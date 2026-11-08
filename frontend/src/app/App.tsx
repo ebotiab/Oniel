@@ -9,7 +9,7 @@ import { LineOverview } from '../panel/LineOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
-import { parseHash, toHash, type Selection } from './state'
+import { lineKind, lineShortLabel, parseHash, toHash, type Selection } from './state'
 import './app.css'
 
 function useMedia(query: string): boolean {
@@ -34,6 +34,7 @@ export default function App() {
   const [showCoverage, setShowCoverage] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [counts, setCounts] = useState<Record<string, number> | null>(null)
+  const [activeLineId, setActiveLineId] = useState<string | null>(null)
   const mobile = useMedia('(max-width: 760px)')
 
   useEffect(() => {
@@ -63,12 +64,20 @@ export default function App() {
     if (window.location.hash !== h) window.history.replaceState(null, '', h)
   }, [route])
 
-  const select = useCallback((sel: Selection) => {
-    setRoute({ selection: sel, simulacion: false })
-    setResult(null)
-    setShowCoverage(false)
-    if (sel) setSheetOpen(true)
-  }, [])
+  const select = useCallback(
+    (sel: Selection) => {
+      setRoute({ selection: sel, simulacion: false })
+      setResult(null)
+      setShowCoverage(false)
+      if (sel) setSheetOpen(true)
+      if (sel && network) {
+        const line = sel.type === 'tramo' ? network.segments.find((s) => s.id === sel.id)?.line_id : undefined
+        const lines = sel.type === 'nodo' ? network.nodes.filter((n) => n.id === sel.id).map((n) => n.line_id) : []
+        setActiveLineId((cur) => line ?? (lines.length ? (cur && lines.includes(cur) ? cur : lines[0]!) : cur))
+      }
+    },
+    [network],
+  )
 
   const selection = route.selection
   const segment = useMemo(
@@ -79,6 +88,16 @@ export default function App() {
     () => (selection?.type === 'nodo' ? network?.nodes.find((n) => n.id === selection.id) ?? null : null),
     [network, selection],
   )
+
+  // El esquema del panel sigue a la selección: un tramo o un nodo de otra línea muestran esa línea.
+  // Un nodo común a varias líneas (Madrid, Córdoba) conserva la línea que ya estaba a la vista.
+  const nodeLines = useMemo(() => (node && network ? network.nodes.filter((n) => n.id === node.id).map((n) => n.line_id) : []), [network, node])
+  const lineId =
+    segment?.line_id ??
+    (nodeLines.length ? (activeLineId && nodeLines.includes(activeLineId) ? activeLineId : nodeLines[0]!) : null) ??
+    activeLineId ??
+    network?.lines[0]?.id ??
+    ''
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
   const referenceDate = coverage?.reference_date ?? null
   const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
@@ -128,6 +147,8 @@ export default function App() {
         network={network}
         coverage={coverage}
         counts={counts}
+        lineId={lineId}
+        onChangeLine={setActiveLineId}
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
@@ -137,7 +158,7 @@ export default function App() {
       />
     )
 
-  const lineLabel = network?.lines[0]?.name.replace('Línea de alta velocidad ', '') ?? 'Madrid – Sevilla'
+  const lines = network?.lines ?? []
 
   return (
     <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''}`}>
@@ -162,8 +183,17 @@ export default function App() {
           <span className="punto" aria-hidden="true" />
           <span className="pill-texto">
             <span className="solo-escritorio">Disponible: </span>
-            <strong>{lineLabel}</strong>
-            <span className="solo-escritorio">, alta velocidad</span>
+            {lines.length ? (
+              lines.map((l, i) => (
+                <span key={l.id}>
+                  {i > 0 && <span aria-hidden="true"> · </span>}
+                  <strong>{lineShortLabel(l)}</strong>
+                  <span className="solo-escritorio">, {lineKind(l)}</span>
+                </span>
+              ))
+            ) : (
+              <strong>Madrid – Sevilla</strong>
+            )}
           </span>
           {coverage && <span className="datos suave solo-escritorio"> · {Math.round(coverage.total_length_km)} km · {coverage.station_count} estaciones</span>}
           {currentMode() === 'estatico' && network && <span className="senal gris">vista estática</span>}
@@ -177,7 +207,7 @@ export default function App() {
         )}
         <div className="panel-contenido">{panel}</div>
       </aside>
-      {!mobile && <Legend closed={closedSegmentId !== null} />}
+      {!mobile && <Legend closed={closedSegmentId !== null} lines={lines} singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false} />}
     </div>
   )
 }

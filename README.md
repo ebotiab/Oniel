@@ -2,7 +2,7 @@
 
 Web en español para descubrir cómo está conectada la red ferroviaria española. Se abre con un mapa interactivo en el que se recorre la línea, se seleccionan estaciones y tramos y, como herramienta secundaria, se simula un cierre hipotético de un tramo en una franja horaria.
 
-Esta primera versión cubre la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz, con los servicios de Renfe que la recorren.
+Esta versión cubre dos líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz, y la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif), con los servicios de Renfe que las recorren. Las dos comparten Madrid-Puerta de Atocha y Córdoba, así que la simulación de un cierre señala el recorrido alternativo cuando existe.
 
 - Diseño: [docs/diseno.md](docs/diseno.md)
 - Datos y procedencia: [docs/datos.md](docs/datos.md)
@@ -31,7 +31,7 @@ docker compose up -d
 cd backend && uv sync && uv run oniel-data import all
 ```
 
-`import all` migra la base de datos, importa la red y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
+`import all` migra la base de datos, importa la red de las dos líneas y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
 
 Opcional, para los agentes de código: `uvx library-skills --claude` en la raíz enlaza en `.claude/skills` y `.agents/skills` las skills que traen FastAPI y Typer (apuntan a `backend/.venv`, por eso no están en git).
 
@@ -54,10 +54,10 @@ cd backend && uv run oniel-data --help
 | Comando | Qué hace |
 |---|---|
 | `db migrate` / `db reset --yes` | Aplica migraciones / recrea el esquema (solo desarrollo) |
-| `import network` | Construye la línea desde la geometría cruda y la especificación curada y la carga |
-| `import gtfs` | Importa los servicios del GTFS que recorren la línea y precalcula su paso por cada tramo |
+| `import network` | Construye cada línea desde la geometría cruda y la especificación curada y la carga (`--spec` repetible; sin él, todas) |
+| `import gtfs` | Importa los servicios del GTFS que recorren las líneas cargadas y precalcula su paso por cada tramo |
 | `import all` | Todo lo anterior más la exportación estática |
-| `validate` | Comprueba la red y la resolución de horarios sin base de datos |
+| `validate` | Comprueba la red y la resolución de horarios sin base de datos (`--spec` repetible; sin él, todas) |
 | `export snapshot` | Exporta JSON estático para el visor |
 | `sources` | Lista las fuentes con licencia y fecha |
 | `logfire-test` | Envía una traza de prueba a Logfire |

@@ -6,13 +6,12 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from oniel.gtfs.importer import calls_for_trip
-from oniel.gtfs.reader import read_feed, select_corridor_trips
+from oniel.gtfs.importer import calls_for_trip, select_trips_for_spec
+from oniel.gtfs.reader import read_feed
 from oniel.network.build import build_network
 from oniel.network.spec import load_network_spec
 from oniel.sim.passes import LineNode, LineSegment, resolve_passes
 
-PK_TOLERANCE_KM = 1.5
 LENGTH_TOLERANCE_KM = 3.0
 
 
@@ -43,21 +42,25 @@ def validate_all(spec_path: Path, feed_path: Path, data_dir: Path) -> dict[str, 
                 "offset_m": round(n.offset_m),
             }
         )
-        if delta is not None and abs(delta) > PK_TOLERANCE_KM and n.spec.position.km is None:
+        if (
+            delta is not None
+            and abs(delta) > spec.line.pk_tolerance_km
+            and n.spec.position.km is None
+        ):
             problems.append(
                 f"el nodo {n.spec.id} queda en el km {n.km:.1f} y la referencia es {ref}"
             )
 
     feed = read_feed(feed_path)
-    trips = select_corridor_trips(
-        feed, spec.corridor_filter.required_stop_ids, spec.corridor_filter.any_of_stop_ids
-    )
+    trips = select_trips_for_spec(feed, spec)
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat) for n in net.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
     kinds: Counter[str] = Counter()
     resolutions: Counter[str] = Counter()
     unmapped: Counter[str] = Counter()
+    products: Counter[str] = Counter()
     for trip in trips:
+        products[trip.product or "tren"] += 1
         calls = calls_for_trip(trip, feed, spec)
         for c in calls:
             if c.node_id is None and not c.exit_node_ids:
@@ -71,6 +74,11 @@ def validate_all(spec_path: Path, feed_path: Path, data_dir: Path) -> dict[str, 
         "line": spec.line.id,
         "length_km": round(length, 3),
         "reference_length_km": spec.line.reference_length_km,
+        "parts": [
+            {"source_id": p.source_id, "km_from": round(p.km_from, 2), "km_to": round(p.km_to, 2)}
+            for p in net.line.part_spans
+        ],
+        "joins_m": [round(j * 1000) for j in net.line.joins_km],
         "nodes": pk_checks,
         "segments": [
             {
@@ -78,12 +86,15 @@ def validate_all(spec_path: Path, feed_path: Path, data_dir: Path) -> dict[str, 
                 "length_km": round(s.length_km, 2),
                 "max_speed_kmh": s.max_speed_kmh,
                 "typical_speed_kmh": s.typical_speed_kmh,
+                "tracks": s.tracks,
+                "source_id": s.source_id,
             }
             for s in net.segments
         ],
         "gtfs": {
             "trips": len(trips),
             "train_numbers": len({t.train_number for t in trips}),
+            "products": dict(products),
             "passes": dict(kinds),
             "resolution": dict(resolutions),
             "feed": [feed.feed_start.isoformat(), feed.feed_end.isoformat()],

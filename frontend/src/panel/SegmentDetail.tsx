@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
 import type { NetworkOut, SegmentOut, SegmentServicesOut } from '../data/types'
-import { formatDate, formatKm, shortStop } from '../app/state'
+import { formatDate, formatKm, productLabel, shortStop, tracksLabel } from '../app/state'
 import { KindBadge } from './KindBadge'
 
 interface Props {
@@ -31,7 +31,7 @@ export function SegmentDetail({ segment, network, referenceDate, onSimulate, onS
   }, [segment.id, referenceDate])
 
   const byProduct = new Map<string, number>()
-  for (const p of services?.passes ?? []) byProduct.set(p.service.product, (byProduct.get(p.service.product) ?? 0) + 1)
+  for (const p of services?.passes ?? []) byProduct.set(productLabel(p.service.product), (byProduct.get(productLabel(p.service.product)) ?? 0) + 1)
 
   return (
     <section className="detalle" aria-labelledby="detalle-titulo" data-testid="detalle-tramo">
@@ -67,6 +67,10 @@ export function SegmentDetail({ segment, network, referenceDate, onSimulate, onS
           <dt>Velocidad habitual</dt>
           <dd>{segment.typical_speed_kmh ? `${segment.typical_speed_kmh} km/h` : 'sin dato'}</dd>
         </div>
+        <div>
+          <dt>Vías</dt>
+          <dd data-testid="tramo-vias">{tracksLabel(segment.tracks)}</dd>
+        </div>
       </dl>
 
       <div className="acciones">
@@ -99,7 +103,7 @@ export function SegmentDetail({ segment, network, referenceDate, onSimulate, onS
                 <span className="hora datos">{p.enter ?? '—'}</span>
                 <span className="tren">
                   <strong>
-                    {p.service.product} {p.service.train_number}
+                    {productLabel(p.service.product)} {p.service.train_number}
                   </strong>{' '}
                   <span className="suave">
                     {shortStop(p.service.origin_name)} → {shortStop(p.service.destination_name)}

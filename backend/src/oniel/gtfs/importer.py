@@ -1,11 +1,17 @@
-"""Importación idempotente de servicios GTFS que recorren una línea cargada."""
+"""Importación idempotente de servicios GTFS que recorren las líneas cargadas.
+
+Un mismo fichero GTFS alimenta todas las líneas: cada viaje se guarda una sola vez y su paso
+por los tramos se calcula línea a línea con la asignación de paradas de cada especificación.
+"""
 
 from __future__ import annotations
 
 import datetime as dt
 from collections import Counter
+from collections.abc import Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import asyncpg
 import logfire
@@ -31,6 +37,18 @@ async def load_line_model(
     return nodes, segments
 
 
+def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
+    f = spec.corridor_filter
+    return select_corridor_trips(
+        feed,
+        f.required_stop_ids,
+        f.any_of_stop_ids,
+        min_node_stops=f.min_node_stops,
+        node_stop_ids=spec.node_stop_ids,
+        exclude_stop_ids=f.exclude_stop_ids,
+    )
+
+
 def calls_for_trip(trip: GtfsTrip, feed: GtfsFeed, spec: NetworkSpec) -> list[StopCall]:
     calls = []
     for st in trip.stop_times:
@@ -52,24 +70,64 @@ def calls_for_trip(trip: GtfsTrip, feed: GtfsFeed, spec: NetworkSpec) -> list[St
     return calls
 
 
+@dataclass
+class _TripPlan:
+    trip: GtfsTrip
+    calls: list[StopCall]
+    passes: list[SegmentPass] = field(default_factory=list)
+    resolutions: list[Literal["completa", "parcial"]] = field(default_factory=list)
+    lines: list[str] = field(default_factory=list)
+
+    @property
+    def resolution(self) -> Literal["completa", "parcial"]:
+        return "completa" if all(r == "completa" for r in self.resolutions) else "parcial"
+
+
 async def import_gtfs(
-    conn: asyncpg.Connection, feed_path: Path, spec_path: Path, *, source_id: str, operator_id: str
+    conn: asyncpg.Connection,
+    feed_path: Path,
+    spec_paths: Path | Sequence[Path],
+    *,
+    source_id: str,
+    operator_id: str,
 ) -> dict[str, Any]:
-    spec = load_network_spec(spec_path)
+    paths = [spec_paths] if isinstance(spec_paths, Path) else list(spec_paths)
+    specs = [load_network_spec(p) for p in paths]
     with logfire.span("import gtfs {feed}", feed=feed_path.name):
         feed = read_feed(feed_path)
-        trips = select_corridor_trips(
-            feed, spec.corridor_filter.required_stop_ids, spec.corridor_filter.any_of_stop_ids
-        )
-        nodes, segments = await load_line_model(conn, spec.line.id)
-        if not segments:
-            raise RuntimeError("primero hay que importar la red (oniel-data import network)")
+        plans: dict[str, _TripPlan] = {}
+        per_line: dict[str, dict[str, Any]] = {}
+        unmapped: Counter[str] = Counter()
+        for spec in specs:
+            nodes, segments = await load_line_model(conn, spec.line.id)
+            if not segments:
+                raise RuntimeError(
+                    f"primero hay que importar la red de {spec.line.id} (oniel-data import network)"
+                )
+            kinds: Counter[str] = Counter()
+            resolutions: Counter[str] = Counter()
+            trips = select_trips_for_spec(feed, spec)
+            for trip in trips:
+                calls = calls_for_trip(trip, feed, spec)
+                for c in calls:
+                    if c.node_id is None and not c.exit_node_ids:
+                        unmapped[f"{spec.line.id}: {c.stop_id} {c.stop_name}"] += 1
+                passes, resolution = resolve_passes(calls, nodes, segments)
+                resolutions[resolution] += 1
+                kinds.update(p.kind for p in passes)
+                plan = plans.setdefault(trip.trip_id, _TripPlan(trip, calls))
+                plan.passes.extend(passes)
+                plan.resolutions.append(resolution)
+                plan.lines.append(spec.line.id)
+            per_line[spec.line.id] = {
+                "trips": len(trips),
+                "train_numbers": len({t.train_number for t in trips}),
+                "passes": dict(kinds),
+                "resolution": dict(resolutions),
+            }
         feed_version = (
             f"{feed_path.name}:{feed.feed_start.isoformat()}..{feed.feed_end.isoformat()}"
         )
-        kinds: Counter[str] = Counter()
-        resolutions: Counter[str] = Counter()
-        unmapped: Counter[str] = Counter()
         async with conn.transaction():
             run_id = await fetch_int(
                 conn,
@@ -78,48 +136,36 @@ async def import_gtfs(
                 feed_version,
             )
             await conn.execute("DELETE FROM services WHERE source_id = $1", source_id)
-            for trip in trips:
-                calls = calls_for_trip(trip, feed, spec)
-                for c in calls:
-                    if c.node_id is None and not c.exit_node_ids:
-                        unmapped[f"{c.stop_id} {c.stop_name}"] += 1
-                passes, resolution = resolve_passes(calls, nodes, segments)
-                resolutions[resolution] += 1
-                for p in passes:
-                    kinds[p.kind] += 1
-                dates = sorted(feed.service_dates.get(trip.service_id, set()))
+            for plan in plans.values():
+                dates = sorted(feed.service_dates.get(plan.trip.service_id, set()))
                 if not dates:
                     continue
                 await _insert_service(
-                    conn,
-                    trip,
-                    calls,
-                    passes,
-                    resolution,
-                    dates,
-                    source_id,
-                    operator_id,
-                    run_id,
-                    feed_version,
+                    conn, plan, dates, source_id, operator_id, run_id, feed_version
                 )
-            for stop_id in spec.stop_mappings:
-                stop = feed.stops.get(stop_id)
-                if stop:
-                    await conn.execute(
-                        "UPDATE stop_mappings SET stop_name=$2, lon=$3, lat=$4, source_id=$5 WHERE stop_id=$1",
-                        stop_id,
-                        stop.name,
-                        stop.lon,
-                        stop.lat,
-                        source_id,
-                    )
+            for spec in specs:
+                for stop_id in spec.stop_mappings:
+                    stop = feed.stops.get(stop_id)
+                    if stop:
+                        await conn.execute(
+                            "UPDATE stop_mappings SET stop_name=$2, lon=$3, lat=$4, source_id=$5 WHERE stop_id=$1",
+                            stop_id,
+                            stop.name,
+                            stop.lon,
+                            stop.lat,
+                            source_id,
+                        )
+            all_kinds: Counter[str] = Counter()
+            for plan in plans.values():
+                all_kinds.update(p.kind for p in plan.passes)
             stats: dict[str, Any] = {
                 "feed_version": feed_version,
                 "trips_in_feed": len(feed.trips),
-                "trips_imported": len(trips),
-                "train_numbers": len({t.train_number for t in trips}),
-                "passes": dict(kinds),
-                "resolution": dict(resolutions),
+                "trips_imported": len(plans),
+                "train_numbers": len({p.trip.train_number for p in plans.values()}),
+                "passes": dict(all_kinds),
+                "resolution": dict(Counter(p.resolution for p in plans.values())),
+                "lines": per_line,
                 "unmapped_stops": dict(unmapped),
                 "feed_start": feed.feed_start.isoformat(),
                 "feed_end": feed.feed_end.isoformat(),
@@ -135,16 +181,14 @@ async def import_gtfs(
 
 async def _insert_service(
     conn: asyncpg.Connection,
-    trip: GtfsTrip,
-    calls: list[StopCall],
-    passes: list[SegmentPass],
-    resolution: str,
+    plan: _TripPlan,
     dates: list[dt.date],
     source_id: str,
     operator_id: str,
     run_id: int,
     feed_version: str,
 ) -> None:
+    trip, calls = plan.trip, plan.calls
     first, last = calls[0], calls[-1]
     await conn.execute(
         """
@@ -165,7 +209,7 @@ async def _insert_service(
         dates[-1],
         trip.route_id,
         trip.service_id,
-        resolution,
+        plan.resolution,
         source_id,
         run_id,
         feed_version,
@@ -211,6 +255,6 @@ async def _insert_service(
                 p.km_increasing,
                 p.basis,
             )
-            for p in passes
+            for p in plan.passes
         ],
     )

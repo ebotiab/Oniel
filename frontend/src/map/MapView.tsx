@@ -15,7 +15,8 @@ import { useEffect, useRef } from 'react'
 
 import type { NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
-import { LAYER, SRC, onielLayers } from './layers'
+import { lineKind } from '../app/state'
+import { LAYER, PESO_ALTA_VELOCIDAD, PESO_CONVENCIONAL, PESO_VIA_UNICA, SRC, onielLayers } from './layers'
 import baseStyle from './style/oniel-base.json'
 
 interface Props {
@@ -39,10 +40,17 @@ const SPAIN_BOUNDS: LngLatBoundsLike = [
 
 function shortName(name: string): string {
   return name
-    .replace('Madrid-Puerta de Atocha', 'Madrid-Puerta de Atocha')
     .replace('Villanueva de Córdoba-Los Pedroches', 'Villanueva de Córdoba')
+    .replace('Almuradiel-Viso del Marqués', 'Almuradiel')
+    .replace('Campus Universitario de Rabanales', 'Rabanales')
     .replace('Bifurcación ', 'Bif. ')
-    .replace('Cambiador de ', 'Cambiador de ')
+}
+
+/** Grosor relativo de un tramo según la categoría de su línea y su número de vías. */
+function segmentWeight(net: NetworkOut, lineId: unknown, tracks: unknown): number {
+  const line = net.lines.find((l) => l.id === lineId)
+  const base = line && lineKind(line) === 'alta velocidad' ? PESO_ALTA_VELOCIDAD : PESO_CONVENCIONAL
+  return tracks === 1 ? Math.min(base, PESO_VIA_UNICA) : base
 }
 
 /** Asigna ids numéricos para feature-state y guarda la correspondencia. */
@@ -108,7 +116,12 @@ export function MapView({ network, selection, hoverId, closedSegmentId, onSelect
 
   function addNetwork(map: MapLibreMap, net: NetworkOut) {
     if (map.getSource(SRC.segments)) return
-    const segs = withNumericIds(net.segment_features)
+    const segs = withNumericIds({
+      features: net.segment_features.features.map((f) => ({
+        ...f,
+        properties: { ...f.properties, peso: segmentWeight(net, f.properties.line_id, f.properties.tracks) },
+      })),
+    })
     const nodes = withNumericIds({
       features: net.node_features.features.map((f) => ({
         ...f,

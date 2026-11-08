@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
 import type { NetworkOut, NodeOut, NodeServicesOut } from '../data/types'
-import { KIND_LABEL, formatDate, formatKm, shortStop } from '../app/state'
+import { KIND_LABEL, formatDate, formatKm, lineShortLabel, productLabel, shortStop } from '../app/state'
 
 interface Props {
   node: NodeOut
@@ -18,6 +18,11 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
   const connections = network.connections.filter((c) => c.node_id === node.id)
   const station = node.kind === 'estacion'
+  // Un nodo puede pertenecer a varias líneas (Madrid y Córdoba): su kilómetro en cada una.
+  const memberships = network.nodes
+    .filter((n) => n.id === node.id)
+    .map((n) => ({ km: n.km, line: network.lines.find((l) => l.id === n.line_id) }))
+  const lineOf = (lineId: string) => network.lines.find((l) => l.id === lineId)
 
   // App monta este componente con key={node.id}, así que el estado se reinicia al cambiar de nodo.
   useEffect(() => {
@@ -37,9 +42,17 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
         ← Toda la línea
       </button>
       <p className="sobre">
-        {KIND_LABEL[node.kind]} · km {formatKm(node.km)}
+        {KIND_LABEL[node.kind]}
+        {memberships.length > 1
+          ? memberships.map((m) => ` · km ${formatKm(m.km)} en ${m.line ? lineShortLabel(m.line) : '?'}`).join('')
+          : ` · km ${formatKm(node.km)}`}
         {node.adif_code ? ` · código Adif ${node.adif_code}` : ''}
       </p>
+      {memberships.length > 1 && (
+        <p className="suave" data-testid="nodo-lineas">
+          Nodo común a {memberships.length} líneas: {memberships.map((m) => (m.line ? m.line.name : '?')).join(' y ')}.
+        </p>
+      )}
       <h2 id="detalle-titulo" className="titulo">
         {node.name}
       </h2>
@@ -71,7 +84,10 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
             <button type="button" className="enlace" onClick={() => onSelectSegment(s.id)}>
               {s.from_name} – {s.to_name}
             </button>{' '}
-            <span className="suave datos">{formatKm(s.length_km)} km</span>
+            <span className="suave datos">
+              {formatKm(s.length_km)} km{memberships.length > 1 && lineOf(s.line_id) ? ` · ${lineShortLabel(lineOf(s.line_id)!)}` : ''}
+              {s.tracks === 1 ? ' · vía única' : ''}
+            </span>
           </li>
         ))}
         {connections.map((c) => (
@@ -101,7 +117,7 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
                   <span className="hora datos">{c.departure ?? c.arrival ?? '—'}</span>
                   <span className="tren">
                     <strong>
-                      {c.product} {c.train_number}
+                      {productLabel(c.product)} {c.train_number}
                     </strong>{' '}
                     <span className="suave">
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}

@@ -4,13 +4,13 @@ La simulación responde a una pregunta sencilla: **si este tramo se cerrase tal 
 
 ## Qué datos usa
 
-- La red cargada: nodos (estaciones, PAET, PB, bifurcaciones, cambiadores) con su kilómetro en la línea y tramos entre nodos consecutivos.
+- La red cargada: nodos (estaciones, PAET, PB, bifurcaciones, cambiadores) con su kilómetro en cada línea y tramos entre nodos consecutivos.
 - Los horarios publicados por Renfe en su GTFS (`backend/data/raw/renfe/`): para cada tren, sus paradas con hora de llegada y salida.
-- Una asignación curada de cada parada GTFS a la red (`stop_mappings` en `backend/data/curated/lav-madrid-sevilla.json`): o la parada es un nodo de la línea, o está fuera y el tren entra o sale de la línea por un nodo concreto (por ejemplo, Málaga sale por la bifurcación de Málaga; Huelva por el cambiador de Majarabique o por Santa Justa según pare o no en Sevilla).
+- Una asignación curada de cada parada GTFS a la red, por línea (`stop_mappings` en `backend/data/curated/<línea>.json`): o la parada es un nodo de la línea, o está fuera y el tren entra o sale de la línea por un nodo concreto (por ejemplo, Málaga sale de la LAV por la bifurcación de Málaga; Jaén sale de la línea convencional por Espelúy).
 
 ## Cómo se calcula el paso de un tren por un tramo
 
-Está implementado en `backend/src/oniel/sim/passes.py` y se precalcula en la importación.
+Está implementado en `backend/src/oniel/sim/passes.py` y se precalcula en la importación, línea a línea.
 
 1. **Publicado.** Si el tren para en las dos estaciones que delimitan el tramo, entra a la hora de salida de la primera y sale a la hora de llegada de la segunda. Sin margen.
 2. **Estimado.** Si no para en uno de los extremos, repartimos el tiempo entre sus dos paradas publicadas en proporción a la distancia recorrida por la línea. Margen de incertidumbre: 15 % del tiempo entre esas paradas, con un mínimo de 3 minutos. El extremo que sí coincide con una parada mantiene su hora publicada sin margen.
@@ -26,6 +26,23 @@ Está en `backend/src/oniel/sim/closure.py`. Para cada tren que recorre el tramo
 - Si solo se tocan dentro del margen de incertidumbre, o el paso era indeterminado → **indeterminado**.
 
 Las ventanas que terminan antes de empezar (23:00 a 01:00) se interpretan como que acaban al día siguiente.
+
+## Recorrido alternativo
+
+Desde que Oniel carga dos líneas que comparten Madrid-Puerta de Atocha y Córdoba, el resultado de un cierre dice también si **existe otro recorrido cargado** que salve el tramo. El cálculo está en `network_repo.fetch_alternatives`: se buscan, en la línea del tramo cerrado, los nodos que también pertenecen a otra línea y quedan uno antes y otro después del tramo; si una misma línea tiene uno a cada lado, se toma el par más cercano al tramo y se informa de la longitud por cada línea, de las estaciones principales intermedias y de los kilómetros de vía única del recorrido alternativo.
+
+Ejemplos:
+
+- Cierre de Villanueva de Córdoba – Adamuz (LAV): alternativa por la línea convencional entre Madrid-Puerta de Atocha y Córdoba, 440,7 km por Aranjuez, Alcázar de San Juan, Manzanares, Valdepeñas, Santa Cruz de Mudela, Vilches, Linares-Baeza y Andújar frente a 343,6 km por la alta velocidad, con 194 km de vía única.
+- Cierre de Venta de Cárdenas – Vilches (convencional, Despeñaperros): alternativa por la LAV entre los mismos dos nodos, 343,6 km frente a 440,7 km.
+- Cierre de Bifurcación Málaga – Majarabique (LAV): sin alternativa cargada, porque al sur de Córdoba Oniel solo tiene una línea.
+
+Lo que **no** hace la simulación, y haría falta para un desvío real:
+
+1. Decidir qué trenes afectados podrían tomar la alternativa. Depende del material (un AVE de ancho estándar no puede circular por la red convencional de ancho ibérico; un Alvia o un Intercity de ancho variable sí, cambiando de ancho en un cambiador que hoy no está modelado como requisito) y de si el tren tiene paradas intermedias que la alternativa no sirve.
+2. Estimar el nuevo horario: tiempo de recorrido por la otra línea a sus velocidades (`segments.typical_speed_kmh` ya está disponible) y huecos en la ocupación de la vía única, donde los cruces limitan cuántos trenes caben por hora en cada sentido.
+3. Representar trenes que cambian de línea dentro de un mismo recorrido (hoy cada viaje se resuelve línea a línea con la asignación de paradas de cada una; véase el límite de los Intercity Madrid-Atocha Cercanías–Andalucía en `docs/datos.md`).
+4. Tener en cuenta la situación real de la infraestructura: el corte por obras al sur de Venta de Cárdenas hasta otoño de 2027 significa que, mientras dure, la alternativa por Despeñaperros no está disponible aunque la geometría exista.
 
 ## Caso comprobado a mano
 
@@ -44,14 +61,14 @@ El mismo caso está automatizado en:
 
 - `backend/tests/test_sim_passes.py::test_estimated_pass_is_proportional_to_distance`
 - `backend/tests/test_sim_closure.py::test_hand_calculated_case_ave_02070`
-- `backend/tests/test_integration_db.py::test_closure_hand_case` (contra la base de datos y la API)
+- `backend/tests/test_integration_db.py::test_closure_hand_case` (contra la base de datos y la API, incluida la alternativa por Alcázar)
 - `frontend/e2e/simulacion.spec.ts` (desde la interfaz)
 
 Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes recorren el tramo ese día; 6 afectados con paso estimado, 5 indeterminados, 85 no afectados.
 
 ## Limitaciones conocidas
 
-- Los horarios son los planificados por Renfe; no incluyen la interrupción vigente desde el 28 de octubre de 2026 ni otros cambios.
-- Solo hay servicios de Renfe; faltan Iryo, Ouigo y mercancías.
-- El cierre se supone de las dos vías, sin desvíos ni reordenación.
+- Los horarios son los planificados por Renfe; no incluyen la interrupción de la alta velocidad vigente desde el 28 de octubre de 2026, el corte de la línea convencional al sur de Venta de Cárdenas ni otros cambios.
+- Solo hay servicios de Renfe; faltan Iryo, Ouigo, Cercanías y mercancías.
+- El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; la alternativa solo se señala.
 - La estimación proporcional ignora paradas técnicas y limitaciones temporales de velocidad.

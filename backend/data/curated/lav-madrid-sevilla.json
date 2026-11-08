@@ -3,6 +3,7 @@
     "id": "lav-madrid-sevilla",
     "name": "Línea de alta velocidad Madrid – Sevilla",
     "short_name": "010",
+    "sort_order": 1,
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,
@@ -25,7 +26,7 @@
   ],
   "nodes": [
     {"id": "madrid-puerta-de-atocha", "name": "Madrid-Puerta de Atocha", "kind": "estacion", "adif_code": "60000", "position": {"lon": -3.690886, "lat": 40.406442}, "reference_pk_km": 0.0,
-     "description": "Cabecera de la línea. Estación término de la alta velocidad hacia Andalucía, Levante y Cataluña, conectada con Madrid-Chamartín por el túnel de ancho estándar."},
+     "description": "Cabecera de la línea. Estación término de la alta velocidad hacia Andalucía, Levante y Cataluña, conectada con Madrid-Chamartín por el túnel de ancho estándar. Forma un mismo complejo con Madrid-Atocha Cercanías, de donde salen los trenes de la línea convencional por Aranjuez y Alcázar de San Juan."},
     {"id": "bif-torrejon-de-velasco", "name": "Bifurcación Torrejón de Velasco", "kind": "bifurcacion", "position": {"lon": -3.75006, "lat": 40.19457}, "reference_pk_km": 27.4,
      "description": "Punto donde la línea de alta velocidad Madrid–Levante se separa del tronco común hacia Andalucía."},
     {"id": "bif-la-sagra", "name": "Bifurcación La Sagra", "kind": "bifurcacion", "position": {"km": 52.7}, "reference_pk_km": 52.7,
@@ -54,7 +55,7 @@
        ]
      }},
     {"id": "cordoba", "name": "Córdoba", "kind": "estacion", "adif_code": "50500", "position": {"lon": -4.789453, "lat": 37.888291}, "reference_pk_km": 343.7,
-     "description": "Nudo de la alta velocidad andaluza: aquí paran los trenes a Sevilla, Málaga, Granada, Huelva y Cádiz. Denominada Córdoba-Julio Anguita desde 2025."},
+     "description": "Nudo de la alta velocidad andaluza: aquí paran los trenes a Sevilla, Málaga, Granada, Huelva y Cádiz. También llega la línea convencional desde Madrid por Alcázar de San Juan, Despeñaperros y Linares-Baeza, y sigue la convencional hacia Sevilla. Denominada Córdoba-Julio Anguita desde 2025."},
     {"id": "bif-malaga", "name": "Bifurcación Málaga-Alta Velocidad", "kind": "bifurcacion", "position": {"lon": -4.94165, "lat": 37.8399}, "reference_pk_km": 358.0,
      "description": "Punto donde la línea de alta velocidad Córdoba–Málaga (y con ella los trenes a Granada y Almería) se separa de la de Sevilla."},
     {"id": "majarabique", "name": "Cambiador de Majarabique", "kind": "cambiador", "position": {"km": 462.5}, "reference_pk_km": 462.5,

@@ -45,6 +45,12 @@ Tipografía
 Composición
 - Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; cobertura arriba a la derecha.
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
+- Varias líneas: el mapa las dibuja todas; el panel muestra una a la vez, elegida con pestañas sobre el esquema, y cambia solo a la línea de lo que se selecciona en el mapa. Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
+
+Trazo de la vía
+- Sigue siendo tinta; el grosor dice de qué vía se trata, como en las hojas del IGN: alta velocidad 3 px, línea convencional 2,4 px, vía única 1,8 px (a zoom 5; crecen con el zoom). Los trazos blancos se mantienen en todas.
+- En el esquema vertical la vía doble es un trazo de 3 px y la vía única de 1,5 px; la leyenda del mapa explica los tres grosores.
+- Los nodos secundarios (apeaderos y estaciones menores) se dibujan más pequeños, con rótulo en gris y solo a partir del zoom 7,5; en el esquema compacto del móvil se ven como marcas sin rótulo.
 - Alineación a la izquierda en todo el texto. Sin mayúsculas sostenidas, sin etiquetas numeradas.
 
 Movimiento

@@ -9,6 +9,7 @@ import asyncpg
 import logfire
 
 from oniel.domain.schemas import ClosureRequest, ClosureResult, ClosureResultItem, SegmentOut
+from oniel.repo.network_repo import fetch_alternatives
 from oniel.repo.services_repo import DatedPass, fmt_time, passes_on_segment
 from oniel.sim.closure import ClosureWindow, classify
 from oniel.sim.passes import SegmentPass
@@ -28,8 +29,14 @@ CAVEATS = [
     " cambios de última hora.",
     "Se consideran solo los servicios de Renfe importados en esta versión; no aparecen otros"
     " operadores ni mercancías.",
-    "El cierre se supone de las dos vías y no se calcula ningún desvío ni reordenación de trenes.",
+    "El cierre se supone de todas las vías del tramo y no se calcula ningún desvío ni"
+    " reordenación de trenes.",
 ]
+
+ALTERNATIVE_CAVEAT = (
+    "Cuando otra línea cargada une dos nodos situados a ambos lados del tramo, Oniel la señala"
+    " como recorrido alternativo, pero no estima qué trenes podrían desviarse ni con qué horario."
+)
 
 
 def direction_label(segment: SegmentOut, km_increasing: bool | None) -> str:
@@ -62,6 +69,7 @@ async def simulate_closure(
         end=req.end.isoformat(),
     ):
         dated: list[DatedPass] = await passes_on_segment(conn, segment.id, req.date)
+        alternatives = await fetch_alternatives(conn, segment)
         items: list[ClosureResultItem] = []
         counts: Counter[str] = Counter()
         for d in dated:
@@ -100,6 +108,7 @@ async def simulate_closure(
             window_label=f"{req.date.strftime('%d/%m/%Y')} de {req.start.strftime('%H:%M')} a {end_label}",
             counts=dict(counts),
             items=items,
+            alternatives=alternatives,
             method=METHOD,
-            caveats=CAVEATS,
+            caveats=[*CAVEATS, ALTERNATIVE_CAVEAT] if alternatives else CAVEATS,
         )

@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     data_dir: Path = BACKEND_DIR / "data"
     default_line_id: str = "lav-madrid-sevilla"
+    #: Líneas cargadas por `import all`, en orden: la primera define los nodos compartidos.
+    line_ids: list[str] = ["lav-madrid-sevilla", "convencional-madrid-alcazar-cordoba"]
 
 
 @lru_cache
