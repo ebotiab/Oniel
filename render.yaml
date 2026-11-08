@@ -3,7 +3,8 @@
 # Tras el primer despliegue, ejecuta el job "oniel-importer" (o `oniel-data import all` en la shell del servicio).
 databases:
   - name: oniel-postgres
-    plan: free
+    plan: free            # caduca a los 30 días; los datos se regeneran con el importador. Subir a basic-256mb para persistir.
+    region: frankfurt     # inmutable: debe coincidir con los servicios
     databaseName: oniel
     user: oniel
     postgresMajorVersion: "17"
@@ -17,7 +18,7 @@ services:
     plan: free
     region: frankfurt
     healthCheckPath: /healthz
-    autoDeploy: true
+    autoDeployTrigger: commit
     envVars:
       - key: DATABASE_URL
         fromDatabase:
