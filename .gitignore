@@ -21,3 +21,7 @@ frontend/playwright-report/
 # misc
 .DS_Store
 *.log
+
+# Enlaces de skills que crea library-skills en la raíz (apuntan a backend/.venv)
+/.agents/
+/.claude/skills/

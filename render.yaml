@@ -28,14 +28,17 @@ services:
         value: production
       - key: ONIEL_CORS_ORIGINS
         value: '["https://oniel.vercel.app"]'
+      - key: ONIEL_IMPORT_ON_START
+        value: "1"    # sin cron job, cada arranque ejecuta `oniel-data import all` (≈5 s) antes de servir
       - key: LOGFIRE_TOKEN
-        sync: false   # token de escritura del proyecto ebotiab/oniel; se pega en el panel de Render
+        sync: false   # token de escritura del proyecto ebotiab/oniel; se aporta al aprobar el primer sync
 
   # Importador programado (opcional, de pago). Render no ofrece cron jobs en el plan gratuito y pide
   # un método de pago en el workspace para crearlo. Para activarlo: añade un método de pago en
   # https://dashboard.render.com/billing, descomenta el bloque y haz push; el Blueprint lo sincroniza.
-  # Sin él, la carga se hace a mano desde cualquier máquina con acceso a la base (ver docs/despliegue.md):
-  #   DATABASE_URL=<External Database URL> uv run oniel-data import all
+  # Sin él, la API importa los datos en cada arranque (ONIEL_IMPORT_ON_START=1); si lo activas, quita esa
+  # variable de oniel-api. También puede lanzarse a mano desde cualquier máquina con acceso a la base:
+  #   ONIEL_DATABASE_URL=<External Database URL> uv run oniel-data import all
   # # Importación repetible: se lanza a mano desde el panel (Jobs) o tras actualizar el GTFS.
   # - type: cron
   #   name: oniel-importer

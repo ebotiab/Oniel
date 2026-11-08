@@ -9,8 +9,10 @@ RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-install-proj
 
 COPY src ./src
 COPY data ./data
+COPY docker-entrypoint.sh ./
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked
 
 ENV PATH="/app/.venv/bin:$PATH" PORT=8000
 EXPOSE 8000
-CMD ["sh", "-c", "fastapi run src/oniel/api/main.py --host 0.0.0.0 --port ${PORT}"]
+# Con ONIEL_IMPORT_ON_START=1 el arranque importa los datos antes de servir (ver docker-entrypoint.sh).
+CMD ["./docker-entrypoint.sh"]

@@ -85,7 +85,7 @@ async def simulate_closure(
             "indeterminado": 2,
             "no_afectado": 3,
         }
-        items.sort(key=lambda i: (order[i.status], i.enter or ""))
+        items.sort(key=lambda i: (order[i.status], i.enter or "", i.service.train_number))
         for key in order:
             counts.setdefault(key, 0)
         logfire.info("closure simulated", **dict(counts), trains=len(items))

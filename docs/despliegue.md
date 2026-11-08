@@ -20,15 +20,32 @@ Variables de entorno del proyecto:
 
 Conviene regenerar la instantánea (`uv run oniel-data export snapshot`) antes de cada despliegue para que la vista estática esté al día.
 
-## API, PostgreSQL e importador en Render
+## API y PostgreSQL en Render
 
-`render.yaml` describe un Blueprint con:
+`render.yaml` es un Blueprint de Render con:
 
-- `oniel-postgres`: PostgreSQL 17 (plan free).
-- `oniel-api`: servicio web Docker (`backend/Dockerfile`), `healthCheckPath: /healthz`, con `DATABASE_URL` enlazada a la base.
-- `oniel-importer`: cron job con la misma imagen que ejecuta `oniel-data import all` (los lunes a las 5:00 UTC; también se lanza a mano desde el panel).
+- `oniel-postgres`: PostgreSQL 17, plan free, región Frankfurt.
+- `oniel-api`: servicio web Docker (`backend/Dockerfile`, `rootDir: backend`), plan free, `healthCheckPath: /healthz`, `DATABASE_URL` enlazada a la base y `LOGFIRE_TOKEN` marcado `sync: false` (se aporta al aprobar el primer sync).
+- `oniel-importer` (cron job, comentado): Render no ofrece cron jobs gratuitos y pide un método de pago en el workspace para crearlos. Para activarlo, añade un método de pago, descomenta el bloque y haz push.
 
-Pasos: Dashboard → Blueprints → New Blueprint Instance → repositorio `ebotiab/Oniel`. Render pide el valor de `LOGFIRE_TOKEN` (marcado `sync: false`). Tras el primer despliegue, ejecutar el job `oniel-importer` una vez (o `oniel-data import all` en la shell del servicio) para cargar los datos.
+Estado (8 de noviembre de 2026): Blueprint `oniel` (`exs-dbo9l3gu01pc73ekfu2g`) en el workspace "My Workspace" de la cuenta personal, creado desde el conector MCP de Render con `existingResources: create_new`, por lo que Render añadió el sufijo `-5e63` a los recursos: base `oniel-postgres-5e63` y API `oniel-api-5e63`, publicada en https://oniel-api-5e63.onrender.com. Con `autoSync` activo, cada push a `main` vuelve a desplegar la API y aplica los cambios del Blueprint.
+
+Límites del plan gratuito, que conviene conocer:
+
+- La API se suspende tras 15 minutos sin tráfico y la primera petición después tarda alrededor de un minuto. El visor lo tolera: mientras tanto sirve la instantánea estática y la simulación avisa.
+- La base gratuita caduca a los 30 días de su creación (el 8 de diciembre de 2026). Todos los datos se regeneran con el importador a partir de los archivos del repositorio, así que no se pierde nada irrecuperable. Para una base persistente, cambia `plan: free` por `basic-256mb` en `render.yaml` (requiere método de pago) y haz push.
+
+### Cargar o refrescar los datos
+
+Sin cron job, la API carga los datos ella misma: con `ONIEL_IMPORT_ON_START=1` (fijado en `render.yaml`), `backend/docker-entrypoint.sh` ejecuta `oniel-data import all` antes de arrancar el servidor. Tarda unos 5 segundos y es idempotente, así que cada despliegue y cada arranque tras una suspensión dejan la base alineada con los archivos del repositorio. Si más adelante se activa el cron job, basta con quitar esa variable.
+
+También puede lanzarse desde cualquier máquina con `uv` y acceso a la base. La URL externa (External Database URL) está en el panel de la base en Render; no la guardes en el repositorio.
+
+```bash
+cd backend && ONIEL_DATABASE_URL='<External Database URL>' uv run oniel-data import all
+```
+
+La importación es repetible: crea el esquema si falta, sustituye los servicios de la fuente dentro de una transacción y registra la ejecución en `import_runs`. También regenera la instantánea estática de `frontend/public/data`, que conviene subir junto con los cambios.
 
 `ONIEL_CORS_ORIGINS` debe incluir el dominio del visor (`["https://oniel.vercel.app"]` por defecto); los dominios de vista previa `*.vercel.app` se aceptan por expresión regular.
 

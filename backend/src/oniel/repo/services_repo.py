@@ -70,7 +70,9 @@ async def passes_on_segment(
     out.sort(
         key=lambda d: (
             (d.segment_pass.enter_s if d.segment_pass.enter_s is not None else 1e9)
-            - (86400 if d.from_previous_day else 0)
+            - (86400 if d.from_previous_day else 0),
+            d.service.train_number,
+            d.service.id,
         )
     )
     return out
@@ -81,7 +83,7 @@ async def daily_counts(conn: asyncpg.Connection, date: dt.date) -> dict[str, int
         """
         SELECT p.segment_id, count(*) AS n
         FROM service_segment_passes p JOIN service_dates d ON d.service_id = p.service_id
-        WHERE d.service_date = $1 GROUP BY p.segment_id
+        WHERE d.service_date = $1 GROUP BY p.segment_id ORDER BY p.segment_id
         """,
         date,
     )
@@ -123,7 +125,7 @@ async def calls_at_node(conn: asyncpg.Connection, node_id: str, date: dt.date) -
         JOIN stop_mappings m ON m.stop_id = ss.stop_id AND m.node_id = $1
         JOIN services s ON s.id = ss.service_id
         JOIN service_dates d ON d.service_id = s.id AND d.service_date = $2
-        ORDER BY ss.departure_s
+        ORDER BY ss.departure_s, s.train_number, s.id
         """,
         node_id,
         date,
