@@ -33,6 +33,8 @@ cd backend && uv sync && uv run oniel-data import all
 
 `import all` migra la base de datos, importa la red y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
 
+Opcional, para los agentes de código: `uvx library-skills --claude` en la raíz enlaza en `.claude/skills` y `.agents/skills` las skills que traen FastAPI y Typer (apuntan a `backend/.venv`, por eso no están en git).
+
 ```bash
 cd backend && uv run fastapi dev
 ```
