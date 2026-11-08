@@ -75,7 +75,7 @@ async def import_network(
             await _replace_nodes_and_segments(conn, net)
             await _replace_connections(conn, net)
             await _upsert_stop_mappings(conn, net)
-        stats = {
+        stats: dict[str, Any] = {
             "line_id": spec.line.id,
             "length_km": round(net.line.polyline.length_km, 3),
             "reference_length_km": spec.line.reference_length_km,

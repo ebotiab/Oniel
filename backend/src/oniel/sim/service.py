@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from typing import Any
 
 import asyncpg
 import logfire
@@ -88,7 +89,8 @@ async def simulate_closure(
         items.sort(key=lambda i: (order[i.status], i.enter or "", i.service.train_number))
         for key in order:
             counts.setdefault(key, 0)
-        logfire.info("closure simulated", **dict(counts), trains=len(items))
+        summary: dict[str, Any] = {**counts, "trains": len(items)}
+        logfire.info("closure simulated", **summary)
         end_label = req.end.strftime("%H:%M") + (
             " del día siguiente" if window.end_s >= 86400 else ""
         )

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 from dataclasses import dataclass
+from typing import Any
 
 import asyncpg
 
@@ -116,7 +117,9 @@ async def fetch_service(
     ]
 
 
-async def calls_at_node(conn: asyncpg.Connection, node_id: str, date: dt.date) -> list[dict]:
+async def calls_at_node(
+    conn: asyncpg.Connection, node_id: str, date: dt.date
+) -> list[dict[str, Any]]:
     rows = await conn.fetch(
         """
         SELECT s.id, s.train_number, s.product, s.origin_name, s.destination_name, ss.arrival_s, ss.departure_s, ss.seq,
@@ -144,10 +147,9 @@ async def calls_at_node(conn: asyncpg.Connection, node_id: str, date: dt.date) -
     ]
 
 
-def fmt_time(seconds: float | int | None) -> str | None:
-    if seconds is None:
-        return None
-    s = int(round(seconds))
+def fmt_time(seconds: float) -> str:
+    """Segundos desde la medianoche del día de servicio → ``HH:MM``, con ``(+1)`` pasada la medianoche."""
+    s = round(seconds)
     h, rem = divmod(s, 3600)
     suffix = " (+1)" if h >= 24 else ""
     return f"{h % 24:02d}:{rem // 60:02d}{suffix}"

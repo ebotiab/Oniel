@@ -10,6 +10,7 @@ from typing import Any
 import asyncpg
 import logfire
 
+from oniel.db.pool import fetch_int
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip, read_feed, select_corridor_trips
 from oniel.network.spec import NetworkSpec, load_network_spec
 from oniel.sim.passes import LineNode, LineSegment, SegmentPass, StopCall, resolve_passes
@@ -70,7 +71,8 @@ async def import_gtfs(
         resolutions: Counter[str] = Counter()
         unmapped: Counter[str] = Counter()
         async with conn.transaction():
-            run_id = await conn.fetchval(
+            run_id = await fetch_int(
+                conn,
                 "INSERT INTO import_runs (command, source_id, status, feed_version) VALUES ('import gtfs', $1, 'running', $2) RETURNING id",
                 source_id,
                 feed_version,
@@ -111,7 +113,7 @@ async def import_gtfs(
                         stop.lat,
                         source_id,
                     )
-            stats = {
+            stats: dict[str, Any] = {
                 "feed_version": feed_version,
                 "trips_in_feed": len(feed.trips),
                 "trips_imported": len(trips),

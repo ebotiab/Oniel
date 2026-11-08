@@ -1,8 +1,10 @@
 """Reglas de paso por tramo, comprobadas con casos que se pueden calcular a mano."""
 
+from collections.abc import Iterable, Sequence
+
 import pytest
 
-from oniel.sim.passes import LineNode, LineSegment, StopCall, resolve_passes
+from oniel.sim.passes import LineNode, LineSegment, SegmentPass, StopCall, resolve_passes
 
 # Línea de juguete con los kilómetros reales de la LAV (redondeados)
 NODES = {
@@ -30,7 +32,17 @@ def hm(h: int, m: int) -> int:
     return h * 3600 + m * 60
 
 
-def call(seq, stop_id, name, arr, dep, node=None, exits=(), lon=None, lat=None):
+def call(
+    seq: int,
+    stop_id: str,
+    name: str,
+    arr: int,
+    dep: int,
+    node: str | None = None,
+    exits: Sequence[str] = (),
+    lon: float | None = None,
+    lat: float | None = None,
+) -> StopCall:
     return StopCall(seq, stop_id, name, arr, dep, lon, lat, node, tuple(exits))
 
 
@@ -44,11 +56,11 @@ AVE_02070 = [
 ]
 
 
-def by_id(passes):
+def by_id(passes: Iterable[SegmentPass]) -> dict[str, SegmentPass]:
     return {p.segment_id: p for p in passes}
 
 
-def test_published_pass_between_two_stops():
+def test_published_pass_between_two_stops() -> None:
     passes, resolution = resolve_passes(AVE_02070, NODES, SEGMENTS)
     assert resolution == "completa"
     p = by_id(passes)["cr-pu"]
@@ -57,7 +69,7 @@ def test_published_pass_between_two_stops():
     assert p.enter_margin_s == 0 and p.exit_margin_s == 0 and p.km_increasing is True
 
 
-def test_estimated_pass_is_proportional_to_distance():
+def test_estimated_pass_is_proportional_to_distance() -> None:
     """Puertollano 8:11 → Córdoba 8:53 son 42 min para 133,8 km.
 
     Puertollano–Villanueva mide 75,4 km → 23,66 min → sale a las 8:34:40.
@@ -75,7 +87,7 @@ def test_estimated_pass_is_proportional_to_distance():
     assert vi_ad.enter_margin_s == vi_ad.exit_margin_s == pytest.approx(378)
 
 
-def test_margin_has_a_floor_of_three_minutes():
+def test_margin_has_a_floor_of_three_minutes() -> None:
     calls = [
         call(1, "a", "Villanueva", hm(9, 0), hm(9, 0), node="villanueva"),
         call(2, "b", "Córdoba", hm(9, 14), hm(9, 14), node="cordoba"),
@@ -84,7 +96,7 @@ def test_margin_has_a_floor_of_three_minutes():
     assert p["vi-ad"].exit_margin_s == 180  # 15 % de 14 min son 2,1 min → se aplica el mínimo
 
 
-def test_exit_to_malaga_uses_straight_line_share():
+def test_exit_to_malaga_uses_straight_line_share() -> None:
     """Córdoba 9:00 → Málaga 9:50 (50 min). Hasta la bifurcación hay 14,4 km por la línea y desde
     ahí unos 130 km en línea recta hasta Málaga: el tren sale de la línea a los ~5 min."""
     calls = [
@@ -107,11 +119,11 @@ def test_exit_to_malaga_uses_straight_line_share():
     assert "bif-se" not in p  # no llega a Sevilla
     co_bif = p["co-bif"]
     assert co_bif.kind == "estimado" and co_bif.enter_s == hm(9, 0) and co_bif.enter_margin_s == 0
-    assert hm(9, 3) < co_bif.exit_s < hm(9, 9)
+    assert co_bif.exit_s is not None and hm(9, 3) < co_bif.exit_s < hm(9, 9)
     assert co_bif.exit_margin_s == 300  # 30 % de ~5 min < mínimo de 5 min
 
 
-def test_exit_choice_respects_direction():
+def test_exit_choice_respects_direction() -> None:
     """Un tren Madrid → Córdoba → Huelva sale por Majarabique; si para en Sevilla, no vuelve atrás."""
     nodes = dict(NODES, majarabique=LineNode("majarabique", 462.5, -5.958, 37.459))
     segs = [
@@ -119,24 +131,36 @@ def test_exit_choice_respects_direction():
         LineSegment("bif-maj", 358.0, 462.5),
         LineSegment("maj-se", 462.5, 470.3),
     ]
-    huelva = dict(exits=["majarabique", "sevilla"], lon=-6.9448, lat=37.2526)
+
+    def huelva(seq: int) -> StopCall:
+        return call(
+            seq,
+            "43019",
+            "Huelva",
+            hm(11, 0),
+            hm(11, 0),
+            exits=["majarabique", "sevilla"],
+            lon=-6.9448,
+            lat=37.2526,
+        )
+
     direct = [
         call(1, "60000", "Madrid", hm(7, 0), hm(7, 0), node="madrid"),
         call(2, "50500", "Córdoba", hm(8, 50), hm(8, 55), node="cordoba"),
-        call(3, "43019", "Huelva", hm(11, 0), hm(11, 0), **huelva),
+        huelva(3),
     ]
     p = by_id(resolve_passes(direct, nodes, segs)[0])
     assert "bif-maj" in p and "maj-se" not in p
     via_sevilla = direct[:2] + [
         call(3, "51003", "Sevilla", hm(9, 40), hm(9, 45), node="sevilla"),
-        call(4, "43019", "Huelva", hm(11, 0), hm(11, 0), **huelva),
+        huelva(4),
     ]
     p2 = by_id(resolve_passes(via_sevilla, nodes, segs)[0])
     assert "maj-se" in p2 and p2["maj-se"].kind == "estimado"
     assert all(v.km_increasing for v in p2.values())
 
 
-def test_unknown_stop_makes_passes_indeterminate():
+def test_unknown_stop_makes_passes_indeterminate() -> None:
     calls = [
         call(1, "60000", "Madrid", hm(7, 0), hm(7, 0), node="madrid"),
         call(2, "xxx", "Parada desconocida", hm(7, 40), hm(7, 42)),
@@ -148,7 +172,7 @@ def test_unknown_stop_makes_passes_indeterminate():
     assert {p.segment_id for p in passes} == {"madrid-cr", "cr-pu", "pu-vi", "vi-ad", "ad-co"}
 
 
-def test_reverse_direction_sevilla_to_madrid():
+def test_reverse_direction_sevilla_to_madrid() -> None:
     calls = [
         call(1, "51003", "Sevilla", hm(16, 0), hm(16, 0), node="sevilla"),
         call(2, "50500", "Córdoba", hm(16, 40), hm(16, 45), node="cordoba"),

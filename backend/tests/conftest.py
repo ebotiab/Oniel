@@ -5,6 +5,10 @@ from pathlib import Path
 
 import pytest
 
+from oniel.gtfs.reader import GtfsFeed, read_feed
+from oniel.network.build import BuiltNetwork, build_network
+from oniel.network.spec import NetworkSpec, load_network_spec
+
 BACKEND = Path(__file__).resolve().parents[1]
 DATA_DIR = BACKEND / "data"
 SPEC = DATA_DIR / "curated" / "lav-madrid-sevilla.json"
@@ -13,23 +17,17 @@ FEED = DATA_DIR / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
 
 
 @pytest.fixture(scope="session")
-def spec():
-    from oniel.network.spec import load_network_spec
-
+def spec() -> NetworkSpec:
     return load_network_spec(SPEC)
 
 
 @pytest.fixture(scope="session")
-def built(spec):
-    from oniel.network.build import build_network
-
+def built(spec: NetworkSpec) -> BuiltNetwork:
     return build_network(spec, DATA_DIR)
 
 
 @pytest.fixture(scope="session")
-def feed():
-    from oniel.gtfs.reader import read_feed
-
+def feed() -> GtfsFeed:
     return read_feed(FEED)
 
 

@@ -1,13 +1,13 @@
 from oniel.geo import Polyline, haversine_km
 
 
-def test_haversine_madrid_sevilla_rough():
+def test_haversine_madrid_sevilla_rough() -> None:
     # Atocha → Santa Justa en línea recta: unos 390 km
     d = haversine_km((-3.6909, 40.4064), (-5.9749, 37.3925))
     assert 385 < d < 395
 
 
-def test_polyline_project_and_point_at_roundtrip():
+def test_polyline_project_and_point_at_roundtrip() -> None:
     line = Polyline([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)])
     p = line.project((0.5, 0.01))
     assert p.index == 0 and 0.45 < p.km / line.cum_km[1] < 0.55

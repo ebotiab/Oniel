@@ -8,6 +8,7 @@ from typing import Any
 
 import asyncpg
 
+from oniel.db.pool import fetch_int
 from oniel.domain.schemas import (
     ConnectionOut,
     CoverageOut,
@@ -240,8 +241,8 @@ async def feed_bounds(
 
 async def fetch_coverage(conn: asyncpg.Connection) -> CoverageOut:
     lines = await fetch_lines(conn)
-    station_count = await conn.fetchval("SELECT count(*) FROM nodes WHERE kind = 'estacion'")
-    service_count = await conn.fetchval("SELECT count(DISTINCT train_number) FROM services")
+    station_count = await fetch_int(conn, "SELECT count(*) FROM nodes WHERE kind = 'estacion'")
+    service_count = await fetch_int(conn, "SELECT count(DISTINCT train_number) FROM services")
     start, end, ref = await feed_bounds(conn)
     return CoverageOut(
         lines=lines,

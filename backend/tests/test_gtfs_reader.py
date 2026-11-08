@@ -1,14 +1,15 @@
 import datetime as dt
 
-from oniel.gtfs.reader import expand_calendar, parse_gtfs_time, select_corridor_trips
+from oniel.gtfs.reader import GtfsFeed, expand_calendar, parse_gtfs_time, select_corridor_trips
+from oniel.network.spec import NetworkSpec
 
 
-def test_parse_gtfs_time_after_midnight():
+def test_parse_gtfs_time_after_midnight() -> None:
     assert parse_gtfs_time("8:30:00") == 8 * 3600 + 30 * 60
     assert parse_gtfs_time("25:10:00") == 25 * 3600 + 10 * 60
 
 
-def test_expand_calendar_with_exceptions():
+def test_expand_calendar_with_exceptions() -> None:
     cal = [
         {
             "service_id": "s",
@@ -31,7 +32,7 @@ def test_expand_calendar_with_exceptions():
     assert dates == {dt.date(2026, 11, 2), dt.date(2026, 11, 11), dt.date(2026, 11, 16)}
 
 
-def test_feed_has_the_madrid_sevilla_sample(feed, spec):
+def test_feed_has_the_madrid_sevilla_sample(feed: GtfsFeed, spec: NetworkSpec) -> None:
     trips = select_corridor_trips(
         feed, spec.corridor_filter.required_stop_ids, spec.corridor_filter.any_of_stop_ids
     )

@@ -1,9 +1,9 @@
 import pytest
 
-from oniel.network.build import chain_osm_relation
+from oniel.network.build import BuiltNetwork, chain_osm_relation
 
 
-def test_line_is_continuous_and_matches_adif_length(built):
+def test_line_is_continuous_and_matches_adif_length(built: BuiltNetwork) -> None:
     assert not built.line.gaps_km
     assert abs(built.line.polyline.length_km - 471.8) < 3.0
 
@@ -20,13 +20,15 @@ def test_line_is_continuous_and_matches_adif_length(built):
         ("sevilla-santa-justa", 470.5),
     ],
 )
-def test_nodes_sit_on_adif_kilometre_points(built, node_id, reference_pk):
+def test_nodes_sit_on_adif_kilometre_points(
+    built: BuiltNetwork, node_id: str, reference_pk: float
+) -> None:
     node = built.node(node_id)
     assert abs(node.km - reference_pk) < 1.0
     assert node.offset_m < 200
 
 
-def test_segments_are_consecutive_and_cover_the_line(built):
+def test_segments_are_consecutive_and_cover_the_line(built: BuiltNetwork) -> None:
     segs = built.segments
     assert segs[0].km_from == pytest.approx(0.0)
     for a, b in zip(segs, segs[1:], strict=False):
@@ -36,7 +38,7 @@ def test_segments_are_consecutive_and_cover_the_line(built):
     assert all(s.max_speed_kmh is not None for s in segs)
 
 
-def test_chain_reverses_ways_when_needed():
+def test_chain_reverses_ways_when_needed() -> None:
     raw = {
         "elements": [
             {"type": "node", "id": 1, "lon": 0.0, "lat": 0.0},

@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator, Iterator
+from typing import Any
+
 import httpx
 import pytest
 import pytest_asyncio
@@ -19,7 +22,7 @@ def dsn() -> str:
 
 
 @pytest_asyncio.fixture(loop_scope="module", scope="module")
-async def imported(dsn):
+async def imported(dsn: str) -> dict[str, Any]:
     from oniel.db.migrate import drop_everything, migrate
     from oniel.db.pool import connect
     from oniel.gtfs.importer import import_gtfs
@@ -53,7 +56,7 @@ async def imported(dsn):
     return {"net": (net1, net2), "gtfs": (gtfs1, gtfs2), "counts": counts}
 
 
-async def test_import_is_repeatable(imported):
+async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     net1, net2 = imported["net"]
     gtfs1, gtfs2 = imported["gtfs"]
     assert net1 == net2
@@ -65,7 +68,9 @@ async def test_import_is_repeatable(imported):
 
 
 @pytest_asyncio.fixture(loop_scope="module", scope="module")
-async def client(dsn, imported, monkeypatch_module):
+async def client(
+    dsn: str, imported: dict[str, Any], monkeypatch_module: pytest.MonkeyPatch
+) -> AsyncIterator[httpx.AsyncClient]:
     monkeypatch_module.setenv("ONIEL_DATABASE_URL", dsn)
     from oniel.settings import get_settings
 
@@ -82,13 +87,13 @@ async def client(dsn, imported, monkeypatch_module):
 
 
 @pytest.fixture(scope="module")
-def monkeypatch_module():
+def monkeypatch_module() -> Iterator[pytest.MonkeyPatch]:
     mp = pytest.MonkeyPatch()
     yield mp
     mp.undo()
 
 
-async def test_network_endpoint(client):
+async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     r = await client.get("/api/network")
     assert r.status_code == 200
     data = r.json()
@@ -101,7 +106,7 @@ async def test_network_endpoint(client):
     assert data["connection_features"]["features"]
 
 
-async def test_coverage_and_sources(client):
+async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     r = await client.get("/api/coverage")
     assert r.status_code == 200
     cov = r.json()
@@ -114,7 +119,7 @@ async def test_coverage_and_sources(client):
     assert cov["reference_date"] is not None
 
 
-async def test_segment_services_on_a_weekday(client):
+async def test_segment_services_on_a_weekday(client: httpx.AsyncClient) -> None:
     r = await client.get(
         "/api/segments/lav-madrid-sevilla:ciudad-real:puertollano/services",
         params={"date": "2026-11-13"},
@@ -126,7 +131,7 @@ async def test_segment_services_on_a_weekday(client):
     assert numbers["02070"]["enter"] == "07:55" and numbers["02070"]["exit"] == "08:09"
 
 
-async def test_closure_hand_case(client):
+async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
     """AVE 02070 el 13/11/2026 en Villanueva–Adamuz con cierre de 8:00 a 9:00: afectado (estimado)."""
     r = await client.post(
         "/api/simulations/closure",
@@ -146,7 +151,7 @@ async def test_closure_hand_case(client):
     assert sum(res["counts"].values()) == len(res["items"])
 
 
-async def test_unknown_segment_is_404(client):
+async def test_unknown_segment_is_404(client: httpx.AsyncClient) -> None:
     r = await client.post(
         "/api/simulations/closure",
         json={"segment_id": "nada", "date": "2026-11-13", "start": "08:00", "end": "09:00"},

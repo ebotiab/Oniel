@@ -1,33 +1,33 @@
 import datetime as dt
 
 from oniel.sim.closure import ClosureWindow, classify
-from oniel.sim.passes import SegmentPass
+from oniel.sim.passes import PassKind, SegmentPass
 
 
 def hm(h: int, m: int) -> int:
     return h * 3600 + m * 60
 
 
-def make(kind, enter, exit_, margin):
+def make(kind: PassKind, enter: float | None, exit_: float | None, margin: float) -> SegmentPass:
     return SegmentPass("s", kind, enter, exit_, margin, margin, True, "base")
 
 
-def test_window_crossing_midnight():
+def test_window_crossing_midnight() -> None:
     w = ClosureWindow.from_times(dt.time(23, 0), dt.time(1, 0))
     assert (w.start_s, w.end_s) == (hm(23, 0), hm(25, 0))
 
 
-def test_published_inside_window_is_affected():
+def test_published_inside_window_is_affected() -> None:
     w = ClosureWindow.from_times(dt.time(8, 0), dt.time(9, 0))
     assert classify(make("publicado", hm(8, 11), hm(8, 53), 0), w).status == "afectado_publicado"
 
 
-def test_outside_window_even_with_margin():
+def test_outside_window_even_with_margin() -> None:
     w = ClosureWindow.from_times(dt.time(8, 0), dt.time(9, 0))
     assert classify(make("estimado", hm(9, 10), hm(9, 30), 300), w).status == "no_afectado"
 
 
-def test_overlap_only_inside_margin_is_indeterminate():
+def test_overlap_only_inside_margin_is_indeterminate() -> None:
     w = ClosureWindow.from_times(dt.time(8, 0), dt.time(9, 0))
     # pasa de 9:02 a 9:20 con ±5 min: toca la ventana solo por el margen
     assert classify(make("estimado", hm(9, 2), hm(9, 20), 300), w).status == "indeterminado"
@@ -35,7 +35,7 @@ def test_overlap_only_inside_margin_is_indeterminate():
     assert classify(make("estimado", hm(8, 50), hm(9, 20), 300), w).status == "afectado_estimado"
 
 
-def test_indeterminate_pass_stays_indeterminate():
+def test_indeterminate_pass_stays_indeterminate() -> None:
     w = ClosureWindow.from_times(dt.time(0, 0), dt.time(23, 59))
     assert (
         classify(
@@ -45,14 +45,14 @@ def test_indeterminate_pass_stays_indeterminate():
     )
 
 
-def test_previous_day_train_is_shifted():
+def test_previous_day_train_is_shifted() -> None:
     w = ClosureWindow.from_times(dt.time(0, 0), dt.time(1, 0))
     late = make("publicado", hm(24, 20), hm(24, 50), 0)  # 00:20–00:50 del día siguiente al suyo
     assert classify(late, w, day_offset_s=-86400).status == "afectado_publicado"
     assert classify(late, w).status == "no_afectado"
 
 
-def test_hand_calculated_case_ave_02070():
+def test_hand_calculated_case_ave_02070() -> None:
     """Cierre de Villanueva de Córdoba–Adamuz el 13/11/2026 de 8:00 a 9:00.
 
     El AVE 02070 sale de Puertollano a las 8:11 y llega a Córdoba a las 8:53 (42 min, 133,8 km).

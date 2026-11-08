@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime as dt
 from typing import Annotated
 
+import asyncpg
 from fastapi import APIRouter, HTTPException, Query
 
 from oniel.api.deps import ConnectionDep
@@ -18,14 +19,14 @@ DateQuery = Annotated[
 ]
 
 
-async def _segment_or_404(conn, segment_id: str) -> SegmentOut:
+async def _segment_or_404(conn: asyncpg.Connection, segment_id: str) -> SegmentOut:
     segment = await network_repo.fetch_segment(conn, segment_id)
     if segment is None:
         raise HTTPException(404, f"No hay ningún tramo con id {segment_id}")
     return segment
 
 
-async def resolve_date(conn, date: dt.date | None) -> dt.date:
+async def resolve_date(conn: asyncpg.Connection, date: dt.date | None) -> dt.date:
     if date is not None:
         return date
     _, _, ref = await network_repo.feed_bounds(conn)

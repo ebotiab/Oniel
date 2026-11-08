@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import datetime as dt
 import json
-from collections.abc import Awaitable, Callable
+from collections.abc import Callable, Coroutine
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -33,7 +33,7 @@ SOURCES_DEFAULT = settings.data_dir / "curated" / "sources.json"
 FEED_DEFAULT = settings.data_dir / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
 
 
-def _run(fn: Callable[..., Awaitable[Any]], *args: Any, **kwargs: Any) -> Any:
+def _run[T](fn: Callable[..., Coroutine[Any, Any, T]], *args: Any, **kwargs: Any) -> T:
     configure_logfire("oniel-data", settings)
     return asyncio.run(fn(*args, **kwargs))
 
