@@ -74,6 +74,18 @@ cd frontend && npm run typecheck && npx playwright install chromium && npx playw
 
 Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación).
 
+## Comprobaciones
+
+```bash
+cd backend && uv run ruff format --check . && uv run ruff check . && uv run mypy && uv run pyright
+```
+
+```bash
+cd frontend && npm run typecheck && npm run lint
+```
+
+Ruff formatea y ordena importaciones; mypy (estricto) y pyright (modo `standard`, el mismo que Pylance) tipan el backend; `tsc` y oxlint cubren el visor, incluidas las pruebas Playwright. El directorio `.vscode/` fija el intérprete de `backend/.venv` y Ruff como formateador, de modo que el editor no muestre avisos que estas órdenes no muestren.
+
 ## Variables de entorno
 
 Backend (`backend/.env.example`): `DATABASE_URL` u `ONIEL_DATABASE_URL`, `ONIEL_ENVIRONMENT`, `ONIEL_CORS_ORIGINS`, `LOGFIRE_TOKEN`. Sin `LOGFIRE_TOKEN` (ni `backend/.logfire/`) no se envía telemetría y todo funciona igual.
