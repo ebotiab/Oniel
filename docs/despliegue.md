@@ -16,7 +16,7 @@ Estado (8 de noviembre de 2026): el proyecto `oniel` existe en el ámbito person
 
 Variables de entorno del proyecto:
 
-- `VITE_API_URL`: URL pública de la API en Render (por ejemplo `https://oniel-api.onrender.com`). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor.
+- `VITE_API_URL`: URL pública de la API en Render. Está fijada a `https://oniel-api-5e63.onrender.com` en los entornos Production y Preview de Vercel (8 de noviembre de 2026). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor. Si la API no responde (por ejemplo mientras Render la despierta), el visor cae por sí solo a la instantánea.
 
 Conviene regenerar la instantánea (`uv run oniel-data export snapshot`) antes de cada despliegue para que la vista estática esté al día.
 
