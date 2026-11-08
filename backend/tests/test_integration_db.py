@@ -63,12 +63,18 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     net1, net2 = imported["net"]
     gtfs1, gtfs2 = imported["gtfs"]
     assert net1 == net2
-    assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == 335 + 479
+    # 335 viajes en la LAV y 503 en la convencional; 24 Intercity/Alvia Madrid-Atocha Cercanías
+    # cuentan en las dos (convencional hasta Manzanares, LAV desde Ciudad Real) y se guardan una vez
+    assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == 335 + 503 - 24
     assert gtfs1["lines"]["lav-madrid-sevilla"]["trips"] == 335
-    assert gtfs1["lines"]["convencional-madrid-alcazar-cordoba"]["trips"] == 479
+    assert gtfs1["lines"]["convencional-madrid-alcazar-cordoba"]["trips"] == 503
+    assert gtfs1["lines"]["lav-madrid-sevilla"]["route_overrides"] == {
+        "atocha-cercanias-ciudad-real-por-manzanares": 20,
+        "atocha-cercanias-cordoba-por-manzanares": 4,
+    }
     c = imported["counts"]
-    assert c["lines"] == 2 and c["segments"] == 11 + 25 and c["services"] == 335 + 479
-    assert c["service_segment_passes"] == (3222 + 115) + (2205 + 683)
+    assert c["lines"] == 2 and c["segments"] == 11 + 25 and c["services"] == 814
+    assert c["service_segment_passes"] == (3126 + 115) + (2469 + 683)
     assert c["import_runs"] == 2
 
 

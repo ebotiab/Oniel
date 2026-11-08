@@ -4,7 +4,14 @@ from collections.abc import Iterable, Sequence
 
 import pytest
 
-from oniel.sim.passes import LineNode, LineSegment, SegmentPass, StopCall, resolve_passes
+from oniel.sim.passes import (
+    ExitDistance,
+    LineNode,
+    LineSegment,
+    SegmentPass,
+    StopCall,
+    resolve_passes,
+)
 
 # Línea de juguete con los kilómetros reales de la LAV (redondeados)
 NODES = {
@@ -185,3 +192,39 @@ def test_reverse_direction_sevilla_to_madrid() -> None:
     )  # llega a Córdoba a hora publicada
     assert p["ad-co"].enter_s == hm(16, 45) and p["ad-co"].enter_margin_s == 0
     assert p["madrid-cr"].exit_s == hm(18, 30)
+
+
+def test_known_distance_along_another_line_replaces_the_straight_line() -> None:
+    """Un tren que sale de la línea en Córdoba hacia una parada de otra línea cargada.
+
+    Córdoba 9:00 → parada X 10:00 (60 min). Si la asignación trae 86,4 km reales desde Córdoba
+    hasta X por la otra línea, Adamuz–Córdoba (25,8 km) se reparte con 25,8 / (25,8 + 86,4):
+    el tren sale de Córdoba... no: entra en Córdoba a las 9:00 publicadas y, en sentido inverso,
+    el tramo Córdoba→Adamuz se recorre en 60 × 25,8 / 112,2 = 13,8 min → sale a las 9:13:48.
+    Con la línea recta (0 km, porque X no lleva coordenadas) el reparto daría los 60 min enteros.
+    """
+    calls = [
+        call(1, "51003", "Sevilla", hm(8, 0), hm(8, 0), node="sevilla"),
+        call(2, "50500", "Córdoba", hm(8, 55), hm(9, 0), node="cordoba"),
+        StopCall(
+            3,
+            "x",
+            "Parada X",
+            hm(10, 0),
+            hm(10, 0),
+            node_id=None,
+            exit_node_ids=("adamuz",),
+            exit_distances={"adamuz": ExitDistance(86.4, "86 km por esa línea hasta Parada X")},
+            exit_note="está en la otra línea, con la que este tren enlaza en Adamuz",
+        ),
+    ]
+    p = by_id(resolve_passes(calls, NODES, SEGMENTS)[0])
+    ad_co = p["ad-co"]
+    assert ad_co.kind == "estimado" and ad_co.km_increasing is False
+    assert ad_co.enter_s == hm(9, 0) and ad_co.enter_margin_s == 0
+    assert ad_co.exit_s == pytest.approx(hm(9, 0) + 60 * 60 * 25.8 / (25.8 + 86.4), abs=1)
+    assert ad_co.exit_margin_s == 300  # 30 % de 13,8 min < mínimo de 5 min
+    assert "Parada X está en la otra línea, con la que este tren enlaza en Adamuz" in ad_co.basis
+    assert "sale de esta línea por adamuz" in ad_co.basis  # sin nombre, se usa el id
+    assert "y, desde adamuz, 86 km por esa línea hasta Parada X;" in ad_co.basis
+    assert "vi-ad" not in p  # no sigue hacia Villanueva

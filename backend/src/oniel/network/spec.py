@@ -56,14 +56,28 @@ class ConnectionSpec(BaseModel):
     sketch: list[tuple[float, float]] = Field(default_factory=list)
 
 
+class ViaLine(BaseModel):
+    """La parada está en otra línea cargada: desde la salida de esta, el tren enlaza con esa
+    línea en el nodo ``node`` y sigue por ella hasta la parada."""
+
+    line: str
+    node: str
+
+
 class StopMapping(BaseModel):
     node: str | None = None
     exits: list[str] = Field(default_factory=list)
+    #: Solo con ``exits``: la parada es un nodo de otra línea cargada y se llega a ella por
+    #: ``via.node``. Permite repartir el tiempo con la distancia por esa línea en vez de la línea
+    #: recta, y explicar en el visor por dónde sigue el tren.
+    via: ViaLine | None = None
 
     @model_validator(mode="after")
     def _one_of(self) -> StopMapping:
         if (self.node is None) == (not self.exits):
             raise ValueError("una parada se asigna a un nodo o a una lista de salidas")
+        if self.via is not None and self.node is not None:
+            raise ValueError("«via» solo tiene sentido en una parada que es salida de la línea")
         return self
 
 
@@ -141,6 +155,45 @@ class CorridorFilter(BaseModel):
     exclude_stop_ids: list[str] = Field(default_factory=list)
 
 
+class RouteOverride(BaseModel):
+    """Viajes que recorren esta línea solo en parte de su recorrido y siguen por otra línea cargada.
+
+    Un viaje encaja si su horario lleva ``consecutive_stop_ids`` seguidas, en ese orden o en el
+    inverso. La regla se escribe en el sentido de esa secuencia: para un viaje en sentido
+    contrario, ``from_stop_id`` y ``to_stop_id`` se intercambian. Los viajes que encajan entran
+    en la línea aunque no pasen el filtro de corredor, y solo se resuelven con las paradas desde
+    ``from_stop_id`` hasta ``to_stop_id`` (por defecto, desde el origen o hasta el destino). Si
+    una de esas dos paradas no es un nodo de la línea, el tren sale o entra por la salida que le
+    da su asignación. ``stop_mappings`` sustituye, solo para estos viajes, la asignación general
+    de las paradas que indique.
+    """
+
+    id: str
+    description: str
+    consecutive_stop_ids: list[str] = Field(min_length=2)
+    from_stop_id: str | None = None
+    to_stop_id: str | None = None
+    stop_mappings: dict[str, StopMapping] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _consistent(self) -> RouteOverride:
+        if len(set(self.consecutive_stop_ids)) != len(self.consecutive_stop_ids):
+            raise ValueError(f"la regla {self.id} repite paradas en consecutive_stop_ids")
+        for ref in (self.from_stop_id, self.to_stop_id):
+            if ref is not None and ref not in self.consecutive_stop_ids:
+                raise ValueError(
+                    f"la regla {self.id}: la parada {ref} tiene que estar en consecutive_stop_ids"
+                )
+        if self.from_stop_id is not None and self.from_stop_id == self.to_stop_id:
+            raise ValueError(f"la regla {self.id} empieza y termina en la misma parada")
+        if self.from_stop_id is None and self.to_stop_id is None and not self.stop_mappings:
+            raise ValueError(f"la regla {self.id} no cambia nada: ni tramo ni asignaciones")
+        return self
+
+    def mapping_for(self, stop_id: str, general: dict[str, StopMapping]) -> StopMapping | None:
+        return self.stop_mappings.get(stop_id) or general.get(stop_id)
+
+
 class NetworkSpec(BaseModel):
     line: LineSpec
     operators: list[OperatorSpec]
@@ -149,6 +202,7 @@ class NetworkSpec(BaseModel):
     connections: list[ConnectionSpec] = Field(default_factory=list)
     stop_mappings: dict[str, StopMapping] = Field(default_factory=dict)
     corridor_filter: CorridorFilter = Field(default_factory=CorridorFilter)
+    route_overrides: list[RouteOverride] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _consistent(self) -> NetworkSpec:
@@ -158,15 +212,30 @@ class NetworkSpec(BaseModel):
         for c in self.connections:
             if c.node_id not in ids:
                 raise ValueError(f"la conexión {c.id} apunta a un nodo desconocido {c.node_id}")
-        for stop_id, m in self.stop_mappings.items():
-            for ref in [m.node, *m.exits]:
-                if ref is not None and ref not in ids:
-                    raise ValueError(f"la parada {stop_id} apunta a un nodo desconocido {ref}")
+        self._check_mappings(self.stop_mappings, ids, "la parada")
         for t in self.track_sections:
             for ref in (t.from_node, t.to_node):
                 if ref not in ids:
                     raise ValueError(f"el tramo de vías {t.from_node}–{t.to_node} apunta a {ref}")
+        rule_ids = [r.id for r in self.route_overrides]
+        if len(set(rule_ids)) != len(rule_ids):
+            raise ValueError("ids de regla de recorrido repetidos en route_overrides")
+        for r in self.route_overrides:
+            self._check_mappings(r.stop_mappings, ids, f"la regla {r.id}: la parada")
+            for boundary in (r.from_stop_id, r.to_stop_id):
+                if boundary is not None and r.mapping_for(boundary, self.stop_mappings) is None:
+                    raise ValueError(
+                        f"la regla {r.id}: la parada {boundary} no tiene asignación en stop_mappings"
+                    )
         return self
+
+    def _check_mappings(self, mappings: dict[str, StopMapping], ids: set[str], what: str) -> None:
+        for stop_id, m in mappings.items():
+            for ref in [m.node, *m.exits]:
+                if ref is not None and ref not in ids:
+                    raise ValueError(f"{what} {stop_id} apunta a un nodo desconocido {ref}")
+            if m.via is not None and m.via.line == self.line.id:
+                raise ValueError(f"{what} {stop_id}: «via» apunta a esta misma línea")
 
     @property
     def node_stop_ids(self) -> frozenset[str]:

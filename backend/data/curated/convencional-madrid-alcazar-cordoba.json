@@ -190,9 +190,29 @@
     "51405": {"exits": ["cordoba"]}
   },
   "corridor_filter": {
-    "description": "Se importan los viajes del GTFS que paran en al menos dos nodos de la línea y en alguna de sus estaciones exclusivas (las que no comparte con la alta velocidad). Así entran los Media Distancia Madrid–Jaén, Madrid–Alcázar–Albacete y Alcázar–Ciudad Real, el Alvia Barcelona–Córdoba por Alcázar y los trenes Córdoba–Jaén y de Proximidad de Córdoba, y quedan fuera los AVE y los Intercity que solo paran en Madrid, Ciudad Real y Córdoba.",
+    "description": "Se importan los viajes del GTFS que paran en al menos dos nodos de la línea y en alguna de sus estaciones exclusivas (las que no comparte con la alta velocidad). Así entran los Media Distancia Madrid–Jaén, Madrid–Alcázar–Albacete y Alcázar–Ciudad Real, el Alvia Barcelona–Córdoba por Alcázar y los trenes Córdoba–Jaén y de Proximidad de Córdoba, y quedan fuera los AVE. Los Intercity y Alvia Madrid-Atocha Cercanías – Andalucía, que solo paran en Madrid, Ciudad Real y Córdoba, entran por las reglas de route_overrides.",
     "required_stop_ids": [],
     "any_of_stop_ids": ["60200", "60202", "60203", "60206", "60207", "60300", "60301", "60400", "50002", "50100", "50102", "50200", "50202", "50207", "50300", "50400", "50403", "50407", "50413", "50417"],
     "min_node_stops": 2
-  }
+  },
+  "route_overrides": [
+    {
+      "id": "atocha-cercanias-ciudad-real-por-manzanares",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por esta línea hasta Manzanares y seguir por la línea Manzanares–Ciudad Real (no cargada), y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Por esta línea se resuelven entre Madrid y Ciudad Real, saliendo por Manzanares.",
+      "consecutive_stop_ids": ["18000", "37200", "50500"],
+      "to_stop_id": "37200",
+      "stop_mappings": {
+        "37200": {"exits": ["manzanares"], "via": {"line": "lav-madrid-sevilla", "node": "ciudad-real"}}
+      }
+    },
+    {
+      "id": "atocha-cercanias-cordoba-por-manzanares",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): tardan las mismas 3 h 45 entre Madrid y Córdoba que los Intercity anteriores, así que se resuelven igual: por esta línea hasta Manzanares y, desde Ciudad Real, por la alta velocidad. Para estos viajes Córdoba se trata como salida por Manzanares, no como nodo.",
+      "consecutive_stop_ids": ["18000", "50500"],
+      "to_stop_id": "50500",
+      "stop_mappings": {
+        "50500": {"exits": ["manzanares"], "via": {"line": "lav-madrid-sevilla", "node": "ciudad-real"}}
+      }
+    }
+  ]
 }
