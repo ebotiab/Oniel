@@ -2,8 +2,9 @@ import { useState, type FormEvent } from 'react'
 
 import { ApiError, simulateClosure } from '../data/api'
 import type { ClosureResult, ClosureStatus, SegmentOut } from '../data/types'
-import { formatKm, shortStop } from '../app/state'
-import { STATUS, StatusBadge } from './KindBadge'
+import { formatKm, shortStop, todayIso } from '../app/state'
+import { StatusBadge } from './KindBadge'
+import { STATUS } from './labels'
 
 interface Props {
   segment: SegmentOut
@@ -18,7 +19,7 @@ interface Props {
 const ORDER: ClosureStatus[] = ['afectado_publicado', 'afectado_estimado', 'indeterminado', 'no_afectado']
 
 export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, result, onResult, onBack }: Props) {
-  const [date, setDate] = useState(result?.request.date ?? referenceDate ?? new Date().toISOString().slice(0, 10))
+  const [date, setDate] = useState(() => result?.request.date ?? referenceDate ?? todayIso())
   const [start, setStart] = useState(result?.request.start.slice(0, 5) ?? '08:00')
   const [end, setEnd] = useState(result?.request.end.slice(0, 5) ?? '09:00')
   const [loading, setLoading] = useState(false)

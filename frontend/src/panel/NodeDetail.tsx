@@ -19,11 +19,10 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
   const connections = network.connections.filter((c) => c.node_id === node.id)
   const station = node.kind === 'estacion'
 
+  // App monta este componente con key={node.id}, así que el estado se reinicia al cambiar de nodo.
   useEffect(() => {
-    let alive = true
-    setCalls(null)
-    setError(null)
     if (!station) return
+    let alive = true
     fetchNodeServices(node.id, referenceDate ?? undefined)
       .then((c) => alive && setCalls(c))
       .catch((e: unknown) => alive && setError(e instanceof ApiError ? e.message : 'No se pudieron cargar los trenes.'))

@@ -25,6 +25,11 @@ export function formatKm(km: number): string {
   return km.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
+/** Fecha de hoy como AAAA-MM-DD (en UTC, como el resto de fechas ISO que maneja la API). */
+export function todayIso(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
 export function formatDate(iso: string): string {
   const d = new Date(`${iso}T12:00:00`)
   return d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })

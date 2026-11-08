@@ -80,6 +80,7 @@ export default function App() {
     [network, selection],
   )
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
+  const referenceDate = coverage?.reference_date ?? null
   const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
 
   let panel: React.ReactNode = null
@@ -90,7 +91,7 @@ export default function App() {
     panel = (
       <SimulationPanel
         segment={segment}
-        referenceDate={coverage?.reference_date ?? null}
+        referenceDate={referenceDate}
         feedStart={coverage?.feed_start ?? null}
         feedEnd={coverage?.feed_end ?? null}
         result={result}
@@ -101,9 +102,10 @@ export default function App() {
   else if (segment)
     panel = (
       <SegmentDetail
+        key={`${segment.id}@${referenceDate}`}
         segment={segment}
         network={network}
-        referenceDate={coverage?.reference_date ?? null}
+        referenceDate={referenceDate}
         onSimulate={() => setRoute({ selection, simulacion: true })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
         onBack={() => select(null)}
@@ -112,9 +114,10 @@ export default function App() {
   else if (node)
     panel = (
       <NodeDetail
+        key={`${node.id}@${referenceDate}`}
         node={node}
         network={network}
-        referenceDate={coverage?.reference_date ?? null}
+        referenceDate={referenceDate}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
         onBack={() => select(null)}
       />

@@ -19,10 +19,9 @@ export function SegmentDetail({ segment, network, referenceDate, onSimulate, onS
   const [error, setError] = useState<string | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
 
+  // App monta este componente con key={segment.id}, así que el estado se reinicia al cambiar de tramo.
   useEffect(() => {
     let alive = true
-    setServices(null)
-    setError(null)
     fetchSegmentServices(segment.id, referenceDate ?? undefined)
       .then((s) => alive && setServices(s))
       .catch((e: unknown) => alive && setError(e instanceof ApiError ? e.message : 'No se pudieron cargar los servicios.'))
