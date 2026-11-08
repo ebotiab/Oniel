@@ -1,0 +1,194 @@
+// Tipos públicos de la API de Oniel (espejo de backend/src/oniel/domain/schemas.py).
+
+export type NodeKind = 'estacion' | 'paet' | 'pb' | 'bifurcacion' | 'cambiador' | 'referencia'
+export type PassKind = 'publicado' | 'estimado' | 'indeterminado'
+export type ClosureStatus = 'afectado_publicado' | 'afectado_estimado' | 'indeterminado' | 'no_afectado'
+
+export interface Source {
+  id: string
+  name: string
+  publisher: string
+  url: string | null
+  license: string | null
+  license_url: string | null
+  retrieved_on: string | null
+  coverage: string | null
+  notes: string | null
+}
+
+export interface Operator {
+  id: string
+  name: string
+  role: 'operador' | 'administrador_infraestructura'
+}
+
+export interface LineSummary {
+  id: string
+  name: string
+  short_name: string | null
+  mode: string
+  infrastructure_manager: Operator | null
+  gauge_mm: number | null
+  electrification: string | null
+  max_speed_kmh: number | null
+  opened_on: string | null
+  length_km: number
+  reference_length_km: number | null
+  status: 'disponible' | 'prevista'
+  description: string | null
+  source_id: string | null
+  node_count: number
+  segment_count: number
+}
+
+export interface NodeOut {
+  id: string
+  name: string
+  kind: NodeKind
+  lon: number
+  lat: number
+  adif_code: string | null
+  description: string | null
+  details: { contexto_2026?: string; fuentes?: { title: string; url: string }[] } & Record<string, unknown>
+  line_id: string
+  km: number
+  reference_pk_km: number | null
+  seq: number
+}
+
+export interface SegmentOut {
+  id: string
+  line_id: string
+  seq: number
+  from_node_id: string
+  to_node_id: string
+  from_name: string
+  to_name: string
+  km_from: number
+  km_to: number
+  length_km: number
+  max_speed_kmh: number | null
+  typical_speed_kmh: number | null
+  status: 'disponible' | 'prevista'
+  source_id: string | null
+}
+
+export interface ConnectionOut {
+  id: string
+  node_id: string
+  name: string
+  towards: string
+  status: 'no_cargada' | 'disponible'
+  line_id: string | null
+}
+
+export interface Feature<P = Record<string, unknown>> {
+  type: 'Feature'
+  id: string
+  geometry: GeoJSON.Geometry
+  properties: P
+}
+
+export interface FeatureCollection<P = Record<string, unknown>> {
+  type: 'FeatureCollection'
+  features: Feature<P>[]
+}
+
+export interface NetworkOut {
+  lines: LineSummary[]
+  nodes: NodeOut[]
+  segments: SegmentOut[]
+  connections: ConnectionOut[]
+  line_features: FeatureCollection
+  segment_features: FeatureCollection
+  node_features: FeatureCollection
+  connection_features: FeatureCollection
+}
+
+export interface CoverageOut {
+  lines: LineSummary[]
+  total_length_km: number
+  station_count: number
+  service_count: number
+  operators: Operator[]
+  feed_start: string | null
+  feed_end: string | null
+  reference_date: string | null
+  sources: Source[]
+  notice: string
+}
+
+export interface ServiceOut {
+  id: string
+  operator_id: string
+  train_number: string
+  product: string
+  origin_name: string | null
+  destination_name: string | null
+  resolution: 'completa' | 'parcial'
+  valid_from: string
+  valid_to: string
+}
+
+export interface SegmentPassOut {
+  service: ServiceOut
+  kind: PassKind
+  enter: string | null
+  exit: string | null
+  enter_margin_min: number
+  exit_margin_min: number
+  km_increasing: boolean | null
+  direction_label: string
+  basis: string
+}
+
+export interface SegmentServicesOut {
+  segment: SegmentOut
+  date: string
+  passes: SegmentPassOut[]
+  counts: Record<PassKind, number>
+}
+
+export interface NodeCall {
+  service_id: string
+  train_number: string
+  product: string
+  origin_name: string | null
+  destination_name: string | null
+  arrival: string | null
+  departure: string | null
+}
+
+export interface NodeServicesOut {
+  node: NodeOut
+  date: string
+  calls: NodeCall[]
+}
+
+export interface ClosureRequest {
+  segment_id: string
+  date: string
+  start: string
+  end: string
+}
+
+export interface ClosureResultItem {
+  service: ServiceOut
+  status: ClosureStatus
+  kind: PassKind
+  enter: string | null
+  exit: string | null
+  direction_label: string
+  explanation: string
+  from_previous_day: boolean
+}
+
+export interface ClosureResult {
+  request: ClosureRequest
+  segment: SegmentOut
+  window_label: string
+  counts: Record<ClosureStatus, number>
+  items: ClosureResultItem[]
+  method: string
+  caveats: string[]
+}

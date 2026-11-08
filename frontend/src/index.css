@@ -1,0 +1,105 @@
+/* Tokens de Oniel: la vía es tinta, el color es señal. */
+:root {
+  --papel: #edefe9;
+  --papel-2: #e3e6df;
+  --papel-3: #d8dcd3;
+  --tinta: #17201e;
+  --tinta-2: #4b5551;
+  --tinta-3: #8b9490;
+  --regla: #c9cec6;
+  --senal-verde: #1f7a4d;
+  --senal-ambar: #c67f12;
+  --senal-roja: #b4232a;
+  --senal-azul: #1e4f9a;
+  --senal-roja-suave: rgba(180, 35, 42, 0.14);
+  --senal-azul-suave: rgba(30, 79, 154, 0.14);
+  --sombra: 0 1px 0 rgba(23, 32, 30, 0.06), 0 10px 28px -18px rgba(23, 32, 30, 0.45);
+  --radio: 4px;
+  --panel-ancho: 424px;
+  --fuente: 'Archivo Variable', Archivo, system-ui, -apple-system, sans-serif;
+  --t-11: 11px;
+  --t-12: 12.5px;
+  --t-14: 14px;
+  --t-17: 17px;
+  --t-22: 22px;
+  --t-28: 28px;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fuente);
+  font-size: var(--t-14);
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'wdth' 100;
+  overscroll-behavior: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--senal-azul);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--senal-azul);
+  outline-offset: 2px;
+}
+
+.datos {
+  font-variation-settings: 'wdth' 88;
+  font-variant-numeric: tabular-nums;
+}
+
+.marca {
+  font-weight: 700;
+  font-variation-settings: 'wdth' 118;
+  letter-spacing: 0.01em;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

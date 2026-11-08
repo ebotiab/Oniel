@@ -1,0 +1,1517 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-08T13:35:49Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 191262271,
+  "lat": 37.3920924,
+  "lon": -5.9752061,
+  "tags": {
+    "addr:city": "Sevilla",
+    "name": "Sevilla - Santa Justa",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "SSJ",
+    "ref": "51003",
+    "ref:EU:PLC": "ES51003",
+    "uic_ref": "7151003",
+    "website": "https://www.adif.es/w/51003-sevilla-sta.-justa",
+    "wheelchair": "yes",
+    "wikidata": "Q801432"
+  }
+},
+{
+  "type": "node",
+  "id": 247377447,
+  "lat": 38.6688617,
+  "lon": -4.3166540,
+  "tags": {
+    "name": "Brazatortas - Veredas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37302",
+    "ref:EU:PLC": "ES37302",
+    "train": "yes",
+    "uic_ref": "7137302",
+    "wikidata": "Q5845853",
+    "wikipedia": "es:Estación de Brazatortas-Veredas"
+  }
+},
+{
+  "type": "node",
+  "id": 254453384,
+  "lat": 39.8625625,
+  "lon": -4.0108266,
+  "tags": {
+    "name": "Toledo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "92102",
+    "ref:EU:PLC": "ES92102",
+    "train": "yes",
+    "uic_ref": "7192102",
+    "website": "https://www.adif.es/w/92102-toledo",
+    "wikidata": "Q801520",
+    "wikipedia": "es:Estación de Toledo"
+  }
+},
+{
+  "type": "node",
+  "id": 325231127,
+  "lat": 40.0222577,
+  "lon": -6.0996298,
+  "tags": {
+    "name": "Plasencia",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "30002",
+    "ref:EU:PLC": "ES30002",
+    "uic_ref": "7130002",
+    "website": "https://www.adif.es/w/30002-plasencia",
+    "wikidata": "Q5846926",
+    "wikipedia": "es:Estación de Plasencia"
+  }
+},
+{
+  "type": "node",
+  "id": 539005521,
+  "lat": 38.7239357,
+  "lon": -5.2270776,
+  "tags": {
+    "name": "Cabeza Del Buey",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37311",
+    "ref:EU:PLC": "ES37311",
+    "train": "yes",
+    "uic_ref": "7137311",
+    "wikidata": "Q5845885",
+    "wikipedia": "es:Estación de Cabeza del Buey"
+  }
+},
+{
+  "type": "node",
+  "id": 539006238,
+  "lat": 38.7404428,
+  "lon": -4.7303075,
+  "tags": {
+    "name": "Almadenejos - Almadén",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37305",
+    "ref:EU:PLC": "ES37305",
+    "train": "yes",
+    "uic_ref": "7137305",
+    "wikidata": "Q5845659",
+    "wikipedia": "es:Estación de Almadenejos-Almadén"
+  }
+},
+{
+  "type": "node",
+  "id": 1073008477,
+  "lat": 39.8919896,
+  "lon": -5.6776371,
+  "tags": {
+    "name": "Casatejada",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35207",
+    "ref:EU:PLC": "ES35207",
+    "uic_ref": "7135207",
+    "website": "https://www.adif.es/w/35207-casatejada",
+    "wikidata": "Q5845986",
+    "wikipedia": "es:Estación de Casatejada"
+  }
+},
+{
+  "type": "node",
+  "id": 1164461464,
+  "lat": 40.1208535,
+  "lon": -3.8422557,
+  "tags": {
+    "name": "Illescas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35005",
+    "ref:EU:PLC": "ES35005",
+    "uic_ref": "7135005",
+    "website": "https://www.adif.es/-/35005-illescas",
+    "wheelchair": "yes",
+    "wikidata": "Q5846393",
+    "wikimedia_commons": "File:Illescas - Estación de Adif 1.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 1447095805,
+  "lat": 40.0323060,
+  "lon": -3.9021710,
+  "tags": {
+    "name": "Villaluenga-Yuncler",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "35100",
+    "ref:EU:PLC": "ES35100",
+    "train": "yes",
+    "uic_ref": "7135100"
+  }
+},
+{
+  "type": "node",
+  "id": 1495837646,
+  "lat": 38.9670555,
+  "lon": -5.8629267,
+  "tags": {
+    "name": "Don Benito",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37407",
+    "ref:EU:PLC": "ES37407",
+    "train": "yes",
+    "uic_ref": "7137407",
+    "wikidata": "Q5846120",
+    "wikipedia": "es:Estación de Don Benito"
+  }
+},
+{
+  "type": "node",
+  "id": 1756622881,
+  "lat": 37.4176230,
+  "lon": -6.0233292,
+  "tags": {
+    "name": "Alamillo",
+    "old_name": "Apeadero de Camas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "uic_ref": "7143001"
+  }
+},
+{
+  "type": "node",
+  "id": 1910778116,
+  "lat": 40.0103507,
+  "lon": -3.9034257,
+  "tags": {
+    "name": "Villaluenga-Asland",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "91002",
+    "ref:EU:PLC": "ES91002",
+    "train": "yes",
+    "uic_ref": "7191002"
+  }
+},
+{
+  "type": "node",
+  "id": 1972336082,
+  "lat": 38.2377459,
+  "lon": -6.0096212,
+  "tags": {
+    "name": "Llerena",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q10949101"
+  }
+},
+{
+  "type": "node",
+  "id": 2043185471,
+  "lat": 37.9126014,
+  "lon": -4.7206348,
+  "tags": {
+    "name": "Rabanales",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q57986245"
+  }
+},
+{
+  "type": "node",
+  "id": 2052060244,
+  "lat": 38.5143650,
+  "lon": -3.5019392,
+  "tags": {
+    "name": "Almuradiel-Viso del Marques",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/w/50202-almuradiel-viso-m.",
+    "wikidata": "Q5845678"
+  }
+},
+{
+  "type": "node",
+  "id": 2269474720,
+  "lat": 38.2552415,
+  "lon": -4.5714216,
+  "tags": {
+    "name": "Villanueva de Córdoba-Los Pedroches",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position:exact": "285.2",
+    "ref": "37704",
+    "ref:EU:PLC": "ES37704",
+    "uic_ref": "7137704",
+    "wikidata": "Q20942785"
+  }
+},
+{
+  "type": "node",
+  "id": 2328131198,
+  "lat": 39.9493512,
+  "lon": -4.4875620,
+  "tags": {
+    "name": "Erustes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35107",
+    "ref:EU:PLC": "ES35107",
+    "uic_ref": "7135107",
+    "wikidata": "Q5846205",
+    "wikipedia": "es:Estación de Erustes"
+  }
+},
+{
+  "type": "node",
+  "id": 2328131201,
+  "lat": 39.9607703,
+  "lon": -4.6465599,
+  "tags": {
+    "name": "Montearagón",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35109",
+    "ref:EU:PLC": "ES35109",
+    "uic_ref": "7135109",
+    "website": "https://www.adif.es/-/35109-montearag%C3%B3n",
+    "wikidata": "Q5846741",
+    "wikipedia": "es:Estación de Montearagón"
+  }
+},
+{
+  "type": "node",
+  "id": 2328131202,
+  "lat": 39.9218531,
+  "lon": -5.1862074,
+  "tags": {
+    "name": "Oropesa de Toledo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35203",
+    "ref:EU:PLC": "ES35203",
+    "uic_ref": "7135203",
+    "website": "https://www.adif.es/w/35203-oropesa-toledo",
+    "wikidata": "Q5846840",
+    "wikipedia": "es:Estación de Oropesa de Toledo"
+  }
+},
+{
+  "type": "node",
+  "id": 2328131203,
+  "lat": 39.9706341,
+  "lon": -4.8265448,
+  "tags": {
+    "name": "Talavera de la Reina",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35200",
+    "ref:EU:PLC": "ES35200",
+    "uic_ref": "7135200",
+    "website": "https://www.adif.es/w/35200-talavera-la-reina",
+    "wikidata": "Q5847306",
+    "wikipedia": "es:Estación de Talavera de la Reina"
+  }
+},
+{
+  "type": "node",
+  "id": 2328131205,
+  "lat": 39.9788063,
+  "lon": -4.2831624,
+  "tags": {
+    "name": "Torrijos",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35105",
+    "ref:EU:PLC": "ES35105",
+    "uic_ref": "7135105",
+    "website": "https://www.adif.es/w/35105-torrijos",
+    "wikidata": "Q5493393",
+    "wikimedia_commons": "File:Torrijos - Estación de Adif 5.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 2364846599,
+  "lat": 37.3958204,
+  "lon": -3.5277610,
+  "tags": {
+    "name": "Iznalloz",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q2918573"
+  }
+},
+{
+  "type": "node",
+  "id": 2393787650,
+  "lat": 39.8795230,
+  "lon": -3.7284893,
+  "tags": {
+    "name": "Villasequilla",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60203",
+    "ref:EU:PLC": "ES60203",
+    "train": "yes",
+    "uic_ref": "7160203",
+    "website": "https://www.adif.es/w/60203-villasequilla",
+    "wheelchair": "yes",
+    "wikidata": "Q5847510",
+    "wikipedia": "es:Estación de Villasequilla"
+  }
+},
+{
+  "type": "node",
+  "id": 2518537266,
+  "lat": 39.0614095,
+  "lon": -3.6040793,
+  "tags": {
+    "name": "Daimiel",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "94002",
+    "ref:EU:PLC": "ES94002",
+    "train": "yes",
+    "uic_ref": "7194002",
+    "wikidata": "Q12174792",
+    "wikipedia": "es:Estación de Daimiel"
+  }
+},
+{
+  "type": "node",
+  "id": 2519683289,
+  "lat": 38.8955125,
+  "lon": -3.7096502,
+  "tags": {
+    "name": "Almagro",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "94004",
+    "ref:EU:PLC": "ES94004",
+    "train": "yes",
+    "uic_ref": "7194004",
+    "wikidata": "Q12174779",
+    "wikipedia": "es:Estación de Almagro"
+  }
+},
+{
+  "type": "node",
+  "id": 2675627429,
+  "lat": 38.1357775,
+  "lon": -3.5579490,
+  "tags": {
+    "name": "Vadollano",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 2962772884,
+  "lat": 39.9151236,
+  "lon": -5.8979244,
+  "tags": {
+    "name": "La Bazagona",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "35209",
+    "ref:EU:PLC": "ES35209",
+    "train": "yes",
+    "uic_ref": "7135209"
+  }
+},
+{
+  "type": "node",
+  "id": 3914593130,
+  "lat": 39.9141541,
+  "lon": -3.8624865,
+  "tags": {
+    "name": "Algodor",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "37100",
+    "ref:EU:PLC": "ES37100",
+    "train": "yes",
+    "uic_ref": "7137100"
+  }
+},
+{
+  "type": "node",
+  "id": 4543903002,
+  "lat": 38.3739600,
+  "lon": -3.5015139,
+  "tags": {
+    "name": "Las Correderas",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 4668682266,
+  "lat": 37.9778822,
+  "lon": -3.8015495,
+  "tags": {
+    "name": "Mengíbar-Artichuela",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q6433201"
+  }
+},
+{
+  "type": "node",
+  "id": 5248861970,
+  "lat": 40.1945731,
+  "lon": -3.7500580,
+  "tags": {
+    "name": "Bifurcación Torrejón de Velasco",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5254650053,
+  "lat": 37.8670309,
+  "lon": -4.8504733,
+  "tags": {
+    "name": "El Higuerón",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q57986271"
+  }
+},
+{
+  "type": "node",
+  "id": 5254727527,
+  "lat": 38.6992951,
+  "lon": -4.9294837,
+  "tags": {
+    "name": "Guadalmez - Los Pedroches",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37308",
+    "ref:EU:PLC": "ES37308",
+    "train": "yes",
+    "uic_ref": "7137308",
+    "wikidata": "Q5846335",
+    "wikipedia": "es:Estación de Guadalmez-Los Pedroches"
+  }
+},
+{
+  "type": "node",
+  "id": 5868423604,
+  "lat": 39.9495725,
+  "lon": -3.7385925,
+  "tags": {
+    "internet_access": "no",
+    "name": "Castillejo-Añover",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60202",
+    "ref:EU:PLC": "ES60202",
+    "train": "yes",
+    "uic_ref": "7160202",
+    "wikidata": "Q5845997",
+    "wikipedia": "es:Estación de Castillejo-Añover"
+  }
+},
+{
+  "type": "node",
+  "id": 6387826186,
+  "lat": 37.4589672,
+  "lon": -5.9584272,
+  "tags": {
+    "name": "Sevilla Majarabique Mercancías",
+    "operator": "Termisur Eurocargo;Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 7499028216,
+  "lat": 40.4056837,
+  "lon": -3.6900187,
+  "tags": {
+    "iata": "XOC",
+    "name": "Madrid-Puerta de Atocha-Almudena Grandes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "MPA",
+    "ref": "60000",
+    "ref:EU:PLC": "ES60000",
+    "train": "yes",
+    "uic_ref": "7160000",
+    "website": "https://www.adif.es/w/60000-madrid-pta-de-atocha",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7557283526,
+  "lat": 37.8398963,
+  "lon": -4.9416509,
+  "tags": {
+    "name": "Bifurcación Málaga-Alta Velocidad",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7564281361,
+  "lat": 37.5789991,
+  "lon": -4.6336985,
+  "tags": {
+    "name": "Montilla",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846754"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287729,
+  "lat": 37.7798915,
+  "lon": -4.6881674,
+  "tags": {
+    "name": "Torres Cabrera",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287730,
+  "lat": 37.7991857,
+  "lon": -4.7592661,
+  "tags": {
+    "name": "El Chaparral",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287752,
+  "lat": 37.8365680,
+  "lon": -4.8327097,
+  "tags": {
+    "name": "Valchillón",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q74220558"
+  }
+},
+{
+  "type": "node",
+  "id": 7567516121,
+  "lat": 37.8885103,
+  "lon": -4.7895160,
+  "tags": {
+    "name": "Córdoba Julio Anguita",
+    "old_name": "Córdoba Central",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "https://github.com/trainline-eu/stations",
+    "uic_ref": "7150500",
+    "url": "https://www.adif.es/w/50500-c%C3%B3rdoba-j.-anguita",
+    "wheelchair": "yes",
+    "wikidata": "Q97624967"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538147,
+  "lat": 37.3959248,
+  "lon": -4.7527784,
+  "tags": {
+    "name": "Puente Genil",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846982"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538149,
+  "lat": 37.5247207,
+  "lon": -4.6608026,
+  "tags": {
+    "name": "Aguilar de la Frontera",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5556412"
+  }
+},
+{
+  "type": "node",
+  "id": 7571619026,
+  "lat": 37.3589237,
+  "lon": -4.8222285,
+  "tags": {
+    "name": "Puente Genil-Herrera",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q4886621"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890826,
+  "lat": 37.9555142,
+  "lon": -3.5357201,
+  "tags": {
+    "name": "Begíjar",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5845790",
+    "wikipedia": "es:Estación de Begíjar"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890828,
+  "lat": 38.0690845,
+  "lon": -3.5891403,
+  "tags": {
+    "addr:city": "Linares-Baeza",
+    "name": "Linares-Baeza",
+    "opening_hours": "Mo-Su 05:30-23:00",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/-/50300-linares-baeza",
+    "wikidata": "Q5846599"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980467,
+  "lat": 37.3323784,
+  "lon": -3.5964364,
+  "tags": {
+    "name": "Deifontes",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5846108"
+  }
+},
+{
+  "type": "node",
+  "id": 7752561497,
+  "lat": 38.0102592,
+  "lon": -3.8321596,
+  "tags": {
+    "name": "Espelúy",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5408191"
+  }
+},
+{
+  "type": "node",
+  "id": 7752561504,
+  "lat": 37.7799776,
+  "lon": -3.7907894,
+  "tags": {
+    "name": "Jaén",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/w/03100-ja%C3%A9n",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653197,
+  "lat": 38.2157347,
+  "lon": -3.5176996,
+  "tags": {
+    "name": "Vilches",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/w/50207-vilches",
+    "wikidata": "Q5847452"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653203,
+  "lat": 38.0197971,
+  "lon": -3.6374159,
+  "tags": {
+    "name": "Las Madrigueras",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653204,
+  "lat": 38.0005057,
+  "lon": -3.7073468,
+  "tags": {
+    "name": "Jabalquinto",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653205,
+  "lat": 37.9893088,
+  "lon": -3.7836243,
+  "tags": {
+    "name": "Mengíbar-Las Palomeras",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653210,
+  "lat": 38.0040278,
+  "lon": -3.9237854,
+  "tags": {
+    "name": "Villanueva de la Reina",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653211,
+  "lat": 38.0279715,
+  "lon": -4.0660316,
+  "tags": {
+    "addr:city": "Andújar",
+    "name": "Andújar",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5549560"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653212,
+  "lat": 37.9812868,
+  "lon": -4.2836936,
+  "tags": {
+    "name": "Villa del Rio",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5847454"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653214,
+  "lat": 38.0077975,
+  "lon": -4.3822459,
+  "tags": {
+    "name": "Montoro",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653215,
+  "lat": 37.9553655,
+  "lon": -4.4389805,
+  "tags": {
+    "name": "Pedro Abad",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653216,
+  "lat": 37.9419286,
+  "lon": -4.4887572,
+  "tags": {
+    "name": "El Carpio de Córdoba",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q96655920"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653217,
+  "lat": 37.9496151,
+  "lon": -4.5362733,
+  "tags": {
+    "name": "Villafranca de Córdoba",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653218,
+  "lat": 37.9111084,
+  "lon": -4.6021035,
+  "tags": {
+    "name": "Los Cansinos",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653219,
+  "lat": 37.9329792,
+  "lon": -4.6748063,
+  "tags": {
+    "name": "Alcolea de Córdoba",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q57986238"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175192,
+  "lat": 37.8479706,
+  "lon": -4.9137717,
+  "tags": {
+    "name": "Villarrubia de Córdoba",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q57985482",
+    "wikimedia_commons": "File:Estación de Villarrubia de Córdoba.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175193,
+  "lat": 37.8138130,
+  "lon": -5.0082768,
+  "tags": {
+    "name": "Almodovar del Rio",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175194,
+  "lat": 37.8041466,
+  "lon": -5.1059226,
+  "tags": {
+    "name": "Posadas",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846962"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175197,
+  "lat": 37.7738800,
+  "lon": -5.2059823,
+  "tags": {
+    "name": "Hornachuelos",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q20639679"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175203,
+  "lat": 37.7181407,
+  "lon": -5.2929522,
+  "tags": {
+    "name": "Palma del Río",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846873"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175205,
+  "lat": 37.7073685,
+  "lon": -5.3407988,
+  "tags": {
+    "name": "Peñaflor",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5841476"
+  }
+},
+{
+  "type": "node",
+  "id": 7776575285,
+  "lat": 37.3270062,
+  "lon": -5.9640926,
+  "tags": {
+    "name": "La Salud",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7776575288,
+  "lat": 37.3805118,
+  "lon": -5.9354340,
+  "tags": {
+    "name": "Sevilla La Negrilla Mercancías",
+    "operator": "Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 7776575293,
+  "lat": 37.4167924,
+  "lon": -5.9452849,
+  "tags": {
+    "name": "Bifurcación La Negrilla",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7776575294,
+  "lat": 37.4241156,
+  "lon": -5.9508958,
+  "tags": {
+    "name": "Bifurcación Tamarguillo",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7776577078,
+  "lat": 37.4264623,
+  "lon": -5.9994981,
+  "tags": {
+    "name": "Bifurcación Cartuja",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7779139774,
+  "lat": 37.4431168,
+  "lon": -5.9684240,
+  "tags": {
+    "name": "Bifurcación San Jerónimo",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7779139775,
+  "lat": 37.4417188,
+  "lon": -5.9590381,
+  "tags": {
+    "name": "Bifurcación Los Naranjos",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7785762853,
+  "lat": 38.0903746,
+  "lon": -5.8033276,
+  "tags": {
+    "name": "Guadalcanal",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846331"
+  }
+},
+{
+  "type": "node",
+  "id": 7785762854,
+  "lat": 38.1636733,
+  "lon": -5.9004141,
+  "tags": {
+    "name": "Fuente del Arco",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "40107",
+    "wikidata": "Q8779825"
+  }
+},
+{
+  "type": "node",
+  "id": 7804977635,
+  "lat": 38.2920585,
+  "lon": -5.2744074,
+  "tags": {
+    "name": "Peñarroya-Pueblonuevo",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q79046579"
+  }
+},
+{
+  "type": "node",
+  "id": 7804977658,
+  "lat": 38.1196267,
+  "lon": -4.9500562,
+  "tags": {
+    "name": "Alhondiguilla-Villaviciosa",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q24819537"
+  }
+},
+{
+  "type": "node",
+  "id": 7804977670,
+  "lat": 38.6964634,
+  "lon": -5.2903616,
+  "tags": {
+    "name": "Almorchón",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37400",
+    "ref:EU:PLC": "ES37400",
+    "train": "yes",
+    "uic_ref": "7137400",
+    "wikidata": "Q5845676",
+    "wikipedia": "es:Estación de Almorchón"
+  }
+},
+{
+  "type": "node",
+  "id": 8048235405,
+  "lat": 37.3343424,
+  "lon": -5.4254964,
+  "tags": {
+    "name": "Marchena",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q5846678"
+  }
+},
+{
+  "type": "node",
+  "id": 8326246961,
+  "lat": 40.3889298,
+  "lon": -3.6777157,
+  "tags": {
+    "addr:city": "Madrid",
+    "addr:housenumber": "84",
+    "addr:postcode": "28053",
+    "addr:street": "Calle de Méndez Álvaro",
+    "email": "logistica.gerenciacentro@adif.es",
+    "name": "Estación de Mercancías Madrid - Abroñigal",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 9821007500,
+  "lat": 40.4720571,
+  "lon": -3.6822622,
+  "tags": {
+    "addr:city": "Madrid",
+    "addr:postcode": "28036",
+    "addr:street": "Calle de Agustín de Foxá",
+    "name": "Madrid-Chamartín-Clara Campoamor",
+    "nohousenumber": "yes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "MCC",
+    "ref": "17000",
+    "ref:EU:PLC": "ES17000",
+    "train": "yes",
+    "uic_ref": "7117000",
+    "url": "https://www.crtm.es/tu-transporte-publico/cercanias-renfe/estaciones/5_18",
+    "website": "https://www.adif.es/-/17000-madrid-chamart%C3%ADn",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9893687907,
+  "lat": 38.6912881,
+  "lon": -4.1119364,
+  "tags": {
+    "name": "Puertollano",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37700",
+    "ref:EU:PLC": "ES37700",
+    "train": "yes",
+    "uic_ref": "7137700",
+    "wikidata": "Q3097356",
+    "wikipedia": "es:Estación de Puertollano"
+  }
+},
+{
+  "type": "node",
+  "id": 11071076221,
+  "lat": 40.4191428,
+  "lon": -3.5804736,
+  "tags": {
+    "network": "RFIG",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "yard",
+    "railway:ref": "VK",
+    "railway:yard:size": "large",
+    "train": "yes",
+    "wikidata": "Q96250574",
+    "wikipedia": "es:Estación de Vicálvaro-Mercancías"
+  }
+},
+{
+  "type": "node",
+  "id": 11071803105,
+  "lat": 40.3855771,
+  "lon": -3.6775536,
+  "tags": {
+    "name": "Bifurcación Planetario",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 11961609153,
+  "lat": 40.3375843,
+  "lon": -3.6215531,
+  "tags": {
+    "name": "Vallecas-Alta Velocidad-aguja km 12,300",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 11961609154,
+  "lat": 40.3061689,
+  "lon": -3.6583785,
+  "tags": {
+    "name": "Los Gavilanes-aguja km 13,400",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 12571012002,
+  "lat": 38.9686751,
+  "lon": -5.7964986,
+  "tags": {
+    "name": "Villanueva de la Serena",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37406",
+    "ref:EU:PLC": "ES37406",
+    "train": "yes",
+    "uic_ref": "7137406",
+    "wikidata": "Q5847492",
+    "wikipedia": "es:Estación de Villanueva de la Serena"
+  }
+},
+{
+  "type": "node",
+  "id": 12589890277,
+  "lat": 38.7351082,
+  "lon": -5.5416907,
+  "tags": {
+    "name": "Castuera",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37402",
+    "ref:EU:PLC": "ES37402",
+    "train": "yes",
+    "uic_ref": "7137402"
+  }
+},
+{
+  "type": "node",
+  "id": 12590020268,
+  "lat": 38.9132989,
+  "lon": -6.0694099,
+  "tags": {
+    "name": "Valdetorres",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "37409",
+    "ref:EU:PLC": "ES37409",
+    "train": "yes",
+    "uic_ref": "7137409",
+    "wikidata": "Q5847409",
+    "wikipedia": "es:Estación de Valdetorres"
+  }
+},
+{
+  "type": "node",
+  "id": 12819863889,
+  "lat": 38.8533050,
+  "lon": -5.6414943,
+  "tags": {
+    "name": "Campanario",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37404",
+    "ref:EU:PLC": "ES37404",
+    "train": "yes",
+    "uic_ref": "7137404",
+    "wikidata": "Q5845930",
+    "wikipedia": "es:Estación de Campanario"
+  }
+},
+{
+  "type": "node",
+  "id": 13418625891,
+  "lat": 39.4190159,
+  "lon": -3.8221101,
+  "tags": {
+    "alt_name": "Puesto de Adelantamiento y Estacionamiento de Trenes Urda;PAET Urda",
+    "alt_name:ca": "Punt d'Avançament i Estacionament de Trens d'Urda;PAET Urda",
+    "alt_name:es": "Puesto de Adelantamiento y Estacionamiento de Trenes Urda;PAET Urda",
+    "name": "Urda",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "railway": "service_station",
+    "railway:position:exact": "119.747",
+    "railway:ref": "URD",
+    "ref": "37107",
+    "ref:EU:PLC": "ES37107",
+    "uic_ref": "7137107"
+  }
+},
+{
+  "type": "node",
+  "id": 13715660837,
+  "lat": 39.8949611,
+  "lon": -5.5456499,
+  "tags": {
+    "addr:city": "Navalmoral de la Mata",
+    "addr:housenumber": "1",
+    "addr:postcode": "10300",
+    "addr:street": "Paseo de la Estación",
+    "name": "Navalmoral de la Mata",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "35206",
+    "ref:EU:PLC": "ES35206",
+    "uic_ref": "7135206",
+    "website": "https://www.adif.es/w/35206-navalmoral-la-mata",
+    "wikidata": "Q5694798",
+    "wikipedia": "es:Estación de Navalmoral de la Mata"
+  }
+},
+{
+  "type": "node",
+  "id": 13717016710,
+  "lat": 38.9848679,
+  "lon": -3.9131406,
+  "tags": {
+    "addr:city": "Ciudad Real",
+    "addr:housenumber": "1",
+    "addr:postcode": "13005",
+    "addr:street": "Avenida de Europa",
+    "name": "Ciudad Real",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "37200",
+    "ref:EU:PLC": "ES37200",
+    "train": "yes",
+    "uic_ref": "7137200",
+    "website": "https://www.adif.es/w/37200-Ciudad+Real",
+    "wikidata": "Q3325441",
+    "wikipedia": "es:Estación de Ciudad Real"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,23 @@
+# secrets
+.env
+.env.*
+!.env.example
+.logfire/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# node
+node_modules/
+dist/
+frontend/test-results/
+frontend/playwright-report/
+
+# misc
+.DS_Store
+*.log

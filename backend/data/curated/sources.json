@@ -1,0 +1,50 @@
+{
+  "sources": [
+    {
+      "id": "renfe-gtfs-av-ld-md",
+      "name": "Horarios de alta velocidad, larga distancia y media distancia (GTFS)",
+      "publisher": "Renfe Viajeros (data.renfe.com)",
+      "url": "https://data.renfe.com/dataset/horarios-de-alta-velocidad-larga-distancia-y-media-distancia",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "retrieved_on": "2026-11-08",
+      "coverage": "Servicios AVE, AVLO, Alvia e Intercity de Renfe que recorren el corredor Madrid–Córdoba–Sevilla; validez del fichero del 7 de noviembre de 2026 al 29 de septiembre de 2027.",
+      "notes": "Fichero google_transit.zip publicado el 8 de noviembre de 2026. Son horarios planificados: no reflejan la interrupción de la circulación Madrid–Andalucía vigente desde el 28 de octubre de 2026 ni otras alteraciones del servicio.",
+      "file": "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
+    },
+    {
+      "id": "osm-relation-1254828",
+      "name": "Trazado de la línea de alta velocidad Madrid–Sevilla (relación OSM 1254828, vías con ref=010 y operador Adif)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/1254828",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-08",
+      "coverage": "Geometría continua de 470,5 km entre Madrid-Puerta de Atocha y Sevilla-Santa Justa, con velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 8 de noviembre de 2026. Se usa como geometría porque el WFS de IDEAdif (Adif) respondía 503 ese día; la longitud y los puntos kilométricos se verificaron contra las referencias de Adif.",
+      "file": "raw/osm/relation_1254828_ave_madrid_sevilla_2026-11-08.json"
+    },
+    {
+      "id": "adif-mapa-red",
+      "name": "Mapa de la red ferroviaria española y referencias de la línea 010",
+      "publisher": "Adif / Adif Alta Velocidad",
+      "url": "https://www.adif.es/sobre-adif/red-ferroviaria/mapa",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-08",
+      "coverage": "Verificación del trazado (mapa de la red, capa de vía doble electrificada en ancho estándar), códigos de estación de Adif y puntos kilométricos de estaciones, PAET y bifurcaciones de la línea 010.",
+      "notes": "El servicio WFS/WMS de IDEAdif (https://ideadif.adif.es/gservices/Tramificacion/wfs) devolvía HTTP 503 el 8 de noviembre de 2026; el importador admite cargar su GeoJSON cuando vuelva a estar disponible. Los PK se contrastaron además con la tabla de instalaciones de la línea en Wikipedia (CC BY-SA 4.0)."
+    },
+    {
+      "id": "openfreemap",
+      "name": "Mapa base (teselas vectoriales)",
+      "publisher": "OpenFreeMap · OpenMapTiles · colaboradores de OpenStreetMap",
+      "url": "https://openfreemap.org",
+      "license": "ODbL 1.0 (datos) · BSD (esquema OpenMapTiles)",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-08",
+      "coverage": "Fondo cartográfico del visor en todo el mundo.",
+      "notes": "Servicio gratuito sin clave de API."
+    }
+  ]
+}

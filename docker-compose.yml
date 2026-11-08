@@ -1,0 +1,20 @@
+# PostgreSQL local para desarrollo y pruebas. `docker compose up -d`
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: oniel-postgres
+    environment:
+      POSTGRES_USER: oniel
+      POSTGRES_PASSWORD: oniel
+      POSTGRES_DB: oniel
+    ports:
+      - "5433:5432"
+    volumes:
+      - oniel-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oniel"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  oniel-pgdata:

@@ -1,0 +1,57 @@
+# Diseño de Oniel
+
+## Brief resumido
+
+Oniel es una web en español para descubrir cómo está conectada la red ferroviaria española. Su función principal es explorar la red en un mapa interactivo; la simulación de cierres es una herramienta secundaria. La primera versión cubre la línea de alta velocidad Madrid–Sevilla (Adif, línea 010), que en 2026 ha sufrido dos accidentes graves (Adamuz, enero; Urda, octubre). El tono debe ser sobrio, preciso y respetuoso.
+
+## Referencias
+
+- Cartografía oficial (hojas del IGN, mapa de la red de Adif): papel mate, tinta negra, el ferrocarril como línea negra con trazos.
+- Esquemas de línea de las estaciones y de los cuadros de mando (TCO): una línea recta con puntos kilométricos, estaciones y bifurcaciones.
+- Señalización ferroviaria: verde (vía libre), ámbar (anuncio de precaución), rojo (parada). En Oniel el color solo aparece cuando significa algo.
+
+## Direcciones exploradas
+
+Se construyeron dos maquetas reales con el trazado y se revisaron en escritorio y móvil (capturas en `docs/capturas/exploracion/`).
+
+**A. Cuaderno cartográfico (elegida).** Fondo papel claro, vía en tinta negra con trazos blancos, panel lateral con el esquema vertical de la línea (PK, estaciones, PAET, bifurcaciones). El color de señalización se reserva para estados: azul selección, verde publicado, ámbar estimado, rojo cierre.
+
+**B. Cuadro de mando.** Fondo pizarra azul verdosa, vía en tiza luminosa, esquema horizontal al pie como un TCO. Más espectacular, pero más cercano al "panel oscuro" genérico, menos legible en móvil y demasiado dramático para el contexto de la línea.
+
+Se eligió A por legibilidad, sobriedad y porque el esquema vertical junto al mapa funciona como índice de la línea en escritorio y como hoja inferior en móvil.
+
+## Sistema de tokens
+
+Color
+- `--papel` `#EDEFE9` fondo del mapa y de la interfaz
+- `--papel-2` `#E3E6DF` zonas hundidas (pie de panel, chips)
+- `--tinta` `#17201E` texto principal y vía disponible
+- `--tinta-2` `#4B5551` texto secundario
+- `--tinta-3` `#8B9490` texto terciario, conexiones no cargadas
+- `--regla` `#C9CEC6` bordes y reglas
+- `--senal-verde` `#1F7A4D` paso publicado
+- `--senal-ambar` `#C67F12` paso estimado
+- `--senal-roja` `#B4232A` cierre simulado / afectado
+- `--senal-azul` `#1E4F9A` selección
+
+Mapa base (sobre teselas vectoriales de OpenFreeMap): agua `#D3DCDF`, tierra `#EDEFE9`, zonas urbanas `#E4E7E0`, carreteras `#DCE0D8`, otros ferrocarriles `#C3C8C0`, límites `#C0C6BF`, rótulos `#6B7470`.
+
+Tipografía
+- Una sola familia: **Archivo** variable (ejes de anchura 62–125 y peso 100–900), autoalojada.
+- Marca "Oniel": Archivo ancho (wdth 118), peso 700.
+- Interfaz: Archivo normal. Datos y PK: Archivo estrecho (wdth 88–90) con cifras tabulares.
+- Escala: 11 / 12,5 / 14 / 17 / 22 / 28 px. Interlineado 1,35 en texto corrido.
+
+Composición
+- Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; cobertura arriba a la derecha.
+- Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
+- Alineación a la izquierda en todo el texto. Sin mayúsculas sostenidas, sin etiquetas numeradas.
+
+Movimiento
+- Solo en respuesta a una acción: enfocar el mapa al seleccionar, abrir el panel de simulación, resaltar en el esquema lo que se resalta en el mapa. Se respeta `prefers-reduced-motion`.
+
+Principios
+- La vía es tinta; el color es señal. Nada se colorea por decoración.
+- El esquema de línea y el mapa son la misma cosa vista de dos formas: siempre sincronizados.
+- Todo lo que se muestra dice de dónde viene (fuente, licencia, fecha).
+- Los textos hablan al visitante que sabe poco de ferrocarril: "tramo", "estación", "cierre", no jerga.

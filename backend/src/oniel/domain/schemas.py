@@ -1,0 +1,202 @@
+"""Modelos públicos de la API (también los usa la exportación estática del visor)."""
+
+from __future__ import annotations
+
+import datetime as dt
+from typing import Any, Literal
+
+from pydantic import BaseModel, Field
+
+
+class Source(BaseModel):
+    id: str
+    name: str
+    publisher: str
+    url: str | None = None
+    license: str | None = None
+    license_url: str | None = None
+    retrieved_on: dt.date | None = None
+    coverage: str | None = None
+    notes: str | None = None
+
+
+class Operator(BaseModel):
+    id: str
+    name: str
+    role: Literal["operador", "administrador_infraestructura"]
+
+
+class LineSummary(BaseModel):
+    id: str
+    name: str
+    short_name: str | None = None
+    mode: str
+    infrastructure_manager: Operator | None = None
+    gauge_mm: int | None = None
+    electrification: str | None = None
+    max_speed_kmh: int | None = None
+    opened_on: dt.date | None = None
+    length_km: float
+    reference_length_km: float | None = None
+    status: Literal["disponible", "prevista"]
+    description: str | None = None
+    source_id: str | None = None
+    node_count: int
+    segment_count: int
+
+
+class NodeOut(BaseModel):
+    id: str
+    name: str
+    kind: Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
+    lon: float
+    lat: float
+    adif_code: str | None = None
+    description: str | None = None
+    details: dict[str, Any] = Field(default_factory=dict)
+    line_id: str
+    km: float
+    reference_pk_km: float | None = None
+    seq: int
+
+
+class SegmentOut(BaseModel):
+    id: str
+    line_id: str
+    seq: int
+    from_node_id: str
+    to_node_id: str
+    from_name: str
+    to_name: str
+    km_from: float
+    km_to: float
+    length_km: float
+    max_speed_kmh: int | None = None
+    typical_speed_kmh: int | None = None
+    status: Literal["disponible", "prevista"]
+    source_id: str | None = None
+
+
+class ConnectionOut(BaseModel):
+    id: str
+    node_id: str
+    name: str
+    towards: str
+    status: Literal["no_cargada", "disponible"]
+    line_id: str | None = None
+
+
+class Feature(BaseModel):
+    type: Literal["Feature"] = "Feature"
+    id: str
+    geometry: dict[str, Any]
+    properties: dict[str, Any]
+
+
+class FeatureCollection(BaseModel):
+    type: Literal["FeatureCollection"] = "FeatureCollection"
+    features: list[Feature]
+
+
+class NetworkOut(BaseModel):
+    """Todo lo que el visor necesita para dibujar la red disponible."""
+
+    lines: list[LineSummary]
+    nodes: list[NodeOut]
+    segments: list[SegmentOut]
+    connections: list[ConnectionOut]
+    line_features: FeatureCollection
+    segment_features: FeatureCollection
+    node_features: FeatureCollection
+    connection_features: FeatureCollection
+
+
+class CoverageOut(BaseModel):
+    lines: list[LineSummary]
+    total_length_km: float
+    station_count: int
+    service_count: int
+    operators: list[Operator]
+    feed_start: dt.date | None = None
+    feed_end: dt.date | None = None
+    reference_date: dt.date | None = None
+    sources: list[Source]
+    notice: str
+
+
+class ServiceOut(BaseModel):
+    id: str
+    operator_id: str
+    train_number: str
+    product: str
+    origin_name: str | None = None
+    destination_name: str | None = None
+    resolution: Literal["completa", "parcial"]
+    valid_from: dt.date
+    valid_to: dt.date
+
+
+class StopOut(BaseModel):
+    seq: int
+    stop_id: str
+    stop_name: str
+    arrival: str
+    departure: str
+    node_id: str | None = None
+
+
+class ServiceDetail(ServiceOut):
+    stops: list[StopOut]
+
+
+class SegmentPassOut(BaseModel):
+    service: ServiceOut
+    kind: Literal["publicado", "estimado", "indeterminado"]
+    enter: str | None = None
+    exit: str | None = None
+    enter_margin_min: float
+    exit_margin_min: float
+    km_increasing: bool | None = None
+    direction_label: str
+    basis: str
+
+
+class SegmentServicesOut(BaseModel):
+    segment: SegmentOut
+    date: dt.date
+    passes: list[SegmentPassOut]
+    counts: dict[str, int]
+
+
+class NodeServicesOut(BaseModel):
+    node: NodeOut
+    date: dt.date
+    calls: list[dict[str, Any]]
+
+
+class ClosureRequest(BaseModel):
+    segment_id: str
+    date: dt.date
+    start: dt.time
+    end: dt.time
+
+
+class ClosureResultItem(BaseModel):
+    service: ServiceOut
+    status: Literal["afectado_publicado", "afectado_estimado", "indeterminado", "no_afectado"]
+    kind: Literal["publicado", "estimado", "indeterminado"]
+    enter: str | None = None
+    exit: str | None = None
+    direction_label: str
+    explanation: str
+    from_previous_day: bool = False
+
+
+class ClosureResult(BaseModel):
+    request: ClosureRequest
+    segment: SegmentOut
+    window_label: str
+    counts: dict[str, int]
+    items: list[ClosureResultItem]
+    method: str
+    caveats: list[str]

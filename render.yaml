@@ -1,0 +1,51 @@
+# Blueprint de Render para Oniel: API FastAPI + PostgreSQL + job de importación.
+# Despliegue: https://dashboard.render.com/blueprints → New Blueprint Instance → este repositorio.
+# Tras el primer despliegue, ejecuta el job "oniel-importer" (o `oniel-data import all` en la shell del servicio).
+databases:
+  - name: oniel-postgres
+    plan: free
+    databaseName: oniel
+    user: oniel
+    postgresMajorVersion: "17"
+
+services:
+  - type: web
+    name: oniel-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: frankfurt
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: oniel-postgres
+          property: connectionString
+      - key: ONIEL_ENVIRONMENT
+        value: production
+      - key: ONIEL_CORS_ORIGINS
+        value: '["https://oniel.vercel.app"]'
+      - key: LOGFIRE_TOKEN
+        sync: false   # token de escritura del proyecto ebotiab/oniel; se pega en el panel de Render
+
+  # Importación repetible: se lanza a mano desde el panel (Jobs) o tras actualizar el GTFS.
+  - type: cron
+    name: oniel-importer
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: frankfurt
+    schedule: "0 5 * * 1"   # lunes a las 5:00 UTC; también se puede ejecutar manualmente
+    dockerCommand: oniel-data import all
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: oniel-postgres
+          property: connectionString
+      - key: ONIEL_ENVIRONMENT
+        value: production
+      - key: LOGFIRE_TOKEN
+        sync: false
