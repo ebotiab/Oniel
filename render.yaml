@@ -31,22 +31,27 @@ services:
       - key: LOGFIRE_TOKEN
         sync: false   # token de escritura del proyecto ebotiab/oniel; se pega en el panel de Render
 
-  # Importación repetible: se lanza a mano desde el panel (Jobs) o tras actualizar el GTFS.
-  - type: cron
-    name: oniel-importer
-    runtime: docker
-    rootDir: backend
-    dockerfilePath: ./Dockerfile
-    plan: starter
-    region: frankfurt
-    schedule: "0 5 * * 1"   # lunes a las 5:00 UTC; también se puede ejecutar manualmente
-    dockerCommand: oniel-data import all
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: oniel-postgres
-          property: connectionString
-      - key: ONIEL_ENVIRONMENT
-        value: production
-      - key: LOGFIRE_TOKEN
-        sync: false
+  # Importador programado (opcional, de pago). Render no ofrece cron jobs en el plan gratuito y pide
+  # un método de pago en el workspace para crearlo. Para activarlo: añade un método de pago en
+  # https://dashboard.render.com/billing, descomenta el bloque y haz push; el Blueprint lo sincroniza.
+  # Sin él, la carga se hace a mano desde cualquier máquina con acceso a la base (ver docs/despliegue.md):
+  #   DATABASE_URL=<External Database URL> uv run oniel-data import all
+  # # Importación repetible: se lanza a mano desde el panel (Jobs) o tras actualizar el GTFS.
+  # - type: cron
+  #   name: oniel-importer
+  #   runtime: docker
+  #   rootDir: backend
+  #   dockerfilePath: ./Dockerfile
+  #   plan: starter
+  #   region: frankfurt
+  #   schedule: "0 5 * * 1"   # lunes a las 5:00 UTC; también se puede ejecutar manualmente
+  #   dockerCommand: oniel-data import all
+  #   envVars:
+  #     - key: DATABASE_URL
+  #       fromDatabase:
+  #         name: oniel-postgres
+  #         property: connectionString
+  #     - key: ONIEL_ENVIRONMENT
+  #       value: production
+  #     - key: LOGFIRE_TOKEN
+  #       sync: false
