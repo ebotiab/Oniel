@@ -28,9 +28,19 @@ app.add_typer(import_app, name="import")
 app.add_typer(export_app, name="export")
 
 settings = get_settings()
-SPEC_DEFAULT = settings.data_dir / "curated" / "lav-madrid-sevilla.json"
-SOURCES_DEFAULT = settings.data_dir / "curated" / "sources.json"
+CURATED = settings.data_dir / "curated"
+#: Líneas cargadas, en el orden en que se importan (la primera define los nodos compartidos).
+SPECS_DEFAULT = [CURATED / f"{line_id}.json" for line_id in settings.line_ids]
+SOURCES_DEFAULT = CURATED / "sources.json"
 FEED_DEFAULT = settings.data_dir / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
+SNAPSHOT_DEFAULT = settings.data_dir.parent.parent / "frontend" / "public" / "data"
+
+SpecsOption = Annotated[
+    list[Path] | None,
+    typer.Option(
+        "--spec", help="Especificación curada de una línea (repetible); por defecto, todas"
+    ),
+]
 
 
 def _run[T](fn: Callable[..., Coroutine[Any, Any, T]], *args: Any, **kwargs: Any) -> T:
@@ -40,6 +50,10 @@ def _run[T](fn: Callable[..., Coroutine[Any, Any, T]], *args: Any, **kwargs: Any
 
 def _echo_json(payload: Any) -> None:
     typer.echo(json.dumps(payload, ensure_ascii=False, indent=2, default=str))
+
+
+def _specs(spec: list[Path] | None) -> list[Path]:
+    return spec or SPECS_DEFAULT
 
 
 @db_app.command("migrate")
@@ -77,15 +91,18 @@ def db_reset(
 
 @import_app.command("network")
 def import_network_cmd(
-    spec: Annotated[Path, typer.Option(help="Especificación curada de la línea")] = SPEC_DEFAULT,
+    spec: SpecsOption = None,
     sources: Annotated[Path, typer.Option(help="Registro de fuentes")] = SOURCES_DEFAULT,
 ) -> None:
-    """Importa (o reimporta) la red de una línea."""
+    """Importa (o reimporta) la red de una o varias líneas."""
     from oniel.network.importer import import_network
 
-    async def go() -> dict[str, Any]:
+    async def go() -> list[dict[str, Any]]:
         async with connect(settings.database_url) as conn:
-            return await import_network(conn, spec, sources, settings.data_dir)
+            return [
+                await import_network(conn, path, sources, settings.data_dir)
+                for path in _specs(spec)
+            ]
 
     _echo_json(_run(go))
 
@@ -93,25 +110,27 @@ def import_network_cmd(
 @import_app.command("gtfs")
 def import_gtfs_cmd(
     feed: Annotated[Path, typer.Option(help="Fichero GTFS (zip)")] = FEED_DEFAULT,
-    spec: Annotated[Path, typer.Option(help="Especificación curada de la línea")] = SPEC_DEFAULT,
+    spec: SpecsOption = None,
     source_id: Annotated[
         str, typer.Option(help="Id de la fuente en sources.json")
     ] = "renfe-gtfs-av-ld-md",
     operator_id: Annotated[str, typer.Option(help="Id del operador")] = "renfe",
 ) -> None:
-    """Importa (o reimporta) los servicios que recorren la línea."""
+    """Importa (o reimporta) los servicios del GTFS que recorren las líneas cargadas."""
     from oniel.gtfs.importer import import_gtfs
 
     async def go() -> dict[str, Any]:
         async with connect(settings.database_url) as conn:
-            return await import_gtfs(conn, feed, spec, source_id=source_id, operator_id=operator_id)
+            return await import_gtfs(
+                conn, feed, _specs(spec), source_id=source_id, operator_id=operator_id
+            )
 
     _echo_json(_run(go))
 
 
 @import_app.command("all")
 def import_all_cmd() -> None:
-    """Migra, importa la red y los horarios y exporta la instantánea estática."""
+    """Migra, importa la red de todas las líneas y los horarios y exporta la instantánea estática."""
     from oniel.db.migrate import migrate
     from oniel.export.snapshot import export_snapshot
     from oniel.gtfs.importer import import_gtfs
@@ -120,42 +139,40 @@ def import_all_cmd() -> None:
     async def go() -> dict[str, Any]:
         async with connect(settings.database_url) as conn:
             migrations = await migrate(conn)
-            net = await import_network(conn, SPEC_DEFAULT, SOURCES_DEFAULT, settings.data_dir)
+            nets = [
+                await import_network(conn, path, SOURCES_DEFAULT, settings.data_dir)
+                for path in SPECS_DEFAULT
+            ]
             gtfs = await import_gtfs(
                 conn,
                 FEED_DEFAULT,
-                SPEC_DEFAULT,
+                SPECS_DEFAULT,
                 source_id="renfe-gtfs-av-ld-md",
                 operator_id="renfe",
             )
-            snap = await export_snapshot(
-                conn, settings.data_dir.parent.parent / "frontend" / "public" / "data"
-            )
-            return {"migrations": migrations, "network": net, "gtfs": gtfs, "snapshot": snap}
+            snap = await export_snapshot(conn, SNAPSHOT_DEFAULT)
+            return {"migrations": migrations, "network": nets, "gtfs": gtfs, "snapshot": snap}
 
     _echo_json(_run(go))
 
 
 @app.command("validate")
 def validate_cmd(
-    spec: Annotated[Path, typer.Option()] = SPEC_DEFAULT,
+    spec: SpecsOption = None,
     feed: Annotated[Path, typer.Option()] = FEED_DEFAULT,
 ) -> None:
     """Comprueba la red construida y la resolución de los horarios sin tocar la base de datos."""
     from oniel.validate import validate_all
 
-    report = validate_all(spec, feed, settings.data_dir)
-    _echo_json(report)
-    if report["problems"]:
+    reports = [validate_all(path, feed, settings.data_dir) for path in _specs(spec)]
+    _echo_json(reports if len(reports) > 1 else reports[0])
+    if any(r["problems"] for r in reports):
         raise typer.Exit(code=1)
 
 
 @export_app.command("snapshot")
 def export_snapshot_cmd(
-    out: Annotated[Path, typer.Option(help="Carpeta de salida")] = settings.data_dir.parent.parent
-    / "frontend"
-    / "public"
-    / "data",
+    out: Annotated[Path, typer.Option(help="Carpeta de salida")] = SNAPSHOT_DEFAULT,
     date: Annotated[str | None, typer.Option(help="Día de servicio (AAAA-MM-DD)")] = None,
 ) -> None:
     """Exporta red y servicios a JSON estático para el visor."""

@@ -1,6 +1,7 @@
 // Tipos públicos de la API de Oniel (espejo de backend/src/oniel/domain/schemas.py).
 
 export type NodeKind = 'estacion' | 'paet' | 'pb' | 'bifurcacion' | 'cambiador' | 'referencia'
+export type NodeRank = 'principal' | 'secundario'
 export type PassKind = 'publicado' | 'estimado' | 'indeterminado'
 export type ClosureStatus = 'afectado_publicado' | 'afectado_estimado' | 'indeterminado' | 'no_afectado'
 
@@ -26,6 +27,7 @@ export interface LineSummary {
   id: string
   name: string
   short_name: string | null
+  sort_order: number
   mode: string
   infrastructure_manager: Operator | null
   gauge_mm: number | null
@@ -45,6 +47,7 @@ export interface NodeOut {
   id: string
   name: string
   kind: NodeKind
+  rank: NodeRank
   lon: number
   lat: number
   adif_code: string | null
@@ -69,6 +72,7 @@ export interface SegmentOut {
   length_km: number
   max_speed_kmh: number | null
   typical_speed_kmh: number | null
+  tracks: number | null
   status: 'disponible' | 'prevista'
   source_id: string | null
 }
@@ -183,12 +187,28 @@ export interface ClosureResultItem {
   from_previous_day: boolean
 }
 
+/** Otra línea cargada que une dos nodos de la línea cerrada situados a ambos lados del tramo. */
+export interface ClosureAlternative {
+  line_id: string
+  line_name: string
+  from_node_id: string
+  from_name: string
+  to_node_id: string
+  to_name: string
+  length_km: number
+  closed_line_length_km: number
+  via: string[]
+  single_track_km: number
+  note: string
+}
+
 export interface ClosureResult {
   request: ClosureRequest
   segment: SegmentOut
   window_label: string
   counts: Record<ClosureStatus, number>
   items: ClosureResultItem[]
+  alternatives: ClosureAlternative[]
   method: string
   caveats: string[]
 }

@@ -30,6 +30,7 @@ class LineSummary(BaseModel):
     id: str
     name: str
     short_name: str | None = None
+    sort_order: int = 1
     mode: str
     infrastructure_manager: Operator | None = None
     gauge_mm: int | None = None
@@ -49,6 +50,7 @@ class NodeOut(BaseModel):
     id: str
     name: str
     kind: Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
+    rank: Literal["principal", "secundario"] = "principal"
     lon: float
     lat: float
     adif_code: str | None = None
@@ -73,6 +75,7 @@ class SegmentOut(BaseModel):
     length_km: float
     max_speed_kmh: int | None = None
     typical_speed_kmh: int | None = None
+    tracks: int | None = None
     status: Literal["disponible", "prevista"]
     source_id: str | None = None
 
@@ -192,11 +195,28 @@ class ClosureResultItem(BaseModel):
     from_previous_day: bool = False
 
 
+class ClosureAlternative(BaseModel):
+    """Otra línea cargada que une dos nodos de la línea cerrada situados a ambos lados del tramo."""
+
+    line_id: str
+    line_name: str
+    from_node_id: str
+    from_name: str
+    to_node_id: str
+    to_name: str
+    length_km: float
+    closed_line_length_km: float
+    via: list[str]
+    single_track_km: float
+    note: str
+
+
 class ClosureResult(BaseModel):
     request: ClosureRequest
     segment: SegmentOut
     window_label: str
     counts: dict[str, int]
     items: list[ClosureResultItem]
+    alternatives: list[ClosureAlternative] = Field(default_factory=list)
     method: str
     caveats: list[str]

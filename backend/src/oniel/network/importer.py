@@ -80,9 +80,12 @@ async def import_network(
             "length_km": round(net.line.polyline.length_km, 3),
             "reference_length_km": spec.line.reference_length_km,
             "nodes": len(net.nodes),
+            "shared_nodes": sum(1 for n in net.nodes if n.spec.shared),
             "segments": len(net.segments),
+            "single_track_segments": sum(1 for s in net.segments if s.tracks == 1),
             "connections": len(spec.connections),
             "gaps": len(net.line.gaps_km),
+            "joins_m": [round(j * 1000) for j in net.line.joins_km],
             "max_snap_offset_m": round(max(n.offset_m for n in net.nodes), 1),
         }
         logfire.info("network imported", **stats)
@@ -94,11 +97,11 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
     geometry = {"type": "LineString", "coordinates": round_coords(net.line.polyline.coords)}
     await conn.execute(
         """
-        INSERT INTO lines (id, name, short_name, mode, infrastructure_manager_id, gauge_mm, electrification, max_speed_kmh,
-                           opened_on, length_km, reference_length_km, status, description, geometry, source_id)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
-        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, short_name=EXCLUDED.short_name, mode=EXCLUDED.mode,
-          infrastructure_manager_id=EXCLUDED.infrastructure_manager_id, gauge_mm=EXCLUDED.gauge_mm,
+        INSERT INTO lines (id, name, short_name, sort_order, mode, infrastructure_manager_id, gauge_mm, electrification,
+                           max_speed_kmh, opened_on, length_km, reference_length_km, status, description, geometry, source_id)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, short_name=EXCLUDED.short_name, sort_order=EXCLUDED.sort_order,
+          mode=EXCLUDED.mode, infrastructure_manager_id=EXCLUDED.infrastructure_manager_id, gauge_mm=EXCLUDED.gauge_mm,
           electrification=EXCLUDED.electrification, max_speed_kmh=EXCLUDED.max_speed_kmh, opened_on=EXCLUDED.opened_on,
           length_km=EXCLUDED.length_km, reference_length_km=EXCLUDED.reference_length_km, status=EXCLUDED.status,
           description=EXCLUDED.description, geometry=EXCLUDED.geometry, source_id=EXCLUDED.source_id, updated_at=now()
@@ -106,6 +109,7 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
         line.id,
         line.name,
         line.short_name,
+        line.sort_order,
         line.mode,
         line.infrastructure_manager,
         line.gauge_mm,
@@ -127,16 +131,25 @@ async def _replace_nodes_and_segments(conn: asyncpg.Connection, net: BuiltNetwor
     await conn.execute("DELETE FROM segments WHERE line_id = $1", line_id)
     await conn.execute("DELETE FROM line_nodes WHERE line_id = $1", line_id)
     for seq, n in enumerate(net.nodes, start=1):
+        # Un nodo compartido lo define otra línea: si ya existe no se toca; si aún no, se crea
+        # con lo que trae esta especificación y la línea propietaria lo completará al importarse.
+        conflict = (
+            "DO NOTHING"
+            if n.spec.shared
+            else """DO UPDATE SET name=EXCLUDED.name, kind=EXCLUDED.kind, rank=EXCLUDED.rank, lon=EXCLUDED.lon,
+              lat=EXCLUDED.lat, adif_code=EXCLUDED.adif_code, description=EXCLUDED.description,
+              details=EXCLUDED.details, source_id=EXCLUDED.source_id"""
+        )
         await conn.execute(
-            """
-            INSERT INTO nodes (id, name, kind, lon, lat, adif_code, description, details, source_id)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
-            ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, kind=EXCLUDED.kind, lon=EXCLUDED.lon, lat=EXCLUDED.lat,
-              adif_code=EXCLUDED.adif_code, description=EXCLUDED.description, details=EXCLUDED.details, source_id=EXCLUDED.source_id
+            f"""
+            INSERT INTO nodes (id, name, kind, rank, lon, lat, adif_code, description, details, source_id)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+            ON CONFLICT (id) {conflict}
             """,
             n.spec.id,
             n.spec.name,
             n.spec.kind,
+            n.spec.rank,
             round(n.lon, 6),
             round(n.lat, 6),
             n.spec.adif_code,
@@ -169,16 +182,31 @@ async def _replace_nodes_and_segments(conn: asyncpg.Connection, net: BuiltNetwor
             round(s.length_km, 3),
             s.max_speed_kmh,
             s.typical_speed_kmh,
-            2,
+            s.tracks,
             net.spec.line.status,
             {"type": "LineString", "coordinates": round_coords(s.coords)},
-            net.spec.line.geometry_source.source_id,
+            s.source_id,
         )
 
 
 async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
+    line_id = net.spec.line.id
     node_ids = [n.spec.id for n in net.nodes]
-    await conn.execute("DELETE FROM connections WHERE node_id = ANY($1::text[])", node_ids)
+    # Se borran las conexiones de esta especificación y las de los nodos que solo pertenecen a
+    # esta línea; las de un nodo compartido que declare otra línea se conservan.
+    await conn.execute(
+        "DELETE FROM connections WHERE id = ANY($1::text[])",
+        [c.id for c in net.spec.connections],
+    )
+    await conn.execute(
+        """
+        DELETE FROM connections
+        WHERE node_id = ANY($1::text[])
+          AND node_id NOT IN (SELECT node_id FROM line_nodes WHERE line_id <> $2)
+        """,
+        node_ids,
+        line_id,
+    )
     for c in net.spec.connections:
         node = net.node(c.node_id)
         coords = [(node.lon, node.lat), *[(x, y) for x, y in c.sketch]]
@@ -205,11 +233,17 @@ async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> N
 
 
 async def _upsert_stop_mappings(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
+    # La tabla es común a todas las líneas y sirve para listar los trenes que paran en un nodo.
+    # Si una parada ya está asignada a un nodo por otra línea, una asignación «de salida» no la
+    # degrada: una estación compartida sigue siendo estación.
     for stop_id, m in net.spec.stop_mappings.items():
         await conn.execute(
             """
             INSERT INTO stop_mappings (stop_id, node_id, exit_node_ids) VALUES ($1,$2,$3)
-            ON CONFLICT (stop_id) DO UPDATE SET node_id=EXCLUDED.node_id, exit_node_ids=EXCLUDED.exit_node_ids
+            ON CONFLICT (stop_id) DO UPDATE SET
+              node_id = COALESCE(EXCLUDED.node_id, stop_mappings.node_id),
+              exit_node_ids = CASE WHEN COALESCE(EXCLUDED.node_id, stop_mappings.node_id) IS NULL
+                                   THEN EXCLUDED.exit_node_ids ELSE '{}'::text[] END
             """,
             stop_id,
             m.node,
@@ -239,6 +273,7 @@ def network_as_json(net: BuiltNetwork) -> dict[str, Any]:
                 "length_km": round(s.length_km, 3),
                 "max_speed_kmh": s.max_speed_kmh,
                 "typical_speed_kmh": s.typical_speed_kmh,
+                "tracks": s.tracks,
             }
             for s in net.segments
         ],

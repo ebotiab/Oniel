@@ -152,13 +152,29 @@ def read_feed(path: Path) -> GtfsFeed:
 
 
 def select_corridor_trips(
-    feed: GtfsFeed, required_stop_ids: list[str], any_of_stop_ids: list[str]
+    feed: GtfsFeed,
+    required_stop_ids: list[str],
+    any_of_stop_ids: list[str],
+    *,
+    min_node_stops: int = 0,
+    node_stop_ids: frozenset[str] = frozenset(),
+    exclude_stop_ids: list[str] | None = None,
 ) -> list[GtfsTrip]:
+    """Viajes que recorren la línea según el filtro de corredor de su especificación.
+
+    Un viaje entra si para en todas las ``required_stop_ids``, en alguna de ``any_of_stop_ids``
+    (si se dan), en al menos ``min_node_stops`` paradas distintas que sean nodos de la línea y en
+    ninguna de ``exclude_stop_ids``.
+    """
     required, any_of = set(required_stop_ids), set(any_of_stop_ids)
+    excluded = set(exclude_stop_ids or ())
     selected = []
     for trip in feed.trips.values():
         ids = feed.stop_ids_of(trip)
-        if required <= ids and (not any_of or ids & any_of):
-            selected.append(trip)
+        if not required <= ids or (any_of and not ids & any_of) or ids & excluded:
+            continue
+        if min_node_stops and len(ids & node_stop_ids) < min_node_stops:
+            continue
+        selected.append(trip)
     selected.sort(key=lambda t: (t.train_number, t.trip_id))
     return selected

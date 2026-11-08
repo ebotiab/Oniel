@@ -24,10 +24,29 @@ test.describe('Simular un cierre', () => {
     await expect(fila).toContainText('08:44')
     await fila.getByText('Por qué').click()
     await expect(fila).toContainText(/en proporción a la distancia/)
+    // la línea convencional por Alcázar une Madrid y Córdoba a ambos lados del tramo cerrado
+    const alternativa = page.getByTestId('sim-alternativa')
+    await expect(alternativa).toBeVisible()
+    await expect(alternativa).toContainText('Madrid-Puerta de Atocha')
+    await expect(alternativa).toContainText('Córdoba')
+    await expect(alternativa).toContainText('Alcázar de San Juan')
+    await expect(alternativa).toContainText(/vía única/)
     // la explicación del método está disponible
     await page.getByRole('button', { name: 'Cómo se calcula' }).click()
     await expect(page.getByText(/margen del 15 %/)).toBeVisible()
     await expect(page).toHaveURL(/\/cierre$/)
+  })
+
+  test('un cierre en Despeñaperros señala la alta velocidad como alternativa', async ({ page }) => {
+    await page.goto('/#/tramo/convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches/cierre')
+    await page.getByTestId('sim-fecha').fill('2026-11-13')
+    await page.getByTestId('sim-inicio').fill('07:00')
+    await page.getByTestId('sim-fin').fill('10:00')
+    await page.getByTestId('sim-calcular').click()
+    const resultado = page.getByTestId('sim-resultado')
+    await expect(resultado).toBeVisible()
+    await expect(resultado).toContainText(/MD \d{5}/)
+    await expect(page.getByTestId('sim-alternativa')).toContainText(/alta velocidad Madrid – Sevilla/)
   })
 
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {

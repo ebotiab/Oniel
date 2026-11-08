@@ -8,8 +8,8 @@
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/",
       "retrieved_on": "2026-11-08",
-      "coverage": "Servicios AVE, AVLO, Alvia e Intercity de Renfe que recorren el corredor Madrid–Córdoba–Sevilla; validez del fichero del 7 de noviembre de 2026 al 29 de septiembre de 2027.",
-      "notes": "Fichero google_transit.zip publicado el 8 de noviembre de 2026. Son horarios planificados: no reflejan la interrupción de la circulación Madrid–Andalucía vigente desde el 28 de octubre de 2026 ni otras alteraciones del servicio.",
+      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant), larga distancia (Alvia, Intercity, Euromed) y media distancia (MD, Regional Exprés, Regional, Proximidad) de toda España; Oniel importa los que recorren las líneas cargadas. Validez del fichero del 7 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
+      "notes": "Fichero google_transit.zip publicado el 8 de noviembre de 2026. Son horarios planificados: no reflejan la interrupción de la circulación de alta velocidad Madrid–Andalucía vigente desde el 28 de octubre de 2026, ni el corte por obras de la línea convencional al sur de Venta de Cárdenas, ni otras alteraciones del servicio.",
       "file": "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
     },
     {
@@ -25,6 +25,41 @@
       "file": "raw/osm/relation_1254828_ave_madrid_sevilla_2026-11-08.json"
     },
     {
+      "id": "osm-relation-18368327",
+      "name": "Trazado de la línea convencional Madrid–Valencia (relación OSM 18368327, línea 300 de Adif, vías de ancho ibérico electrificadas a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18368327",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-08",
+      "coverage": "De la relación completa (Madrid-Chamartín–València) Oniel usa los 146,7 km entre Madrid-Atocha y Alcázar de San Juan, recorriendo el grafo de vías por el camino más corto entre ambas estaciones; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 8 de noviembre de 2026. La relación incluye las dos vías de la línea sin orden fijo, por eso la geometría se obtiene trazando el camino más corto en lugar de encadenar los miembros. Los puntos kilométricos se contrastaron con los de Adif recogidos en Wikipedia.",
+      "file": "raw/osm/relation_18368327_linea_300_madrid_valencia_2026-11-08.json"
+    },
+    {
+      "id": "osm-relation-11351144",
+      "name": "Trazado de la línea convencional Alcázar de San Juan–Cádiz (relación OSM 11351144, línea 400 de Adif, vías de ancho ibérico electrificadas a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11351144",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-08",
+      "coverage": "De la relación completa (Alcázar de San Juan–Cádiz) Oniel usa los 293,5 km entre Alcázar de San Juan y Córdoba, por Manzanares, Despeñaperros, Linares-Baeza y Andújar; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 8 de noviembre de 2026. Mismo método que la línea 300: camino más corto en el grafo de vías de la relación. Las etiquetas de número de vías de OSM no cubren este tramo, así que los tramos de vía única se tomaron de Wikipedia y del rutómetro de la FCMAF. También se descargaron los nodos de estaciones e instalaciones de Adif del corredor (raw/osm/adif_facility_nodes_mancha_andalucia_2026-11-08.json) para situar los nodos.",
+      "file": "raw/osm/relation_11351144_linea_400_alcazar_cadiz_2026-11-08.json"
+    },
+    {
+      "id": "wikipedia-lineas-300-400",
+      "name": "Artículos «Línea Madrid-Valencia» y «Línea Alcázar de San Juan-Cádiz» de Wikipedia en español (puntos kilométricos y tramos de vía única)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Alc%C3%A1zar_de_San_Juan-C%C3%A1diz",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-08",
+      "coverage": "Puntos kilométricos de Adif de las estaciones de las líneas 300 (Madrid–Alcázar) y 400 (Alcázar–Córdoba), longitud total de cada línea y tramos de vía única (Santa Cruz de Mudela–Vadollano y Linares-Baeza–Lora del Río), coincidentes con el rutómetro de la línea 400 de la FCMAF (fcmaf.es/Rutometros/RT-400_01.pdf).",
+      "notes": "Fuente de verificación, no de geometría. Los PK de Adif conservan la numeración histórica desde Madrid-Atocha, con variantes de trazado posteriores, por lo que difieren hasta 1,6 km del kilometraje medido sobre la geometría de OpenStreetMap."
+    },
+    {
       "id": "adif-mapa-red",
       "name": "Mapa de la red ferroviaria española y referencias de la línea 010",
       "publisher": "Adif / Adif Alta Velocidad",
@@ -34,6 +69,17 @@
       "retrieved_on": "2026-11-08",
       "coverage": "Verificación del trazado (mapa de la red, capa de vía doble electrificada en ancho estándar), códigos de estación de Adif y puntos kilométricos de estaciones, PAET y bifurcaciones de la línea 010.",
       "notes": "El servicio WFS/WMS de IDEAdif (https://ideadif.adif.es/gservices/Tramificacion/wfs) devolvía HTTP 503 el 8 de noviembre de 2026; el importador admite cargar su GeoJSON cuando vuelva a estar disponible. Los PK se contrastaron además con la tabla de instalaciones de la línea en Wikipedia (CC BY-SA 4.0)."
+    },
+    {
+      "id": "adif-obras-autopista-ferroviaria",
+      "name": "Obras de adaptación del corredor Madrid–Algeciras a la autopista ferroviaria (información pública de Adif recogida por la prensa)",
+      "publisher": "Adif; Europa Press / Demócrata",
+      "url": "https://www.democrata.es/economia/adif-arranca-las-obras-para-adaptar-el-corredor-madrid-algeciras-a-la-autopista-ferroviaria-por-345-millones/",
+      "license": "Consulta pública",
+      "license_url": null,
+      "retrieved_on": "2026-11-08",
+      "coverage": "Interrupción de la circulación entre Venta de Cárdenas y Algeciras desde comienzos de septiembre de 2026, con reanudación prevista en otoño de 2027, por la adaptación del gálibo de 13 túneles entre Venta de Cárdenas y Los Cansinos y de otras estructuras.",
+      "notes": "La fecha de reanudación es una previsión de Adif, no un compromiso. Los horarios GTFS cargados no reflejan este corte."
     },
     {
       "id": "openfreemap",

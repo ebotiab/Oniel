@@ -1,3 +1,5 @@
+import type { LineSummary } from '../data/types'
+
 export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: string } | null
 
 export interface Route {
@@ -46,6 +48,7 @@ export const KIND_LABEL: Record<string, string> = {
 
 const SHORT_STOP_NAMES: Record<string, string> = {
   'Madrid-Puerta de Atocha-Almudena Grandes': 'Madrid-Puerta de Atocha',
+  'Madrid-Atocha Cercanías': 'Madrid-Atocha',
   'Córdoba-Julio Anguita': 'Córdoba',
   'Málaga María Zambrano': 'Málaga',
   'Villanueva de Córdoba-Los Pedroches': 'Villanueva de Córdoba',
@@ -53,10 +56,55 @@ const SHORT_STOP_NAMES: Record<string, string> = {
   'Cuenca-Fernando Zóbel': 'Cuenca',
   'Albacete-Los Llanos': 'Albacete',
   'San Fernando-Bahía Sur': 'San Fernando',
+  'Alicante/Alacant-Terminal': 'Alicante',
+  'València-Estació del Nord': 'Valencia',
+  'Campus Universitario de Rabanales': 'Rabanales',
+  'Almuradiel-Viso del Marqués': 'Almuradiel',
 }
 
 /** Nombre corto de una parada para listas densas. */
 export function shortStop(name: string | null | undefined): string {
   if (!name) return ''
   return SHORT_STOP_NAMES[name] ?? name
+}
+
+const PRODUCT_LABELS: Record<string, string> = {
+  'REG.EXP.': 'Regional Exprés',
+  PROXIMDAD: 'Proximidad',
+  REGIONAL: 'Regional',
+}
+
+/** Nombre del producto comercial tal y como lo entiende un visitante. */
+export function productLabel(product: string): string {
+  return PRODUCT_LABELS[product] ?? product
+}
+
+/** «Línea de alta velocidad Madrid – Sevilla» → «Madrid – Sevilla». */
+export function lineLabel(line: LineSummary): string {
+  return line.name.replace(/^Línea (de alta velocidad|convencional)\s+/i, '')
+}
+
+/** Etiqueta breve para pestañas: extremos y, si los hay, los puntos intermedios del nombre. */
+export function lineShortLabel(line: LineSummary): string {
+  const parts = lineLabel(line).split(' – ')
+  if (parts.length <= 2) return parts.join(' – ')
+  return `${parts[0]} – ${parts[parts.length - 1]} por ${parts.slice(1, -1).join(' y ')}`
+}
+
+export function lineKind(line: LineSummary): 'alta velocidad' | 'convencional' {
+  return line.gauge_mm === 1435 || /alta velocidad/i.test(line.name) ? 'alta velocidad' : 'convencional'
+}
+
+export function gaugeLabel(gauge: number | null): string {
+  if (gauge === 1435) return 'ancho estándar'
+  if (gauge === 1668) return 'ancho ibérico'
+  if (gauge === 1000) return 'ancho métrico'
+  return gauge ? `ancho ${gauge} mm` : 'ancho sin dato'
+}
+
+export function tracksLabel(tracks: number | null): string {
+  if (tracks === 1) return 'Vía única'
+  if (tracks === 2) return 'Vía doble'
+  if (tracks && tracks > 2) return `${tracks} vías`
+  return 'sin dato'
 }

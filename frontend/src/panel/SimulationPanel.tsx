@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 
 import { ApiError, simulateClosure } from '../data/api'
 import type { ClosureResult, ClosureStatus, SegmentOut } from '../data/types'
-import { formatKm, shortStop, todayIso } from '../app/state'
+import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
 import { STATUS } from './labels'
 
@@ -89,6 +89,18 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
             {result.window_label}
             {result.counts.indeterminado ? `, y ${result.counts.indeterminado} ${result.counts.indeterminado === 1 ? 'indeterminado' : 'indeterminados'}` : ''}.
           </p>
+          {result.alternatives.length > 0 && (
+            <aside className="alternativa" aria-label="Recorrido alternativo" data-testid="sim-alternativa">
+              <p className="sobre">Recorrido alternativo cargado en Oniel</p>
+              {result.alternatives.map((a) => (
+                <p key={a.line_id} className="texto">
+                  Entre <strong>{a.from_name}</strong> y <strong>{a.to_name}</strong> existe otra línea: {a.line_name.charAt(0).toLowerCase() + a.line_name.slice(1)}
+                  {a.via.length ? `, por ${a.via.join(', ')}` : ''}. Son {formatKm(a.length_km)} km frente a {formatKm(a.closed_line_length_km)} km por la línea cerrada
+                  {a.single_track_km > 0 ? `, con ${formatKm(a.single_track_km)} km de vía única` : ''}. Oniel no reasigna los trenes afectados; solo señala que la alternativa existe.
+                </p>
+              ))}
+            </aside>
+          )}
           <ul className="contadores">
             {ORDER.map((s) => (
               <li key={s} className={STATUS[s].cls}>
@@ -119,7 +131,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
                         </span>
                         <span className="tren">
                           <strong>
-                            {i.service.product} {i.service.train_number}
+                            {productLabel(i.service.product)} {i.service.train_number}
                           </strong>{' '}
                           <span className="suave">
                             {shortStop(i.service.origin_name)} → {shortStop(i.service.destination_name)}

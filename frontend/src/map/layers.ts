@@ -1,4 +1,5 @@
 // Capas de Oniel sobre el mapa base. La vía es tinta; el color solo marca estados.
+// El grosor del trazo distingue la categoría de la vía: alta velocidad, convencional y vía única.
 
 import type { ExpressionSpecification, LayerSpecification } from 'maplibre-gl'
 
@@ -25,9 +26,22 @@ export const LAYER = {
   nodesMinor: 'oniel-nodes-minor',
   nodesStations: 'oniel-nodes-stations',
   nodeLabels: 'oniel-node-labels',
+  nodeLabelsSecondary: 'oniel-node-labels-secondary',
 } as const
 
+/** Factor de grosor de un tramo: 1 alta velocidad, 0,8 convencional, 0,6 vía única (propiedad `peso`). */
+export const PESO_ALTA_VELOCIDAD = 1
+export const PESO_CONVENCIONAL = 0.8
+export const PESO_VIA_UNICA = 0.6
+
 const isStation: ExpressionSpecification = ['==', ['get', 'kind'], 'estacion']
+const isSecondary: ExpressionSpecification = ['==', ['get', 'rank'], 'secundario']
+const peso: ExpressionSpecification = ['coalesce', ['get', 'peso'], 1]
+const emphasised: ExpressionSpecification = [
+  'any',
+  ['boolean', ['feature-state', 'seleccionado'], false],
+  ['boolean', ['feature-state', 'cerrado'], false],
+]
 
 const segmentColor: ExpressionSpecification = [
   'case',
@@ -37,6 +51,19 @@ const segmentColor: ExpressionSpecification = [
   AZUL,
   TINTA,
 ]
+
+/** Grosor que crece con el zoom y se multiplica por el peso de la vía. */
+function weighted(low: number, high: number, lowEmph: number, highEmph: number): ExpressionSpecification {
+  return [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    5,
+    ['*', ['case', emphasised, lowEmph, low], peso],
+    12,
+    ['*', ['case', emphasised, highEmph, high], peso],
+  ]
+}
 
 export function onielLayers(): LayerSpecification[] {
   return [
@@ -85,7 +112,7 @@ export function onielLayers(): LayerSpecification[] {
       id: LAYER.segmentsCasing,
       type: 'line',
       source: SRC.segments,
-      paint: { 'line-color': PAPEL, 'line-width': ['interpolate', ['linear'], ['zoom'], 5, 6.5, 12, 10] },
+      paint: { 'line-color': PAPEL, 'line-width': weighted(6.5, 10, 6.5, 10) },
       layout: { 'line-cap': 'round', 'line-join': 'round' },
     },
     {
@@ -94,15 +121,7 @@ export function onielLayers(): LayerSpecification[] {
       source: SRC.segments,
       paint: {
         'line-color': segmentColor,
-        'line-width': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          5,
-          ['case', ['any', ['boolean', ['feature-state', 'seleccionado'], false], ['boolean', ['feature-state', 'cerrado'], false]], 4.5, 3],
-          12,
-          ['case', ['any', ['boolean', ['feature-state', 'seleccionado'], false], ['boolean', ['feature-state', 'cerrado'], false]], 7, 5],
-        ],
+        'line-width': weighted(3, 5, 4.5, 7),
       },
       layout: { 'line-cap': 'round', 'line-join': 'round' },
     },
@@ -112,7 +131,7 @@ export function onielLayers(): LayerSpecification[] {
       source: SRC.segments,
       paint: {
         'line-color': PAPEL,
-        'line-width': ['interpolate', ['linear'], ['zoom'], 5, 1.4, 12, 2.2],
+        'line-width': weighted(1.4, 2.2, 1.4, 2.2),
         'line-dasharray': [0.5, 3.2],
       },
     },
@@ -141,16 +160,17 @@ export function onielLayers(): LayerSpecification[] {
       source: SRC.nodes,
       filter: isStation,
       paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 5, 11, 8],
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, ['case', isSecondary, 3, 5], 11, ['case', isSecondary, 5.5, 8]],
         'circle-color': PAPEL,
         'circle-stroke-color': ['case', ['boolean', ['feature-state', 'seleccionado'], false], AZUL, TINTA],
-        'circle-stroke-width': ['case', ['boolean', ['feature-state', 'seleccionado'], false], 3.5, 2.5],
+        'circle-stroke-width': ['case', ['boolean', ['feature-state', 'seleccionado'], false], 3.5, ['case', isSecondary, 1.8, 2.5]],
       },
     },
     {
       id: LAYER.nodeLabels,
       type: 'symbol',
       source: SRC.nodes,
+      filter: ['!', isSecondary],
       layout: {
         'text-field': ['get', 'short_name'],
         'text-font': ['case', isStation, ['literal', ['Noto Sans Bold']], ['literal', ['Noto Sans Regular']]],
@@ -166,6 +186,28 @@ export function onielLayers(): LayerSpecification[] {
         'text-color': ['case', isStation, TINTA, '#4B5551'],
         'text-halo-color': PAPEL,
         'text-halo-width': 1.8,
+      },
+    },
+    {
+      id: LAYER.nodeLabelsSecondary,
+      type: 'symbol',
+      source: SRC.nodes,
+      filter: isSecondary,
+      minzoom: 7.5,
+      layout: {
+        'text-field': ['get', 'short_name'],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 7.5, 10, 11, 12],
+        'text-offset': [0.8, 0],
+        'text-anchor': 'left',
+        'text-justify': 'left',
+        'text-optional': true,
+        'symbol-sort-key': 2,
+      },
+      paint: {
+        'text-color': '#4B5551',
+        'text-halo-color': PAPEL,
+        'text-halo-width': 1.6,
       },
     },
   ]
