@@ -12,7 +12,9 @@ cd frontend && vercel login
 cd frontend && vercel link --project oniel --yes && vercel deploy
 ```
 
-La primera vez, `vercel link` ofrece crear el proyecto. Variables de entorno del proyecto:
+Estado (8 de noviembre de 2026): el proyecto `oniel` existe en el ámbito personal `enrique-botia-barbera-s-projects` y el primer despliegue está publicado en https://oniel.vercel.app (vista estática, sin API todavía). El enlace local está en `frontend/.vercel/` (ignorado por git). Nota: la CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local; ejecutarla sin ellas (`env -u HTTPS_PROXY -u HTTP_PROXY vercel …`).
+
+Variables de entorno del proyecto:
 
 - `VITE_API_URL`: URL pública de la API en Render (por ejemplo `https://oniel-api.onrender.com`). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor.
 
