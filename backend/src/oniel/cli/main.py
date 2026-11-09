@@ -129,29 +129,29 @@ def import_gtfs_cmd(
 
 
 @import_app.command("all")
-def import_all_cmd() -> None:
+def import_all_cmd(
+    if_changed: Annotated[
+        bool,
+        typer.Option(
+            "--if-changed",
+            help="Saltar la importación si los datos y el código no han cambiado desde la última",
+        ),
+    ] = False,
+) -> None:
     """Migra, importa la red de todas las líneas y los horarios y exporta la instantánea estática."""
-    from oniel.db.migrate import migrate
-    from oniel.export.snapshot import export_snapshot
-    from oniel.gtfs.importer import import_gtfs
-    from oniel.network.importer import import_network
+    from oniel.importing import run_import_all
 
     async def go() -> dict[str, Any]:
         async with connect(settings.database_url) as conn:
-            migrations = await migrate(conn)
-            nets = [
-                await import_network(conn, path, SOURCES_DEFAULT, settings.data_dir)
-                for path in SPECS_DEFAULT
-            ]
-            gtfs = await import_gtfs(
+            return await run_import_all(
                 conn,
-                FEED_DEFAULT,
-                SPECS_DEFAULT,
-                source_id="renfe-gtfs-av-ld-md",
-                operator_id="renfe",
+                specs=SPECS_DEFAULT,
+                sources=SOURCES_DEFAULT,
+                feed=FEED_DEFAULT,
+                data_dir=settings.data_dir,
+                snapshot_dir=SNAPSHOT_DEFAULT,
+                if_changed=if_changed,
             )
-            snap = await export_snapshot(conn, SNAPSHOT_DEFAULT)
-            return {"migrations": migrations, "network": nets, "gtfs": gtfs, "snapshot": snap}
 
     _echo_json(_run(go))
 

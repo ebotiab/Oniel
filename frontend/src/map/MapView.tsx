@@ -1,4 +1,5 @@
 import {
+  type GeoJSONSource,
   LngLatBounds,
   Map as MapLibreMap,
   NavigationControl,
@@ -115,7 +116,6 @@ export function MapView({ network, selection, hoverId, closedSegmentId, onSelect
   }, [network])
 
   function addNetwork(map: MapLibreMap, net: NetworkOut) {
-    if (map.getSource(SRC.segments)) return
     const segs = withNumericIds({
       features: net.segment_features.features.map((f) => ({
         ...f,
@@ -130,6 +130,15 @@ export function MapView({ network, selection, hoverId, closedSegmentId, onSelect
     })
     const conns = withNumericIds(net.connection_features)
     idsRef.current = { segments: segs.index, nodes: nodes.index }
+    const existing = map.getSource(SRC.segments) as GeoJSONSource | undefined
+    if (existing) {
+      // La red ya está dibujada (la instantánea); la de la API la sustituye sin recrear capas ni eventos.
+      existing.setData(segs.data)
+      ;(map.getSource(SRC.nodes) as GeoJSONSource).setData(nodes.data)
+      ;(map.getSource(SRC.connections) as GeoJSONSource).setData(conns.data)
+      applyStates(map)
+      return
+    }
     map.addSource(SRC.segments, { type: 'geojson', data: segs.data })
     map.addSource(SRC.nodes, { type: 'geojson', data: nodes.data })
     map.addSource(SRC.connections, { type: 'geojson', data: conns.data })
