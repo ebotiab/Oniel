@@ -1,6 +1,6 @@
 import type { CoverageOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
-import { formatDate, formatKm, gaugeLabel, lineKind, lineShortLabel } from '../app/state'
+import { formatDate, formatDayShort, formatKm, gaugeLabel, lineKind, lineShortLabel } from '../app/state'
 import { StripDiagram } from './StripDiagram'
 
 interface Props {
@@ -20,8 +20,23 @@ interface Props {
 export function LineOverview({ network, coverage, counts, lineId, onChangeLine, selection, hoverId, closedSegmentId, onSelect, onHover, compact }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
-  const opened = line.opened_on ? new Date(`${line.opened_on}T12:00:00`).getFullYear() : null
-  const singleTrackKm = network.segments.filter((s) => s.line_id === line.id && s.tracks === 1).reduce((acc, s) => acc + s.length_km, 0)
+  // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
+  // entrada y el resto queda plegado. Los datos técnicos no se repiten en ella: van en la ficha.
+  const [entrada, ...resto] = (line.description ?? '')
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+  const gestor = line.infrastructure_manager?.name.split(' / ')[0]
+  const numero = line.short_name ? `${/ y /.test(line.short_name) ? 'líneas' : 'línea'} ${line.short_name}` : null
+  const antetitulo = [gestor, numero].filter(Boolean).join(', ')
+  const ficha = [
+    `${formatKm(line.length_km)} km`,
+    line.max_speed_kmh ? `${line.max_speed_kmh} km/h` : null,
+    gaugeLabel(line.gauge_mm),
+    line.electrification,
+  ].filter((d): d is string => Boolean(d))
+  const dia = coverage?.reference_date ?? null
+  const conBarras = Boolean(counts && dia && Object.keys(counts).length)
   return (
     <section className="resumen-linea" aria-labelledby="linea-titulo">
       {network.lines.length > 1 && (
@@ -42,25 +57,30 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
           ))}
         </div>
       )}
-      <div className="cabecera-linea">
+      <div className="cabecera-linea" data-testid="cabecera-linea">
+        {!compact && antetitulo && <p className="antetitulo">{antetitulo}</p>}
         <h2 id="linea-titulo" className="titulo">
           {line.name}
         </h2>
-        <p className="sobre">
-          {line.infrastructure_manager?.name.split(' / ')[0]}, línea {line.short_name} · {formatKm(line.length_km)} km · {gaugeLabel(line.gauge_mm)} · {line.electrification}
-          {opened ? ` · abierta en ${opened}` : ''}
-          {singleTrackKm > 0 ? ` · ${formatKm(singleTrackKm)} km de vía única` : ''}
-        </p>
-        {!compact && line.description && (
-          <details className="sobre-linea">
-            <summary>Sobre la línea</summary>
-            <p className="texto suave">{line.description}</p>
-          </details>
-        )}
-        {!compact && coverage?.reference_date && (
-          <p className="suave datos-dia">
-            Las barras cuentan los trenes de cada tramo el {formatDate(coverage.reference_date)}, según los horarios publicados por Renfe.
+        <ul className="ficha-linea datos" aria-label="Datos de la línea" data-testid="ficha-linea">
+          {ficha.map((d) => (
+            <li key={d}>{d}</li>
+          ))}
+        </ul>
+        {!compact && entrada && (
+          <p className="entrada" data-testid="linea-entrada">
+            {entrada}
           </p>
+        )}
+        {!compact && resto.length > 0 && (
+          <details key={line.id} className="sobre-linea">
+            <summary>Más sobre la línea</summary>
+            {resto.map((p) => (
+              <p key={p} className="texto">
+                {p}
+              </p>
+            ))}
+          </details>
         )}
       </div>
       <StripDiagram
@@ -70,11 +90,17 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
         counts={counts}
+        countsLabel={conBarras && dia ? `trenes el ${formatDayShort(dia)}` : null}
         onSelect={onSelect}
         onHover={onHover}
         compact={compact}
       />
-      {!compact && <p className="pista suave">Toca una estación o un tramo, aquí o en el mapa, para ver qué pasa por él. El trazo fino marca la vía única.</p>}
+      {!compact && (
+        <p className="nota-esquema" data-testid="nota-esquema">
+          {conBarras && dia ? `Las barras cuentan los trenes de cada tramo el ${formatDate(dia)}, según los horarios de Renfe. ` : ''}
+          Toca una estación o un tramo para ver sus trenes.
+        </p>
+      )}
     </section>
   )
 }

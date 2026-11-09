@@ -46,6 +46,27 @@ test.describe('Explorar la red', () => {
     await expect(page).toHaveURL(/#\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
   })
 
+  test('la cabecera de la línea es breve y la descripción se despliega por párrafos', async ({ page }) => {
+    await page.goto('/')
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    const movil = await asa.isVisible()
+    if (movil) await asa.click()
+    // los datos de la línea caben en una línea: longitud, velocidad, ancho y electrificación
+    await expect(page.getByTestId('ficha-linea')).toHaveText(/470,5 km.*300 km\/h.*ancho estándar.*25 kV 50 Hz/)
+    if (movil) return // la hoja compacta no lleva descripción ni notas
+    await expect(page.getByTestId('cabecera-linea')).toContainText('Adif, línea 010')
+    // una frase de entrada a la vista; el resto, plegado por párrafos
+    await expect(page.getByTestId('linea-entrada')).toContainText(/^Primera línea de alta velocidad de España/)
+    const resto = page.getByText(/Es de vía doble en todo su recorrido/)
+    await expect(resto).toBeHidden()
+    await page.getByText('Más sobre la línea').click()
+    await expect(resto).toBeVisible()
+    // una sola nota bajo el esquema, y el rótulo de la columna de barras
+    await expect(page.getByTestId('nota-esquema')).toContainText(/Toca una estación o un tramo/)
+    await expect(page.getByTestId('esquema-rotulo-trenes')).toHaveText(/^trenes el \d+ [a-z]+$/)
+    await expect(page.getByText(/Las barras cuentan los trenes/)).toHaveCount(1)
+  })
+
   test('seleccionar una estación muestra qué tramos confluyen y qué trenes paran', async ({ page }) => {
     await page.goto('/#/nodo/cordoba')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()

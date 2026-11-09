@@ -37,6 +37,12 @@ export function formatDate(iso: string): string {
   return d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 }
 
+/** Día y mes abreviados («13 nov»), para rótulos donde no cabe la fecha completa. */
+export function formatDayShort(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`)
+  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', '')
+}
+
 export const KIND_LABEL: Record<string, string> = {
   estacion: 'Estación',
   paet: 'Puesto de adelantamiento y estacionamiento',

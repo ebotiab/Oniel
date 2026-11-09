@@ -10,6 +10,8 @@ interface Props {
   hoverId: string | null
   closedSegmentId: string | null
   counts: Record<string, number> | null
+  /** Rótulo de la columna de barras («trenes el 13 nov»); sin él no se rotula. */
+  countsLabel?: string | null
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   compact?: boolean
@@ -31,7 +33,7 @@ function label(n: NodeOut): string {
 }
 
 /** Esquema vertical de una línea: estaciones, puestos y bifurcaciones sobre una escala de kilómetros. */
-export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, counts, onSelect, onHover, compact = false }: Props) {
+export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, counts, countsLabel = null, onSelect, onHover, compact = false }: Props) {
   const nodes = network.nodes.filter((n) => n.line_id === lineId)
   const segments = network.segments.filter((s) => s.line_id === lineId)
   const withConnections = new Set(network.connections.map((c) => c.node_id))
@@ -66,6 +68,12 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
       aria-label="Esquema de la línea con sus estaciones y tramos"
       data-testid="esquema"
     >
+      {/* qué cuentan las barras, encima de su columna */}
+      {!compact && countsLabel && maxCount > 0 && (
+        <text x={X + 9} y={10} fontSize={10} fill="var(--tinta-3)" className="datos" data-testid="esquema-rotulo-trenes">
+          {countsLabel}
+        </text>
+      )}
       {/* la vía: trazo grueso en vía doble, fino en vía única */}
       {segments.map((s) => (
         <line key={`via-${s.id}`} x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke="var(--tinta)" strokeWidth={s.tracks === 1 ? 1.5 : 3} />

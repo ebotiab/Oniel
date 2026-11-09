@@ -13,7 +13,7 @@
     "reference_length_km": 442.0,
     "pk_tolerance_km": 2.0,
     "status": "disponible",
-    "description": "La antigua línea de Andalucía: ancho ibérico (1.668 mm), electrificada a 3 kV, velocidad máxima de 160 km/h. Sale de Madrid-Atocha por Aranjuez hasta Alcázar de San Juan (tramo de la línea 300 Madrid–Valencia de Adif) y sigue por Manzanares, Valdepeñas, el paso de Despeñaperros, Linares-Baeza y Andújar hasta Córdoba (tramo de la línea 400 Alcázar–Cádiz). El ferrocarril Madrid–Aranjuez de 1851 fue el primero de Madrid y la línea quedó completa hasta Córdoba en 1866. Es de vía doble salvo en Despeñaperros (Santa Cruz de Mudela–Vadollano) y entre Linares-Baeza y Córdoba, donde es de vía única. Da acceso, por sus conexiones, a Albacete y Levante, a Ciudad Real y Extremadura, a Jaén, a Almería y a la red convencional de Sevilla y Cádiz.",
+    "description": "La antigua línea de Andalucía: de Madrid-Atocha a Córdoba por Aranjuez, Alcázar de San Juan, Valdepeñas y el paso de Despeñaperros.\n\nPara Adif son dos tramos: hasta Alcázar de San Juan, la línea 300 Madrid–Valencia; de Alcázar a Córdoba, la 400 Alcázar–Cádiz. El ferrocarril Madrid–Aranjuez de 1851 fue el primero de Madrid, y la línea quedó completa hasta Córdoba en 1866.\n\nEs de vía doble salvo en el paso de Despeñaperros, entre Santa Cruz de Mudela y Vadollano, y entre Linares-Baeza y Córdoba, donde es de vía única. Por sus conexiones da acceso a Albacete y Levante, a Ciudad Real y Extremadura, a Jaén, a Almería y a la red convencional de Sevilla y Cádiz.",
     "geometry_source": {
       "source_id": "osm-relation-11351144",
       "parts": [
