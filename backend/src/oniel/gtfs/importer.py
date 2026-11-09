@@ -1,7 +1,9 @@
 """Importación idempotente de servicios GTFS que recorren las líneas cargadas.
 
 Un mismo fichero GTFS alimenta todas las líneas: cada viaje se guarda una sola vez y su paso
-por los tramos se calcula línea a línea con la asignación de paradas de cada especificación.
+por los tramos se calcula línea a línea con la asignación de paradas de cada especificación. Un
+tren que cambia de línea a mitad de recorrido (``route_overrides``) produce pasos en cada una
+solo entre las paradas que le corresponden.
 """
 
 from __future__ import annotations
@@ -17,57 +19,35 @@ import asyncpg
 import logfire
 
 from oniel.db.pool import fetch_int
-from oniel.gtfs.reader import GtfsFeed, GtfsTrip, read_feed, select_corridor_trips
-from oniel.network.spec import NetworkSpec, load_network_spec
+from oniel.gtfs.reader import GtfsTrip, read_feed
+from oniel.gtfs.trips import (
+    LoadedLine,
+    calls_for_trip,
+    calls_on_line,
+    route_for_trip,
+    select_trips_for_spec,
+)
+from oniel.network.spec import load_network_spec
 from oniel.sim.passes import LineNode, LineSegment, SegmentPass, StopCall, resolve_passes
+
+__all__ = ["calls_for_trip", "import_gtfs", "load_line_model", "select_trips_for_spec"]
 
 
 async def load_line_model(
     conn: asyncpg.Connection, line_id: str
 ) -> tuple[dict[str, LineNode], list[LineSegment]]:
     node_rows = await conn.fetch(
-        "SELECT n.id, ln.km, n.lon, n.lat FROM nodes n JOIN line_nodes ln ON ln.node_id = n.id WHERE ln.line_id = $1",
+        "SELECT n.id, n.name, ln.km, n.lon, n.lat FROM nodes n JOIN line_nodes ln ON ln.node_id = n.id WHERE ln.line_id = $1",
         line_id,
     )
     seg_rows = await conn.fetch(
         "SELECT id, km_from, km_to FROM segments WHERE line_id = $1 ORDER BY seq", line_id
     )
-    nodes = {r["id"]: LineNode(r["id"], float(r["km"]), r["lon"], r["lat"]) for r in node_rows}
+    nodes = {
+        r["id"]: LineNode(r["id"], float(r["km"]), r["lon"], r["lat"], r["name"]) for r in node_rows
+    }
     segments = [LineSegment(r["id"], float(r["km_from"]), float(r["km_to"])) for r in seg_rows]
     return nodes, segments
-
-
-def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
-    f = spec.corridor_filter
-    return select_corridor_trips(
-        feed,
-        f.required_stop_ids,
-        f.any_of_stop_ids,
-        min_node_stops=f.min_node_stops,
-        node_stop_ids=spec.node_stop_ids,
-        exclude_stop_ids=f.exclude_stop_ids,
-    )
-
-
-def calls_for_trip(trip: GtfsTrip, feed: GtfsFeed, spec: NetworkSpec) -> list[StopCall]:
-    calls = []
-    for st in trip.stop_times:
-        stop = feed.stops.get(st.stop_id)
-        mapping = spec.stop_mappings.get(st.stop_id)
-        calls.append(
-            StopCall(
-                seq=st.seq,
-                stop_id=st.stop_id,
-                stop_name=stop.name if stop else st.stop_id,
-                arrival_s=st.arrival_s,
-                departure_s=st.departure_s,
-                lon=stop.lon if stop else None,
-                lat=stop.lat if stop else None,
-                node_id=mapping.node if mapping else None,
-                exit_node_ids=tuple(mapping.exits) if mapping else (),
-            )
-        )
-    return calls
 
 
 @dataclass
@@ -98,21 +78,29 @@ async def import_gtfs(
         plans: dict[str, _TripPlan] = {}
         per_line: dict[str, dict[str, Any]] = {}
         unmapped: Counter[str] = Counter()
+        models = {spec.line.id: await load_line_model(conn, spec.line.id) for spec in specs}
+        loaded = [LoadedLine(spec, models[spec.line.id][0]) for spec in specs]
         for spec in specs:
-            nodes, segments = await load_line_model(conn, spec.line.id)
+            nodes, segments = models[spec.line.id]
             if not segments:
                 raise RuntimeError(
                     f"primero hay que importar la red de {spec.line.id} (oniel-data import network)"
                 )
+            others = [line for line in loaded if line.line_id != spec.line.id]
             kinds: Counter[str] = Counter()
             resolutions: Counter[str] = Counter()
+            rules: Counter[str] = Counter()
             trips = select_trips_for_spec(feed, spec)
             for trip in trips:
-                calls = calls_for_trip(trip, feed, spec)
-                for c in calls:
+                route = route_for_trip(spec, trip)
+                if route is not None:
+                    rules[route.override.id] += 1
+                calls = calls_for_trip(trip, feed, spec, nodes=nodes, others=others, route=route)
+                line_calls = calls_on_line(calls, route)
+                for c in line_calls:
                     if c.node_id is None and not c.exit_node_ids:
                         unmapped[f"{spec.line.id}: {c.stop_id} {c.stop_name}"] += 1
-                passes, resolution = resolve_passes(calls, nodes, segments)
+                passes, resolution = resolve_passes(line_calls, nodes, segments)
                 resolutions[resolution] += 1
                 kinds.update(p.kind for p in passes)
                 plan = plans.setdefault(trip.trip_id, _TripPlan(trip, calls))
@@ -124,6 +112,7 @@ async def import_gtfs(
                 "train_numbers": len({t.train_number for t in trips}),
                 "passes": dict(kinds),
                 "resolution": dict(resolutions),
+                "route_overrides": dict(rules),
             }
         feed_version = (
             f"{feed_path.name}:{feed.feed_start.isoformat()}..{feed.feed_end.isoformat()}"

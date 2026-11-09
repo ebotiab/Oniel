@@ -164,7 +164,13 @@ def validate_cmd(
     """Comprueba la red construida y la resolución de los horarios sin tocar la base de datos."""
     from oniel.validate import validate_all
 
-    reports = [validate_all(path, feed, settings.data_dir) for path in _specs(spec)]
+    # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
+    # parada puede ser salida hacia otra línea y medir la distancia por ella.
+    context = list(dict.fromkeys([*SPECS_DEFAULT, *_specs(spec)]))
+    reports = [
+        validate_all(path, feed, settings.data_dir, [p for p in context if p != path])
+        for path in _specs(spec)
+    ]
     _echo_json(reports if len(reports) > 1 else reports[0])
     if any(r["problems"] for r in reports):
         raise typer.Exit(code=1)

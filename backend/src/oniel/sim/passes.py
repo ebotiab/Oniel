@@ -10,12 +10,16 @@ Reglas, en lenguaje llano:
 * Si una de las paradas está fuera de la red cargada (por ejemplo Málaga), el tren sale o entra
   por un nodo de la línea (una bifurcación o un cambiador). Estimamos cuándo con la distancia en
   línea recta hasta esa parada y damos un margen mayor: 30 % (mínimo 5 minutos).
+* Si esa parada está en otra línea cargada (un tren que cambia de línea a mitad de recorrido),
+  la asignación puede traer la distancia real desde la salida hasta la parada por la otra línea;
+  entonces el reparto la usa en vez de la línea recta, con el mismo margen del 30 %.
 * Si no podemos saber por dónde circula el tren, el paso queda **indeterminado**.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, field
 from typing import Literal
 
 from oniel.geo import haversine_km
@@ -35,6 +39,11 @@ class LineNode:
     km: float
     lon: float
     lat: float
+    name: str = ""
+
+    @property
+    def label(self) -> str:
+        return self.name or self.id
 
 
 @dataclass(frozen=True)
@@ -42,6 +51,16 @@ class LineSegment:
     id: str
     km_from: float
     km_to: float
+
+
+@dataclass(frozen=True)
+class ExitDistance:
+    """Distancia conocida desde un nodo de salida hasta una parada que está en otra línea cargada."""
+
+    km: float
+    #: Cómo se compone, para explicarlo («47 km en línea recta hasta Ciudad Real y 173 km por esa
+    #: línea hasta Córdoba»).
+    how: str
 
 
 @dataclass(frozen=True)
@@ -59,6 +78,12 @@ class StopCall:
     exit_node_ids: tuple[
         str, ...
     ] = ()  # la parada está fuera; el tren entra o sale por uno de estos
+    #: Distancia conocida desde cada nodo de salida hasta la parada (por otra línea cargada);
+    #: si falta, se usa la línea recta.
+    exit_distances: Mapping[str, ExitDistance] = field(default_factory=dict)
+    #: Dónde está la parada cuando no es de esta línea pero sí de otra cargada, para explicarlo
+    #: («está en la línea de alta velocidad Madrid – Sevilla, con la que enlaza en Ciudad Real»).
+    exit_note: str | None = None
 
 
 @dataclass(frozen=True)
@@ -86,11 +111,15 @@ class _Anchor:
     call: StopCall
     km: float
     on_line: bool  # True si el tren para en este punto de la línea
-    extra_km: float  # distancia en línea recta desde el nodo de salida hasta la parada exterior
+    extra_km: float  # distancia desde el nodo de salida hasta la parada exterior
+    #: Nodo por el que el tren sale o entra, si la parada es exterior.
+    exit_node: LineNode | None = None
+    #: De dónde sale extra_km cuando no es la línea recta.
+    extra_how: str | None = None
 
 
 def resolve_passes(
-    calls: list[StopCall], nodes: dict[str, LineNode], segments: list[LineSegment]
+    calls: Sequence[StopCall], nodes: Mapping[str, LineNode], segments: Sequence[LineSegment]
 ) -> tuple[list[SegmentPass], Literal["completa", "parcial"]]:
     """Calcula el paso del servicio por cada tramo que recorre."""
     ordered = sorted(segments, key=lambda s: s.km_from)
@@ -132,7 +161,7 @@ def resolve_passes(
     return [passes[s.id] for s in ordered if s.id in passes], resolution
 
 
-def _overall_direction(calls: list[StopCall], nodes: dict[str, LineNode]) -> bool | None:
+def _overall_direction(calls: Sequence[StopCall], nodes: Mapping[str, LineNode]) -> bool | None:
     kms = [nodes[c.node_id].km for c in calls if c.node_id and c.node_id in nodes]
     if len(kms) >= 2 and kms[0] != kms[-1]:
         return kms[-1] > kms[0]
@@ -140,7 +169,7 @@ def _overall_direction(calls: list[StopCall], nodes: dict[str, LineNode]) -> boo
 
 
 def _anchor_for(
-    call: StopCall, nodes: dict[str, LineNode], direction: bool | None, prev_km: float | None
+    call: StopCall, nodes: Mapping[str, LineNode], direction: bool | None, prev_km: float | None
 ) -> _Anchor | None:
     if call.node_id and call.node_id in nodes:
         return _Anchor(call, nodes[call.node_id].km, True, 0.0)
@@ -158,10 +187,13 @@ def _anchor_for(
             if ahead:
                 chosen = cand
                 break
+    known = call.exit_distances.get(chosen.id)
+    if known is not None:
+        return _Anchor(call, chosen.km, False, known.km, chosen, known.how)
     extra = 0.0
     if call.lon is not None and call.lat is not None:
         extra = haversine_km((call.lon, call.lat), (chosen.lon, chosen.lat))
-    return _Anchor(call, chosen.km, False, extra)
+    return _Anchor(call, chosen.km, False, extra, chosen)
 
 
 def _fmt(seconds: float) -> str:
@@ -171,7 +203,7 @@ def _fmt(seconds: float) -> str:
 
 
 def _leg_passes(
-    a: _Anchor, b: _Anchor, segments: list[LineSegment], unknown_between: bool
+    a: _Anchor, b: _Anchor, segments: Sequence[LineSegment], unknown_between: bool
 ) -> list[SegmentPass]:
     lo, hi = min(a.km, b.km), max(a.km, b.km)
     if hi - lo < KM_TOLERANCE:
@@ -233,12 +265,7 @@ def _leg_passes(
                     f" margen de ±{int(margin // 60)} min."
                 )
             else:
-                outside = b.call.stop_name if not b.on_line else a.call.stop_name
-                basis = (
-                    f"Estimado: {outside} está fuera de la red cargada, así que el reparto entre"
-                    f" {a.call.stop_name} ({_fmt(t0)}) y {b.call.stop_name} ({_fmt(t1)}) usa la"
-                    f" distancia en línea recta; margen de ±{int(margin // 60)} min."
-                )
+                basis = _outside_basis(a, b, on_line_km, margin)
         passes.append(
             SegmentPass(
                 segment_id=s.id,
@@ -252,3 +279,26 @@ def _leg_passes(
             )
         )
     return passes
+
+
+def _outside_basis(a: _Anchor, b: _Anchor, on_line_km: float, margin: float) -> str:
+    """Explica un reparto en el que una de las dos paradas no está en esta línea."""
+    outside = b if not b.on_line else a
+    t0, t1 = _fmt(a.call.departure_s), _fmt(b.call.arrival_s)
+    minutes = int(margin // 60)
+    if outside.call.exit_note is None or outside.exit_node is None:
+        return (
+            f"Estimado: {outside.call.stop_name} está fuera de la red cargada, así que el reparto"
+            f" entre {a.call.stop_name} ({t0}) y {b.call.stop_name} ({t1}) usa la distancia en"
+            f" línea recta; margen de ±{minutes} min."
+        )
+    verb = "sale de" if outside is b else "entra en"
+    how = outside.extra_how or (
+        f"{outside.extra_km:.0f} km en línea recta hasta {outside.call.stop_name}"
+    )
+    return (
+        f"Estimado: {outside.call.stop_name} {outside.call.exit_note}; el tren {verb} esta línea"
+        f" por {outside.exit_node.label}. El reparto entre {a.call.stop_name} ({t0}) y"
+        f" {b.call.stop_name} ({t1}) usa {on_line_km:.0f} km por la línea y, desde"
+        f" {outside.exit_node.label}, {how}; margen de ±{minutes} min."
+    )

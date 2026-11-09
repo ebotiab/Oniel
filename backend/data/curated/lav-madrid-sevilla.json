@@ -104,5 +104,21 @@
     "description": "Se importan los viajes del GTFS que paran en Córdoba y en alguna estación de Madrid: son los que recorren el corredor de la línea 010.",
     "required_stop_ids": ["50500"],
     "any_of_stop_ids": ["60000", "17000", "18000"]
-  }
+  },
+  "route_overrides": [
+    {
+      "id": "atocha-cercanias-ciudad-real-por-manzanares",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: entre Madrid y Ciudad Real van por la línea convencional hasta Manzanares y por la línea Manzanares–Ciudad Real (no cargada); por esta línea se resuelven desde Ciudad Real.",
+      "consecutive_stop_ids": ["18000", "37200", "50500"],
+      "from_stop_id": "37200"
+    },
+    {
+      "id": "atocha-cercanias-cordoba-por-manzanares",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): entran en esta línea en Ciudad Real procedentes de la convencional por Manzanares, así que para estos viajes Madrid-Atocha Cercanías se trata como salida por Ciudad Real.",
+      "consecutive_stop_ids": ["18000", "50500"],
+      "stop_mappings": {
+        "18000": {"exits": ["ciudad-real"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}}
+      }
+    }
+  ]
 }
