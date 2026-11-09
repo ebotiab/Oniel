@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { currentMode, detectMode, fetchCoverage, fetchNetwork, fetchSegmentCounts, type DataMode } from '../data/api'
+import { apiStatus, fetchCoverage, fetchNetwork, fetchSegmentCounts, onApiStatus, wakeApi, type ApiStatus, type DataMode } from '../data/api'
+import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, NetworkOut } from '../data/types'
 import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
@@ -26,7 +27,6 @@ function useMedia(query: string): boolean {
 export default function App() {
   const [network, setNetwork] = useState<NetworkOut | null>(null)
   const [coverage, setCoverage] = useState<CoverageOut | null>(null)
-  const [mode, setMode] = useState<DataMode>('estatico')
   const [loadError, setLoadError] = useState<string | null>(null)
   const [route, setRoute] = useState(() => parseHash(window.location.hash))
   const [hoverId, setHoverId] = useState<string | null>(null)
@@ -36,21 +36,59 @@ export default function App() {
   const [counts, setCounts] = useState<Record<string, number> | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(null)
   const mobile = useMedia('(max-width: 760px)')
+  const status = useApiStatus()
 
+  // Arranque: la instantánea estática pinta la red enseguida; la API, cuando responde, la sustituye.
   useEffect(() => {
-    detectMode()
-      .then(async (m) => {
-        setMode(m)
-        const [net, cov] = await Promise.all([fetchNetwork(), fetchCoverage()])
-        setNetwork(net)
-        setCoverage(cov)
-        try {
-          setCounts((await fetchSegmentCounts(cov.reference_date ?? undefined)).counts)
-        } catch {
-          /* los contadores son opcionales */
-        }
+    let cancelled = false
+    let fromApi = false
+    let staticFailed = false
+    const fail = () => setLoadError('No se ha podido cargar la red. Comprueba la conexión o el servidor de Oniel.')
+    const load = async (source: DataMode) => {
+      const [net, cov] = await Promise.all([fetchNetwork(source), fetchCoverage(source)])
+      let counts: Record<string, number> | null = null
+      try {
+        counts = (await fetchSegmentCounts(cov.reference_date ?? undefined, source)).counts
+      } catch {
+        /* los contadores son opcionales */
+      }
+      return { net, cov, counts }
+    }
+    const apply = (d: Awaited<ReturnType<typeof load>>) => {
+      setNetwork(d.net)
+      setCoverage(d.cov)
+      setCounts(d.counts)
+      setLoadError(null)
+    }
+    load('estatico')
+      .then((d) => {
+        if (!cancelled && !fromApi) apply(d)
       })
-      .catch(() => setLoadError('No se ha podido cargar la red. Comprueba la conexión o el servidor de Oniel.'))
+      .catch(() => {
+        staticFailed = true
+        if (!cancelled && apiStatus() === 'ausente') fail()
+      })
+    const onStatus = (s: ApiStatus) => {
+      if (cancelled) return
+      if (s === 'disponible') {
+        load('api')
+          .then((d) => {
+            if (cancelled) return
+            fromApi = true
+            apply(d)
+          })
+          .catch(() => {
+            if (!cancelled && staticFailed) fail()
+          })
+      } else if (s === 'ausente' && staticFailed) fail()
+    }
+    const off = onApiStatus(onStatus)
+    if (apiStatus() === 'disponible') onStatus('disponible')
+    else void wakeApi()
+    return () => {
+      cancelled = true
+      off()
+    }
   }, [])
 
   // Sincronizar el hash con la selección
@@ -105,7 +143,7 @@ export default function App() {
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
-  else if (showCoverage && coverage) panel = <CoveragePanel coverage={coverage} mode={mode} onClose={() => setShowCoverage(false)} />
+  else if (showCoverage && coverage) panel = <CoveragePanel coverage={coverage} status={status} onClose={() => setShowCoverage(false)} />
   else if (segment && route.simulacion)
     panel = (
       <SimulationPanel
@@ -196,7 +234,8 @@ export default function App() {
             )}
           </span>
           {coverage && <span className="datos suave solo-escritorio"> · {Math.round(coverage.total_length_km)} km · {coverage.station_count} estaciones</span>}
-          {currentMode() === 'estatico' && network && <span className="senal gris">vista estática</span>}
+          {network && status === 'buscando' && <span className="senal gris">despertando el servidor…</span>}
+          {network && status === 'ausente' && <span className="senal gris">vista estática</span>}
         </button>
       </header>
       <aside id="panel" className="panel" aria-label="Panel de la línea">

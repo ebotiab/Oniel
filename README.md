@@ -43,7 +43,7 @@ cd backend && uv run fastapi dev
 cd frontend && npm install && npm run dev
 ```
 
-El visor queda en http://localhost:5173 y habla con la API a través del proxy de Vite (`/api` → http://127.0.0.1:8000; cambia el destino con `ONIEL_API_PROXY`). Sin API, el visor muestra la instantánea estática y la simulación avisa de que necesita el servidor.
+El visor queda en http://localhost:5173 y habla con la API a través del proxy de Vite (`/api` → http://127.0.0.1:8000; cambia el destino con `ONIEL_API_PROXY`). El visor arranca siempre con la instantánea estática de `frontend/public/data` y pasa a la API en cuanto responde; sin API, se queda en la instantánea y la simulación avisa de que necesita el servidor.
 
 ## Comandos de datos
 
@@ -56,7 +56,7 @@ cd backend && uv run oniel-data --help
 | `db migrate` / `db reset --yes` | Aplica migraciones / recrea el esquema (solo desarrollo) |
 | `import network` | Construye cada línea desde la geometría cruda y la especificación curada y la carga (`--spec` repetible; sin él, todas) |
 | `import gtfs` | Importa los servicios del GTFS que recorren las líneas cargadas y precalcula su paso por cada tramo |
-| `import all` | Todo lo anterior más la exportación estática |
+| `import all` | Todo lo anterior más la exportación estática; con `--if-changed` se salta si datos y código no cambiaron desde la última |
 | `validate` | Comprueba la red y la resolución de horarios sin base de datos (`--spec` repetible; sin él, todas) |
 | `export snapshot` | Exporta JSON estático para el visor |
 | `sources` | Lista las fuentes con licencia y fecha |

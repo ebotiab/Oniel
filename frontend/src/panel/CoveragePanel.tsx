@@ -1,14 +1,14 @@
 import type { CoverageOut } from '../data/types'
-import type { DataMode } from '../data/api'
+import type { ApiStatus } from '../data/api'
 import { formatDate, formatKm } from '../app/state'
 
 interface Props {
   coverage: CoverageOut
-  mode: DataMode
+  status: ApiStatus
   onClose: () => void
 }
 
-export function CoveragePanel({ coverage, mode, onClose }: Props) {
+export function CoveragePanel({ coverage, status, onClose }: Props) {
   return (
     <section className="detalle cobertura" aria-labelledby="cob-titulo" data-testid="panel-cobertura">
       <button type="button" className="enlace volver" onClick={onClose}>
@@ -40,7 +40,8 @@ export function CoveragePanel({ coverage, mode, onClose }: Props) {
       <p className="suave">
         Horarios válidos del {coverage.feed_start ? formatDate(coverage.feed_start) : '–'} al {coverage.feed_end ? formatDate(coverage.feed_end) : '–'}.
         Operadores: {coverage.operators.map((o) => o.name).join(', ')}.
-        {mode === 'estatico' ? ' Esta vista previa muestra una instantánea estática; la simulación necesita el servidor.' : ''}
+        {status === 'ausente' ? ' Esta vista previa muestra una instantánea estática; la simulación necesita el servidor.' : ''}
+        {status === 'buscando' ? ' El servidor se está despertando; hasta que responda se muestra la instantánea estática.' : ''}
       </p>
       <h3 className="subtitulo">Pendiente de cargar</h3>
       <p className="texto suave">

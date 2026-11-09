@@ -29,7 +29,8 @@ services:
       - key: ONIEL_CORS_ORIGINS
         value: '["https://oniel.vercel.app"]'
       - key: ONIEL_IMPORT_ON_START
-        value: "1"    # sin cron job, cada arranque ejecuta `oniel-data import all` (≈5 s) antes de servir
+        value: "1"    # sin cron job, cada arranque ejecuta `oniel-data import all --if-changed` antes de servir
+                      # (≈1 min en Render, solo tras un despliegue nuevo; al despertar se salta)
       - key: LOGFIRE_TOKEN
         sync: false   # token de escritura del proyecto ebotiab/oniel; se aporta al aprobar el primer sync
 

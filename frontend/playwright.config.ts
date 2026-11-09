@@ -26,6 +26,8 @@ export default defineConfig({
     env: {
       ONIEL_API_PROXY: process.env.ONIEL_API_PROXY ?? 'http://127.0.0.1:8000',
       VITE_DATA_MODE: process.env.ONIEL_E2E_STATIC ? 'estatico' : '',
+      // El visor sondea /healthz hasta dos minutos y medio; en las pruebas basta con 20 s.
+      VITE_API_WAKE_MS: '20000',
     },
   },
   projects: [

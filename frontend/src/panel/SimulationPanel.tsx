@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 
 import { ApiError, simulateClosure } from '../data/api'
+import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, ClosureStatus, SegmentOut } from '../data/types'
 import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
@@ -26,6 +27,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
   const [error, setError] = useState<string | null>(null)
   const [openMethod, setOpenMethod] = useState(false)
   const [open, setOpen] = useState<Record<string, boolean>>({ afectado_publicado: true, afectado_estimado: true, indeterminado: true })
+  const status = useApiStatus()
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -76,6 +78,11 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
           {loading ? 'Calculando…' : 'Calcular el efecto del cierre'}
         </button>
       </form>
+      {status === 'buscando' && (
+        <p className="suave" role="status">
+          El servidor de Oniel se está despertando; la simulación se calculará en cuanto responda.
+        </p>
+      )}
       {error && (
         <p className="aviso" role="alert">
           {error}
