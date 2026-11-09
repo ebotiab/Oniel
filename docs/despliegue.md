@@ -12,7 +12,13 @@ cd frontend && vercel login
 cd frontend && vercel link --project oniel --yes && vercel deploy
 ```
 
-Estado (8 de noviembre de 2026): el proyecto `oniel` existe en el ámbito personal `enrique-botia-barbera-s-projects` y el primer despliegue está publicado en https://oniel.vercel.app (vista estática, sin API todavía). El enlace local está en `frontend/.vercel/` (ignorado por git). Nota: la CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local; ejecutarla sin ellas (`env -u HTTPS_PROXY -u HTTP_PROXY vercel …`).
+Para publicar en producción (https://oniel.vercel.app):
+
+```bash
+cd frontend && env -u HTTPS_PROXY -u HTTP_PROXY vercel --prod
+```
+
+Estado (9 de noviembre de 2026): el proyecto `oniel` existe en el ámbito personal `enrique-botia-barbera-s-projects`. La producción https://oniel.vercel.app sirve el commit `e4eb6e0` de `main` (pestañas de línea, esquema filtrado por línea y rótulos sin solapar), publicado el 9 de noviembre de 2026 con `vercel --prod` desde `frontend/` (despliegue `dpl_FMqoPxba1xw5RHsEQSYTCYZXZBAU`). Vercel no está conectado a git: cada publicación es manual con la CLI, así que tras fusionar cambios del visor en `main` hay que repetir el despliegue. El enlace local está en `frontend/.vercel/` (ignorado por git; en un worktree nuevo basta con copiar su `project.json`). Nota: la CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local; ejecutarla sin ellas (`env -u HTTPS_PROXY -u HTTP_PROXY vercel …`).
 
 Variables de entorno del proyecto:
 
