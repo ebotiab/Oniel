@@ -12,7 +12,7 @@
     "opened_on": "1992-04-21",
     "reference_length_km": 471.8,
     "status": "disponible",
-    "description": "Primera línea de alta velocidad de España, abierta en abril de 1992. Vía doble de ancho estándar (1.435 mm) electrificada a 25 kV, con velocidad máxima de 300 km/h. Une Madrid-Puerta de Atocha con Sevilla-Santa Justa en 471,8 km y da acceso, por sus bifurcaciones, a Toledo, Levante, Málaga y Granada.",
+    "description": "Primera línea de alta velocidad de España, abierta en abril de 1992 entre Madrid-Puerta de Atocha y Sevilla-Santa Justa.\n\nEs de vía doble en todo su recorrido y da acceso, por sus bifurcaciones, a Toledo, Levante, Málaga y Granada.",
     "geometry_source": {
       "source_id": "osm-relation-1254828",
       "file": "raw/osm/relation_1254828_ave_madrid_sevilla_2026-11-08.json",
