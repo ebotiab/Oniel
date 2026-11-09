@@ -1,6 +1,7 @@
 import type { NetworkOut, NodeOut, SegmentOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { formatKm } from '../app/state'
+import { spreadLabels } from './layout'
 
 interface Props {
   network: NetworkOut
@@ -15,6 +16,11 @@ interface Props {
 }
 
 const X = 78
+// Caja de un rótulo en función de su cuerpo: lo que sobresale por encima y por debajo de la línea base,
+// más un margen entre rótulos consecutivos (medido con Archivo en Chrome).
+const LABEL_ASCENT = 0.88
+const LABEL_DESCENT = 0.21
+const LABEL_PADDING = 3
 
 function label(n: NodeOut): string {
   return n.name
@@ -38,7 +44,18 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
   const maxCount = counts ? Math.max(0, ...Object.values(counts)) : 0
   const isSelSeg = (s: SegmentOut) => selection?.type === 'tramo' && selection.id === s.id
   const isSelNode = (n: NodeOut) => selection?.type === 'nodo' && selection.id === n.id
-  const minor = (n: NodeOut) => n.kind !== 'estacion' || n.rank === 'secundario'
+  const principalStation = (n: NodeOut) => n.kind === 'estacion' && n.rank !== 'secundario'
+  const fontSize = (n: NodeOut) => (principalStation(n) ? (compact ? 12 : 13.5) : 11.5)
+  const baseline = (n: NodeOut) => (principalStation(n) ? 4.5 : 4)
+
+  // Rótulos: cada uno quiere la altura de su nodo, pero dos consecutivos han de distar al menos lo que
+  // ocupan sus letras (descendentes del de arriba, ascendentes del de abajo) y un margen. Los que no
+  // caben se reparten centrados en torno a sus nodos; el esquema compacto no rotula los secundarios.
+  const labelled = nodes.filter((n) => !(compact && n.rank === 'secundario')).sort((a, b) => a.km - b.km)
+  const anchors = labelled.map((n) => y(n.km) + baseline(n))
+  const gaps = labelled.slice(1).map((n, i) => LABEL_DESCENT * fontSize(labelled[i]!) + LABEL_ASCENT * fontSize(n) + LABEL_PADDING)
+  const labelShift = new Map<string, number>()
+  spreadLabels(anchors, gaps).forEach((ly, i) => labelShift.set(labelled[i]!.id, ly - anchors[i]!))
 
   return (
     <svg
@@ -109,16 +126,9 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
         )
       })}
 
-      {nodes.map((n, i) => {
+      {nodes.map((n) => {
         const yy = y(n.km)
-        const prev = nodes[i - 1]
-        const next = nodes[i + 1]
-        const minGap = 14
-        let dy = 0
-        if (minor(n)) {
-          if (next && y(next.km) - yy < minGap) dy = -(minGap - (y(next.km) - yy)) - 2
-          else if (prev && yy - y(prev.km) < minGap) dy = minGap - (yy - y(prev.km)) + 2
-        }
+        const dy = labelShift.get(n.id) ?? 0
         const sel = isSelNode(n)
         const stroke = sel ? 'var(--senal-azul)' : 'var(--tinta)'
         const station = n.kind === 'estacion'
@@ -155,8 +165,8 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             {!hideLabel && (
               <text
                 x={X + (compact ? 14 : 112)}
-                y={yy + dy + (station && !secondary ? 4.5 : 4)}
-                fontSize={station && !secondary ? (compact ? 12 : 13.5) : 11.5}
+                y={yy + dy + baseline(n)}
+                fontSize={fontSize(n)}
                 fontWeight={station && !secondary ? 600 : 400}
                 fill={sel ? 'var(--senal-azul)' : station && !secondary ? 'var(--tinta)' : 'var(--tinta-2)'}
               >

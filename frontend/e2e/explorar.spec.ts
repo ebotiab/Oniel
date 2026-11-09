@@ -74,4 +74,38 @@ test.describe('Explorar la red', () => {
     await expect(page.getByText(/Adif/).first()).toBeVisible()
     await expect(page.getByText(/línea convencional Madrid – Alcázar de San Juan – Córdoba/).first()).toBeVisible()
   })
+  test('los rótulos del esquema no se pisan aunque haya nodos muy cercanos', async ({ page }) => {
+    await page.goto('/')
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    if (await asa.isVisible()) await asa.click()
+    for (const [lineId, nodeId] of [
+      ['lav-madrid-sevilla', 'majarabique'],
+      ['convencional-madrid-alcazar-cordoba', 'rabanales'],
+    ] as const) {
+      await page.getByTestId(`selector-linea-${lineId}`).click()
+      await expect(page.getByTestId(`esquema-nodo-${nodeId}`)).toBeAttached()
+      // Cajas de todos los textos de los nodos (nombre y kilómetro); dos no pueden compartir área.
+      const boxes = await page
+        .getByTestId('esquema')
+        .locator('.esquema-nodo text')
+        .evaluateAll((els) =>
+          els.map((el) => {
+            const r = el.getBoundingClientRect()
+            return { text: el.textContent ?? '', top: r.top, bottom: r.bottom, left: r.left, right: r.right }
+          }),
+        )
+      expect(boxes.length).toBeGreaterThan(5)
+      const overlaps: string[] = []
+      for (let i = 0; i < boxes.length; i++) {
+        for (let j = i + 1; j < boxes.length; j++) {
+          const a = boxes[i]!
+          const b = boxes[j]!
+          const horizontal = Math.min(a.right, b.right) - Math.max(a.left, b.left)
+          const vertical = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)
+          if (horizontal > 0.5 && vertical > 0.5) overlaps.push(`«${a.text}» y «${b.text}» se pisan ${vertical.toFixed(1)} px`)
+        }
+      }
+      expect(overlaps, `rótulos solapados en ${lineId}`).toEqual([])
+    }
+  })
 })
