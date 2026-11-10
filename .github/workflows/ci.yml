@@ -115,13 +115,11 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
 
-      - name: Instalar Chromium y sus dependencias del sistema
+      # Solo el navegador: la imagen del runner ya trae Chromium y sus librerías, así que
+      # `playwright install-deps` (un apt-get de 1,5 a 3,5 minutos) sobra.
+      - name: Instalar Chromium
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Dependencias del sistema de Chromium (navegador ya en caché)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+        run: npx playwright install chromium
 
       - name: Pruebas Playwright sobre la instantánea estática (sin servidor)
         run: npx playwright test
