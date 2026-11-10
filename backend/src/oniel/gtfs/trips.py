@@ -3,8 +3,9 @@
 Un viaje se resuelve línea a línea con la asignación de paradas de cada especificación. Las
 reglas de recorrido (``route_overrides``) cubren los trenes que cambian de línea a mitad de
 camino: dicen entre qué paradas el viaje va por esta línea y, si hace falta, por qué nodo sale
-hacia la otra. Las demás líneas cargadas (``OtherLine``) sirven para medir la distancia por
-ellas y para explicar en el visor por dónde sigue el tren.
+hacia las otras. Las demás líneas cargadas (``LoadedLine``) sirven para medir la distancia por
+ellas, aunque el camino hasta la parada cruce más de una, y para explicar en el visor por dónde
+sigue el tren.
 """
 
 from __future__ import annotations
@@ -110,7 +111,7 @@ def calls_for_trip(
 
     Si el viaje encaja con una regla de recorrido, sus asignaciones particulares mandan sobre las
     generales. Una parada que es salida hacia otra línea cargada (``via``) lleva una nota que lo
-    explica y, si se conocen los nodos de las dos líneas, la distancia por la otra línea.
+    explica y, si se conocen los nodos de las líneas del camino, la distancia por ellas.
     """
     general = spec.stop_mappings
     calls = []
@@ -123,8 +124,8 @@ def calls_for_trip(
         )
         distances: dict[str, ExitDistance] = {}
         note = None
-        if mapping is not None and mapping.via is not None:
-            distances, note = _via_other_line(
+        if mapping is not None and mapping.via:
+            distances, note = _via_other_lines(
                 st.stop_id, stop.name if stop else st.stop_id, mapping, nodes or {}, others
             )
         calls.append(
@@ -145,7 +146,58 @@ def calls_for_trip(
     return calls
 
 
-def _via_other_line(
+@dataclass(frozen=True)
+class ViaLeg:
+    """Un trecho del camino hasta una parada de otra línea: por qué línea y entre qué nodos."""
+
+    line: LoadedLine
+    #: Nodo por el que el tren entra en la línea.
+    join: LineNode
+    #: Nodo en el que la deja: el enlace con el trecho siguiente o, en el último, la parada.
+    end: LineNode
+
+    @property
+    def km(self) -> float:
+        return abs(self.join.km - self.end.km)
+
+    @property
+    def line_name(self) -> str:
+        """Nombre de la línea para ir en mitad de una frase («línea convencional…»)."""
+        name = self.line.spec.line.name
+        return f"{name[0].lower()}{name[1:]}"
+
+
+def via_legs(
+    stop_id: str, mapping: StopMapping, others: Sequence[LoadedLine]
+) -> list[ViaLeg] | str:
+    """El camino ``via`` de una parada, trecho a trecho; si no se puede seguir, por qué no.
+
+    Cada trecho entra en su línea por el nodo que declara y la deja en el nodo del trecho
+    siguiente, que por tanto tiene que ser común a las dos; el último llega a la parada, que
+    tiene que ser un nodo de esa línea.
+    """
+    legs: list[ViaLeg] = []
+    for i, hop in enumerate(mapping.via):
+        line = next((o for o in others if o.line_id == hop.line), None)
+        if line is None:
+            return f"la línea {hop.line} no está entre las líneas cargadas"
+        join = line.nodes.get(hop.node)
+        if join is None:
+            return f"{hop.node} no es un nodo de la línea {hop.line}"
+        if i + 1 < len(mapping.via):
+            next_node = mapping.via[i + 1].node
+            end = line.nodes.get(next_node)
+            if end is None:
+                return f"{next_node} no es un nodo de la línea {hop.line}"
+        else:
+            end = line.node_of_stop(stop_id)
+            if end is None:
+                return f"la parada no es un nodo de la línea {hop.line}"
+        legs.append(ViaLeg(line, join, end))
+    return legs
+
+
+def _via_other_lines(
     stop_id: str,
     stop_name: str,
     mapping: StopMapping,
@@ -154,39 +206,38 @@ def _via_other_line(
 ) -> tuple[dict[str, ExitDistance], str | None]:
     """Nota que explica dónde está la parada y, por cada salida, la distancia hasta ella.
 
-    La distancia se compone de la línea recta entre la salida y el nodo de enlace más el
-    kilometraje por la otra línea desde ahí hasta la parada. Si el enlace es la propia parada
-    no hay nada que medir por la otra línea y se deja la línea recta de siempre.
+    La distancia suma el kilometraje de cada trecho por su línea; si la salida no es el propio
+    nodo de enlace con la primera, se añade la línea recta entre los dos. Si el enlace es la
+    propia parada no hay nada que medir por la otra línea y se deja la línea recta de siempre.
     """
-    assert mapping.via is not None
-    other = next((o for o in others if o.line_id == mapping.via.line), None)
-    if other is None:
-        return {}, None  # la otra línea no está cargada en esta ejecución: línea recta
-    join = other.nodes.get(mapping.via.node)
-    target = other.node_of_stop(stop_id)
-    if join is None or target is None:
-        return {}, None
-    name = other.spec.line.name
-    note = f"está en la {name[0].lower()}{name[1:]}"
-    if join.id == target.id:
+    legs = via_legs(stop_id, mapping, others)
+    if isinstance(legs, str) or not legs:
+        return {}, None  # el camino no se puede seguir en esta ejecución: línea recta
+    first, last = legs[0], legs[-1]
+    note = f"está en la {last.line_name}"
+    by_lines = sum(leg.km for leg in legs)
+    if by_lines == 0:
         return {}, note
-    note += f", con la que este tren enlaza en {join.label}"
-    by_other = abs(join.km - target.km)
+    exits = [own[e] for e in mapping.exits if e in own]
+    if len(legs) == 1 and any(e.id != first.join.id for e in exits):
+        note += f", con la que este tren enlaza en {first.join.label}"
     distances = {}
-    for exit_id in mapping.exits:
-        exit_node = own.get(exit_id)
-        if exit_node is None:
-            continue
-        if exit_node.id == join.id:
-            how = f"{by_other:.0f} km por esa línea hasta {stop_name}"
-            distances[exit_id] = ExitDistance(by_other, how)
-            continue
-        link = haversine_km((exit_node.lon, exit_node.lat), (join.lon, join.lat))
-        how = (
-            f"{link:.0f} km en línea recta hasta {join.label} y {by_other:.0f} km por esa línea"
-            f" hasta {stop_name}"
-        )
-        distances[exit_id] = ExitDistance(link + by_other, how)
+    for exit_node in exits:
+        parts = []
+        link = 0.0
+        if exit_node.id != first.join.id:
+            link = haversine_km((exit_node.lon, exit_node.lat), (first.join.lon, first.join.lat))
+            parts.append(f"{link:.0f} km en línea recta hasta {first.join.label}")
+        if len(legs) == 1:
+            parts.append(f"{first.km:.0f} km por esa línea hasta {stop_name}")
+        else:
+            parts.extend(
+                f"{leg.km:.0f} km por la {leg.line_name} hasta"
+                f" {stop_name if leg is last else leg.end.label}"
+                for leg in legs
+            )
+        how = ", ".join(parts[:-1]) + f" y {parts[-1]}" if len(parts) > 1 else parts[0]
+        distances[exit_node.id] = ExitDistance(link + by_lines, how)
     return distances, note
 
 

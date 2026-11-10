@@ -41,7 +41,7 @@
        ]
      }},
     {"id": "ciudad-real", "name": "Ciudad Real", "kind": "estacion", "adif_code": "37200", "position": {"lon": -3.913633, "lat": 38.9853}, "reference_pk_km": 170.7,
-     "description": "Primera estación con parada comercial al sur de Madrid. Da servicio a Castilla-La Mancha con AVE, AVLO, Alvia e Intercity."},
+     "description": "Primera estación con parada comercial al sur de Madrid. Da servicio a Castilla-La Mancha con AVE, AVLO, Alvia e Intercity. También llega aquí la línea convencional desde Manzanares, que sigue hacia Puertollano, Mérida y Badajoz."},
     {"id": "puertollano", "name": "Puertollano", "kind": "estacion", "adif_code": "37300", "position": {"lon": -4.111655, "lat": 38.69128}, "reference_pk_km": 209.4,
      "description": "Estación en el límite sur de la meseta, antes de que la línea cruce Sierra Morena."},
     {"id": "villanueva-de-cordoba", "name": "Villanueva de Córdoba-Los Pedroches", "kind": "estacion", "adif_code": "37704", "position": {"lon": -4.570952, "lat": 38.2554}, "reference_pk_km": 285.2,
@@ -108,16 +108,16 @@
   "route_overrides": [
     {
       "id": "atocha-cercanias-ciudad-real-por-manzanares",
-      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: entre Madrid y Ciudad Real van por la línea convencional hasta Manzanares y por la línea Manzanares–Ciudad Real (no cargada); por esta línea se resuelven desde Ciudad Real.",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: entre Madrid y Ciudad Real van por la línea convencional hasta Manzanares y por la línea Manzanares – Ciudad Real; por esta línea se resuelven desde Ciudad Real.",
       "consecutive_stop_ids": ["18000", "37200", "50500"],
       "from_stop_id": "37200"
     },
     {
       "id": "atocha-cercanias-cordoba-por-manzanares",
-      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): entran en esta línea en Ciudad Real procedentes de la convencional por Manzanares, así que para estos viajes Madrid-Atocha Cercanías se trata como salida por Ciudad Real.",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): entran en esta línea en Ciudad Real, adonde llegan por la convencional hasta Manzanares y por la línea Manzanares – Ciudad Real, así que para estos viajes Madrid-Atocha Cercanías se trata como salida por Ciudad Real.",
       "consecutive_stop_ids": ["18000", "50500"],
       "stop_mappings": {
-        "18000": {"exits": ["ciudad-real"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}}
+        "18000": {"exits": ["ciudad-real"], "via": [{"line": "manzanares-ciudad-real", "node": "ciudad-real"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}]}
       }
     }
   ]

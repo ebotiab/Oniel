@@ -12,6 +12,10 @@ from oniel.network.spec import NetworkSpec, load_network_spec
 BACKEND = Path(__file__).resolve().parents[1]
 DATA_DIR = BACKEND / "data"
 SPEC = DATA_DIR / "curated" / "lav-madrid-sevilla.json"
+CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
+MZCR_SPEC = DATA_DIR / "curated" / "manzanares-ciudad-real.json"
+#: Las líneas cargadas, en el orden de importación.
+SPECS = [SPEC, CONV_SPEC, MZCR_SPEC]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 FEED = DATA_DIR / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
 

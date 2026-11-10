@@ -8,9 +8,10 @@ test.describe('Explorar la red', () => {
     await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
-    // la cobertura de la versión está a la vista: las dos líneas cargadas
+    // la cobertura de la versión está a la vista: las tres líneas cargadas
     await expect(page.getByTestId('boton-cobertura')).toContainText('Madrid – Sevilla')
     await expect(page.getByTestId('boton-cobertura')).toContainText('Madrid – Córdoba por Alcázar de San Juan')
+    await expect(page.getByTestId('boton-cobertura')).toContainText('Manzanares – Ciudad Real')
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -44,6 +45,53 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
     await expect(page.getByTestId('lista-servicios')).toContainText(/MD/)
     await expect(page).toHaveURL(/#\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
+  })
+
+  test('la tercera pestaña muestra la línea Manzanares – Ciudad Real, de vía única, con los trenes desviados', async ({ page }) => {
+    await page.goto('/')
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    const movil = await asa.isVisible()
+    if (movil) await asa.click()
+    // tres pestañas, una por línea, también en la hoja del móvil
+    await expect(page.getByRole('tab')).toHaveCount(3)
+    await page.getByTestId('selector-linea-manzanares-ciudad-real').click()
+    await expect(page.getByTestId('selector-linea-manzanares-ciudad-real')).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
+    await expect(page.getByTestId('ficha-linea')).toHaveText(/64,4 km.*140 km\/h.*ancho ibérico.*3 kV CC/)
+    if (!movil) await expect(page.getByTestId('cabecera-linea')).toContainText('Adif, línea 522')
+    for (const nodo of ['manzanares', 'daimiel', 'almagro', 'ciudad-real']) await expect(page.getByTestId(`esquema-nodo-${nodo}`)).toBeVisible()
+    // Daimiel – Almagro: vía única, con los Media Distancia y los Intercity y Alvia que la cruzan sin parar
+    await page.getByTestId('esquema-tramo-2').click()
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+    await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
+    await expect(page).toHaveURL(/#\/tramo\/manzanares-ciudad-real:daimiel:almagro/)
+    const lista = page.getByTestId('lista-servicios')
+    await expect(lista).toContainText(/MD \d{5}/)
+    await expect(lista).toContainText(/ALVIA \d{5}/)
+    // el Intercity 10270 se explica con kilómetros por las líneas, no en línea recta
+    const intercity = lista.locator('li', { hasText: 'Intercity 10270' }).first()
+    await expect(intercity).toContainText('Madrid-Atocha → Sevilla-Santa Justa')
+    const porque = intercity.locator('.senal')
+    await expect(porque).toHaveText('estimado')
+    await expect(porque).toHaveAttribute('title', /entra en esta línea por Manzanares.*64 km por la línea y, desde Manzanares, 196 km por esa línea/)
+    await expect(porque).not.toHaveAttribute('title', /línea recta/)
+  })
+
+  test('Manzanares y Ciudad Real unen la línea nueva con las otras dos', async ({ page }) => {
+    await page.goto('/#/nodo/ciudad-real')
+    await expect(page.getByRole('heading', { name: 'Ciudad Real' })).toBeVisible()
+    await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
+    await expect(page.getByTestId('nodo-lineas')).toContainText('Línea de alta velocidad Madrid – Sevilla y Línea convencional Manzanares – Ciudad Real')
+    await expect(page.getByRole('button', { name: 'Almagro – Ciudad Real' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Ciudad Real – Puertollano' })).toBeVisible()
+    await expect(page.getByText(/Línea convencional Ciudad Real–Badajoz hacia Puertollano/)).toBeVisible()
+    await page.goto('/#/nodo/manzanares')
+    await expect(page.getByRole('heading', { name: 'Manzanares' })).toBeVisible()
+    await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
+    await expect(page.getByRole('button', { name: 'Manzanares – Daimiel' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Manzanares – Valdepeñas' })).toBeVisible()
+    // la línea a Ciudad Real ya no es una conexión pendiente
+    await expect(page.getByTestId('detalle-nodo').getByText('no cargada todavía')).toHaveCount(0)
   })
 
   test('la cabecera de la línea es breve y la descripción se despliega por párrafos', async ({ page }) => {
@@ -94,7 +142,9 @@ test.describe('Explorar la red', () => {
     await expect(page.getByText(/OpenStreetMap/).first()).toBeVisible()
     await expect(page.getByText(/Adif/).first()).toBeVisible()
     await expect(page.getByText(/línea convencional Madrid – Alcázar de San Juan – Córdoba/).first()).toBeVisible()
+    await expect(page.getByText(/línea convencional Manzanares – Ciudad Real/).first()).toBeVisible()
   })
+
   test('los rótulos del esquema no se pisan aunque haya nodos muy cercanos', async ({ page }) => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
@@ -102,6 +152,7 @@ test.describe('Explorar la red', () => {
     for (const [lineId, nodeId] of [
       ['lav-madrid-sevilla', 'majarabique'],
       ['convencional-madrid-alcazar-cordoba', 'rabanales'],
+      ['manzanares-ciudad-real', 'almagro'],
     ] as const) {
       await page.getByTestId(`selector-linea-${lineId}`).click()
       await expect(page.getByTestId(`esquema-nodo-${nodeId}`)).toBeAttached()
@@ -115,7 +166,7 @@ test.describe('Explorar la red', () => {
             return { text: el.textContent ?? '', top: r.top, bottom: r.bottom, left: r.left, right: r.right }
           }),
         )
-      expect(boxes.length).toBeGreaterThan(5)
+      expect(boxes.length).toBeGreaterThan(3) // la línea más corta tiene cuatro nodos
       const overlaps: string[] = []
       for (let i = 0; i < boxes.length; i++) {
         for (let j = i + 1; j < boxes.length; j++) {

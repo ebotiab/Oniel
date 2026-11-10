@@ -1,0 +1,122 @@
+{
+  "line": {
+    "id": "manzanares-ciudad-real",
+    "name": "Línea convencional Manzanares – Ciudad Real",
+    "short_name": "522",
+    "sort_order": 3,
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 140,
+    "tracks": 1,
+    "opened_on": "1861-03-14",
+    "reference_length_km": 64.5,
+    "pk_origin_km": 197.319,
+    "status": "disponible",
+    "description": "Une la línea de Andalucía, en Manzanares, con Ciudad Real por Daimiel y Almagro, en vía única.\n\nSe abrió por tramos entre octubre de 1860 y marzo de 1861, como parte del ferrocarril de Alcázar de San Juan a Ciudad Real. Para Adif es la línea 522, y sus puntos kilométricos continúan los de la línea desde Madrid: Manzanares es el 197,3 y Ciudad Real, el 261,8.\n\nEn Ciudad Real comparte estación con la línea de alta velocidad Madrid – Sevilla y enlaza con la línea convencional hacia Puertollano, Mérida y Badajoz. La recorren los trenes de Media Distancia de Alcázar de San Juan a Ciudad Real y Badajoz y los que unen Ciudad Real con Albacete, Alicante y Valencia.",
+    "geometry_source": {
+      "source_id": "osm-relation-6759901",
+      "parts": [
+        {
+          "source_id": "osm-relation-6759901",
+          "file": "raw/osm/relation_6759901_md_alcazar_badajoz_2026-11-10.json",
+          "relation_id": 6759901,
+          "from": [-3.370597, 39.005896],
+          "to": [-3.913633, 38.9853]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-522"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "manzanares", "name": "Manzanares", "kind": "estacion", "adif_code": "50100", "shared": true, "position": {"lon": -3.370597, "lat": 39.005896}, "reference_pk_km": 197.319},
+    {"id": "daimiel", "name": "Daimiel", "kind": "estacion", "adif_code": "94002", "position": {"lon": -3.6040793, "lat": 39.0614095}, "reference_pk_km": 218.799,
+     "description": "Estación con trenes de Media Distancia. El tramo de Manzanares a Daimiel fue el primero de la línea en abrirse, el 1 de octubre de 1860."},
+    {"id": "almagro", "name": "Almagro", "kind": "estacion", "adif_code": "94004", "position": {"lon": -3.7096502, "lat": 38.8955125}, "reference_pk_km": 240.112,
+     "description": "Estación con trenes de Media Distancia. El ferrocarril llegó desde Daimiel el 21 de enero de 1861 y siguió hasta Ciudad Real el 14 de marzo."},
+    {"id": "ciudad-real", "name": "Ciudad Real", "kind": "estacion", "adif_code": "37200", "shared": true, "position": {"lon": -3.913633, "lat": 38.9853}, "reference_pk_km": 261.783}
+  ],
+  "track_sections": [
+    {"from_node": "manzanares", "to_node": "ciudad-real", "tracks": 1, "note": "Vía única en toda la línea, según Wikipedia y la ficha de la línea 522 de la FCMAF."}
+  ],
+  "connections": [
+    {"id": "conv-ciudad-real-badajoz", "node_id": "ciudad-real", "name": "Línea convencional Ciudad Real–Badajoz", "towards": "Puertollano, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.913633, 38.9853], [-3.975, 38.955], [-4.035, 38.9], [-4.1, 38.83]]}
+  ],
+  "stop_mappings": {
+    "50100": {"node": "manzanares"},
+    "94002": {"node": "daimiel"},
+    "94004": {"node": "almagro"},
+    "37200": {"node": "ciudad-real"},
+    "18000": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "60200": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "60203": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "60300": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "60301": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "60400": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "50002": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
+    "17000": {"exits": ["manzanares"]},
+    "60402": {"exits": ["manzanares"]},
+    "60406": {"exits": ["manzanares"]},
+    "60500": {"exits": ["manzanares"]},
+    "60503": {"exits": ["manzanares"]},
+    "60505": {"exits": ["manzanares"]},
+    "60507": {"exits": ["manzanares"]},
+    "60600": {"exits": ["manzanares"]},
+    "60800": {"exits": ["manzanares"]},
+    "60900": {"exits": ["manzanares"]},
+    "60901": {"exits": ["manzanares"]},
+    "60902": {"exits": ["manzanares"]},
+    "60905": {"exits": ["manzanares"]},
+    "60911": {"exits": ["manzanares"]},
+    "60913": {"exits": ["manzanares"]},
+    "60914": {"exits": ["manzanares"]},
+    "64100": {"exits": ["manzanares"]},
+    "64200": {"exits": ["manzanares"]},
+    "65000": {"exits": ["manzanares"]},
+    "37300": {"exits": ["ciudad-real"]},
+    "37302": {"exits": ["ciudad-real"]},
+    "37305": {"exits": ["ciudad-real"]},
+    "37308": {"exits": ["ciudad-real"]},
+    "37311": {"exits": ["ciudad-real"]},
+    "37400": {"exits": ["ciudad-real"]},
+    "37402": {"exits": ["ciudad-real"]},
+    "37404": {"exits": ["ciudad-real"]},
+    "37406": {"exits": ["ciudad-real"]},
+    "37407": {"exits": ["ciudad-real"]},
+    "37409": {"exits": ["ciudad-real"]},
+    "37410": {"exits": ["ciudad-real"]},
+    "37500": {"exits": ["ciudad-real"]},
+    "37611": {"exits": ["ciudad-real"]},
+    "37603": {"exits": ["ciudad-real"]},
+    "37608": {"exits": ["ciudad-real"]},
+    "37606": {"exits": ["ciudad-real"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea (Manzanares, Daimiel, Almagro y Ciudad Real): entre ellas no hay otro recorrido. Así entran los Media Distancia y Regional Exprés que van de Alcázar de San Juan, Madrid, Albacete, Alicante o Valencia a Ciudad Real y Badajoz. Los Intercity y Alvia Madrid-Atocha Cercanías – Andalucía, que recorren la línea sin parar en ella, entran por las reglas de route_overrides.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [],
+    "min_node_stops": 2
+  },
+  "route_overrides": [
+    {
+      "id": "atocha-cercanias-ciudad-real-por-manzanares",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: llegan de Madrid por la línea convencional hasta Manzanares, recorren esta línea entera sin parar en Daimiel ni en Almagro y siguen desde Ciudad Real por la alta velocidad. Por esta línea se resuelven entre Madrid y Ciudad Real, entrando por Manzanares.",
+      "consecutive_stop_ids": ["18000", "37200", "50500"],
+      "to_stop_id": "37200"
+    },
+    {
+      "id": "atocha-cercanias-cordoba-por-manzanares",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): tardan las mismas 3 h 45 entre Madrid y Córdoba que los Intercity anteriores, así que se resuelven igual. Cruzan esta línea sin parar en ella: entran por Manzanares y, para estos viajes, Córdoba es una salida por Ciudad Real hacia la alta velocidad.",
+      "consecutive_stop_ids": ["18000", "50500"],
+      "to_stop_id": "50500",
+      "stop_mappings": {
+        "50500": {"exits": ["ciudad-real"], "via": {"line": "lav-madrid-sevilla", "node": "ciudad-real"}}
+      }
+    }
+  ]
+}

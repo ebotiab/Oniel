@@ -13,6 +13,9 @@ Reglas, en lenguaje llano:
 * Si esa parada está en otra línea cargada (un tren que cambia de línea a mitad de recorrido),
   la asignación puede traer la distancia real desde la salida hasta la parada por la otra línea;
   entonces el reparto la usa en vez de la línea recta, con el mismo margen del 30 %.
+* Si las dos paradas están en otras líneas cargadas y se conoce esa distancia a cada lado, el
+  tren cruza la línea entera sin parar: entra por un nodo y sale por otro. El paso es estimado y
+  el margen es el 30 % del mayor de los dos tiempos que pasa fuera de la línea.
 * Si no podemos saber por dónde circula el tren, el paso queda **indeterminado**.
 """
 
@@ -117,6 +120,11 @@ class _Anchor:
     #: De dónde sale extra_km cuando no es la línea recta.
     extra_how: str | None = None
 
+    @property
+    def along_loaded_lines(self) -> bool:
+        """La parada es exterior, pero se llega a ella por otras líneas cargadas y se sabe cuánto hay."""
+        return not self.on_line and self.exit_node is not None and self.extra_how is not None
+
 
 def resolve_passes(
     calls: Sequence[StopCall], nodes: Mapping[str, LineNode], segments: Sequence[LineSegment]
@@ -212,7 +220,10 @@ def _leg_passes(
     inside = [
         s for s in segments if s.km_from >= lo - KM_TOLERANCE and s.km_to <= hi + KM_TOLERANCE
     ]
-    if unknown_between or (not a.on_line and not b.on_line):
+    # Las dos paradas fuera de la línea: solo se puede fijar el recorrido si a las dos se llega
+    # por otras líneas cargadas (el tren cruza esta de un nodo a otro sin parar en ella).
+    crossing = not a.on_line and not b.on_line
+    if unknown_between or (crossing and not (a.along_loaded_lines and b.along_loaded_lines)):
         why = (
             "El horario incluye una parada que Oniel no sabe situar en la red, así que no se puede"
             " fijar el recorrido entre "
@@ -236,7 +247,13 @@ def _leg_passes(
     both_on_line = a.on_line and b.on_line
     ratio = IN_NETWORK_MARGIN_RATIO if both_on_line else EXIT_MARGIN_RATIO
     min_margin = IN_NETWORK_MARGIN_MIN_S if both_on_line else EXIT_MARGIN_MIN_S
-    margin = max(min_margin, ratio * (t_exit_line - t_enter_line))
+    # Con una parada en la línea, el margen crece con el tiempo que el tren pasa en ella desde esa
+    # parada. Si cruza sin parar, la hora publicada más cercana queda fuera: cuenta el mayor de
+    # los dos tiempos exteriores, que es el margen que las líneas vecinas dan a esos enlaces.
+    uncertain_s = (
+        max(t_enter_line - t0, t1 - t_exit_line) if crossing else t_exit_line - t_enter_line
+    )
+    margin = max(min_margin, ratio * uncertain_s)
 
     def time_at(km: float) -> float:
         frac = 0.0 if on_line_km == 0 else (km - lo) / on_line_km
@@ -264,6 +281,8 @@ def _leg_passes(
                     f" ({_fmt(t0)}) y {b.call.stop_name} ({_fmt(t1)}) en proporción a la distancia;"
                     f" margen de ±{int(margin // 60)} min."
                 )
+            elif crossing:
+                basis = _crossing_basis(a, b, on_line_km, margin)
             else:
                 basis = _outside_basis(a, b, on_line_km, margin)
         passes.append(
@@ -301,4 +320,21 @@ def _outside_basis(a: _Anchor, b: _Anchor, on_line_km: float, margin: float) -> 
         f" por {outside.exit_node.label}. El reparto entre {a.call.stop_name} ({t0}) y"
         f" {b.call.stop_name} ({t1}) usa {on_line_km:.0f} km por la línea y, desde"
         f" {outside.exit_node.label}, {how}; margen de ±{minutes} min."
+    )
+
+
+def _crossing_basis(a: _Anchor, b: _Anchor, on_line_km: float, margin: float) -> str:
+    """Explica el paso de un tren que cruza la línea sin parar, entre paradas de otras líneas."""
+    assert a.exit_node is not None and b.exit_node is not None
+    t0, t1 = _fmt(a.call.departure_s), _fmt(b.call.arrival_s)
+    where = " y ".join(
+        f"{x.call.stop_name} {x.call.exit_note}" for x in (a, b) if x.call.exit_note is not None
+    )
+    return (
+        f"Estimado: este tren recorre la línea sin parar en ella; entra por {a.exit_node.label}"
+        f" y sale por {b.exit_node.label}.{f' {where}.' if where else ''} El reparto entre"
+        f" {a.call.stop_name} ({t0}) y"
+        f" {b.call.stop_name} ({t1}) usa {a.extra_km:.0f} km antes de {a.exit_node.label},"
+        f" {on_line_km:.0f} km por la línea y {b.extra_km:.0f} km después de"
+        f" {b.exit_node.label}; margen de ±{int(margin // 60)} min."
     )

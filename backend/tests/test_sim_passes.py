@@ -228,3 +228,76 @@ def test_known_distance_along_another_line_replaces_the_straight_line() -> None:
     assert "sale de esta línea por adamuz" in ad_co.basis  # sin nombre, se usa el id
     assert "y, desde adamuz, 86 km por esa línea hasta Parada X;" in ad_co.basis
     assert "vi-ad" not in p  # no sigue hacia Villanueva
+
+
+def _through(
+    seq: int, name: str, when: int, exit_node: str, km: float | None, note: str | None
+) -> StopCall:
+    """Parada fuera de la línea, a la que se llega (o no) por otra línea cargada."""
+    distances = {} if km is None else {exit_node: ExitDistance(km, f"{km:.0f} km por otra línea")}
+    return StopCall(
+        seq,
+        name,
+        name,
+        when,
+        when,
+        exit_node_ids=(exit_node,),
+        exit_distances=distances,
+        exit_note=note,
+    )
+
+
+def test_a_train_that_crosses_the_line_between_two_other_loaded_lines_is_estimated() -> None:
+    """Parada A 8:00 → parada B 10:00 (120 min), las dos en otras líneas cargadas.
+
+    El tren entra por Ciudad Real, a 100 km de A, recorre 172,8 km hasta Córdoba y sigue 50 km
+    hasta B: 322,8 km en total. Entra a los 120 × 100 / 322,8 = 37,2 min (8:37:10) y sale a los
+    120 × 272,8 / 322,8 = 101,4 min (9:41:25). Pasa fuera 37,2 min antes y 18,6 min después:
+    el margen es el 30 % del mayor, 11,2 min (669 s), en todos los tramos.
+    """
+    calls = [
+        _through(1, "Parada A", hm(8, 0), "ciudad-real", 100.0, "está en la línea A"),
+        _through(2, "Parada B", hm(10, 0), "cordoba", 50.0, "está en la línea B"),
+    ]
+    passes, resolution = resolve_passes(calls, NODES, SEGMENTS)
+    p = by_id(passes)
+    assert resolution == "completa"
+    assert set(p) == {"cr-pu", "pu-vi", "vi-ad", "ad-co"}
+    assert all(x.kind == "estimado" and x.km_increasing for x in p.values())
+    enter = hm(8, 0) + 120 * 60 * 100 / 322.8
+    leave = hm(8, 0) + 120 * 60 * 272.8 / 322.8
+    assert p["cr-pu"].enter_s == pytest.approx(enter, abs=1)
+    assert p["ad-co"].exit_s == pytest.approx(leave, abs=1)
+    assert p["pu-vi"].enter_s == pytest.approx(p["cr-pu"].exit_s)
+    margin = 0.3 * (enter - hm(8, 0))
+    assert all(
+        x.enter_margin_s == pytest.approx(margin) and x.exit_margin_s == pytest.approx(margin)
+        for x in p.values()
+    )
+    basis = p["vi-ad"].basis
+    assert "recorre la línea sin parar en ella; entra por ciudad-real y sale por cordoba" in basis
+    assert "Parada A está en la línea A y Parada B está en la línea B." in basis
+    assert "usa 100 km antes de ciudad-real, 173 km por la línea y 50 km después de" in basis
+    assert "margen de ±11 min" in basis
+
+    # en sentido contrario, el mismo recorrido al revés
+    back = [
+        _through(1, "Parada B", hm(8, 0), "cordoba", 50.0, "está en la línea B"),
+        _through(2, "Parada A", hm(10, 0), "ciudad-real", 100.0, "está en la línea A"),
+    ]
+    q = by_id(resolve_passes(back, NODES, SEGMENTS)[0])
+    assert set(q) == set(p) and all(x.km_increasing is False for x in q.values())
+    assert q["ad-co"].enter_s == pytest.approx(hm(8, 0) + 120 * 60 * 50 / 322.8, abs=1)
+    assert "entra por cordoba y sale por ciudad-real" in q["ad-co"].basis
+
+
+def test_two_stops_outside_the_network_stay_indeterminate() -> None:
+    """Sin una distancia conocida a cada lado no se puede fijar el recorrido: sigue indeterminado."""
+    for km_a, km_b in ((None, None), (100.0, None), (None, 50.0)):
+        calls = [
+            _through(1, "Parada A", hm(8, 0), "ciudad-real", km_a, None),
+            _through(2, "Parada B", hm(10, 0), "cordoba", km_b, None),
+        ]
+        passes, _ = resolve_passes(calls, NODES, SEGMENTS)
+        assert {x.kind for x in passes} == {"indeterminado"}
+        assert {x.segment_id for x in passes} == {"cr-pu", "pu-vi", "vi-ad", "ad-co"}

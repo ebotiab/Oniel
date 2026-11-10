@@ -2,7 +2,7 @@
 
 Web en español para descubrir cómo está conectada la red ferroviaria española. Se abre con un mapa interactivo en el que se recorre la línea, se seleccionan estaciones y tramos y, como herramienta secundaria, se simula un cierre hipotético de un tramo en una franja horaria.
 
-Esta versión cubre dos líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz, y la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif), con los servicios de Renfe que las recorren. Las dos comparten Madrid-Puerta de Atocha y Córdoba, así que la simulación de un cierre señala el recorrido alternativo cuando existe.
+Esta versión cubre tres líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz; la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif), y la **línea convencional Manzanares–Ciudad Real** (Adif, línea 522, de vía única), que une las otras dos, con los servicios de Renfe que las recorren. La alta velocidad y la convencional comparten Madrid-Puerta de Atocha y Córdoba, así que la simulación de un cierre señala el recorrido alternativo cuando existe.
 
 - Diseño: [docs/diseno.md](docs/diseno.md)
 - Datos y procedencia: [docs/datos.md](docs/datos.md)
@@ -33,7 +33,7 @@ docker compose up -d
 cd backend && uv sync && uv run oniel-data import all
 ```
 
-`import all` migra la base de datos, importa la red de las dos líneas y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
+`import all` migra la base de datos, importa la red de las líneas cargadas y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
 
 Opcional, para los agentes de código: `uvx library-skills --claude` en la raíz enlaza en `.claude/skills` y `.agents/skills` las skills que traen FastAPI y Typer (apuntan a `backend/.venv`, por eso no están en git).
 

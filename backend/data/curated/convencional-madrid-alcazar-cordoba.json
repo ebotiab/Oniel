@@ -56,7 +56,7 @@
      "description": "Nudo histórico de la red convencional: aquí la línea de Andalucía se separa de la de Levante (Albacete, Valencia y Alicante). Tiene además una terminal de mercancías."},
     {"id": "cinco-casas", "name": "Cinco Casas", "kind": "estacion", "adif_code": "50002", "rank": "secundario", "position": {"lon": -3.233055, "lat": 39.168883}, "reference_pk_km": 174.0},
     {"id": "manzanares", "name": "Manzanares", "kind": "estacion", "adif_code": "50100", "position": {"lon": -3.370597, "lat": 39.005896}, "reference_pk_km": 197.3,
-     "description": "Arranque de la línea Manzanares–Ciudad Real, que continúa hacia Puertollano, Mérida y Badajoz."},
+     "description": "Estación de enlace: de aquí sale la línea a Ciudad Real por Daimiel y Almagro, que continúa hacia Puertollano, Mérida y Badajoz."},
     {"id": "valdepenas", "name": "Valdepeñas", "kind": "estacion", "adif_code": "50102", "position": {"lon": -3.396136, "lat": 38.763282}, "reference_pk_km": 224.9},
     {"id": "santa-cruz-de-mudela", "name": "Santa Cruz de Mudela", "kind": "estacion", "adif_code": "50200", "position": {"lon": -3.451352, "lat": 38.644591}, "reference_pk_km": 239.0,
      "description": "Última estación de la Mancha antes de Despeñaperros. Aquí termina la vía doble: hasta Vadollano la línea es de vía única."},
@@ -86,7 +86,6 @@
   "connections": [
     {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},
     {"id": "conv-alcazar-levante", "node_id": "alcazar-de-san-juan", "name": "Línea convencional Alcázar–Albacete", "towards": "Albacete, Valencia y Alicante", "status": "no_cargada", "sketch": [[-3.205371, 39.395663], [-3.12, 39.39], [-2.78, 39.28], [-2.5, 39.2]]},
-    {"id": "conv-manzanares-ciudad-real", "node_id": "manzanares", "name": "Línea Manzanares–Ciudad Real", "towards": "Daimiel, Ciudad Real, Puertollano y Badajoz", "status": "no_cargada", "sketch": [[-3.370597, 39.005896], [-3.5, 39.04], [-3.7, 39.0], [-3.9, 38.99]]},
     {"id": "conv-linares-almeria", "node_id": "linares-baeza", "name": "Línea Linares-Baeza–Almería", "towards": "Jódar, Moreda, Guadix y Almería", "status": "no_cargada", "sketch": [[-3.589140, 38.069085], [-3.5, 38.0], [-3.35, 37.92], [-3.31, 37.75]]},
     {"id": "conv-espeluy-jaen", "node_id": "espeluy", "name": "Línea Espelúy–Jaén", "towards": "Mengíbar y Jaén", "status": "no_cargada", "sketch": [[-3.832160, 38.010259], [-3.80, 37.98], [-3.79, 37.86], [-3.79, 37.78]]},
     {"id": "conv-cordoba-sevilla", "node_id": "cordoba", "name": "Línea convencional Córdoba–Sevilla", "towards": "Posadas, Palma del Río, Lora del Río, Sevilla y Cádiz", "status": "no_cargada", "sketch": [[-4.789453, 37.888291], [-4.84, 37.87], [-4.92, 37.85], [-5.11, 37.80], [-5.29, 37.72]]}
@@ -140,9 +139,9 @@
     "65422": {"exits": ["alcazar-de-san-juan"]},
     "04104": {"exits": ["alcazar-de-san-juan"]},
     "71801": {"exits": ["alcazar-de-san-juan"]},
-    "94002": {"exits": ["manzanares"]},
-    "94004": {"exits": ["manzanares"]},
-    "37200": {"exits": ["manzanares"]},
+    "94002": {"exits": ["manzanares"], "via": {"line": "manzanares-ciudad-real", "node": "manzanares"}},
+    "94004": {"exits": ["manzanares"], "via": {"line": "manzanares-ciudad-real", "node": "manzanares"}},
+    "37200": {"exits": ["manzanares"], "via": {"line": "manzanares-ciudad-real", "node": "manzanares"}},
     "37300": {"exits": ["manzanares"]},
     "37302": {"exits": ["manzanares"]},
     "37305": {"exits": ["manzanares"]},
@@ -198,20 +197,17 @@
   "route_overrides": [
     {
       "id": "atocha-cercanias-ciudad-real-por-manzanares",
-      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por esta línea hasta Manzanares y seguir por la línea Manzanares–Ciudad Real (no cargada), y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Por esta línea se resuelven entre Madrid y Ciudad Real, saliendo por Manzanares.",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por esta línea hasta Manzanares y seguir por la línea Manzanares – Ciudad Real, y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Por esta línea se resuelven entre Madrid y Ciudad Real, saliendo por Manzanares.",
       "consecutive_stop_ids": ["18000", "37200", "50500"],
-      "to_stop_id": "37200",
-      "stop_mappings": {
-        "37200": {"exits": ["manzanares"], "via": {"line": "lav-madrid-sevilla", "node": "ciudad-real"}}
-      }
+      "to_stop_id": "37200"
     },
     {
       "id": "atocha-cercanias-cordoba-por-manzanares",
-      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): tardan las mismas 3 h 45 entre Madrid y Córdoba que los Intercity anteriores, así que se resuelven igual: por esta línea hasta Manzanares y, desde Ciudad Real, por la alta velocidad. Para estos viajes Córdoba se trata como salida por Manzanares, no como nodo.",
+      "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Sin parada en Ciudad Real (Alvia Madrid – Córdoba – Antequera – Ronda/Algeciras): tardan las mismas 3 h 45 entre Madrid y Córdoba que los Intercity anteriores, así que se resuelven igual: por esta línea hasta Manzanares, por la línea Manzanares – Ciudad Real y, desde Ciudad Real, por la alta velocidad. Para estos viajes Córdoba se trata como salida por Manzanares, no como nodo.",
       "consecutive_stop_ids": ["18000", "50500"],
       "to_stop_id": "50500",
       "stop_mappings": {
-        "50500": {"exits": ["manzanares"], "via": {"line": "lav-madrid-sevilla", "node": "ciudad-real"}}
+        "50500": {"exits": ["manzanares"], "via": [{"line": "manzanares-ciudad-real", "node": "manzanares"}, {"line": "lav-madrid-sevilla", "node": "ciudad-real"}]}
       }
     }
   ]

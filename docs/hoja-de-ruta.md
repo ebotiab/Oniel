@@ -13,7 +13,7 @@ Lista ordenada de las tareas pendientes para que Oniel sea útil a más gente. �
 
 ## Hecho hasta ahora
 
-En dos días (8 a 10 de noviembre de 2026) se han fusionado nueve PR, una por tarea:
+Desde el 8 de noviembre de 2026 se ha fusionado una PR por tarea:
 
 - PR 1: segunda línea, la convencional Madrid – Alcázar de San Juan – Córdoba, con el trazado por el camino más corto en el grafo de vías de OSM, los tramos de vía única y los MD, Regional Exprés y Proximidad del GTFS.
 - PR 2: trenes que cambian de línea, con reglas de recorrido (`route_overrides`) para los 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía que, tras Urda, van por la convencional hasta Manzanares y por la alta velocidad desde Ciudad Real.
@@ -22,12 +22,11 @@ En dos días (8 a 10 de noviembre de 2026) se han fusionado nueve PR, una por ta
 - PR 5, 6 y 7: documentación del despliegue vigente en Vercel (la clase de PR que la tarea 10 hace innecesaria).
 - PR 8: panel de línea con cabecera más ligera, descripción por párrafos y una sola nota.
 - PR 9: mapa acotado a la península y sus vecinos, siempre con el norte arriba.
-
-Y esta misma: CI en GitHub Actions, `CLAUDE.md` y esta hoja de ruta.
+- PR 10 y 11: CI en GitHub Actions, `CLAUDE.md` y esta hoja de ruta.
+- PR 12: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, vía única), y los 24 Intercity y Alvia desviados recorriendo las tres líneas tramo a tramo, sin distancias en línea recta. Era la tarea 1 de esta lista.
 
 ## Orden
 
-1. Tercera línea: Manzanares – Ciudad Real
 2. Capa de interrupciones vigentes, con fuente y fecha
 3. Trenes diarios por tramo y por operador, con Iryo y Ouigo
 4. Capa de proyectos e infraestructura planeada
@@ -38,21 +37,9 @@ Y esta misma: CI en GitHub Actions, `CLAUDE.md` y esta hoja de ruta.
 9. Refresco automático del GTFS
 10. Conectar Vercel a GitHub
 
-Las tareas 1 a 4 amplían los datos; 5 y 6 explican lo que ya se ve; 7 y 8 son herramientas nuevas sobre los datos existentes; 9 y 10 son infraestructura. El orden es orientativo: 5, 9 y 10 no dependen de nada y pueden adelantarse si conviene.
+Las tareas 2 a 4 amplían los datos; 5 y 6 explican lo que ya se ve; 7 y 8 son herramientas nuevas sobre los datos existentes; 9 y 10 son infraestructura. El orden es orientativo: 5, 9 y 10 no dependen de nada y pueden adelantarse si conviene. Cada tarea conserva su número aunque se retiren las anteriores, para que las referencias entre tareas y entre sesiones sigan valiendo.
 
 ## Tareas
-
-### 1. Tercera línea: Manzanares – Ciudad Real
-
-**Por qué.** Los 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios posteriores a Urda van por la convencional hasta Manzanares, por la línea Manzanares – Ciudad Real hasta Ciudad Real y por la alta velocidad desde allí. Oniel no tiene esa línea, así que el reparto de tiempos mide los 47 km Manzanares – Ciudad Real en línea recta (`docs/simulacion.md`, «Trenes que recorren las dos líneas») y el visor no puede mostrar esos trenes entre las dos ciudades. Con la línea cargada, el desvío queda representado tramo a tramo y la red forma un segundo lazo (Madrid – Manzanares – Ciudad Real – Madrid).
-
-**Qué datos usa.** La geometría se obtiene de OpenStreetMap por la API Overpass (la petición necesita una cabecera `User-Agent`; sin ella Overpass devuelve 406), como relación o como conjunto de vías entre Manzanares y Ciudad Real, con el método de `geometry_source.parts` si la relación trae las dos vías o miembros sin orden. El GTFS ya cargado trae los MD Alcázar de San Juan – Ciudad Real (– Badajoz) con la secuencia Manzanares (50100) → Daimiel (94002) → Almagro (94004) → Ciudad Real (37200), unos 40 minutos. Los puntos kilométricos, el número de vías y la electrificación se toman de la Declaración sobre la Red de Adif o de Wikipedia como verificación, registrados en `sources.json`; el número de línea de Adif se comprueba allí, no se da por supuesto.
-
-**Qué toca.** Seguir «Añadir otra línea» de `docs/datos.md`: fichero crudo en `backend/data/raw/osm/`, fuente en `sources.json`, especificación `backend/data/curated/manzanares-ciudad-real.json` (Manzanares y Ciudad Real con `shared: true`; Daimiel y Almagro como nodos; `track_sections` si cambia el número de vías; un `corridor_filter` con `min_node_stops` y las estaciones exclusivas Daimiel y Almagro para que entren solo los MD de esa línea) y el id en `line_ids` de `backend/src/oniel/settings.py`. Las reglas `route_overrides` de las dos especificaciones existentes cambian: el `via` de Ciudad Real (en la convencional) y de Madrid-Atocha Cercanías (en la LAV) debe apuntar a la nueva línea y a Manzanares o Ciudad Real como nodo de enlace, de modo que la distancia desde la salida se mida por la línea nueva y no en línea recta. La nueva línea declara su propia regla para los 24 viajes, que no paran en ella pero la recorren entera: Madrid-Atocha Cercanías como salida por Manzanares con `via` hacia la convencional y Ciudad Real como nodo. `oniel.sim.passes` no debería cambiar (es el caso «estimado con una parada en otra línea cargada»); `oniel-data validate` lo confirma. Pruebas: `test_route_overrides.py` (el Intercity 10270 en las tres líneas), `test_integration_db.py` (recuentos de líneas, tramos, servicios y pasos), `frontend/e2e/explorar.spec.ts` (la cobertura enumera tres líneas; el selector de líneas con tres pestañas, también en móvil). Documentación: tabla de líneas y sección de verificación en `docs/datos.md`, y la sección de los trenes que recorren varias líneas en `docs/simulacion.md`. Instantánea regenerada.
-
-Un límite que conviene conocer: `fetch_alternatives` busca una sola línea con un nodo a cada lado del tramo cerrado. Un desvío que necesite dos líneas (convencional hasta Manzanares y Manzanares – Ciudad Real hasta Ciudad Real para salvar un cierre entre Madrid y Ciudad Real en la LAV) no lo encuentra. Se puede generalizar aquí si es pequeño o dejarlo para la tarea 7, que lo necesita de todos modos.
-
-**Hecha cuando.** `uv run oniel-data validate` no da problemas con las tres líneas; los 24 Intercity y Alvia aparecen en «Trenes que lo recorren» de los tramos Manzanares – Daimiel – Almagro – Ciudad Real y la explicación de su paso ya no habla de línea recta entre Manzanares y Ciudad Real; los MD Alcázar – Ciudad Real aparecen solo en esa línea y en la convencional hasta Manzanares; la tercera pestaña funciona en escritorio y móvil; las pruebas y el CI están en verde; `docs/datos.md` y `docs/simulacion.md` describen la línea y su verificación; la instantánea está regenerada.
 
 ### 2. Capa de interrupciones vigentes, con fuente y fecha
 
@@ -106,13 +93,13 @@ Un límite que conviene conocer: `fetch_alternatives` busca una sola línea con 
 
 ### 7. Comparador de recorridos entre dos estaciones
 
-**Por qué.** Con un lazo Madrid – Córdoba (y otro más con la tarea 1), la pregunta natural es «¿cómo se va de A a B y qué diferencia hay entre un camino y otro?»: kilómetros, tiempo estimado, kilómetros de vía única, estaciones servidas, trenes directos. Generaliza el recorrido alternativo de la simulación, que hoy solo encuentra una línea entre dos nodos compartidos.
+**Por qué.** Con dos lazos (Madrid – Córdoba, y Madrid – Manzanares – Ciudad Real desde que está cargada la tercera línea), la pregunta natural es «¿cómo se va de A a B y qué diferencia hay entre un camino y otro?»: kilómetros, tiempo estimado, kilómetros de vía única, estaciones servidas, trenes directos. Generaliza el recorrido alternativo de la simulación, que hoy solo encuentra una línea entre dos nodos compartidos: `fetch_alternatives` no ve un desvío que encadene dos líneas, como el de Madrid a Ciudad Real por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real (260,5 km frente a 170,8 km por la alta velocidad), que es justo el que hacen los Intercity y Alvia desviados tras Urda (`docs/simulacion.md`, «Recorrido alternativo»).
 
 **Qué datos usa.** La red cargada (`line_nodes`, `segments` con longitud, `typical_speed_kmh` y `tracks`) y los servicios ya importados (trenes directos y tiempos publicados como referencia real). Las interrupciones de la tarea 2, si existen, para señalar un recorrido cortado. Sin fuentes nuevas.
 
 **Qué toca.** Backend: un módulo de rutas (`oniel.routing` o dentro de `oniel.repo.network_repo`) que construya el grafo de nodos y tramos de todas las líneas y enumere los caminos simples distintos entre dos nodos, con kilómetros, tiempo estimado (longitud entre velocidad habitual, con el método escrito en `docs/simulacion.md`), kilómetros de vía única, estaciones principales y líneas usadas; `GET /api/routes?from=&to=`; la simulación pasa a usarlo para `alternatives`. Para el modo estático, el visor puede calcularlo en el cliente a partir de `network.json`, que ya tiene el grafo. Frontend: panel «Comparar recorridos» con dos selectores de estación, resultados lado a lado y ruta `#/recorridos/<a>/<b>`; el mapa resalta los recorridos (cómo distinguirlos se decide con el usuario según `docs/diseno.md`). Pruebas: unitarias del grafo (Madrid – Córdoba devuelve los dos recorridos), API, Playwright en modo estático. Documentación: sección en `docs/simulacion.md`.
 
-**Hecha cuando.** Madrid – Córdoba muestra los dos recorridos (343,6 km por la alta velocidad; 440,7 km y 194 km de vía única por la convencional) con sus estaciones y trenes directos; funciona sin API; la simulación usa el mismo cálculo para la alternativa; pruebas y documentación al día.
+**Hecha cuando.** Madrid – Córdoba muestra los dos recorridos (343,6 km por la alta velocidad; 440,7 km y 194 km de vía única por la convencional) con sus estaciones y trenes directos; Madrid – Ciudad Real muestra también el que pasa por Manzanares, que usa dos líneas, y un cierre entre Madrid y Ciudad Real en la alta velocidad lo señala como alternativa; funciona sin API; la simulación usa el mismo cálculo para la alternativa; pruebas y documentación al día.
 
 ### 8. Cobertura por estación: destinos directos y frecuencias
 
@@ -130,7 +117,7 @@ Un límite que conviene conocer: `fetch_alternatives` busca una sola línea con 
 
 **Qué datos usa.** La URL del conjunto de datos de Renfe en data.renfe.com (CC BY 4.0) ya registrada en `sources.json`; los de Iryo y Ouigo si la tarea 3 está hecha.
 
-**Qué toca.** Primero el código, porque hoy el fichero está fijado por nombre: `FEED_DEFAULT` en `oniel/cli/main.py` y `FEED` en `backend/tests/conftest.py`, y las pruebas afirman recuentos de ese fichero (335 y 503 viajes, 24 reglas, 814 servicios) y un caso comprobado a mano del 13 de noviembre de 2026. Decidir y hacer: el fichero de producción se elige por configuración (`ONIEL_GTFS_FEED` o el más reciente de `raw/renfe/`) mientras las pruebas siguen usando el del 8 de noviembre de 2026 como fixture fijo (en `backend/tests/fixtures/` o en `raw/` por nombre), y el día de referencia de la instantánea (`coverage.reference_date`) sigue una regla reproducible dentro de la validez del fichero. La prueba Playwright de la simulación usa la fecha fija del caso a mano y solo corre con la API; con un fichero nuevo necesitará su propia base de pruebas o una fecha derivada. Después el flujo `.github/workflows/gtfs.yml`: `schedule` semanal más `workflow_dispatch`; permisos `contents: write` y `pull-requests: write`; servicio PostgreSQL; pasos: descargar, calcular el SHA-256 y compararlo con el fichero actual, y si cambió guardar `raw/renfe/google_transit_av_ld_md_<fecha>.zip`, actualizar `sources.json` (`file`, `retrieved_on`, validez en `coverage`), ejecutar `validate`, `import all` (regenera la instantánea) y `pytest`, y abrir una PR en una rama `datos/gtfs-<fecha>` con `gh pr create` resumiendo viajes por línea, validez y cambios en los recuentos por tramo. El CI del repositorio se ejecuta sobre esa PR como sobre cualquier otra. Documentación: «Fuentes» en `docs/datos.md` y una sección en `docs/despliegue.md`.
+**Qué toca.** Primero el código, porque hoy el fichero está fijado por nombre: `FEED_DEFAULT` en `oniel/cli/main.py` y `FEED` en `backend/tests/conftest.py`, y las pruebas afirman recuentos de ese fichero (335, 503 y 154 viajes por línea, 24 viajes con regla de recorrido, 814 servicios) y un caso comprobado a mano del 13 de noviembre de 2026. Decidir y hacer: el fichero de producción se elige por configuración (`ONIEL_GTFS_FEED` o el más reciente de `raw/renfe/`) mientras las pruebas siguen usando el del 8 de noviembre de 2026 como fixture fijo (en `backend/tests/fixtures/` o en `raw/` por nombre), y el día de referencia de la instantánea (`coverage.reference_date`) sigue una regla reproducible dentro de la validez del fichero. La prueba Playwright de la simulación usa la fecha fija del caso a mano y solo corre con la API; con un fichero nuevo necesitará su propia base de pruebas o una fecha derivada. Después el flujo `.github/workflows/gtfs.yml`: `schedule` semanal más `workflow_dispatch`; permisos `contents: write` y `pull-requests: write`; servicio PostgreSQL; pasos: descargar, calcular el SHA-256 y compararlo con el fichero actual, y si cambió guardar `raw/renfe/google_transit_av_ld_md_<fecha>.zip`, actualizar `sources.json` (`file`, `retrieved_on`, validez en `coverage`), ejecutar `validate`, `import all` (regenera la instantánea) y `pytest`, y abrir una PR en una rama `datos/gtfs-<fecha>` con `gh pr create` resumiendo viajes por línea, validez y cambios en los recuentos por tramo. El CI del repositorio se ejecuta sobre esa PR como sobre cualquier otra. Documentación: «Fuentes» en `docs/datos.md` y una sección en `docs/despliegue.md`.
 
 **Hecha cuando.** Una ejecución manual del flujo abre una PR con el fichero nuevo, `sources.json` y la instantánea, y el CI pasa en ella; sin cambios en el fichero, termina sin abrir nada; las pruebas no dependen del fichero de producción; la documentación explica el refresco.
 
