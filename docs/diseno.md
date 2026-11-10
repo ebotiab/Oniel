@@ -56,6 +56,12 @@ Trazo de la vía
 Movimiento
 - Solo en respuesta a una acción: enfocar el mapa al seleccionar, abrir el panel de simulación, resaltar en el esquema lo que se resalta en el mapa. Se respeta `prefers-reduced-motion`.
 
+Encuadre
+- El mapa no sale de la península y sus vecinos: longitud −12,5 a 6 y latitud 34 a 46 (`IBERIA_BOUNDS` en `frontend/src/map/bounds.ts`), es decir, España, Portugal, Baleares, el sur de Francia y el norte del Magreb. Canarias queda fuera: no tiene ferrocarril y meterla haría la caja tan grande que la restricción casi desaparecería.
+- MapLibre obliga a que todo el lienzo quepa dentro de la caja, así que el zoom mínimo efectivo depende de la pantalla: unos 5,8 en escritorio (1440 px) y 5,4 en un móvil, frente al 4,5 nominal. El límite oeste va bastante más allá de Portugal porque el panel de escritorio tapa unos cinco grados por la izquierda; con menos margen, Sevilla quedaría bajo el panel al alejar el mapa. El encuadre inicial de las líneas (`SPAIN_BOUNDS`) no cambia.
+- Medido el 9 de noviembre de 2026: cada pantalla fuera de España descarga de 1 a 4 MB de teselas de OpenFreeMap (de 80 a 325 KB por tesela a zoom 4–6). Ese coste es del visitante y de OpenFreeMap, no de Oniel; la caja se puso por foco de producto.
+- Siempre con el norte arriba y sin inclinación, como una hoja de mapa: ni el arrastre con el botón derecho, ni los dos dedos, ni el teclado giran el mapa. La brújula ya estaba oculta.
+
 Principios
 - La vía es tinta; el color es señal. Nada se colorea por decoración.
 - El esquema de línea y el mapa son la misma cosa vista de dos formas: siempre sincronizados.

@@ -4,7 +4,6 @@ import {
   Map as MapLibreMap,
   NavigationControl,
   ScaleControl,
-  type LngLatBoundsLike,
   type MapGeoJSONFeature,
   type MapMouseEvent,
   type StyleSpecification,
@@ -17,6 +16,7 @@ import { useEffect, useRef } from 'react'
 import type { NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
+import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
 import { LAYER, PESO_ALTA_VELOCIDAD, PESO_CONVENCIONAL, PESO_VIA_UNICA, SRC, onielLayers } from './layers'
 import baseStyle from './style/oniel-base.json'
 
@@ -33,11 +33,6 @@ interface Props {
 
 // El worker de MapLibre se sirve como fichero propio para que funcione igual en desarrollo y en producción.
 setWorkerUrl(workerUrl)
-
-const SPAIN_BOUNDS: LngLatBoundsLike = [
-  [-7.2, 36.6],
-  [-2.6, 40.9],
-]
 
 function shortName(name: string): string {
   return name
@@ -86,11 +81,20 @@ export function MapView({ network, selection, hoverId, closedSegmentId, onSelect
       style: baseStyle as unknown as StyleSpecification,
       bounds: SPAIN_BOUNDS,
       fitBoundsOptions: { padding: { top: 70, right: 40, bottom: 40, left: padding.left + 40 } },
+      // El mapa no sale de la península y sus vecinos: el lienzo entero se queda dentro de la caja,
+      // así que el zoom mínimo efectivo depende de la pantalla (unos 5,8 en escritorio, 5,4 en móvil).
+      maxBounds: IBERIA_BOUNDS,
       minZoom: 4.5,
       maxZoom: 15,
+      // Siempre con el norte arriba y sin inclinar, como una hoja de mapa.
+      dragRotate: false,
+      pitchWithRotate: false,
+      maxPitch: 0,
       attributionControl: { compact: true },
       fadeDuration: reduced ? 0 : 200,
     })
+    map.touchZoomRotate.disableRotation()
+    map.keyboard.disableRotation()
     map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-right')
     map.on('load', () => {
