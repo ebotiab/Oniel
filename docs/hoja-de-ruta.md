@@ -23,7 +23,7 @@ Desde el 8 de noviembre de 2026 se ha fusionado una PR por tarea:
 - PR 8: panel de línea con cabecera más ligera, descripción por párrafos y una sola nota.
 - PR 9: mapa acotado a la península y sus vecinos, siempre con el norte arriba.
 - PR 10 y 11: CI en GitHub Actions, `CLAUDE.md` y esta hoja de ruta.
-- PR 12: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, vía única), y los 24 Intercity y Alvia desviados recorriendo las tres líneas tramo a tramo, sin distancias en línea recta. Era la tarea 1 de esta lista.
+- PR 13: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, vía única), y los 24 Intercity y Alvia desviados recorriendo las tres líneas tramo a tramo, sin distancias en línea recta. Era la tarea 1 de esta lista.
 
 ## Orden
 
