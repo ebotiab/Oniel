@@ -8,6 +8,8 @@ Esta versión cubre dos líneas: la **línea de alta velocidad Madrid–Sevilla*
 - Datos y procedencia: [docs/datos.md](docs/datos.md)
 - Método de simulación y caso comprobado a mano: [docs/simulacion.md](docs/simulacion.md)
 - Despliegue (Vercel, Render, Logfire): [docs/despliegue.md](docs/despliegue.md)
+- Tareas pendientes, ordenadas: [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md)
+- Guía para las sesiones de código (qué es Oniel, dónde está cada cosa, convenciones): [CLAUDE.md](CLAUDE.md)
 
 ## Estructura
 
@@ -87,6 +89,8 @@ cd frontend && npm run typecheck && npm run lint
 ```
 
 Ruff formatea y ordena importaciones; mypy (estricto) y pyright (modo `standard`, el mismo que Pylance) tipan el backend; `tsc` y oxlint cubren el visor, incluidas las pruebas Playwright. El directorio `.vscode/` fija el intérprete de `backend/.venv` y Ruff como formateador, de modo que el editor no muestre avisos que estas órdenes no muestren.
+
+El CI de GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) ejecuta estas mismas órdenes y las pruebas en cada pull request y en cada push a `main`: el backend con PostgreSQL 17 (incluidas las pruebas de integración y `oniel-data validate`) y el visor con Node 20 y Playwright sobre la instantánea estática.
 
 ## Variables de entorno
 
