@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 NodeKind = Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
 NodeRank = Literal["principal", "secundario"]
@@ -58,8 +58,9 @@ class ConnectionSpec(BaseModel):
 
 
 class ViaLine(BaseModel):
-    """La parada está en otra línea cargada: desde la salida de esta, el tren enlaza con esa
-    línea en el nodo ``node`` y sigue por ella hasta la parada."""
+    """Un trecho del camino hasta una parada que está en otra línea cargada: el tren entra en la
+    línea ``line`` por el nodo ``node`` y sigue por ella hasta el nodo del trecho siguiente o,
+    en el último, hasta la parada."""
 
     line: str
     node: str
@@ -68,17 +69,29 @@ class ViaLine(BaseModel):
 class StopMapping(BaseModel):
     node: str | None = None
     exits: list[str] = Field(default_factory=list)
-    #: Solo con ``exits``: la parada es un nodo de otra línea cargada y se llega a ella por
-    #: ``via.node``. Permite repartir el tiempo con la distancia por esa línea en vez de la línea
-    #: recta, y explicar en el visor por dónde sigue el tren.
-    via: ViaLine | None = None
+    #: Solo con ``exits``: la parada es un nodo de otra línea cargada y este es el camino hasta
+    #: ella desde la salida, línea a línea. Lo normal es un solo trecho (se escribe como un
+    #: objeto); un tren que cruza una tercera línea antes de llegar lleva una lista. Permite
+    #: repartir el tiempo con la distancia por esas líneas en vez de la línea recta, y explicar
+    #: en el visor por dónde sigue el tren.
+    via: list[ViaLine] = Field(default_factory=list)
+
+    @field_validator("via", mode="before")
+    @classmethod
+    def _one_or_many(cls, value: object) -> object:
+        if value is None:
+            return []
+        return [value] if isinstance(value, dict | ViaLine) else value
 
     @model_validator(mode="after")
     def _one_of(self) -> StopMapping:
         if (self.node is None) == (not self.exits):
             raise ValueError("una parada se asigna a un nodo o a una lista de salidas")
-        if self.via is not None and self.node is not None:
+        if self.via and self.node is not None:
             raise ValueError("«via» solo tiene sentido en una parada que es salida de la línea")
+        lines = [v.line for v in self.via]
+        if any(a == b for a, b in zip(lines, lines[1:], strict=False)):
+            raise ValueError("«via» repite la misma línea en dos trechos seguidos")
         return self
 
 
@@ -139,6 +152,9 @@ class LineSpec(BaseModel):
     tracks: int = 2
     opened_on: str | None = None
     reference_length_km: float | None = None
+    #: PK de referencia del origen de la línea, cuando su numeración no empieza en cero (la de
+    #: Manzanares a Ciudad Real continúa la de Madrid: Manzanares es el PK 197,3).
+    pk_origin_km: float = 0.0
     #: Diferencia admitida entre el PK de referencia y el kilómetro medido sobre la geometría.
     pk_tolerance_km: float = 1.5
     status: Literal["disponible", "prevista"] = "disponible"
@@ -157,7 +173,8 @@ class CorridorFilter(BaseModel):
 
 
 class RouteOverride(BaseModel):
-    """Viajes que recorren esta línea solo en parte de su recorrido y siguen por otra línea cargada.
+    """Viajes que recorren esta línea solo en parte de su recorrido y siguen por otra línea cargada,
+    o que la cruzan sin parar en ella entre paradas de otras líneas.
 
     Un viaje encaja si su horario lleva ``consecutive_stop_ids`` seguidas, en ese orden o en el
     inverso. La regla se escribe en el sentido de esa secuencia: para un viaje en sentido
@@ -235,7 +252,7 @@ class NetworkSpec(BaseModel):
             for ref in [m.node, *m.exits]:
                 if ref is not None and ref not in ids:
                     raise ValueError(f"{what} {stop_id} apunta a un nodo desconocido {ref}")
-            if m.via is not None and m.via.line == self.line.id:
+            if any(v.line == self.line.id for v in m.via):
                 raise ValueError(f"{what} {stop_id}: «via» apunta a esta misma línea")
 
     @property

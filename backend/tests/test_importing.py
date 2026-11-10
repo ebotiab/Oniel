@@ -6,12 +6,9 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from conftest import DATA_DIR, FEED, SOURCES, SPEC, database_url_for_tests, requires_db
+from conftest import DATA_DIR, FEED, SOURCES, SPECS, database_url_for_tests, requires_db
 
 from oniel.importing import import_fingerprint
-
-CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
-SPECS = [SPEC, CONV_SPEC]
 
 
 def _tree(root: Path) -> tuple[Path, Path]:

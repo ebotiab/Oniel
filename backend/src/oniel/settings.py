@@ -26,7 +26,11 @@ class Settings(BaseSettings):
     data_dir: Path = BACKEND_DIR / "data"
     default_line_id: str = "lav-madrid-sevilla"
     #: Líneas cargadas por `import all`, en orden: la primera define los nodos compartidos.
-    line_ids: list[str] = ["lav-madrid-sevilla", "convencional-madrid-alcazar-cordoba"]
+    line_ids: list[str] = [
+        "lav-madrid-sevilla",
+        "convencional-madrid-alcazar-cordoba",
+        "manzanares-ciudad-real",
+    ]
 
 
 @lru_cache

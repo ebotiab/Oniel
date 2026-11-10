@@ -60,6 +60,40 @@
       "notes": "Fuente de verificación, no de geometría. Los PK de Adif conservan la numeración histórica desde Madrid-Atocha, con variantes de trazado posteriores, por lo que difieren hasta 1,6 km del kilometraje medido sobre la geometría de OpenStreetMap."
     },
     {
+      "id": "osm-relation-6759901",
+      "name": "Trazado de la línea convencional Manzanares–Ciudad Real (vías de la relación OSM 6759901, línea 522 de Adif, ancho ibérico, vía única electrificada a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/6759901",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-10",
+      "coverage": "De la relación completa (vías entre Manzanares y Badajoz) Oniel usa los 64,4 km entre la estación de Manzanares y la de Ciudad Real, por Daimiel y Almagro, recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 10 de noviembre de 2026. OpenStreetMap no tiene una relación de infraestructura propia de la línea 522: la 6759901 es la del servicio regional de Renfe «Alcázar de San Juan – Badajoz», y sus vías empiezan en Manzanares. Las vías del recorrido llevan operator=Adif, ancho 1668 mm y 3000 V en continua, y las que están rotuladas dicen «Línea Manzanares-Ciudad Real» (ref=522); la entrada a la estación de Ciudad Real está rotulada como línea 520. El trazado empieza a 44 m del punto de la estación de Manzanares y termina a 63 m del de Ciudad Real. La longitud y los puntos kilométricos se contrastaron con Wikipedia y con la ficha de la FCMAF.",
+      "file": "raw/osm/relation_6759901_md_alcazar_badajoz_2026-11-10.json"
+    },
+    {
+      "id": "wikipedia-linea-522",
+      "name": "Artículo «Línea Manzanares-Ciudad Real» de Wikipedia en español (número de línea de Adif, puntos kilométricos, vía única, fechas de apertura)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Manzanares-Ciudad_Real",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-10",
+      "coverage": "Catalogación de Adif como línea 522, longitud (64,5 km), ancho ibérico, vía única electrificada, puntos kilométricos de Manzanares (197,319), Daimiel (218,799), Almagro (240,112) y Ciudad Real (261,783), y fechas de apertura de cada tramo (1 de octubre de 1860, 21 de enero y 14 de marzo de 1861).",
+      "notes": "Fuente de verificación, no de geometría; revisión del 9 de septiembre de 2024 (oldid 162363261), consultada por la API de Wikipedia. Los puntos kilométricos continúan la numeración de la línea desde Madrid, por eso Manzanares no es el km 0. Los códigos de estación (94002 Daimiel, 94004 Almagro) se tomaron de los artículos de cada estación y coinciden con las paradas del GTFS de Renfe."
+    },
+    {
+      "id": "fcmaf-linea-522",
+      "name": "Ficha «Línea 522 Manzanares a Ciudad Real» de la Federación Castellano Manchega de Amigos del Ferrocarril",
+      "publisher": "Federación Castellano Manchega de Amigos del Ferrocarril (FCMAF)",
+      "url": "http://fcmaf.es/Ferrocarriles/522.htm",
+      "license": "Consulta pública; © Federación Castellano Manchega de Amigos del Ferrocarril",
+      "license_url": null,
+      "retrieved_on": "2026-11-10",
+      "coverage": "Tipo de vía (vía única electrificada en toda la línea, electrificación en servicio desde el 28 de noviembre de 1975), puntos kilométricos y códigos de las estaciones, longitud hasta el final de línea (64,6 km) y velocidades máximas por tramo (140 km/h en la mayor parte del recorrido).",
+      "notes": "Fuente de verificación, no de geometría. Sus puntos kilométricos coinciden con los de Wikipedia. Da la tensión como 3.300 V en continua; Oniel la anota como 3 kV CC, el valor nominal que usa en las demás líneas convencionales."
+    },
+    {
       "id": "adif-mapa-red",
       "name": "Mapa de la red ferroviaria española y referencias de la línea 010",
       "publisher": "Adif / Adif Alta Velocidad",

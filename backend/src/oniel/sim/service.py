@@ -19,9 +19,10 @@ METHOD = (
     " en que ocupa el tramo. Si el tren para en las dos estaciones que lo delimitan, el intervalo"
     " sale del horario publicado. Si no, lo estimamos repartiendo el tiempo entre sus paradas en"
     " proporción a la distancia, con un margen del 15 % (mínimo 3 minutos), o del 30 % (mínimo"
-    " 5 minutos) cuando una parada está fuera de la red cargada. Un tren cuenta como afectado si"
-    " el solape existe incluso descontando el margen; si solo coincide dentro del margen, o no se"
-    " puede fijar su recorrido, queda indeterminado."
+    " 5 minutos) cuando una parada está fuera de la línea: en otra línea cargada, y entonces la"
+    " distancia se mide por ella, o fuera de la red, y se mide en línea recta. Un tren cuenta"
+    " como afectado si el solape existe incluso descontando el margen; si solo coincide dentro"
+    " del margen, o no se puede fijar su recorrido, queda indeterminado."
 )
 
 CAVEATS = [

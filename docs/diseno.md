@@ -46,7 +46,7 @@ Composición
 - Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; cobertura arriba a la derecha.
 - Cabecera de la línea: antetítulo con el gestor y el número de línea, título, una ficha de una sola línea (longitud, velocidad máxima, ancho, electrificación) y una frase de entrada en cuerpo normal. El resto de la descripción queda plegado bajo «Más sobre la línea» y se lee en párrafos cortos, en tinta, con interlineado 1,5. Bajo el esquema, una sola nota en gris terciario con la fecha de las barras y la pista de uso; la columna de barras lleva su propio rótulo («trenes el 13 nov»). La ficha no se repite en la descripción.
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
-- Varias líneas: el mapa las dibuja todas; el panel muestra una a la vez, elegida con pestañas sobre el esquema, y cambia solo a la línea de lo que se selecciona en el mapa. Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
+- Varias líneas: el mapa las dibuja todas; el panel muestra una a la vez, elegida con pestañas sobre el esquema, y cambia solo a la línea de lo que se selecciona en el mapa. Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
 
 Trazo de la vía
 - Sigue siendo tinta; el grosor dice de qué vía se trata, como en las hojas del IGN: alta velocidad 3 px, línea convencional 2,4 px, vía única 1,8 px (a zoom 5; crecen con el zoom). Los trazos blancos se mantienen en todas.

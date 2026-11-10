@@ -1,6 +1,6 @@
 # Oniel
 
-Web en español para descubrir cómo está conectada la red ferroviaria española. Lo principal es un mapa interactivo en el que se recorre cada línea, con su esquema vertical al lado, y se seleccionan estaciones y tramos; como herramienta secundaria, se simula el cierre hipotético de un tramo en una franja horaria. Está pensada para quien sabe poco de ferrocarril y quiere entender la red, no para profesionales. Hoy carga dos líneas (alta velocidad Madrid – Sevilla y convencional Madrid – Alcázar de San Juan – Córdoba) con los horarios de Renfe, y está publicada en https://oniel.vercel.app con la API en Render.
+Web en español para descubrir cómo está conectada la red ferroviaria española. Lo principal es un mapa interactivo en el que se recorre cada línea, con su esquema vertical al lado, y se seleccionan estaciones y tramos; como herramienta secundaria, se simula el cierre hipotético de un tramo en una franja horaria. Está pensada para quien sabe poco de ferrocarril y quiere entender la red, no para profesionales. Hoy carga tres líneas (alta velocidad Madrid – Sevilla, convencional Madrid – Alcázar de San Juan – Córdoba y convencional Manzanares – Ciudad Real, que une las otras dos) con los horarios de Renfe, y está publicada en https://oniel.vercel.app con la API en Render.
 
 Este fichero orienta a una sesión que llega sin contexto. No repite el README ni los documentos de `docs/`: los enlaza.
 

@@ -14,6 +14,7 @@ from oniel.gtfs.trips import (
     calls_on_line,
     route_for_trip,
     select_trips_for_spec,
+    via_legs,
 )
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.interruptions import check_interruptions
@@ -89,7 +90,8 @@ def validate_all(
     pk_checks = []
     for n in net.nodes:
         ref = n.spec.reference_pk_km
-        delta = None if ref is None else round(n.km - ref, 2)
+        # el PK de referencia se compara con el kilómetro medido más el PK del origen de la línea
+        delta = None if ref is None else round(n.km + spec.line.pk_origin_km - ref, 2)
         pk_checks.append(
             {
                 "node": n.spec.id,
@@ -105,7 +107,8 @@ def validate_all(
             and n.spec.position.km is None
         ):
             problems.append(
-                f"el nodo {n.spec.id} queda en el km {n.km:.1f} y la referencia es {ref}"
+                f"el nodo {n.spec.id} queda en el km {n.km + spec.line.pk_origin_km:.1f} y la"
+                f" referencia es {ref}"
             )
 
     feed = read_feed(feed_path)
@@ -135,17 +138,18 @@ def validate_all(
     for rule_id, count in rules.items():
         if count == 0:
             problems.append(f"la regla de recorrido {rule_id} no encaja con ningún viaje del GTFS")
-    known_lines = {o.line_id for o in others}
+    # Una parada que sale hacia otra línea cargada tiene que poder seguirse hasta ella; si no,
+    # el reparto volvería a la línea recta sin avisar.
     for where, mappings in [
         ("stop_mappings", spec.stop_mappings),
         *[(f"la regla {r.id}", r.stop_mappings) for r in spec.route_overrides],
     ]:
         for stop_id, m in mappings.items():
-            if m.via is not None and m.via.line not in known_lines:
-                problems.append(
-                    f"{where}: la parada {stop_id} sale hacia la línea {m.via.line}, que no está"
-                    " entre las líneas cargadas"
-                )
+            if not m.via:
+                continue
+            legs = via_legs(stop_id, m, others)
+            if isinstance(legs, str):
+                problems.append(f"{where}: el «via» de la parada {stop_id} no se sostiene: {legs}")
     return {
         "line": spec.line.id,
         "length_km": round(length, 3),

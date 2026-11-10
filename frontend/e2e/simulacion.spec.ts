@@ -49,6 +49,29 @@ test.describe('Simular un cierre', () => {
     await expect(page.getByTestId('sim-alternativa')).toContainText(/alta velocidad Madrid – Sevilla/)
   })
 
+  test('un cierre entre Almagro y Ciudad Real afecta a los Intercity desviados por Manzanares', async ({ page }) => {
+    await page.goto('/#/tramo/manzanares-ciudad-real:almagro:ciudad-real/cierre')
+    await page.getByTestId('sim-fecha').fill('2026-11-13')
+    await page.getByTestId('sim-inicio').fill('08:00')
+    await page.getByTestId('sim-fin').fill('09:00')
+    await page.getByTestId('sim-calcular').click()
+    const resultado = page.getByTestId('sim-resultado')
+    await expect(resultado).toBeVisible()
+    await expect(resultado).toContainText(/trenes afectados/)
+    // el Intercity 10270 llega a Ciudad Real a las 8:35 publicadas; su entrada en el tramo es estimada
+    const fila = resultado.locator('li', { hasText: 'Intercity 10270' }).first()
+    await expect(fila).toBeVisible()
+    await expect(fila).toContainText('08:22–08:35')
+    await fila.getByText('Por qué').click()
+    await expect(fila).toContainText(/dentro de la ventana/)
+    await expect(fila).toContainText(/entra en esta línea por Manzanares/)
+    await expect(fila).toContainText(/196 km por esa línea hasta Madrid-Atocha Cercanías/)
+    await expect(fila).not.toContainText(/línea recta/)
+    await expect(resultado).toContainText(/MD \d{5}/)
+    // ninguna línea sola une los dos lados de este tramo
+    await expect(page.getByTestId('sim-alternativa')).toHaveCount(0)
+  })
+
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {
     await page.goto('/#/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre')
     await page.getByTestId('sim-fecha').fill('2026-11-13')
