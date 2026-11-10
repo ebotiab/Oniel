@@ -31,7 +31,7 @@ Color
 - `--regla` `#C9CEC6` bordes y reglas
 - `--senal-verde` `#1F7A4D` paso publicado
 - `--senal-ambar` `#C67F12` paso estimado
-- `--senal-roja` `#B4232A` cierre simulado / afectado
+- `--senal-roja` `#B4232A` sin circulación: interrupción vigente del servicio, cierre simulado / afectado
 - `--senal-azul` `#1E4F9A` selección
 
 Mapa base (sobre teselas vectoriales de OpenFreeMap): agua `#D3DCDF`, tierra `#EDEFE9`, zonas urbanas `#E4E7E0`, carreteras `#DCE0D8`, otros ferrocarriles `#C3C8C0`, límites `#C0C6BF`, rótulos `#6B7470`.
@@ -52,6 +52,13 @@ Trazo de la vía
 - Sigue siendo tinta; el grosor dice de qué vía se trata, como en las hojas del IGN: alta velocidad 3 px, línea convencional 2,4 px, vía única 1,8 px (a zoom 5; crecen con el zoom). Los trazos blancos se mantienen en todas.
 - En el esquema vertical la vía doble es un trazo de 3 px y la vía única de 1,5 px; la leyenda del mapa explica los tres grosores.
 - Los nodos secundarios (apeaderos y estaciones menores) se dibujan más pequeños, con rótulo en gris y solo a partir del zoom 7,5; en el esquema compacto del móvil se ven como marcas sin rótulo.
+
+Interrupciones del servicio (decidido el 10 de noviembre de 2026)
+- El rojo ya significaba «cierre»: un tramo con una interrupción vigente hoy se dibuja con la vía en rojo, en el mapa y en el esquema, con su grosor de siempre y sus trazos blancos. No hay iconos, animaciones ni avisos emergentes.
+- Se distingue del cierre simulado por el énfasis: el cierre simulado lleva el trazo grueso y un halo rojo; la interrupción real, solo el color. Un tramo interrumpido sigue en rojo al seleccionarlo: la selección la dicen el grosor y el halo azul (en el esquema, un borde azul alrededor del rojo).
+- La leyenda añade «Sin circulación hoy» con una muestra roja fina, solo cuando hay alguna interrupción vigente. En el móvil no hay leyenda: lo explica la línea de texto que va sobre el esquema.
+- En el panel, la interrupción es un bloque como el del contexto de un nodo, con el filete en rojo: la etiqueta «sin circulación» y los extremos, el motivo, desde cuándo y hasta cuándo se prevé, una nota opcional, las fuentes con enlace y la fecha de la última comprobación. Aparece en el tramo, en los nodos del corte y en el panel de cobertura.
+- Donde hay una lista de trenes o un formulario sobre un tramo interrumpido, basta una línea de texto con un filete rojo: «Horario publicado; sin circulación real desde el … (fuente).» Sobre el esquema de la línea, otra línea por interrupción dice qué está cortado, desde cuándo y según quién, y lleva al primer tramo.
 - Alineación a la izquierda en todo el texto. Sin mayúsculas sostenidas, sin etiquetas numeradas.
 
 Movimiento

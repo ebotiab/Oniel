@@ -13,7 +13,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useEffect, useRef } from 'react'
 
-import type { NetworkOut } from '../data/types'
+import type { InterruptionOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
 import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
@@ -25,6 +25,8 @@ interface Props {
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
+  /** Interrupciones vigentes hoy, por id de tramo: esos tramos se dibujan en rojo. */
+  interrupted: Map<string, InterruptionOut[]>
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   /** Hueco (px) que ocupa el panel a la izquierda en escritorio o abajo en móvil. */
@@ -59,7 +61,7 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, onSelect, onHover, padding }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, onSelect, onHover, padding }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
@@ -69,6 +71,9 @@ export function MapView({ network, selection, hoverId, closedSegmentId, onSelect
   callbacks.current = { onSelect, onHover }
   const networkRef = useRef<NetworkOut | null>(network)
   networkRef.current = network
+  // Se deduce de la red, así que cambia a la vez que ella: addNetwork lo lee de aquí.
+  const interruptedRef = useRef(interrupted)
+  interruptedRef.current = interrupted
   const stateRef = useRef({ selection, hoverId, closedSegmentId })
   stateRef.current = { selection, hoverId, closedSegmentId }
 
@@ -123,7 +128,11 @@ export function MapView({ network, selection, hoverId, closedSegmentId, onSelect
     const segs = withNumericIds({
       features: net.segment_features.features.map((f) => ({
         ...f,
-        properties: { ...f.properties, peso: segmentWeight(net, f.properties.line_id, f.properties.tracks) },
+        properties: {
+          ...f.properties,
+          peso: segmentWeight(net, f.properties.line_id, f.properties.tracks),
+          interrumpido: interruptedRef.current.has(f.id),
+        },
       })),
     })
     const nodes = withNumericIds({

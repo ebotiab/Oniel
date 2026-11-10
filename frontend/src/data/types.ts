@@ -86,6 +86,40 @@ export interface ConnectionOut {
   line_id: string | null
 }
 
+/** Lo justo de una fuente para citarla junto a un dato. */
+export interface SourceRef {
+  id: string
+  name: string
+  publisher: string
+  url: string | null
+}
+
+/**
+ * Interrupción del servicio entre dos nodos de una línea. Está vigente los días
+ * start_date <= día < ended_on, o sin límite mientras ended_on sea nulo.
+ */
+export interface InterruptionOut {
+  id: string
+  line_id: string
+  from_node_id: string
+  to_node_id: string
+  from_name: string
+  to_name: string
+  km_from: number
+  km_to: number
+  segment_ids: string[]
+  start_date: string
+  expected_end_date: string | null
+  expected_end_text: string | null
+  ended_on: string | null
+  reason: string
+  note: string | null
+  sources: SourceRef[]
+  checked_on: string
+  /** «Horario publicado; sin circulación real desde el … (fuente)». */
+  schedule_note: string
+}
+
 export interface Feature<P = Record<string, unknown>> {
   type: 'Feature'
   id: string
@@ -107,6 +141,8 @@ export interface NetworkOut {
   segment_features: FeatureCollection
   node_features: FeatureCollection
   connection_features: FeatureCollection
+  /** Todas las registradas, vigentes o no. Falta en las respuestas anteriores a esta capa. */
+  interruptions?: InterruptionOut[]
 }
 
 export interface CoverageOut {
@@ -151,6 +187,8 @@ export interface SegmentServicesOut {
   date: string
   passes: SegmentPassOut[]
   counts: Record<PassKind, number>
+  /** Interrupciones vigentes en el tramo el día de los pasos. */
+  interruptions?: InterruptionOut[]
 }
 
 export interface NodeCall {
@@ -200,6 +238,8 @@ export interface ClosureAlternative {
   via: string[]
   single_track_km: number
   note: string
+  /** Interrupciones vigentes ese día en el recorrido alternativo. */
+  interruptions?: InterruptionOut[]
 }
 
 export interface ClosureResult {
@@ -209,6 +249,8 @@ export interface ClosureResult {
   counts: Record<ClosureStatus, number>
   items: ClosureResultItem[]
   alternatives: ClosureAlternative[]
+  /** Interrupciones vigentes ese día en el tramo que se cierra. */
+  interruptions?: InterruptionOut[]
   method: string
   caveats: string[]
 }

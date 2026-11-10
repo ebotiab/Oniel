@@ -9,7 +9,7 @@ import asyncpg
 import logfire
 
 from oniel.domain.schemas import ClosureRequest, ClosureResult, ClosureResultItem, SegmentOut
-from oniel.repo.network_repo import fetch_alternatives
+from oniel.repo.network_repo import fetch_alternatives, fetch_interruptions
 from oniel.repo.services_repo import DatedPass, fmt_time, passes_on_segment
 from oniel.sim.closure import ClosureWindow, classify
 from oniel.sim.passes import SegmentPass
@@ -33,6 +33,11 @@ CAVEATS = [
     "El cierre se supone de todas las vías del tramo y no se calcula ningún desvío ni"
     " reordenación de trenes.",
 ]
+
+INTERRUPTED_CAVEAT = (
+    "En la fecha simulada el tramo ya tiene una interrupción real registrada: los trenes de la"
+    " lista figuran en el horario publicado, pero no circulan por él."
+)
 
 ALTERNATIVE_CAVEAT = (
     "Cuando otra línea cargada une dos nodos situados a ambos lados del tramo, Oniel la señala"
@@ -70,7 +75,8 @@ async def simulate_closure(
         end=req.end.isoformat(),
     ):
         dated: list[DatedPass] = await passes_on_segment(conn, segment.id, req.date)
-        alternatives = await fetch_alternatives(conn, segment)
+        alternatives = await fetch_alternatives(conn, segment, req.date)
+        interruptions = await fetch_interruptions(conn, day=req.date, segment_id=segment.id)
         items: list[ClosureResultItem] = []
         counts: Counter[str] = Counter()
         for d in dated:
@@ -98,7 +104,11 @@ async def simulate_closure(
         items.sort(key=lambda i: (order[i.status], i.enter or "", i.service.train_number))
         for key in order:
             counts.setdefault(key, 0)
-        summary: dict[str, Any] = {**counts, "trains": len(items)}
+        summary: dict[str, Any] = {
+            **counts,
+            "trains": len(items),
+            "interrupted": bool(interruptions),
+        }
         logfire.info("closure simulated", **summary)
         end_label = req.end.strftime("%H:%M") + (
             " del día siguiente" if window.end_s >= 86400 else ""
@@ -110,6 +120,11 @@ async def simulate_closure(
             counts=dict(counts),
             items=items,
             alternatives=alternatives,
+            interruptions=interruptions,
             method=METHOD,
-            caveats=[*CAVEATS, ALTERNATIVE_CAVEAT] if alternatives else CAVEATS,
+            caveats=[
+                *CAVEATS,
+                *([INTERRUPTED_CAVEAT] if interruptions else []),
+                *([ALTERNATIVE_CAVEAT] if alternatives else []),
+            ],
         )

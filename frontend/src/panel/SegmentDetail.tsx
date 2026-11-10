@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
-import type { NetworkOut, SegmentOut, SegmentServicesOut } from '../data/types'
+import type { InterruptionOut, NetworkOut, SegmentOut, SegmentServicesOut } from '../data/types'
 import { formatDate, formatKm, productLabel, shortStop, tracksLabel } from '../app/state'
+import { InterruptionNotice } from './InterruptionNotice'
 import { KindBadge } from './KindBadge'
 
 interface Props {
   segment: SegmentOut
   network: NetworkOut
   referenceDate: string | null
+  /** Interrupciones del servicio vigentes hoy en este tramo. */
+  interruptions: InterruptionOut[]
   onSimulate: () => void
   onSelectNode: (id: string) => void
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, referenceDate, onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ segment, network, referenceDate, interruptions, onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
@@ -73,6 +76,10 @@ export function SegmentDetail({ segment, network, referenceDate, onSimulate, onS
         </div>
       </dl>
 
+      {interruptions.map((i) => (
+        <InterruptionNotice key={i.id} interruption={i} />
+      ))}
+
       <div className="acciones">
         <button type="button" className="boton primario" onClick={onSimulate} data-testid="boton-simular">
           Simular un cierre en este tramo
@@ -90,6 +97,12 @@ export function SegmentDetail({ segment, network, referenceDate, onSimulate, onS
       </h3>
       {error && <p className="aviso">{error}</p>}
       {!services && !error && <p className="suave">Cargando servicios…</p>}
+      {/* el tramo está interrumpido el día de la lista: los trenes son los del horario, no los que circulan */}
+      {services?.interruptions?.map((i) => (
+        <p key={i.id} className="nota-horario" data-testid="nota-horario">
+          {i.schedule_note}
+        </p>
+      ))}
       {services && (
         <>
           <p className="suave">

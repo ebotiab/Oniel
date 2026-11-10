@@ -1,4 +1,5 @@
-import type { CoverageOut, NetworkOut } from '../data/types'
+import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
+import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, lineKind, lineShortLabel } from '../app/state'
 import { StripDiagram } from './StripDiagram'
@@ -12,12 +13,14 @@ interface Props {
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
+  /** Interrupciones vigentes hoy en cualquier línea; aquí se muestran las de la línea a la vista. */
+  interruptions: InterruptionOut[]
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   compact: boolean
 }
 
-export function LineOverview({ network, coverage, counts, lineId, onChangeLine, selection, hoverId, closedSegmentId, onSelect, onHover, compact }: Props) {
+export function LineOverview({ network, coverage, counts, lineId, onChangeLine, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -35,6 +38,7 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
     gaugeLabel(line.gauge_mm),
     line.electrification,
   ].filter((d): d is string => Boolean(d))
+  const cuts = interruptions.filter((i) => i.line_id === line.id && i.segment_ids.length > 0)
   const dia = coverage?.reference_date ?? null
   const conBarras = Boolean(counts && dia && Object.keys(counts).length)
   return (
@@ -83,12 +87,27 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
           </details>
         )}
       </div>
+      {cuts.length > 0 && (
+        <ul className="cortes-linea" aria-label="Tramos sin circulación hoy" data-testid="cortes-linea">
+          {cuts.map((i) => (
+            <li key={i.id}>
+              <button type="button" className="enlace" onClick={() => onSelect({ type: 'tramo', id: i.segment_ids[0]! })}>
+                Sin circulación entre {i.from_name} y {i.to_name}
+              </button>{' '}
+              <span className="suave">
+                desde el {formatDateLong(i.start_date)} ({mainSourceLabel(i)})
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
       <StripDiagram
         network={network}
         lineId={line.id}
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
+        interruptions={cuts}
         counts={counts}
         countsLabel={conBarras && dia ? `trenes el ${formatDayShort(dia)}` : null}
         onSelect={onSelect}

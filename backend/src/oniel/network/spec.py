@@ -1,7 +1,8 @@
-"""Especificación curada de una línea (data/curated/*.json)."""
+"""Especificaciones curadas (data/curated/*.json): líneas, fuentes e interrupciones."""
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 from pathlib import Path
 from typing import Any, Literal
@@ -273,8 +274,76 @@ class SourceSpec(BaseModel):
     file: str | None = None
 
 
+class InterruptionSpec(BaseModel):
+    """Interrupción del servicio en parte de una línea cargada (data/curated/interrupciones.json).
+
+    Va de ``from_node`` a ``to_node``, dos nodos de la misma línea en el orden de su kilometraje, y
+    afecta a todos los tramos que quedan entre ambos. Las fechas son días completos: no hay
+    circulación desde ``start_date`` y, si ya terminó, vuelve a haberla desde ``ended_on``.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    line_id: str
+    from_node: str
+    to_node: str
+    start_date: dt.date
+    #: Previsión de fin publicada por la fuente, como fecha o como texto («otoño de 2027»).
+    expected_end_date: dt.date | None = None
+    expected_end_text: str | None = None
+    #: Día en que se reanudó la circulación; sin él, la interrupción sigue vigente.
+    ended_on: dt.date | None = None
+    #: Motivo en una frase neutra.
+    reason: str = Field(min_length=1)
+    #: Precisión opcional: hasta dónde llegan los trenes, qué sigue en servicio.
+    note: str | None = None
+    #: Ids de ``sources.json``; la primera es la fuente principal, la que se cita junto a la fecha.
+    source_ids: list[str] = Field(min_length=1)
+    #: Día de la última comprobación en las fuentes.
+    checked_on: dt.date
+
+    @model_validator(mode="after")
+    def _consistent(self) -> InterruptionSpec:
+        if self.from_node == self.to_node:
+            raise ValueError(f"la interrupción {self.id} empieza y termina en el mismo nodo")
+        if len(set(self.source_ids)) != len(self.source_ids):
+            raise ValueError(f"la interrupción {self.id} repite fuentes")
+        if self.expected_end_date is not None and self.expected_end_date < self.start_date:
+            raise ValueError(f"la interrupción {self.id} prevé terminar antes de empezar")
+        if self.ended_on is not None:
+            if self.ended_on < self.start_date:
+                raise ValueError(f"la interrupción {self.id} termina antes de empezar")
+            if self.ended_on > self.checked_on:
+                raise ValueError(
+                    f"la interrupción {self.id} termina después de la fecha de consulta"
+                )
+        return self
+
+    def active_on(self, day: dt.date) -> bool:
+        return self.start_date <= day and (self.ended_on is None or day < self.ended_on)
+
+
+class InterruptionsFile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    interruptions: list[InterruptionSpec]
+
+    @model_validator(mode="after")
+    def _unique_ids(self) -> InterruptionsFile:
+        ids = [i.id for i in self.interruptions]
+        if len(set(ids)) != len(ids):
+            raise ValueError("ids de interrupción repetidos")
+        return self
+
+
 def load_network_spec(path: Path) -> NetworkSpec:
     return NetworkSpec.model_validate(json.loads(path.read_text(encoding="utf-8")))
+
+
+def load_interruptions(path: Path) -> list[InterruptionSpec]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    return InterruptionsFile.model_validate(raw).interruptions
 
 
 def load_sources(path: Path) -> list[SourceSpec]:

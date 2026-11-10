@@ -8,6 +8,7 @@ La simulación responde a una pregunta sencilla: **si este tramo se cerrase tal 
 - Los horarios publicados por Renfe en su GTFS (`backend/data/raw/renfe/`): para cada tren, sus paradas con hora de llegada y salida.
 - Una asignación curada de cada parada GTFS a la red, por línea (`stop_mappings` en `backend/data/curated/<línea>.json`): o la parada es un nodo de la línea, o está fuera y el tren entra o sale de la línea por un nodo concreto (por ejemplo, Málaga sale de la LAV por la bifurcación de Málaga; Jaén sale de la línea convencional por Espelúy).
 - Las reglas de recorrido (`route_overrides`) para los trenes que cambian de línea a mitad de camino: dicen entre qué paradas el viaje va por cada línea y por qué nodo sale hacia las otras.
+- Las interrupciones del servicio registradas a mano (`backend/data/curated/interrupciones.json`, descritas en `docs/datos.md`): no cambian el cálculo, pero el resultado dice cuándo el tramo o su alternativa ya están interrumpidos en la fecha simulada.
 
 ## Cómo se calcula el paso de un tren por un tramo
 
@@ -48,11 +49,21 @@ Lo que **no** hace la simulación, y haría falta para un desvío real:
 2. Estimar el nuevo horario: tiempo de recorrido por la otra línea a sus velocidades (`segments.typical_speed_kmh` ya está disponible) y huecos en la ocupación de la vía única, donde los cruces limitan cuántos trenes caben por hora en cada sentido.
 3. Deducir por sí sola el recorrido de un tren que cambia de línea: hoy hay que declararlo en una regla de recorrido de cada especificación, como se hizo con los Intercity y Alvia Madrid-Atocha Cercanías–Andalucía (véase `docs/datos.md`).
 4. Encontrar alternativas que encadenen varias líneas, como la de Madrid a Ciudad Real por Manzanares. Es lo que pide el comparador de recorridos de la hoja de ruta.
-5. Tener en cuenta la situación real de la infraestructura: el corte por obras al sur de Venta de Cárdenas hasta otoño de 2027 significa que, mientras dure, la alternativa por Despeñaperros no está disponible aunque la geometría exista.
+5. Descontar los trenes que en realidad no circulan. La simulación señala que el tramo o la alternativa tienen una interrupción real registrada ese día (véase «Interrupciones reales»), pero sigue comparando la ventana con el horario publicado.
+
+## Interrupciones reales
+
+Un cierre simulado puede caer sobre un tramo que ya está interrumpido de verdad. La simulación no lo oculta ni lo corrige: lo dice.
+
+- **En la vista de un tramo.** `GET /api/segments/{id}/services` devuelve, junto a los pasos del día, las interrupciones vigentes ese día en el tramo (`interruptions`). Cada una lleva su nota: «Horario publicado; sin circulación real desde el 6 de septiembre de 2026 (Adif).» El visor la muestra en una línea sobre la lista de trenes.
+- **En el tramo que se cierra.** El resultado de `POST /api/simulations/closure` lleva en `interruptions` las vigentes en ese tramo en la fecha simulada y añade una advertencia al método: los trenes de la lista figuran en el horario, pero no circulan. El recuento de afectados no cambia.
+- **En el recorrido alternativo.** Cada alternativa lleva en `interruptions` las vigentes ese día en algún tramo de su recorrido, y su nota termina diciendo entre qué nodos no hay circulación, desde cuándo y según quién. El 10 de noviembre de 2026, un cierre en la alta velocidad entre Madrid y Córdoba señala la alternativa por Despeñaperros y avisa de que está cortada entre Almuradiel-Viso del Marqués y Alcolea de Córdoba; un cierre en la convencional señala la alta velocidad y avisa de que está cortada entre la Bifurcación La Sagra y Córdoba.
+
+Vale la fecha simulada, no la de hoy: un cierre simulado en una fecha anterior al inicio de una interrupción, o posterior a su final, no lleva ninguna nota. Está automatizado en `backend/tests/test_integration_db.py` y `frontend/e2e/interrupciones.spec.ts`.
 
 ## Trenes que recorren varias líneas
 
-Los horarios de Renfe del 8 al 15 de noviembre de 2026 incluyen 24 Intercity y Alvia entre Madrid-Atocha Cercanías y Sevilla, Málaga, Ronda o Algeciras que tardan 2 h 50 entre Madrid y Ciudad Real y 1 h 15 entre Ciudad Real y Córdoba: el desvío por la red convencional que aparece en los horarios tras la interrupción de la alta velocidad en Urda. Van por la convencional hasta Manzanares, por la línea de Manzanares a Ciudad Real y, desde Ciudad Real, por la alta velocidad. Cada una de las tres líneas los declara en `route_overrides`, y el resultado es el siguiente, tomando el Intercity 10270 (Madrid-Atocha Cercanías 6:00 → Ciudad Real 8:35/8:50 → Córdoba 9:45/9:50 → Sevilla 10:53) del viernes 13 de noviembre de 2026:
+Los horarios de Renfe del 8 al 15 de noviembre de 2026 incluyen 24 Intercity y Alvia entre Madrid-Atocha Cercanías y Sevilla, Málaga, Ronda o Algeciras que tardan 2 h 50 entre Madrid y Ciudad Real y 1 h 15 entre Ciudad Real y Córdoba: el desvío por la red convencional que aparece en los horarios tras la interrupción de la alta velocidad en Urda. Según esos horarios, van por la convencional hasta Manzanares, por la línea de Manzanares a Ciudad Real y, desde Ciudad Real, por la alta velocidad; la interrupción registrada de la alta velocidad incluye Ciudad Real – Córdoba, y Oniel no sabe si circulan (`docs/datos.md`, «Interrupciones registradas»). Cada una de las tres líneas los declara en `route_overrides`, y el resultado es el siguiente, tomando el Intercity 10270 (Madrid-Atocha Cercanías 6:00 → Ciudad Real 8:35/8:50 → Córdoba 9:45/9:50 → Sevilla 10:53) del viernes 13 de noviembre de 2026:
 
 | Punto | Distancia desde Madrid | Tiempo proporcional | Hora |
 |---|---|---|---|
@@ -97,7 +108,7 @@ Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes r
 
 ## Limitaciones conocidas
 
-- Los horarios son los planificados por Renfe; no incluyen la interrupción de la alta velocidad vigente desde el 28 de octubre de 2026, el corte de la línea convencional al sur de Venta de Cárdenas ni otros cambios.
+- Los horarios son los planificados por Renfe. Las interrupciones registradas en `interrupciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
 - Solo hay servicios de Renfe; faltan Iryo, Ouigo, Cercanías y mercancías.
 - El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; la alternativa solo se señala.
 - La estimación proporcional ignora paradas técnicas y limitaciones temporales de velocidad.

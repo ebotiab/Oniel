@@ -9,7 +9,7 @@
       "license_url": "https://creativecommons.org/licenses/by/4.0/",
       "retrieved_on": "2026-11-08",
       "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant), larga distancia (Alvia, Intercity, Euromed) y media distancia (MD, Regional Exprés, Regional, Proximidad) de toda España; Oniel importa los que recorren las líneas cargadas. Validez del fichero del 7 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
-      "notes": "Fichero google_transit.zip publicado el 8 de noviembre de 2026. Son horarios planificados: no reflejan la interrupción de la circulación de alta velocidad Madrid–Andalucía vigente desde el 28 de octubre de 2026, ni el corte por obras de la línea convencional al sur de Venta de Cárdenas, ni otras alteraciones del servicio.",
+      "notes": "Fichero google_transit.zip publicado el 8 de noviembre de 2026. Son horarios planificados: no reflejan las interrupciones registradas en interrupciones.json (la de la alta velocidad Madrid–Andalucía, desde el 28 de octubre de 2026, y la de la línea convencional por obras, desde el 6 de septiembre de 2026) ni otras alteraciones del servicio.",
       "file": "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
     },
     {
@@ -114,6 +114,78 @@
       "retrieved_on": "2026-11-08",
       "coverage": "Interrupción de la circulación entre Venta de Cárdenas y Algeciras desde comienzos de septiembre de 2026, con reanudación prevista en otoño de 2027, por la adaptación del gálibo de 13 túneles entre Venta de Cárdenas y Los Cansinos y de otras estructuras.",
       "notes": "La fecha de reanudación es una previsión de Adif, no un compromiso. Los horarios GTFS cargados no reflejan este corte."
+    },
+    {
+      "id": "adif-estado-de-la-red",
+      "name": "Estado de la red: aviso de la línea de alta velocidad Madrid–Andalucía",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-10",
+      "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 10 de noviembre de 2026 a las 13:02 está resumido en el registro de consultas de ese día.",
+      "file": "raw/interrupciones/consultas_2026-11-10.json"
+    },
+    {
+      "id": "adif-aviso-obras-autopista-ferroviaria",
+      "name": "Aviso «Obras autopista ferroviaria Algeciras-Zaragoza»",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/obras-autopista-ferroviaria-algeciras-zaragoza",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-10",
+      "coverage": "Interrupción del servicio entre Córdoba y Santa Cruz de Mudela y en el tramo Algeciras–Bobadilla–Córdoba por las obras de la autopista ferroviaria, con transporte alternativo por carretera.",
+      "notes": "El aviso declara su última actualización el 30 de septiembre de 2026. No da fecha de inicio ni previsión de fin: esas salen de la nota de Renfe y de la prensa registradas aparte.",
+      "file": "raw/interrupciones/consultas_2026-11-10.json"
+    },
+    {
+      "id": "adif-salidas-y-llegadas",
+      "name": "Salidas y llegadas de las estaciones de Santa Cruz de Mudela, Jaén, Ciudad Real y Córdoba",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/viajeros/estaciones",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-10",
+      "coverage": "Qué trenes circulan y cuáles hacen parte del recorrido por carretera el 10 de noviembre de 2026: sirve para fijar hasta qué estación llegan los trenes a cada lado de una interrupción.",
+      "notes": "Paneles en tiempo real, sin histórico; las cuatro páginas consultadas y lo que mostraban están en el registro de consultas de ese día.",
+      "file": "raw/interrupciones/consultas_2026-11-10.json"
+    },
+    {
+      "id": "renfe-nota-md-jaen-madrid-2026-09",
+      "name": "Nota de prensa «Modificación del servicio de los Media Distancia Jaén-Madrid e Intercity Almería-Madrid desde el 6 de septiembre»",
+      "publisher": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/07/modificacion-servicio-media-distancia-jaen-madrid-e-almeria-madrid",
+      "license": "Consulta pública; © Renfe",
+      "license_url": null,
+      "retrieved_on": "2026-11-10",
+      "coverage": "Inicio de las obras de la autopista ferroviaria el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel y entre Jaén y Córdoba.",
+      "notes": "Publicada el 25 de julio de 2026. Dice que entre Jaén y Córdoba el servicio ya se prestaba por carretera desde los daños de un temporal, sin dar la fecha.",
+      "file": "raw/interrupciones/consultas_2026-11-10.json"
+    },
+    {
+      "id": "el-estrecho-digital-corte-algeciras",
+      "name": "Noticia «Comienza el largo corte ferroviario entre Algeciras y Venta de Cárdenas por las obras de la Autopista Ferroviaria»",
+      "publisher": "El Estrecho Digital",
+      "url": "https://www.elestrechodigital.com/2026/09/07/comienza-el-largo-corte-ferroviario-entre-algeciras-y-venta-de-cardenas-por-las-obras-de-la-autopista-ferroviaria",
+      "license": "© El Estrecho Digital; se cita como fuente del dato, sin reproducir el texto",
+      "license_url": null,
+      "retrieved_on": "2026-11-10",
+      "coverage": "Previsión de Adif de mantener el corte hasta el otoño de 2027, límite del corte de la vía en Venta de Cárdenas e interrupción entre Córdoba y Santa Cruz de Mudela desde el 6 de septiembre de 2026.",
+      "notes": "Publicada el 7 de septiembre de 2026. Prensa que recoge información de Adif; la previsión de fin no es un compromiso.",
+      "file": "raw/interrupciones/consultas_2026-11-10.json"
+    },
+    {
+      "id": "europa-press-reapertura-madrid-sevilla",
+      "name": "Noticia «Puente prevé abrir con menos frecuencias la línea Madrid-Sevilla en máximo 10 días tras permiso judicial»",
+      "publisher": "Europa Press; Pressdigital",
+      "url": "https://www.pressdigital.es/articulo/economia/2026-11-03/6076208-puente-preve-abrir-menos-frecuencias-linea-madrid-sevilla-maximo-10-dias-permiso-judicial",
+      "license": "© Europa Press; se cita como fuente del dato, sin reproducir el texto",
+      "license_url": null,
+      "retrieved_on": "2026-11-10",
+      "coverage": "Estimación del Ministerio de Transportes, el 3 de noviembre de 2026, sobre la reanudación de la alta velocidad Madrid–Sevilla: un máximo de diez días naturales desde la autorización judicial de las obras de reparación.",
+      "notes": "Publicada el 3 de noviembre de 2026. Es una estimación condicionada, no una fecha.",
+      "file": "raw/interrupciones/consultas_2026-11-10.json"
     },
     {
       "id": "openfreemap",

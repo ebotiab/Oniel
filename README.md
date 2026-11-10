@@ -2,7 +2,7 @@
 
 Web en español para descubrir cómo está conectada la red ferroviaria española. Se abre con un mapa interactivo en el que se recorre la línea, se seleccionan estaciones y tramos y, como herramienta secundaria, se simula un cierre hipotético de un tramo en una franja horaria.
 
-Esta versión cubre tres líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz; la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif), y la **línea convencional Manzanares–Ciudad Real** (Adif, línea 522, de vía única), que une las otras dos, con los servicios de Renfe que las recorren. La alta velocidad y la convencional comparten Madrid-Puerta de Atocha y Córdoba, así que la simulación de un cierre señala el recorrido alternativo cuando existe.
+Esta versión cubre tres líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz; la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif), y la **línea convencional Manzanares–Ciudad Real** (Adif, línea 522, de vía única), que une las otras dos, con los servicios de Renfe que las recorren. La alta velocidad y la convencional comparten Madrid-Puerta de Atocha y Córdoba, así que la simulación de un cierre señala el recorrido alternativo cuando existe. Los horarios son los planificados; las interrupciones vigentes del servicio (obras, cortes tras un accidente) se registran a mano en `backend/data/curated/interrupciones.json`, con su fuente y la fecha de comprobación, y el visor las marca en rojo.
 
 - Diseño: [docs/diseno.md](docs/diseno.md)
 - Datos y procedencia: [docs/datos.md](docs/datos.md)
@@ -15,7 +15,7 @@ Esta versión cubre tres líneas: la **línea de alta velocidad Madrid–Sevilla
 
 ```
 backend/   API FastAPI, CLI de datos (Typer), reglas de simulación, pruebas pytest
-  data/    raw/ (ficheros originales), curated/ (especificación de la línea y fuentes)
+  data/    raw/ (ficheros originales), curated/ (especificación de cada línea, fuentes e interrupciones)
 frontend/  Visor React + TypeScript + Vite + MapLibre, pruebas Playwright
 docs/      Diseño, datos, simulación, despliegue, capturas
 render.yaml, docker-compose.yml, backend/Dockerfile
@@ -33,7 +33,7 @@ docker compose up -d
 cd backend && uv sync && uv run oniel-data import all
 ```
 
-`import all` migra la base de datos, importa la red de las líneas cargadas y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
+`import all` migra la base de datos, importa la red de las líneas cargadas, las interrupciones y los horarios y exporta la instantánea estática a `frontend/public/data`. Es repetible: volver a ejecutarlo deja el mismo estado.
 
 Opcional, para los agentes de código: `uvx library-skills --claude` en la raíz enlaza en `.claude/skills` y `.agents/skills` las skills que traen FastAPI y Typer (apuntan a `backend/.venv`, por eso no están en git).
 
@@ -57,9 +57,10 @@ cd backend && uv run oniel-data --help
 |---|---|
 | `db migrate` / `db reset --yes` | Aplica migraciones / recrea el esquema (solo desarrollo) |
 | `import network` | Construye cada línea desde la geometría cruda y la especificación curada y la carga (`--spec` repetible; sin él, todas) |
+| `import interruptions` | Carga las interrupciones del servicio de `curated/interrupciones.json`; la red tiene que estar importada |
 | `import gtfs` | Importa los servicios del GTFS que recorren las líneas cargadas y precalcula su paso por cada tramo |
 | `import all` | Todo lo anterior más la exportación estática; con `--if-changed` se salta si datos y código no cambiaron desde la última |
-| `validate` | Comprueba la red y la resolución de horarios sin base de datos (`--spec` repetible; sin él, todas) |
+| `validate` | Comprueba la red, la resolución de horarios y las interrupciones sin base de datos (`--spec` repetible; sin él, todas) |
 | `export snapshot` | Exporta JSON estático para el visor |
 | `sources` | Lista las fuentes con licencia y fecha |
 | `logfire-test` | Envía una traza de prueba a Logfire |

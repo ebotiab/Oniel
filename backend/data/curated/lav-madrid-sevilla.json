@@ -34,7 +34,7 @@
     {"id": "urda", "name": "Urda", "kind": "paet", "adif_code": "37107", "position": {"lon": -3.82211, "lat": 39.41902}, "reference_pk_km": 119.7,
      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) en el término de Urda (Toledo). No tiene servicio de viajeros: permite que un tren adelante a otro o espere en vía apartada.",
      "details": {
-       "contexto_2026": "El 28 de octubre de 2026 se produjo en su entorno (km 118,8, término de Los Yébenes) la colisión de un AVE de Renfe con un tren de Iryo detenido, con 69 personas fallecidas según las fuentes citadas. La investigación de la AITAT está abierta y la circulación de alta velocidad entre Madrid y Andalucía permanece interrumpida.",
+       "contexto_2026": "El 28 de octubre de 2026 se produjo en su entorno (km 118,8, término de Los Yébenes) la colisión de un AVE de Renfe con un tren de Iryo detenido, con 69 personas fallecidas según las fuentes citadas. La investigación de la AITAT está abierta.",
        "fuentes": [
          {"title": "Adif: Mapa de la red (aviso sobre el accidente de Urda)", "url": "https://www.adif.es/sobre-adif/red-ferroviaria/mapa"},
          {"title": "Wikipedia: Accidente ferroviario de Urda", "url": "https://es.wikipedia.org/wiki/Accidente_ferroviario_de_Urda"}

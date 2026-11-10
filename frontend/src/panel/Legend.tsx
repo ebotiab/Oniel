@@ -3,11 +3,13 @@ import { lineKind } from '../app/state'
 
 interface Props {
   closed: boolean
+  /** Hay algún tramo con una interrupción del servicio vigente hoy. */
+  interrupted: boolean
   lines: LineSummary[]
   singleTrack: boolean
 }
 
-export function Legend({ closed, lines, singleTrack }: Props) {
+export function Legend({ closed, interrupted, lines, singleTrack }: Props) {
   const kinds = new Set(lines.map(lineKind))
   const several = kinds.size > 1
   return (
@@ -41,6 +43,12 @@ export function Legend({ closed, lines, singleTrack }: Props) {
       )}
       <span className="muestra conexion" aria-hidden="true" />
       <span>Conexión no cargada todavía</span>
+      {interrupted && (
+        <>
+          <span className="muestra sin-circulacion" aria-hidden="true" data-testid="leyenda-interrupcion" />
+          <span>Sin circulación hoy</span>
+        </>
+      )}
       <span className="muestra seleccion" aria-hidden="true" />
       <span>Tramo seleccionado</span>
       {closed && (

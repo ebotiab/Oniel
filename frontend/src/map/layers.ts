@@ -43,12 +43,30 @@ const emphasised: ExpressionSpecification = [
   ['boolean', ['feature-state', 'cerrado'], false],
 ]
 
+/** Tramo con una interrupción del servicio vigente hoy (propiedad `interrumpido`, no un estado). */
+const interrupted: ExpressionSpecification = ['boolean', ['get', 'interrumpido'], false]
+
+// El rojo es «sin circulación»: real (interrupción vigente) o simulada (cierre). Un tramo
+// interrumpido sigue en rojo cuando se selecciona; la selección la marcan el grosor y el halo azul.
 const segmentColor: ExpressionSpecification = [
+  'case',
+  ['boolean', ['feature-state', 'cerrado'], false],
+  ROJA,
+  interrupted,
+  ROJA,
+  ['boolean', ['feature-state', 'seleccionado'], false],
+  AZUL,
+  TINTA,
+]
+
+const haloColor: ExpressionSpecification = [
   'case',
   ['boolean', ['feature-state', 'cerrado'], false],
   ROJA,
   ['boolean', ['feature-state', 'seleccionado'], false],
   AZUL,
+  interrupted,
+  ROJA,
   TINTA,
 ]
 
@@ -93,14 +111,14 @@ export function onielLayers(): LayerSpecification[] {
       type: 'line',
       source: SRC.segments,
       paint: {
-        'line-color': segmentColor,
+        'line-color': haloColor,
         'line-width': ['interpolate', ['linear'], ['zoom'], 5, 10, 10, 18],
         'line-opacity': [
           'case',
           ['boolean', ['feature-state', 'cerrado'], false],
           0.2,
           ['boolean', ['feature-state', 'seleccionado'], false],
-          0.16,
+          ['case', interrupted, 0.3, 0.16],
           ['boolean', ['feature-state', 'hover'], false],
           0.1,
           0,
