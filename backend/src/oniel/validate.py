@@ -1,4 +1,4 @@
-"""Validaciones sin base de datos: red construida, PK de referencia y resolución de horarios."""
+"""Validaciones sin base de datos: red construida, PK de referencia, horarios e interrupciones."""
 
 from __future__ import annotations
 
@@ -16,7 +16,8 @@ from oniel.gtfs.trips import (
     select_trips_for_spec,
 )
 from oniel.network.build import BuiltNetwork, build_network
-from oniel.network.spec import load_network_spec
+from oniel.network.interruptions import check_interruptions
+from oniel.network.spec import load_interruptions, load_network_spec, load_sources
 from oniel.sim.passes import LineNode, LineSegment, resolve_passes
 
 LENGTH_TOLERANCE_KM = 3.0
@@ -25,6 +26,42 @@ LENGTH_TOLERANCE_KM = 3.0
 def loaded_line(net: BuiltNetwork) -> LoadedLine:
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat, n.spec.name) for n in net.nodes}
     return LoadedLine(net.spec, nodes)
+
+
+def validate_interruptions(
+    path: Path, sources_path: Path, spec_paths: Sequence[Path], data_dir: Path
+) -> dict[str, Any]:
+    """Comprueba el fichero de interrupciones contra las líneas cargadas y el registro de fuentes.
+
+    Un fichero que no cumple el esquema (campos, orden de las fechas, ids repetidos) no llega a
+    contrastarse con la red: el error del modelo es el único problema que se devuelve.
+    """
+    try:
+        interruptions = load_interruptions(path)
+    except (ValueError, OSError) as error:
+        return {"interruptions": path.name, "entries": [], "problems": [str(error)]}
+    line_nodes: dict[str, list[str]] = {}
+    for spec_path in spec_paths:
+        net = build_network(load_network_spec(spec_path), data_dir)
+        line_nodes[net.spec.line.id] = [n.spec.id for n in sorted(net.nodes, key=lambda n: n.km)]
+    sources = {s.id: s.url for s in load_sources(sources_path)}
+    return {
+        "interruptions": path.name,
+        "entries": [
+            {
+                "id": i.id,
+                "line": i.line_id,
+                "from": i.from_node,
+                "to": i.to_node,
+                "start_date": i.start_date.isoformat(),
+                "ended_on": i.ended_on.isoformat() if i.ended_on else None,
+                "checked_on": i.checked_on.isoformat(),
+                "sources": i.source_ids,
+            }
+            for i in interruptions
+        ],
+        "problems": check_interruptions(interruptions, line_nodes, sources),
+    }
 
 
 def validate_all(

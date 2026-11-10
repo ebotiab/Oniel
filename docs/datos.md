@@ -11,9 +11,15 @@
 | `wikipedia-lineas-300-400` | PK de Adif, longitudes y tramos de vía única de las líneas 300 y 400 (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-08 |
 | `adif-mapa-red` | Verificación del trazado, códigos de estación y puntos kilométricos de la línea 010 | Adif / Adif Alta Velocidad | Consulta pública | 2026-11-08 |
 | `adif-obras-autopista-ferroviaria` | Corte de la línea convencional al sur de Venta de Cárdenas por obras (información de Adif en prensa) | Adif; Europa Press / Demócrata | Consulta pública | 2026-11-08 |
+| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio | Adif | Consulta pública | 2026-11-10 |
+| `adif-aviso-obras-autopista-ferroviaria` | Aviso de la interrupción por obras entre Córdoba y Santa Cruz de Mudela | Adif | Consulta pública | 2026-11-10 |
+| `adif-salidas-y-llegadas` | Paneles de salidas y llegadas de cuatro estaciones: hasta dónde llegan los trenes a cada lado de una interrupción | Adif | Consulta pública | 2026-11-10 |
+| `renfe-nota-md-jaen-madrid-2026-09` | Inicio de las obras el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel | Renfe | Consulta pública | 2026-11-10 |
+| `el-estrecho-digital-corte-algeciras` | Previsión de fin de las obras (otoño de 2027) y límite del corte de la vía en Venta de Cárdenas | El Estrecho Digital | © del medio; se cita el dato | 2026-11-10 |
+| `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
 
-El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar.
+El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto.
 
 ## Líneas cargadas
 
@@ -47,11 +53,66 @@ Verificación:
 
 Límites y avisos:
 
-- **Corte por obras.** Según Adif, entre Venta de Cárdenas y Algeciras no hay circulación desde comienzos de septiembre de 2026 por la adaptación del gálibo de 13 túneles (entre Venta de Cárdenas y Los Cansinos) y otras estructuras para la autopista ferroviaria Algeciras–Madrid–Zaragoza; la reanudación está prevista para otoño de 2027 y es una previsión, no un compromiso. Los horarios GTFS cargados son los planificados y no reflejan este corte: muestran trenes Madrid–Jaén por Despeñaperros y algunos trayectos parciales (Linares-Baeza–Vilches, Linares-Baeza–Mengíbar) que probablemente corresponden a transbordos. El nodo de Venta de Cárdenas lleva esta nota.
+- **Corte por obras.** Desde el 6 de septiembre de 2026 no circulan trenes de viajeros entre Almuradiel-Viso del Marqués y Alcolea de Córdoba, por la adaptación del gálibo de 13 túneles (entre Venta de Cárdenas y Los Cansinos) y otras estructuras para la autopista ferroviaria Algeciras–Madrid–Zaragoza. Está registrado en `interrupciones.json` con sus fechas y sus fuentes (véase «Interrupciones del servicio»). Los horarios GTFS cargados son los planificados y no lo reflejan: muestran trenes Madrid–Jaén por Despeñaperros y algunos trayectos parciales (Linares-Baeza–Vilches, Linares-Baeza–Mengíbar) que probablemente corresponden a transbordos. El visor marca esos tramos en rojo y añade una nota a sus listas de trenes; el panel de Venta de Cárdenas y el de cualquier otro nodo del corte muestran la interrupción a partir del mismo dato.
 - **Servicios incluidos.** El GTFS de Renfe trae AVE, AVLO, Avant, Alvia, Intercity, Euromed, MD, Regional Exprés, Regional y Proximidad, pero no Cercanías: los trenes de la línea C-3 Madrid–Aranjuez no aparecen, y tampoco los de otros operadores ni mercancías.
 - **Selección de viajes.** Un viaje se asigna a la línea convencional si para en al menos dos de sus nodos y en alguna de las estaciones que no comparte con la alta velocidad (`min_node_stops` y `any_of_stop_ids` del filtro de corredor). Así entran los MD Madrid–Jaén, Madrid–Alcázar–Albacete, Alcázar–Ciudad Real–Badajoz, Córdoba–Jaén y Cádiz–Jaén, el Alvia Barcelona–Córdoba por Alcázar y los trenes de Proximidad de Córdoba. Los Intercity y Alvia Madrid-Atocha Cercanías–Córdoba–Sevilla/Málaga/Algeciras del fichero (24 viajes, válidos del 8 al 15 de noviembre de 2026) no pasan ese filtro, porque solo paran en Madrid, Ciudad Real y Córdoba, y entran por una regla de recorrido (véase el apartado siguiente).
 - **Trenes que cambian de línea.** Esos 24 viajes son los horarios publicados por Renfe tras la interrupción de la alta velocidad en Urda: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por la red convencional (Aranjuez, Alcázar de San Juan, Manzanares y la línea Manzanares–Ciudad Real, no cargada), y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Cada especificación los declara en `route_overrides`: una regla encaja con los viajes que llevan ciertas paradas seguidas (`consecutive_stop_ids`, en ese orden o en el inverso) y dice entre qué paradas el viaje va por esa línea (`from_stop_id`, `to_stop_id`) y qué asignaciones de parada cambian solo para ellos. La convencional los resuelve entre Madrid y Ciudad Real, saliendo por Manzanares; la LAV, desde Ciudad Real. Los 4 Alvia que no paran en Ciudad Real (Madrid–Córdoba en las mismas 3 h 45) se tratan igual: para ellos Córdoba es salida por Manzanares en la convencional y Madrid-Atocha Cercanías es entrada por Ciudad Real en la LAV. Una asignación con `via` (línea y nodo de enlace) indica que la parada está en otra línea cargada: el reparto de tiempos usa entonces la distancia por esa línea en vez de la línea recta, y el visor explica por dónde sigue el tren. Así estos trenes aparecen en los tramos Madrid–Manzanares de la convencional y Ciudad Real–Córdoba de la alta velocidad, y en ningún otro; `oniel-data validate` avisa si una regla deja de encajar con algún viaje del GTFS.
 - **Estaciones compartidas.** Madrid-Puerta de Atocha agrupa en un solo nodo la estación de alta velocidad (60000) y Madrid-Atocha Cercanías (18000), de donde salen los trenes convencionales: forman el mismo complejo. La tabla `stop_mappings` asigna 18000 al nodo, de modo que esos trenes aparecen en «Trenes que paran aquí».
+
+## Interrupciones del servicio
+
+Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/interrupciones.json`, una entrada por interrupción. El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo.
+
+| Campo | Qué es |
+|---|---|
+| `id` | Identificador estable: línea, motivo y fecha de inicio. |
+| `line_id` | Línea cargada a la que afecta. |
+| `from_node`, `to_node` | Nodos extremos, de esa línea y en el orden de su kilometraje. Afecta a todos los tramos que quedan entre ambos. |
+| `start_date` | Primer día sin circulación. |
+| `expected_end_date`, `expected_end_text` | Previsión de fin que publica la fuente, como fecha o como texto («otoño de 2027»). Opcionales: sin ellos, el visor dice que no hay fecha prevista. |
+| `ended_on` | Día en que se reanudó la circulación. Sin él, la interrupción sigue vigente. |
+| `reason` | Motivo en una frase neutra. |
+| `note` | Opcional: hasta dónde llegan los trenes, qué sigue en servicio, qué se sabe de la reanudación y según quién. |
+| `source_ids` | Ids de `sources.json`. La primera es la fuente principal: la que se cita junto a la fecha («… (Adif)»). |
+| `checked_on` | Día de la última comprobación en las fuentes. |
+
+Una interrupción está vigente los días `start_date` ≤ día < `ended_on`. Al terminar no se borra: se le pone `ended_on` y queda como registro, y sigue marcando los trenes de las fechas en que estuvo vigente, por ejemplo al simular un cierre en una fecha pasada.
+
+`oniel-data validate` comprueba el fichero sin base de datos y termina con código 1 si algo no encaja: que cada entrada cumple el esquema; que las fechas tienen orden (ni la previsión ni el final son anteriores al inicio, y el final no es posterior a la comprobación); que la línea está cargada; que los dos nodos son de esa línea y van en el orden del kilometraje, y que las fuentes están en `sources.json`, la principal con URL. `oniel-data import interruptions` carga el fichero en la tabla `interruptions` (también lo hace `import all`, después de la red) y, si no encaja con la red cargada, lo rechaza sin tocar lo que había. La API las sirve en `GET /api/interruptions` (con `?date=AAAA-MM-DD`, solo las vigentes ese día) y dentro de `GET /api/network`, que es de donde las lee el visor; la instantánea las lleva en `network.json`, y cada fichero de tramo, las vigentes en el día de referencia.
+
+### Interrupciones registradas
+
+Comprobadas el 10 de noviembre de 2026. Lo que decía cada fuente ese día está resumido en `backend/data/raw/interrupciones/consultas_2026-11-10.json`: son avisos y paneles en tiempo real, sin histórico.
+
+| Línea | De – a | Desde | Previsión de fin | Motivo | Fuente principal |
+|---|---|---|---|---|---|
+| Alta velocidad Madrid – Sevilla | Bifurcación La Sagra – Córdoba (6 tramos, 290,9 km) | 28 de octubre de 2026 | Sin fecha | Suspensión de la circulación tras el accidente del 28 de octubre de 2026 en el entorno de Urda | `adif-estado-de-la-red` |
+| Convencional Madrid – Alcázar – Córdoba | Almuradiel-Viso del Marqués – Alcolea de Córdoba (9 tramos, 174,3 km) | 6 de septiembre de 2026 | Otoño de 2027 | Obras de adaptación a la autopista ferroviaria Algeciras–Madrid–Zaragoza | `adif-aviso-obras-autopista-ferroviaria` |
+
+Cómo se fijaron los extremos:
+
+- **Alta velocidad.** La página de estado de la red de Adif mantiene el aviso de que la circulación en la línea Madrid–Andalucía sigue interrumpida desde el accidente y da por abiertos los tramos Madrid–Toledo y Málaga–Sevilla. Los paneles de salidas de Ciudad Real dan por suspendidos todos los trenes de alta velocidad, también los que van a Puertollano, y en los de Córdoba no sale ninguno hacia Madrid, pero sí a Sevilla, Málaga y Granada. En Oniel eso deja abiertos Madrid – Bifurcación La Sagra y Córdoba – Sevilla, y sin circulación los seis tramos entre La Sagra y Córdoba. No hay fecha de reanudación: la nota de la entrada recoge la estimación del Ministerio de Transportes del 3 de noviembre de 2026, condicionada a una autorización judicial.
+- **Línea convencional.** Las fuentes dan tres límites distintos por el norte. El aviso de Adif habla de servicio interrumpido entre Córdoba y Santa Cruz de Mudela; la información de Adif en prensa sitúa el corte de la vía entre Venta de Cárdenas y Algeciras; la nota de Renfe y los paneles de Santa Cruz de Mudela y Jaén dicen que los Media Distancia Madrid–Jaén hacen por carretera el trayecto entre Almuradiel y Jaén. Se registra lo que ve el viajero: los trenes llegan a Almuradiel-Viso del Marqués y no pasan de ahí. Por el sur, los paneles de Córdoba muestran trenes de Proximidad hasta Alcolea de Córdoba y el recorrido Córdoba–Jaén por carretera, así que el extremo es Alcolea. La fecha de inicio es la de la nota de Renfe; la previsión de fin es de Adif, recogida por la prensa, y no es un compromiso.
+
+Límites de lo registrado:
+
+- Entre Jaén y Córdoba ya se viajaba por carretera antes de las obras, por los daños de un temporal de enero de 2026, según la nota de Renfe. La prensa da fechas distintas para ese corte y un restablecimiento intermedio, y no se encontró una fecha en una fuente oficial: no tiene entrada propia, y los tramos entre Espelúy y Alcolea figuran sin circulación desde el 6 de septiembre de 2026 aunque no la tenían desde antes.
+- Los 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía del GTFS (válidos del 8 al 15 de noviembre de 2026) no figuran en los paneles de Ciudad Real del 10 de noviembre. Sus pasos por la alta velocidad entre Ciudad Real y Córdoba llevan la nota de la interrupción; los de la convencional entre Madrid y Manzanares no, porque ese tramo no está interrumpido. Oniel no sabe si circulan.
+- Una interrupción es de todo el servicio entre dos nodos y por días completos. No se registran reducciones de frecuencia, limitaciones de velocidad ni cortes de unas horas.
+
+### Cómo se actualiza
+
+No hay actualización automática: Adif no publica estos avisos como datos abiertos y su web rechaza las descargas automáticas. Lo revisa quien mantiene Oniel, o una sesión a petición suya.
+
+Cada cuánto: una vez por semana mientras haya alguna interrupción sin fecha de fin (hoy, la de la alta velocidad); una vez al mes si todas tienen una previsión lejana; y siempre que una fuente anuncie un cambio (una reanudación, otra previsión, un corte nuevo) o se refresque el GTFS.
+
+1. Consultar las fuentes de cada entrada: el estado de la red y los avisos de Adif, la sala de prensa de Renfe y los paneles de salidas y llegadas de las estaciones de los extremos.
+2. Resumir lo consultado, con palabras propias, en `backend/data/raw/interrupciones/consultas_<fecha>.json`, y poner al día `sources.json` (`retrieved_on`, `file` y las fuentes nuevas que hagan falta).
+3. Editar `interrupciones.json`. `checked_on` cambia siempre. Si la circulación se reanudó, se pone `ended_on`; si cambió la previsión, se corrige; si hay otro corte, se añade una entrada. Si un corte se reabre solo en parte, se acortan sus extremos o se divide en dos entradas. No se infiere nada: lo que la fuente no dice, no se escribe.
+4. `uv run oniel-data validate`, `uv run oniel-data import all` (regenera la instantánea) y las pruebas. La tabla de arriba se pone al día en la misma PR.
+5. Al fusionar, Render reimporta la base. La instantánea va dentro del visor, así que hay que publicarlo (`docs/despliegue.md`): hasta entonces, quien entre con la API dormida ve la interrupción anterior.
+
+Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
 
 ## Modelo de datos
 
@@ -66,6 +127,7 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 - `stop_mappings`: cómo se resuelve cada parada de un horario contra la red. La tabla es común a todas las líneas; una parada asignada a un nodo por una línea no la degrada otra que la declare como salida. Las reglas de recorrido (`route_overrides` de cada especificación) no se guardan en la base: solo actúan al importar.
 - `services`, `service_dates`, `service_stops`: horarios por tren y día, con el operador y la fuente. Cada viaje del GTFS se guarda una sola vez aunque recorra varias líneas.
 - `service_segment_passes`: el paso de cada tren por cada tramo, precalculado con las reglas de simulación, línea a línea. Un tren que cambia de línea tiene pasos en cada una solo entre las paradas que le corresponden.
+- `interruptions`: interrupciones del servicio entre dos nodos de una línea, con sus fechas, el motivo, las fuentes y el día de la última comprobación. Los tramos afectados no se guardan: salen del orden de esos dos nodos en `line_nodes`, de modo que reimportar la red no las deja huérfanas.
 - `import_runs`: historial de importaciones con estadísticas.
 
 ## Añadir otra línea

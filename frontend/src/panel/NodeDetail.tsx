@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
-import type { NetworkOut, NodeOut, NodeServicesOut } from '../data/types'
+import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineShortLabel, productLabel, shortStop } from '../app/state'
+import { InterruptionNotice } from './InterruptionNotice'
 
 interface Props {
   node: NodeOut
   network: NetworkOut
   referenceDate: string | null
+  /** Interrupciones vigentes hoy, por id de tramo. */
+  interrupted: Map<string, InterruptionOut[]>
   onSelectSegment: (id: string) => void
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBack }: Props) {
+export function NodeDetail({ node, network, referenceDate, interrupted, onSelectSegment, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -23,6 +26,8 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
     .filter((n) => n.id === node.id)
     .map((n) => ({ km: n.km, line: network.lines.find((l) => l.id === n.line_id) }))
   const lineOf = (lineId: string) => network.lines.find((l) => l.id === lineId)
+  // Interrupciones de los tramos que confluyen aquí, cada una una sola vez.
+  const cuts = [...new Map(adjacent.flatMap((s) => interrupted.get(s.id) ?? []).map((i) => [i.id, i])).values()]
 
   // App monta este componente con key={node.id}, así que el estado se reinicia al cambiar de nodo.
   useEffect(() => {
@@ -77,6 +82,10 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
         </aside>
       )}
 
+      {cuts.map((i) => (
+        <InterruptionNotice key={i.id} interruption={i} />
+      ))}
+
       <h3 className="subtitulo">Tramos que confluyen</h3>
       <ul className="lista-simple">
         {adjacent.map((s) => (
@@ -88,6 +97,12 @@ export function NodeDetail({ node, network, referenceDate, onSelectSegment, onBa
               {formatKm(s.length_km)} km{memberships.length > 1 && lineOf(s.line_id) ? ` · ${lineShortLabel(lineOf(s.line_id)!)}` : ''}
               {s.tracks === 1 ? ' · vía única' : ''}
             </span>
+            {interrupted.has(s.id) && (
+              <>
+                {' '}
+                <span className="senal roja">sin circulación</span>
+              </>
+            )}
           </li>
         ))}
         {connections.map((c) => (

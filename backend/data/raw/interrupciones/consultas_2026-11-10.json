@@ -1,0 +1,71 @@
+{
+  "descripcion": "Registro de las consultas hechas el 10 de noviembre de 2026 para rellenar backend/data/curated/interrupciones.json. Las páginas consultadas son avisos y noticias que cambian o desaparecen, así que aquí queda qué decía cada una ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "consultado_el": "2026-11-10",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red. Información del tráfico ferroviario",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-10 13:02",
+      "resumen": "Un único aviso, para Andalucía, Castilla-La Mancha y Madrid: la circulación en la línea de alta velocidad Madrid-Andalucía sigue interrumpida por el alcance entre dos trenes ocurrido el 28 de octubre, que el aviso sitúa en la zona de Mora, Orgaz y Urda. Se sigue prestando servicio en los tramos de alta velocidad Madrid-Toledo y Málaga-Sevilla. No da fecha de reanudación y remite a las compañías que operan en la línea. La cabecera de toda la web de Adif repite que la alta velocidad entre Madrid y Andalucía sigue interrumpida.",
+      "que_aporta": "Que la interrupción de la alta velocidad sigue vigente el 10 de noviembre de 2026, su fecha de inicio y los tramos que Adif da por abiertos."
+    },
+    {
+      "source_id": "adif-aviso-obras-autopista-ferroviaria",
+      "titulo": "Obras autopista ferroviaria Algeciras-Zaragoza",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/obras-autopista-ferroviaria-algeciras-zaragoza",
+      "fecha_de_la_pagina": "2026-09-30 (fecha de actualización que declara el aviso)",
+      "resumen": "Aviso para Andalucía, Aragón y Castilla-La Mancha: por las obras de adaptación de la infraestructura a la autopista ferroviaria Algeciras-Zaragoza, el servicio está interrumpido entre Córdoba y Santa Cruz de Mudela (Ciudad Real) y en el tramo Algeciras-Bobadilla-Córdoba. Hay un plan de transporte alternativo por carretera para los viajeros de media y larga distancia. Remite a Renfe para más información. No da fecha de inicio ni previsión de fin.",
+      "que_aporta": "Que la interrupción por obras sigue vigente y qué extremos da Adif al público (Córdoba y Santa Cruz de Mudela)."
+    },
+    {
+      "source_id": "adif-salidas-y-llegadas",
+      "titulo": "Salidas y llegadas de las estaciones de Santa Cruz de Mudela, Jaén, Ciudad Real y Córdoba",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estaciones",
+      "fecha_de_la_pagina": "2026-11-10, entre las 13:11 y las 13:15",
+      "paginas": [
+        "https://www.adif.es/w/50200-sta.cruz-de-mudela",
+        "https://www.adif.es/w/03100-ja%C3%A9n",
+        "https://www.adif.es/w/37200-ciudad-real",
+        "https://www.adif.es/w/50500-c%C3%B3rdoba-j.-anguita"
+      ],
+      "resumen": "Santa Cruz de Mudela: los Media Distancia y Regional Exprés Madrid-Jaén (18030 a 18037) salen de la estación con vía asignada y llevan la observación de que, por obras, el trayecto entre Almuradiel y Jaén se hace por carretera. Jaén: la misma observación en los trenes a Madrid; los Media Distancia a Córdoba y Cádiz indican que el recorrido Jaén-Córdoba se hace por carretera, y uno de ellos, todo su recorrido. Ciudad Real: todos los trenes de alta velocidad (AVE, Avant, AVLO, Alvia e Iryo), en los dos sentidos e incluidos los Avant a Puertollano, figuran con la circulación suspendida hasta nuevo aviso por el alcance en la línea Madrid-Sevilla; los Media Distancia convencionales a Alicante, Badajoz y Alcázar de San Juan circulan. Córdoba: salen trenes de Proximidad con vía asignada a Alcolea de Córdoba, Campus Universitario de Rabanales, Villarrubia y Palma del Río; los Media Distancia a Jaén indican recorrido Córdoba-Jaén por carretera; salen Avant a Sevilla, Málaga y Granada sin ninguna observación, y no figura ningún tren hacia Madrid ni hacia Puertollano. Las páginas de Linares-Baeza, Andújar y Campus de Rabanales no devolvieron información de circulación en el momento de la consulta.",
+      "que_aporta": "Hasta dónde llegan hoy los trenes: en la línea convencional, hasta Almuradiel-Viso del Marqués por el norte y hasta Alcolea de Córdoba por el sur; en la alta velocidad, ninguno entre Madrid y Córdoba por Ciudad Real, y sí de Córdoba hacia Sevilla y Málaga."
+    },
+    {
+      "source_id": "renfe-nota-md-jaen-madrid-2026-09",
+      "titulo": "Modificación del servicio de los Media Distancia Jaén-Madrid e Intercity Almería-Madrid desde el 6 de septiembre",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/07/modificacion-servicio-media-distancia-jaen-madrid-e-almeria-madrid",
+      "fecha_de_la_pagina": "2026-07-25",
+      "resumen": "Nota de prensa: desde el 6 de septiembre, cuando empiezan las obras de adaptación de la infraestructura a la autopista ferroviaria, los Media Distancia Madrid-Jaén hacen por carretera el recorrido entre Jaén y Almuradiel, con sus paradas intermedias, en los dos sentidos. En el trayecto Jaén-Córdoba se mantiene el plan de transporte por carretera que ya se prestaba desde los daños de un temporal en la infraestructura. Los Intercity Almería-Madrid dejan de circular mientras duren las obras, con dos servicios diarios por carretera entre Almería y Linares-Baeza; los dos Alvia Almería-Granada-Madrid siguen igual.",
+      "que_aporta": "La fecha de inicio (6 de septiembre de 2026), el límite norte del servicio por carretera (Almuradiel) y que entre Jaén y Córdoba ya no había trenes antes de las obras."
+    },
+    {
+      "source_id": "el-estrecho-digital-corte-algeciras",
+      "titulo": "Comienza el largo corte ferroviario entre Algeciras y Venta de Cárdenas por las obras de la Autopista Ferroviaria",
+      "editor": "El Estrecho Digital",
+      "url": "https://www.elestrechodigital.com/2026/09/07/comienza-el-largo-corte-ferroviario-entre-algeciras-y-venta-de-cardenas-por-las-obras-de-la-autopista-ferroviaria",
+      "fecha_de_la_pagina": "2026-09-07",
+      "resumen": "Noticia: el corredor entre Algeciras y Venta de Cárdenas entra el lunes 7 de septiembre en el periodo de suspensión de circulaciones previsto para las obras; Adif había situado el inicio a principios de septiembre y prevé mantenerlo hasta el otoño de 2027. Los trenes de mercancías se desvían por la línea Los Rosales-Zafra. Entre Algeciras y San Fernando de Henares se adapta el gálibo de 34 túneles, 104 pasos superiores y 18 puentes metálicos; 13 de los túneles están en la línea Alcázar de San Juan-Cádiz, entre Córdoba y el entorno de Venta de Cárdenas. Adif mantiene interrumpida desde el 6 de septiembre la circulación entre Córdoba y Santa Cruz de Mudela, con transporte por carretera para los viajeros.",
+      "que_aporta": "La previsión de fin que da Adif (otoño de 2027), el límite del corte de la vía (Venta de Cárdenas) y la confirmación del 6 de septiembre."
+    },
+    {
+      "source_id": "europa-press-reapertura-madrid-sevilla",
+      "titulo": "Puente prevé abrir con menos frecuencias la línea Madrid-Sevilla en máximo 10 días tras permiso judicial",
+      "editor": "Europa Press, publicado en Pressdigital",
+      "url": "https://www.pressdigital.es/articulo/economia/2026-11-03/6076208-puente-preve-abrir-menos-frecuencias-linea-madrid-sevilla-maximo-10-dias-permiso-judicial",
+      "fecha_de_la_pagina": "2026-11-03 14:00",
+      "resumen": "Noticia de agencia sobre la rueda de prensa posterior al Consejo de Ministros del 3 de noviembre de 2026: el ministro de Transportes estima que la línea Madrid-Sevilla podrá volver a prestar servicio en un máximo de diez días naturales desde que el juzgado autorice las obras de reconstrucción en Urda; ese día se pidió la autorización. La reapertura sería con menos frecuencias, sin reducir plazas, hasta completar el despliegue del ERTMS de nivel 2 y una revisión de los sistemas de seguridad de la línea.",
+      "que_aporta": "Que el 10 de noviembre de 2026 no hay fecha de reanudación, solo una estimación condicionada a la autorización judicial."
+    }
+  ],
+  "otras_comprobaciones": [
+    "La nota de prensa de Renfe y el aviso de Adif no dan previsión de fin de las obras; la previsión de otoño de 2027 procede de la información de Adif recogida por la prensa (El Estrecho Digital, 7 de septiembre de 2026; El Mercantil, 24 de julio de 2026; y la fuente adif-obras-autopista-ferroviaria ya registrada).",
+    "Sobre el corte anterior entre Jaén y Córdoba por el temporal de enero de 2026, la prensa consultada da fechas distintas (23 y 26 de enero) y un restablecimiento intermedio, y no se encontró una fecha en una fuente oficial: no se registra como interrupción propia y queda mencionado en la nota de la interrupción por obras.",
+    "Los 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía del GTFS, válidos del 8 al 15 de noviembre de 2026, no figuran en las salidas de Ciudad Real del 10 de noviembre."
+  ]
+}

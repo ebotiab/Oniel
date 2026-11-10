@@ -63,4 +63,10 @@ async def get_segment_services(
                 basis=d.segment_pass.basis,
             )
         )
-    return SegmentServicesOut(segment=segment, date=day, passes=passes, counts=counts)
+    return SegmentServicesOut(
+        segment=segment,
+        date=day,
+        passes=passes,
+        counts=counts,
+        interruptions=await network_repo.fetch_interruptions(conn, day=day, segment_id=segment.id),
+    )

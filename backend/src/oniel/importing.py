@@ -76,12 +76,13 @@ async def run_import_all(
     feed: Path,
     data_dir: Path,
     snapshot_dir: Path | None,
+    interruptions: Path | None = None,
     if_changed: bool = False,
     source_id: str = "renfe-gtfs-av-ld-md",
     operator_id: str = "renfe",
     src_dir: Path = SRC_DIR,
 ) -> dict[str, Any]:
-    """Migra, importa la red y los horarios, exporta la instantánea y registra la huella.
+    """Migra, importa la red, las interrupciones y los horarios, exporta la instantánea y registra la huella.
 
     Con ``if_changed`` devuelve ``{"skipped": True}`` sin tocar los datos cuando la huella coincide
     con la de la última importación. Las migraciones se aplican siempre: son baratas y la tabla de
@@ -92,6 +93,7 @@ async def run_import_all(
     from oniel.export.snapshot import export_snapshot
     from oniel.gtfs.importer import import_gtfs
     from oniel.network.importer import import_network
+    from oniel.network.interruptions import import_interruptions
 
     migrations = await migrate(conn)
     fingerprint = import_fingerprint(data_dir, src_dir)
@@ -99,6 +101,12 @@ async def run_import_all(
         return {"skipped": True, "fingerprint": fingerprint, "migrations": migrations}
 
     nets = [await import_network(conn, path, sources, data_dir) for path in specs]
+    # Las interrupciones se refieren a nodos de las líneas: van después de la red.
+    cuts = (
+        await import_interruptions(conn, interruptions, sources, data_dir)
+        if interruptions
+        else None
+    )
     gtfs = await import_gtfs(conn, feed, specs, source_id=source_id, operator_id=operator_id)
     snap = await export_snapshot(conn, snapshot_dir) if snapshot_dir else None
     await record_import_fingerprint(conn, fingerprint)
@@ -107,6 +115,7 @@ async def run_import_all(
         "fingerprint": fingerprint,
         "migrations": migrations,
         "network": nets,
+        "interruptions": cuts,
         "gtfs": gtfs,
         "snapshot": snap,
     }

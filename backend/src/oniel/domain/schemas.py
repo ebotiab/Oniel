@@ -89,6 +89,45 @@ class ConnectionOut(BaseModel):
     line_id: str | None = None
 
 
+class SourceRef(BaseModel):
+    """Lo justo de una fuente para citarla junto a un dato: quién lo publica y dónde."""
+
+    id: str
+    name: str
+    publisher: str
+    url: str | None = None
+
+
+class InterruptionOut(BaseModel):
+    """Interrupción del servicio entre dos nodos de una línea, con sus fechas y sus fuentes.
+
+    Está vigente los días ``start_date <= día < ended_on`` (sin límite si ``ended_on`` es nulo).
+    """
+
+    id: str
+    line_id: str
+    from_node_id: str
+    to_node_id: str
+    from_name: str
+    to_name: str
+    km_from: float
+    km_to: float
+    segment_ids: list[str]
+    start_date: dt.date
+    expected_end_date: dt.date | None = None
+    expected_end_text: str | None = None
+    ended_on: dt.date | None = None
+    reason: str
+    note: str | None = None
+    sources: list[SourceRef]
+    checked_on: dt.date
+    #: Nota para los pasos por tramo: «Horario publicado; sin circulación real desde el … (fuente)».
+    schedule_note: str
+
+    def active_on(self, day: dt.date) -> bool:
+        return self.start_date <= day and (self.ended_on is None or day < self.ended_on)
+
+
 class Feature(BaseModel):
     type: Literal["Feature"] = "Feature"
     id: str
@@ -112,6 +151,8 @@ class NetworkOut(BaseModel):
     segment_features: FeatureCollection
     node_features: FeatureCollection
     connection_features: FeatureCollection
+    #: Todas las interrupciones registradas, vigentes o ya terminadas; el visor decide por fecha.
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
 class CoverageOut(BaseModel):
@@ -169,6 +210,8 @@ class SegmentServicesOut(BaseModel):
     date: dt.date
     passes: list[SegmentPassOut]
     counts: dict[str, int]
+    #: Interrupciones vigentes en el tramo ese día: los pasos son los del horario publicado.
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
 class NodeServicesOut(BaseModel):
@@ -209,6 +252,8 @@ class ClosureAlternative(BaseModel):
     via: list[str]
     single_track_km: float
     note: str
+    #: Interrupciones vigentes ese día en algún tramo del recorrido alternativo.
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
 class ClosureResult(BaseModel):
@@ -218,5 +263,7 @@ class ClosureResult(BaseModel):
     counts: dict[str, int]
     items: list[ClosureResultItem]
     alternatives: list[ClosureAlternative] = Field(default_factory=list)
+    #: Interrupciones vigentes ese día en el tramo que se cierra: el cierre simulado se suma a una real.
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
     method: str
     caveats: list[str]

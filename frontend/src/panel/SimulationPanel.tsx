@@ -2,7 +2,8 @@ import { useState, type FormEvent } from 'react'
 
 import { ApiError, simulateClosure } from '../data/api'
 import { useApiStatus } from '../data/useApiStatus'
-import type { ClosureResult, ClosureStatus, SegmentOut } from '../data/types'
+import type { ClosureResult, ClosureStatus, InterruptionOut, SegmentOut } from '../data/types'
+import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
 import { STATUS } from './labels'
@@ -12,6 +13,8 @@ interface Props {
   referenceDate: string | null
   feedStart: string | null
   feedEnd: string | null
+  /** Interrupciones del servicio vigentes hoy en el tramo que se va a cerrar. */
+  interruptions: InterruptionOut[]
   result: ClosureResult | null
   onResult: (r: ClosureResult | null) => void
   onBack: () => void
@@ -19,7 +22,7 @@ interface Props {
 
 const ORDER: ClosureStatus[] = ['afectado_publicado', 'afectado_estimado', 'indeterminado', 'no_afectado']
 
-export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, result, onResult, onBack }: Props) {
+export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, interruptions, result, onResult, onBack }: Props) {
   const [date, setDate] = useState(() => result?.request.date ?? referenceDate ?? todayIso())
   const [start, setStart] = useState(result?.request.start.slice(0, 5) ?? '08:00')
   const [end, setEnd] = useState(result?.request.end.slice(0, 5) ?? '09:00')
@@ -58,6 +61,14 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
         Elige un día y una franja. Oniel compara la ventana con la hora en que cada tren recorre el tramo y distingue
         horarios publicados, pasos estimados y casos indeterminados.
       </p>
+      {/* antes de calcular: el tramo ya está interrumpido hoy; con resultado, lo dice el propio resultado */}
+      {!result &&
+        interruptions.map((i) => (
+          <p key={i.id} className="nota-horario" data-testid="sim-interrumpido">
+            Este tramo ya está sin circulación desde el {formatDateLong(i.start_date)} ({mainSourceLabel(i)}). La simulación se calcula sobre el
+            horario publicado.
+          </p>
+        ))}
 
       <form className="formulario" onSubmit={submit}>
         <label>
@@ -96,6 +107,11 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
             {result.window_label}
             {result.counts.indeterminado ? `, y ${result.counts.indeterminado} ${result.counts.indeterminado === 1 ? 'indeterminado' : 'indeterminados'}` : ''}.
           </p>
+          {result.interruptions?.map((i) => (
+            <p key={i.id} className="nota-horario" data-testid="sim-resultado-interrumpido">
+              Ese día el tramo ya está interrumpido. {i.schedule_note}
+            </p>
+          ))}
           {result.alternatives.length > 0 && (
             <aside className="alternativa" aria-label="Recorrido alternativo" data-testid="sim-alternativa">
               <p className="sobre">Recorrido alternativo cargado en Oniel</p>
@@ -104,6 +120,13 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, re
                   Entre <strong>{a.from_name}</strong> y <strong>{a.to_name}</strong> existe otra línea: {a.line_name.charAt(0).toLowerCase() + a.line_name.slice(1)}
                   {a.via.length ? `, por ${a.via.join(', ')}` : ''}. Son {formatKm(a.length_km)} km frente a {formatKm(a.closed_line_length_km)} km por la línea cerrada
                   {a.single_track_km > 0 ? `, con ${formatKm(a.single_track_km)} km de vía única` : ''}. Oniel no reasigna los trenes afectados; solo señala que la alternativa existe.
+                  {a.interruptions?.map((i) => (
+                    <span key={i.id} data-testid="sim-alternativa-interrumpida">
+                      {' '}
+                      Ese día no está disponible: no hay circulación entre {i.from_name} y {i.to_name} desde el {formatDateLong(i.start_date)} (
+                      {mainSourceLabel(i)}).
+                    </span>
+                  ))}
                 </p>
               ))}
             </aside>
