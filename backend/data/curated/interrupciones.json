@@ -1,0 +1,41 @@
+{
+  "interruptions": [
+    {
+      "id": "lav-madrid-andalucia-2026-10-28",
+      "line_id": "lav-madrid-sevilla",
+      "from_node": "bif-la-sagra",
+      "to_node": "cordoba",
+      "start_date": "2026-10-28",
+      "expected_end_date": null,
+      "expected_end_text": null,
+      "ended_on": null,
+      "reason": "Circulación suspendida por Adif tras el accidente ferroviario del 28 de octubre de 2026 en el entorno de Urda (Toledo).",
+      "note": "Siguen en servicio, según Adif, los tramos Madrid–Toledo y Málaga–Sevilla, y de Córdoba salen trenes a Sevilla, Málaga y Granada. No hay fecha de reanudación: el Ministerio de Transportes estimó el 3 de noviembre de 2026 un máximo de diez días naturales desde que el juzgado autorice las obras de reparación.",
+      "source_ids": [
+        "adif-estado-de-la-red",
+        "adif-salidas-y-llegadas",
+        "europa-press-reapertura-madrid-sevilla"
+      ],
+      "checked_on": "2026-11-10"
+    },
+    {
+      "id": "convencional-obras-autopista-ferroviaria-2026-09-06",
+      "line_id": "convencional-madrid-alcazar-cordoba",
+      "from_node": "almuradiel-viso-del-marques",
+      "to_node": "alcolea-de-cordoba",
+      "start_date": "2026-09-06",
+      "expected_end_date": null,
+      "expected_end_text": "otoño de 2027",
+      "ended_on": null,
+      "reason": "Obras de adaptación de la línea a la autopista ferroviaria Algeciras–Madrid–Zaragoza: ampliación del gálibo de túneles y otras estructuras.",
+      "note": "Los trenes de viajeros llegan por el norte hasta Almuradiel-Viso del Marqués y por el sur hasta Alcolea de Córdoba; entre ambas estaciones se viaja por carretera. El corte de la vía que anunció Adif empieza en Venta de Cárdenas. Entre Jaén y Córdoba ya se viajaba por carretera antes de las obras, por los daños de un temporal, según Renfe.",
+      "source_ids": [
+        "adif-aviso-obras-autopista-ferroviaria",
+        "renfe-nota-md-jaen-madrid-2026-09",
+        "adif-salidas-y-llegadas",
+        "el-estrecho-digital-corte-algeciras"
+      ],
+      "checked_on": "2026-11-10"
+    }
+  ]
+}

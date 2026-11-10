@@ -9,18 +9,21 @@ from typing import Any
 import asyncpg
 
 from oniel.db.pool import fetch_int
+from oniel.domain.interruptions import alternative_note, schedule_note
 from oniel.domain.schemas import (
     ClosureAlternative,
     ConnectionOut,
     CoverageOut,
     Feature,
     FeatureCollection,
+    InterruptionOut,
     LineSummary,
     NetworkOut,
     NodeOut,
     Operator,
     SegmentOut,
     Source,
+    SourceRef,
 )
 
 
@@ -36,7 +39,8 @@ def coverage_notice(lines: list[LineSummary]) -> str:
     return (
         f"Esta versión de Oniel carga {listed}, con los servicios de Renfe que las recorren."
         " Los horarios son los publicados por Renfe y no reflejan interrupciones ni"
-        " alteraciones del servicio."
+        " alteraciones del servicio; las interrupciones que Oniel conoce se señalan aparte, con"
+        " su fuente y la fecha en que se comprobaron."
     )
 
 
@@ -193,6 +197,72 @@ async def fetch_connections(
     ]
 
 
+async def fetch_interruptions(
+    conn: asyncpg.Connection,
+    *,
+    day: dt.date | None = None,
+    segment_id: str | None = None,
+    line_id: str | None = None,
+) -> list[InterruptionOut]:
+    """Interrupciones registradas, con sus tramos y sus fuentes.
+
+    ``day`` deja solo las vigentes ese día; ``segment_id``, las que afectan a ese tramo;
+    ``line_id``, las de esa línea. Los tramos afectados son los que quedan entre los dos nodos
+    de la interrupción según su orden en la línea.
+    """
+    rows = await conn.fetch(
+        """
+        SELECT i.*, a.name AS from_name, b.name AS to_name, lf.km AS km_from, lt.km AS km_to,
+               ARRAY(SELECT s.id FROM segments s
+                     WHERE s.line_id = i.line_id AND s.seq >= lf.seq AND s.seq < lt.seq
+                     ORDER BY s.seq) AS segment_ids
+        FROM interruptions i
+        JOIN lines l ON l.id = i.line_id
+        JOIN line_nodes lf ON lf.line_id = i.line_id AND lf.node_id = i.from_node_id
+        JOIN line_nodes lt ON lt.line_id = i.line_id AND lt.node_id = i.to_node_id
+        JOIN nodes a ON a.id = i.from_node_id
+        JOIN nodes b ON b.id = i.to_node_id
+        WHERE ($1::date IS NULL OR (i.start_date <= $1 AND (i.ended_on IS NULL OR $1 < i.ended_on)))
+          AND ($2::text IS NULL OR i.line_id = $2)
+        ORDER BY l.sort_order, i.line_id, lf.seq, i.start_date, i.id
+        """,
+        day,
+        line_id,
+    )
+    source_rows = await conn.fetch("SELECT id, name, publisher, url FROM sources")
+    sources = {r["id"]: SourceRef(**dict(r)) for r in source_rows}
+    out: list[InterruptionOut] = []
+    for r in rows:
+        segment_ids = list(r["segment_ids"])
+        if segment_id is not None and segment_id not in segment_ids:
+            continue
+        refs = [sources[s] for s in r["source_ids"] if s in sources]
+        publisher = refs[0].publisher if refs else "fuente sin registrar"
+        out.append(
+            InterruptionOut(
+                id=r["id"],
+                line_id=r["line_id"],
+                from_node_id=r["from_node_id"],
+                to_node_id=r["to_node_id"],
+                from_name=r["from_name"],
+                to_name=r["to_name"],
+                km_from=float(r["km_from"]),
+                km_to=float(r["km_to"]),
+                segment_ids=segment_ids,
+                start_date=r["start_date"],
+                expected_end_date=r["expected_end_date"],
+                expected_end_text=r["expected_end_text"],
+                ended_on=r["ended_on"],
+                reason=r["reason"],
+                note=r["note"],
+                sources=refs,
+                checked_on=r["checked_on"],
+                schedule_note=schedule_note(r["start_date"], r["ended_on"], publisher),
+            )
+        )
+    return out
+
+
 async def fetch_network(conn: asyncpg.Connection) -> NetworkOut:
     lines = await fetch_lines(conn)
     line_rows = await conn.fetch("SELECT id, name, geometry FROM lines ORDER BY sort_order, id")
@@ -242,17 +312,19 @@ async def fetch_network(conn: asyncpg.Connection) -> NetworkOut:
                 if g is not None
             ]
         ),
+        interruptions=await fetch_interruptions(conn),
     )
 
 
 async def fetch_alternatives(
-    conn: asyncpg.Connection, segment: SegmentOut
+    conn: asyncpg.Connection, segment: SegmentOut, day: dt.date | None = None
 ) -> list[ClosureAlternative]:
     """Líneas cargadas que unen un nodo anterior y otro posterior al tramo cerrado.
 
     Se buscan, en la línea del tramo, los nodos compartidos con otra línea situados antes y
     después del tramo; si una misma línea tiene uno a cada lado, existe un recorrido alternativo
-    entre ambos. Se eligen los nodos compartidos más cercanos al tramo.
+    entre ambos. Se eligen los nodos compartidos más cercanos al tramo. Con ``day``, cada
+    alternativa lleva las interrupciones vigentes ese día en su recorrido.
     """
     rows = await conn.fetch(
         """
@@ -310,6 +382,19 @@ async def fetch_alternatives(
         note += (
             " Oniel no reasigna los trenes afectados a esta alternativa; solo señala que existe."
         )
+        # Una interrupción corta la alternativa si comparte algún kilómetro con su recorrido.
+        blocking = (
+            [
+                i
+                for i in await fetch_interruptions(conn, day=day, line_id=line_id)
+                if i.km_from < hi - 0.05 and i.km_to > lo + 0.05
+            ]
+            if day is not None
+            else []
+        )
+        for i in blocking:
+            publisher = i.sources[0].publisher if i.sources else "fuente sin registrar"
+            note += alternative_note(i.from_name, i.to_name, i.start_date, publisher)
         out.append(
             ClosureAlternative(
                 line_id=line_id,
@@ -323,6 +408,7 @@ async def fetch_alternatives(
                 via=via,
                 single_track_km=round(single_km, 1),
                 note=note,
+                interruptions=blocking,
             )
         )
     return out

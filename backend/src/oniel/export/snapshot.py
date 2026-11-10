@@ -54,7 +54,15 @@ async def export_snapshot(
                     basis=d.segment_pass.basis,
                 )
             )
-        payload = SegmentServicesOut(segment=segment, date=day, passes=passes, counts=kinds)
+        payload = SegmentServicesOut(
+            segment=segment,
+            date=day,
+            passes=passes,
+            counts=kinds,
+            interruptions=[
+                i for i in network.interruptions if segment.id in i.segment_ids and i.active_on(day)
+            ],
+        )
         _write(
             out_dir / "segments" / f"{safe_name(segment.id)}.json", payload.model_dump(mode="json")
         )
@@ -69,4 +77,5 @@ async def export_snapshot(
         "date": day.isoformat(),
         "segments": len(network.segments),
         "nodes": len(network.nodes),
+        "interruptions": len(network.interruptions),
     }

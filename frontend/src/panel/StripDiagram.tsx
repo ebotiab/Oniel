@@ -1,4 +1,4 @@
-import type { NetworkOut, NodeOut, SegmentOut } from '../data/types'
+import type { InterruptionOut, NetworkOut, NodeOut, SegmentOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { formatKm } from '../app/state'
 import { spreadLabels } from './layout'
@@ -9,6 +9,8 @@ interface Props {
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
+  /** Interrupciones vigentes hoy: sus tramos llevan la vía en rojo, como en el mapa. */
+  interruptions?: InterruptionOut[]
   counts: Record<string, number> | null
   /** Rótulo de la columna de barras («trenes el 13 nov»); sin él no se rotula. */
   countsLabel?: string | null
@@ -33,7 +35,8 @@ function label(n: NodeOut): string {
 }
 
 /** Esquema vertical de una línea: estaciones, puestos y bifurcaciones sobre una escala de kilómetros. */
-export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, counts, countsLabel = null, onSelect, onHover, compact = false }: Props) {
+export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, interruptions = [], counts, countsLabel = null, onSelect, onHover, compact = false }: Props) {
+  const cut = new Set(interruptions.flatMap((i) => i.segment_ids))
   const nodes = network.nodes.filter((n) => n.line_id === lineId)
   const segments = network.segments.filter((s) => s.line_id === lineId)
   const withConnections = new Set(network.connections.map((c) => c.node_id))
@@ -74,9 +77,17 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
           {countsLabel}
         </text>
       )}
-      {/* la vía: trazo grueso en vía doble, fino en vía única */}
+      {/* la vía: trazo grueso en vía doble, fino en vía única; en rojo donde hoy no hay circulación */}
       {segments.map((s) => (
-        <line key={`via-${s.id}`} x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke="var(--tinta)" strokeWidth={s.tracks === 1 ? 1.5 : 3} />
+        <line
+          key={`via-${s.id}`}
+          x1={X}
+          y1={y(s.km_from)}
+          x2={X}
+          y2={y(s.km_to)}
+          stroke={cut.has(s.id) ? 'var(--senal-roja)' : 'var(--tinta)'}
+          strokeWidth={s.tracks === 1 ? 1.5 : 3}
+        />
       ))}
       {Array.from({ length: Math.floor(kmMax / 10) + 1 }, (_, i) => i * 10).map((km) => (
         <g key={km}>
@@ -95,7 +106,8 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
         const sel = isSelSeg(s)
         const closed = closedSegmentId === s.id
         const hov = hoverId === s.id
-        const color = closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : 'var(--tinta)'
+        const interrupted = cut.has(s.id)
+        const color = closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : interrupted ? 'var(--senal-roja)' : 'var(--tinta)'
         const n = counts?.[s.id]
         const inset = Math.min(6, Math.max(2, (y2 - y1) / 4))
         return (
@@ -104,9 +116,10 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             className="esquema-tramo"
             role="button"
             tabIndex={0}
-            aria-label={`Tramo ${s.from_name} – ${s.to_name}, ${formatKm(s.length_km)} km${s.tracks === 1 ? ', vía única' : ''}`}
+            aria-label={`Tramo ${s.from_name} – ${s.to_name}, ${formatKm(s.length_km)} km${s.tracks === 1 ? ', vía única' : ''}${interrupted ? ', sin circulación hoy' : ''}`}
             aria-pressed={sel}
             data-testid={`esquema-tramo-${s.seq}`}
+            data-interrumpido={interrupted ? 'true' : undefined}
             onClick={() => onSelect({ type: 'tramo', id: s.id })}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -122,6 +135,8 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             {(sel || closed || hov) && (
               <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={color} strokeWidth={sel || closed ? 7 : 5} opacity={sel || closed ? 1 : 0.35} strokeLinecap="round" />
             )}
+            {/* seleccionado e interrumpido: el rojo de la vía sigue a la vista dentro del azul de la selección */}
+            {sel && interrupted && !closed && <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke="var(--senal-roja)" strokeWidth={3} strokeLinecap="round" />}
             {!compact && n !== undefined && maxCount > 0 && y2 - y1 > 14 && (
               <g className="esquema-conteo" aria-hidden="true">
                 <rect x={X + 9} y={y1 + inset + 2} width={Math.max(2, (n / maxCount) * 26)} height={Math.max(2, y2 - y1 - 2 * inset - 4)} rx={1} fill={closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : 'var(--tinta)'} opacity={sel || closed ? 0.22 : 0.1} />

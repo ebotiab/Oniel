@@ -1,14 +1,17 @@
-import type { CoverageOut } from '../data/types'
+import type { CoverageOut, InterruptionOut } from '../data/types'
 import type { ApiStatus } from '../data/api'
 import { formatDate, formatKm } from '../app/state'
+import { InterruptionNotice } from './InterruptionNotice'
 
 interface Props {
   coverage: CoverageOut
+  /** Interrupciones del servicio vigentes hoy. */
+  interruptions: InterruptionOut[]
   status: ApiStatus
   onClose: () => void
 }
 
-export function CoveragePanel({ coverage, status, onClose }: Props) {
+export function CoveragePanel({ coverage, interruptions, status, onClose }: Props) {
   return (
     <section className="detalle cobertura" aria-labelledby="cob-titulo" data-testid="panel-cobertura">
       <button type="button" className="enlace volver" onClick={onClose}>
@@ -43,6 +46,20 @@ export function CoveragePanel({ coverage, status, onClose }: Props) {
         {status === 'ausente' ? ' Esta vista previa muestra una instantánea estática; la simulación necesita el servidor.' : ''}
         {status === 'buscando' ? ' El servidor se está despertando; hasta que responda se muestra la instantánea estática.' : ''}
       </p>
+      <h3 className="subtitulo">Interrupciones del servicio</h3>
+      {interruptions.length > 0 ? (
+        <div data-testid="cobertura-interrupciones">
+          <p className="texto suave">
+            Tramos de las líneas cargadas en los que hoy no circulan trenes. Se registran y se revisan a mano, cada una con sus fuentes y la fecha de la
+            última comprobación.
+          </p>
+          {interruptions.map((i) => (
+            <InterruptionNotice key={i.id} interruption={i} />
+          ))}
+        </div>
+      ) : (
+        <p className="texto suave">Oniel no tiene registrada ninguna interrupción vigente hoy en las líneas cargadas.</p>
+      )}
       <h3 className="subtitulo">Pendiente de cargar</h3>
       <p className="texto suave">
         El resto de la red ferroviaria española, otros operadores (Iryo, Ouigo, mercancías) y otros medios de transporte. El modelo

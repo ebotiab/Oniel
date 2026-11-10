@@ -32,6 +32,7 @@ CURATED = settings.data_dir / "curated"
 #: Líneas cargadas, en el orden en que se importan (la primera define los nodos compartidos).
 SPECS_DEFAULT = [CURATED / f"{line_id}.json" for line_id in settings.line_ids]
 SOURCES_DEFAULT = CURATED / "sources.json"
+INTERRUPTIONS_DEFAULT = CURATED / "interrupciones.json"
 FEED_DEFAULT = settings.data_dir / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
 SNAPSHOT_DEFAULT = settings.data_dir.parent.parent / "frontend" / "public" / "data"
 
@@ -107,6 +108,23 @@ def import_network_cmd(
     _echo_json(_run(go))
 
 
+@import_app.command("interruptions")
+def import_interruptions_cmd(
+    file: Annotated[
+        Path, typer.Option(help="Fichero curado de interrupciones")
+    ] = INTERRUPTIONS_DEFAULT,
+    sources: Annotated[Path, typer.Option(help="Registro de fuentes")] = SOURCES_DEFAULT,
+) -> None:
+    """Importa (o reimporta) las interrupciones del servicio; la red tiene que estar cargada."""
+    from oniel.network.interruptions import import_interruptions
+
+    async def go() -> dict[str, Any]:
+        async with connect(settings.database_url) as conn:
+            return await import_interruptions(conn, file, sources, settings.data_dir)
+
+    _echo_json(_run(go))
+
+
 @import_app.command("gtfs")
 def import_gtfs_cmd(
     feed: Annotated[Path, typer.Option(help="Fichero GTFS (zip)")] = FEED_DEFAULT,
@@ -138,7 +156,7 @@ def import_all_cmd(
         ),
     ] = False,
 ) -> None:
-    """Migra, importa la red de todas las líneas y los horarios y exporta la instantánea estática."""
+    """Migra, importa la red, las interrupciones y los horarios y exporta la instantánea estática."""
     from oniel.importing import run_import_all
 
     async def go() -> dict[str, Any]:
@@ -150,6 +168,7 @@ def import_all_cmd(
                 feed=FEED_DEFAULT,
                 data_dir=settings.data_dir,
                 snapshot_dir=SNAPSHOT_DEFAULT,
+                interruptions=INTERRUPTIONS_DEFAULT,
                 if_changed=if_changed,
             )
 
@@ -160,9 +179,13 @@ def import_all_cmd(
 def validate_cmd(
     spec: SpecsOption = None,
     feed: Annotated[Path, typer.Option()] = FEED_DEFAULT,
+    interruptions: Annotated[
+        Path, typer.Option(help="Fichero curado de interrupciones")
+    ] = INTERRUPTIONS_DEFAULT,
+    sources: Annotated[Path, typer.Option(help="Registro de fuentes")] = SOURCES_DEFAULT,
 ) -> None:
-    """Comprueba la red construida y la resolución de los horarios sin tocar la base de datos."""
-    from oniel.validate import validate_all
+    """Comprueba la red, la resolución de los horarios y las interrupciones sin tocar la base de datos."""
+    from oniel.validate import validate_all, validate_interruptions
 
     # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
     # parada puede ser salida hacia otra línea y medir la distancia por ella.
@@ -171,7 +194,9 @@ def validate_cmd(
         validate_all(path, feed, settings.data_dir, [p for p in context if p != path])
         for path in _specs(spec)
     ]
-    _echo_json(reports if len(reports) > 1 else reports[0])
+    # Las interrupciones se contrastan con todas las líneas configuradas, se valide una o todas.
+    reports.append(validate_interruptions(interruptions, sources, context, settings.data_dir))
+    _echo_json(reports)
     if any(r["problems"] for r in reports):
         raise typer.Exit(code=1)
 

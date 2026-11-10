@@ -10,7 +10,8 @@ import { LineOverview } from '../panel/LineOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
-import { lineKind, lineShortLabel, parseHash, toHash, type Selection } from './state'
+import { activeInterruptions, bySegment } from './interruptions'
+import { lineKind, lineShortLabel, parseHash, toHash, todayIso, type Selection } from './state'
 import './app.css'
 
 function useMedia(query: string): boolean {
@@ -137,13 +138,18 @@ export default function App() {
     network?.lines[0]?.id ??
     ''
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
+  // Interrupciones vigentes hoy: se marcan en rojo en el mapa y en el esquema, y se explican en el panel.
+  const today = useMemo(() => todayIso(), [])
+  const interruptions = useMemo(() => activeInterruptions(network, today), [network, today])
+  const interrupted = useMemo(() => bySegment(interruptions), [interruptions])
   const referenceDate = coverage?.reference_date ?? null
   const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
 
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
-  else if (showCoverage && coverage) panel = <CoveragePanel coverage={coverage} status={status} onClose={() => setShowCoverage(false)} />
+  else if (showCoverage && coverage)
+    panel = <CoveragePanel coverage={coverage} interruptions={interruptions} status={status} onClose={() => setShowCoverage(false)} />
   else if (segment && route.simulacion)
     panel = (
       <SimulationPanel
@@ -151,6 +157,7 @@ export default function App() {
         referenceDate={referenceDate}
         feedStart={coverage?.feed_start ?? null}
         feedEnd={coverage?.feed_end ?? null}
+        interruptions={interrupted.get(segment.id) ?? []}
         result={result}
         onResult={setResult}
         onBack={() => setRoute({ selection, simulacion: false })}
@@ -163,6 +170,7 @@ export default function App() {
         segment={segment}
         network={network}
         referenceDate={referenceDate}
+        interruptions={interrupted.get(segment.id) ?? []}
         onSimulate={() => setRoute({ selection, simulacion: true })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
         onBack={() => select(null)}
@@ -175,6 +183,7 @@ export default function App() {
         node={node}
         network={network}
         referenceDate={referenceDate}
+        interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
         onBack={() => select(null)}
       />
@@ -190,6 +199,7 @@ export default function App() {
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
+        interruptions={interruptions}
         onSelect={select}
         onHover={setHoverId}
         compact={mobile}
@@ -208,6 +218,7 @@ export default function App() {
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
+        interrupted={interrupted}
         onSelect={select}
         onHover={setHoverId}
         padding={padding}
@@ -246,7 +257,14 @@ export default function App() {
         )}
         <div className="panel-contenido">{panel}</div>
       </aside>
-      {!mobile && <Legend closed={closedSegmentId !== null} lines={lines} singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false} />}
+      {!mobile && (
+        <Legend
+          closed={closedSegmentId !== null}
+          interrupted={interruptions.length > 0}
+          lines={lines}
+          singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false}
+        />
+      )}
     </div>
   )
 }
