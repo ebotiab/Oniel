@@ -66,7 +66,7 @@ El orden es orientativo. #16, #28 y #30 no dependen de nada y pueden adelantarse
 
 ## Pendientes menores
 
-Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas, recordatorio programado de revisión de las interrupciones, la escala del mapa detrás de la leyenda, `uv run fastapi dev` en un entorno recién creado y la pastilla de cobertura con más de tres líneas.
+Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas, recordatorio programado de revisión de las interrupciones, la escala del mapa detrás de la leyenda y la pastilla de cobertura con más de tres líneas.
 
 ## Proteger `main` exigiendo el CI
 

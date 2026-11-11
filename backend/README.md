@@ -5,7 +5,7 @@ API FastAPI, CLI de datos (`oniel-data`, Typer) y reglas de simulación. Las ins
 ```bash
 uv sync
 uv run oniel-data import all
-uv run fastapi dev
+uv run uvicorn oniel.api.main:app --reload
 uv run pytest
 ```
 
