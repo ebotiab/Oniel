@@ -59,10 +59,9 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 11. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Depende de #22 y #23.
 12. [#26](https://github.com/ebotiab/Oniel/issues/26) Visor: cobertura por estación, destinos directos y frecuencias.
 13. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #21 y #26.
-14. [#28](https://github.com/ebotiab/Oniel/issues/28) Visor: buscar una estación o una línea. Por nombre o por código de Adif, también en móvil y sin API.
-15. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Depende de #21.
+14. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Depende de #21.
 
-El orden es orientativo. #16, #28 y #30 no dependen de nada y pueden adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
+El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 

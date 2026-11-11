@@ -43,7 +43,7 @@ Tipografía
 - Escala: 11 / 12,5 / 14 / 17 / 22 / 28 px. Interlineado 1,35 en texto corrido.
 
 Composición
-- Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; cobertura arriba a la derecha.
+- Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; buscador en la cabecera, junto a la marca; cobertura arriba a la derecha.
 - Cabecera de la línea: título, una ficha de una sola línea (longitud y velocidad máxima) y una frase de entrada en cuerpo normal. El resto de la descripción y los datos técnicos quedan plegados bajo «Más detalle» (véase «Patrón de ficha») y se leen en párrafos cortos, en tinta, con interlineado 1,5. Bajo el esquema, una sola nota en gris terciario con la fecha de las barras y la pista de uso; la columna de barras lleva su propio rótulo («trenes el 13 nov»). La ficha no se repite en la descripción.
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
 - Varias líneas: el mapa las dibuja todas; el panel muestra una a la vez, elegida con pestañas sobre el esquema, y cambia solo a la línea de lo que se selecciona en el mapa. Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
@@ -72,6 +72,15 @@ Patrón de ficha (aplicado el 11 de noviembre de 2026 a tramo, nodo y línea)
 Rutas
 - Toda vista tiene su ruta en el hash de la URL, para poder compartir un enlace exacto: `#/linea/<id>` (la línea a la vista en el panel), `#/tramo/<id>`, `#/nodo/<id>`, `#/tramo/<id>/cierre` (la simulación) y `#/cobertura`. Se leen y se escriben en `parseHash` y `toHash` (`frontend/src/app/state.ts`).
 - Una vista nueva lleva la suya desde el primer día y se añade a esas dos funciones. No tienen ruta los estados que no son una vista: si el detalle está plegado, el punto por el que se pasa el ratón, la hoja del móvil ampliada o no. El resultado de una simulación todavía no la tiene (la ventana horaria no va en la URL); le corresponde al escenario serializable de la hoja de ruta.
+
+Buscador (decidido el 11 de noviembre de 2026)
+- Un solo buscador, en la cabecera, para llegar a cualquier estación, a cualquier otro punto de la red o a una línea. En escritorio es un campo junto a la marca, sobre el panel, y su lista de resultados ocupa el ancho del panel. En el móvil es una lupa al final de la cabecera, tras la cobertura, que despliega el campo a todo el ancho; «Cerrar» lo recoge. Se descartó ponerlo dentro del panel: en el móvil obligaba a abrir la hoja inferior y el teclado tapaba los resultados. Capturas en `docs/capturas/buscador/`.
+- Se escribe el nombre como salga: sin acentos ni mayúsculas («alcazar», «anover»). El código de Adif se admite, pero no se pide ni se enseña salvo que se haya buscado por él.
+- Cada resultado son dos líneas: el nombre en negrita y, debajo, en gris, qué es y en qué líneas está («Estación · Madrid – Sevilla y Manzanares – Ciudad Real», «Puesto de adelantamiento (PAET) · Madrid – Sevilla», «Línea convencional · 64,4 km»). El resultado activo lleva el fondo hundido y un filete azul, el color de la selección.
+- Con el campo vacío ofrece las líneas, bajo el rótulo «Líneas»: se llega a cualquiera sin escribir.
+- Teclado: «/» o Ctrl/⌘ + K enfocan el campo (la tecla «/» se muestra dentro del campo en escritorio), las flechas recorren los resultados, Intro abre el primero o el elegido y Escape cierra. Es un «combobox» de WAI-ARIA con su lista de opciones.
+- Elegir una estación la selecciona como al tocarla en el mapa; elegir una línea la pone en el panel. Las dos cosas quedan en la URL (`#/nodo/<id>`, `#/linea/<id>`), como dice «Rutas».
+- El mismo componente (`SearchBox` con `scope="nodos"`) es el selector de estación para otros paneles, como el comparador de recorridos.
 
 Movimiento
 - Solo en respuesta a una acción: enfocar el mapa al seleccionar, abrir el panel de simulación, resaltar en el esquema lo que se resalta en el mapa. Se respeta `prefers-reduced-motion`.

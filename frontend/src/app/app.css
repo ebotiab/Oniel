@@ -45,6 +45,15 @@
   pointer-events: auto;
 }
 
+.cabecera-inicio {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: var(--panel-ancho);
+  flex: none;
+  position: relative;
+}
+
 .marca-bloque {
   display: flex;
   flex-direction: column;
@@ -86,6 +95,116 @@
   border-radius: 50%;
   background: var(--senal-verde);
   flex: none;
+}
+
+/* Buscador */
+.buscador {
+  flex: 1;
+  min-width: 0;
+}
+
+.buscador-campo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  background: var(--papel);
+  border: 1px solid var(--regla);
+  border-radius: 3px;
+  box-shadow: var(--sombra);
+  color: var(--tinta-2);
+}
+
+.buscador-campo:focus-within {
+  border-color: var(--senal-azul);
+  outline: 2px solid var(--senal-azul-suave);
+}
+
+.buscador-lupa {
+  flex: none;
+}
+
+.buscador input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: var(--t-14);
+  color: var(--tinta);
+  outline: none;
+}
+
+.buscador input::placeholder {
+  color: var(--tinta-2);
+  opacity: 1;
+}
+
+.buscador-atajo {
+  flex: none;
+  font: inherit;
+  font-size: var(--t-11);
+  line-height: 1;
+  padding: 3px 6px;
+  border: 1px solid var(--regla);
+  border-radius: 3px;
+  color: var(--tinta-2);
+}
+
+/* La lista ocupa el ancho del panel, justo bajo la cabecera. */
+.buscador-lista {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: min(60vh, 440px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--papel);
+  border: 1px solid var(--regla);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 4px 0;
+}
+
+.buscador-lista ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.buscador-lista li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 7px 14px 7px 12px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+
+.buscador-lista li.activo {
+  background: var(--papel-2);
+  border-left-color: var(--senal-azul);
+}
+
+.buscador-nombre {
+  font-weight: 600;
+}
+
+.buscador-detalle,
+.buscador-rotulo,
+.buscador-vacio {
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+.buscador-rotulo {
+  padding: 6px 14px 2px;
+}
+
+.buscador-vacio {
+  padding: 8px 14px;
 }
 
 /* Panel */
@@ -617,6 +736,90 @@
 
 .movil .cobertura-pill {
   max-width: 46vw;
+}
+
+/* En el móvil la lupa va al final de la cabecera, tras la marca y la cobertura. */
+.movil .cabecera {
+  gap: 10px;
+}
+
+.movil .cabecera-inicio {
+  display: contents;
+}
+
+.movil .marca-bloque {
+  flex: none;
+  margin-right: auto;
+}
+
+.movil .lema {
+  max-width: 150px;
+}
+
+.movil .cobertura-pill {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.movil .buscador {
+  flex: none;
+  order: 1;
+}
+
+.buscador-abrir {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--papel);
+  border: 1px solid var(--regla);
+  border-radius: 3px;
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+/* Desplegado, el campo ocupa la cabecera entera y la lista, el ancho de la pantalla. */
+.movil .buscador.desplegado {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  background: var(--papel);
+  z-index: 1;
+}
+
+.movil .buscador-campo {
+  flex: 1;
+  height: 40px;
+  box-shadow: none;
+}
+
+/* Con menos de 16 px, Safari en iOS amplía la página al enfocar el campo. */
+.movil .buscador input {
+  font-size: 16px;
+}
+
+.buscador-cerrar {
+  flex: none;
+  background: none;
+  border: 0;
+  padding: 8px 0 8px 8px;
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+  cursor: pointer;
+}
+
+.movil .buscador-lista {
+  top: 100%;
+  left: 14px;
+  right: 14px;
+  max-height: 46vh;
+}
+
+.movil .buscador-lista li {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .movil .cobertura-pill .pill-texto {

@@ -10,7 +10,9 @@ import { LineOverview } from '../panel/LineOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
+import { SearchBox } from '../panel/SearchBox'
 import { activeInterruptions, bySegment } from './interruptions'
+import type { SearchTarget } from './search'
 import { lineKind, lineShortLabel, parseHash, toHash, todayIso, type Selection } from './state'
 import './app.css'
 
@@ -122,6 +124,19 @@ export default function App() {
       }
     },
     [network],
+  )
+
+  // El buscador lleva a un punto de la red, como al tocarlo en el mapa, o pone una línea en el panel.
+  const pick = useCallback(
+    (target: SearchTarget) => {
+      if (target.type === 'nodo') return select(target)
+      setActiveLineId(target.id)
+      setRoute({ selection: null, simulacion: false })
+      setResult(null)
+      setShowCoverage(false)
+      setSheetOpen(true)
+    },
+    [select],
   )
 
   const selection = route.selection
@@ -238,9 +253,20 @@ export default function App() {
         padding={padding}
       />
       <header className="cabecera">
-        <div className="marca-bloque">
-          <span className="marca">Oniel</span>
-          <span className="lema">Cómo está conectada la red ferroviaria</span>
+        <div className="cabecera-inicio">
+          <div className="marca-bloque">
+            <span className="marca">Oniel</span>
+            <span className="lema">Cómo está conectada la red ferroviaria</span>
+          </div>
+          <SearchBox
+            network={network}
+            label="Buscar una estación o una línea"
+            placeholder="Buscar estación o línea"
+            onPick={pick}
+            shortcut
+            compact={mobile}
+            testId="buscador"
+          />
         </div>
         <button type="button" className="cobertura-pill" onClick={() => setShowCoverage(true)} aria-haspopup="dialog" data-testid="boton-cobertura">
           <span className="punto" aria-hidden="true" />
