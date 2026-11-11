@@ -7,7 +7,7 @@ import datetime as dt
 import json
 from collections.abc import Callable, Coroutine
 from pathlib import Path
-from typing import Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any
 
 import logfire
 import typer
@@ -15,6 +15,9 @@ import typer
 from oniel.db.pool import connect
 from oniel.observability import configure_logfire
 from oniel.settings import get_settings
+
+if TYPE_CHECKING:
+    from oniel.network.spec import FeedSpec
 
 app = typer.Typer(
     help="Datos de Oniel: base de datos, importaciones, validación y exportación.",
@@ -33,7 +36,6 @@ CURATED = settings.data_dir / "curated"
 SPECS_DEFAULT = [CURATED / f"{line_id}.json" for line_id in settings.line_ids]
 SOURCES_DEFAULT = CURATED / "sources.json"
 INTERRUPTIONS_DEFAULT = CURATED / "interrupciones.json"
-FEED_DEFAULT = settings.data_dir / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
 SNAPSHOT_DEFAULT = settings.data_dir.parent.parent / "frontend" / "public" / "data"
 
 SpecsOption = Annotated[
@@ -55,6 +57,13 @@ def _echo_json(payload: Any) -> None:
 
 def _specs(spec: list[Path] | None) -> list[Path]:
     return spec or SPECS_DEFAULT
+
+
+def _declared_feeds(sources: Path = SOURCES_DEFAULT) -> list[FeedSpec]:
+    """Ficheros de horarios declarados en sources.json (clave ``feeds``), del más antiguo al más reciente."""
+    from oniel.network.spec import load_feeds
+
+    return load_feeds(sources)
 
 
 @db_app.command("migrate")
@@ -127,21 +136,55 @@ def import_interruptions_cmd(
 
 @import_app.command("gtfs")
 def import_gtfs_cmd(
-    feed: Annotated[Path, typer.Option(help="Fichero GTFS (zip)")] = FEED_DEFAULT,
+    feed: Annotated[
+        Path | None,
+        typer.Option(help="Fichero GTFS (zip); por defecto, todos los declarados en sources.json"),
+    ] = None,
     spec: SpecsOption = None,
     source_id: Annotated[
-        str, typer.Option(help="Id de la fuente en sources.json")
+        str, typer.Option(help="Id de la fuente en sources.json (con --feed)")
     ] = "renfe-gtfs-av-ld-md",
-    operator_id: Annotated[str, typer.Option(help="Id del operador")] = "renfe",
+    operator_id: Annotated[str, typer.Option(help="Id del operador (con --feed)")] = "renfe",
+    retrieved_on: Annotated[
+        str | None,
+        typer.Option(
+            help="Día de descarga, AAAA-MM-DD (con --feed); por defecto, el del nombre del fichero"
+        ),
+    ] = None,
 ) -> None:
-    """Importa (o reimporta) los servicios del GTFS que recorren las líneas cargadas."""
+    """Importa ficheros GTFS como conjuntos de datos: cada uno se crea o, si ya está, se rehace.
+
+    El conjunto se reconoce por el SHA-256 del fichero, así que repetir la orden no duplica nada e
+    importar un fichero nuevo conserva los anteriores.
+    """
     from oniel.gtfs.importer import import_gtfs
 
-    async def go() -> dict[str, Any]:
+    async def go() -> list[dict[str, Any]]:
         async with connect(settings.database_url) as conn:
-            return await import_gtfs(
-                conn, feed, _specs(spec), source_id=source_id, operator_id=operator_id
-            )
+            if feed is not None:
+                return [
+                    await import_gtfs(
+                        conn,
+                        feed,
+                        _specs(spec),
+                        source_id=source_id,
+                        operator_id=operator_id,
+                        retrieved_on=dt.date.fromisoformat(retrieved_on) if retrieved_on else None,
+                        data_dir=settings.data_dir,
+                    )
+                ]
+            return [
+                await import_gtfs(
+                    conn,
+                    settings.data_dir / f.file,
+                    _specs(spec),
+                    source_id=f.source_id,
+                    operator_id=f.operator_id,
+                    retrieved_on=f.retrieved_on,
+                    data_dir=settings.data_dir,
+                )
+                for f in _declared_feeds()
+            ]
 
     _echo_json(_run(go))
 
@@ -156,7 +199,7 @@ def import_all_cmd(
         ),
     ] = False,
 ) -> None:
-    """Migra, importa la red, las interrupciones y los horarios y exporta la instantánea estática."""
+    """Migra, importa la red, las interrupciones y cada fichero de horarios declarado y exporta la instantánea."""
     from oniel.importing import run_import_all
 
     async def go() -> dict[str, Any]:
@@ -165,7 +208,7 @@ def import_all_cmd(
                 conn,
                 specs=SPECS_DEFAULT,
                 sources=SOURCES_DEFAULT,
-                feed=FEED_DEFAULT,
+                feeds=_declared_feeds(),
                 data_dir=settings.data_dir,
                 snapshot_dir=SNAPSHOT_DEFAULT,
                 interruptions=INTERRUPTIONS_DEFAULT,
@@ -178,7 +221,10 @@ def import_all_cmd(
 @app.command("validate")
 def validate_cmd(
     spec: SpecsOption = None,
-    feed: Annotated[Path, typer.Option()] = FEED_DEFAULT,
+    feed: Annotated[
+        Path | None,
+        typer.Option(help="Fichero GTFS (zip); por defecto, todos los declarados en sources.json"),
+    ] = None,
     interruptions: Annotated[
         Path, typer.Option(help="Fichero curado de interrupciones")
     ] = INTERRUPTIONS_DEFAULT,
@@ -190,8 +236,10 @@ def validate_cmd(
     # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
     # parada puede ser salida hacia otra línea y medir la distancia por ella.
     context = list(dict.fromkeys([*SPECS_DEFAULT, *_specs(spec)]))
+    feeds = [feed] if feed else [settings.data_dir / f.file for f in _declared_feeds(sources)]
     reports = [
-        validate_all(path, feed, settings.data_dir, [p for p in context if p != path])
+        validate_all(path, feed_path, settings.data_dir, [p for p in context if p != path])
+        for feed_path in feeds
         for path in _specs(spec)
     ]
     # Las interrupciones se contrastan con todas las líneas configuradas, se valide una o todas.

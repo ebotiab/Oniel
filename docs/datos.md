@@ -22,7 +22,7 @@
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
 
-El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto.
+El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto.
 
 ## Líneas cargadas
 
@@ -144,6 +144,36 @@ Lo recuerda un flujo de GitHub Actions, `.github/workflows/recordatorio-interrup
 
 Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
 
+## Conjuntos de datos
+
+Cada fichero de horarios importado es un conjunto de datos: se guarda con su fuente, su operador, el día en que se descargó y los días que cubre, y los servicios cuelgan de él. Importar un fichero nuevo no borra el anterior, de modo que se puede cargar más de un operador a la vez y comparar más adelante cómo cambia el servicio.
+
+Los ficheros se declaran en la lista `feeds` de `backend/data/curated/sources.json`, del más antiguo al más reciente:
+
+```json
+{ "file": "raw/renfe/google_transit_av_ld_md_2026-11-08.zip", "source_id": "renfe-gtfs-av-ld-md", "operator_id": "renfe", "retrieved_on": "2026-11-08" }
+```
+
+| Conjunto | Fuente | Operador | Descargado | Cubre |
+|---|---|---|---|---|
+| `renfe-gtfs-av-ld-md-2026-11-08` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-08 | del 7 de noviembre de 2026 al 29 de septiembre de 2027 |
+
+Cómo se decide qué se muestra:
+
+- El conjunto **vigente** de una fuente es el descargado más recientemente. De los vigentes salen el día de referencia (el laborable con más servicios de sus primeros treinta días) y las cifras de la cobertura.
+- El conjunto **activo** de una fuente en un día es el más reciente cuya validez incluye ese día. Los trenes de un tramo, las paradas de una estación, los recuentos y la simulación de un día leen solo los conjuntos activos ese día. `GET /api/coverage` los enumera en `datasets`.
+- Se decide por fuente, no por operador: un operador puede publicar ficheros que no se sustituyen entre sí (alta velocidad y cercanías, por ejemplo). Hoy cada operador tiene una sola fuente y da lo mismo.
+
+Cómo se importa:
+
+- `import gtfs` reconoce cada fichero por su SHA-256. Si ya está, rehace sus servicios (las reglas de recorrido pueden haber cambiado) sin duplicar nada; si es nuevo, crea su conjunto y deja los demás como están.
+- `import all` importa todos los ficheros de `feeds` y trata la lista como la referencia: reimportar la red borra los pasos por tramo de todos los conjuntos, así que retira de la base el conjunto que ya no esté declarado. El histórico se conserva mientras el fichero siga en `backend/data/raw/` y en `feeds`.
+- Cada fichero añade a `import all` el tiempo de leerlo y resolverlo (en local, unos 6 s por fichero de Renfe, medido el 11 de noviembre de 2026; en el plan gratuito de Render, bastante más). Conviene tenerlo en cuenta al acumular histórico.
+
+Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<operador>/` con el día de descarga en el nombre, añadirlo a `feeds` (y poner al día `retrieved_on`, cobertura y notas de su fuente), ejecutar `validate` e `import all` y subir la instantánea. Los recuentos de las pruebas no cambian: usan siempre el fichero del 8 de noviembre de 2026 por su nombre (`backend/tests/conftest.py`).
+
+La instantánea estática lleva solo el estado actual. Para la evolución futura guarda además `frontend/public/data/historico/<conjunto>/segment-counts.json`: los pasos por tramo de cada conjunto en su propio día de referencia. Pesa 2,8 KB por conjunto con los 39 tramos de hoy (medido el 11 de noviembre de 2026), y el visor todavía no lo lee.
+
 ## Modelo de datos
 
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
@@ -155,8 +185,9 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 - `segments`: tramos entre nodos consecutivos con geometría, velocidad máxima y habitual, número de vías (`tracks`) y la fuente de su geometría.
 - `connections`: hacia dónde continúa la red donde Oniel todavía no tiene datos (se dibujan a trazos).
 - `stop_mappings`: cómo se resuelve cada parada de un horario contra la red. La tabla es común a todas las líneas; una parada asignada a un nodo por una línea no la degrada otra que la declare como salida. Las reglas de recorrido (`route_overrides` de cada especificación) no se guardan en la base: solo actúan al importar.
-- `services`, `service_dates`, `service_stops`: horarios por tren y día, con el operador y la fuente. Cada viaje del GTFS se guarda una sola vez aunque recorra varias líneas.
-- `service_segment_passes`: el paso de cada tren por cada tramo, precalculado con las reglas de simulación, línea a línea. Un tren que cambia de línea tiene pasos en cada una solo entre las paradas que le corresponden.
+- `datasets`: un conjunto de datos por fichero de horarios importado, con su fuente, su operador, el fichero, su SHA-256, el día de descarga (`retrieved_on`), los días que cubre (`valid_from`, `valid_to`) y cuándo se importó. El id es legible: la fuente y el día de descarga (`renfe-gtfs-av-ld-md-2026-11-08`).
+- `services`, `service_dates`, `service_stops`: horarios por tren y día, con el operador y el conjunto de datos del que salen (`dataset_id`, que forma parte de la clave). Cada viaje del GTFS se guarda una sola vez por conjunto aunque recorra varias líneas, y el mismo viaje puede estar en varios conjuntos.
+- `service_segment_passes`: el paso de cada tren por cada tramo, precalculado con las reglas de simulación, línea a línea y por conjunto de datos. Un tren que cambia de línea tiene pasos en cada una solo entre las paradas que le corresponden.
 - `interruptions`: interrupciones del servicio entre dos nodos de una línea, con sus fechas, el motivo, las fuentes y el día de la última comprobación. Los tramos afectados no se guardan: salen del orden de esos dos nodos en `line_nodes`, de modo que reimportar la red no las deja huérfanas.
 - `import_runs`: historial de importaciones con estadísticas.
 

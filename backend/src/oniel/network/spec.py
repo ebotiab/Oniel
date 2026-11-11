@@ -274,6 +274,22 @@ class SourceSpec(BaseModel):
     file: str | None = None
 
 
+class FeedSpec(BaseModel):
+    """Un fichero de horarios que carga `import all` (clave ``feeds`` de sources.json).
+
+    Cada fichero es un conjunto de datos: se guarda con su fuente, su operador y el día en que se
+    descargó, y los anteriores siguen en la lista mientras se quiera conservar su histórico.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    #: Ruta relativa a ``data/``, con la fecha de descarga en el nombre.
+    file: str
+    source_id: str
+    operator_id: str
+    retrieved_on: dt.date
+
+
 class InterruptionSpec(BaseModel):
     """Interrupción del servicio en parte de una línea cargada (data/curated/interrupciones.json).
 
@@ -349,3 +365,20 @@ def load_interruptions(path: Path) -> list[InterruptionSpec]:
 def load_sources(path: Path) -> list[SourceSpec]:
     raw = json.loads(path.read_text(encoding="utf-8"))
     return [SourceSpec.model_validate(s) for s in raw["sources"]]
+
+
+def load_feeds(path: Path) -> list[FeedSpec]:
+    """Ficheros de horarios declarados en sources.json, del más antiguo al más reciente.
+
+    Cada uno tiene que citar una fuente registrada y no puede repetirse.
+    """
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    feeds = [FeedSpec.model_validate(f) for f in raw.get("feeds", [])]
+    known = {s["id"] for s in raw["sources"]}
+    for feed in feeds:
+        if feed.source_id not in known:
+            raise ValueError(f"{feed.file} cita la fuente {feed.source_id}, que no está registrada")
+    files = [f.file for f in feeds]
+    if len(set(files)) != len(files):
+        raise ValueError("ficheros de horarios repetidos en feeds")
+    return sorted(feeds, key=lambda f: (f.retrieved_on, f.file))

@@ -58,9 +58,9 @@ cd backend && uv run oniel-data --help
 | `db migrate` / `db reset --yes` | Aplica migraciones / recrea el esquema (solo desarrollo) |
 | `import network` | Construye cada línea desde la geometría cruda y la especificación curada y la carga (`--spec` repetible; sin él, todas) |
 | `import interruptions` | Carga las interrupciones del servicio de `curated/interrupciones.json`; la red tiene que estar importada |
-| `import gtfs` | Importa los servicios del GTFS que recorren las líneas cargadas y precalcula su paso por cada tramo |
+| `import gtfs` | Importa cada fichero de horarios declarado en `sources.json` (o el de `--feed`) como un conjunto de datos: los servicios que recorren las líneas cargadas y su paso por cada tramo. Repetirlo no duplica nada y un fichero nuevo conserva los anteriores |
 | `import all` | Todo lo anterior más la exportación estática; con `--if-changed` se salta si datos y código no cambiaron desde la última |
-| `validate` | Comprueba la red, la resolución de horarios y las interrupciones sin base de datos (`--spec` repetible; sin él, todas) |
+| `validate` | Comprueba la red, la resolución de cada fichero de horarios declarado y las interrupciones sin base de datos (`--spec` repetible; sin él, todas) |
 | `export snapshot` | Exporta JSON estático para el visor |
 | `sources` | Lista las fuentes con licencia y fecha |
 | `logfire-test` | Envía una traza de prueba a Logfire |

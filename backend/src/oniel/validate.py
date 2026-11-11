@@ -178,6 +178,7 @@ def validate_all(
             "passes": dict(kinds),
             "resolution": dict(resolutions),
             "route_overrides": dict(rules),
+            "file": feed_path.name,
             "feed": [feed.feed_start.isoformat(), feed.feed_end.isoformat()],
         },
         "problems": problems,

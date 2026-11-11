@@ -25,6 +25,8 @@ from oniel.domain.schemas import (
     Source,
     SourceRef,
 )
+from oniel.repo import datasets_repo
+from oniel.repo.datasets_repo import CURRENT_IDS_SQL
 
 
 def coverage_notice(lines: list[LineSummary]) -> str:
@@ -417,26 +419,17 @@ async def fetch_alternatives(
 async def feed_bounds(
     conn: asyncpg.Connection,
 ) -> tuple[dt.date | None, dt.date | None, dt.date | None]:
-    r = await conn.fetchrow(
-        "SELECT min(service_date) AS a, max(service_date) AS b FROM service_dates"
-    )
-    if r is None or r["a"] is None:
-        return None, None, None
-    ref = await conn.fetchrow(
-        """
-        SELECT service_date FROM service_dates
-        WHERE service_date BETWEEN $1 AND $1 + 30 AND extract(isodow FROM service_date) <= 5
-        GROUP BY service_date ORDER BY count(*) DESC, service_date LIMIT 1
-        """,
-        r["a"],
-    )
-    return r["a"], r["b"], ref["service_date"] if ref else r["a"]
+    """Primer y último día con servicio y día de referencia de los conjuntos de datos vigentes."""
+    return await datasets_repo.feed_bounds(conn)
 
 
 async def fetch_coverage(conn: asyncpg.Connection) -> CoverageOut:
     lines = await fetch_lines(conn)
     station_count = await fetch_int(conn, "SELECT count(*) FROM nodes WHERE kind = 'estacion'")
-    service_count = await fetch_int(conn, "SELECT count(DISTINCT train_number) FROM services")
+    service_count = await fetch_int(
+        conn,
+        f"SELECT count(DISTINCT train_number) FROM services WHERE dataset_id IN {CURRENT_IDS_SQL}",
+    )
     start, end, ref = await feed_bounds(conn)
     return CoverageOut(
         lines=lines,
@@ -447,6 +440,7 @@ async def fetch_coverage(conn: asyncpg.Connection) -> CoverageOut:
         feed_start=start,
         feed_end=end,
         reference_date=ref,
+        datasets=await datasets_repo.fetch_active_datasets(conn, ref) if ref else [],
         sources=await fetch_sources(conn),
         notice=coverage_notice(lines),
     )

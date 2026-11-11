@@ -10,11 +10,14 @@ from __future__ import annotations
 
 import hashlib
 import os
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import asyncpg
+
+if TYPE_CHECKING:
+    from oniel.network.spec import FeedSpec
 
 #: Código cuya modificación obliga a reimportar (reglas de recorrido, migraciones, exportación…).
 SRC_DIR = Path(__file__).resolve().parent
@@ -73,16 +76,14 @@ async def run_import_all(
     *,
     specs: list[Path],
     sources: Path,
-    feed: Path,
+    feeds: Sequence[FeedSpec],
     data_dir: Path,
     snapshot_dir: Path | None,
     interruptions: Path | None = None,
     if_changed: bool = False,
-    source_id: str = "renfe-gtfs-av-ld-md",
-    operator_id: str = "renfe",
     src_dir: Path = SRC_DIR,
 ) -> dict[str, Any]:
-    """Migra, importa la red, las interrupciones y los horarios, exporta la instantánea y registra la huella.
+    """Migra, importa la red, las interrupciones y cada fichero de horarios, exporta la instantánea y registra la huella.
 
     Con ``if_changed`` devuelve ``{"skipped": True}`` sin tocar los datos cuando la huella coincide
     con la de la última importación. Las migraciones se aplican siempre: son baratas y la tabla de
@@ -107,7 +108,25 @@ async def run_import_all(
         if interruptions
         else None
     )
-    gtfs = await import_gtfs(conn, feed, specs, source_id=source_id, operator_id=operator_id)
+    # Un conjunto de datos por fichero declarado, del más antiguo al más reciente. La lista es la
+    # referencia: reimportar la red borra los pasos por tramo de todos los conjuntos, así que uno
+    # que ya no esté declarado se quedaría sin ellos y se retira.
+    gtfs = [
+        await import_gtfs(
+            conn,
+            data_dir / feed.file,
+            specs,
+            source_id=feed.source_id,
+            operator_id=feed.operator_id,
+            retrieved_on=feed.retrieved_on,
+            data_dir=data_dir,
+        )
+        for feed in feeds
+    ]
+    removed = await conn.fetch(
+        "DELETE FROM datasets WHERE NOT (id = ANY($1::text[])) RETURNING id",
+        [g["dataset"]["id"] for g in gtfs],
+    )
     snap = await export_snapshot(conn, snapshot_dir) if snapshot_dir else None
     await record_import_fingerprint(conn, fingerprint)
     return {
@@ -117,5 +136,6 @@ async def run_import_all(
         "network": nets,
         "interruptions": cuts,
         "gtfs": gtfs,
+        "datasets_removed": sorted(r["id"] for r in removed),
         "snapshot": snap,
     }
