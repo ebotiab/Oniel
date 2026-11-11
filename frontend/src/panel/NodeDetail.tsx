@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
-import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut } from '../data/types'
+import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineShortLabel, productLabel, shortStop } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
+import { PieFuente, Plegable } from './Plegable'
 
 interface Props {
   node: NodeOut
   network: NetworkOut
+  /** Fuentes registradas, para citar al pie del detalle las de sus líneas. */
+  sources: Source[]
   referenceDate: string | null
   /** Interrupciones vigentes hoy, por id de tramo. */
   interrupted: Map<string, InterruptionOut[]>
@@ -15,7 +18,7 @@ interface Props {
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, referenceDate, interrupted, onSelectSegment, onBack }: Props) {
+export function NodeDetail({ node, network, sources, referenceDate, interrupted, onSelectSegment, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -46,22 +49,38 @@ export function NodeDetail({ node, network, referenceDate, interrupted, onSelect
       <button type="button" className="enlace volver" onClick={onBack}>
         ← Toda la línea
       </button>
-      <p className="sobre">
-        {KIND_LABEL[node.kind]}
-        {memberships.length > 1
-          ? memberships.map((m) => ` · km ${formatKm(m.km)} en ${m.line ? lineShortLabel(m.line) : '?'}`).join('')
-          : ` · km ${formatKm(node.km)}`}
-        {node.adif_code ? ` · código Adif ${node.adif_code}` : ''}
-      </p>
-      {memberships.length > 1 && (
-        <p className="suave" data-testid="nodo-lineas">
-          Nodo común a {memberships.length} líneas: {memberships.map((m) => (m.line ? m.line.name : '?')).join(' y ')}.
-        </p>
-      )}
+      <p className="sobre">{KIND_LABEL[node.kind]}</p>
       <h2 id="detalle-titulo" className="titulo">
         {node.name}
       </h2>
+      {memberships.length > 1 && (
+        <p className="texto" data-testid="nodo-lineas">
+          Aquí se encuentran {memberships.length} líneas: {memberships.map((m) => (m.line ? m.line.name : '?')).join(' y ')}.
+        </p>
+      )}
       {node.description && <p className="texto">{node.description}</p>}
+
+      <Plegable>
+        <dl className="datos-tramo datos">
+          {memberships.map((m) => (
+            <div key={m.line?.id ?? '?'}>
+              <dt>Punto kilométrico{memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''}</dt>
+              <dd data-testid="nodo-pk">km {formatKm(m.km)}</dd>
+            </div>
+          ))}
+          {node.adif_code && (
+            <div>
+              <dt>Código de Adif</dt>
+              <dd>{node.adif_code}</dd>
+            </div>
+          )}
+        </dl>
+        <p className="suave">
+          El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea.
+          {node.adif_code ? ' El código es el número con el que Adif identifica esta dependencia.' : ''}
+        </p>
+        <PieFuente de="del trazado" sources={memberships.map((m) => sources.find((s) => s.id === m.line?.source_id))} />
+      </Plegable>
 
       {node.details.contexto_2026 && (
         <aside className="contexto" aria-label="Contexto de 2026">
@@ -86,7 +105,7 @@ export function NodeDetail({ node, network, referenceDate, interrupted, onSelect
         <InterruptionNotice key={i.id} interruption={i} />
       ))}
 
-      <h3 className="subtitulo">Tramos que confluyen</h3>
+      <h3 className="subtitulo">Tramos que salen de aquí</h3>
       <ul className="lista-simple">
         {adjacent.map((s) => (
           <li key={s.id}>

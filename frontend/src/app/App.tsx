@@ -32,10 +32,10 @@ export default function App() {
   const [route, setRoute] = useState(() => parseHash(window.location.hash))
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
-  const [showCoverage, setShowCoverage] = useState(false)
+  const [showCoverage, setShowCoverage] = useState(() => Boolean(parseHash(window.location.hash).cobertura))
   const [sheetOpen, setSheetOpen] = useState(false)
   const [counts, setCounts] = useState<Record<string, number> | null>(null)
-  const [activeLineId, setActiveLineId] = useState<string | null>(null)
+  const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
   const status = useApiStatus()
 
@@ -94,14 +94,20 @@ export default function App() {
 
   // Sincronizar el hash con la selección
   useEffect(() => {
-    const onHash = () => setRoute(parseHash(window.location.hash))
+    const onHash = () => {
+      const r = parseHash(window.location.hash)
+      setRoute(r)
+      setShowCoverage(Boolean(r.cobertura))
+      if (r.linea) setActiveLineId(r.linea)
+    }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
+  // La línea a la vista y el panel de cobertura también van en la URL: toda vista se puede enlazar.
   useEffect(() => {
-    const h = toHash(route)
+    const h = toHash({ ...route, linea: activeLineId, cobertura: showCoverage })
     if (window.location.hash !== h) window.history.replaceState(null, '', h)
-  }, [route])
+  }, [route, activeLineId, showCoverage])
 
   const select = useCallback(
     (sel: Selection) => {
@@ -145,6 +151,12 @@ export default function App() {
   const referenceDate = coverage?.reference_date ?? null
   const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
 
+  // «Toda la línea» vuelve a la línea que se estaba viendo, también si se llegó por un enlace directo.
+  const backToLine = () => {
+    if (lineId) setActiveLineId(lineId)
+    select(null)
+  }
+
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
@@ -169,11 +181,12 @@ export default function App() {
         key={`${segment.id}@${referenceDate}`}
         segment={segment}
         network={network}
+        sources={coverage?.sources ?? []}
         referenceDate={referenceDate}
         interruptions={interrupted.get(segment.id) ?? []}
         onSimulate={() => setRoute({ selection, simulacion: true })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
-        onBack={() => select(null)}
+        onBack={backToLine}
       />
     )
   else if (node)
@@ -182,10 +195,11 @@ export default function App() {
         key={`${node.id}@${referenceDate}`}
         node={node}
         network={network}
+        sources={coverage?.sources ?? []}
         referenceDate={referenceDate}
         interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
-        onBack={() => select(null)}
+        onBack={backToLine}
       />
     )
   else
