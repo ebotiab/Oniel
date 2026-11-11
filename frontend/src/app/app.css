@@ -45,6 +45,24 @@
   pointer-events: auto;
 }
 
+/* En escritorio la marca y el buscador van sobre el mapa: un fondo de papel que se desvanece hacia la derecha
+   y hacia abajo evita que un rótulo del mapa asome entre las letras. */
+.escritorio .cabecera::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--panel-ancho) + 72px);
+  height: 80px;
+  background: var(--papel);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent), linear-gradient(#000 56px, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent), linear-gradient(#000 56px, transparent);
+  mask-composite: intersect;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .cabecera-inicio {
   display: flex;
   align-items: center;

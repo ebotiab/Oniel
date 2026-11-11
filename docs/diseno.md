@@ -45,6 +45,7 @@ Tipografía
 Composición
 - Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; buscador en la cabecera, junto a la marca; recuento de la red arriba a la derecha.
 - Cabecera de la línea: título, una ficha de una sola línea (longitud y velocidad máxima) y una frase de entrada en cuerpo normal. El resto de la descripción y los datos técnicos quedan plegados bajo «Más detalle» (véase «Patrón de ficha») y se leen en párrafos cortos, en tinta, con interlineado 1,5. Bajo el esquema, una sola nota en gris terciario con la fecha de las barras y la pista de uso; la columna de barras lleva su propio rótulo («trenes el 13 nov»). La ficha no se repite en la descripción.
+- La marca y el buscador van sobre el mapa. Para que ningún rótulo del mapa asome entre sus letras, tras ellos hay un fondo de papel del ancho del panel que se desvanece hacia la derecha y hacia abajo, sin borde ni sombra; en el móvil la cabecera ya llevaba un degradado igual.
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
 - Varias líneas: el mapa las dibuja todas y el panel muestra una a la vez. Cómo se elige está en «Elegir línea». Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
 
