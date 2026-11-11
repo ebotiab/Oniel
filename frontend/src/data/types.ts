@@ -212,6 +212,8 @@ export interface ClosureRequest {
   date: string
   start: string
   end: string
+  /** Escenario como cadena corta: sus otras modificaciones cuentan al buscar la alternativa. */
+  scenario?: string
 }
 
 export interface ClosureResultItem {
@@ -225,7 +227,41 @@ export interface ClosureResultItem {
   from_previous_day: boolean
 }
 
-/** Otra línea cargada que une dos nodos de la línea cerrada situados a ambos lados del tramo. */
+/** Trecho de un recorrido por una sola línea (o por un enlace esbozado, sin `line_id`). */
+export interface RouteLeg {
+  line_id: string | null
+  line_name: string
+  from_node_id: string
+  from_name: string
+  to_node_id: string
+  to_name: string
+  length_km: number
+  time_min: number | null
+  single_track_km: number
+}
+
+/** Un recorrido entre dos nodos sobre el grafo de todas las líneas, con lo que cuesta. */
+export interface Route {
+  from_node_id: string
+  from_name: string
+  to_node_id: string
+  to_name: string
+  length_km: number
+  /** Minutos a la velocidad habitual de cada tramo, sin paradas; nulo si falta alguna velocidad. */
+  time_min: number | null
+  single_track_km: number
+  line_ids: string[]
+  legs: RouteLeg[]
+  /** Estaciones principales intermedias, en el orden en que se recorren. */
+  via: string[]
+  node_ids: string[]
+  segment_ids: string[]
+}
+
+/**
+ * Recorrido por otras líneas cargadas entre dos nodos de la línea cerrada, uno a cada lado del
+ * tramo. `line_id` y `line_name` son los de la primera línea; si encadena varias, `legs` las trae.
+ */
 export interface ClosureAlternative {
   line_id: string
   line_name: string
@@ -240,6 +276,10 @@ export interface ClosureAlternative {
   note: string
   /** Interrupciones vigentes ese día en el recorrido alternativo. */
   interruptions?: InterruptionOut[]
+  line_ids?: string[]
+  legs?: RouteLeg[]
+  time_min?: number | null
+  segment_ids?: string[]
 }
 
 export interface ClosureResult {

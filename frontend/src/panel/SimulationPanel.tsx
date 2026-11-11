@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 
 import { ApiError, simulateClosure } from '../data/api'
 import { useApiStatus } from '../data/useApiStatus'
-import type { ClosureResult, ClosureStatus, InterruptionOut, SegmentOut } from '../data/types'
+import type { ClosureResult, ClosureStatus, InterruptionOut, RouteLeg, SegmentOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
@@ -15,14 +15,22 @@ interface Props {
   feedEnd: string | null
   /** Interrupciones del servicio vigentes hoy en el tramo que se va a cerrar. */
   interruptions: InterruptionOut[]
+  /** Escenario abierto desde la URL (cadena corta): sus modificaciones cuentan al buscar la alternativa. */
+  scenario?: string
   result: ClosureResult | null
   onResult: (r: ClosureResult | null) => void
   onBack: () => void
 }
 
+const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1)
+/** «a, b y c». */
+const joinList = (items: string[]) => (items.length > 1 ? `${items.slice(0, -1).join(', ')} y ${items.at(-1)}` : (items[0] ?? ''))
+
+const legName = (leg: RouteLeg) => (leg.line_id ? lowerFirst(leg.line_name) : 'un enlace esbozado')
+
 const ORDER: ClosureStatus[] = ['afectado_publicado', 'afectado_estimado', 'indeterminado', 'no_afectado']
 
-export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, interruptions, result, onResult, onBack }: Props) {
+export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, interruptions, scenario, result, onResult, onBack }: Props) {
   const [date, setDate] = useState(() => result?.request.date ?? referenceDate ?? todayIso())
   const [start, setStart] = useState(result?.request.start.slice(0, 5) ?? '08:00')
   const [end, setEnd] = useState(result?.request.end.slice(0, 5) ?? '09:00')
@@ -37,7 +45,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
     setLoading(true)
     setError(null)
     try {
-      onResult(await simulateClosure({ segment_id: segment.id, date, start, end }))
+      onResult(await simulateClosure({ segment_id: segment.id, date, start, end, ...(scenario ? { scenario } : {}) }))
     } catch (err) {
       onResult(null)
       setError(err instanceof ApiError ? err.message : 'No se pudo calcular la simulación.')
@@ -116,9 +124,14 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
             <aside className="alternativa" aria-label="Recorrido alternativo" data-testid="sim-alternativa">
               <p className="sobre">Recorrido alternativo cargado en Oniel</p>
               {result.alternatives.map((a) => (
-                <p key={a.line_id} className="texto">
-                  Entre <strong>{a.from_name}</strong> y <strong>{a.to_name}</strong> existe otra línea: {a.line_name.charAt(0).toLowerCase() + a.line_name.slice(1)}
-                  {a.via.length ? `, por ${a.via.join(', ')}` : ''}. Son {formatKm(a.length_km)} km frente a {formatKm(a.closed_line_length_km)} km por la línea cerrada
+                <p key={`${a.from_node_id}>${a.to_node_id}>${(a.line_ids ?? [a.line_id]).join('+')}`} className="texto">
+                  Entre <strong>{a.from_name}</strong> y <strong>{a.to_name}</strong>{' '}
+                  {a.legs && a.legs.length > 1
+                    ? `existe otro recorrido que encadena ${a.legs.length} ${a.legs.every((leg) => leg.line_id) ? 'líneas' : 'trechos'}: ${joinList(a.legs.map((leg) => `${legName(leg)} hasta ${leg.to_name}`))}`
+                    : a.legs?.[0] && !a.legs[0].line_id
+                      ? 'el escenario añade un enlace esbozado'
+                      : `existe otra línea: ${lowerFirst(a.line_name)}${a.via.length ? `, por ${a.via.join(', ')}` : ''}`}
+                  . Son {formatKm(a.length_km)} km frente a {formatKm(a.closed_line_length_km)} km por la línea cerrada
                   {a.single_track_km > 0 ? `, con ${formatKm(a.single_track_km)} km de vía única` : ''}. Oniel no reasigna los trenes afectados; solo señala que la alternativa existe.
                   {a.interruptions?.map((i) => (
                     <span key={i.id} data-testid="sim-alternativa-interrumpida">

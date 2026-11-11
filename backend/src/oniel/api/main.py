@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from oniel import __version__
-from oniel.api.routers import network, nodes, segments, services, simulations
+from oniel.api.routers import network, nodes, routes, segments, services, simulations
 from oniel.db.pool import create_pool
 from oniel.observability import configure_logfire
 from oniel.settings import get_settings
@@ -53,6 +53,7 @@ def create_app() -> FastAPI:
         segments.router,
         nodes.router,
         services.router,
+        routes.router,
         simulations.router,
     ):
         app.include_router(router, prefix="/api")

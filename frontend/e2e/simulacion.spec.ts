@@ -68,8 +68,28 @@ test.describe('Simular un cierre', () => {
     await expect(fila).toContainText(/196 km por esa línea hasta Madrid-Atocha Cercanías/)
     await expect(fila).not.toContainText(/línea recta/)
     await expect(resultado).toContainText(/MD \d{5}/)
-    // ninguna línea sola une los dos lados de este tramo
-    await expect(page.getByTestId('sim-alternativa')).toHaveCount(0)
+    // ninguna línea sola une los dos lados de este tramo; el rodeo encadena dos
+    const alternativa = page.getByTestId('sim-alternativa')
+    await expect(alternativa).toContainText(/encadena 2 líneas/)
+    await expect(alternativa).toContainText(/hasta Madrid-Puerta de Atocha y línea de alta velocidad Madrid – Sevilla hasta Ciudad Real/)
+    await expect(alternativa).toContainText(/366,9 km frente a 64,4 km/)
+  })
+
+  test('un cierre entre Urda y Ciudad Real señala el desvío por Manzanares, que usa dos líneas', async ({ page }) => {
+    await page.goto('/#/tramo/lav-madrid-sevilla:urda:ciudad-real/cierre')
+    await page.getByTestId('sim-fecha').fill('2026-11-13')
+    await page.getByTestId('sim-inicio').fill('08:00')
+    await page.getByTestId('sim-fin').fill('09:00')
+    await page.getByTestId('sim-calcular').click()
+    const alternativa = page.getByTestId('sim-alternativa')
+    await expect(alternativa).toBeVisible()
+    const desvio = alternativa.locator('p.texto').first()
+    await expect(desvio).toContainText('Madrid-Puerta de Atocha')
+    await expect(desvio).toContainText(/encadena 2 líneas: línea convencional Madrid – Alcázar de San Juan – Córdoba hasta Manzanares y línea convencional Manzanares – Ciudad Real hasta Ciudad Real/)
+    await expect(desvio).toContainText(/260,5 km frente a 170,8 km por la línea cerrada, con 64,4 km de vía única/)
+    // la convencional entera, de Madrid a Córdoba, sigue apareciendo como antes
+    await expect(alternativa.locator('p.texto')).toHaveCount(2)
+    await expect(alternativa.locator('p.texto').nth(1)).toContainText(/existe otra línea: línea convencional Madrid – Alcázar de San Juan – Córdoba, por Aranjuez/)
   })
 
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {
