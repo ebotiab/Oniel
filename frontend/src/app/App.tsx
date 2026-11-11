@@ -34,7 +34,7 @@ export default function App() {
   const [route, setRoute] = useState(() => parseHash(window.location.hash))
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
-  const [showCoverage, setShowCoverage] = useState(false)
+  const [showCoverage, setShowCoverage] = useState(() => Boolean(parseHash(window.location.hash).cobertura))
   const [sheetOpen, setSheetOpen] = useState(false)
   const [counts, setCounts] = useState<Record<string, number> | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
@@ -97,17 +97,19 @@ export default function App() {
   // Sincronizar el hash con la selección
   useEffect(() => {
     const onHash = () => {
-      const next = parseHash(window.location.hash)
-      setRoute(next)
-      if (next.linea) setActiveLineId(next.linea)
+      const r = parseHash(window.location.hash)
+      setRoute(r)
+      setShowCoverage(Boolean(r.cobertura))
+      if (r.linea) setActiveLineId(r.linea)
     }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
+  // La línea a la vista y el panel de cobertura también van en la URL: toda vista se puede enlazar.
   useEffect(() => {
-    const h = toHash(route)
+    const h = toHash({ ...route, linea: activeLineId, cobertura: showCoverage })
     if (window.location.hash !== h) window.history.replaceState(null, '', h)
-  }, [route])
+  }, [route, activeLineId, showCoverage])
 
   const select = useCallback(
     (sel: Selection) => {
@@ -124,20 +126,17 @@ export default function App() {
     [network],
   )
 
-  // Una línea se elige con las pestañas del panel o con el buscador; también queda en la URL.
-  const chooseLine = useCallback((id: string) => {
-    setActiveLineId(id)
-    setRoute({ selection: null, simulacion: false, linea: id })
-    setResult(null)
-    setShowCoverage(false)
-  }, [])
+  // El buscador lleva a un punto de la red, como al tocarlo en el mapa, o pone una línea en el panel.
   const pick = useCallback(
     (target: SearchTarget) => {
       if (target.type === 'nodo') return select(target)
-      chooseLine(target.id)
+      setActiveLineId(target.id)
+      setRoute({ selection: null, simulacion: false })
+      setResult(null)
+      setShowCoverage(false)
       setSheetOpen(true)
     },
-    [select, chooseLine],
+    [select],
   )
 
   const selection = route.selection
@@ -156,7 +155,7 @@ export default function App() {
   const lineId =
     segment?.line_id ??
     (nodeLines.length ? (activeLineId && nodeLines.includes(activeLineId) ? activeLineId : nodeLines[0]!) : null) ??
-    (activeLineId && network?.lines.some((l) => l.id === activeLineId) ? activeLineId : null) ??
+    activeLineId ??
     network?.lines[0]?.id ??
     ''
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
@@ -166,6 +165,12 @@ export default function App() {
   const interrupted = useMemo(() => bySegment(interruptions), [interruptions])
   const referenceDate = coverage?.reference_date ?? null
   const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
+
+  // «Toda la línea» vuelve a la línea que se estaba viendo, también si se llegó por un enlace directo.
+  const backToLine = () => {
+    if (lineId) setActiveLineId(lineId)
+    select(null)
+  }
 
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
@@ -191,11 +196,12 @@ export default function App() {
         key={`${segment.id}@${referenceDate}`}
         segment={segment}
         network={network}
+        sources={coverage?.sources ?? []}
         referenceDate={referenceDate}
         interruptions={interrupted.get(segment.id) ?? []}
         onSimulate={() => setRoute({ selection, simulacion: true })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
-        onBack={() => select(null)}
+        onBack={backToLine}
       />
     )
   else if (node)
@@ -204,10 +210,11 @@ export default function App() {
         key={`${node.id}@${referenceDate}`}
         node={node}
         network={network}
+        sources={coverage?.sources ?? []}
         referenceDate={referenceDate}
         interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
-        onBack={() => select(null)}
+        onBack={backToLine}
       />
     )
   else
@@ -217,7 +224,7 @@ export default function App() {
         coverage={coverage}
         counts={counts}
         lineId={lineId}
-        onChangeLine={chooseLine}
+        onChangeLine={setActiveLineId}
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}

@@ -30,7 +30,7 @@ Los comandos están en el README y no se repiten aquí: «Arrancar desde cero» 
 
 El editor no debe mostrar avisos que esas órdenes no den: `.vscode/settings.json` fija el intérprete y Ruff, y `backend/pyproject.toml` deja pyright al mismo nivel que Pylance. El frontend no tiene formateador configurado: no se reformatean ficheros enteros.
 
-Para previsualizar el visor desde una sesión, `.claude/launch.json` arranca Vite (`oniel-visor`) con el proxy de la API apuntando al puerto 8010; la API se arranca aparte con `uv run fastapi dev --port 8010` desde `backend/`.
+Para previsualizar el visor desde una sesión, `.claude/launch.json` arranca Vite (`oniel-visor`) con el proxy de la API apuntando al puerto 8010; la API se arranca aparte con `uv run uvicorn oniel.api.main:app --reload --port 8010` desde `backend/`.
 
 ## Convenciones
 

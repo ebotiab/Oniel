@@ -6,10 +6,15 @@ export interface Route {
   selection: Selection
   simulacion: boolean
   /** Línea a la vista en el panel cuando no hay nada seleccionado. */
-  linea?: string
+  linea?: string | null
+  /** El panel «Cobertura y fuentes» está abierto. */
+  cobertura?: boolean
 }
 
-/** Ruta en el hash: #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/linea/<id> */
+/**
+ * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
+ * #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre y #/cobertura.
+ */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
   const [kind, id, action] = parts
@@ -17,10 +22,12 @@ export function parseHash(hash: string): Route {
     return { selection: { type: kind, id }, simulacion: kind === 'tramo' && action === 'cierre' }
   }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
+  if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
   return { selection: null, simulacion: false }
 }
 
 export function toHash(route: Route): string {
+  if (route.cobertura) return '#/cobertura'
   if (!route.selection) return route.linea ? `#/linea/${encodeURIComponent(route.linea)}` : '#/'
   const base = `#/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
   return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base

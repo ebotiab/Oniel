@@ -2,6 +2,7 @@ import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, lineKind, lineShortLabel } from '../app/state'
+import { PieFuente, Plegable } from './Plegable'
 import { StripDiagram } from './StripDiagram'
 
 interface Props {
@@ -30,14 +31,12 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
     .map((p) => p.trim())
     .filter(Boolean)
   const gestor = line.infrastructure_manager?.name.split(' / ')[0]
-  const numero = line.short_name ? `${/ y /.test(line.short_name) ? 'líneas' : 'línea'} ${line.short_name}` : null
-  const antetitulo = [gestor, numero].filter(Boolean).join(', ')
-  const ficha = [
-    `${formatKm(line.length_km)} km`,
-    line.max_speed_kmh ? `${line.max_speed_kmh} km/h` : null,
-    gaugeLabel(line.gauge_mm),
-    line.electrification,
-  ].filter((d): d is string => Boolean(d))
+  const numero = line.short_name
+  const ancho = gaugeLabel(line.gauge_mm).replace(/^ancho /, '') + (line.gauge_mm ? ` (${line.gauge_mm.toLocaleString('es-ES', { useGrouping: 'always' })} mm)` : '')
+  // Lo que entiende cualquiera, a la vista; el ancho, la electrificación y el número de línea, en el detalle.
+  const ficha = [`${formatKm(line.length_km)} km`, line.max_speed_kmh ? `hasta ${line.max_speed_kmh} km/h` : null].filter((d): d is string => Boolean(d))
+  // En el móvil la cabecera no lleva la frase de entrada: la descripción entera va en el detalle.
+  const parrafos = compact ? [entrada, ...resto].filter((p): p is string => Boolean(p)) : resto
   const cuts = interruptions.filter((i) => i.line_id === line.id && i.segment_ids.length > 0)
   const dia = coverage?.reference_date ?? null
   const conBarras = Boolean(counts && dia && Object.keys(counts).length)
@@ -62,7 +61,6 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
         </div>
       )}
       <div className="cabecera-linea" data-testid="cabecera-linea">
-        {!compact && antetitulo && <p className="antetitulo">{antetitulo}</p>}
         <h2 id="linea-titulo" className="titulo">
           {line.name}
         </h2>
@@ -76,16 +74,38 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
             {entrada}
           </p>
         )}
-        {!compact && resto.length > 0 && (
-          <details key={line.id} className="sobre-linea">
-            <summary>Más sobre la línea</summary>
-            {resto.map((p) => (
-              <p key={p} className="texto">
-                {p}
-              </p>
-            ))}
-          </details>
-        )}
+        <Plegable>
+          {parrafos.map((p) => (
+            <p key={p} className="texto">
+              {p}
+            </p>
+          ))}
+          <dl className="datos-tramo datos" data-testid="linea-detalle">
+            {gestor && (
+              <div>
+                <dt>Quién la gestiona</dt>
+                <dd>{gestor}</dd>
+              </div>
+            )}
+            {numero && (
+              <div>
+                <dt>Número en la red de Adif</dt>
+                <dd>{numero}</dd>
+              </div>
+            )}
+            <div>
+              <dt>Ancho de vía</dt>
+              <dd>{ancho}</dd>
+            </div>
+            {line.electrification && (
+              <div>
+                <dt>Electrificación</dt>
+                <dd>{line.electrification}</dd>
+              </div>
+            )}
+          </dl>
+          <PieFuente de="del trazado" sources={[coverage?.sources.find((s) => s.id === line.source_id)]} />
+        </Plegable>
       </div>
       {cuts.length > 0 && (
         <ul className="cortes-linea" aria-label="Tramos sin circulación hoy" data-testid="cortes-linea">
