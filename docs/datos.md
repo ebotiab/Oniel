@@ -199,4 +199,4 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 4. `uv run oniel-data validate --spec data/curated/<línea>.json` hasta que no haya problemas.
 5. `uv run oniel-data import network` e `import gtfs` (sin `--spec` cargan todas las líneas; `import all` hace todo y exporta la instantánea).
 
-El visor dibuja todo lo que devuelve `GET /api/network`: una pestaña por línea en el panel y todas las líneas en el mapa.
+El visor dibuja todo lo que devuelve `GET /api/network`: todas las líneas en el mapa y una entrada por línea en la lista de la vista de la red.

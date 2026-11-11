@@ -1,21 +1,19 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('Explorar la red', () => {
-  test('se abre con el mapa y la línea Madrid–Sevilla', async ({ page }) => {
+  test('se abre con el mapa y la vista de la red', async ({ page }) => {
     await page.goto('/')
     await expect(page).toHaveTitle(/Oniel/)
     await expect(page.getByTestId('mapa')).toBeVisible()
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
+    await expect(page.getByTestId('vista-red')).toBeVisible()
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
-    // la cobertura de la versión está a la vista: las tres líneas cargadas
-    await expect(page.getByTestId('boton-cobertura')).toContainText('Madrid – Sevilla')
-    await expect(page.getByTestId('boton-cobertura')).toContainText('Madrid – Córdoba por Alcázar de San Juan')
-    await expect(page.getByTestId('boton-cobertura')).toContainText('Manzanares – Ciudad Real')
+    // la cabecera dice cuánta red hay cargada con un recuento, sin enumerar las líneas
+    await expect(page.getByTestId('recuento-red')).toHaveText(/^3 líneas · 976 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/#/linea/lav-madrid-sevilla')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
     await page.getByTestId('esquema-tramo-5').click() // Ciudad Real – Puertollano
@@ -30,11 +28,11 @@ test.describe('Explorar la red', () => {
     await expect(page).toHaveURL(/#\/tramo\/lav-madrid-sevilla:ciudad-real:puertollano/)
   })
 
-  test('el panel permite cambiar a la línea convencional por Alcázar', async ({ page }) => {
+  test('desde la lista de la red se llega a la línea convencional por Alcázar', async ({ page }) => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
-    await page.getByTestId('selector-linea-convencional-madrid-alcazar-cordoba').click()
+    await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
     await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-alcazar-de-san-juan')).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-linares-baeza')).toBeVisible()
@@ -49,15 +47,16 @@ test.describe('Explorar la red', () => {
     await expect(page).toHaveURL(/#\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
   })
 
-  test('la tercera pestaña muestra la línea Manzanares – Ciudad Real, de vía única, con los trenes desviados', async ({ page }) => {
+  test('la lista lleva a la línea Manzanares – Ciudad Real, de vía única, con los trenes desviados', async ({ page }) => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
-    // tres pestañas, una por línea, también en la hoja del móvil
-    await expect(page.getByRole('tab')).toHaveCount(3)
-    await page.getByTestId('selector-linea-manzanares-ciudad-real').click()
-    await expect(page.getByTestId('selector-linea-manzanares-ciudad-real')).toHaveAttribute('aria-selected', 'true')
+    // la lista tiene las tres líneas, también en la hoja del móvil, y ya no hay pestañas
+    await expect(page.getByTestId('lista-lineas').getByRole('button')).toHaveCount(3)
+    await expect(page.getByRole('tab')).toHaveCount(0)
+    await page.getByTestId('linea-manzanares-ciudad-real').click()
+    await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
     await expect(page.getByTestId('ficha-linea')).toHaveText(/64,4 km.*hasta 140 km\/h/)
     // el número de línea, el ancho y la electrificación están en el detalle, plegado
@@ -85,7 +84,7 @@ test.describe('Explorar la red', () => {
     await page.goto('/#/nodo/ciudad-real')
     await expect(page.getByRole('heading', { name: 'Ciudad Real' })).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
-    await expect(page.getByTestId('nodo-lineas')).toContainText('Línea de alta velocidad Madrid – Sevilla y Línea convencional Manzanares – Ciudad Real')
+    await expect(page.getByTestId('nodo-lineas')).toContainText(/Madrid – Sevilla\s*alta velocidad\s*Manzanares – Ciudad Real\s*convencional/)
     await expect(page.getByRole('button', { name: 'Almagro – Ciudad Real' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Ciudad Real – Puertollano' })).toBeVisible()
     await expect(page.getByText(/Línea convencional Ciudad Real–Badajoz hacia Puertollano/)).toBeVisible()
@@ -99,7 +98,7 @@ test.describe('Explorar la red', () => {
   })
 
   test('la cabecera de la línea es breve y la descripción se despliega por párrafos', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/#/linea/lav-madrid-sevilla')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
@@ -157,7 +156,7 @@ test.describe('Explorar la red', () => {
       ['convencional-madrid-alcazar-cordoba', 'rabanales'],
       ['manzanares-ciudad-real', 'almagro'],
     ] as const) {
-      await page.getByTestId(`selector-linea-${lineId}`).click()
+      await page.goto(`/#/linea/${lineId}`)
       await expect(page.getByTestId(`esquema-nodo-${nodeId}`)).toBeAttached()
       // Cajas de todos los textos de los nodos (nombre y kilómetro); dos no pueden compartir área.
       const boxes = await page

@@ -12,7 +12,7 @@ async function abrirBuscador(page: Page) {
 test.describe('Buscar una estación o una línea', () => {
   test('«alcazar», sin acento ni mayúscula, lleva a Alcázar de San Juan', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
+    await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.fill('alcazar')
     const primero = page.getByRole('option').first()
@@ -29,7 +29,7 @@ test.describe('Buscar una estación o una línea', () => {
 
   test('«Urda» lleva al PAET, y el resultado dice qué es', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
+    await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.fill('Urda')
     const resultado = page.getByRole('option', { name: /Urda/ })
@@ -42,7 +42,7 @@ test.describe('Buscar una estación o una línea', () => {
 
   test('sin escribir ofrece las líneas, y con las flechas se llega a una que queda en la URL', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
+    await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.focus()
     await expect(page.getByRole('option')).toHaveCount(3)
@@ -59,7 +59,7 @@ test.describe('Buscar una estación o una línea', () => {
 
   test('admite el código de Adif y avisa cuando nada coincide', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
+    await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.fill('60400')
     await expect(page.getByRole('option')).toHaveCount(1)
@@ -75,7 +75,7 @@ test.describe('Buscar una estación o una línea', () => {
   test('la tecla «/» enfoca el buscador', async ({ page, isMobile }) => {
     test.skip(isMobile, 'El atajo es de teclado físico')
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible()
+    await expect(page.getByTestId('vista-red')).toBeVisible()
     await page.keyboard.press('/')
     await expect(page.getByRole('combobox', { name: 'Buscar una estación o una línea' })).toBeFocused()
     await page.keyboard.type('anover')

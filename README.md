@@ -77,7 +77,7 @@ Las pruebas de integración con PostgreSQL se activan con `ONIEL_TEST_DATABASE_U
 cd frontend && npm run typecheck && npx playwright install chromium && npx playwright test
 ```
 
-Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación).
+Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación). Si otra sesión ocupa el puerto 5199, `ONIEL_E2E_PORT` lo cambia.
 
 ## Comprobaciones
 

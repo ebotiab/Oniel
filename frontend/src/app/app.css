@@ -1023,10 +1023,6 @@
   outline: none;
 }
 
-.fila-linea.actual {
-  border-left-color: var(--tinta);
-}
-
 .fila-linea-nombre {
   font-weight: 600;
 }

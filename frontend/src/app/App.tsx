@@ -8,14 +8,14 @@ import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
-import { NetworkOverview, networkCount } from '../panel/NetworkOverview'
+import { NetworkOverview } from '../panel/NetworkOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeInterruptions, bySegment } from './interruptions'
 import type { SearchTarget } from './search'
-import { parseHash, toHash, todayIso, type Selection } from './state'
+import { networkCount, parseHash, toHash, todayIso, type Selection } from './state'
 import './app.css'
 
 function useMedia(query: string): boolean {
@@ -275,7 +275,7 @@ export default function App() {
         <button type="button" className="cobertura-pill" onClick={() => showLine(null)} data-testid="recuento-red">
           <span className="punto" aria-hidden="true" />
           <span className="pill-texto">
-            <strong>{network ? networkCount(network) : 'Oniel'}</strong>
+            <strong>{network ? networkCount(network.lines) : 'Oniel'}</strong>
           </span>
           {network && status === 'buscando' && <span className="senal gris">despertando el servidor…</span>}
           {network && status === 'ausente' && <span className="senal gris">vista estática</span>}

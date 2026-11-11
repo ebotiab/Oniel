@@ -65,18 +65,22 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
   test('la línea a la vista y el panel de cobertura tienen su ruta en la URL', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
-    await page.getByTestId('selector-linea-manzanares-ciudad-real').click()
+    await expect(page).toHaveURL(/#\/$/)
+    await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
     // el enlace abre esa misma línea
     await page.goto('/#/linea/convencional-madrid-alcazar-cordoba')
     await page.reload()
-    await expect(page.getByTestId('selector-linea-convencional-madrid-alcazar-cordoba')).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     // «Toda la línea» vuelve a la línea del tramo, con su ruta
     await page.goto('/#/tramo/manzanares-ciudad-real:daimiel:almagro')
     await page.reload()
     await page.getByRole('button', { name: '← Toda la línea' }).click()
     await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
-    await expect(page.getByTestId('selector-linea-manzanares-ciudad-real')).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
+    // «Toda la red» vuelve a la vista de la red, que es la raíz
+    await page.getByTestId('volver-red').click()
+    await expect(page).toHaveURL(/#\/$/)
     // la cobertura
     await page.getByTestId('boton-cobertura').click()
     await expect(page).toHaveURL(/#\/cobertura$/)

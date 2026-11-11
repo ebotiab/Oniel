@@ -1,4 +1,4 @@
-import { formatCount } from '../app/state'
+import { formatCount, networkCount } from '../app/state'
 import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
 import { LineList } from './LineList'
 
@@ -11,21 +11,10 @@ interface Props {
   onShowCoverage: () => void
 }
 
-/** Kilómetros de vía cargados: la suma de las líneas. */
-export function networkKm(network: NetworkOut): number {
-  return network.lines.reduce((km, l) => km + l.length_km, 0)
-}
-
-/** «3 líneas · 1.170 km»: el recuento de la red, igual de largo con tres líneas que con cien. */
-export function networkCount(network: NetworkOut): string {
-  const n = network.lines.length
-  return `${formatCount(n)} ${n === 1 ? 'línea' : 'líneas'} · ${formatCount(Math.round(networkKm(network)))} km`
-}
-
 /** Vista de la red: lo que se ve cuando no hay ninguna línea elegida. Dice qué hay cargado y por dónde empezar. */
 export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage }: Props) {
   const cortadas = new Set(interruptions.filter((i) => i.segment_ids.length > 0).map((i) => i.line_id))
-  const ficha = [networkCount(network), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
+  const ficha = [networkCount(network.lines), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
   return (
     <section className="vista-red" aria-labelledby="red-titulo" data-testid="vista-red">
       <div className="cabecera-linea">

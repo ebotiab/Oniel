@@ -7,8 +7,6 @@ import { Muestra } from './Legend'
 
 interface Props {
   lines: LineSummary[]
-  /** Línea a la vista, si la hay: se marca en la lista. */
-  currentId?: string | null
   /** Líneas con algún tramo sin circulación hoy. */
   interruptedLineIds: Set<string>
   onPick: (id: string) => void
@@ -26,7 +24,7 @@ const GROUPS = [
  * Lista de las líneas cargadas, agrupada por tipo. Es la misma con tres líneas que con cien: cada línea
  * ocupa un renglón doble, la lista se desplaza dentro del panel y, cuando son muchas, se filtra por nombre.
  */
-export function LineList({ lines, currentId = null, interruptedLineIds, onPick }: Props) {
+export function LineList({ lines, interruptedLineIds, onPick }: Props) {
   const [query, setQuery] = useState('')
   const filterable = lines.length >= FILTER_FROM
   const shown = useMemo(() => {
@@ -67,8 +65,7 @@ export function LineList({ lines, currentId = null, interruptedLineIds, onPick }
                 <li key={l.id}>
                   <button
                     type="button"
-                    className={`fila-linea${l.id === currentId ? ' actual' : ''}`}
-                    aria-current={l.id === currentId ? 'true' : undefined}
+                    className="fila-linea"
                     onClick={() => onPick(l.id)}
                     data-testid={`linea-${l.id}`}
                   >

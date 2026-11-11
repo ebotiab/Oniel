@@ -23,8 +23,8 @@ test.describe('Arranque con el servidor dormido', () => {
     })
 
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible({ timeout: 5_000 })
-    const cobertura = page.getByTestId('boton-cobertura')
+    await expect(page.getByTestId('vista-red')).toBeVisible({ timeout: 5_000 })
+    const cobertura = page.getByTestId('recuento-red')
     await expect(cobertura).toContainText('despertando el servidor')
 
     despertar()
@@ -36,9 +36,9 @@ test.describe('Arranque con el servidor dormido', () => {
   test('si el servidor no llega a responder, queda la vista estática', async ({ page }) => {
     await page.route('**/healthz', (route) => route.abort('connectionrefused'))
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: /Línea de alta velocidad Madrid – Sevilla/ })).toBeVisible({ timeout: 5_000 })
+    await expect(page.getByTestId('vista-red')).toBeVisible({ timeout: 5_000 })
     // un fallo rápido no basta para rendirse: se reintenta durante VITE_API_WAKE_MS (20 s en las pruebas)
-    const cobertura = page.getByTestId('boton-cobertura')
+    const cobertura = page.getByTestId('recuento-red')
     await expect(cobertura).toContainText('despertando el servidor')
     await expect(cobertura).toContainText('vista estática', { timeout: 30_000 })
   })

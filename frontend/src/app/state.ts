@@ -42,6 +42,12 @@ export function formatCount(n: number): string {
   return n.toLocaleString('es-ES', { useGrouping: 'always', maximumFractionDigits: 0 })
 }
 
+/** «3 líneas · 976 km»: el recuento de la red, igual de largo con tres líneas que con cien. */
+export function networkCount(lines: LineSummary[]): string {
+  const km = lines.reduce((sum, l) => sum + l.length_km, 0)
+  return `${formatCount(lines.length)} ${lines.length === 1 ? 'línea' : 'líneas'} · ${formatCount(Math.round(km))} km`
+}
+
 /** Fecha de hoy como AAAA-MM-DD (en UTC, como el resto de fechas ISO que maneja la API). */
 export function todayIso(): string {
   return new Date().toISOString().slice(0, 10)
