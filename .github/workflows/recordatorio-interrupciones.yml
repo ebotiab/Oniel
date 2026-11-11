@@ -1,0 +1,86 @@
+# Recordatorio de revisión de las interrupciones del servicio.
+#
+# Las interrupciones se revisan a mano (docs/datos.md, «Cómo se actualiza»): Adif no publica sus avisos
+# como datos abiertos. Este flujo no consulta ninguna fuente ni cambia ningún dato: solo lee
+# backend/data/curated/interrupciones.json y, si alguna interrupción sin fecha de fin (`ended_on`) lleva
+# más de siete días sin revisarse (`checked_on`), abre una incidencia que lo recuerda. Si ya hay una
+# abierta con la etiqueta del recordatorio, no abre otra.
+name: Recordatorio de revisión de las interrupciones
+
+on:
+  schedule:
+    # Los lunes a las 07:00 UTC.
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: recordatorio-interrupciones
+  cancel-in-progress: false
+
+env:
+  FICHERO: backend/data/curated/interrupciones.json
+  ETIQUETA: revision-interrupciones
+  DIAS: "7"
+
+jobs:
+  recordatorio:
+    name: Comprobar checked_on
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Interrupciones vigentes sin revisar en más de siete días
+        id: pendientes
+        run: |
+          limite="$(date -u -d "${DIAS} days ago" +%F)"
+          # Las fechas van en ISO (AAAA-MM-DD), así que compararlas como texto las ordena bien.
+          lista="$(jq -r --arg limite "$limite" '
+            .interruptions[]
+            | select(.ended_on == null and .checked_on < $limite)
+            | "- `\(.id)`: \(.line_id), de `\(.from_node)` a `\(.to_node)`. Última revisión: \(.checked_on)."
+          ' "$FICHERO")"
+          if [ -z "$lista" ]; then
+            echo "Ninguna interrupción vigente lleva más de ${DIAS} días sin revisar (límite: ${limite})."
+            echo "hay=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "$lista"
+          {
+            echo "hay=true"
+            echo "lista<<FIN_DE_LISTA"
+            echo "$lista"
+            echo "FIN_DE_LISTA"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Abrir la incidencia si no hay ya una abierta
+        if: steps.pendientes.outputs.hay == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LISTA: ${{ steps.pendientes.outputs.lista }}
+        run: |
+          gh label create "$ETIQUETA" --force --color FBCA04 \
+            --description "Recordatorio automático: toca revisar las interrupciones del servicio"
+          abierta="$(gh issue list --state open --label "$ETIQUETA" --json number --jq '.[0].number // empty')"
+          if [ -n "$abierta" ]; then
+            echo "Ya está abierta la incidencia #${abierta}: no se abre otra."
+            exit 0
+          fi
+          {
+            echo "Estas interrupciones no tienen fecha de fin (\`ended_on\`) y llevan más de ${DIAS} días sin revisarse:"
+            echo
+            echo "$LISTA"
+            echo
+            echo "Qué hacer: seguir «Cómo se actualiza» de [docs/datos.md](https://github.com/${GH_REPO}/blob/main/docs/datos.md#cómo-se-actualiza). Se consultan las fuentes de cada entrada, se pone al día \`checked_on\` en \`${FICHERO}\` (y \`ended_on\` o la previsión, si la fuente lo dice) y se regenera la instantánea. La PR que lo haga cierra esta incidencia."
+            echo
+            echo "La abre el flujo «${GITHUB_WORKFLOW}» (\`.github/workflows/recordatorio-interrupciones.yml\`), que solo lee el fichero: no consulta ninguna fuente."
+          } > cuerpo.md
+          gh issue create \
+            --title "Revisar las interrupciones del servicio" \
+            --label "$ETIQUETA" --label datos \
+            --body-file cuerpo.md
