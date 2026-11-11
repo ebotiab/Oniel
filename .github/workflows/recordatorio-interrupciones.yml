@@ -9,8 +9,8 @@ name: Recordatorio de revisión de las interrupciones
 
 on:
   schedule:
-    # Los lunes a las 07:00 UTC.
-    - cron: "0 7 * * 1"
+    # Cada día a las 07:00 UTC: así el aviso llega al octavo día, sea cual sea el día de la revisión.
+    - cron: "0 7 * * *"
   workflow_dispatch:
 
 permissions:
