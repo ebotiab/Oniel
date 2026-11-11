@@ -17,7 +17,13 @@ MZCR_SPEC = DATA_DIR / "curated" / "manzanares-ciudad-real.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [SPEC, CONV_SPEC, MZCR_SPEC]
 SOURCES = DATA_DIR / "curated" / "sources.json"
+#: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los
+#: recuentos que se comprueban son los suyos y no cambian aunque `sources.json` declare otros
+#: ficheros más recientes para producción.
 FEED = DATA_DIR / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
+FEED_SOURCE_ID = "renfe-gtfs-av-ld-md"
+FEED_OPERATOR_ID = "renfe"
+FEED_DATASET_ID = "renfe-gtfs-av-ld-md-2026-11-08"
 
 
 @pytest.fixture(scope="session")

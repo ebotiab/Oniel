@@ -1,4 +1,12 @@
 {
+  "feeds": [
+    {
+      "file": "raw/renfe/google_transit_av_ld_md_2026-11-08.zip",
+      "source_id": "renfe-gtfs-av-ld-md",
+      "operator_id": "renfe",
+      "retrieved_on": "2026-11-08"
+    }
+  ],
   "sources": [
     {
       "id": "renfe-gtfs-av-ld-md",

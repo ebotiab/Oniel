@@ -1,0 +1,340 @@
+"""Conjuntos de datos fechados: cada fichero de horarios se guarda aparte y el visor lee el activo."""
+
+from __future__ import annotations
+
+import csv
+import datetime as dt
+import io
+import json
+import zipfile
+from collections.abc import AsyncIterator
+from pathlib import Path
+from typing import Any
+
+import asyncpg
+import pytest
+import pytest_asyncio
+from conftest import (
+    DATA_DIR,
+    FEED,
+    FEED_DATASET_ID,
+    FEED_OPERATOR_ID,
+    FEED_SOURCE_ID,
+    SOURCES,
+    SPECS,
+    database_url_for_tests,
+    requires_db,
+)
+
+from oniel.gtfs.importer import file_sha256, retrieved_on_from_name
+from oniel.network.spec import FeedSpec, load_feeds
+
+#: Día de referencia del fichero del 8 de noviembre de 2026 (un viernes).
+REFERENCE = dt.date(2026, 11, 13)
+NEWER_ID = "renfe-gtfs-av-ld-md-2026-11-20"
+
+
+def test_declared_feeds_exist_and_cite_registered_sources() -> None:
+    feeds = load_feeds(SOURCES)
+    assert feeds, "sources.json tiene que declarar al menos un fichero de horarios"
+    assert [f.retrieved_on for f in feeds] == sorted(f.retrieved_on for f in feeds)
+    for feed in feeds:
+        path = DATA_DIR / feed.file
+        assert path.is_file(), feed.file
+        # la fecha de descarga es la del nombre del fichero
+        assert retrieved_on_from_name(path) == feed.retrieved_on
+    # el fichero fijo de las pruebas sigue declarado: es el primer conjunto del histórico
+    assert FEED in [DATA_DIR / f.file for f in feeds]
+
+
+def _sources_file(tmp_path: Path, feeds: list[dict[str, str]]) -> Path:
+    path = tmp_path / "sources.json"
+    source = {"id": "horarios", "name": "Horarios", "publisher": "Operador"}
+    path.write_text(json.dumps({"feeds": feeds, "sources": [source]}), encoding="utf-8")
+    return path
+
+
+def test_feeds_are_sorted_from_oldest_to_newest(tmp_path: Path) -> None:
+    def feed(day: str) -> dict[str, str]:
+        return {
+            "file": f"raw/horarios_{day}.zip",
+            "source_id": "horarios",
+            "operator_id": "operador",
+            "retrieved_on": day,
+        }
+
+    feeds = load_feeds(_sources_file(tmp_path, [feed("2026-12-01"), feed("2026-11-08")]))
+    assert [f.retrieved_on.isoformat() for f in feeds] == ["2026-11-08", "2026-12-01"]
+    assert load_feeds(_sources_file(tmp_path, [])) == []
+
+
+@pytest.mark.parametrize(
+    ("feeds", "message"),
+    [
+        (
+            [
+                {
+                    "file": "raw/a.zip",
+                    "source_id": "otra",
+                    "operator_id": "operador",
+                    "retrieved_on": "2026-11-08",
+                }
+            ],
+            "no está registrada",
+        ),
+        (
+            [
+                {
+                    "file": "raw/a.zip",
+                    "source_id": "horarios",
+                    "operator_id": "operador",
+                    "retrieved_on": "2026-11-08",
+                }
+            ]
+            * 2,
+            "repetidos",
+        ),
+        (
+            [{"file": "raw/a.zip", "source_id": "horarios", "operator_id": "operador"}],
+            "retrieved_on",
+        ),
+    ],
+)
+def test_feeds_that_do_not_hold_are_rejected(
+    tmp_path: Path, feeds: list[dict[str, str]], message: str
+) -> None:
+    with pytest.raises(ValueError, match=message):
+        load_feeds(_sources_file(tmp_path, feeds))
+
+
+def test_retrieved_on_comes_from_the_file_name() -> None:
+    assert retrieved_on_from_name(FEED) == dt.date(2026, 11, 8)
+    assert retrieved_on_from_name(Path("google_transit.zip")) is None
+
+
+def feed_without_trip(source: Path, target: Path, trip_id: str) -> None:
+    """Copia un GTFS quitándole un viaje: un fichero distinto, con un servicio menos."""
+    with zipfile.ZipFile(source) as src, zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as out:
+        for info in src.infolist():
+            data = src.read(info.filename)
+            if info.filename == "trips.txt":
+                lines = data.decode("utf-8-sig").splitlines(keepends=True)
+                column = [c.strip() for c in next(csv.reader(io.StringIO(lines[0])))].index(
+                    "trip_id"
+                )
+                kept = [lines[0]] + [
+                    line
+                    for line in lines[1:]
+                    if next(csv.reader(io.StringIO(line)))[column].strip() != trip_id
+                ]
+                assert len(kept) == len(lines) - 1
+                data = "".join(kept).encode("utf-8")
+            out.writestr(info.filename, data)
+
+
+in_db = pytest.mark.asyncio(loop_scope="module")
+
+
+@pytest_asyncio.fixture(loop_scope="module", scope="module")
+async def conn() -> AsyncIterator[asyncpg.Connection]:
+    from oniel.db.migrate import drop_everything, migrate
+    from oniel.db.pool import connect
+    from oniel.network.importer import import_network
+
+    dsn = database_url_for_tests()
+    assert dsn is not None
+    async with connect(dsn) as connection:
+        await drop_everything(connection)
+        await migrate(connection)
+        for spec in SPECS:
+            await import_network(connection, spec, SOURCES, DATA_DIR)
+        yield connection
+
+
+@pytest_asyncio.fixture(loop_scope="module", scope="module")
+async def two_datasets(
+    conn: asyncpg.Connection, tmp_path_factory: pytest.TempPathFactory
+) -> dict[str, Any]:
+    """El fichero fijo y, después, uno más reciente al que le falta un tren del día de referencia."""
+    from oniel.gtfs.importer import import_gtfs
+    from oniel.repo import services_repo
+
+    first = await import_gtfs(
+        conn,
+        FEED,
+        SPECS,
+        source_id=FEED_SOURCE_ID,
+        operator_id=FEED_OPERATOR_ID,
+        data_dir=DATA_DIR,
+    )
+    segment_id = "lav-madrid-sevilla:ciudad-real:puertollano"
+    before = await services_repo.daily_counts(conn, REFERENCE)
+    removed = (await services_repo.passes_on_segment(conn, segment_id, REFERENCE))[0].service
+    newer = tmp_path_factory.mktemp("gtfs") / "google_transit_av_ld_md_2026-11-20.zip"
+    feed_without_trip(FEED, newer, removed.id)
+    second = await import_gtfs(
+        conn, newer, SPECS, source_id=FEED_SOURCE_ID, operator_id=FEED_OPERATOR_ID
+    )
+    return {
+        "first": first,
+        "second": second,
+        "before": before,
+        "removed": removed,
+        "segment_id": segment_id,
+        "newer": newer,
+    }
+
+
+async def _count(conn: asyncpg.Connection, table: str, dataset_id: str) -> int:
+    from oniel.db.pool import fetch_int
+
+    return await fetch_int(conn, f"SELECT count(*) FROM {table} WHERE dataset_id = $1", dataset_id)
+
+
+@requires_db
+@in_db
+async def test_a_new_file_keeps_the_previous_dataset(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    first, second = two_datasets["first"], two_datasets["second"]
+    assert first["dataset"] == {
+        "id": FEED_DATASET_ID,
+        "sha256": file_sha256(FEED),
+        "retrieved_on": "2026-11-08",
+        "reused": False,
+    }
+    assert second["dataset"]["id"] == NEWER_ID and second["dataset"]["reused"] is False
+    rows = await conn.fetch("SELECT * FROM datasets ORDER BY retrieved_on")
+    assert [r["id"] for r in rows] == [FEED_DATASET_ID, NEWER_ID]
+    old, new = rows
+    assert old["file"] == "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
+    assert old["source_id"] == new["source_id"] == FEED_SOURCE_ID
+    assert old["operator_id"] == new["operator_id"] == FEED_OPERATOR_ID
+    assert (old["valid_from"], old["valid_to"]) == (dt.date(2026, 11, 7), dt.date(2027, 9, 29))
+    # el anterior sigue entero y el nuevo tiene un viaje menos
+    assert await _count(conn, "services", FEED_DATASET_ID) == 814
+    assert await _count(conn, "services", NEWER_ID) == 813
+    passes = (3126 + 115) + (2469 + 683) + (72 + 390)
+    assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
+    assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
+
+
+@requires_db
+@in_db
+async def test_counts_and_coverage_come_from_the_active_dataset(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    from oniel.repo import network_repo, services_repo
+
+    segment_id, removed = two_datasets["segment_id"], two_datasets["removed"]
+    coverage = await network_repo.fetch_coverage(conn)
+    assert coverage.reference_date == REFERENCE
+    assert [d.id for d in coverage.datasets] == [NEWER_ID]
+    # el tren retirado circulaba el día de referencia: en el conjunto activo ya no pasa
+    before = two_datasets["before"]
+    now = await services_repo.daily_counts(conn, REFERENCE)
+    assert now[segment_id] == before[segment_id] - 1
+    assert sum(now.values()) < sum(before.values())
+    assert await services_repo.daily_counts(conn, REFERENCE, FEED_DATASET_ID) == before
+    on_segment = await services_repo.passes_on_segment(conn, segment_id, REFERENCE)
+    assert len(on_segment) == now[segment_id]
+    assert removed.id not in {d.service.id for d in on_segment}
+    # los viajes no se cuentan dos veces aunque estén en los dos conjuntos
+    assert len({d.service.id for d in on_segment}) == len(on_segment)
+    # la ficha de un viaje que solo está en el conjunto anterior se sigue pudiendo leer
+    found = await services_repo.fetch_service(conn, removed.id)
+    assert found is not None and found[0].train_number == removed.train_number
+
+
+@requires_db
+@in_db
+async def test_the_active_dataset_is_the_newest_one_valid_that_day(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    from oniel.repo import datasets_repo, services_repo
+
+    later = dt.date(2026, 12, 2)
+    async with conn.transaction():
+        # si el fichero nuevo empezara a valer el 1 de diciembre, hasta entonces manda el anterior
+        await conn.execute("UPDATE datasets SET valid_from = '2026-12-01' WHERE id = $1", NEWER_ID)
+        assert [d.id for d in await datasets_repo.fetch_active_datasets(conn, REFERENCE)] == [
+            FEED_DATASET_ID
+        ]
+        assert await services_repo.daily_counts(conn, REFERENCE) == two_datasets["before"]
+        assert [d.id for d in await datasets_repo.fetch_active_datasets(conn, later)] == [NEWER_ID]
+        assert await services_repo.daily_counts(conn, later) == await services_repo.daily_counts(
+            conn, later, NEWER_ID
+        )
+        # y fuera de la validez de todos no hay nada que mostrar
+        assert await datasets_repo.fetch_active_datasets(conn, dt.date(2025, 1, 1)) == []
+        assert await services_repo.daily_counts(conn, dt.date(2025, 1, 1)) == {}
+        await conn.execute("UPDATE datasets SET valid_from = '2026-11-07' WHERE id = $1", NEWER_ID)
+
+
+@requires_db
+@in_db
+async def test_importing_the_same_file_again_duplicates_nothing(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    from oniel.gtfs.importer import import_gtfs
+
+    again = await import_gtfs(
+        conn,
+        two_datasets["newer"],
+        SPECS,
+        source_id=FEED_SOURCE_ID,
+        operator_id=FEED_OPERATOR_ID,
+    )
+    assert again["dataset"]["id"] == NEWER_ID and again["dataset"]["reused"] is True
+    assert await conn.fetchval("SELECT count(*) FROM datasets") == 2
+    assert await _count(conn, "services", NEWER_ID) == 813
+    assert await conn.fetchval("SELECT count(*) FROM services") == 814 + 813
+
+
+@requires_db
+@in_db
+async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any], tmp_path: Path
+) -> None:
+    from oniel.importing import run_import_all
+
+    def feed(path: Path, day: dt.date) -> FeedSpec:
+        return FeedSpec(
+            file=str(path),
+            source_id=FEED_SOURCE_ID,
+            operator_id=FEED_OPERATOR_ID,
+            retrieved_on=day,
+        )
+
+    async def run(feeds: list[FeedSpec], snapshot_dir: Path | None) -> dict[str, Any]:
+        return await run_import_all(
+            conn,
+            specs=SPECS,
+            sources=SOURCES,
+            feeds=feeds,
+            data_dir=DATA_DIR,
+            snapshot_dir=snapshot_dir,
+        )
+
+    both = [feed(FEED, dt.date(2026, 11, 8)), feed(two_datasets["newer"], dt.date(2026, 11, 20))]
+    result = await run(both, tmp_path)
+    assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
+    assert [g["trips_imported"] for g in result["gtfs"]] == [814, 813]
+    assert result["datasets_removed"] == []
+    # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
+    coverage = json.loads((tmp_path / "coverage.json").read_text(encoding="utf-8"))
+    assert [d["id"] for d in coverage["datasets"]] == [NEWER_ID]
+    current = json.loads((tmp_path / "segment-counts.json").read_text(encoding="utf-8"))
+    history = {
+        p.parent.name: json.loads(p.read_text(encoding="utf-8"))
+        for p in (tmp_path / "historico").glob("*/segment-counts.json")
+    }
+    assert set(history) == {FEED_DATASET_ID, NEWER_ID}
+    assert history[FEED_DATASET_ID]["counts"] == two_datasets["before"]
+    assert history[NEWER_ID]["counts"] == current["counts"]
+    assert history[NEWER_ID]["date"] == current["date"] == REFERENCE.isoformat()
+    # un conjunto que deja de estar declarado se retira, también de la instantánea
+    result = await run(both[:1], tmp_path)
+    assert result["datasets_removed"] == [NEWER_ID]
+    assert await conn.fetchval("SELECT count(*) FROM services") == 814
+    assert [p.name for p in (tmp_path / "historico").iterdir()] == [FEED_DATASET_ID]

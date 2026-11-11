@@ -2,11 +2,21 @@
 
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 from typing import Any
 
 import pytest
-from conftest import DATA_DIR, FEED, SOURCES, SPECS, database_url_for_tests, requires_db
+from conftest import (
+    DATA_DIR,
+    FEED,
+    FEED_OPERATOR_ID,
+    FEED_SOURCE_ID,
+    SOURCES,
+    SPECS,
+    database_url_for_tests,
+    requires_db,
+)
 
 from oniel.importing import import_fingerprint
 
@@ -55,6 +65,7 @@ async def test_import_all_skips_when_nothing_changed() -> None:
     from oniel.db.migrate import drop_everything
     from oniel.db.pool import connect
     from oniel.importing import run_import_all
+    from oniel.network.spec import FeedSpec
 
     dsn = database_url_for_tests()
     assert dsn is not None
@@ -65,7 +76,14 @@ async def test_import_all_skips_when_nothing_changed() -> None:
                 conn,
                 specs=SPECS,
                 sources=SOURCES,
-                feed=FEED,
+                feeds=[
+                    FeedSpec(
+                        file=str(FEED),
+                        source_id=FEED_SOURCE_ID,
+                        operator_id=FEED_OPERATOR_ID,
+                        retrieved_on=dt.date(2026, 11, 8),
+                    )
+                ],
                 data_dir=DATA_DIR,
                 snapshot_dir=None,
                 if_changed=if_changed,
@@ -75,7 +93,7 @@ async def test_import_all_skips_when_nothing_changed() -> None:
         # base vacía: aunque se pida saltar, hay que importar
         first = await run(if_changed=True)
         assert first["skipped"] is False
-        assert first["gtfs"]["trips_imported"] == 335 + 503 - 24
+        assert first["gtfs"][0]["trips_imported"] == 335 + 503 - 24
         # misma huella: se salta sin tocar la base
         second = await run(if_changed=True)
         assert second["skipped"] is True
