@@ -1,5 +1,6 @@
 // Capas de Oniel sobre el mapa base. La vía es tinta; el color solo marca estados.
-// El grosor del trazo distingue la categoría de la vía: alta velocidad, convencional y vía única.
+// El dibujo y el grosor del trazo dicen qué vía es: alta velocidad (gruesa, con un filete claro en el
+// centro), convencional (trazos blancos) y vía única (fina, con los trazos más espaciados).
 
 import type { ExpressionSpecification, LayerSpecification } from 'maplibre-gl'
 
@@ -22,6 +23,8 @@ export const LAYER = {
   segmentsHalo: 'oniel-segments-halo',
   segments: 'oniel-segments',
   segmentsTicks: 'oniel-segments-ticks',
+  segmentsTicksSingle: 'oniel-segments-ticks-unica',
+  segmentsFillet: 'oniel-segments-filete',
   segmentsHit: 'oniel-segments-hit',
   nodesMinor: 'oniel-nodes-minor',
   nodesStations: 'oniel-nodes-stations',
@@ -29,14 +32,20 @@ export const LAYER = {
   nodeLabelsSecondary: 'oniel-node-labels-secondary',
 } as const
 
-/** Factor de grosor de un tramo: 1 alta velocidad, 0,8 convencional, 0,6 vía única (propiedad `peso`). */
-export const PESO_ALTA_VELOCIDAD = 1
-export const PESO_CONVENCIONAL = 0.8
-export const PESO_VIA_UNICA = 0.6
+/** Tipo de línea de un tramo (propiedad `tipo`) y número de vías (propiedad `vias`). */
+export const TIPO_ALTA_VELOCIDAD = 'alta-velocidad'
+export const TIPO_CONVENCIONAL = 'convencional'
+
+/** Los tres trazos que distingue el mapa; la vía única manda sobre el tipo de línea. */
+export type Trazo = 'alta-velocidad' | 'convencional' | 'via-unica'
+
+/** Factor de grosor de cada trazo: a zoom 5 son 4,2 px, 2,55 px y 1,5 px. */
+export const GROSOR: Record<Trazo, number> = { 'alta-velocidad': 1.4, convencional: 0.85, 'via-unica': 0.5 }
 
 const isStation: ExpressionSpecification = ['==', ['get', 'kind'], 'estacion']
 const isSecondary: ExpressionSpecification = ['==', ['get', 'rank'], 'secundario']
-const peso: ExpressionSpecification = ['coalesce', ['get', 'peso'], 1]
+const altaVelocidad: ExpressionSpecification = ['==', ['get', 'tipo'], TIPO_ALTA_VELOCIDAD]
+const viaUnica: ExpressionSpecification = ['==', ['get', 'vias'], 1]
 const emphasised: ExpressionSpecification = [
   'any',
   ['boolean', ['feature-state', 'seleccionado'], false],
@@ -70,17 +79,31 @@ const haloColor: ExpressionSpecification = [
   TINTA,
 ]
 
-/** Grosor que crece con el zoom y se multiplica por el peso de la vía. */
+const esAltaVelocidad: ExpressionSpecification = ['all', altaVelocidad, ['!', viaUnica]]
+const esConvencional: ExpressionSpecification = ['all', ['!', altaVelocidad], ['!', viaUnica]]
+const factor: ExpressionSpecification = ['case', viaUnica, GROSOR['via-unica'], altaVelocidad, GROSOR['alta-velocidad'], GROSOR.convencional]
+
+/** Grosor que crece con el zoom y se multiplica por el factor de la vía. */
 function weighted(low: number, high: number, lowEmph: number, highEmph: number): ExpressionSpecification {
   return [
     'interpolate',
     ['linear'],
     ['zoom'],
     5,
-    ['*', ['case', emphasised, lowEmph, low], peso],
+    ['*', ['case', emphasised, lowEmph, low], factor],
     12,
-    ['*', ['case', emphasised, highEmph, high], peso],
+    ['*', ['case', emphasised, highEmph, high], factor],
   ]
+}
+
+/** Capas que dibujan la vía y se atenúan cuando la leyenda resalta un trazo. */
+export const CAPAS_DE_VIA = [LAYER.segments, LAYER.segmentsTicks, LAYER.segmentsTicksSingle, LAYER.segmentsFillet] as const
+
+/** Opacidad de la vía: entera, o con el trazo resaltado entero y los demás atenuados. */
+export function opacidadDeVia(resaltado: Trazo | null): ExpressionSpecification | number {
+  if (!resaltado) return 1
+  const es = resaltado === 'via-unica' ? viaUnica : resaltado === 'alta-velocidad' ? esAltaVelocidad : esConvencional
+  return ['case', es, 1, 0.18]
 }
 
 export function onielLayers(): LayerSpecification[] {
@@ -143,15 +166,30 @@ export function onielLayers(): LayerSpecification[] {
       },
       layout: { 'line-cap': 'round', 'line-join': 'round' },
     },
+    // Línea convencional de vía doble: los trazos blancos clásicos.
     {
       id: LAYER.segmentsTicks,
       type: 'line',
       source: SRC.segments,
-      paint: {
-        'line-color': PAPEL,
-        'line-width': weighted(1.4, 2.2, 1.4, 2.2),
-        'line-dasharray': [0.5, 3.2],
-      },
+      filter: esConvencional,
+      paint: { 'line-color': PAPEL, 'line-width': weighted(1.4, 2.2, 1.4, 2.2), 'line-dasharray': [0.5, 3.2] },
+    },
+    // Vía única: los mismos trazos, más espaciados.
+    {
+      id: LAYER.segmentsTicksSingle,
+      type: 'line',
+      source: SRC.segments,
+      filter: viaUnica,
+      paint: { 'line-color': PAPEL, 'line-width': weighted(1.4, 2.2, 1.4, 2.2), 'line-dasharray': [0.5, 9] },
+    },
+    // Alta velocidad: un filete claro continuo por el centro.
+    {
+      id: LAYER.segmentsFillet,
+      type: 'line',
+      source: SRC.segments,
+      filter: esAltaVelocidad,
+      paint: { 'line-color': PAPEL, 'line-width': weighted(0.95, 1.6, 1.1, 1.8) },
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
     },
     {
       id: LAYER.segmentsHit,

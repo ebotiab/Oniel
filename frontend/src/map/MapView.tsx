@@ -17,7 +17,7 @@ import type { InterruptionOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
 import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
-import { LAYER, PESO_ALTA_VELOCIDAD, PESO_CONVENCIONAL, PESO_VIA_UNICA, SRC, onielLayers } from './layers'
+import { CAPAS_DE_VIA, LAYER, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeVia, type Trazo } from './layers'
 import baseStyle from './style/oniel-base.json'
 
 interface Props {
@@ -27,6 +27,8 @@ interface Props {
   closedSegmentId: string | null
   /** Interrupciones vigentes hoy, por id de tramo: esos tramos se dibujan en rojo. */
   interrupted: Map<string, InterruptionOut[]>
+  /** Trazo que resalta la leyenda: los demás se atenúan. */
+  highlight?: Trazo | null
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   /** Hueco (px) que ocupa el panel a la izquierda en escritorio o abajo en móvil. */
@@ -44,11 +46,10 @@ function shortName(name: string): string {
     .replace('Bifurcación ', 'Bif. ')
 }
 
-/** Grosor relativo de un tramo según la categoría de su línea y su número de vías. */
-function segmentWeight(net: NetworkOut, lineId: unknown, tracks: unknown): number {
+/** Tipo de la línea de un tramo, para dibujar su trazo. */
+function segmentKind(net: NetworkOut, lineId: unknown): string {
   const line = net.lines.find((l) => l.id === lineId)
-  const base = line && lineKind(line) === 'alta velocidad' ? PESO_ALTA_VELOCIDAD : PESO_CONVENCIONAL
-  return tracks === 1 ? Math.min(base, PESO_VIA_UNICA) : base
+  return line && lineKind(line) === 'alta velocidad' ? TIPO_ALTA_VELOCIDAD : TIPO_CONVENCIONAL
 }
 
 /** Asigna ids numéricos para feature-state y guarda la correspondencia. */
@@ -61,7 +62,7 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, onSelect, onHover, padding }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, onSelect, onHover, padding }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
@@ -74,6 +75,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
   // Se deduce de la red, así que cambia a la vez que ella: addNetwork lo lee de aquí.
   const interruptedRef = useRef(interrupted)
   interruptedRef.current = interrupted
+  const highlightRef = useRef(highlight)
+  highlightRef.current = highlight
   const stateRef = useRef({ selection, hoverId, closedSegmentId })
   stateRef.current = { selection, hoverId, closedSegmentId }
 
@@ -130,7 +133,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
         ...f,
         properties: {
           ...f.properties,
-          peso: segmentWeight(net, f.properties.line_id, f.properties.tracks),
+          tipo: segmentKind(net, f.properties.line_id),
+          vias: f.properties.tracks === 1 ? 1 : 2,
           interrumpido: interruptedRef.current.has(f.id),
         },
       })),
@@ -185,7 +189,21 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     })
     map.on('mouseout', () => callbacks.current.onHover(null))
     applyStates(map)
+    applyHighlight(map)
   }
+
+  function applyHighlight(map: MapLibreMap) {
+    const opacity = opacidadDeVia(highlightRef.current)
+    for (const id of CAPAS_DE_VIA) if (map.getLayer(id)) map.setPaintProperty(id, 'line-opacity', opacity)
+  }
+
+  // Resaltar el trazo que señala la leyenda
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !map.getSource(SRC.segments)) return
+    applyHighlight(map)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [highlight])
 
   function applyStates(map: MapLibreMap) {
     const { selection, hoverId, closedSegmentId } = stateRef.current
@@ -245,5 +263,5 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     }
   }, [selection, network, padding.left, padding.bottom])
 
-  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" />
+  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} />
 }

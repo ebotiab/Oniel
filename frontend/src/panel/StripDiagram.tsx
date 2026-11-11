@@ -1,6 +1,6 @@
 import type { InterruptionOut, NetworkOut, NodeOut, SegmentOut } from '../data/types'
 import type { Selection } from '../app/state'
-import { formatKm } from '../app/state'
+import { formatKm, lineKind } from '../app/state'
 import { spreadLabels } from './layout'
 
 interface Props {
@@ -39,6 +39,8 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
   const cut = new Set(interruptions.flatMap((i) => i.segment_ids))
   const nodes = network.nodes.filter((n) => n.line_id === lineId)
   const segments = network.segments.filter((s) => s.line_id === lineId)
+  const line = network.lines.find((l) => l.id === lineId)
+  const highSpeed = line ? lineKind(line) === 'alta velocidad' : false
   const withConnections = new Set(network.connections.map((c) => c.node_id))
   const kmMax = Math.max(...nodes.map((n) => n.km))
   const top = 22
@@ -77,18 +79,23 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
           {countsLabel}
         </text>
       )}
-      {/* la vía: trazo grueso en vía doble, fino en vía única; en rojo donde hoy no hay circulación */}
-      {segments.map((s) => (
-        <line
-          key={`via-${s.id}`}
-          x1={X}
-          y1={y(s.km_from)}
-          x2={X}
-          y2={y(s.km_to)}
-          stroke={cut.has(s.id) ? 'var(--senal-roja)' : 'var(--tinta)'}
-          strokeWidth={s.tracks === 1 ? 1.5 : 3}
-        />
-      ))}
+      {/* la vía, con el dibujo del mapa: alta velocidad gruesa con un filete claro, convencional con trazos
+          blancos y vía única fina con los trazos más espaciados; en rojo donde hoy no hay circulación */}
+      {segments.map((s) => {
+        const single = s.tracks === 1
+        const trazo = single ? 'via-unica' : highSpeed ? 'alta-velocidad' : 'convencional'
+        const w = single ? 2 : highSpeed ? 5 : 3
+        return (
+          <g key={`via-${s.id}`} data-trazo={trazo}>
+            <line x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke={cut.has(s.id) ? 'var(--senal-roja)' : 'var(--tinta)'} strokeWidth={w} />
+            {trazo === 'alta-velocidad' ? (
+              <line x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke="var(--papel)" strokeWidth={1.5} />
+            ) : (
+              <line x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke="var(--papel)" strokeWidth={single ? 1 : 1.4} strokeDasharray={single ? '1.5 12' : '1.5 5'} strokeDashoffset={-4} />
+            )}
+          </g>
+        )
+      })}
       {Array.from({ length: Math.floor(kmMax / 10) + 1 }, (_, i) => i * 10).map((km) => (
         <g key={km}>
           <line x1={X - (km % 50 ? 4 : 7)} y1={y(km)} x2={X} y2={y(km)} stroke="var(--tinta)" strokeWidth={km % 50 ? 1 : 1.5} />

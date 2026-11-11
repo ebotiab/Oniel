@@ -55,3 +55,60 @@ test.describe('Navegar por el mapa', () => {
     expect(giro).toEqual({ bearing: 0, pitch: 0 })
   })
 })
+
+test.describe('Trazo de la vía', () => {
+  test('el mapa separa el tipo de línea del número de vías y el esquema usa los mismos trazos', async ({ page }) => {
+    await mapaListo(page)
+    const trazos = await page.evaluate(() => {
+      const map = (globalThis as unknown as ConMapa).__onielMap!
+      const vistos = new Set<string>()
+      for (const f of map.querySourceFeatures('oniel-segments')) vistos.add(`${f.properties.tipo}/${f.properties.vias}`)
+      return [...vistos].sort()
+    })
+    expect(trazos).toEqual(['alta-velocidad/2', 'convencional/1', 'convencional/2'])
+    // cada trazo tiene su capa de dibujo: filete, trazos blancos y trazos espaciados
+    const capas = await page.evaluate(() => {
+      const map = (globalThis as unknown as ConMapa).__onielMap!
+      return ['oniel-segments-filete', 'oniel-segments-ticks', 'oniel-segments-ticks-unica'].map((id) => map.getLayer(id) !== undefined)
+    })
+    expect(capas).toEqual([true, true, true])
+
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
+    await expect(page.locator('[data-testid="esquema"] [data-trazo="alta-velocidad"]').first()).toBeAttached()
+    await page.getByTestId('selector-linea-convencional-madrid-alcazar-cordoba').click()
+    await expect(page.locator('[data-testid="esquema"] [data-trazo="convencional"]').first()).toBeAttached()
+    await expect(page.locator('[data-testid="esquema"] [data-trazo="via-unica"]').first()).toBeAttached()
+    await expect(page.locator('[data-testid="esquema"] [data-trazo="alta-velocidad"]')).toHaveCount(0)
+  })
+
+  test('la leyenda muestra los tres trazos y resalta en el mapa el que se señala', async ({ page }, info) => {
+    test.skip(info.project.name === 'movil', 'la leyenda solo existe en escritorio')
+    await mapaListo(page)
+    const opacidad = () =>
+      page.evaluate(() => JSON.stringify((globalThis as unknown as ConMapa).__onielMap!.getPaintProperty('oniel-segments', 'line-opacity') ?? 1))
+    const mapa = page.getByTestId('mapa')
+    await expect(page.getByTestId('leyenda-alta-velocidad')).toHaveText('Alta velocidad')
+    await expect(page.getByTestId('leyenda-convencional')).toHaveText('Línea convencional')
+    await expect(page.getByTestId('leyenda-via-unica')).toHaveText('Vía única')
+    expect(await opacidad()).toBe('1')
+
+    // pasar por encima resalta sin fijar
+    await page.getByTestId('leyenda-via-unica').hover()
+    await expect(mapa).toHaveAttribute('data-resaltado', 'via-unica')
+    expect(await opacidad()).toContain('vias')
+    await page.mouse.move(700, 400)
+    await expect(mapa).not.toHaveAttribute('data-resaltado')
+    expect(await opacidad()).toBe('1')
+
+    // un clic lo deja fijado; otro lo suelta
+    await page.getByTestId('leyenda-alta-velocidad').click()
+    await page.mouse.move(700, 400)
+    await expect(mapa).toHaveAttribute('data-resaltado', 'alta-velocidad')
+    await expect(page.getByTestId('leyenda-alta-velocidad')).toHaveAttribute('aria-pressed', 'true')
+    expect(await opacidad()).toContain('alta-velocidad')
+    await page.getByTestId('leyenda-alta-velocidad').click()
+    await page.mouse.move(700, 400)
+    await expect(mapa).not.toHaveAttribute('data-resaltado')
+  })
+})
