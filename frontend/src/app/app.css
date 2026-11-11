@@ -913,60 +913,6 @@
   bottom: calc(66vh + 4px);
 }
 
-/* Selector de línea (pestañas) */
-.selector-lineas {
-  display: flex;
-  gap: 4px;
-  margin: 0 0 12px;
-  border-bottom: 1px solid var(--regla);
-}
-
-.pestana-linea {
-  flex: 1;
-  display: grid;
-  gap: 1px;
-  background: none;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  padding: 6px 4px 7px;
-  text-align: left;
-  cursor: pointer;
-  color: var(--tinta-2);
-  font-size: var(--t-12);
-  line-height: 1.25;
-}
-
-.pestana-linea .pestana-nombre {
-  font-weight: 600;
-  color: inherit;
-}
-
-.pestana-linea .pestana-tipo {
-  font-size: var(--t-11);
-}
-
-.pestana-linea:hover {
-  color: var(--tinta);
-}
-
-.pestana-linea.activa {
-  color: var(--tinta);
-  border-bottom-color: var(--tinta);
-}
-
-.movil .selector-lineas {
-  margin-bottom: 6px;
-}
-
-.movil .pestana-linea {
-  padding: 4px 4px 5px;
-}
-
-.movil .pestana-linea .pestana-tipo {
-  display: none;
-}
-
 /* Recorrido alternativo en la simulación */
 .alternativa {
   margin-top: 12px;
@@ -1017,4 +963,90 @@
 
 .pie-fuente .datos {
   color: var(--tinta-3);
+}
+
+/* Lista de líneas: la de la vista de la red. Ocupa lo mismo con tres líneas que con cien. */
+.lista-lineas ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filtro-lineas {
+  width: 100%;
+  height: 34px;
+  margin: 4px 0 2px;
+  padding: 0 10px;
+  background: var(--papel);
+  border: 1px solid var(--regla);
+  border-radius: 3px;
+  font: inherit;
+  font-size: var(--t-14);
+  color: var(--tinta);
+}
+
+.filtro-lineas:focus-visible {
+  border-color: var(--senal-azul);
+  outline: 2px solid var(--senal-azul-suave);
+}
+
+.grupo-lineas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 2px;
+  font-size: var(--t-12);
+  font-weight: 400;
+  color: var(--tinta-2);
+}
+
+.fila-linea {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 7px 10px;
+  margin-left: -12px;
+  width: calc(100% + 12px);
+  background: none;
+  border: 0;
+  border-left: 2px solid transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: var(--t-14);
+  color: var(--tinta);
+}
+
+.fila-linea:hover,
+.fila-linea:focus-visible {
+  background: var(--papel-2);
+  border-left-color: var(--senal-azul);
+  outline: none;
+}
+
+.fila-linea.actual {
+  border-left-color: var(--tinta);
+}
+
+.fila-linea-nombre {
+  font-weight: 600;
+}
+
+.fila-linea-detalle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+/* En el móvil el recuento se lee entero; si falta sitio, lo que se recorta es el estado del servidor. */
+.movil .cobertura-pill .pill-texto {
+  flex: none;
+}
+
+.movil .cobertura-pill .senal {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

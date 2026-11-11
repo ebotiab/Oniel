@@ -5,7 +5,7 @@ export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: stri
 export interface Route {
   selection: Selection
   simulacion: boolean
-  /** Línea a la vista en el panel cuando no hay nada seleccionado. */
+  /** Línea a la vista en el panel cuando no hay nada seleccionado; sin ella, la vista de la red. */
   linea?: string | null
   /** El panel «Cobertura y fuentes» está abierto. */
   cobertura?: boolean
@@ -13,7 +13,7 @@ export interface Route {
 
 /**
  * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
- * #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre y #/cobertura.
+ * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre y #/cobertura.
  */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
@@ -35,6 +35,11 @@ export function toHash(route: Route): string {
 
 export function formatKm(km: number): string {
   return km.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+}
+
+/** Un recuento con el punto de los millares: 1170 → «1.170». */
+export function formatCount(n: number): string {
+  return n.toLocaleString('es-ES', { useGrouping: 'always', maximumFractionDigits: 0 })
 }
 
 /** Fecha de hoy como AAAA-MM-DD (en UTC, como el resto de fechas ISO que maneja la API). */
@@ -100,7 +105,7 @@ export function lineLabel(line: LineSummary): string {
   return line.name.replace(/^Línea (de alta velocidad|convencional)\s+/i, '')
 }
 
-/** Etiqueta breve para pestañas: extremos y, si los hay, los puntos intermedios del nombre. */
+/** Etiqueta breve para listas: extremos y, si los hay, los puntos intermedios del nombre. */
 export function lineShortLabel(line: LineSummary): string {
   const parts = lineLabel(line).split(' – ')
   if (parts.length <= 2) return parts.join(' – ')

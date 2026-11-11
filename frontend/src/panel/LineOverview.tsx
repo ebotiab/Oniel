@@ -1,7 +1,7 @@
 import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import type { Selection } from '../app/state'
-import { formatDate, formatDayShort, formatKm, gaugeLabel, lineKind, lineShortLabel } from '../app/state'
+import { formatDate, formatDayShort, formatKm, gaugeLabel } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
 import { StripDiagram } from './StripDiagram'
 
@@ -10,7 +10,8 @@ interface Props {
   coverage: CoverageOut | null
   counts: Record<string, number> | null
   lineId: string
-  onChangeLine: (id: string) => void
+  /** Vuelve a la vista de la red. */
+  onShowNetwork: () => void
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
@@ -21,7 +22,7 @@ interface Props {
   compact: boolean
 }
 
-export function LineOverview({ network, coverage, counts, lineId, onChangeLine, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact }: Props) {
+export function LineOverview({ network, coverage, counts, lineId, onShowNetwork, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -42,25 +43,10 @@ export function LineOverview({ network, coverage, counts, lineId, onChangeLine, 
   const conBarras = Boolean(counts && dia && Object.keys(counts).length)
   return (
     <section className="resumen-linea" aria-labelledby="linea-titulo">
-      {network.lines.length > 1 && (
-        <div className="selector-lineas" role="tablist" aria-label="Líneas cargadas">
-          {network.lines.map((l) => (
-            <button
-              key={l.id}
-              type="button"
-              role="tab"
-              aria-selected={l.id === line.id}
-              className={`pestana-linea ${l.id === line.id ? 'activa' : ''}`}
-              onClick={() => onChangeLine(l.id)}
-              data-testid={`selector-linea-${l.id}`}
-            >
-              <span className="pestana-nombre">{lineShortLabel(l)}</span>
-              <span className="pestana-tipo suave">{lineKind(l)}</span>
-            </button>
-          ))}
-        </div>
-      )}
       <div className="cabecera-linea" data-testid="cabecera-linea">
+        <button type="button" className="enlace volver" onClick={onShowNetwork} data-testid="volver-red">
+          ← Toda la red
+        </button>
         <h2 id="linea-titulo" className="titulo">
           {line.name}
         </h2>

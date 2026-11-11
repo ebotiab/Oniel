@@ -2,8 +2,8 @@ import { defineConfig, devices } from '@playwright/test'
 
 // Pruebas de extremo a extremo del visor. Por defecto arrancan Vite contra la API local
 // (ONIEL_API_PROXY, por defecto http://127.0.0.1:8000). Con ONIEL_E2E_STATIC=1 se prueba la
-// instantánea estática sin servidor.
-const port = 5199
+// instantánea estática sin servidor. ONIEL_E2E_PORT cambia el puerto cuando otra sesión ocupa el 5199.
+const port = Number(process.env.ONIEL_E2E_PORT ?? 5199)
 const baseURL = `http://127.0.0.1:${port}`
 
 export default defineConfig({

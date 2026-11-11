@@ -33,6 +33,8 @@ interface Props {
   onHover: (id: string | null) => void
   /** Hueco (px) que ocupa el panel a la izquierda en escritorio o abajo en móvil. */
   padding: { left: number; bottom: number }
+  /** Línea a la vista sin nada seleccionado: el mapa la encuadra. Sin ella, encuadra la red. */
+  lineId?: string | null
 }
 
 // El worker de MapLibre se sirve como fichero propio para que funcione igual en desarrollo y en producción.
@@ -62,12 +64,13 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, onSelect, onHover, padding }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, onSelect, onHover, padding, lineId = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
   const readyRef = useRef(false)
-  const userMovedRef = useRef(false)
+  // Lo último que encuadró el mapa: 'red', una línea o una selección. De entrada, la red.
+  const framedRef = useRef('red')
   const callbacks = useRef({ onSelect, onHover })
   callbacks.current = { onSelect, onHover }
   const networkRef = useRef<NetworkOut | null>(network)
@@ -238,12 +241,17 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const pad = { top: 80, right: 60, bottom: padding.bottom + 40, left: padding.left + 60 }
     if (!selection) {
-      if (!userMovedRef.current) return
-      userMovedRef.current = false
-      map.fitBounds(SPAIN_BOUNDS, { padding: pad, duration: reduced ? 0 : 700 })
+      const key = lineId ? `linea:${lineId}` : 'red'
+      if (framedRef.current === key) return
+      framedRef.current = key
+      const b = new LngLatBounds()
+      if (lineId)
+        for (const f of network.segment_features.features)
+          if (f.properties.line_id === lineId && f.geometry.type === 'LineString') for (const c of f.geometry.coordinates) b.extend([c[0]!, c[1]!])
+      map.fitBounds(b.isEmpty() ? SPAIN_BOUNDS : b, { padding: pad, maxZoom: 10, duration: reduced ? 0 : 700 })
       return
     }
-    userMovedRef.current = true
+    framedRef.current = `${selection.type}:${selection.id}`
     if (selection.type === 'tramo') {
       const f = network.segment_features.features.find((x) => x.id === selection.id)
       if (!f || f.geometry.type !== 'LineString') return
@@ -261,7 +269,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
         duration: reduced ? 0 : 700,
       })
     }
-  }, [selection, network, padding.left, padding.bottom])
+  }, [selection, lineId, network, padding.left, padding.bottom])
 
   return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} />
 }

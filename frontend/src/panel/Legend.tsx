@@ -16,7 +16,7 @@ interface Props {
 }
 
 /** Muestra de un trazo con el mismo dibujo que el mapa: filete claro, trazos blancos o trazos espaciados. */
-function Muestra({ trazo }: { trazo: Trazo }) {
+export function Muestra({ trazo }: { trazo: Trazo }) {
   const grosor = trazo === 'alta-velocidad' ? 5 : trazo === 'convencional' ? 3.2 : 2
   return (
     <svg className="muestra-via" width={26} height={6} viewBox="0 0 26 6" aria-hidden="true">

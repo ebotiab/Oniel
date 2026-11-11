@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
 import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut, Source } from '../data/types'
-import { KIND_LABEL, formatDate, formatKm, lineShortLabel, productLabel, shortStop } from '../app/state'
+import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, productLabel, shortStop } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
 import { PieFuente, Plegable } from './Plegable'
 
@@ -15,10 +15,12 @@ interface Props {
   /** Interrupciones vigentes hoy, por id de tramo. */
   interrupted: Map<string, InterruptionOut[]>
   onSelectSegment: (id: string) => void
+  /** Salta a una de las líneas que pasan por el nodo. */
+  onGoLine: (lineId: string) => void
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, referenceDate, interrupted, onSelectSegment, onBack }: Props) {
+export function NodeDetail({ node, network, sources, referenceDate, interrupted, onSelectSegment, onGoLine, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -54,9 +56,22 @@ export function NodeDetail({ node, network, sources, referenceDate, interrupted,
         {node.name}
       </h2>
       {memberships.length > 1 && (
-        <p className="texto" data-testid="nodo-lineas">
-          Aquí se encuentran {memberships.length} líneas: {memberships.map((m) => (m.line ? m.line.name : '?')).join(' y ')}.
-        </p>
+        <div data-testid="nodo-lineas">
+          <p className="texto">Aquí se encuentran {memberships.length} líneas:</p>
+          <ul className="lista-simple">
+            {memberships.map(
+              (m) =>
+                m.line && (
+                  <li key={m.line.id}>
+                    <button type="button" className="enlace" onClick={() => onGoLine(m.line!.id)} data-testid={`nodo-linea-${m.line.id}`}>
+                      {lineShortLabel(m.line)}
+                    </button>{' '}
+                    <span className="suave">{lineKind(m.line)}</span>
+                  </li>
+                ),
+            )}
+          </ul>
+        </div>
       )}
       {node.description && <p className="texto">{node.description}</p>}
 
