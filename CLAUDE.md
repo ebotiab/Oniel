@@ -1,6 +1,6 @@
 # Oniel
 
-Web en español para descubrir cómo está conectada la red ferroviaria española. Lo principal es un mapa interactivo en el que se recorre cada línea, con su esquema vertical al lado, y se seleccionan estaciones y tramos; como herramienta secundaria, se simula el cierre hipotético de un tramo en una franja horaria. Está pensada para quien sabe poco de ferrocarril y quiere entender la red, no para profesionales. Hoy carga tres líneas (alta velocidad Madrid – Sevilla, convencional Madrid – Alcázar de San Juan – Córdoba y convencional Manzanares – Ciudad Real, que une las otras dos) con los horarios de Renfe, y está publicada en https://oniel.vercel.app con la API en Render.
+Web en español para descubrir cómo está conectada la red ferroviaria española. Lo principal es un mapa interactivo en el que se recorre cada línea, con su esquema vertical al lado, y se seleccionan estaciones y tramos; como herramienta secundaria, se simula el cierre hipotético de un tramo en una franja horaria. Está pensada para quien sabe poco de ferrocarril y quiere entender la red, y también para quien trabaja en él, con una sola interfaz: primero el lenguaje llano y, a un toque, el detalle técnico (la incidencia #15 materializa ese patrón). Hoy carga tres líneas (alta velocidad Madrid – Sevilla, convencional Madrid – Alcázar de San Juan – Córdoba y convencional Manzanares – Ciudad Real, que une las otras dos) con los horarios de Renfe, y está publicada en https://oniel.vercel.app con la API en Render.
 
 Este fichero orienta a una sesión que llega sin contexto. No repite el README ni los documentos de `docs/`: los enlaza.
 
@@ -18,7 +18,7 @@ Interfaz, documentación, comentarios del código, nombres y mensajes de las pru
 - [docs/datos.md](docs/datos.md): fuentes y licencias, cómo se verificó cada línea, modelo de datos y el procedimiento «Añadir otra línea».
 - [docs/simulacion.md](docs/simulacion.md): método de la simulación, recorrido alternativo, caso comprobado a mano y límites conocidos.
 - [docs/despliegue.md](docs/despliegue.md): Vercel (visor), Render (API y PostgreSQL), Logfire y base de datos local.
-- [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): las tareas pendientes, ordenadas; cada sesión nueva coge la siguiente.
+- [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): el orden de las tareas pendientes y los principios de arquitectura; el brief de cada tarea está en su incidencia de GitHub (`gh issue view <número>`). Cada sesión nueva coge la siguiente cuyas dependencias estén cerradas.
 - `.github/workflows/ci.yml`: lo que comprueba el CI en cada PR y en `main`. `.vscode/`: intérprete `backend/.venv`, Ruff como formateador y pytest desde `backend/`.
 
 ## Arrancar y comprobar
@@ -46,6 +46,6 @@ Para previsualizar el visor desde una sesión, `.claude/launch.json` arranca Vit
 
 **Pruebas.** Cada regla nueva de simulación o de datos lleva su prueba en `backend/tests/`; cada comportamiento visible nuevo, una prueba Playwright en `frontend/e2e/` que funcione también en modo estático cuando no necesite la API (y `test.skip(estatico, …)` cuando sí la necesite).
 
-**PR pequeñas.** Una tarea por rama y por PR, contra `main`, desde una sesión aislada. La descripción, en español, dice qué cambia, por qué, qué conviene mirar al revisar y qué comprobaciones se han pasado; la PR se abre con las comprobaciones pasadas en local y se espera a que el CI esté en verde. Cuando el CI está en verde y la PR está completa, la misma sesión la fusiona en `main` y actualiza `main` en el checkout local del proyecto (`git pull`), salvo que el usuario haya dicho lo contrario para esa PR. Los mensajes de commit también en español, en una frase que describa el resultado. Al terminar una tarea de `docs/hoja-de-ruta.md`, la misma PR la retira de la lista y lleva lo aprendido a `docs/`.
+**PR pequeñas.** Una tarea por rama y por PR, contra `main`, desde una sesión aislada. La descripción, en español, dice qué cambia, por qué, qué conviene mirar al revisar y qué comprobaciones se han pasado; la PR se abre con las comprobaciones pasadas en local y se espera a que el CI esté en verde. Cuando el CI está en verde y la PR está completa, la misma sesión la fusiona en `main` y actualiza `main` en el checkout local del proyecto (`git pull`), salvo que el usuario haya dicho lo contrario para esa PR. Los mensajes de commit también en español, en una frase que describa el resultado. Al terminar una tarea de `docs/hoja-de-ruta.md`, la misma PR cierra su incidencia («Cierra #N» en la descripción), la retira de la lista y lleva lo aprendido a `docs/`.
 
 **Despliegue.** Render vuelve a desplegar la API con cada push a `main`, y la importación se salta si datos y código no han cambiado. El visor en Vercel se publica a mano con la CLI (`docs/despliegue.md`) hasta que el proyecto se conecte a GitHub (está en la hoja de ruta). No se despliega nada desde una sesión salvo que el usuario lo pida.
