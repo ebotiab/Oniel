@@ -8,13 +8,14 @@ import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
+import { NetworkOverview } from '../panel/NetworkOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeInterruptions, bySegment } from './interruptions'
 import type { SearchTarget } from './search'
-import { lineKind, lineShortLabel, parseHash, toHash, todayIso, type Selection } from './state'
+import { networkCount, parseHash, toHash, todayIso, type Selection } from './state'
 import './app.css'
 
 function useMedia(query: string): boolean {
@@ -102,7 +103,8 @@ export default function App() {
       const r = parseHash(window.location.hash)
       setRoute(r)
       setShowCoverage(Boolean(r.cobertura))
-      if (r.linea) setActiveLineId(r.linea)
+      // Sin selección manda la URL: #/ es la vista de la red. Con selección, la línea sale de lo seleccionado.
+      if (!r.selection && !r.cobertura) setActiveLineId(r.linea ?? null)
     }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
@@ -118,7 +120,7 @@ export default function App() {
       setRoute({ selection: sel, simulacion: false })
       setResult(null)
       setShowCoverage(false)
-      if (sel) setSheetOpen(true)
+        if (sel) setSheetOpen(true)
       if (sel && network) {
         const line = sel.type === 'tramo' ? network.segments.find((s) => s.id === sel.id)?.line_id : undefined
         const lines = sel.type === 'nodo' ? network.nodes.filter((n) => n.id === sel.id).map((n) => n.line_id) : []
@@ -129,17 +131,14 @@ export default function App() {
   )
 
   // El buscador lleva a un punto de la red, como al tocarlo en el mapa, o pone una línea en el panel.
-  const pick = useCallback(
-    (target: SearchTarget) => {
-      if (target.type === 'nodo') return select(target)
-      setActiveLineId(target.id)
-      setRoute({ selection: null, simulacion: false })
-      setResult(null)
-      setShowCoverage(false)
-      setSheetOpen(true)
-    },
-    [select],
-  )
+  const showLine = useCallback((id: string | null) => {
+    setActiveLineId(id)
+    setRoute({ selection: null, simulacion: false })
+    setResult(null)
+    setShowCoverage(false)
+    setSheetOpen(true)
+  }, [])
+  const pick = useCallback((target: SearchTarget) => (target.type === 'nodo' ? select(target) : showLine(target.id)), [select, showLine])
 
   const selection = route.selection
   const segment = useMemo(
@@ -157,9 +156,7 @@ export default function App() {
   const lineId =
     segment?.line_id ??
     (nodeLines.length ? (activeLineId && nodeLines.includes(activeLineId) ? activeLineId : nodeLines[0]!) : null) ??
-    activeLineId ??
-    network?.lines[0]?.id ??
-    ''
+    (activeLineId && (!network || network.lines.some((l) => l.id === activeLineId)) ? activeLineId : null)
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
   // Interrupciones vigentes hoy: se marcan en rojo en el mapa y en el esquema, y se explican en el panel.
   const today = useMemo(() => todayIso(), [])
@@ -216,9 +213,12 @@ export default function App() {
         referenceDate={referenceDate}
         interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
+        onGoLine={showLine}
         onBack={backToLine}
       />
     )
+  else if (!lineId)
+    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} />
   else
     panel = (
       <LineOverview
@@ -226,7 +226,7 @@ export default function App() {
         coverage={coverage}
         counts={counts}
         lineId={lineId}
-        onChangeLine={setActiveLineId}
+        onShowNetwork={() => showLine(null)}
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
@@ -254,6 +254,7 @@ export default function App() {
         onSelect={select}
         onHover={setHoverId}
         padding={padding}
+        lineId={selection ? null : lineId}
       />
       <header className="cabecera">
         <div className="cabecera-inicio">
@@ -271,23 +272,11 @@ export default function App() {
             testId="buscador"
           />
         </div>
-        <button type="button" className="cobertura-pill" onClick={() => setShowCoverage(true)} aria-haspopup="dialog" data-testid="boton-cobertura">
+        <button type="button" className="cobertura-pill" onClick={() => showLine(null)} data-testid="recuento-red">
           <span className="punto" aria-hidden="true" />
           <span className="pill-texto">
-            <span className="solo-escritorio">Disponible: </span>
-            {lines.length ? (
-              lines.map((l, i) => (
-                <span key={l.id}>
-                  {i > 0 && <span aria-hidden="true"> · </span>}
-                  <strong>{lineShortLabel(l)}</strong>
-                  <span className="solo-escritorio">, {lineKind(l)}</span>
-                </span>
-              ))
-            ) : (
-              <strong>Madrid – Sevilla</strong>
-            )}
+            <strong>{network ? networkCount(network.lines) : 'Oniel'}</strong>
           </span>
-          {coverage && <span className="datos suave solo-escritorio"> · {Math.round(coverage.total_length_km)} km · {coverage.station_count} estaciones</span>}
           {network && status === 'buscando' && <span className="senal gris">despertando el servidor…</span>}
           {network && status === 'ausente' && <span className="senal gris">vista estática</span>}
         </button>

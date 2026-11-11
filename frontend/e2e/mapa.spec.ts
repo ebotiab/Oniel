@@ -75,8 +75,10 @@ test.describe('Trazo de la vía', () => {
 
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
+    await page.getByTestId('linea-lav-madrid-sevilla').click()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="alta-velocidad"]').first()).toBeAttached()
-    await page.getByTestId('selector-linea-convencional-madrid-alcazar-cordoba').click()
+    await page.getByTestId('volver-red').click()
+    await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="convencional"]').first()).toBeAttached()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="via-unica"]').first()).toBeAttached()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="alta-velocidad"]')).toHaveCount(0)

@@ -64,7 +64,7 @@ El orden es orientativo. #16 no depende de nada y puede adelantarse cuando conve
 
 ## Pendientes menores
 
-Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas, la escala del mapa detrás de la leyenda y la pastilla de cobertura con más de tres líneas.
+Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas y la escala del mapa detrás de la leyenda.
 
 ## Proteger `main` exigiendo el CI
 

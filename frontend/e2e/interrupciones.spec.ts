@@ -19,7 +19,7 @@ async function abrirLineaConvencional(page: Page) {
   await page.goto('/')
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })
   if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
-  await page.getByTestId(`selector-linea-${LINEA}`).click()
+  await page.getByTestId(`linea-${LINEA}`).click()
   await expect(page.getByTestId('esquema-tramo-16')).toBeAttached()
 }
 
@@ -136,7 +136,7 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('interrupcion')).toContainText(/autopista ferroviaria/)
     // los dos tramos que confluyen en Venta de Cárdenas están sin circulación
     await expect(page.getByTestId('detalle-nodo').locator('.lista-simple .senal.roja')).toHaveCount(2)
-    await page.getByTestId('boton-cobertura').click()
+    await page.goto('/#/cobertura')
     const cobertura = page.getByTestId('cobertura-interrupciones')
     await expect(cobertura.getByTestId('interrupcion')).toHaveCount(2)
     await expect(cobertura).toContainText('Bifurcación La Sagra – Córdoba')
