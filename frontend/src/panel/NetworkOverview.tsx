@@ -1,6 +1,4 @@
 import { formatCount, networkCount } from '../app/state'
-import type { ReactNode } from 'react'
-
 import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
 import { LineList } from './LineList'
 
@@ -11,12 +9,10 @@ interface Props {
   interruptions: InterruptionOut[]
   onPickLine: (id: string) => void
   onShowCoverage: () => void
-  /** Leyenda de los trazos, cuando va dentro del panel (en el móvil). */
-  leyenda?: ReactNode
 }
 
 /** Vista de la red: lo que se ve cuando no hay ninguna línea elegida. Dice qué hay cargado y por dónde empezar. */
-export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage, leyenda = null }: Props) {
+export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage }: Props) {
   const cortadas = new Set(interruptions.filter((i) => i.segment_ids.length > 0).map((i) => i.line_id))
   const ficha = [networkCount(network.lines), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
   return (
@@ -34,7 +30,6 @@ export function NetworkOverview({ network, coverage, interruptions, onPickLine, 
           Toca una vía en el mapa o elige una línea de la lista para recorrerla estación a estación. Oniel va incorporando las líneas poco a poco.
         </p>
       </div>
-      {leyenda}
       <h3 className="subtitulo">Líneas</h3>
       <LineList lines={network.lines} interruptedLineIds={cortadas} onPick={onPickLine} />
       <p className="nota-esquema">

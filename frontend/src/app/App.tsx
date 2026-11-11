@@ -197,7 +197,7 @@ export default function App() {
     select(null)
   }
 
-  // En el móvil la leyenda de los trazos va dentro del panel, en la vista de la red y en la de una línea.
+  // En el móvil la leyenda de los trazos va dentro del panel, sobre el esquema de la línea.
   const leyendaMovil =
     mobile && network ? (
       <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} />
@@ -250,7 +250,7 @@ export default function App() {
       />
     )
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} leyenda={leyendaMovil} />
+    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} />
   else
     panel = (
       <LineOverview
