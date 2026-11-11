@@ -15,6 +15,18 @@ async function mapaListo(page: Page) {
 }
 
 test.describe('Navegar por el mapa', () => {
+  test('la vía se dibuja sin esperar a las teselas del mapa base', async ({ page }) => {
+    // Las teselas de OpenFreeMap no llegan nunca: como con una conexión muy lenta.
+    await page.route(/tiles\.openfreemap\.org\/.*\.pbf/, () => {})
+    await page.goto('/')
+    await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.getSource('oniel-segments') !== undefined)
+    const estado = await page.evaluate(() => {
+      const map = (globalThis as unknown as ConMapa).__onielMap!
+      return { cargado: map.loaded(), capaDeVia: map.getLayer('oniel-segments') !== undefined }
+    })
+    expect(estado).toEqual({ cargado: false, capaDeVia: true })
+  })
+
   test('el mapa no sale de la península ni de sus vecinos', async ({ page }) => {
     await mapaListo(page)
     const vistas = await page.evaluate(() => {

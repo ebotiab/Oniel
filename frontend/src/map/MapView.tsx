@@ -136,7 +136,9 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     map.keyboard.disableRotation()
     map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-right')
-    map.on('load', () => {
+    // La red se añade en cuanto el estilo está listo ('style.load'), sin esperar a 'load', que no salta
+    // hasta que llegan las teselas y los rótulos del mapa base: con una conexión lenta eran varios segundos.
+    map.once('style.load', () => {
       readyRef.current = true
       if (networkRef.current) addNetwork(map, networkRef.current)
     })

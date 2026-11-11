@@ -234,6 +234,8 @@ Proyección, suponiendo líneas como la media de hoy (325 km y 13 tramos; cien l
 
 El índice crece unos 3,7 KB comprimidos por línea, diez veces menos que antes. Si llega a pesar, lo siguiente es quitar de sus tramos los nombres de los extremos, que ya están en los nodos, y servir las conexiones con cada línea. Un límite conocido: `GET /api/lines` simplifica la geometría en cada petición (unos 30 ms con tres líneas); con muchas líneas convendrá guardarla ya simplificada al importar.
 
+La vía no espera al mapa base: se añade al mapa en cuanto el estilo está listo (`style.load` en `frontend/src/map/MapView.tsx`), sin aguardar a las teselas y los rótulos de OpenFreeMap. Medido el 11 de noviembre de 2026 sobre la compilación de producción, con un Pixel 7 emulado, la caché vacía y el procesador ralentizado cuatro veces: con 4G lenta (1,6 Mbit/s, 150 ms) la vía pasa de dibujarse a los 11,5 – 11,8 s a los 5,1 – 5,2 s, y con 3G (400 kbit/s, 400 ms), de 25,7 – 31,0 s a 16,3 – 18,6 s. Lo que queda por delante es sobre todo el JavaScript del visor (376 KB).
+
 ## Modelo de datos
 
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
