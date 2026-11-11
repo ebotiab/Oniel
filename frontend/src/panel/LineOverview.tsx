@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import type { Selection } from '../app/state'
@@ -20,9 +22,11 @@ interface Props {
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   compact: boolean
+  /** Leyenda de los trazos, cuando va dentro del panel (en el móvil): sobre el esquema. */
+  leyenda?: ReactNode
 }
 
-export function LineOverview({ network, coverage, counts, lineId, onShowNetwork, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact }: Props) {
+export function LineOverview({ network, coverage, counts, lineId, onShowNetwork, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact, leyenda = null }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -107,6 +111,7 @@ export function LineOverview({ network, coverage, counts, lineId, onShowNetwork,
           ))}
         </ul>
       )}
+      {leyenda}
       <StripDiagram
         network={network}
         lineId={line.id}

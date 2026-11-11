@@ -735,6 +735,21 @@
   border-top: 3px solid var(--senal-roja);
 }
 
+/* Leyenda de los trazos dentro del panel (móvil): un renglón que salta de línea si no cabe. */
+.leyenda-trazos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 10px 0 2px;
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+.leyenda-trazos .leyenda-tipo {
+  gap: 8px;
+  min-height: 32px;
+}
+
 /* Móvil: hoja inferior */
 .movil .cabecera {
   height: 52px;
