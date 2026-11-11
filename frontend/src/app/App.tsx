@@ -10,7 +10,9 @@ import { LineOverview } from '../panel/LineOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
+import { SearchBox } from '../panel/SearchBox'
 import { activeInterruptions, bySegment } from './interruptions'
+import type { SearchTarget } from './search'
 import { lineKind, lineShortLabel, parseHash, toHash, todayIso, type Selection } from './state'
 import './app.css'
 
@@ -35,7 +37,7 @@ export default function App() {
   const [showCoverage, setShowCoverage] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [counts, setCounts] = useState<Record<string, number> | null>(null)
-  const [activeLineId, setActiveLineId] = useState<string | null>(null)
+  const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
   const status = useApiStatus()
 
@@ -94,7 +96,11 @@ export default function App() {
 
   // Sincronizar el hash con la selección
   useEffect(() => {
-    const onHash = () => setRoute(parseHash(window.location.hash))
+    const onHash = () => {
+      const next = parseHash(window.location.hash)
+      setRoute(next)
+      if (next.linea) setActiveLineId(next.linea)
+    }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
@@ -118,6 +124,22 @@ export default function App() {
     [network],
   )
 
+  // Una línea se elige con las pestañas del panel o con el buscador; también queda en la URL.
+  const chooseLine = useCallback((id: string) => {
+    setActiveLineId(id)
+    setRoute({ selection: null, simulacion: false, linea: id })
+    setResult(null)
+    setShowCoverage(false)
+  }, [])
+  const pick = useCallback(
+    (target: SearchTarget) => {
+      if (target.type === 'nodo') return select(target)
+      chooseLine(target.id)
+      setSheetOpen(true)
+    },
+    [select, chooseLine],
+  )
+
   const selection = route.selection
   const segment = useMemo(
     () => (selection?.type === 'tramo' ? network?.segments.find((s) => s.id === selection.id) ?? null : null),
@@ -134,7 +156,7 @@ export default function App() {
   const lineId =
     segment?.line_id ??
     (nodeLines.length ? (activeLineId && nodeLines.includes(activeLineId) ? activeLineId : nodeLines[0]!) : null) ??
-    activeLineId ??
+    (activeLineId && network?.lines.some((l) => l.id === activeLineId) ? activeLineId : null) ??
     network?.lines[0]?.id ??
     ''
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
@@ -195,7 +217,7 @@ export default function App() {
         coverage={coverage}
         counts={counts}
         lineId={lineId}
-        onChangeLine={setActiveLineId}
+        onChangeLine={chooseLine}
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
@@ -224,9 +246,20 @@ export default function App() {
         padding={padding}
       />
       <header className="cabecera">
-        <div className="marca-bloque">
-          <span className="marca">Oniel</span>
-          <span className="lema">Cómo está conectada la red ferroviaria</span>
+        <div className="cabecera-inicio">
+          <div className="marca-bloque">
+            <span className="marca">Oniel</span>
+            <span className="lema">Cómo está conectada la red ferroviaria</span>
+          </div>
+          <SearchBox
+            network={network}
+            label="Buscar una estación o una línea"
+            placeholder="Buscar estación o línea"
+            onPick={pick}
+            shortcut
+            compact={mobile}
+            testId="buscador"
+          />
         </div>
         <button type="button" className="cobertura-pill" onClick={() => setShowCoverage(true)} aria-haspopup="dialog" data-testid="boton-cobertura">
           <span className="punto" aria-hidden="true" />

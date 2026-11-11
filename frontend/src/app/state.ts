@@ -5,20 +5,23 @@ export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: stri
 export interface Route {
   selection: Selection
   simulacion: boolean
+  /** Línea a la vista en el panel cuando no hay nada seleccionado. */
+  linea?: string
 }
 
-/** Ruta en el hash: #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre */
+/** Ruta en el hash: #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/linea/<id> */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
   const [kind, id, action] = parts
   if ((kind === 'tramo' || kind === 'nodo') && id) {
     return { selection: { type: kind, id }, simulacion: kind === 'tramo' && action === 'cierre' }
   }
+  if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
   return { selection: null, simulacion: false }
 }
 
 export function toHash(route: Route): string {
-  if (!route.selection) return '#/'
+  if (!route.selection) return route.linea ? `#/linea/${encodeURIComponent(route.linea)}` : '#/'
   const base = `#/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
   return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base
 }
