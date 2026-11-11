@@ -29,6 +29,8 @@ interface Props {
   interrupted: Map<string, InterruptionOut[]>
   /** Trazo que resalta la leyenda: los demás se atenúan. */
   highlight?: Trazo | null
+  /** Trazo que la leyenda pide encuadrar al fijarlo; `n` cambia en cada petición para repetir el encuadre. */
+  frame?: { trazo: Trazo; n: number } | null
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   /** Líneas con algún tramo a la vista cuando el mapa está cerca: conviene tener su geometría completa. */
@@ -81,6 +83,16 @@ function segmentKind(net: NetworkOut, lineId: unknown): string {
   return line && lineKind(line) === 'alta velocidad' ? TIPO_ALTA_VELOCIDAD : TIPO_CONVENCIONAL
 }
 
+/**
+ * Márgenes para encuadrar algo en lo que el panel deja a la vista. En el móvil (panel abajo) son más
+ * justos: el hueco es pequeño y, con poco zoom, el límite sur del mapa impide subir lo encuadrado.
+ */
+function framePadding(padding: { left: number; bottom: number }) {
+  return padding.left === 0
+    ? { top: 64, right: 24, bottom: padding.bottom + 12, left: 24 }
+    : { top: 80, right: 60, bottom: padding.bottom + 40, left: padding.left + 60 }
+}
+
 /** Asigna ids numéricos para feature-state y guarda la correspondencia. */
 function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id: string; geometry: GeoJSON.Geometry; properties: P }[] }) {
   const index = new Map<string, number>()
@@ -91,7 +103,7 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, onSelect, onHover, onNearLines, padding, lineId = null }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
@@ -285,7 +297,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     const network = networkRef.current
     if (!map || !network) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const pad = { top: 80, right: 60, bottom: padding.bottom + 40, left: padding.left + 60 }
+    const pad = framePadding({ left: padding.left, bottom: padding.bottom })
     if (!selection) {
       const key = lineId ? `linea:${lineId}` : 'red'
       if (framedRef.current === key) return
@@ -316,6 +328,26 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
       })
     }
   }, [selection, lineId, hasNetwork, padding.left, padding.bottom])
+
+  // Encuadrar el trazo que se fija en la leyenda: todos los tramos de ese tipo, en toda la red.
+  useEffect(() => {
+    const map = mapRef.current
+    const network = networkRef.current
+    if (!map || !network || !frame) return
+    const b = new LngLatBounds()
+    for (const f of network.segment_features.features) {
+      if (f.geometry.type !== 'LineString') continue
+      const unica = f.properties.tracks === 1
+      const tipo = unica ? 'via-unica' : segmentKind(network, f.properties.line_id)
+      if (tipo === frame.trazo) for (const c of f.geometry.coordinates) b.extend([c[0]!, c[1]!])
+    }
+    if (b.isEmpty()) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    framedRef.current = `trazo:${frame.trazo}`
+    map.fitBounds(b, { padding: framePadding(padding), maxZoom: 10, duration: reduced ? 0 : 700 })
+    // Solo al pedirlo: que cambie el hueco del panel no vuelve a mover el mapa.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frame])
 
   return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} />
 }
