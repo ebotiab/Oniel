@@ -2,7 +2,7 @@
 
 Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 11 de noviembre de 2026.
 
-Oniel debe servir a la vez a quien trabaja en el ferrocarril y a quien no sabe nada de él, para consultar la red española de forma clara y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
+Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
 ## Cómo se usa
 
@@ -29,12 +29,13 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR 12: capa de interrupciones vigentes del servicio: `interrupciones.json` curado a mano, tabla `interruptions`, `GET /api/interruptions`, tramos en rojo en el mapa y en el esquema, y una nota en las listas de trenes y en la simulación. Las dos interrupciones iniciales (alta velocidad entre La Sagra y Córdoba; obras entre Almuradiel y Alcolea de Córdoba) se comprobaron el 10 de noviembre de 2026; `docs/datos.md` dice cómo y cada cuánto se revisan.
 - PR 13: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, de vía única), trazada desde OpenStreetMap, con sus MD y Regional Exprés. Los 24 Intercity y Alvia desviados tras Urda recorren ahora las tres líneas tramo a tramo, y el reparto de tiempos usa los kilómetros por cada una en vez de la línea recta entre Manzanares y Ciudad Real; `docs/datos.md` y `docs/simulacion.md` lo explican.
 - PR 14: `docs/despliegue.md` anota que producción sirve el commit `883d080`, con las tres líneas y las interrupciones.
+- PR 34 (11 de noviembre de 2026): Vercel conectado a GitHub. Una fusión en `main` publica el visor en https://oniel.vercel.app y cada PR tiene su vista previa; dejan de hacer falta las PR que anotaban el commit vigente.
 
 ## Principios de arquitectura
 
-Oniel tiene que servir a dos públicos y crecer durante años. Estos principios evitan que cada dato o capa nueva traiga su propio caso particular; la incidencia que materializa cada uno va entre paréntesis.
+Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Estos principios evitan que cada dato o capa nueva traiga su propio caso particular; la incidencia que materializa cada uno va entre paréntesis.
 
-1. **Dos públicos, una interfaz.** Profundidad progresiva: cada ficha empieza en lenguaje llano, lo que entiende cualquiera, y despliega a un toque el detalle técnico que busca el profesional (puntos kilométricos exactos, códigos, señalización, velocidades, fuente y fecha). Nunca dos modos ni dos webs (#15).
+1. **Se entiende sin saber de ferrocarril.** Cada ficha dice primero lo esencial en lenguaje llano y guarda plegado el detalle (puntos kilométricos exactos, códigos, fuente y fecha), para que no estorbe. A quien trabaja en el sector puede serle útil, pero nada se diseña para él ni se añade complejidad por él (#15).
 2. **Todo dato con fuente y fecha, como estructura.** Un dato no es un texto con una nota al pie sino un valor con `source_id`, `checked_on` y, cuando la tiene, su vigencia. Así el visor puede citar la fuente junto a cada cifra y una revisión programada puede saber qué dato envejece.
 3. **Anotaciones de red: un modelo común.** Todo lo que pasa sobre la red entre dos fechas según una fuente (interrupciones, obras, proyectos, cambios de servicio) comparte un modelo con tipo, alcance, estado, fechas y fuentes. Un tipo nuevo es una entrada en un registro, no una tabla, un endpoint y una capa nuevos (#17).
 4. **Atributos de tramo por secciones.** Lo que cambia a lo largo de una línea (vías, electrificación, señalización, velocidad, ancho) se declara de nodo a nodo con un único mecanismo que lo reparte a los tramos, valida su cobertura y lo muestra (#19).
@@ -45,7 +46,7 @@ Oniel tiene que servir a dos públicos y crecer durante años. Estos principios 
 
 ## Orden
 
-1. [#15](https://github.com/ebotiab/Oniel/issues/15) Producto: dos públicos, una interfaz. Fija el patrón de ficha (resumen llano, «Detalle técnico» plegado, fuente y fecha) y lo aplica a tramo, nodo y línea.
+1. [#15](https://github.com/ebotiab/Oniel/issues/15) Visor: fichas claras. Fija el patrón de ficha (lo esencial en llano, «Más detalle» plegado, fuente y fecha) y lo aplica a tramo, nodo y línea.
 2. [#16](https://github.com/ebotiab/Oniel/issues/16) Visor: glosario didáctico y conceptos. Cada término a un toque y un glosario con los conceptos que hacen falta para entender la red. Depende de #15.
 3. [#17](https://github.com/ebotiab/Oniel/issues/17) Datos: anotaciones de red con fecha y fuente. El modelo común; las interrupciones pasan a ser su primer tipo sin cambio visible.
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
@@ -59,9 +60,8 @@ Oniel tiene que servir a dos públicos y crecer durante años. Estos principios 
 12. [#26](https://github.com/ebotiab/Oniel/issues/26) Visor: cobertura por estación, destinos directos y frecuencias.
 13. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #21 y #26.
 14. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Depende de #21.
-15. [#30](https://github.com/ebotiab/Oniel/issues/30) Infraestructura: conectar Vercel a GitHub.
 
-El orden es orientativo. #16 y #30 no dependen de nada y pueden adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
+El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 

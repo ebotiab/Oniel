@@ -2,29 +2,41 @@
 
 ## Visor en Vercel
 
-Proyecto `oniel` en la cuenta personal de Vercel, directorio raíz `frontend/` (hay un `frontend/vercel.json` con el framework y la carpeta de salida).
+Proyecto `oniel` en la cuenta personal de Vercel (ámbito `enrique-botia-barbera-s-projects`), conectado desde el 11 de noviembre de 2026 al repositorio `ebotiab/Oniel`, con directorio raíz `frontend` y rama de producción `main`. Lo demás está en `frontend/vercel.json`: el framework (Vite), la orden de compilación, la carpeta de salida, las cabeceras de caché y cuándo se salta una compilación.
+
+### Despliegue automático
+
+Una fusión en `main` compila el visor y lo publica en https://oniel.vercel.app, sin pasos manuales. Render despliega la API con ese mismo push, así que las dos mitades salen del mismo commit. La instantánea que se publica es la de `frontend/public/data` en `main`: cuando cambian los datos se regenera (`uv run oniel-data export snapshot`) y se sube en la misma PR.
+
+Cada rama que se sube tiene además su vista previa, con una dirección propia. En la PR aparecen la comprobación «Vercel» y un comentario con el enlace, que se actualiza con cada push. Las vistas previas usan la misma API que producción (`VITE_API_URL` en el entorno Preview) y el backend acepta su origen. Están protegidas por Vercel Authentication: solo se abren con la sesión iniciada en la cuenta de Vercel del proyecto. La dirección de producción es pública. Una PR que llega desde un fork no se despliega hasta que se autoriza en Vercel.
+
+Vercel se salta la compilación cuando nada ha cambiado dentro de `frontend/` desde el último despliegue correcto de esa rama (`ignoreCommand` en `frontend/vercel.json`). Una fusión que solo toca el backend o la documentación deja producción como estaba. En una PR, el primer push de la rama siempre compila, de modo que toda PR tiene vista previa, y los siguientes solo si tocan `frontend/`. Cuando se salta, la comprobación «Vercel» queda en verde con el texto «Canceled by Ignored Build Step» y el comentario conserva el enlace a la última vista previa compilada. Si la comparación no puede hacerse, se compila.
+
+Para saber qué commit sirve producción: `vercel inspect oniel.vercel.app`, o la comprobación «Vercel» del commit en `main`, que enlaza a su despliegue.
+
+### La CLI como respaldo
+
+Sirve si la integración con GitHub falla o si hay que volver a publicar sin un commit nuevo. Como el directorio raíz está fijado en el proyecto, la CLI se ejecuta desde la raíz del repositorio, no desde `frontend/`.
 
 ```bash
-cd frontend && vercel login
+vercel login
 ```
 
 ```bash
-cd frontend && vercel link --project oniel --yes && vercel deploy
+vercel link --project oniel --yes
 ```
-
-Para publicar en producción (https://oniel.vercel.app):
 
 ```bash
-cd frontend && env -u HTTPS_PROXY -u HTTP_PROXY vercel --prod
+env -u HTTPS_PROXY -u HTTP_PROXY vercel --prod
 ```
 
-Estado (10 de noviembre de 2026): el proyecto `oniel` existe en el ámbito personal `enrique-botia-barbera-s-projects`. La producción https://oniel.vercel.app sirve el commit `883d080` de `main` (las tres líneas cargadas y la capa de interrupciones del servicio), publicado el 10 de noviembre de 2026 a las 15:54 CET con `vercel --prod` desde `frontend/` (despliegue `dpl_DdyJyRvvgd63Z6aZ1xa96vGmz9Su`). Vercel no está conectado a git: cada publicación es manual con la CLI, así que tras fusionar cambios del visor en `main` hay que repetir el despliegue. Eso incluye los cambios de datos: la instantánea va dentro del visor, de modo que una interrupción nueva o terminada no llega a la vista estática hasta que se publica. El enlace local está en `frontend/.vercel/` (ignorado por git; en un worktree nuevo basta con copiar su `project.json`). Nota: la CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local; ejecutarla sin ellas (`env -u HTTPS_PROXY -u HTTP_PROXY vercel …`). Sin terminal interactiva hace falta `--yes` y la CLI responde en JSON; `vercel inspect oniel.vercel.app` dice qué despliegue sirve producción y con qué alias.
+Al enlazar, la CLI deja `.vercel/` y un `.env.local` con un token temporal; git ignora los dos. La CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local, y por eso se ejecuta sin ellas. Sin terminal interactiva hace falta `--yes` y la CLI responde en JSON.
 
-Variables de entorno del proyecto:
+### Variables de entorno
 
-- `VITE_API_URL`: URL pública de la API en Render. Está fijada a `https://oniel-api-5e63.onrender.com` en los entornos Production y Preview de Vercel (8 de noviembre de 2026). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor. Con ella, el visor arranca igualmente desde la instantánea y pasa a la API en cuanto `/healthz` responde (ver `frontend/src/data/api.ts`). `frontend/vercel.json` fija la caché: un año e inmutable para `/assets/` (ficheros con hash en el nombre) y una hora con revalidación para `/data/`.
+- `VITE_API_URL`: URL pública de la API en Render. Está fijada a `https://oniel-api-5e63.onrender.com` en los entornos Production y Preview de Vercel (8 de noviembre de 2026). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor. Con ella, el visor arranca igualmente desde la instantánea y pasa a la API en cuanto `/healthz` responde (ver `frontend/src/data/api.ts`).
 
-Conviene regenerar la instantánea (`uv run oniel-data export snapshot`) antes de cada despliegue para que la vista estática esté al día.
+`frontend/vercel.json` fija la caché: un año e inmutable para `/assets/` (ficheros con hash en el nombre) y una hora con revalidación para `/data/`.
 
 ## API y PostgreSQL en Render
 
