@@ -87,3 +87,33 @@ class Polyline:
             else:
                 hi = mid - 1
         return lo
+
+
+def simplify(coords: list[Coord], tolerance_m: float) -> list[Coord]:
+    """Simplifica una polilínea (Douglas-Peucker): quita los vértices que se apartan menos de
+    ``tolerance_m`` metros de la línea que queda. Conserva siempre el primero y el último."""
+    if len(coords) <= 2 or tolerance_m <= 0:
+        return list(coords)
+    kx = math.cos(math.radians((coords[0][1] + coords[-1][1]) / 2)) * 111_320
+    ky = 111_320.0
+    pts = [(c[0] * kx, c[1] * ky) for c in coords]
+    keep = [False] * len(coords)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(coords) - 1)]
+    while stack:
+        first, last = stack.pop()
+        ax, ay = pts[first]
+        dx, dy = pts[last][0] - ax, pts[last][1] - ay
+        l2 = dx * dx + dy * dy
+        worst, worst_d2 = -1, tolerance_m * tolerance_m
+        for i in range(first + 1, last):
+            px, py = pts[i][0] - ax, pts[i][1] - ay
+            t = 0.0 if l2 == 0 else max(0.0, min(1.0, (px * dx + py * dy) / l2))
+            d2 = (px - t * dx) ** 2 + (py - t * dy) ** 2
+            if d2 > worst_d2:
+                worst, worst_d2 = i, d2
+        if worst >= 0:
+            keep[worst] = True
+            stack.append((first, worst))
+            stack.append((worst, last))
+    return [c for c, k in zip(coords, keep, strict=True) if k]

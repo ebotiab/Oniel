@@ -2,12 +2,17 @@
 // `oniel-data export snapshot` (mismo origen, en caché) y pasa a la API (VITE_API_URL, o el proxy
 // /api en desarrollo) en cuanto /healthz responde. La API en Render duerme tras 15 minutos sin
 // tráfico y tarda más de un minuto en despertar: por eso nunca se espera a ella para pintar la red.
+//
+// La red se carga por partes: al arrancar, solo el índice (líneas, nodos sin textos y geometría
+// simplificada); el detalle de cada línea se pide al abrirla o al acercar el mapa a ella, y se
+// guarda en memoria para no pedirlo dos veces.
 
 import type {
   ClosureRequest,
   ClosureResult,
   CoverageOut,
-  NetworkOut,
+  LineDetailOut,
+  NetworkIndexOut,
   NodeServicesOut,
   SegmentServicesOut,
 } from './types'
@@ -111,23 +116,33 @@ export function wakeApi(): Promise<ApiStatus> {
   return waking
 }
 
-export async function fetchNetwork(source: DataMode = currentMode()): Promise<NetworkOut> {
-  return source === 'api' ? getJson(`${API_BASE}/api/network`) : getJson('/data/network.json')
+/** Nombre de fichero de un identificador en la instantánea: sin dos puntos, como lo escribe el exportador. */
+function safeName(id: string): string {
+  return encodeURIComponent(id.replaceAll(':', '--'))
+}
+
+export async function fetchIndex(source: DataMode = currentMode()): Promise<NetworkIndexOut> {
+  return source === 'api' ? getJson(`${API_BASE}/api/lines`) : getJson('/data/index.json')
+}
+
+const lineCache = new Map<string, Promise<LineDetailOut>>()
+
+/** El detalle de una línea. Cada línea se pide una sola vez por origen; un fallo no se guarda. */
+export function fetchLine(lineId: string, source: DataMode = currentMode()): Promise<LineDetailOut> {
+  const key = `${source}:${lineId}`
+  let pending = lineCache.get(key)
+  if (!pending) {
+    pending = getJson<LineDetailOut>(
+      source === 'api' ? `${API_BASE}/api/lines/${encodeURIComponent(lineId)}` : `/data/lines/${safeName(lineId)}.json`,
+    )
+    lineCache.set(key, pending)
+    pending.catch(() => lineCache.delete(key))
+  }
+  return pending
 }
 
 export async function fetchCoverage(source: DataMode = currentMode()): Promise<CoverageOut> {
   return source === 'api' ? getJson(`${API_BASE}/api/coverage`) : getJson('/data/coverage.json')
-}
-
-export async function fetchSegmentCounts(
-  date?: string,
-  source: DataMode = currentMode(),
-): Promise<{ date: string; counts: Record<string, number> }> {
-  if (source === 'api') {
-    const q = date ? `?date=${date}` : ''
-    return getJson(`${API_BASE}/api/segment-counts${q}`)
-  }
-  return getJson('/data/segment-counts.json')
 }
 
 export async function fetchSegmentServices(segmentId: string, date?: string): Promise<SegmentServicesOut> {
@@ -135,7 +150,7 @@ export async function fetchSegmentServices(segmentId: string, date?: string): Pr
     const q = date ? `?date=${date}` : ''
     return getJson(`${API_BASE}/api/segments/${encodeURIComponent(segmentId)}/services${q}`)
   }
-  return getJson(`/data/segments/${encodeURIComponent(segmentId.replaceAll(':', '--'))}.json`)
+  return getJson(`/data/segments/${safeName(segmentId)}.json`)
 }
 
 export async function fetchNodeServices(nodeId: string, date?: string): Promise<NodeServicesOut> {

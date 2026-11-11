@@ -9,4 +9,4 @@ uv run uvicorn oniel.api.main:app --reload
 uv run pytest
 ```
 
-Módulos: `oniel.api` (rutas), `oniel.cli` (importación y validación), `oniel.network` (construcción de la línea e interrupciones del servicio), `oniel.gtfs` (lectura e importación de horarios, un conjunto de datos por fichero), `oniel.sim` (reglas puras de paso y cierre), `oniel.routing` (grafo de todas las líneas, escenarios y recorridos entre dos nodos), `oniel.repo` (consultas asyncpg), `oniel.export` (instantánea estática), `oniel.observability` (Logfire).
+Módulos: `oniel.api` (rutas), `oniel.cli` (importación y validación), `oniel.network` (construcción de la línea e interrupciones del servicio), `oniel.gtfs` (lectura e importación de horarios, un conjunto de datos por fichero), `oniel.sim` (reglas puras de paso y cierre), `oniel.routing` (grafo de todas las líneas, escenarios y recorridos entre dos nodos), `oniel.repo` (consultas asyncpg), `oniel.export` (instantánea estática: un índice ligero de la red y un fichero por línea), `oniel.observability` (Logfire).

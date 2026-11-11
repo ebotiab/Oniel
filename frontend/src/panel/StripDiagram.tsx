@@ -12,6 +12,8 @@ interface Props {
   /** Interrupciones vigentes hoy: sus tramos llevan la vía en rojo, como en el mapa. */
   interruptions?: InterruptionOut[]
   counts: Record<string, number> | null
+  /** Recuento que llena la barra: el mayor de toda la red. Sin él, el mayor de `counts`. */
+  countsMax?: number | null
   /** Rótulo de la columna de barras («trenes el 13 nov»); sin él no se rotula. */
   countsLabel?: string | null
   onSelect: (sel: Selection) => void
@@ -35,7 +37,7 @@ function label(n: NodeOut): string {
 }
 
 /** Esquema vertical de una línea: estaciones, puestos y bifurcaciones sobre una escala de kilómetros. */
-export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, interruptions = [], counts, countsLabel = null, onSelect, onHover, compact = false }: Props) {
+export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, interruptions = [], counts, countsMax = null, countsLabel = null, onSelect, onHover, compact = false }: Props) {
   const cut = new Set(interruptions.flatMap((i) => i.segment_ids))
   const nodes = network.nodes.filter((n) => n.line_id === lineId)
   const segments = network.segments.filter((s) => s.line_id === lineId)
@@ -48,7 +50,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
   const height = compact ? 300 : Math.max(420, principal * 52 + (nodes.length - principal) * 26)
   const y = (km: number) => top + (km / kmMax) * height
   const width = 404
-  const maxCount = counts ? Math.max(0, ...Object.values(counts)) : 0
+  const maxCount = counts ? (countsMax ?? Math.max(0, ...Object.values(counts))) : 0
   const isSelSeg = (s: SegmentOut) => selection?.type === 'tramo' && selection.id === s.id
   const isSelNode = (n: NodeOut) => selection?.type === 'nodo' && selection.id === n.id
   const principalStation = (n: NodeOut) => n.kind === 'estacion' && n.rank !== 'secundario'

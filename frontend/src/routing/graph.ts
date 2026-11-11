@@ -1,5 +1,7 @@
 // Grafo de todas las líneas cargadas y recorridos entre dos nodos, calculados en el cliente sobre
-// `network.json` (o la respuesta de /api/network) para que el modo estático no dependa de la API.
+// la red que compone el visor (`data/network.ts`) para que el modo estático no dependa de la API.
+// Las líneas, los nodos y los tramos salen enteros del índice (`index.json` o /api/lines), así que
+// el grafo está completo al arrancar, sin esperar al detalle de ninguna línea.
 //
 // Es el mismo cálculo que `backend/src/oniel/routing/graph.py`, con los mismos nombres: los dos
 // tienen que dar lo mismo, y `e2e/rutas.spec.ts` lo comprueba con un caso compartido. El método

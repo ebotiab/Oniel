@@ -11,6 +11,8 @@ interface Props {
   network: NetworkOut
   coverage: CoverageOut | null
   counts: Record<string, number> | null
+  /** El mayor recuento de toda la red, para que las barras de todas las líneas vayan a la misma escala. */
+  countsMax: number | null
   lineId: string
   /** Vuelve a la vista de la red. */
   onShowNetwork: () => void
@@ -26,7 +28,7 @@ interface Props {
   leyenda?: ReactNode
 }
 
-export function LineOverview({ network, coverage, counts, lineId, onShowNetwork, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact, leyenda = null }: Props) {
+export function LineOverview({ network, coverage, counts, countsMax, lineId, onShowNetwork, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact, leyenda = null }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -44,7 +46,7 @@ export function LineOverview({ network, coverage, counts, lineId, onShowNetwork,
   const parrafos = compact ? [entrada, ...resto].filter((p): p is string => Boolean(p)) : resto
   const cuts = interruptions.filter((i) => i.line_id === line.id && i.segment_ids.length > 0)
   const dia = coverage?.reference_date ?? null
-  const conBarras = Boolean(counts && dia && Object.keys(counts).length)
+  const conBarras = Boolean(counts && dia && (countsMax ?? Object.keys(counts).length))
   return (
     <section className="resumen-linea" aria-labelledby="linea-titulo">
       <div className="cabecera-linea" data-testid="cabecera-linea">
@@ -120,6 +122,7 @@ export function LineOverview({ network, coverage, counts, lineId, onShowNetwork,
         closedSegmentId={closedSegmentId}
         interruptions={cuts}
         counts={counts}
+        countsMax={countsMax}
         countsLabel={conBarras && dia ? `trenes el ${formatDayShort(dia)}` : null}
         onSelect={onSelect}
         onHover={onHover}

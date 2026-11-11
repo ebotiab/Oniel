@@ -174,6 +174,65 @@ Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<oper
 
 La instantánea estática lleva solo el estado actual. Para la evolución futura guarda además `frontend/public/data/historico/<conjunto>/segment-counts.json`: los pasos por tramo de cada conjunto en su propio día de referencia. Pesa 2,8 KB por conjunto con los 39 tramos de hoy (medido el 11 de noviembre de 2026), y el visor todavía no lo lee.
 
+## Instantánea estática
+
+`oniel-data import all` (o `export snapshot`) deja en `frontend/public/data` todo lo que el visor necesita sin API. La red va por partes, para que el arranque no pese más cada vez que se añade una línea:
+
+| Fichero | Qué lleva | Cuándo lo pide el visor |
+|---|---|---|
+| `index.json` | El índice de toda la red: las líneas, todos los nodos sin sus textos, los tramos con sus datos y la geometría simplificada, las conexiones a trazos y las interrupciones. | Al arrancar. |
+| `lines/<id>.json` | El detalle de una línea: sus nodos con descripción y detalles, sus tramos con la geometría completa, sus conexiones e interrupciones y los pasos por tramo del día de referencia. | Al abrir la línea, al seleccionar un tramo o un nodo suyo (también por enlace directo) o al acercar el mapa a ella (zoom 8 o más). |
+| `coverage.json` | Cobertura, conjuntos de datos y fuentes. | Al arrancar. |
+| `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y las paradas de una estación el día de referencia. | Al abrir su ficha. |
+| `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos (véase «Conjuntos de datos»). | Todavía no se lee. |
+| `network.json`, `segment-counts.json` | Lo mismo que el índice y las líneas en un solo fichero. | Nunca: el visor ya no los descarga. Se retiran cuando ninguna prueba los lea (el grafo de rutas, #23, los usa en las suyas). |
+
+La API ofrece lo equivalente: `GET /api/lines` (el índice) y `GET /api/lines/{id}` (el detalle, con `?date=` para los recuentos de otro día). `GET /api/network` sigue devolviendo la red entera.
+
+Qué va en el índice y por qué. Lleva todos los nodos y todos los tramos, no solo los principales: con ellos el buscador encuentra cualquier estación, un enlace directo a cualquier tramo o nodo sabe de qué línea es antes de pedirla, y el cálculo de recorridos en el cliente tiene el grafo entero (nodos, tramos, longitudes y velocidades) sin descargar ninguna línea. Lo que se deja fuera es lo que pesa: la geometría completa y los textos de los nodos. La geometría del índice se simplifica con una tolerancia de 200 m (Douglas-Peucker, `oniel.geo.simplify`, `INDEX_TOLERANCE_M`); los extremos de cada tramo no se mueven. Hasta el zoom 8 un píxel del mapa son más de 230 m, así que el trazo simplificado y el completo se dibujan igual; al acercarse más, el visor ya ha pedido la línea y sustituye su geometría por la completa. Los recuentos de cada línea llevan el máximo de toda la red (`network_max_count`) para que las barras del esquema tengan la misma escala en todas las líneas.
+
+En el visor, `frontend/src/data/api.ts` pide el índice y cada línea (una sola vez por origen, con caché en memoria) y `frontend/src/data/network.ts` compone con ello la red que usan el mapa y el panel. Las cabeceras de caché de `frontend/vercel.json` para `/data/` cubren los ficheros nuevos.
+
+### Medidas
+
+Medido el 11 de noviembre de 2026 con las tres líneas (976 km, 42 nodos, 39 tramos); gzip con nivel 9.
+
+Antes, el arranque descargaba `network.json` y `segment-counts.json`:
+
+| Fichero | Bruto | gzip |
+|---|---|---|
+| `network.json` | 376,2 KB | 106,5 KB |
+| `segment-counts.json` | 2,5 KB | 0,6 KB |
+
+El 83 % de `network.json` era geometría (311 KB brutos), y casi la mitad de ella (`line_features`, 145 KB) repetía la de los tramos sin que el visor la usara. Lo que aportaba cada línea (su ficha, nodos, tramos y geometrías, comprimido aparte):
+
+| Línea | Bruto | gzip |
+|---|---|---|
+| Alta velocidad Madrid – Sevilla (470,5 km) | 142,0 KB | 43,6 KB |
+| Convencional Madrid – Alcázar – Córdoba (440,7 km) | 190,5 KB | 53,6 KB |
+| Convencional Manzanares – Ciudad Real (64,4 km) | 16,2 KB | 3,2 KB |
+
+Ahora el arranque descarga `index.json`, y cada línea se descarga cuando hace falta:
+
+| Fichero | Bruto | gzip |
+|---|---|---|
+| `index.json` | 54,4 KB | 11,0 KB |
+| `lines/lav-madrid-sevilla.json` | 84,1 KB | 25,5 KB |
+| `lines/convencional-madrid-alcazar-cordoba.json` | 119,2 KB | 32,0 KB |
+| `lines/manzanares-ciudad-real.json` | 11,3 KB | 3,3 KB |
+
+En el índice, cada línea aporta entre 1,3 KB (Manzanares – Ciudad Real) y 5,1 KB (la convencional por Alcázar) comprimidos; la geometría simplificada de toda la red son 359 vértices frente a 6.142.
+
+Proyección, suponiendo líneas como la media de hoy (325 km y 13 tramos; cien líneas así serían unos 32.500 km, el doble de la red española, de modo que es una cota alta):
+
+| Líneas | Arranque antes (gzip) | Arranque ahora (gzip) |
+|---|---|---|
+| 3 (hoy) | 107 KB | 11 KB |
+| 20 | 0,7 MB | 73 KB |
+| 100 | 3,6 MB | 365 KB |
+
+El índice crece unos 3,7 KB comprimidos por línea, diez veces menos que antes. Si llega a pesar, lo siguiente es quitar de sus tramos los nombres de los extremos, que ya están en los nodos, y servir las conexiones con cada línea. Un límite conocido: `GET /api/lines` simplifica la geometría en cada petición (unos 30 ms con tres líneas); con muchas líneas convendrá guardarla ya simplificada al importar.
+
 ## Modelo de datos
 
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
@@ -199,4 +258,6 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 4. `uv run oniel-data validate --spec data/curated/<línea>.json` hasta que no haya problemas.
 5. `uv run oniel-data import network` e `import gtfs` (sin `--spec` cargan todas las líneas; `import all` hace todo y exporta la instantánea).
 
-El visor dibuja todo lo que devuelve `GET /api/network`: todas las líneas en el mapa y una entrada por línea en la lista de la vista de la red.
+6. Subir con la PR la instantánea regenerada: `index.json` lleva la línea nueva y aparece su `lines/<id>.json`. Si la línea es larga, anotar en «Medidas» de «Instantánea estática» lo que pesan ahora el índice y su fichero.
+
+El visor dibuja todo lo que trae el índice (`index.json` o `GET /api/lines`): todas las líneas en el mapa y una entrada por línea en la lista de la vista de la red. No hay que tocar el visor: el detalle de la línea nueva se pide solo cuando se abre.

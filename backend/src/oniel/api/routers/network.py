@@ -3,10 +3,17 @@ from __future__ import annotations
 import datetime as dt
 from typing import Annotated
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 from oniel.api.deps import ConnectionDep
-from oniel.domain.schemas import CoverageOut, InterruptionOut, NetworkOut, Source
+from oniel.domain.schemas import (
+    CoverageOut,
+    InterruptionOut,
+    LineDetailOut,
+    NetworkIndexOut,
+    NetworkOut,
+    Source,
+)
 from oniel.repo import network_repo, services_repo
 
 router = APIRouter(tags=["red"])
@@ -15,6 +22,28 @@ router = APIRouter(tags=["red"])
 @router.get("/network")
 async def get_network(conn: ConnectionDep) -> NetworkOut:
     return await network_repo.fetch_network(conn)
+
+
+@router.get("/lines")
+async def get_lines(conn: ConnectionDep) -> NetworkIndexOut:
+    """Índice ligero de la red: líneas, nodos sin textos y tramos con la geometría simplificada."""
+    return await network_repo.fetch_index(conn)
+
+
+@router.get("/lines/{line_id}")
+async def get_line(
+    conn: ConnectionDep,
+    line_id: str,
+    date: Annotated[
+        dt.date | None,
+        Query(description="Día de los recuentos por tramo; por defecto el de referencia"),
+    ] = None,
+) -> LineDetailOut:
+    """El detalle de una línea: nodos, tramos, geometría completa y pasos por tramo."""
+    detail = await network_repo.fetch_line_detail(conn, line_id, date)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Línea no encontrada")
+    return detail
 
 
 @router.get("/coverage")

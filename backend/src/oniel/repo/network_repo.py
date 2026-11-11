@@ -16,15 +16,19 @@ from oniel.domain.schemas import (
     Feature,
     FeatureCollection,
     InterruptionOut,
+    LineDetailOut,
     LineSummary,
+    NetworkIndexOut,
     NetworkOut,
+    NodeIndexOut,
     NodeOut,
     Operator,
     SegmentOut,
     Source,
     SourceRef,
 )
-from oniel.repo import datasets_repo
+from oniel.geo import simplify
+from oniel.repo import datasets_repo, services_repo
 from oniel.repo.datasets_repo import CURRENT_IDS_SQL
 from oniel.routing import Graph, build_graph
 
@@ -44,6 +48,19 @@ def coverage_notice(lines: list[LineSummary]) -> str:
         " alteraciones del servicio; las interrupciones que Oniel conoce se señalan aparte, con"
         " su fuente y la fecha en que se comprobaron."
     )
+
+
+#: Tolerancia de la geometría del índice. A la escala a la que el visor la dibuja (hasta el zoom 8,
+#: unos 230 m por píxel) 200 m quedan por debajo de un píxel; más cerca ya se ha pedido la línea.
+INDEX_TOLERANCE_M = 200.0
+
+
+def simplified_geometry(geometry: dict[str, Any], tolerance_m: float) -> dict[str, Any]:
+    """La misma geometría con menos vértices; los extremos no se mueven."""
+    if geometry.get("type") != "LineString":
+        return geometry
+    coords = simplify([(c[0], c[1]) for c in geometry["coordinates"]], tolerance_m)
+    return {"type": "LineString", "coordinates": [[lon, lat] for lon, lat in coords]}
 
 
 def _geom(value: Any) -> dict[str, Any]:
@@ -307,14 +324,79 @@ async def fetch_network(conn: asyncpg.Connection) -> NetworkOut:
             ]
         ),
         node_features=FeatureCollection(features=node_features),
-        connection_features=FeatureCollection(
+        connection_features=_connection_features(connections),
+        interruptions=await fetch_interruptions(conn),
+    )
+
+
+def _connection_features(
+    connections: list[tuple[ConnectionOut, dict[str, Any] | None]],
+) -> FeatureCollection:
+    return FeatureCollection(
+        features=[
+            Feature(id=c.id, geometry=g, properties=c.model_dump(exclude={"id"}))
+            for c, g in connections
+            if g is not None
+        ]
+    )
+
+
+async def fetch_index(
+    conn: asyncpg.Connection, tolerance_m: float = INDEX_TOLERANCE_M
+) -> NetworkIndexOut:
+    """Índice ligero de la red: todo salvo los textos de los nodos y la geometría completa."""
+    nodes = await fetch_nodes(conn)
+    segments = await fetch_segments(conn)
+    connections = await fetch_connections(conn)
+    return NetworkIndexOut(
+        lines=await fetch_lines(conn),
+        nodes=[NodeIndexOut(**n.model_dump(exclude={"description", "details"})) for n in nodes],
+        segment_features=FeatureCollection(
             features=[
-                Feature(id=c.id, geometry=g, properties=c.model_dump(exclude={"id"}))
-                for c, g in connections
-                if g is not None
+                Feature(
+                    id=s.id,
+                    geometry=simplified_geometry(g, tolerance_m),
+                    properties=s.model_dump(exclude={"id"}),
+                )
+                for s, g in segments
             ]
         ),
+        connections=[c for c, _ in connections],
+        connection_features=_connection_features(connections),
         interruptions=await fetch_interruptions(conn),
+        simplify_tolerance_m=tolerance_m,
+    )
+
+
+async def fetch_line_detail(
+    conn: asyncpg.Connection, line_id: str, day: dt.date | None = None
+) -> LineDetailOut | None:
+    """El detalle de una línea, con los pasos por tramo de ``day`` (por defecto, el de referencia)."""
+    line = next((ln for ln in await fetch_lines(conn) if ln.id == line_id), None)
+    if line is None:
+        return None
+    nodes = await fetch_nodes(conn, line_id)
+    segments = await fetch_segments(conn, line_id)
+    node_ids = {n.id for n in nodes}
+    segment_ids = {s.id for s, _ in segments}
+    if day is None:
+        _, _, day = await feed_bounds(conn)
+    counts = await services_repo.daily_counts(conn, day) if day else {}
+    return LineDetailOut(
+        line=line,
+        nodes=nodes,
+        segments=[s for s, _ in segments],
+        segment_features=FeatureCollection(
+            features=[
+                Feature(id=s.id, geometry=g, properties=s.model_dump(exclude={"id"}))
+                for s, g in segments
+            ]
+        ),
+        connections=[c for c, _ in await fetch_connections(conn) if c.node_id in node_ids],
+        interruptions=await fetch_interruptions(conn, line_id=line_id),
+        date=day,
+        counts={k: v for k, v in counts.items() if k in segment_ids},
+        network_max_count=max(counts.values(), default=0),
     )
 
 

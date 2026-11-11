@@ -671,3 +671,98 @@ async def test_unknown_segment_is_404(client: httpx.AsyncClient) -> None:
         json={"segment_id": "nada", "date": "2026-11-13", "start": "08:00", "end": "09:00"},
     )
     assert r.status_code == 404
+
+
+async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncClient) -> None:
+    network = (await client.get("/api/network")).json()
+    index = (await client.get("/api/lines")).json()
+    assert index["lines"] == network["lines"]
+    assert index["connections"] == network["connections"]
+    assert index["connection_features"] == network["connection_features"]
+    assert index["interruptions"] == network["interruptions"]
+    # los nodos del índice son los de la red sin sus textos
+    assert index["nodes"] == [
+        {k: v for k, v in n.items() if k not in ("description", "details")}
+        for n in network["nodes"]
+    ]
+    # los tramos son los mismos, con sus datos, y la geometría simplificada no mueve los extremos
+    full = {f["id"]: f for f in network["segment_features"]["features"]}
+    assert [f["id"] for f in index["segment_features"]["features"]] == list(full)
+    points = 0
+    for f in index["segment_features"]["features"]:
+        assert f["properties"] == full[f["id"]]["properties"]
+        coords, original = f["geometry"]["coordinates"], full[f["id"]]["geometry"]["coordinates"]
+        assert coords[0] == original[0] and coords[-1] == original[-1]
+        assert set(map(tuple, coords)) <= set(map(tuple, original))
+        points += len(coords)
+    assert points < sum(len(f["geometry"]["coordinates"]) for f in full.values()) / 10
+
+    counts = (await client.get("/api/segment-counts")).json()
+    nodes: list[Any] = []
+    segments: list[Any] = []
+    features: list[Any] = []
+    merged: dict[str, int] = {}
+    for line in index["lines"]:
+        detail = (await client.get(f"/api/lines/{line['id']}")).json()
+        assert detail["line"] == line
+        assert detail["date"] == counts["date"]
+        assert detail["network_max_count"] == max(counts["counts"].values())
+        node_ids = {n["id"] for n in detail["nodes"]}
+        assert detail["connections"] == [
+            c for c in network["connections"] if c["node_id"] in node_ids
+        ]
+        assert detail["interruptions"] == [
+            i for i in network["interruptions"] if i["line_id"] == line["id"]
+        ]
+        nodes += detail["nodes"]
+        segments += detail["segments"]
+        features += detail["segment_features"]["features"]
+        merged |= detail["counts"]
+    # las líneas, juntas, suman lo mismo que la red entera
+    assert nodes == network["nodes"]
+    assert segments == network["segments"]
+    assert features == network["segment_features"]["features"]
+    assert merged == counts["counts"]
+
+    other_day = (await client.get(f"/api/lines/{MZCR}", params={"date": "2026-11-14"})).json()
+    assert other_day["date"] == "2026-11-14"
+    assert (await client.get("/api/lines/no-existe")).status_code == 404
+
+
+async def test_snapshot_parts_add_up_to_the_single_file(
+    imported: dict[str, Any], dsn: str, tmp_path: Path
+) -> None:
+    from oniel.db.pool import connect
+    from oniel.export.snapshot import export_snapshot
+
+    async with connect(dsn) as conn:
+        result = await export_snapshot(conn, tmp_path)
+
+    def read(name: str) -> Any:
+        return json.loads((tmp_path / name).read_text(encoding="utf-8"))
+
+    network, counts, index = read("network.json"), read("segment-counts.json"), read("index.json")
+    assert result["lines"] == [LAV, CONV, MZCR]
+    assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
+        f"{line}.json" for line in result["lines"]
+    )
+    assert index["lines"] == network["lines"]
+    assert [n["id"] for n in index["nodes"]] == [n["id"] for n in network["nodes"]]
+    details = [read(f"lines/{line}.json") for line in result["lines"]]
+    assert [n for d in details for n in d["nodes"]] == network["nodes"]
+    assert [s for d in details for s in d["segments"]] == network["segments"]
+    assert [f for d in details for f in d["segment_features"]["features"]] == network[
+        "segment_features"
+    ]["features"]
+    merged: dict[str, int] = {}
+    for d in details:
+        assert d["date"] == counts["date"]
+        merged |= d["counts"]
+    assert merged == counts["counts"]
+    # el índice pesa una fracción del fichero único: es lo que el visor descarga al arrancar
+    assert (tmp_path / "index.json").stat().st_size < (tmp_path / "network.json").stat().st_size / 5
+    # una línea que deja de estar cargada no deja su fichero en la instantánea
+    (tmp_path / "lines" / "retirada.json").write_text("{}", encoding="utf-8")
+    async with connect(dsn) as conn:
+        await export_snapshot(conn, tmp_path)
+    assert not (tmp_path / "lines" / "retirada.json").exists()
