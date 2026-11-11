@@ -579,12 +579,31 @@
   border-top: 3px solid var(--tinta);
 }
 
-.muestra.via.convencional {
-  border-top-width: 2px;
+/* Las muestras de la vía (Legend.tsx) repiten el dibujo del mapa. */
+.muestra-via {
+  display: block;
 }
 
-.muestra.via.unica {
-  border-top-width: 1.5px;
+.leyenda-tipo {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 26px auto;
+  gap: 10px;
+  align-items: center;
+  margin: -2px -5px;
+  padding: 2px 5px;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.leyenda-tipo:hover,
+.leyenda-tipo[aria-pressed='true'] {
+  background: var(--papel-2, rgba(23, 32, 30, 0.07));
 }
 
 .muestra.conexion {

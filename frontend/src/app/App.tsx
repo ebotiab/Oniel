@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { apiStatus, fetchCoverage, fetchNetwork, fetchSegmentCounts, onApiStatus, wakeApi, type ApiStatus, type DataMode } from '../data/api'
 import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, NetworkOut } from '../data/types'
+import type { Trazo } from '../map/layers'
 import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend } from '../panel/Legend'
@@ -29,6 +30,7 @@ export default function App() {
   const [network, setNetwork] = useState<NetworkOut | null>(null)
   const [coverage, setCoverage] = useState<CoverageOut | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [highlight, setHighlight] = useState<Trazo | null>(null)
   const [route, setRoute] = useState(() => parseHash(window.location.hash))
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
@@ -219,6 +221,7 @@ export default function App() {
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
         interrupted={interrupted}
+        highlight={highlight}
         onSelect={select}
         onHover={setHoverId}
         padding={padding}
@@ -263,6 +266,8 @@ export default function App() {
           interrupted={interruptions.length > 0}
           lines={lines}
           singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false}
+          highlight={highlight}
+          onHighlight={setHighlight}
         />
       )}
     </div>
