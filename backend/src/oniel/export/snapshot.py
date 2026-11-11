@@ -1,8 +1,8 @@
 """Exporta la red y los servicios a JSON estático para el visor cuando no hay API.
 
 El visor arranca con ``index.json`` (el índice ligero de toda la red) y pide ``lines/<id>.json``
-al abrir cada línea. ``network.json`` y ``segment-counts.json`` llevan lo mismo en un solo
-fichero; el visor ya no los descarga y se conservan mientras alguna prueba los lea.
+al abrir cada línea, que trae también sus pasos por tramo. La red entera en una sola respuesta
+solo la da la API (``GET /api/network``).
 """
 
 from __future__ import annotations
@@ -36,10 +36,7 @@ async def export_snapshot(
     network = await network_repo.fetch_network(conn)
     coverage = await network_repo.fetch_coverage(conn)
     day = date or coverage.reference_date or dt.date.today()
-    _write(out_dir / "network.json", network.model_dump(mode="json"))
     _write(out_dir / "coverage.json", coverage.model_dump(mode="json"))
-    counts = await services_repo.daily_counts(conn, day)
-    _write(out_dir / "segment-counts.json", {"date": day.isoformat(), "counts": counts})
     index = await network_repo.fetch_index(conn)
     _write(out_dir / "index.json", index.model_dump(mode="json"))
     # Un fichero por línea; la carpeta se rehace entera para que no queden líneas retiradas.

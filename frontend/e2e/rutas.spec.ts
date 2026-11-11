@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs'
 
 import { expect, test } from '@playwright/test'
 
-import type { NetworkOut, Route } from '../src/data/types.ts'
+import { composeNetwork } from '../src/data/network.ts'
+import type { NetworkIndexOut, Route } from '../src/data/types.ts'
 import { buildGraph, closureDetours, findRoutes, type Detour } from '../src/routing/graph.ts'
 import { ScenarioError, closureScenario, scenarioFromCode, scenarioToCode } from '../src/routing/scenario.ts'
 
@@ -11,14 +12,14 @@ const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 // El grafo de rutas se calcula igual en el servidor (`backend/src/oniel/routing`) y en el cliente
 // (`src/routing`). Los casos y lo que da el servidor están en `fixtures/rutas-paridad.json`, que
 // genera y comprueba `backend/tests/test_routing.py`; aquí el cliente tiene que dar lo mismo sobre
-// la instantánea estática.
+// la instantánea estática: le basta el índice, que lleva todas las líneas, nodos y tramos.
 interface Paridad {
   routes: { from: string; to: string; scenario: string; max_changes: number; expected: Route[] }[]
   detours: { segment_id: string; scenario: string; expected: Detour[] }[]
 }
 const leer = <T>(ruta: string) => JSON.parse(readFileSync(new URL(ruta, import.meta.url), 'utf-8')) as T
 const paridad = leer<Paridad>('./fixtures/rutas-paridad.json')
-const red = leer<NetworkOut>('../public/data/network.json')
+const red = composeNetwork(leer<NetworkIndexOut>('../public/data/index.json'), {})
 
 const MADRID = 'madrid-puerta-de-atocha'
 const URDA_CIUDAD_REAL = 'lav-madrid-sevilla:urda:ciudad-real'
@@ -67,7 +68,7 @@ test.describe('Grafo de rutas en el cliente', () => {
       delete copia.interruptions
       return copia
     })
-    const redApi = (await (await request.get('/api/network')).json()) as NetworkOut
+    const redApi = composeNetwork((await (await request.get('/api/lines')).json()) as NetworkIndexOut, {})
     expect(findRoutes(buildGraph(redApi), caso.from, caso.to, scenarioFromCode(caso.scenario), caso.max_changes)).toEqual(delServidor)
   })
 })
