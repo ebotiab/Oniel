@@ -60,7 +60,6 @@ Oniel tiene que servir a dos públicos y crecer durante años. Estos principios 
 13. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #21 y #26.
 14. [#28](https://github.com/ebotiab/Oniel/issues/28) Visor: buscar una estación o una línea. Por nombre o por código de Adif, también en móvil y sin API.
 15. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Depende de #21.
-16. [#30](https://github.com/ebotiab/Oniel/issues/30) Infraestructura: conectar Vercel a GitHub.
 
 El orden es orientativo. #16, #28 y #30 no dependen de nada y pueden adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
