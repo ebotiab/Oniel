@@ -23,8 +23,11 @@ from pydantic import BaseModel
 
 from oniel.routing.scenario import Scenario, ScenarioError
 
-#: Cambios de línea que admite un recorrido si no se pide otra cosa.
-DEFAULT_MAX_CHANGES = 1
+#: Veces que un recorrido pasa de una línea a otra si no se pide otra cosa. Es un freno técnico
+#: (hasta seis líneas encadenadas), no un criterio: lo que descarta recorridos es ``max_ratio``.
+DEFAULT_MAX_CHANGES = 5
+#: Un recorrido se descarta si mide más de estas veces lo que mide el más corto.
+DEFAULT_MAX_RATIO = 2.0
 #: Tope de recorridos devueltos, para que una red más grande no dispare la lista.
 MAX_ROUTES = 12
 #: Holgura al comparar kilómetros de una línea, como en el resto de Oniel.
@@ -368,11 +371,13 @@ def find_routes(
     scenario: Scenario | None = None,
     *,
     max_changes: int | None = DEFAULT_MAX_CHANGES,
+    max_ratio: float | None = DEFAULT_MAX_RATIO,
 ) -> list[Route]:
     """Recorridos distintos entre dos nodos con la red del escenario, del más corto al más largo.
 
-    Son los caminos que no pasan dos veces por el mismo nodo y cambian de línea como mucho
-    ``max_changes`` veces (``None``, sin tope).
+    Son los caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho
+    ``max_changes`` veces (``None``, sin tope) y no miden más de ``max_ratio`` veces lo que mide
+    el más corto (``None``, sin descartar ninguno por largo).
     """
     for node_id in (from_node_id, to_node_id):
         if node_id not in graph.nodes:
@@ -386,7 +391,11 @@ def find_routes(
             g, from_node_id, lambda n: n == to_node_id, lambda n: True, lambda e: True, max_changes
         )
     ]
-    return [_route(g, start, steps) for start, steps in _sorted(found)[:MAX_ROUTES]]
+    ordered = _sorted(found)
+    if max_ratio is not None and ordered:
+        limit = _raw_length(ordered[0][1]) * max_ratio
+        ordered = [f for f in ordered if _raw_length(f[1]) <= limit]
+    return [_route(g, start, steps) for start, steps in ordered[:MAX_ROUTES]]
 
 
 def closure_detours(

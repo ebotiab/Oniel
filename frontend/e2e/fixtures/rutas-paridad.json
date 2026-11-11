@@ -5,6 +5,7 @@
       "to": "cordoba",
       "scenario": "",
       "max_changes": 1,
+      "max_ratio": null,
       "expected": [
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -154,6 +155,7 @@
       "to": "ciudad-real",
       "scenario": "",
       "max_changes": 1,
+      "max_ratio": null,
       "expected": [
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -391,6 +393,7 @@
       "to": "sevilla-santa-justa",
       "scenario": "",
       "max_changes": 2,
+      "max_ratio": null,
       "expected": [
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -673,6 +676,7 @@
       "to": "ciudad-real",
       "scenario": "c~lav-madrid-sevilla:urda:ciudad-real;e~alcazar-de-san-juan~ciudad-real~110.5~200;v~manzanares-ciudad-real:almagro:ciudad-real~95",
       "max_changes": 2,
+      "max_ratio": null,
       "expected": [
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -927,6 +931,868 @@
             "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
             "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
             "lav-madrid-sevilla:ciudad-real:puertollano"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "cordoba",
+      "scenario": "",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "cordoba",
+          "to_name": "Córdoba",
+          "length_km": 343.6,
+          "time_min": 81,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 343.6,
+              "time_min": 81,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Ciudad Real",
+            "Puertollano",
+            "Villanueva de Córdoba-Los Pedroches"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-torrejon-de-velasco",
+            "bif-la-sagra",
+            "urda",
+            "ciudad-real",
+            "puertollano",
+            "villanueva-de-cordoba",
+            "adamuz",
+            "cordoba"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:bif-la-sagra:urda",
+            "lav-madrid-sevilla:urda:ciudad-real",
+            "lav-madrid-sevilla:ciudad-real:puertollano",
+            "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
+            "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
+            "lav-madrid-sevilla:adamuz:cordoba"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "cordoba",
+          "to_name": "Córdoba",
+          "length_km": 433.3,
+          "time_min": 148,
+          "single_track_km": 64.4,
+          "line_ids": [
+            "convencional-madrid-alcazar-cordoba",
+            "manzanares-ciudad-real",
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 196.1,
+              "time_min": 79,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "manzanares-ciudad-real",
+              "line_name": "Línea convencional Manzanares – Ciudad Real",
+              "from_node_id": "manzanares",
+              "from_name": "Manzanares",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 64.4,
+              "time_min": 28,
+              "single_track_km": 64.4
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "ciudad-real",
+              "from_name": "Ciudad Real",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 172.8,
+              "time_min": 41,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Aranjuez",
+            "Alcázar de San Juan",
+            "Manzanares",
+            "Daimiel",
+            "Almagro",
+            "Ciudad Real",
+            "Puertollano",
+            "Villanueva de Córdoba-Los Pedroches"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-planetario",
+            "aranjuez",
+            "castillejo-anover",
+            "villasequilla",
+            "tembleque",
+            "el-romeral",
+            "villacanas",
+            "quero",
+            "alcazar-de-san-juan",
+            "cinco-casas",
+            "manzanares",
+            "daimiel",
+            "almagro",
+            "ciudad-real",
+            "puertollano",
+            "villanueva-de-cordoba",
+            "adamuz",
+            "cordoba"
+          ],
+          "segment_ids": [
+            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
+            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
+            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
+            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
+            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
+            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
+            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
+            "convencional-madrid-alcazar-cordoba:villacanas:quero",
+            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
+            "convencional-madrid-alcazar-cordoba:alcazar-de-san-juan:cinco-casas",
+            "convencional-madrid-alcazar-cordoba:cinco-casas:manzanares",
+            "manzanares-ciudad-real:manzanares:daimiel",
+            "manzanares-ciudad-real:daimiel:almagro",
+            "manzanares-ciudad-real:almagro:ciudad-real",
+            "lav-madrid-sevilla:ciudad-real:puertollano",
+            "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
+            "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
+            "lav-madrid-sevilla:adamuz:cordoba"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "cordoba",
+          "to_name": "Córdoba",
+          "length_km": 440.7,
+          "time_min": 186,
+          "single_track_km": 194.1,
+          "line_ids": [
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 440.7,
+              "time_min": 186,
+              "single_track_km": 194.1
+            }
+          ],
+          "via": [
+            "Aranjuez",
+            "Alcázar de San Juan",
+            "Manzanares",
+            "Valdepeñas",
+            "Santa Cruz de Mudela",
+            "Vilches",
+            "Linares-Baeza",
+            "Andújar"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-planetario",
+            "aranjuez",
+            "castillejo-anover",
+            "villasequilla",
+            "tembleque",
+            "el-romeral",
+            "villacanas",
+            "quero",
+            "alcazar-de-san-juan",
+            "cinco-casas",
+            "manzanares",
+            "valdepenas",
+            "santa-cruz-de-mudela",
+            "almuradiel-viso-del-marques",
+            "venta-de-cardenas",
+            "vilches",
+            "vadollano",
+            "linares-baeza",
+            "espeluy",
+            "andujar",
+            "villa-del-rio",
+            "montoro",
+            "alcolea-de-cordoba",
+            "rabanales",
+            "cordoba"
+          ],
+          "segment_ids": [
+            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
+            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
+            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
+            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
+            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
+            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
+            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
+            "convencional-madrid-alcazar-cordoba:villacanas:quero",
+            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
+            "convencional-madrid-alcazar-cordoba:alcazar-de-san-juan:cinco-casas",
+            "convencional-madrid-alcazar-cordoba:cinco-casas:manzanares",
+            "convencional-madrid-alcazar-cordoba:manzanares:valdepenas",
+            "convencional-madrid-alcazar-cordoba:valdepenas:santa-cruz-de-mudela",
+            "convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques",
+            "convencional-madrid-alcazar-cordoba:almuradiel-viso-del-marques:venta-de-cardenas",
+            "convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches",
+            "convencional-madrid-alcazar-cordoba:vilches:vadollano",
+            "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "cordoba",
+          "to_name": "Córdoba",
+          "length_km": 479.8,
+          "time_min": 174,
+          "single_track_km": 258.6,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "manzanares-ciudad-real",
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 170.8,
+              "time_min": 40,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "manzanares-ciudad-real",
+              "line_name": "Línea convencional Manzanares – Ciudad Real",
+              "from_node_id": "ciudad-real",
+              "from_name": "Ciudad Real",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 64.4,
+              "time_min": 28,
+              "single_track_km": 64.4
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "manzanares",
+              "from_name": "Manzanares",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 244.6,
+              "time_min": 107,
+              "single_track_km": 194.1
+            }
+          ],
+          "via": [
+            "Ciudad Real",
+            "Almagro",
+            "Daimiel",
+            "Manzanares",
+            "Valdepeñas",
+            "Santa Cruz de Mudela",
+            "Vilches",
+            "Linares-Baeza",
+            "Andújar"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-torrejon-de-velasco",
+            "bif-la-sagra",
+            "urda",
+            "ciudad-real",
+            "almagro",
+            "daimiel",
+            "manzanares",
+            "valdepenas",
+            "santa-cruz-de-mudela",
+            "almuradiel-viso-del-marques",
+            "venta-de-cardenas",
+            "vilches",
+            "vadollano",
+            "linares-baeza",
+            "espeluy",
+            "andujar",
+            "villa-del-rio",
+            "montoro",
+            "alcolea-de-cordoba",
+            "rabanales",
+            "cordoba"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:bif-la-sagra:urda",
+            "lav-madrid-sevilla:urda:ciudad-real",
+            "manzanares-ciudad-real:almagro:ciudad-real",
+            "manzanares-ciudad-real:daimiel:almagro",
+            "manzanares-ciudad-real:manzanares:daimiel",
+            "convencional-madrid-alcazar-cordoba:manzanares:valdepenas",
+            "convencional-madrid-alcazar-cordoba:valdepenas:santa-cruz-de-mudela",
+            "convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques",
+            "convencional-madrid-alcazar-cordoba:almuradiel-viso-del-marques:venta-de-cardenas",
+            "convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches",
+            "convencional-madrid-alcazar-cordoba:vilches:vadollano",
+            "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "ciudad-real",
+      "scenario": "",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "ciudad-real",
+          "to_name": "Ciudad Real",
+          "length_km": 170.8,
+          "time_min": 40,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 170.8,
+              "time_min": 40,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-torrejon-de-velasco",
+            "bif-la-sagra",
+            "urda",
+            "ciudad-real"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:bif-la-sagra:urda",
+            "lav-madrid-sevilla:urda:ciudad-real"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "ciudad-real",
+          "to_name": "Ciudad Real",
+          "length_km": 260.5,
+          "time_min": 107,
+          "single_track_km": 64.4,
+          "line_ids": [
+            "convencional-madrid-alcazar-cordoba",
+            "manzanares-ciudad-real"
+          ],
+          "legs": [
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 196.1,
+              "time_min": 79,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "manzanares-ciudad-real",
+              "line_name": "Línea convencional Manzanares – Ciudad Real",
+              "from_node_id": "manzanares",
+              "from_name": "Manzanares",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 64.4,
+              "time_min": 28,
+              "single_track_km": 64.4
+            }
+          ],
+          "via": [
+            "Aranjuez",
+            "Alcázar de San Juan",
+            "Manzanares",
+            "Daimiel",
+            "Almagro"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-planetario",
+            "aranjuez",
+            "castillejo-anover",
+            "villasequilla",
+            "tembleque",
+            "el-romeral",
+            "villacanas",
+            "quero",
+            "alcazar-de-san-juan",
+            "cinco-casas",
+            "manzanares",
+            "daimiel",
+            "almagro",
+            "ciudad-real"
+          ],
+          "segment_ids": [
+            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
+            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
+            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
+            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
+            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
+            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
+            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
+            "convencional-madrid-alcazar-cordoba:villacanas:quero",
+            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
+            "convencional-madrid-alcazar-cordoba:alcazar-de-san-juan:cinco-casas",
+            "convencional-madrid-alcazar-cordoba:cinco-casas:manzanares",
+            "manzanares-ciudad-real:manzanares:daimiel",
+            "manzanares-ciudad-real:daimiel:almagro",
+            "manzanares-ciudad-real:almagro:ciudad-real"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "andujar",
+      "scenario": "",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "andujar",
+          "to_name": "Andújar",
+          "length_km": 361.9,
+          "time_min": 156,
+          "single_track_km": 115.4,
+          "line_ids": [
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "andujar",
+              "to_name": "Andújar",
+              "length_km": 361.9,
+              "time_min": 156,
+              "single_track_km": 115.4
+            }
+          ],
+          "via": [
+            "Aranjuez",
+            "Alcázar de San Juan",
+            "Manzanares",
+            "Valdepeñas",
+            "Santa Cruz de Mudela",
+            "Vilches",
+            "Linares-Baeza"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-planetario",
+            "aranjuez",
+            "castillejo-anover",
+            "villasequilla",
+            "tembleque",
+            "el-romeral",
+            "villacanas",
+            "quero",
+            "alcazar-de-san-juan",
+            "cinco-casas",
+            "manzanares",
+            "valdepenas",
+            "santa-cruz-de-mudela",
+            "almuradiel-viso-del-marques",
+            "venta-de-cardenas",
+            "vilches",
+            "vadollano",
+            "linares-baeza",
+            "espeluy",
+            "andujar"
+          ],
+          "segment_ids": [
+            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
+            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
+            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
+            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
+            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
+            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
+            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
+            "convencional-madrid-alcazar-cordoba:villacanas:quero",
+            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
+            "convencional-madrid-alcazar-cordoba:alcazar-de-san-juan:cinco-casas",
+            "convencional-madrid-alcazar-cordoba:cinco-casas:manzanares",
+            "convencional-madrid-alcazar-cordoba:manzanares:valdepenas",
+            "convencional-madrid-alcazar-cordoba:valdepenas:santa-cruz-de-mudela",
+            "convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques",
+            "convencional-madrid-alcazar-cordoba:almuradiel-viso-del-marques:venta-de-cardenas",
+            "convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches",
+            "convencional-madrid-alcazar-cordoba:vilches:vadollano",
+            "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "andujar",
+          "to_name": "Andújar",
+          "length_km": 401.0,
+          "time_min": 145,
+          "single_track_km": 179.8,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "manzanares-ciudad-real",
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 170.8,
+              "time_min": 40,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "manzanares-ciudad-real",
+              "line_name": "Línea convencional Manzanares – Ciudad Real",
+              "from_node_id": "ciudad-real",
+              "from_name": "Ciudad Real",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 64.4,
+              "time_min": 28,
+              "single_track_km": 64.4
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "manzanares",
+              "from_name": "Manzanares",
+              "to_node_id": "andujar",
+              "to_name": "Andújar",
+              "length_km": 165.8,
+              "time_min": 77,
+              "single_track_km": 115.4
+            }
+          ],
+          "via": [
+            "Ciudad Real",
+            "Almagro",
+            "Daimiel",
+            "Manzanares",
+            "Valdepeñas",
+            "Santa Cruz de Mudela",
+            "Vilches",
+            "Linares-Baeza"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-torrejon-de-velasco",
+            "bif-la-sagra",
+            "urda",
+            "ciudad-real",
+            "almagro",
+            "daimiel",
+            "manzanares",
+            "valdepenas",
+            "santa-cruz-de-mudela",
+            "almuradiel-viso-del-marques",
+            "venta-de-cardenas",
+            "vilches",
+            "vadollano",
+            "linares-baeza",
+            "espeluy",
+            "andujar"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:bif-la-sagra:urda",
+            "lav-madrid-sevilla:urda:ciudad-real",
+            "manzanares-ciudad-real:almagro:ciudad-real",
+            "manzanares-ciudad-real:daimiel:almagro",
+            "manzanares-ciudad-real:manzanares:daimiel",
+            "convencional-madrid-alcazar-cordoba:manzanares:valdepenas",
+            "convencional-madrid-alcazar-cordoba:valdepenas:santa-cruz-de-mudela",
+            "convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques",
+            "convencional-madrid-alcazar-cordoba:almuradiel-viso-del-marques:venta-de-cardenas",
+            "convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches",
+            "convencional-madrid-alcazar-cordoba:vilches:vadollano",
+            "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "andujar",
+          "to_name": "Andújar",
+          "length_km": 422.4,
+          "time_min": 111,
+          "single_track_km": 78.7,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 343.6,
+              "time_min": 81,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "andujar",
+              "to_name": "Andújar",
+              "length_km": 78.7,
+              "time_min": 30,
+              "single_track_km": 78.7
+            }
+          ],
+          "via": [
+            "Ciudad Real",
+            "Puertollano",
+            "Villanueva de Córdoba-Los Pedroches",
+            "Córdoba"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-torrejon-de-velasco",
+            "bif-la-sagra",
+            "urda",
+            "ciudad-real",
+            "puertollano",
+            "villanueva-de-cordoba",
+            "adamuz",
+            "cordoba",
+            "rabanales",
+            "alcolea-de-cordoba",
+            "montoro",
+            "villa-del-rio",
+            "andujar"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:bif-la-sagra:urda",
+            "lav-madrid-sevilla:urda:ciudad-real",
+            "lav-madrid-sevilla:ciudad-real:puertollano",
+            "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
+            "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
+            "lav-madrid-sevilla:adamuz:cordoba",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio"
+          ]
+        },
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "andujar",
+          "to_name": "Andújar",
+          "length_km": 512.1,
+          "time_min": 177,
+          "single_track_km": 143.2,
+          "line_ids": [
+            "convencional-madrid-alcazar-cordoba",
+            "manzanares-ciudad-real",
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 196.1,
+              "time_min": 79,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "manzanares-ciudad-real",
+              "line_name": "Línea convencional Manzanares – Ciudad Real",
+              "from_node_id": "manzanares",
+              "from_name": "Manzanares",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 64.4,
+              "time_min": 28,
+              "single_track_km": 64.4
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "ciudad-real",
+              "from_name": "Ciudad Real",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 172.8,
+              "time_min": 41,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "andujar",
+              "to_name": "Andújar",
+              "length_km": 78.7,
+              "time_min": 30,
+              "single_track_km": 78.7
+            }
+          ],
+          "via": [
+            "Aranjuez",
+            "Alcázar de San Juan",
+            "Manzanares",
+            "Daimiel",
+            "Almagro",
+            "Ciudad Real",
+            "Puertollano",
+            "Villanueva de Córdoba-Los Pedroches",
+            "Córdoba"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-planetario",
+            "aranjuez",
+            "castillejo-anover",
+            "villasequilla",
+            "tembleque",
+            "el-romeral",
+            "villacanas",
+            "quero",
+            "alcazar-de-san-juan",
+            "cinco-casas",
+            "manzanares",
+            "daimiel",
+            "almagro",
+            "ciudad-real",
+            "puertollano",
+            "villanueva-de-cordoba",
+            "adamuz",
+            "cordoba",
+            "rabanales",
+            "alcolea-de-cordoba",
+            "montoro",
+            "villa-del-rio",
+            "andujar"
+          ],
+          "segment_ids": [
+            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
+            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
+            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
+            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
+            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
+            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
+            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
+            "convencional-madrid-alcazar-cordoba:villacanas:quero",
+            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
+            "convencional-madrid-alcazar-cordoba:alcazar-de-san-juan:cinco-casas",
+            "convencional-madrid-alcazar-cordoba:cinco-casas:manzanares",
+            "manzanares-ciudad-real:manzanares:daimiel",
+            "manzanares-ciudad-real:daimiel:almagro",
+            "manzanares-ciudad-real:almagro:ciudad-real",
+            "lav-madrid-sevilla:ciudad-real:puertollano",
+            "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
+            "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
+            "lav-madrid-sevilla:adamuz:cordoba",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio"
           ]
         }
       ]

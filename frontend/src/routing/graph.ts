@@ -10,8 +10,13 @@
 import type { LineSummary, NodeOut, Route, RouteLeg, SegmentOut } from '../data/types.ts'
 import { ScenarioError, emptyScenario, linkId, withClosures, type Scenario } from './scenario.ts'
 
-/** Cambios de línea que admite un recorrido si no se pide otra cosa. */
-export const DEFAULT_MAX_CHANGES = 1
+/**
+ * Veces que un recorrido pasa de una línea a otra si no se pide otra cosa. Es un freno técnico
+ * (hasta seis líneas encadenadas), no un criterio: lo que descarta recorridos es `maxRatio`.
+ */
+export const DEFAULT_MAX_CHANGES = 5
+/** Un recorrido se descarta si mide más de estas veces lo que mide el más corto. */
+export const DEFAULT_MAX_RATIO = 2
 /** Tope de recorridos devueltos. */
 export const MAX_ROUTES = 12
 const KM_TOLERANCE = 0.05
@@ -242,10 +247,18 @@ function sorted(found: { start: string; steps: Step[] }[]): { start: string; ste
 
 /**
  * Recorridos distintos entre dos nodos con la red del escenario, del más corto al más largo: los
- * caminos que no pasan dos veces por el mismo nodo y cambian de línea como mucho `maxChanges`
- * veces (`null`, sin tope).
+ * caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho `maxChanges`
+ * veces (`null`, sin tope) y no miden más de `maxRatio` veces lo que mide el más corto (`null`,
+ * sin descartar ninguno por largo).
  */
-export function findRoutes(graph: Graph, fromNodeId: string, toNodeId: string, scenario?: Scenario, maxChanges: number | null = DEFAULT_MAX_CHANGES): Route[] {
+export function findRoutes(
+  graph: Graph,
+  fromNodeId: string,
+  toNodeId: string,
+  scenario?: Scenario,
+  maxChanges: number | null = DEFAULT_MAX_CHANGES,
+  maxRatio: number | null = DEFAULT_MAX_RATIO,
+): Route[] {
   for (const id of [fromNodeId, toNodeId]) {
     if (!graph.nodes.has(id)) throw new ScenarioError(`No hay ningún nodo con id ${id}`)
   }
@@ -259,9 +272,12 @@ export function findRoutes(graph: Graph, fromNodeId: string, toNodeId: string, s
     () => true,
     maxChanges,
   ).map((steps) => ({ start: fromNodeId, steps }))
-  return sorted(found)
-    .slice(0, MAX_ROUTES)
-    .map((f) => toRoute(g, f.start, f.steps))
+  let ordered = sorted(found)
+  if (maxRatio !== null && ordered.length) {
+    const limit = rawLength(ordered[0]!.steps) * maxRatio
+    ordered = ordered.filter((f) => rawLength(f.steps) <= limit)
+  }
+  return ordered.slice(0, MAX_ROUTES).map((f) => toRoute(g, f.start, f.steps))
 }
 
 /**

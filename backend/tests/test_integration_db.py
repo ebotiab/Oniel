@@ -616,9 +616,16 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
     )
     assert r.status_code == 200
     body = r.json()
-    assert body["scenario_code"] == "" and body["max_changes"] == 1
-    assert [route["line_ids"] for route in body["routes"]] == [[LAV], [CONV, MZCR], [CONV, LAV]]
-    assert [route["length_km"] for route in body["routes"]] == [170.8, 260.5, 613.5]
+    assert body["scenario_code"] == ""
+    assert (body["max_changes"], body["max_ratio"]) == (5, 2)
+    # la vuelta por Córdoba (613,5 km) pasa del doble del más corto y no se devuelve
+    assert [route["line_ids"] for route in body["routes"]] == [[LAV], [CONV, MZCR]]
+    assert [route["length_km"] for route in body["routes"]] == [170.8, 260.5]
+    r = await client.get(
+        "/api/routes",
+        params={"from": "madrid-puerta-de-atocha", "to": "ciudad-real", "max_ratio": "4"},
+    )
+    assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5, 613.5]
     assert body["routes"][0]["time_min"] == 40
     assert "velocidad habitual" in body["method"]
     assert all(route["interruptions"] == [] for route in body["routes"])
