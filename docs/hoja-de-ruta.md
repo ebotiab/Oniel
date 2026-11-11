@@ -2,7 +2,7 @@
 
 Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 11 de noviembre de 2026.
 
-Oniel debe servir a la vez a quien trabaja en el ferrocarril y a quien no sabe nada de él, para consultar la red española de forma clara y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
+Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
 ## Cómo se usa
 
@@ -32,9 +32,9 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 
 ## Principios de arquitectura
 
-Oniel tiene que servir a dos públicos y crecer durante años. Estos principios evitan que cada dato o capa nueva traiga su propio caso particular; la incidencia que materializa cada uno va entre paréntesis.
+Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Estos principios evitan que cada dato o capa nueva traiga su propio caso particular; la incidencia que materializa cada uno va entre paréntesis.
 
-1. **Dos públicos, una interfaz.** Profundidad progresiva: cada ficha empieza en lenguaje llano, lo que entiende cualquiera, y despliega a un toque el detalle técnico que busca el profesional (puntos kilométricos exactos, códigos, señalización, velocidades, fuente y fecha). Nunca dos modos ni dos webs (#15).
+1. **Se entiende sin saber de ferrocarril.** Cada ficha dice primero lo esencial en lenguaje llano y guarda plegado el detalle (puntos kilométricos exactos, códigos, fuente y fecha), para que no estorbe. A quien trabaja en el sector puede serle útil, pero nada se diseña para él ni se añade complejidad por él (#15).
 2. **Todo dato con fuente y fecha, como estructura.** Un dato no es un texto con una nota al pie sino un valor con `source_id`, `checked_on` y, cuando la tiene, su vigencia. Así el visor puede citar la fuente junto a cada cifra y una revisión programada puede saber qué dato envejece.
 3. **Anotaciones de red: un modelo común.** Todo lo que pasa sobre la red entre dos fechas según una fuente (interrupciones, obras, proyectos, cambios de servicio) comparte un modelo con tipo, alcance, estado, fechas y fuentes. Un tipo nuevo es una entrada en un registro, no una tabla, un endpoint y una capa nuevos (#17).
 4. **Atributos de tramo por secciones.** Lo que cambia a lo largo de una línea (vías, electrificación, señalización, velocidad, ancho) se declara de nodo a nodo con un único mecanismo que lo reparte a los tramos, valida su cobertura y lo muestra (#19).
@@ -45,7 +45,7 @@ Oniel tiene que servir a dos públicos y crecer durante años. Estos principios 
 
 ## Orden
 
-1. [#15](https://github.com/ebotiab/Oniel/issues/15) Producto: dos públicos, una interfaz. Fija el patrón de ficha (resumen llano, «Detalle técnico» plegado, fuente y fecha) y lo aplica a tramo, nodo y línea.
+1. [#15](https://github.com/ebotiab/Oniel/issues/15) Visor: fichas claras. Fija el patrón de ficha (lo esencial en llano, «Más detalle» plegado, fuente y fecha) y lo aplica a tramo, nodo y línea.
 2. [#16](https://github.com/ebotiab/Oniel/issues/16) Visor: glosario didáctico y conceptos. Cada término a un toque y un glosario con los conceptos que hacen falta para entender la red. Depende de #15.
 3. [#17](https://github.com/ebotiab/Oniel/issues/17) Datos: anotaciones de red con fecha y fuente. El modelo común; las interrupciones pasan a ser su primer tipo sin cambio visible.
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
