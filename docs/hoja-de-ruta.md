@@ -60,7 +60,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 11. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #26; los conjuntos de datos fechados ya están (#21).
 12. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Se apoya en los conjuntos de datos fechados, ya hechos (#21).
 
-El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las tres tareas de arquitectura que quedan (#17, #19 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
+El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las dos tareas de arquitectura que quedan (#17 y #19) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 
