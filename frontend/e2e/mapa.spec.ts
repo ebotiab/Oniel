@@ -113,4 +113,29 @@ test.describe('Trazo de la vía', () => {
     await page.mouse.move(700, 400)
     await expect(mapa).not.toHaveAttribute('data-resaltado')
   })
+
+  test('en el móvil la leyenda de los trazos va en el panel y resalta el que se toca', async ({ page }, info) => {
+    test.skip(info.project.name !== 'movil', 'en escritorio la leyenda va sobre el mapa')
+    await mapaListo(page)
+    await page.getByRole('button', { name: 'Ampliar el panel' }).click()
+    const mapa = page.getByTestId('mapa')
+    const leyenda = page.getByTestId('leyenda-trazos')
+    // en la vista de la red, los tres trazos
+    await expect(leyenda.getByRole('button')).toHaveText(['Alta velocidad', 'Línea convencional', 'Vía única'])
+    await page.getByTestId('leyenda-via-unica').click()
+    await expect(mapa).toHaveAttribute('data-resaltado', 'via-unica')
+    await expect(page.getByTestId('leyenda-via-unica')).toHaveAttribute('aria-pressed', 'true')
+    await page.getByTestId('leyenda-via-unica').click()
+    await expect(mapa).not.toHaveAttribute('data-resaltado')
+
+    // en la vista de una línea sigue a la vista, sobre el esquema; al abrir un tramo, el resaltado se suelta
+    await page.goto('/#/linea/lav-madrid-sevilla')
+    await expect(leyenda).toBeVisible()
+    await page.getByTestId('leyenda-alta-velocidad').click()
+    await expect(mapa).toHaveAttribute('data-resaltado', 'alta-velocidad')
+    await page.getByTestId('esquema-tramo-5').click()
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+    await expect(leyenda).toHaveCount(0)
+    await expect(mapa).not.toHaveAttribute('data-resaltado')
+  })
 })

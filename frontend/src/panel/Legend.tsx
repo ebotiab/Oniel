@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { LineSummary } from '../data/types'
 import { lineKind } from '../app/state'
@@ -86,6 +86,46 @@ export function Legend({ closed, interrupted, lines, singleTrack, highlight, onH
           <span>Cierre simulado</span>
         </>
       )}
+    </div>
+  )
+}
+
+interface TrazosProps {
+  lines: LineSummary[]
+  singleTrack: boolean
+  highlight: Trazo | null
+  onHighlight: (trazo: Trazo | null) => void
+}
+
+/**
+ * Leyenda del móvil: solo los trazos de la vía, en un renglón dentro del panel. Un toque resalta ese
+ * trazo en el mapa y otro lo suelta; al salir de la vista (por ejemplo, al abrir un tramo) se suelta solo.
+ */
+export function LeyendaTrazos({ lines, singleTrack, highlight, onHighlight }: TrazosProps) {
+  const kinds = new Set(lines.map(lineKind))
+  // onHighlight es el setter de estado de App, estable: el efecto solo se deshace al desmontar.
+  useEffect(() => () => onHighlight(null), [onHighlight])
+  const trazos: [Trazo, string][] = []
+  if (kinds.has('alta velocidad')) trazos.push(['alta-velocidad', 'Alta velocidad'])
+  if (kinds.has('convencional')) trazos.push(['convencional', 'Línea convencional'])
+  if (singleTrack) trazos.push(['via-unica', 'Vía única'])
+  if (trazos.length < 2) return null
+  return (
+    <div className="leyenda-trazos" role="group" aria-label="Trazos de la vía en el mapa" data-testid="leyenda-trazos">
+      {trazos.map(([trazo, texto]) => (
+        <button
+          key={trazo}
+          type="button"
+          className="leyenda-tipo"
+          aria-pressed={highlight === trazo}
+          title="Resaltar en el mapa"
+          data-testid={`leyenda-${trazo}`}
+          onClick={() => onHighlight(highlight === trazo ? null : trazo)}
+        >
+          <Muestra trazo={trazo} />
+          <span>{texto}</span>
+        </button>
+      ))}
     </div>
   )
 }
