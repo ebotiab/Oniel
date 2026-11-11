@@ -30,6 +30,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR 13: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, de vía única), trazada desde OpenStreetMap, con sus MD y Regional Exprés. Los 24 Intercity y Alvia desviados tras Urda recorren ahora las tres líneas tramo a tramo, y el reparto de tiempos usa los kilómetros por cada una en vez de la línea recta entre Manzanares y Ciudad Real; `docs/datos.md` y `docs/simulacion.md` lo explican.
 - PR 14: `docs/despliegue.md` anota que producción sirve el commit `883d080`, con las tres líneas y las interrupciones.
 - PR 34 (11 de noviembre de 2026): Vercel conectado a GitHub. Una fusión en `main` publica el visor en https://oniel.vercel.app y cada PR tiene su vista previa; dejan de hacer falta las PR que anotaban el commit vigente.
+- PR 36 (11 de noviembre de 2026): patrón de ficha del visor. Tramo, nodo y línea dicen primero lo esencial en lenguaje llano y guardan lo técnico bajo «Más detalle», con la fuente y la fecha al pie; la línea a la vista y la cobertura tienen ruta en la URL. `docs/diseno.md` recoge el patrón («Patrón de ficha» y «Rutas»).
 
 ## Principios de arquitectura
 
@@ -46,7 +47,6 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-1. [#15](https://github.com/ebotiab/Oniel/issues/15) Visor: fichas claras. Fija el patrón de ficha (lo esencial en llano, «Más detalle» plegado, fuente y fecha) y lo aplica a tramo, nodo y línea.
 2. [#16](https://github.com/ebotiab/Oniel/issues/16) Visor: glosario didáctico y conceptos. Cada término a un toque y un glosario con los conceptos que hacen falta para entender la red. Depende de #15.
 3. [#17](https://github.com/ebotiab/Oniel/issues/17) Datos: anotaciones de red con fecha y fuente. El modelo común; las interrupciones pasan a ser su primer tipo sin cambio visible.
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
