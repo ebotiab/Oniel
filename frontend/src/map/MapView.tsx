@@ -286,6 +286,11 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     if (!map || !network) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const pad = { top: 80, right: 60, bottom: padding.bottom + 40, left: padding.left + 60 }
+    // Al pasar de móvil a escritorio el margen cambia antes de que MapLibre haya medido el lienzo nuevo:
+    // con el ancho antiguo el margen del panel no cabe y el encuadre se descarta. Se mide antes de encuadrar.
+    const caja = map.getContainer()
+    const lienzo = map.getCanvas()
+    if (caja.clientWidth !== lienzo.clientWidth || caja.clientHeight !== lienzo.clientHeight) map.resize()
     if (!selection) {
       const key = lineId ? `linea:${lineId}` : 'red'
       if (framedRef.current === key) return
