@@ -29,6 +29,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR 12: capa de interrupciones vigentes del servicio: `interrupciones.json` curado a mano, tabla `interruptions`, `GET /api/interruptions`, tramos en rojo en el mapa y en el esquema, y una nota en las listas de trenes y en la simulación. Las dos interrupciones iniciales (alta velocidad entre La Sagra y Córdoba; obras entre Almuradiel y Alcolea de Córdoba) se comprobaron el 10 de noviembre de 2026; `docs/datos.md` dice cómo y cada cuánto se revisan.
 - PR 13: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, de vía única), trazada desde OpenStreetMap, con sus MD y Regional Exprés. Los 24 Intercity y Alvia desviados tras Urda recorren ahora las tres líneas tramo a tramo, y el reparto de tiempos usa los kilómetros por cada una en vez de la línea recta entre Manzanares y Ciudad Real; `docs/datos.md` y `docs/simulacion.md` lo explican.
 - PR 14: `docs/despliegue.md` anota que producción sirve el commit `883d080`, con las tres líneas y las interrupciones.
+- PR 34 (11 de noviembre de 2026): Vercel conectado a GitHub. Una fusión en `main` publica el visor en https://oniel.vercel.app y cada PR tiene su vista previa; dejan de hacer falta las PR que anotaban el commit vigente.
 
 ## Principios de arquitectura
 

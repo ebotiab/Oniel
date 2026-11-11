@@ -12,7 +12,7 @@ Cada rama que se sube tiene además su vista previa, con una dirección propia. 
 
 Vercel se salta la compilación cuando nada ha cambiado dentro de `frontend/` desde el último despliegue correcto de esa rama (`ignoreCommand` en `frontend/vercel.json`). Una fusión que solo toca el backend o la documentación deja producción como estaba. En una PR, el primer push de la rama siempre compila, de modo que toda PR tiene vista previa, y los siguientes solo si tocan `frontend/`. Si la comparación no puede hacerse, se compila.
 
-Para saber qué commit sirve producción: `vercel inspect oniel.vercel.app`, o la sección «Deployments» del repositorio en GitHub.
+Para saber qué commit sirve producción: `vercel inspect oniel.vercel.app`, o la comprobación «Vercel» del commit en `main`, que enlaza a su despliegue.
 
 ### La CLI como respaldo
 
@@ -30,7 +30,7 @@ vercel link --project oniel --yes
 env -u HTTPS_PROXY -u HTTP_PROXY vercel --prod
 ```
 
-El enlace local queda en `.vercel/`, ignorado por git. La CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local, y por eso se ejecuta sin ellas. Sin terminal interactiva hace falta `--yes` y la CLI responde en JSON.
+Al enlazar, la CLI deja `.vercel/` y un `.env.local` con un token temporal; git ignora los dos. La CLI falla con `fetch failed` si las variables `HTTPS_PROXY`/`HTTP_PROXY` apuntan a un proxy local, y por eso se ejecuta sin ellas. Sin terminal interactiva hace falta `--yes` y la CLI responde en JSON.
 
 ### Variables de entorno
 

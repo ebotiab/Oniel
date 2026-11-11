@@ -1,6 +1,5 @@
-# secrets
-.env
-.env.*
+# secrets (`.env*` tal cual: es la línea que busca la CLI de Vercel antes de añadirla)
+.env*
 !.env.example
 .logfire/
 
@@ -18,8 +17,8 @@ dist/
 frontend/test-results/
 frontend/playwright-report/
 
-# Enlace local de la CLI de Vercel (docs/despliegue.md)
-.vercel/
+# Enlace local de la CLI de Vercel (docs/despliegue.md); sin barra final, por lo mismo
+.vercel
 
 # misc
 .DS_Store
