@@ -41,7 +41,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 3. **Anotaciones de red: un modelo común.** Todo lo que pasa sobre la red entre dos fechas según una fuente (interrupciones, obras, proyectos, cambios de servicio) comparte un modelo con tipo, alcance, estado, fechas y fuentes. Un tipo nuevo es una entrada en un registro, no una tabla, un endpoint y una capa nuevos (#17).
 4. **Atributos de tramo por secciones.** Lo que cambia a lo largo de una línea (vías, electrificación, señalización, velocidad, ancho) se declara de nodo a nodo con un único mecanismo que lo reparte a los tramos, valida su cobertura y lo muestra (#19).
 5. **Grafo y escenarios.** Un grafo único de todas las líneas cargadas y un escenario serializable (una lista de modificaciones: cerrar tramos, añadir un enlace, cambiar una velocidad). De ahí salen la simulación de cierre, el comparador de recorridos y los «¿y si?» que vengan, con un solo cálculo (#23).
-6. **Conjuntos de datos fechados.** Cada horario importado es un conjunto con fuente, fecha de descarga y validez; refrescar añade, no sustituye. Así se puede decir cómo ha cambiado el servicio en una estación o un tramo (#21).
+6. **Conjuntos de datos fechados.** Cada horario importado es un conjunto con fuente, fecha de descarga y validez; refrescar añade, no sustituye. Así se puede decir cómo ha cambiado el servicio en una estación o un tramo. Hecho en #21: tabla `datasets`, lista `feeds` de `sources.json` y conjunto activo por fuente y día (`docs/datos.md`, «Conjuntos de datos»).
 7. **Registro de capas en el visor.** Cada capa declara sus datos, su estilo, su entrada de leyenda, su ficha y su ruta. Añadir una capa no toca las demás; se empieza con las anotaciones (#17).
 8. **Toda vista tiene ruta en la URL.** Una línea, un nodo, un tramo, un escenario, una comparación o un término del glosario se pueden compartir con un enlace exacto (#15).
 
@@ -52,16 +52,15 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
 5. [#19](https://github.com/ebotiab/Oniel/issues/19) Datos: atributos de tramo por secciones. Un mecanismo para todos; `tracks` lo estrena.
 6. [#20](https://github.com/ebotiab/Oniel/issues/20) Datos: señalización y protección del tren por tramo. ASFA, LZB, ERTMS, bloqueo y mando desde la Declaración sobre la Red. Depende de #19 y #15.
-7. [#21](https://github.com/ebotiab/Oniel/issues/21) Datos: conjuntos de datos fechados. Varios horarios a la vez y un histórico que empieza hoy.
-8. [#22](https://github.com/ebotiab/Oniel/issues/22) Datos: trenes diarios por tramo y por operador, con Iryo y Ouigo. Depende de #21.
-9. [#23](https://github.com/ebotiab/Oniel/issues/23) Simulación: grafo de rutas y escenarios. La simulación de cierre pasa a ser un escenario de una modificación.
-10. [#24](https://github.com/ebotiab/Oniel/issues/24) Visor: comparador de recorridos entre dos estaciones. Depende de #23.
-11. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Depende de #22 y #23.
-12. [#26](https://github.com/ebotiab/Oniel/issues/26) Visor: cobertura por estación, destinos directos y frecuencias.
-13. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #21 y #26.
-14. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Depende de #21.
+7. [#22](https://github.com/ebotiab/Oniel/issues/22) Datos: trenes diarios por tramo y por operador, con Iryo y Ouigo. Se apoya en los conjuntos de datos fechados, ya hechos (#21).
+8. [#23](https://github.com/ebotiab/Oniel/issues/23) Simulación: grafo de rutas y escenarios. La simulación de cierre pasa a ser un escenario de una modificación.
+9. [#24](https://github.com/ebotiab/Oniel/issues/24) Visor: comparador de recorridos entre dos estaciones. Depende de #23.
+10. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Depende de #22 y #23.
+11. [#26](https://github.com/ebotiab/Oniel/issues/26) Visor: cobertura por estación, destinos directos y frecuencias.
+12. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #26; los conjuntos de datos fechados ya están (#21).
+13. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Se apoya en los conjuntos de datos fechados, ya hechos (#21).
 
-El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
+El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las tres tareas de arquitectura que quedan (#17, #19 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 

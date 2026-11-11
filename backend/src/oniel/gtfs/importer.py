@@ -9,6 +9,8 @@ solo entre las paradas que le corresponden.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
+import re
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -63,6 +65,74 @@ class _TripPlan:
         return "completa" if all(r == "completa" for r in self.resolutions) else "parcial"
 
 
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def retrieved_on_from_name(path: Path) -> dt.date | None:
+    """Fecha de descarga escrita en el nombre del fichero (``…_2026-11-08.zip``), si la lleva."""
+    found = re.search(r"\d{4}-\d{2}-\d{2}", path.name)
+    return dt.date.fromisoformat(found.group()) if found else None
+
+
+async def upsert_dataset(
+    conn: asyncpg.Connection,
+    *,
+    source_id: str,
+    operator_id: str,
+    file: str,
+    sha256: str,
+    retrieved_on: dt.date,
+    valid_from: dt.date,
+    valid_to: dt.date,
+) -> tuple[str, bool]:
+    """Crea el conjunto de datos de un fichero o reutiliza el que ya tiene su SHA-256.
+
+    Devuelve su id y si se ha reutilizado. El id es legible y estable (fuente y fecha de descarga);
+    si otro fichero distinto de la misma fuente y el mismo día ya lo ocupa, se le añade el
+    principio del SHA-256.
+    """
+    existing: str | None = await conn.fetchval("SELECT id FROM datasets WHERE sha256 = $1", sha256)
+    if existing is not None:
+        await conn.execute(
+            """
+            UPDATE datasets SET source_id=$2, operator_id=$3, file=$4, retrieved_on=$5, valid_from=$6,
+                                valid_to=$7, imported_at=now()
+            WHERE id=$1
+            """,
+            existing,
+            source_id,
+            operator_id,
+            file,
+            retrieved_on,
+            valid_from,
+            valid_to,
+        )
+        return existing, True
+    dataset_id = f"{source_id}-{retrieved_on.isoformat()}"
+    if await conn.fetchval("SELECT 1 FROM datasets WHERE id = $1", dataset_id):
+        dataset_id = f"{dataset_id}-{sha256[:8]}"
+    await conn.execute(
+        """
+        INSERT INTO datasets (id, source_id, operator_id, file, sha256, retrieved_on, valid_from, valid_to)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+        """,
+        dataset_id,
+        source_id,
+        operator_id,
+        file,
+        sha256,
+        retrieved_on,
+        valid_from,
+        valid_to,
+    )
+    return dataset_id, False
+
+
 async def import_gtfs(
     conn: asyncpg.Connection,
     feed_path: Path,
@@ -70,7 +140,23 @@ async def import_gtfs(
     *,
     source_id: str,
     operator_id: str,
+    retrieved_on: dt.date | None = None,
+    data_dir: Path | None = None,
 ) -> dict[str, Any]:
+    """Importa un fichero GTFS como conjunto de datos, sin tocar los demás conjuntos.
+
+    El conjunto se identifica por el SHA-256 del fichero: repetir la importación del mismo fichero
+    sustituye sus servicios (las reglas de recorrido pueden haber cambiado) y no duplica nada.
+    ``retrieved_on`` es el día de descarga; si no se da, se lee del nombre del fichero.
+    """
+    retrieved = retrieved_on or retrieved_on_from_name(feed_path)
+    if retrieved is None:
+        raise ValueError(
+            f"{feed_path.name} no lleva la fecha de descarga en el nombre: hay que indicarla"
+        )
+    file = feed_path.name
+    if data_dir is not None and feed_path.resolve().is_relative_to(data_dir.resolve()):
+        file = feed_path.resolve().relative_to(data_dir.resolve()).as_posix()
     paths = [spec_paths] if isinstance(spec_paths, Path) else list(spec_paths)
     specs = [load_network_spec(p) for p in paths]
     with logfire.span("import gtfs {feed}", feed=feed_path.name):
@@ -124,14 +210,23 @@ async def import_gtfs(
                 source_id,
                 feed_version,
             )
-            await conn.execute("DELETE FROM services WHERE source_id = $1", source_id)
+            sha256 = file_sha256(feed_path)
+            dataset_id, reused = await upsert_dataset(
+                conn,
+                source_id=source_id,
+                operator_id=operator_id,
+                file=file,
+                sha256=sha256,
+                retrieved_on=retrieved,
+                valid_from=feed.feed_start,
+                valid_to=feed.feed_end,
+            )
+            await conn.execute("DELETE FROM services WHERE dataset_id = $1", dataset_id)
             for plan in plans.values():
                 dates = sorted(feed.service_dates.get(plan.trip.service_id, set()))
                 if not dates:
                     continue
-                await _insert_service(
-                    conn, plan, dates, source_id, operator_id, run_id, feed_version
-                )
+                await _insert_service(conn, plan, dates, dataset_id, operator_id, run_id)
             for spec in specs:
                 for stop_id in spec.stop_mappings:
                     stop = feed.stops.get(stop_id)
@@ -148,6 +243,12 @@ async def import_gtfs(
             for plan in plans.values():
                 all_kinds.update(p.kind for p in plan.passes)
             stats: dict[str, Any] = {
+                "dataset": {
+                    "id": dataset_id,
+                    "sha256": sha256,
+                    "retrieved_on": retrieved.isoformat(),
+                    "reused": reused,
+                },
                 "feed_version": feed_version,
                 "trips_in_feed": len(feed.trips),
                 "trips_imported": len(plans),
@@ -172,20 +273,20 @@ async def _insert_service(
     conn: asyncpg.Connection,
     plan: _TripPlan,
     dates: list[dt.date],
-    source_id: str,
+    dataset_id: str,
     operator_id: str,
     run_id: int,
-    feed_version: str,
 ) -> None:
     trip, calls = plan.trip, plan.calls
     first, last = calls[0], calls[-1]
     await conn.execute(
         """
-        INSERT INTO services (id, operator_id, train_number, product, origin_stop_id, origin_name, destination_stop_id,
-                              destination_name, valid_from, valid_to, gtfs_route_id, gtfs_service_id, resolution,
-                              source_id, import_run_id, feed_version)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+        INSERT INTO services (dataset_id, id, operator_id, train_number, product, origin_stop_id, origin_name,
+                              destination_stop_id, destination_name, valid_from, valid_to, gtfs_route_id,
+                              gtfs_service_id, resolution, import_run_id)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
         """,
+        dataset_id,
         trip.trip_id,
         operator_id,
         trip.train_number,
@@ -199,21 +300,21 @@ async def _insert_service(
         trip.route_id,
         trip.service_id,
         plan.resolution,
-        source_id,
         run_id,
-        feed_version,
     )
     await conn.executemany(
-        "INSERT INTO service_dates (service_id, service_date) VALUES ($1, $2)",
-        [(trip.trip_id, d) for d in dates],
+        "INSERT INTO service_dates (dataset_id, service_id, service_date) VALUES ($1, $2, $3)",
+        [(dataset_id, trip.trip_id, d) for d in dates],
     )
     await conn.executemany(
         """
-        INSERT INTO service_stops (service_id, seq, stop_id, stop_name, arrival_s, departure_s, pickup_type, drop_off_type)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+        INSERT INTO service_stops (dataset_id, service_id, seq, stop_id, stop_name, arrival_s, departure_s,
+                                   pickup_type, drop_off_type)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
         """,
         [
             (
+                dataset_id,
                 trip.trip_id,
                 c.seq,
                 c.stop_id,
@@ -228,12 +329,13 @@ async def _insert_service(
     )
     await conn.executemany(
         """
-        INSERT INTO service_segment_passes (service_id, segment_id, kind, enter_s, exit_s, enter_margin_s, exit_margin_s,
-                                            km_increasing, basis)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+        INSERT INTO service_segment_passes (dataset_id, service_id, segment_id, kind, enter_s, exit_s,
+                                            enter_margin_s, exit_margin_s, km_increasing, basis)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
         """,
         [
             (
+                dataset_id,
                 trip.trip_id,
                 p.segment_id,
                 p.kind,

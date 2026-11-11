@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import shutil
 from pathlib import Path
 from typing import Any
 
 import asyncpg
 
 from oniel.domain.schemas import SegmentPassOut, SegmentServicesOut
-from oniel.repo import network_repo, services_repo
+from oniel.repo import datasets_repo, network_repo, services_repo
 from oniel.sim.service import direction_label, shifted_times
 
 
@@ -34,6 +35,25 @@ async def export_snapshot(
     _write(out_dir / "coverage.json", coverage.model_dump(mode="json"))
     counts = await services_repo.daily_counts(conn, day)
     _write(out_dir / "segment-counts.json", {"date": day.isoformat(), "counts": counts})
+    # Histórico compacto: los pasos por tramo de cada conjunto de datos en su propio día de
+    # referencia, para poder comparar más adelante cómo cambia el servicio. La carpeta se rehace
+    # entera para que no queden conjuntos retirados.
+    history_dir = out_dir / "historico"
+    if history_dir.exists():
+        shutil.rmtree(history_dir)
+    datasets = await datasets_repo.fetch_datasets(conn)
+    for dataset in datasets:
+        _, _, ref = await datasets_repo.feed_bounds(conn, dataset.id)
+        if ref is None:
+            continue
+        _write(
+            history_dir / safe_name(dataset.id) / "segment-counts.json",
+            {
+                "dataset": dataset.model_dump(mode="json"),
+                "date": ref.isoformat(),
+                "counts": await services_repo.daily_counts(conn, ref, dataset.id),
+            },
+        )
     for segment in network.segments:
         dated = await services_repo.passes_on_segment(conn, segment.id, day)
         passes = []
@@ -78,4 +98,5 @@ async def export_snapshot(
         "segments": len(network.segments),
         "nodes": len(network.nodes),
         "interruptions": len(network.interruptions),
+        "datasets": [d.id for d in datasets],
     }

@@ -53,13 +53,23 @@ async def imported(dsn: str) -> dict[str, Any]:
         net1 = [await import_network(conn, s, SOURCES, DATA_DIR) for s in SPECS]
         cuts1 = await import_interruptions(conn, INTERRUPTIONS, SOURCES, DATA_DIR)
         gtfs1 = await import_gtfs(
-            conn, FEED, SPECS, source_id="renfe-gtfs-av-ld-md", operator_id="renfe"
+            conn,
+            FEED,
+            SPECS,
+            source_id="renfe-gtfs-av-ld-md",
+            operator_id="renfe",
+            data_dir=DATA_DIR,
         )
         # repetir la importación debe dejar exactamente el mismo estado
         net2 = [await import_network(conn, s, SOURCES, DATA_DIR) for s in SPECS]
         cuts2 = await import_interruptions(conn, INTERRUPTIONS, SOURCES, DATA_DIR)
         gtfs2 = await import_gtfs(
-            conn, FEED, SPECS, source_id="renfe-gtfs-av-ld-md", operator_id="renfe"
+            conn,
+            FEED,
+            SPECS,
+            source_id="renfe-gtfs-av-ld-md",
+            operator_id="renfe",
+            data_dir=DATA_DIR,
         )
         counts = {
             t: await conn.fetchval(f"SELECT count(*) FROM {t}")
@@ -73,6 +83,7 @@ async def imported(dsn: str) -> dict[str, Any]:
                 "service_segment_passes",
                 "import_runs",
                 "interruptions",
+                "datasets",
             )
         }
     return {
@@ -103,6 +114,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert c["lines"] == 3 and c["segments"] == 11 + 25 + 3 and c["services"] == 814
     assert c["service_segment_passes"] == (3126 + 115) + (2469 + 683) + (72 + 390)
     assert c["import_runs"] == 2
+    # el mismo fichero dos veces es un solo conjunto de datos, reconocido por su SHA-256
+    assert c["datasets"] == 1
+    assert gtfs1["dataset"]["id"] == gtfs2["dataset"]["id"] == "renfe-gtfs-av-ld-md-2026-11-08"
+    assert (gtfs1["dataset"]["reused"], gtfs2["dataset"]["reused"]) == (False, True)
 
 
 async def test_interruptions_import_is_repeatable_and_survives_a_network_reimport(
@@ -379,6 +394,14 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "línea convencional" in cov["notice"]
     assert "y la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [LAV, CONV, MZCR]
+    # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
+    (dataset,) = cov["datasets"]
+    assert dataset["id"] == "renfe-gtfs-av-ld-md-2026-11-08"
+    assert dataset["source_id"] == "renfe-gtfs-av-ld-md" and dataset["operator_id"] == "renfe"
+    assert dataset["file"] == "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
+    assert dataset["retrieved_on"] == "2026-11-08"
+    assert (dataset["valid_from"], dataset["valid_to"]) == (cov["feed_start"], cov["feed_end"])
+    assert dataset["valid_from"] <= cov["reference_date"] <= dataset["valid_to"]
     assert "interrupciones" in cov["notice"]
     assert cov["reference_date"] is not None
 

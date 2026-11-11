@@ -155,6 +155,19 @@ class NetworkOut(BaseModel):
     interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
+class DatasetOut(BaseModel):
+    """Un fichero de horarios importado: de qué fuente es, cuándo se descargó y qué días cubre."""
+
+    id: str
+    source_id: str
+    operator_id: str | None = None
+    file: str
+    sha256: str
+    retrieved_on: dt.date
+    valid_from: dt.date
+    valid_to: dt.date
+
+
 class CoverageOut(BaseModel):
     lines: list[LineSummary]
     total_length_km: float
@@ -164,6 +177,8 @@ class CoverageOut(BaseModel):
     feed_start: dt.date | None = None
     feed_end: dt.date | None = None
     reference_date: dt.date | None = None
+    #: Conjuntos de datos activos el día de referencia: de ellos salen las cifras y los horarios.
+    datasets: list[DatasetOut] = Field(default_factory=list)
     sources: list[Source]
     notice: str
 
