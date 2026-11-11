@@ -1,4 +1,9 @@
-"""Exporta la red y los servicios a JSON estático para el visor cuando no hay API."""
+"""Exporta la red y los servicios a JSON estático para el visor cuando no hay API.
+
+El visor arranca con ``index.json`` (el índice ligero de toda la red) y pide ``lines/<id>.json``
+al abrir cada línea. ``network.json`` y ``segment-counts.json`` llevan lo mismo en un solo
+fichero; el visor ya no los descarga y se conservan mientras alguna prueba los lea.
+"""
 
 from __future__ import annotations
 
@@ -35,6 +40,16 @@ async def export_snapshot(
     _write(out_dir / "coverage.json", coverage.model_dump(mode="json"))
     counts = await services_repo.daily_counts(conn, day)
     _write(out_dir / "segment-counts.json", {"date": day.isoformat(), "counts": counts})
+    index = await network_repo.fetch_index(conn)
+    _write(out_dir / "index.json", index.model_dump(mode="json"))
+    # Un fichero por línea; la carpeta se rehace entera para que no queden líneas retiradas.
+    lines_dir = out_dir / "lines"
+    if lines_dir.exists():
+        shutil.rmtree(lines_dir)
+    for line in network.lines:
+        detail = await network_repo.fetch_line_detail(conn, line.id, day)
+        assert detail is not None
+        _write(lines_dir / f"{safe_name(line.id)}.json", detail.model_dump(mode="json"))
     # Histórico compacto: los pasos por tramo de cada conjunto de datos en su propio día de
     # referencia, para poder comparar más adelante cómo cambia el servicio. La carpeta se rehace
     # entera para que no queden conjuntos retirados.
@@ -95,6 +110,7 @@ async def export_snapshot(
     return {
         "out_dir": str(out_dir),
         "date": day.isoformat(),
+        "lines": [line.id for line in network.lines],
         "segments": len(network.segments),
         "nodes": len(network.nodes),
         "interruptions": len(network.interruptions),

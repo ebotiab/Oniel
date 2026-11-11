@@ -15,3 +15,18 @@ def test_polyline_project_and_point_at_roundtrip() -> None:
     assert abs(x - 0.5) < 1e-6 and abs(y) < 1e-9
     sl = line.slice(0, line.length_km)
     assert sl[0] == (0.0, 0.0) and sl[-1] == (1.0, 1.0) and len(sl) == 3
+
+
+def test_simplify_keeps_ends_and_stays_within_tolerance() -> None:
+    from oniel.geo import Polyline, simplify
+
+    # Una recta con un quiebro de unos 40 m y otro de unos 900 m.
+    coords = [(-3.70, 40.0), (-3.65, 40.0004), (-3.60, 40.0), (-3.55, 40.008), (-3.50, 40.0)]
+    out = simplify(coords, 200)
+    assert out[0] == coords[0] and out[-1] == coords[-1]
+    assert out == [coords[0], coords[2], coords[3], coords[4]]
+    # ningún vértice original queda a más de la tolerancia de la línea simplificada
+    line = Polyline(out)
+    assert max(line.project(c).offset_m for c in coords) <= 200
+    assert simplify(coords, 0) == coords
+    assert simplify(coords[:2], 200) == coords[:2]

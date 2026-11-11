@@ -132,17 +132,49 @@ export interface FeatureCollection<P = Record<string, unknown>> {
   features: Feature<P>[]
 }
 
+/**
+ * La red tal y como la usa el visor. Ya no llega en una sola respuesta: se compone en memoria a
+ * partir del índice y de las líneas cargadas (src/data/network.ts).
+ */
 export interface NetworkOut {
   lines: LineSummary[]
   nodes: NodeOut[]
   segments: SegmentOut[]
   connections: ConnectionOut[]
-  line_features: FeatureCollection
   segment_features: FeatureCollection
   node_features: FeatureCollection
   connection_features: FeatureCollection
   /** Todas las registradas, vigentes o no. Falta en las respuestas anteriores a esta capa. */
   interruptions?: InterruptionOut[]
+}
+
+/** Un nodo en el índice: sin descripción ni detalles, que llegan con su línea. */
+export type NodeIndexOut = Omit<NodeOut, 'description' | 'details'>
+
+/** Índice ligero de toda la red: lo que se descarga al arrancar. */
+export interface NetworkIndexOut {
+  lines: LineSummary[]
+  nodes: NodeIndexOut[]
+  /** Tramos con la geometría simplificada; sus datos van en properties. */
+  segment_features: FeatureCollection<Omit<SegmentOut, 'id'>>
+  connections: ConnectionOut[]
+  connection_features: FeatureCollection
+  interruptions?: InterruptionOut[]
+  simplify_tolerance_m: number
+}
+
+/** El detalle de una línea: nodos con sus textos, geometría completa y pasos por tramo. */
+export interface LineDetailOut {
+  line: LineSummary
+  nodes: NodeOut[]
+  segments: SegmentOut[]
+  segment_features: FeatureCollection
+  connections: ConnectionOut[]
+  interruptions?: InterruptionOut[]
+  date: string | null
+  counts: Record<string, number>
+  /** El mayor recuento de toda la red ese día, para dibujar las barras de todas las líneas a la misma escala. */
+  network_max_count: number
 }
 
 export interface CoverageOut {

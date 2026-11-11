@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { apiStatus, fetchCoverage, fetchNetwork, fetchSegmentCounts, onApiStatus, wakeApi, type ApiStatus, type DataMode } from '../data/api'
+import { apiStatus, fetchCoverage, fetchIndex, fetchLine, onApiStatus, wakeApi, type ApiStatus, type DataMode } from '../data/api'
+import { composeNetwork } from '../data/network'
 import { useApiStatus } from '../data/useApiStatus'
-import type { ClosureResult, CoverageOut, NetworkOut } from '../data/types'
+import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
 import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
@@ -30,7 +31,11 @@ function useMedia(query: string): boolean {
 }
 
 export default function App() {
-  const [network, setNetwork] = useState<NetworkOut | null>(null)
+  // La red llega por partes: el índice al arrancar y el detalle de cada línea cuando hace falta.
+  const [loaded, setLoaded] = useState<{ index: NetworkIndexOut; source: DataMode } | null>(null)
+  const [details, setDetails] = useState<Record<string, LineDetailOut>>({})
+  const [near, setNear] = useState<readonly string[]>([])
+  const requested = useRef(new Set<string>())
   const [coverage, setCoverage] = useState<CoverageOut | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [highlight, setHighlight] = useState<Trazo | null>(null)
@@ -39,31 +44,23 @@ export default function App() {
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseHash(window.location.hash).cobertura))
   const [sheetOpen, setSheetOpen] = useState(false)
-  const [counts, setCounts] = useState<Record<string, number> | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
   const status = useApiStatus()
 
-  // Arranque: la instantánea estática pinta la red enseguida; la API, cuando responde, la sustituye.
+  // Arranque: el índice de la instantánea estática pinta la red enseguida; el de la API, cuando responde, lo sustituye.
   useEffect(() => {
     let cancelled = false
     let fromApi = false
     let staticFailed = false
     const fail = () => setLoadError('No se ha podido cargar la red. Comprueba la conexión o el servidor de Oniel.')
     const load = async (source: DataMode) => {
-      const [net, cov] = await Promise.all([fetchNetwork(source), fetchCoverage(source)])
-      let counts: Record<string, number> | null = null
-      try {
-        counts = (await fetchSegmentCounts(cov.reference_date ?? undefined, source)).counts
-      } catch {
-        /* los contadores son opcionales */
-      }
-      return { net, cov, counts }
+      const [index, cov] = await Promise.all([fetchIndex(source), fetchCoverage(source)])
+      return { index, cov, source }
     }
     const apply = (d: Awaited<ReturnType<typeof load>>) => {
-      setNetwork(d.net)
+      setLoaded({ index: d.index, source: d.source })
       setCoverage(d.cov)
-      setCounts(d.counts)
       setLoadError(null)
     }
     load('estatico')
@@ -96,6 +93,8 @@ export default function App() {
       off()
     }
   }, [])
+
+  const network = useMemo(() => (loaded ? composeNetwork(loaded.index, details) : null), [loaded, details])
 
   // Sincronizar el hash con la selección
   useEffect(() => {
@@ -157,6 +156,33 @@ export default function App() {
     segment?.line_id ??
     (nodeLines.length ? (activeLineId && nodeLines.includes(activeLineId) ? activeLineId : nodeLines[0]!) : null) ??
     (activeLineId && (!network || network.lines.some((l) => l.id === activeLineId)) ? activeLineId : null)
+  // Líneas que el mapa tiene cerca: se añaden a las que ya se han pedido.
+  const wantNear = useCallback((ids: string[]) => {
+    setNear((cur) => {
+      const extra = ids.filter((id) => !cur.includes(id))
+      return extra.length ? [...cur, ...extra] : cur
+    })
+  }, [])
+
+  // La línea a la vista y las que el mapa tiene cerca se cargan enteras: textos de sus nodos, geometría
+  // completa y recuentos. Cada una se descarga una vez por origen: de la instantánea y, cuando responde,
+  // de la API.
+  useEffect(() => {
+    if (!loaded) return
+    const { index, source } = loaded
+    for (const id of lineId ? [lineId, ...near] : near) {
+      const key = `${source}:${id}`
+      if (requested.current.has(key) || !index.lines.some((l) => l.id === id)) continue
+      requested.current.add(key)
+      fetchLine(id, source)
+        .then((detail) => setDetails((cur) => ({ ...cur, [id]: detail })))
+        .catch(() => {
+          // Sin el detalle, la línea se queda con lo que trae el índice; se reintenta si se vuelve a pedir.
+          requested.current.delete(key)
+        })
+    }
+  }, [loaded, near, lineId])
+  const lineDetail = lineId ? details[lineId] : undefined
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
   // Interrupciones vigentes hoy: se marcan en rojo en el mapa y en el esquema, y se explican en el panel.
   const today = useMemo(() => todayIso(), [])
@@ -224,7 +250,8 @@ export default function App() {
       <LineOverview
         network={network}
         coverage={coverage}
-        counts={counts}
+        counts={lineDetail?.counts ?? null}
+        countsMax={lineDetail?.network_max_count ?? null}
         lineId={lineId}
         onShowNetwork={() => showLine(null)}
         selection={selection}
@@ -253,6 +280,7 @@ export default function App() {
         highlight={highlight}
         onSelect={select}
         onHover={setHoverId}
+        onNearLines={wantNear}
         padding={padding}
         lineId={selection ? null : lineId}
       />

@@ -155,6 +155,59 @@ class NetworkOut(BaseModel):
     interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
+class NodeIndexOut(BaseModel):
+    """Un nodo en el índice de la red: lo justo para situarlo, buscarlo y saber de qué línea es."""
+
+    id: str
+    name: str
+    kind: Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
+    rank: Literal["principal", "secundario"] = "principal"
+    lon: float
+    lat: float
+    adif_code: str | None = None
+    line_id: str
+    km: float
+    reference_pk_km: float | None = None
+    seq: int
+
+
+class NetworkIndexOut(BaseModel):
+    """Índice ligero de toda la red: lo que el visor descarga al arrancar.
+
+    Lleva las líneas, todos los nodos sin sus textos, los tramos con la geometría simplificada
+    (sus datos van en ``properties``, como en ``NetworkOut.segment_features``), las conexiones y
+    las interrupciones. El detalle de cada línea se pide aparte (``LineDetailOut``).
+    """
+
+    lines: list[LineSummary]
+    nodes: list[NodeIndexOut]
+    segment_features: FeatureCollection
+    connections: list[ConnectionOut]
+    connection_features: FeatureCollection
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
+    #: Tolerancia con la que se ha simplificado la geometría de los tramos, en metros.
+    simplify_tolerance_m: float
+
+
+class LineDetailOut(BaseModel):
+    """El detalle de una línea: nodos con sus textos, tramos con la geometría completa y recuentos."""
+
+    line: LineSummary
+    nodes: list[NodeOut]
+    segments: list[SegmentOut]
+    segment_features: FeatureCollection
+    #: Conexiones que salen de algún nodo de la línea.
+    connections: list[ConnectionOut]
+    #: Interrupciones registradas en la línea, vigentes o ya terminadas.
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
+    #: Día de los recuentos; nulo si no hay horarios cargados.
+    date: dt.date | None = None
+    #: Pasos por tramo ese día, por id de tramo; los tramos sin pasos no aparecen.
+    counts: dict[str, int] = Field(default_factory=dict)
+    #: El mayor recuento de toda la red ese día: las barras de todas las líneas van a su escala.
+    network_max_count: int = 0
+
+
 class DatasetOut(BaseModel):
     """Un fichero de horarios importado: de qué fuente es, cuándo se descargó y qué días cubre."""
 

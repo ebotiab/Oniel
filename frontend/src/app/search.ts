@@ -1,5 +1,5 @@
 // Índice de búsqueda del visor: estaciones, otros puntos de la red y líneas, por nombre o por código de Adif.
-// Se construye en el cliente a partir de network.json, así que funciona igual sin API.
+// Se construye en el cliente a partir del índice de la red (index.json), así que funciona igual sin API.
 
 import type { LineSummary, NetworkOut, NodeKind } from '../data/types'
 import { formatKm, lineKind, lineLabel } from './state'
@@ -67,7 +67,7 @@ function lineEntry(line: LineSummary): SearchEntry {
 
 export function buildIndex(network: NetworkOut, scope: SearchScope = 'todo'): SearchEntry[] {
   const lineById = new Map(network.lines.map((l) => [l.id, l]))
-  // Un nodo común a varias líneas aparece una vez por línea en network.nodes: aquí es un solo resultado.
+  // Un nodo común a varias líneas aparece una vez por línea en la red: aquí es un solo resultado.
   const nodes = new Map<string, SearchEntry & { lines: string[] }>()
   for (const n of network.nodes) {
     const line = lineById.get(n.line_id)

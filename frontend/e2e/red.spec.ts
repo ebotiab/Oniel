@@ -8,7 +8,7 @@ async function abrirHoja(page: Page) {
 
 /** Una red con muchas líneas: a las tres cargadas se les añaden copias con otro nombre, sin trazado. */
 async function conMuchasLineas(page: Page, extra: number) {
-  await page.route(/\/(data\/network\.json|api\/network)$/, async (route) => {
+  await page.route(/\/(data\/index\.json|api\/lines)$/, async (route) => {
     const res = await route.fetch()
     const net = await res.json()
     const [lav, conv] = [net.lines[0], net.lines[1]]

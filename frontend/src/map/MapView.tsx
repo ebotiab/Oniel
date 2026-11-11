@@ -31,10 +31,37 @@ interface Props {
   highlight?: Trazo | null
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
+  /** Líneas con algún tramo a la vista cuando el mapa está cerca: conviene tener su geometría completa. */
+  onNearLines?: (lineIds: string[]) => void
   /** Hueco (px) que ocupa el panel a la izquierda en escritorio o abajo en móvil. */
   padding: { left: number; bottom: number }
   /** Línea a la vista sin nada seleccionado: el mapa la encuadra. Sin ella, encuadra la red. */
   lineId?: string | null
+}
+
+/**
+ * A partir de este zoom el mapa pide el detalle de las líneas que tiene a la vista. Más lejos basta
+ * la geometría simplificada del índice: su tolerancia (200 m) queda por debajo de un píxel.
+ */
+const ZOOM_DETALLE = 8
+
+type Caja = [number, number, number, number]
+
+/** Caja de cada tramo (oeste, sur, este, norte) con su línea, para saber qué líneas hay a la vista. */
+function segmentBoxes(net: NetworkOut): { lineId: string; box: Caja }[] {
+  const out: { lineId: string; box: Caja }[] = []
+  for (const f of net.segment_features.features) {
+    if (f.geometry.type !== 'LineString') continue
+    const box: Caja = [Infinity, Infinity, -Infinity, -Infinity]
+    for (const c of f.geometry.coordinates) {
+      box[0] = Math.min(box[0], c[0]!)
+      box[1] = Math.min(box[1], c[1]!)
+      box[2] = Math.max(box[2], c[0]!)
+      box[3] = Math.max(box[3], c[1]!)
+    }
+    out.push({ lineId: String(f.properties.line_id), box })
+  }
+  return out
 }
 
 // El worker de MapLibre se sirve como fichero propio para que funcione igual en desarrollo y en producción.
@@ -64,15 +91,16 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, onSelect, onHover, padding, lineId = null }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, onSelect, onHover, onNearLines, padding, lineId = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
   const readyRef = useRef(false)
   // Lo último que encuadró el mapa: 'red', una línea o una selección. De entrada, la red.
   const framedRef = useRef('red')
-  const callbacks = useRef({ onSelect, onHover })
-  callbacks.current = { onSelect, onHover }
+  const callbacks = useRef({ onSelect, onHover, onNearLines })
+  callbacks.current = { onSelect, onHover, onNearLines }
+  const boxesRef = useRef<{ lineId: string; box: Caja }[]>([])
   const networkRef = useRef<NetworkOut | null>(network)
   networkRef.current = network
   // Se deduce de la red, así que cambia a la vez que ella: addNetwork lo lee de aquí.
@@ -112,6 +140,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
       readyRef.current = true
       if (networkRef.current) addNetwork(map, networkRef.current)
     })
+    map.on('moveend', () => reportNearLines(map))
     mapRef.current = map
     if (import.meta.env.DEV) (window as unknown as { __onielMap?: MapLibreMap }).__onielMap = map
     map.on('error', (e) => console.error('[oniel mapa]', e.error?.message ?? e))
@@ -130,7 +159,18 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     addNetwork(map, network)
   }, [network])
 
+  /** Avisa de las líneas con algún tramo dentro del encuadre cuando el mapa está lo bastante cerca. */
+  function reportNearLines(map: MapLibreMap) {
+    if (map.getZoom() < ZOOM_DETALLE || !callbacks.current.onNearLines) return
+    const view = map.getBounds()
+    const [w, s, e, n] = [view.getWest(), view.getSouth(), view.getEast(), view.getNorth()]
+    const near = new Set<string>()
+    for (const { lineId, box } of boxesRef.current) if (box[0] <= e && box[2] >= w && box[1] <= n && box[3] >= s) near.add(lineId)
+    if (near.size) callbacks.current.onNearLines([...near])
+  }
+
   function addNetwork(map: MapLibreMap, net: NetworkOut) {
+    boxesRef.current = segmentBoxes(net)
     const segs = withNumericIds({
       features: net.segment_features.features.map((f) => ({
         ...f,
@@ -152,11 +192,13 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     idsRef.current = { segments: segs.index, nodes: nodes.index }
     const existing = map.getSource(SRC.segments) as GeoJSONSource | undefined
     if (existing) {
-      // La red ya está dibujada (la instantánea); la de la API la sustituye sin recrear capas ni eventos.
+      // La red ya está dibujada: la geometría completa de una línea recién cargada, o la red de la API,
+      // sustituyen a lo anterior sin recrear capas ni eventos.
       existing.setData(segs.data)
       ;(map.getSource(SRC.nodes) as GeoJSONSource).setData(nodes.data)
       ;(map.getSource(SRC.connections) as GeoJSONSource).setData(conns.data)
       applyStates(map)
+      reportNearLines(map)
       return
     }
     map.addSource(SRC.segments, { type: 'geojson', data: segs.data })
@@ -193,6 +235,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     map.on('mouseout', () => callbacks.current.onHover(null))
     applyStates(map)
     applyHighlight(map)
+    reportNearLines(map)
   }
 
   function applyHighlight(map: MapLibreMap) {
@@ -234,9 +277,12 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selection, hoverId, closedSegmentId])
 
-  // Encuadrar la selección
+  // Encuadrar la selección. La red se lee de la referencia: que llegue el detalle de una línea cambia
+  // la red, pero no debe volver a mover el mapa.
+  const hasNetwork = network !== null
   useEffect(() => {
     const map = mapRef.current
+    const network = networkRef.current
     if (!map || !network) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const pad = { top: 80, right: 60, bottom: padding.bottom + 40, left: padding.left + 60 }
@@ -269,7 +315,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
         duration: reduced ? 0 : 700,
       })
     }
-  }, [selection, lineId, network, padding.left, padding.bottom])
+  }, [selection, lineId, hasNetwork, padding.left, padding.bottom])
 
   return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} />
 }
