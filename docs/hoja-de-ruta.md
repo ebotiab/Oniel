@@ -29,6 +29,8 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR 12: capa de interrupciones vigentes del servicio: `interrupciones.json` curado a mano, tabla `interruptions`, `GET /api/interruptions`, tramos en rojo en el mapa y en el esquema, y una nota en las listas de trenes y en la simulación. Las dos interrupciones iniciales (alta velocidad entre La Sagra y Córdoba; obras entre Almuradiel y Alcolea de Córdoba) se comprobaron el 10 de noviembre de 2026; `docs/datos.md` dice cómo y cada cuánto se revisan.
 - PR 13: tercera línea, la convencional Manzanares – Ciudad Real (Adif 522, de vía única), trazada desde OpenStreetMap, con sus MD y Regional Exprés. Los 24 Intercity y Alvia desviados tras Urda recorren ahora las tres líneas tramo a tramo, y el reparto de tiempos usa los kilómetros por cada una en vez de la línea recta entre Manzanares y Ciudad Real; `docs/datos.md` y `docs/simulacion.md` lo explican.
 - PR 14: `docs/despliegue.md` anota que producción sirve el commit `883d080`, con las tres líneas y las interrupciones.
+- PR 34 (11 de noviembre de 2026): Vercel conectado a GitHub. Una fusión en `main` publica el visor en https://oniel.vercel.app y cada PR tiene su vista previa; dejan de hacer falta las PR que anotaban el commit vigente.
+- PR 36 (11 de noviembre de 2026): patrón de ficha del visor. Tramo, nodo y línea dicen primero lo esencial en lenguaje llano y guardan lo técnico bajo «Más detalle», con la fuente y la fecha al pie; la línea a la vista y la cobertura tienen ruta en la URL. `docs/diseno.md` recoge el patrón («Patrón de ficha» y «Rutas»).
 
 ## Principios de arquitectura
 
@@ -45,7 +47,6 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-1. [#15](https://github.com/ebotiab/Oniel/issues/15) Visor: fichas claras. Fija el patrón de ficha (lo esencial en llano, «Más detalle» plegado, fuente y fecha) y lo aplica a tramo, nodo y línea.
 2. [#16](https://github.com/ebotiab/Oniel/issues/16) Visor: glosario didáctico y conceptos. Cada término a un toque y un glosario con los conceptos que hacen falta para entender la red. Depende de #15.
 3. [#17](https://github.com/ebotiab/Oniel/issues/17) Datos: anotaciones de red con fecha y fuente. El modelo común; las interrupciones pasan a ser su primer tipo sin cambio visible.
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
@@ -60,13 +61,12 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 13. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #21 y #26.
 14. [#28](https://github.com/ebotiab/Oniel/issues/28) Visor: buscar una estación o una línea. Por nombre o por código de Adif, también en móvil y sin API.
 15. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Depende de #21.
-16. [#30](https://github.com/ebotiab/Oniel/issues/30) Infraestructura: conectar Vercel a GitHub.
 
 El orden es orientativo. #16, #28 y #30 no dependen de nada y pueden adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las cuatro tareas de arquitectura (#17, #19, #21 y #23) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 
-Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas, recordatorio programado de revisión de las interrupciones, la escala del mapa detrás de la leyenda, `uv run fastapi dev` en un entorno recién creado y la pastilla de cobertura con más de tres líneas.
+Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas, recordatorio programado de revisión de las interrupciones, la escala del mapa detrás de la leyenda y la pastilla de cobertura con más de tres líneas.
 
 ## Proteger `main` exigiendo el CI
 

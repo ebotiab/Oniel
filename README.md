@@ -38,7 +38,7 @@ cd backend && uv sync && uv run oniel-data import all
 Opcional, para los agentes de código: `uvx library-skills --claude` en la raíz enlaza en `.claude/skills` y `.agents/skills` las skills que traen FastAPI y Typer (apuntan a `backend/.venv`, por eso no están en git).
 
 ```bash
-cd backend && uv run fastapi dev
+cd backend && uv run uvicorn oniel.api.main:app --reload
 ```
 
 ```bash

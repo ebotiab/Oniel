@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-// En desarrollo, /api se redirige al backend local (uv run fastapi dev → :8000, o el puerto que uses).
+// En desarrollo, /api se redirige al backend local (uv run uvicorn oniel.api.main:app --reload → :8000, o el puerto que uses).
 const apiTarget = process.env.ONIEL_API_PROXY ?? 'http://127.0.0.1:8000'
 
 export default defineConfig({

@@ -44,7 +44,7 @@ Tipografía
 
 Composición
 - Escritorio: mapa a sangre; panel izquierdo de 420 px con cabecera de línea, esquema vertical y pie de selección; leyenda abajo a la derecha; cobertura arriba a la derecha.
-- Cabecera de la línea: antetítulo con el gestor y el número de línea, título, una ficha de una sola línea (longitud, velocidad máxima, ancho, electrificación) y una frase de entrada en cuerpo normal. El resto de la descripción queda plegado bajo «Más sobre la línea» y se lee en párrafos cortos, en tinta, con interlineado 1,5. Bajo el esquema, una sola nota en gris terciario con la fecha de las barras y la pista de uso; la columna de barras lleva su propio rótulo («trenes el 13 nov»). La ficha no se repite en la descripción.
+- Cabecera de la línea: título, una ficha de una sola línea (longitud y velocidad máxima) y una frase de entrada en cuerpo normal. El resto de la descripción y los datos técnicos quedan plegados bajo «Más detalle» (véase «Patrón de ficha») y se leen en párrafos cortos, en tinta, con interlineado 1,5. Bajo el esquema, una sola nota en gris terciario con la fecha de las barras y la pista de uso; la columna de barras lleva su propio rótulo («trenes el 13 nov»). La ficha no se repite en la descripción.
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
 - Varias líneas: el mapa las dibuja todas; el panel muestra una a la vez, elegida con pestañas sobre el esquema, y cambia solo a la línea de lo que se selecciona en el mapa. Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
 
@@ -61,6 +61,18 @@ Interrupciones del servicio (decidido el 10 de noviembre de 2026)
 - Donde hay una lista de trenes o un formulario sobre un tramo interrumpido, basta una línea de texto con un filete rojo: «Horario publicado; sin circulación real desde el … (fuente).» Sobre el esquema de la línea, otra línea por interrupción dice qué está cortado, desde cuándo y según quién, y lleva al primer tramo.
 - Alineación a la izquierda en todo el texto. Sin mayúsculas sostenidas, sin etiquetas numeradas.
 
+Patrón de ficha (aplicado el 11 de noviembre de 2026 a tramo, nodo y línea)
+- Toda ficha tiene tres partes, en este orden. Primero, un resumen en lenguaje llano: qué es, entre qué va, cuánto mide, a qué velocidad se circula, cuántos trenes pasan. Después, un plegable con el rótulo «Más detalle», cerrado de entrada, con lo que para un visitante es ruido: puntos kilométricos, códigos de Adif, número de línea, ancho, electrificación, velocidad habitual. Al pie del detalle, la fuente y la fecha en que se consultó, con su identificador en `sources.json`.
+- Ninguna pantalla exige saber de ferrocarril para entenderse. Lo que queda a la vista se lee sin conocimientos previos; cuando un término técnico aparece en el detalle, una frase lo explica allí mismo («El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea»).
+- El detalle no se quita ni se resume: se mueve. Todo lo que se mostraba sigue a un toque.
+- El plegable es uno solo por ficha y es el mismo componente en todas (`Plegable` en `frontend/src/panel/Plegable.tsx`): un `<details>` nativo, que se abre con el teclado, con el rótulo en el azul de los enlaces y el contenido sangrado tras un filete gris. Recuerda durante la sesión si el visitante lo dejó abierto, y lo recuerda para todas las fichas a la vez: quien abre el detalle de un tramo lo encuentra abierto en el siguiente. La fuente la pinta `PieFuente`, del mismo fichero.
+- Una ficha nueva (glosario, señalización, anotaciones) sigue el patrón sin discutirlo de nuevo: decide qué va en el resumen y mete lo demás en el mismo plegable; no añade un segundo plegable ni otro rótulo.
+- Los bloques de contexto y de interrupción no son detalle técnico: van fuera del plegable, a la vista, con sus propias fuentes.
+
+Rutas
+- Toda vista tiene su ruta en el hash de la URL, para poder compartir un enlace exacto: `#/linea/<id>` (la línea a la vista en el panel), `#/tramo/<id>`, `#/nodo/<id>`, `#/tramo/<id>/cierre` (la simulación) y `#/cobertura`. Se leen y se escriben en `parseHash` y `toHash` (`frontend/src/app/state.ts`).
+- Una vista nueva lleva la suya desde el primer día y se añade a esas dos funciones. No tienen ruta los estados que no son una vista: si el detalle está plegado, el punto por el que se pasa el ratón, la hoja del móvil ampliada o no. El resultado de una simulación todavía no la tiene (la ventana horaria no va en la URL); le corresponde al escenario serializable de la hoja de ruta.
+
 Movimiento
 - Solo en respuesta a una acción: enfocar el mapa al seleccionar, abrir el panel de simulación, resaltar en el esquema lo que se resalta en el mapa. Se respeta `prefers-reduced-motion`.
 
@@ -75,3 +87,4 @@ Principios
 - El esquema de línea y el mapa son la misma cosa vista de dos formas: siempre sincronizados.
 - Todo lo que se muestra dice de dónde viene (fuente, licencia, fecha).
 - Los textos hablan al visitante que sabe poco de ferrocarril: "tramo", "estación", "cierre", no jerga.
+- Lo esencial primero y el detalle plegado: cada ficha sigue el «Patrón de ficha».

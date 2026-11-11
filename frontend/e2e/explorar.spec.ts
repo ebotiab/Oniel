@@ -57,8 +57,10 @@ test.describe('Explorar la red', () => {
     await page.getByTestId('selector-linea-manzanares-ciudad-real').click()
     await expect(page.getByTestId('selector-linea-manzanares-ciudad-real')).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
-    await expect(page.getByTestId('ficha-linea')).toHaveText(/64,4 km.*140 km\/h.*ancho ibérico.*3 kV CC/)
-    if (!movil) await expect(page.getByTestId('cabecera-linea')).toContainText('Adif, línea 522')
+    await expect(page.getByTestId('ficha-linea')).toHaveText(/64,4 km.*hasta 140 km\/h/)
+    // el número de línea, el ancho y la electrificación están en el detalle, plegado
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    await expect(page.getByTestId('linea-detalle')).toHaveText(/Adif.*522.*ibérico \(1\.668 mm\).*3 kV CC/)
     for (const nodo of ['manzanares', 'daimiel', 'almagro', 'ciudad-real']) await expect(page.getByTestId(`esquema-nodo-${nodo}`)).toBeVisible()
     // Daimiel – Almagro: vía única, con los Media Distancia y los Intercity y Alvia que la cruzan sin parar
     await page.getByTestId('esquema-tramo-2').click()
@@ -99,15 +101,14 @@ test.describe('Explorar la red', () => {
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
-    // los datos de la línea caben en una línea: longitud, velocidad, ancho y electrificación
-    await expect(page.getByTestId('ficha-linea')).toHaveText(/470,5 km.*300 km\/h.*ancho estándar.*25 kV 50 Hz/)
-    if (movil) return // la hoja compacta no lleva descripción ni notas
-    await expect(page.getByTestId('cabecera-linea')).toContainText('Adif, línea 010')
+    // a la vista, lo que entiende cualquiera: cuánto mide y a qué velocidad se circula
+    await expect(page.getByTestId('ficha-linea')).toHaveText(/^470,5 km\s*hasta 300 km\/h$/)
+    if (movil) return // la hoja compacta no lleva frase de entrada ni notas
     // una frase de entrada a la vista; el resto, plegado por párrafos
     await expect(page.getByTestId('linea-entrada')).toContainText(/^Primera línea de alta velocidad de España/)
     const resto = page.getByText(/Es de vía doble en todo su recorrido/)
     await expect(resto).toBeHidden()
-    await page.getByText('Más sobre la línea').click()
+    await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(resto).toBeVisible()
     // una sola nota bajo el esquema, y el rótulo de la columna de barras
     await expect(page.getByTestId('nota-esquema')).toContainText(/Toca una estación o un tramo/)
@@ -115,11 +116,11 @@ test.describe('Explorar la red', () => {
     await expect(page.getByText(/Las barras cuentan los trenes/)).toHaveCount(1)
   })
 
-  test('seleccionar una estación muestra qué tramos confluyen y qué trenes paran', async ({ page }) => {
+  test('seleccionar una estación muestra qué tramos salen de ella y qué trenes paran', async ({ page }) => {
     await page.goto('/#/nodo/cordoba')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Córdoba' })).toBeVisible()
-    await expect(page.getByText(/Tramos que confluyen/)).toBeVisible()
+    await expect(page.getByText(/Tramos que salen de aquí/)).toBeVisible()
     await expect(page.getByText(/Trenes que paran aquí/)).toBeVisible()
     await expect(page.getByText(/Bifurcación Málaga/).first()).toBeVisible()
     // Córdoba es común a las dos líneas: llega también la convencional desde Rabanales

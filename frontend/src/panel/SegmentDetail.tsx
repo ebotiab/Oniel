@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
-import type { InterruptionOut, NetworkOut, SegmentOut, SegmentServicesOut } from '../data/types'
+import type { InterruptionOut, NetworkOut, SegmentOut, SegmentServicesOut, Source } from '../data/types'
 import { formatDate, formatKm, productLabel, shortStop, tracksLabel } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
 import { KindBadge } from './KindBadge'
+import { PieFuente, Plegable } from './Plegable'
 
 interface Props {
   segment: SegmentOut
   network: NetworkOut
+  /** Fuentes registradas, para citar al pie del detalle la del tramo. */
+  sources: Source[]
   referenceDate: string | null
   /** Interrupciones del servicio vigentes hoy en este tramo. */
   interruptions: InterruptionOut[]
@@ -17,7 +20,7 @@ interface Props {
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, referenceDate, interruptions, onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ segment, network, sources, referenceDate, interruptions, onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
@@ -57,24 +60,34 @@ export function SegmentDetail({ segment, network, referenceDate, interruptions, 
           <dd>{formatKm(segment.length_km)} km</dd>
         </div>
         <div>
-          <dt>Puntos kilométricos</dt>
-          <dd>
-            {formatKm(segment.km_from)} → {formatKm(segment.km_to)}
-          </dd>
-        </div>
-        <div>
           <dt>Velocidad máxima</dt>
           <dd>{segment.max_speed_kmh ? `${segment.max_speed_kmh} km/h` : 'sin dato'}</dd>
-        </div>
-        <div>
-          <dt>Velocidad habitual</dt>
-          <dd>{segment.typical_speed_kmh ? `${segment.typical_speed_kmh} km/h` : 'sin dato'}</dd>
         </div>
         <div>
           <dt>Vías</dt>
           <dd data-testid="tramo-vias">{tracksLabel(segment.tracks)}</dd>
         </div>
       </dl>
+
+      <Plegable>
+        <dl className="datos-tramo datos">
+          <div>
+            <dt>Puntos kilométricos</dt>
+            <dd data-testid="tramo-pk">
+              del {formatKm(segment.km_from)} al {formatKm(segment.km_to)}
+            </dd>
+          </div>
+          <div>
+            <dt>Velocidad habitual</dt>
+            <dd>{segment.typical_speed_kmh ? `${segment.typical_speed_kmh} km/h` : 'sin dato'}</dd>
+          </div>
+        </dl>
+        <p className="suave">
+          El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea. La velocidad habitual es la que Oniel usa para
+          estimar la hora de paso de los trenes que no paran en el tramo.
+        </p>
+        <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
+      </Plegable>
 
       {interruptions.map((i) => (
         <InterruptionNotice key={i.id} interruption={i} />
