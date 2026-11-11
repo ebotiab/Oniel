@@ -9,9 +9,10 @@ import asyncpg
 import logfire
 
 from oniel.domain.schemas import ClosureRequest, ClosureResult, ClosureResultItem, SegmentOut
-from oniel.repo.network_repo import fetch_alternatives, fetch_interruptions
+from oniel.repo.network_repo import fetch_graph, fetch_interruptions
 from oniel.repo.services_repo import DatedPass, fmt_time, passes_on_segment
-from oniel.sim.closure import ClosureWindow, classify
+from oniel.routing import Scenario
+from oniel.sim.closure import ClosureWindow, alternatives, classify
 from oniel.sim.passes import SegmentPass
 
 METHOD = (
@@ -40,8 +41,9 @@ INTERRUPTED_CAVEAT = (
 )
 
 ALTERNATIVE_CAVEAT = (
-    "Cuando otra línea cargada une dos nodos situados a ambos lados del tramo, Oniel la señala"
-    " como recorrido alternativo, pero no estima qué trenes podrían desviarse ni con qué horario."
+    "Cuando otras líneas cargadas, una sola o varias encadenadas, unen dos nodos situados a ambos"
+    " lados del tramo, Oniel señala ese recorrido alternativo, pero no estima qué trenes podrían"
+    " desviarse ni con qué horario."
 )
 
 
@@ -75,8 +77,12 @@ async def simulate_closure(
         end=req.end.isoformat(),
     ):
         dated: list[DatedPass] = await passes_on_segment(conn, segment.id, req.date)
-        alternatives = await fetch_alternatives(conn, segment, req.date)
-        interruptions = await fetch_interruptions(conn, day=req.date, segment_id=segment.id)
+        # El cierre es un escenario de una modificación sobre el grafo de todas las líneas.
+        active = await fetch_interruptions(conn, day=req.date)
+        detours = alternatives(
+            await fetch_graph(conn), segment.id, active, Scenario.from_code(req.scenario)
+        )
+        interruptions = [i for i in active if segment.id in i.segment_ids]
         items: list[ClosureResultItem] = []
         counts: Counter[str] = Counter()
         for d in dated:
@@ -119,12 +125,12 @@ async def simulate_closure(
             window_label=f"{req.date.strftime('%d/%m/%Y')} de {req.start.strftime('%H:%M')} a {end_label}",
             counts=dict(counts),
             items=items,
-            alternatives=alternatives,
+            alternatives=detours,
             interruptions=interruptions,
             method=METHOD,
             caveats=[
                 *CAVEATS,
                 *([INTERRUPTED_CAVEAT] if interruptions else []),
-                *([ALTERNATIVE_CAVEAT] if alternatives else []),
+                *([ALTERNATIVE_CAVEAT] if detours else []),
             ],
         )

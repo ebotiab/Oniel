@@ -184,6 +184,7 @@ export default function App() {
         feedStart={coverage?.feed_start ?? null}
         feedEnd={coverage?.feed_end ?? null}
         interruptions={interrupted.get(segment.id) ?? []}
+        scenario={route.escenario}
         result={result}
         onResult={setResult}
         onBack={() => setRoute({ selection, simulacion: false })}

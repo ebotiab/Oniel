@@ -7,6 +7,9 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from oniel.routing.graph import Route, RouteLeg
+from oniel.routing.scenario import Scenario
+
 
 class Source(BaseModel):
     id: str
@@ -240,6 +243,8 @@ class ClosureRequest(BaseModel):
     date: dt.date
     start: dt.time
     end: dt.time
+    #: Escenario como cadena corta (``oniel.routing``): el cierre de ``segment_id`` se le suma.
+    scenario: str = ""
 
 
 class ClosureResultItem(BaseModel):
@@ -254,7 +259,11 @@ class ClosureResultItem(BaseModel):
 
 
 class ClosureAlternative(BaseModel):
-    """Otra línea cargada que une dos nodos de la línea cerrada situados a ambos lados del tramo."""
+    """Recorrido por otras líneas cargadas entre dos nodos de la línea cerrada, uno a cada lado del tramo.
+
+    Sale del grafo de rutas (``oniel.routing``). ``line_id`` y ``line_name`` son los de la primera
+    línea del recorrido; cuando encadena varias, ``legs`` trae un trecho por cada una.
+    """
 
     line_id: str
     line_name: str
@@ -269,6 +278,11 @@ class ClosureAlternative(BaseModel):
     note: str
     #: Interrupciones vigentes ese día en algún tramo del recorrido alternativo.
     interruptions: list[InterruptionOut] = Field(default_factory=list)
+    line_ids: list[str] = Field(default_factory=list)
+    legs: list[RouteLeg] = Field(default_factory=list)
+    #: Minutos a la velocidad habitual de cada tramo, sin paradas.
+    time_min: int | None = None
+    segment_ids: list[str] = Field(default_factory=list)
 
 
 class ClosureResult(BaseModel):
@@ -282,3 +296,23 @@ class ClosureResult(BaseModel):
     interruptions: list[InterruptionOut] = Field(default_factory=list)
     method: str
     caveats: list[str]
+
+
+class RouteOut(Route):
+    """Un recorrido del grafo, con las interrupciones vigentes en él el día pedido."""
+
+    interruptions: list[InterruptionOut] = Field(default_factory=list)
+
+
+class RoutesOut(BaseModel):
+    """Recorridos entre dos nodos con la red de un escenario, del más corto al más largo."""
+
+    from_node_id: str
+    to_node_id: str
+    #: El escenario aplicado, como modelo y como cadena corta para la URL.
+    scenario: Scenario
+    scenario_code: str
+    date: dt.date | None = None
+    max_changes: int
+    routes: list[RouteOut]
+    method: str
