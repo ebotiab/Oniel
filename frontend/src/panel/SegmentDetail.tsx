@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
 import type { InterruptionOut, NetworkOut, SegmentOut, SegmentServicesOut, Source } from '../data/types'
-import { formatDate, formatKm, productLabel, shortStop, tracksLabel } from '../app/state'
+import { formatDate, formatKm, lineKind, productLabel, shortStop, tracksLabel } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
@@ -44,6 +44,11 @@ export function SegmentDetail({ segment, network, sources, referenceDate, interr
       <button type="button" className="enlace volver" onClick={onBack}>
         ← Toda la línea
       </button>
+      {/* lo primero, el tipo de vía en palabras: el mismo que dicen el trazo del mapa y la leyenda */}
+      <p className="sobre" data-testid="tramo-tipo">
+        {line && lineKind(line) === 'alta velocidad' ? 'Alta velocidad' : 'Línea convencional'}
+        {segment.tracks === 1 ? ', vía única' : ''}
+      </p>
       <p className="sobre">Tramo {segment.seq} de {line?.segment_count ?? '–'} · {line?.name}</p>
       <h2 id="detalle-titulo" className="titulo">
         <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.from_node_id)}>

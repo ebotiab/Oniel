@@ -48,13 +48,17 @@ Composición
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
 - Varias líneas: el mapa las dibuja todas; el panel muestra una a la vez, elegida con pestañas sobre el esquema, y cambia solo a la línea de lo que se selecciona en el mapa. Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
 
-Trazo de la vía
-- Sigue siendo tinta; el grosor dice de qué vía se trata, como en las hojas del IGN: alta velocidad 3 px, línea convencional 2,4 px, vía única 1,8 px (a zoom 5; crecen con el zoom). Los trazos blancos se mantienen en todas.
-- En el esquema vertical la vía doble es un trazo de 3 px y la vía única de 1,5 px; la leyenda del mapa explica los tres grosores.
+Trazo de la vía (decidido el 11 de noviembre de 2026, con las variantes delante: `docs/capturas/escritorio-16-trazos.jpg` y `movil-07-trazos.jpg`)
+- La vía sigue siendo tinta y no usa color: lo que dice de qué vía se trata es el dibujo del trazo y, además, el grosor, como en los mapas topográficos. Se descartó distinguirla solo por el grosor (había que comparar dos líneas para notarlo) y solo por el dibujo (el filete se perdía en la vista general).
+- Alta velocidad: trazo grueso (4,2 px a zoom 5) con un filete claro continuo por el centro. Línea convencional de vía doble: trazo medio (2,55 px) con los trazos blancos clásicos. Vía única, sea cual sea la línea: trazo fino (1,5 px) con los trazos blancos más espaciados. Todos crecen con el zoom.
+- El tipo de línea y el número de vías son dos propiedades distintas de cada tramo (`tipo` y `vias` en `frontend/src/map/layers.ts`); el trazo sale de las dos.
+- El esquema vertical usa la misma convención (5 px con filete, 3 px con trazos, 2 px con trazos espaciados) y la leyenda enseña los tres trazos con su dibujo. En la ficha del tramo, la primera línea lo dice en palabras: «Alta velocidad», «Línea convencional, vía única».
+- Cada trazo de la leyenda es un botón: al pasar por encima o al llegar con el teclado se resalta ese trazo en el mapa y los demás se atenúan; un clic lo deja fijado y otro lo suelta. Es movimiento en respuesta a una acción, sin animación. En el móvil no hay leyenda.
+- Los estados van encima del dibujo y no lo cambian: el rojo de «sin circulación» y el azul de la selección tiñen la tinta y conservan el filete o los trazos; el halo y el engrosado siguen marcando la selección y el cierre simulado.
 - Los nodos secundarios (apeaderos y estaciones menores) se dibujan más pequeños, con rótulo en gris y solo a partir del zoom 7,5; en el esquema compacto del móvil se ven como marcas sin rótulo.
 
 Interrupciones del servicio (decidido el 10 de noviembre de 2026)
-- El rojo ya significaba «cierre»: un tramo con una interrupción vigente hoy se dibuja con la vía en rojo, en el mapa y en el esquema, con su grosor de siempre y sus trazos blancos. No hay iconos, animaciones ni avisos emergentes.
+- El rojo ya significaba «cierre»: un tramo con una interrupción vigente hoy se dibuja con la vía en rojo, en el mapa y en el esquema, con su grosor y su dibujo de siempre. No hay iconos, animaciones ni avisos emergentes.
 - Se distingue del cierre simulado por el énfasis: el cierre simulado lleva el trazo grueso y un halo rojo; la interrupción real, solo el color. Un tramo interrumpido sigue en rojo al seleccionarlo: la selección la dicen el grosor y el halo azul (en el esquema, un borde azul alrededor del rojo).
 - La leyenda añade «Sin circulación hoy» con una muestra roja fina, solo cuando hay alguna interrupción vigente. En el móvil no hay leyenda: lo explica la línea de texto que va sobre el esquema.
 - En el panel, la interrupción es un bloque como el del contexto de un nodo, con el filete en rojo: la etiqueta «sin circulación» y los extremos, el motivo, desde cuándo y hasta cuándo se prevé, una nota opcional, las fuentes con enlace y la fecha de la última comprobación. Aparece en el tramo, en los nodos del corte y en el panel de cobertura.
