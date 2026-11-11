@@ -2,7 +2,7 @@
 // salen todas las líneas, nodos y tramos (el grafo entero, para buscar, enlazar y calcular
 // recorridos); de cada línea cargada, los textos de sus nodos y la geometría completa.
 
-import type { Feature, LineDetailOut, NetworkIndexOut, NetworkOut, NodeOut } from './types'
+import type { Feature, LineDetailOut, NetworkIndexOut, NetworkOut, NodeOut } from './types.ts'
 
 export type LineDetails = Readonly<Record<string, LineDetailOut>>
 

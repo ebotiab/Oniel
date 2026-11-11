@@ -7,7 +7,7 @@ const LAV = 'lav-madrid-sevilla'
 const CONV = 'convencional-madrid-alcazar-cordoba'
 const MZCR = 'manzanares-ciudad-real'
 
-/** Anota qué partes de la red pide la página: el índice, cada línea y el fichero único antiguo. */
+/** Anota qué partes de la red pide la página: el índice, cada línea y la red entera (que ya no debe pedirse). */
 function partesPedidas(page: Page) {
   const pedidas = { indice: 0, lineas: [] as string[], redEntera: 0 }
   page.on('request', (req) => {

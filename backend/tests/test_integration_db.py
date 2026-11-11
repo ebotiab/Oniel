@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 from collections.abc import AsyncIterator, Iterator
 from pathlib import Path
@@ -729,19 +730,30 @@ async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncCli
     assert (await client.get("/api/lines/no-existe")).status_code == 404
 
 
-async def test_snapshot_parts_add_up_to_the_single_file(
+async def test_snapshot_parts_add_up_to_the_whole_network(
     imported: dict[str, Any], dsn: str, tmp_path: Path
 ) -> None:
     from oniel.db.pool import connect
     from oniel.export.snapshot import export_snapshot
+    from oniel.repo import network_repo, services_repo
 
     async with connect(dsn) as conn:
         result = await export_snapshot(conn, tmp_path)
+        whole = await network_repo.fetch_network(conn)
+        day = result["date"]
+        counts = {
+            "date": day,
+            "counts": await services_repo.daily_counts(conn, dt.date.fromisoformat(day)),
+        }
+    network = whole.model_dump(mode="json")
 
     def read(name: str) -> Any:
         return json.loads((tmp_path / name).read_text(encoding="utf-8"))
 
-    network, counts, index = read("network.json"), read("segment-counts.json"), read("index.json")
+    index = read("index.json")
+    # la red entera ya no se exporta en un solo fichero: el visor no lo descargaba
+    assert not (tmp_path / "network.json").exists()
+    assert not (tmp_path / "segment-counts.json").exists()
     assert result["lines"] == [LAV, CONV, MZCR]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]
@@ -759,8 +771,8 @@ async def test_snapshot_parts_add_up_to_the_single_file(
         assert d["date"] == counts["date"]
         merged |= d["counts"]
     assert merged == counts["counts"]
-    # el índice pesa una fracción del fichero único: es lo que el visor descarga al arrancar
-    assert (tmp_path / "index.json").stat().st_size < (tmp_path / "network.json").stat().st_size / 5
+    # el índice pesa una fracción de la red entera: es lo que el visor descarga al arrancar
+    assert (tmp_path / "index.json").stat().st_size < len(whole.model_dump_json()) / 5
     # una línea que deja de estar cargada no deja su fichero en la instantánea
     (tmp_path / "lines" / "retirada.json").write_text("{}", encoding="utf-8")
     async with connect(dsn) as conn:

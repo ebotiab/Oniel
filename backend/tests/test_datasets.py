@@ -324,7 +324,13 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
     coverage = json.loads((tmp_path / "coverage.json").read_text(encoding="utf-8"))
     assert [d["id"] for d in coverage["datasets"]] == [NEWER_ID]
-    current = json.loads((tmp_path / "segment-counts.json").read_text(encoding="utf-8"))
+    # el estado actual va repartido en un fichero por línea
+    lines = [json.loads(p.read_text(encoding="utf-8")) for p in (tmp_path / "lines").glob("*.json")]
+    assert {d["date"] for d in lines} == {REFERENCE.isoformat()}
+    current = {
+        "date": REFERENCE.isoformat(),
+        "counts": {k: v for d in lines for k, v in d["counts"].items()},
+    }
     history = {
         p.parent.name: json.loads(p.read_text(encoding="utf-8"))
         for p in (tmp_path / "historico").glob("*/segment-counts.json")

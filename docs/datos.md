@@ -185,7 +185,8 @@ La instantánea estática lleva solo el estado actual. Para la evolución futura
 | `coverage.json` | Cobertura, conjuntos de datos y fuentes. | Al arrancar. |
 | `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y las paradas de una estación el día de referencia. | Al abrir su ficha. |
 | `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos (véase «Conjuntos de datos»). | Todavía no se lee. |
-| `network.json`, `segment-counts.json` | Lo mismo que el índice y las líneas en un solo fichero. | Nunca: el visor ya no los descarga. Se retiran cuando ninguna prueba los lea (el grafo de rutas, #23, los usa en las suyas). |
+
+La red entera en un solo fichero (`network.json`, con `segment-counts.json`) dejó de exportarse el 11 de noviembre de 2026: el visor ya no la descargaba y las pruebas del grafo de rutas leen el índice.
 
 La API ofrece lo equivalente: `GET /api/lines` (el índice) y `GET /api/lines/{id}` (el detalle, con `?date=` para los recuentos de otro día). `GET /api/network` sigue devolviendo la red entera.
 

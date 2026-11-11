@@ -45,7 +45,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 6. **Conjuntos de datos fechados.** Cada horario importado es un conjunto con fuente, fecha de descarga y validez; refrescar añade, no sustituye. Así se puede decir cómo ha cambiado el servicio en una estación o un tramo. Hecho en #21: tabla `datasets`, lista `feeds` de `sources.json` y conjunto activo por fuente y día (`docs/datos.md`, «Conjuntos de datos»).
 7. **Registro de capas en el visor.** Cada capa declara sus datos, su estilo, su entrada de leyenda, su ficha y su ruta. Añadir una capa no toca las demás; se empieza con las anotaciones (#17).
 8. **Toda vista tiene ruta en la URL.** Una línea, un nodo, un tramo, un escenario, una comparación o un término del glosario se pueden compartir con un enlace exacto (#15).
-9. **La red se carga por partes.** El visor arranca con un índice ligero de toda la red (líneas, nodos sin textos, geometría simplificada) y pide el detalle de cada línea cuando se abre o cuando el mapa se acerca a ella; añadir una línea apenas cambia lo que pesa el arranque. El grafo entero va en el índice, así que buscar, enlazar y calcular recorridos no dependen de qué líneas se hayan cargado. Hecho en #43: `index.json` y `lines/<id>.json`, `GET /api/lines` y `GET /api/lines/{id}`, con las medidas en `docs/datos.md`, «Instantánea estática».
+9. **La red se carga por partes.** El visor arranca con un índice ligero de toda la red (líneas, nodos sin textos, geometría simplificada) y pide el detalle de cada línea cuando se abre o cuando el mapa se acerca a ella; añadir una línea apenas cambia lo que pesa el arranque. El grafo entero va en el índice, así que buscar, enlazar y calcular recorridos no dependen de qué líneas se hayan cargado. Hecho en #43: `index.json` y `lines/<id>.json` (que sustituyen a `network.json` y `segment-counts.json`, ya retirados), `GET /api/lines` y `GET /api/lines/{id}`, con las medidas en `docs/datos.md`, «Instantánea estática».
 
 ## Orden
 
@@ -64,8 +64,6 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las dos tareas de arquitectura que quedan (#17 y #19) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
-
-`network.json` y `segment-counts.json` siguen en la instantánea aunque el visor ya no los descarga (#43): se retiran del exportador cuando las pruebas del grafo de rutas (`backend/tests/test_routing.py` y `frontend/e2e/rutas.spec.ts`, de la #23) lean `index.json` en su lugar.
 
 Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: interrupciones anteriores a las registradas y la escala del mapa detrás de la leyenda.
 

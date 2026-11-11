@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import json
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import pytest
 
-from oniel.domain.schemas import NetworkOut
+from oniel.domain.schemas import LineSummary, NetworkIndexOut, NodeIndexOut, SegmentOut
 from oniel.routing import (
     Graph,
     Scenario,
@@ -23,7 +24,8 @@ from oniel.routing import (
 from oniel.sim.closure import alternatives
 
 REPO = Path(__file__).resolve().parents[2]
-SNAPSHOT = REPO / "frontend" / "public" / "data" / "network.json"
+#: El índice de la instantánea lleva todas las líneas, nodos y tramos: el grafo entero.
+SNAPSHOT = REPO / "frontend" / "public" / "data" / "index.json"
 #: Casos que el cliente (``frontend/e2e/rutas.spec.ts``) tiene que resolver igual que el servidor.
 PARITY = REPO / "frontend" / "e2e" / "fixtures" / "rutas-paridad.json"
 
@@ -41,17 +43,28 @@ MADRID, CIUDAD_REAL, MANZANARES, CORDOBA = (
 URDA_CIUDAD_REAL = f"{LAV}:urda:ciudad-real"
 
 
-@pytest.fixture(scope="module")
-def network() -> NetworkOut:
-    return NetworkOut.model_validate(json.loads(SNAPSHOT.read_text(encoding="utf-8")))
+@dataclass(frozen=True)
+class Red:
+    """Lo que el grafo necesita de la red, leído del índice de la instantánea."""
+
+    lines: list[LineSummary]
+    nodes: list[NodeIndexOut]
+    segments: list[SegmentOut]
 
 
 @pytest.fixture(scope="module")
-def graph(network: NetworkOut) -> Graph:
+def network() -> Red:
+    index = NetworkIndexOut.model_validate(json.loads(SNAPSHOT.read_text(encoding="utf-8")))
+    segments = [SegmentOut(id=f.id, **f.properties) for f in index.segment_features.features]
+    return Red(lines=index.lines, nodes=index.nodes, segments=segments)
+
+
+@pytest.fixture(scope="module")
+def graph(network: Red) -> Graph:
     return build_graph(network.lines, network.nodes, network.segments)
 
 
-def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: NetworkOut) -> None:
+def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
     assert len(graph.edges) == len(network.segments) == 39
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
@@ -105,7 +118,7 @@ def test_more_line_changes_find_the_route_of_the_diverted_alvia(graph: Graph) ->
     ]
 
 
-def test_time_is_length_over_typical_speed(graph: Graph, network: NetworkOut) -> None:
+def test_time_is_length_over_typical_speed(graph: Graph, network: Red) -> None:
     (route,) = find_routes(graph, MANZANARES, CIUDAD_REAL, max_changes=0)
     segments = [s for s in network.segments if s.line_id == MZCR]
     assert all(s.typical_speed_kmh == 140 for s in segments)
