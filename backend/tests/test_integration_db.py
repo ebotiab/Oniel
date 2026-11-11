@@ -327,9 +327,11 @@ async def test_closure_of_an_interrupted_segment_says_so(client: httpx.AsyncClie
     assert any("interrupción real" in c for c in res["caveats"])
     # la simulación sigue calculándose sobre el horario publicado
     assert res["items"] and sum(res["counts"].values()) == len(res["items"])
-    # la alternativa por Despeñaperros cruza el corte por obras
-    (alt,) = res["alternatives"]
-    assert alt["line_id"] == "convencional-madrid-alcazar-cordoba"
+    # la alternativa por Despeñaperros cruza el corte por obras, y el rodeo por Manzanares también
+    by_manzanares, alt = res["alternatives"]
+    assert alt["line_ids"] == ["convencional-madrid-alcazar-cordoba"]
+    assert by_manzanares["line_ids"] == [MZCR, CONV]
+    assert [i["id"] for i in by_manzanares["interruptions"]] == [WORKS_CUT]
     assert [i["id"] for i in alt["interruptions"]] == [WORKS_CUT]
     assert (
         "no hay circulación entre Almuradiel-Viso del Marqués y Alcolea de Córdoba desde el"
@@ -350,8 +352,9 @@ async def test_closure_before_the_interruptions_has_no_notes(client: httpx.Async
     res = r.json()
     assert res["interruptions"] == []
     assert not any("interrupción real" in c for c in res["caveats"])
-    (alt,) = res["alternatives"]
-    assert alt["interruptions"] == [] and "no está disponible" not in alt["note"]
+    assert len(res["alternatives"]) == 2
+    for alt in res["alternatives"]:
+        assert alt["interruptions"] == [] and "no está disponible" not in alt["note"]
 
 
 async def test_closure_of_an_open_segment_warns_when_the_alternative_is_interrupted(
@@ -368,9 +371,17 @@ async def test_closure_of_an_open_segment_warns_when_the_alternative_is_interrup
     )
     res = r.json()
     assert res["interruptions"] == []
-    (alt,) = res["alternatives"]
-    assert alt["line_id"] == "lav-madrid-sevilla"
+    # Madrid – Manzanares por la alta velocidad y la línea de Ciudad Real, o Madrid – Córdoba
+    by_ciudad_real, alt = res["alternatives"]
+    assert alt["line_ids"] == ["lav-madrid-sevilla"]
     assert [i["id"] for i in alt["interruptions"]] == [LAV_CUT]
+    assert by_ciudad_real["line_ids"] == [LAV, MZCR]
+    assert (by_ciudad_real["from_node_id"], by_ciudad_real["to_node_id"]) == (
+        "madrid-puerta-de-atocha",
+        "manzanares",
+    )
+    # la interrupción de la alta velocidad incluye Madrid – Ciudad Real desde La Sagra
+    assert [i["id"] for i in by_ciudad_real["interruptions"]] == [LAV_CUT]
 
 
 async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
@@ -471,8 +482,17 @@ async def test_closure_between_manzanares_and_ciudad_real_affects_the_diverted_t
     assert {"Intercity", "MD"} <= {i["service"]["product"] for i in affected}
     assert any(i["status"] == "afectado_publicado" for i in affected)
     assert sum(res["counts"].values()) == len(res["items"])
-    # ninguna línea sola une los dos lados del tramo: sin alternativa cargada
-    assert res["alternatives"] == []
+    # ninguna línea sola une los dos lados del tramo; el grafo encuentra el rodeo por dos:
+    # la convencional hasta Madrid (o hasta Córdoba) y la alta velocidad hasta Ciudad Real
+    by_madrid, by_cordoba = res["alternatives"]
+    assert by_madrid["line_ids"] == by_cordoba["line_ids"] == [CONV, LAV]
+    assert (by_madrid["from_node_id"], by_madrid["to_node_id"]) == ("manzanares", "ciudad-real")
+    assert (by_madrid["length_km"], by_madrid["closed_line_length_km"]) == (366.9, 64.4)
+    assert [leg["to_name"] for leg in by_madrid["legs"]] == [
+        "Madrid-Puerta de Atocha",
+        "Ciudad Real",
+    ]
+    assert by_cordoba["length_km"] == 417.4
 
 
 async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
@@ -494,7 +514,9 @@ async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
     assert res["counts"]["afectado_publicado"] + res["counts"]["afectado_estimado"] >= 1
     assert sum(res["counts"].values()) == len(res["items"])
     # la línea convencional une Madrid y Córdoba a ambos lados del tramo cerrado
-    alt = res["alternatives"]
+    # y, más ceñido al tramo, el rodeo de Ciudad Real a Córdoba por Manzanares (dos líneas)
+    alt = [a for a in res["alternatives"] if len(a["legs"]) == 1]
+    assert [a["line_ids"] for a in res["alternatives"]] == [[MZCR, CONV], [CONV]]
     assert [a["line_id"] for a in alt] == [CONV]
     assert alt[0]["from_node_id"] == "madrid-puerta-de-atocha" and alt[0]["to_node_id"] == "cordoba"
     assert alt[0]["length_km"] > alt[0]["closed_line_length_km"]
@@ -519,8 +541,11 @@ async def test_closure_on_the_conventional_line_points_back_to_high_speed(
     res = r.json()
     assert res["segment"]["tracks"] == 1
     assert {i["service"]["product"] for i in res["items"]} <= {"MD", "ALVIA", "REG.EXP."}
-    assert [a["line_id"] for a in res["alternatives"]] == [LAV]
-    assert res["alternatives"][0]["length_km"] < res["alternatives"][0]["closed_line_length_km"]
+    # de Manzanares a Córdoba por Ciudad Real (237,2 km frente a 244,6) y Madrid – Córdoba
+    assert [a["line_ids"] for a in res["alternatives"]] == [[MZCR, LAV], [LAV]]
+    for a in res["alternatives"]:
+        assert a["length_km"] < a["closed_line_length_km"]
+    assert res["alternatives"][0]["length_km"] == 237.2
 
 
 async def test_closure_beyond_the_shared_nodes_has_no_alternative(
@@ -537,6 +562,107 @@ async def test_closure_beyond_the_shared_nodes_has_no_alternative(
     )
     assert r.status_code == 200
     assert r.json()["alternatives"] == []
+
+
+async def test_closure_between_urda_and_ciudad_real_finds_the_detour_through_manzanares(
+    client: httpx.AsyncClient,
+) -> None:
+    """El desvío de los Intercity y Alvia tras Urda: 260,5 km por dos líneas frente a 170,8 km."""
+    r = await client.post(
+        "/api/simulations/closure",
+        json={
+            "segment_id": f"{LAV}:urda:ciudad-real",
+            "date": "2026-11-13",
+            "start": "08:00",
+            "end": "09:00",
+        },
+    )
+    assert r.status_code == 200
+    detour, whole_line = r.json()["alternatives"]
+    assert detour["line_ids"] == [CONV, MZCR]
+    assert (detour["from_node_id"], detour["to_node_id"]) == (
+        "madrid-puerta-de-atocha",
+        "ciudad-real",
+    )
+    assert (detour["length_km"], detour["closed_line_length_km"]) == (260.5, 170.8)
+    assert detour["single_track_km"] == 64.4 and detour["time_min"] == 107
+    assert "hasta Manzanares y por la línea convencional Manzanares – Ciudad Real" in detour["note"]
+    # ese rodeo queda al norte del corte por obras de la convencional: sin interrupciones
+    assert detour["interruptions"] == []
+    assert whole_line["line_ids"] == [CONV] and whole_line["to_node_id"] == "cordoba"
+    assert [i["id"] for i in whole_line["interruptions"]] == [WORKS_CUT]
+
+
+async def test_closure_with_a_scenario_adds_its_other_changes(client: httpx.AsyncClient) -> None:
+    """Con Daimiel – Almagro cerrado además, el rodeo por Manzanares desaparece."""
+    body = {
+        "segment_id": f"{LAV}:urda:ciudad-real",
+        "date": "2026-11-13",
+        "start": "08:00",
+        "end": "09:00",
+        "scenario": f"c~{MZCR}:daimiel:almagro",
+    }
+    r = await client.post("/api/simulations/closure", json=body)
+    assert r.status_code == 200
+    assert [a["line_ids"] for a in r.json()["alternatives"]] == [[CONV]]
+    r = await client.post("/api/simulations/closure", json={**body, "scenario": "c~no:existe"})
+    assert r.status_code == 422 and "Escenario no válido" in r.json()["detail"]
+
+
+async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) -> None:
+    r = await client.get(
+        "/api/routes", params={"from": "madrid-puerta-de-atocha", "to": "ciudad-real"}
+    )
+    assert r.status_code == 200
+    body = r.json()
+    assert body["scenario_code"] == "" and body["max_changes"] == 1
+    assert [route["line_ids"] for route in body["routes"]] == [[LAV], [CONV, MZCR], [CONV, LAV]]
+    assert [route["length_km"] for route in body["routes"]] == [170.8, 260.5, 613.5]
+    assert body["routes"][0]["time_min"] == 40
+    assert "velocidad habitual" in body["method"]
+    assert all(route["interruptions"] == [] for route in body["routes"])
+
+
+async def test_routes_with_a_scenario_and_the_interruptions_of_a_day(
+    client: httpx.AsyncClient,
+) -> None:
+    params = {
+        "from": "madrid-puerta-de-atocha",
+        "to": "cordoba",
+        "scenario": f"c~{LAV}:urda:ciudad-real",
+        "date": CHECKED,
+        "max_changes": "2",
+    }
+    r = await client.get("/api/routes", params=params)
+    assert r.status_code == 200
+    body = r.json()
+    assert body["scenario"]["closures"] == [f"{LAV}:urda:ciudad-real"]
+    assert body["scenario_code"] == f"c~{LAV}:urda:ciudad-real"
+    # sin Urda – Ciudad Real quedan el desvío por Manzanares y la convencional entera
+    assert [route["line_ids"] for route in body["routes"]] == [[CONV, MZCR, LAV], [CONV]]
+    assert [[i["id"] for i in route["interruptions"]] for route in body["routes"]] == [
+        [LAV_CUT],
+        [WORKS_CUT],
+    ]
+    # las interrupciones vigentes como cierres del escenario: ese día no queda ningún recorrido
+    r = await client.get("/api/routes", params={**params, "avoid_interruptions": "true"})
+    assert r.json()["routes"] == []
+    assert len(r.json()["scenario"]["closures"]) > 1
+    # el mismo escenario como JSON
+    as_json = json.dumps({"closures": [f"{LAV}:urda:ciudad-real"]})
+    r = await client.get("/api/routes", params={**params, "scenario": as_json})
+    assert [route["line_ids"] for route in r.json()["routes"]] == [[CONV, MZCR, LAV], [CONV]]
+
+
+async def test_routes_reject_unknown_nodes_and_unreadable_scenarios(
+    client: httpx.AsyncClient,
+) -> None:
+    r = await client.get("/api/routes", params={"from": "atlantida", "to": "cordoba"})
+    assert r.status_code == 404
+    ok = {"from": "madrid-puerta-de-atocha", "to": "cordoba"}
+    for scenario in ("x~nada", "c~no:existe:aqui", '{"closures": 3}'):
+        r = await client.get("/api/routes", params={**ok, "scenario": scenario})
+        assert r.status_code == 422 and "Escenario no válido" in r.json()["detail"]
 
 
 async def test_unknown_segment_is_404(client: httpx.AsyncClient) -> None:

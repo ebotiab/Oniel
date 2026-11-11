@@ -124,8 +124,9 @@ test.describe('Interrupciones del servicio', () => {
     await page.getByTestId('sim-calcular').click()
     await expect(page.getByTestId('sim-resultado')).toBeVisible()
     await expect(page.getByTestId('sim-resultado-interrumpido')).toHaveText(/^Ese día el tramo ya está interrumpido\. Horario publicado; sin circulación real desde el 28 de octubre de 2026 \(Adif\)\.$/)
-    // la alternativa por Despeñaperros cruza el corte por obras
-    await expect(page.getByTestId('sim-alternativa-interrumpida')).toContainText('no hay circulación entre Almuradiel-Viso del Marqués y Alcolea de Córdoba desde el 6 de septiembre de 2026 (Adif)')
+    // la alternativa por Despeñaperros cruza el corte por obras, y el rodeo de Ciudad Real a Córdoba por Manzanares también
+    await expect(page.getByTestId('sim-alternativa-interrumpida')).toHaveCount(2)
+    await expect(page.getByTestId('sim-alternativa-interrumpida').last()).toContainText('no hay circulación entre Almuradiel-Viso del Marqués y Alcolea de Córdoba desde el 6 de septiembre de 2026 (Adif)')
     await expect(page.getByTestId('sim-interrumpido')).toHaveCount(0)
   })
 

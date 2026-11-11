@@ -1,4 +1,5 @@
 import type { LineSummary } from '../data/types'
+import { scenarioFromCode } from '../routing/scenario.ts'
 
 export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: string } | null
 
@@ -9,11 +10,14 @@ export interface Route {
   linea?: string | null
   /** El panel «Cobertura y fuentes» está abierto. */
   cobertura?: boolean
+  /** Escenario abierto desde la URL, como cadena corta (`frontend/src/routing/scenario.ts`). */
+  escenario?: string
 }
 
 /**
  * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
- * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre y #/cobertura.
+ * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/escenario/<cadena> y
+ * #/cobertura.
  */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
@@ -23,12 +27,22 @@ export function parseHash(hash: string): Route {
   }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
+  if (kind === 'escenario' && id) {
+    // Un escenario que cierra un tramo abre la simulación de ese cierre; la URL lo conserva entero.
+    try {
+      const closed = scenarioFromCode(id).closures[0]
+      if (closed) return { selection: { type: 'tramo', id: closed }, simulacion: true, escenario: id }
+    } catch {
+      /* cadena ilegible: se ignora */
+    }
+  }
   return { selection: null, simulacion: false }
 }
 
 export function toHash(route: Route): string {
   if (route.cobertura) return '#/cobertura'
   if (!route.selection) return route.linea ? `#/linea/${encodeURIComponent(route.linea)}` : '#/'
+  if (route.escenario && route.simulacion) return `#/escenario/${encodeURIComponent(route.escenario).replace(/%3A/gi, ':').replace(/%3B/gi, ';')}`
   const base = `#/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
   return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base
 }

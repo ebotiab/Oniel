@@ -9,9 +9,8 @@ from typing import Any
 import asyncpg
 
 from oniel.db.pool import fetch_int
-from oniel.domain.interruptions import alternative_note, schedule_note
+from oniel.domain.interruptions import schedule_note
 from oniel.domain.schemas import (
-    ClosureAlternative,
     ConnectionOut,
     CoverageOut,
     Feature,
@@ -31,6 +30,7 @@ from oniel.domain.schemas import (
 from oniel.geo import simplify
 from oniel.repo import datasets_repo, services_repo
 from oniel.repo.datasets_repo import CURRENT_IDS_SQL
+from oniel.routing import Graph, build_graph
 
 
 def coverage_notice(lines: list[LineSummary]) -> str:
@@ -400,102 +400,13 @@ async def fetch_line_detail(
     )
 
 
-async def fetch_alternatives(
-    conn: asyncpg.Connection, segment: SegmentOut, day: dt.date | None = None
-) -> list[ClosureAlternative]:
-    """Líneas cargadas que unen un nodo anterior y otro posterior al tramo cerrado.
-
-    Se buscan, en la línea del tramo, los nodos compartidos con otra línea situados antes y
-    después del tramo; si una misma línea tiene uno a cada lado, existe un recorrido alternativo
-    entre ambos. Se eligen los nodos compartidos más cercanos al tramo. Con ``day``, cada
-    alternativa lleva las interrupciones vigentes ese día en su recorrido.
-    """
-    rows = await conn.fetch(
-        """
-        SELECT ln.node_id, ln.km AS km_closed, other.line_id, other.km AS km_other, l.name AS line_name
-        FROM line_nodes ln
-        JOIN line_nodes other ON other.node_id = ln.node_id AND other.line_id <> ln.line_id
-        JOIN lines l ON l.id = other.line_id
-        WHERE ln.line_id = $1
-        ORDER BY l.sort_order, other.line_id, ln.km
-        """,
-        segment.line_id,
+async def fetch_graph(conn: asyncpg.Connection) -> Graph:
+    """Grafo de rutas de todas las líneas cargadas (``oniel.routing``)."""
+    return build_graph(
+        await fetch_lines(conn),
+        await fetch_nodes(conn),
+        [s for s, _ in await fetch_segments(conn)],
     )
-    by_line: dict[str, list[asyncpg.Record]] = {}
-    for r in rows:
-        by_line.setdefault(r["line_id"], []).append(r)
-    out: list[ClosureAlternative] = []
-    for line_id, shared in by_line.items():
-        before = [r for r in shared if float(r["km_closed"]) <= segment.km_from + 0.05]
-        after = [r for r in shared if float(r["km_closed"]) >= segment.km_to - 0.05]
-        if not before or not after:
-            continue
-        a, b = before[-1], after[0]
-        lo, hi = sorted((float(a["km_other"]), float(b["km_other"])))
-        inner = await conn.fetch(
-            """
-            SELECT n.name, n.kind, n.rank, ln.km FROM line_nodes ln JOIN nodes n ON n.id = ln.node_id
-            WHERE ln.line_id = $1 AND ln.km > $2 + 0.05 AND ln.km < $3 - 0.05 ORDER BY ln.km
-            """,
-            line_id,
-            lo,
-            hi,
-        )
-        single = await conn.fetchval(
-            """
-            SELECT coalesce(sum(length_km), 0) FROM segments
-            WHERE line_id = $1 AND tracks = 1 AND km_from >= $2 - 0.05 AND km_to <= $3 + 0.05
-            """,
-            line_id,
-            lo,
-            hi,
-        )
-        names = await conn.fetch(
-            "SELECT id, name FROM nodes WHERE id = ANY($1::text[])", [a["node_id"], b["node_id"]]
-        )
-        name_of = {r["id"]: r["name"] for r in names}
-        via = [r["name"] for r in inner if r["kind"] == "estacion" and r["rank"] == "principal"]
-        single_km = float(single or 0)
-        note = (
-            f"Recorrido alternativo cargado en Oniel entre {name_of[a['node_id']]} y"
-            f" {name_of[b['node_id']]}: {hi - lo:.0f} km por la {a['line_name'][0].lower()}{a['line_name'][1:]}"
-            f" frente a {float(b['km_closed']) - float(a['km_closed']):.0f} km por la línea cerrada."
-        )
-        if single_km > 0:
-            note += f" Incluye {single_km:.0f} km de vía única."
-        note += (
-            " Oniel no reasigna los trenes afectados a esta alternativa; solo señala que existe."
-        )
-        # Una interrupción corta la alternativa si comparte algún kilómetro con su recorrido.
-        blocking = (
-            [
-                i
-                for i in await fetch_interruptions(conn, day=day, line_id=line_id)
-                if i.km_from < hi - 0.05 and i.km_to > lo + 0.05
-            ]
-            if day is not None
-            else []
-        )
-        for i in blocking:
-            publisher = i.sources[0].publisher if i.sources else "fuente sin registrar"
-            note += alternative_note(i.from_name, i.to_name, i.start_date, publisher)
-        out.append(
-            ClosureAlternative(
-                line_id=line_id,
-                line_name=a["line_name"],
-                from_node_id=a["node_id"],
-                from_name=name_of[a["node_id"]],
-                to_node_id=b["node_id"],
-                to_name=name_of[b["node_id"]],
-                length_km=round(hi - lo, 1),
-                closed_line_length_km=round(float(b["km_closed"]) - float(a["km_closed"]), 1),
-                via=via,
-                single_track_km=round(single_km, 1),
-                note=note,
-                interruptions=blocking,
-            )
-        )
-    return out
 
 
 async def feed_bounds(

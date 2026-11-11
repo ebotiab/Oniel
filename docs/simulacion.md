@@ -33,23 +33,56 @@ Las ventanas que terminan antes de empezar (23:00 a 01:00) se interpretan como q
 
 ## Recorrido alternativo
 
-Desde que Oniel carga líneas que comparten nodos (Madrid-Puerta de Atocha y Córdoba, la alta velocidad y la convencional; Manzanares y Ciudad Real, la tercera con cada una de las otras), el resultado de un cierre dice también si **existe otro recorrido cargado** que salve el tramo. El cálculo está en `network_repo.fetch_alternatives`: se buscan, en la línea del tramo cerrado, los nodos que también pertenecen a otra línea y quedan uno antes y otro después del tramo; si una misma línea tiene uno a cada lado, se toma el par más cercano al tramo y se informa de la longitud por cada línea, de las estaciones principales intermedias y de los kilómetros de vía única del recorrido alternativo.
+Desde que Oniel carga líneas que comparten nodos (Madrid-Puerta de Atocha y Córdoba, la alta velocidad y la convencional; Manzanares y Ciudad Real, la tercera con cada una de las otras), el resultado de un cierre dice también si **existe otro recorrido cargado** que salve el tramo. El cálculo sale del grafo de rutas (véase «Grafo y escenarios»): el cierre es un escenario de una modificación, y `oniel.sim.closure.alternatives` pide al grafo los rodeos que lo salvan.
+
+Un rodeo sale de la línea del tramo cerrado por un nodo situado antes del cierre, sigue por otras líneas, una sola o varias encadenadas, y vuelve a la línea por un nodo situado después. No usa ningún tramo de la línea cerrada ni pasa por sus nodos intermedios, así que cada rodeo es el más ceñido al tramo de los que siguen su camino. De cada uno se informa de los kilómetros por cada línea y en total, de los kilómetros entre los mismos dos nodos por la línea cerrada, de las estaciones principales intermedias, de los kilómetros de vía única y del tiempo estimado. Van del más corto al más largo.
 
 Ejemplos:
 
-- Cierre de Villanueva de Córdoba – Adamuz (LAV): alternativa por la línea convencional entre Madrid-Puerta de Atocha y Córdoba, 440,7 km por Aranjuez, Alcázar de San Juan, Manzanares, Valdepeñas, Santa Cruz de Mudela, Vilches, Linares-Baeza y Andújar frente a 343,6 km por la alta velocidad, con 194 km de vía única.
-- Cierre de Venta de Cárdenas – Vilches (convencional, Despeñaperros): alternativa por la LAV entre los mismos dos nodos, 343,6 km frente a 440,7 km.
+- Cierre de Urda – Ciudad Real (LAV): dos alternativas. La más corta es la que siguen los Intercity y Alvia desviados tras la interrupción de la alta velocidad: por la convencional hasta Manzanares y por la línea de Manzanares a Ciudad Real, 260,5 km frente a 170,8 km por la alta velocidad, con 64,4 km de vía única. La otra es la convencional entera entre Madrid-Puerta de Atocha y Córdoba.
+- Cierre de Villanueva de Córdoba – Adamuz (LAV): por la línea convencional entre Madrid-Puerta de Atocha y Córdoba, 440,7 km por Aranjuez, Alcázar de San Juan, Manzanares, Valdepeñas, Santa Cruz de Mudela, Vilches, Linares-Baeza y Andújar frente a 343,6 km por la alta velocidad, con 194,1 km de vía única. Y, más ceñido al tramo, de Ciudad Real a Córdoba por Manzanares: 309,0 km por dos líneas frente a 172,8 km.
+- Cierre de Venta de Cárdenas – Vilches (convencional, Despeñaperros): por la LAV entre Madrid-Puerta de Atocha y Córdoba, 343,6 km frente a 440,7 km. Y de Manzanares a Córdoba por Ciudad Real y la alta velocidad, 237,2 km frente a 244,6 km.
+- Cierre de Almagro – Ciudad Real (línea de Manzanares a Ciudad Real): ninguna línea sola tiene un nodo a cada lado del tramo; el rodeo encadena dos, la convencional hasta Madrid y la alta velocidad hasta Ciudad Real (366,9 km frente a 64,4 km), o la convencional hasta Córdoba y la alta velocidad de vuelta (417,4 km).
 - Cierre de Bifurcación Málaga – Majarabique (LAV): sin alternativa cargada, porque al sur de Córdoba Oniel solo tiene una línea.
-- Cierre de Urda – Ciudad Real (LAV): la alternativa señalada es la convencional entera entre Madrid-Puerta de Atocha y Córdoba. El recorrido más corto, por la convencional hasta Manzanares y por la línea de Manzanares a Ciudad Real (260,5 km frente a 170,8 km), no aparece: usa dos líneas, y la búsqueda solo considera una.
-- Cierre de Almagro – Ciudad Real (línea de Manzanares a Ciudad Real): sin alternativa, porque ninguna otra línea tiene un nodo a cada lado del tramo. El rodeo existe (por la convencional hasta Madrid y por la alta velocidad hasta Ciudad Real), pero también necesita dos líneas.
+
+Las alternativas por una sola línea son las mismas que antes de pasar por el grafo, con los mismos nodos, kilómetros y texto: se comprobó en los 39 tramos, en dos fechas, contra el cálculo anterior (`network_repo.fetch_alternatives`, ya retirado). Lo nuevo son los rodeos por varias líneas.
 
 Lo que **no** hace la simulación, y haría falta para un desvío real:
 
-1. Decidir qué trenes afectados podrían tomar la alternativa. Depende del material (un AVE de ancho estándar no puede circular por la red convencional de ancho ibérico; un Alvia o un Intercity de ancho variable sí, cambiando de ancho en un cambiador que hoy no está modelado como requisito) y de si el tren tiene paradas intermedias que la alternativa no sirve.
-2. Estimar el nuevo horario: tiempo de recorrido por la otra línea a sus velocidades (`segments.typical_speed_kmh` ya está disponible) y huecos en la ocupación de la vía única, donde los cruces limitan cuántos trenes caben por hora en cada sentido.
+1. Decidir qué trenes afectados podrían tomar la alternativa. Depende del material (un AVE de ancho estándar no puede circular por la red convencional de ancho ibérico; un Alvia o un Intercity de ancho variable sí, cambiando de ancho en un cambiador que hoy no está modelado como requisito) y de si el tren tiene paradas intermedias que la alternativa no sirve. El grafo tampoco lo sabe: une alta velocidad y convencional en los nodos comunes sin mirar el ancho de vía.
+2. Estimar el nuevo horario: el tiempo del recorrido alternativo es una estimación sin paradas (véase «Grafo y escenarios»), y faltan los huecos en la ocupación de la vía única, donde los cruces limitan cuántos trenes caben por hora en cada sentido.
 3. Deducir por sí sola el recorrido de un tren que cambia de línea: hoy hay que declararlo en una regla de recorrido de cada especificación, como se hizo con los Intercity y Alvia Madrid-Atocha Cercanías–Andalucía (véase `docs/datos.md`).
-4. Encontrar alternativas que encadenen varias líneas, como la de Madrid a Ciudad Real por Manzanares. Es lo que pide el comparador de recorridos de la hoja de ruta.
-5. Descontar los trenes que en realidad no circulan. La simulación señala que el tramo o la alternativa tienen una interrupción real registrada ese día (véase «Interrupciones reales»), pero sigue comparando la ventana con el horario publicado.
+4. Descontar los trenes que en realidad no circulan. La simulación señala que el tramo o la alternativa tienen una interrupción real registrada ese día (véase «Interrupciones reales»), pero sigue comparando la ventana con el horario publicado.
+
+## Grafo y escenarios
+
+La simulación de cierre, el recorrido alternativo y el comparador de recorridos de la hoja de ruta hacen la misma pregunta: con la red así, ¿por dónde se va de un nodo a otro y cuánto cuesta? La responde un solo cálculo, `backend/src/oniel/routing/`, que no toca la base de datos.
+
+**El grafo.** Los nodos son los de la red y las aristas, los tramos de todas las líneas cargadas. Un nodo común a dos líneas es uno solo, con su kilómetro en cada una: por ahí se cambia de línea. `network_repo.fetch_graph` lo construye con las mismas lecturas que `GET /api/network`.
+
+**El escenario.** Es una lista de modificaciones sobre la red, no una copia de ella:
+
+- cerrar un tramo;
+- añadir un enlace esbozado entre dos nodos, con su longitud y su velocidad (un proyecto que aún no existe, por ejemplo);
+- cambiar la velocidad de un tramo.
+
+Se guarda como JSON (`{"closures": [...], "links": [...], "speeds": [...]}`) y como una cadena corta para la URL, que une las modificaciones con `;` y sus campos con `~`: `c~<tramo>`, `e~<nodo>~<nodo>~<km>~<km/h>` y `v~<tramo>~<km/h>`. Por ejemplo, `c~lav-madrid-sevilla:urda:ciudad-real` cierra Urda – Ciudad Real. Un tramo o un nodo que no existe en la red hace el escenario inválido. Las interrupciones vigentes un día pueden sumarse como cierres (`Scenario.with_closures`), pero solo si se pide: por defecto se señalan y no se aplican.
+
+**Los recorridos.** `find_routes` devuelve los caminos entre dos nodos que no pasan dos veces por el mismo nodo, del más corto al más largo, con un tope de doce. Por defecto admite un cambio de línea como mucho (`max_changes`), que es lo que separa los recorridos distintos de las combinaciones de trozos de unos y otros. Así, Madrid – Córdoba tiene dos recorridos (alta velocidad, 343,6 km; convencional, 440,7 km) y Madrid – Ciudad Real, tres (alta velocidad, 170,8 km; convencional hasta Manzanares y línea de Manzanares a Ciudad Real, 260,5 km; convencional hasta Córdoba y alta velocidad de vuelta, 613,5 km). Con dos cambios aparece además el recorrido de los Alvia desviados que no paran en Ciudad Real: Madrid – Manzanares – Ciudad Real – Córdoba, 433,3 km por tres líneas, más corto que la convencional entera.
+
+Cada recorrido lleva:
+
+- **Kilómetros.** Por cada línea, la diferencia entre los kilómetros del nodo de entrada y el de salida; un enlace esbozado aporta los suyos. El total es la suma de los trechos.
+- **Tiempo estimado.** La suma, tramo a tramo, de su longitud entre su velocidad habitual (`typical_speed_kmh`; la máxima si no hay habitual), en minutos enteros. Es el tiempo de recorrer cada tramo a esa velocidad sin parar, sin acelerar ni frenar y sin esperar cruces en vía única: sirve para comparar recorridos entre sí, no es un horario. Madrid – Ciudad Real sale en 40 minutos por la alta velocidad y en 107 por Manzanares; los Intercity desviados tardan 155 minutos publicados en ese mismo recorrido. Si a algún tramo le falta la velocidad, el recorrido no lleva tiempo.
+- **Kilómetros de vía única**, las **líneas usadas** en orden, un **trecho** por cada línea (con sus nodos, kilómetros, tiempo y vía única) y las **estaciones principales** intermedias en el orden en que se recorren.
+
+**La API.** `GET /api/routes?from=<nodo>&to=<nodo>` devuelve los recorridos y el método. Admite `scenario` (la cadena corta o el JSON), `max_changes`, `date` (cada recorrido lleva entonces las interrupciones vigentes ese día en sus tramos) y `avoid_interruptions=true` (con fecha, los tramos interrumpidos se cierran además). `POST /api/simulations/closure` acepta también `scenario`: el cierre del tramo se suma a sus otras modificaciones al buscar la alternativa.
+
+**El visor.** `frontend/src/routing/` hace el mismo cálculo en el cliente sobre la red que compone el visor a partir del índice (`index.json`, que lleva todas las líneas, nodos y tramos), para que el modo estático no dependa de la API; todavía no tiene interfaz propia, que es lo que añade el comparador de recorridos. La ruta `#/escenario/<cadena>` abre un escenario: hoy, si cierra un tramo, abre la simulación de ese cierre y la URL lo conserva.
+
+**Paridad.** Servidor y cliente tienen que dar lo mismo. `backend/tests/test_routing.py` resuelve siete casos sobre la instantánea y los compara con `frontend/e2e/fixtures/rutas-paridad.json`; `frontend/e2e/rutas.spec.ts` resuelve los mismos casos en el cliente contra el mismo fichero y, con la API arrancada, compara además con `GET /api/routes`. Si el cálculo cambia a propósito, el fichero se regenera con `ONIEL_UPDATE_FIXTURES=1 uv run pytest tests/test_routing.py`. Los redondeos usan la misma fórmula en los dos lados.
+
+Límites: el grafo no distingue anchos de vía ni sentidos, no sabe por qué vía de una estación se pasa de una línea a otra y trata un cambio de línea como instantáneo.
 
 ## Interrupciones reales
 
@@ -57,7 +90,7 @@ Un cierre simulado puede caer sobre un tramo que ya está interrumpido de verdad
 
 - **En la vista de un tramo.** `GET /api/segments/{id}/services` devuelve, junto a los pasos del día, las interrupciones vigentes ese día en el tramo (`interruptions`). Cada una lleva su nota: «Horario publicado; sin circulación real desde el 6 de septiembre de 2026 (Adif).» El visor la muestra en una línea sobre la lista de trenes.
 - **En el tramo que se cierra.** El resultado de `POST /api/simulations/closure` lleva en `interruptions` las vigentes en ese tramo en la fecha simulada y añade una advertencia al método: los trenes de la lista figuran en el horario, pero no circulan. El recuento de afectados no cambia.
-- **En el recorrido alternativo.** Cada alternativa lleva en `interruptions` las vigentes ese día en algún tramo de su recorrido, y su nota termina diciendo entre qué nodos no hay circulación, desde cuándo y según quién. El 10 de noviembre de 2026, un cierre en la alta velocidad entre Madrid y Córdoba señala la alternativa por Despeñaperros y avisa de que está cortada entre Almuradiel-Viso del Marqués y Alcolea de Córdoba; un cierre en la convencional señala la alta velocidad y avisa de que está cortada entre la Bifurcación La Sagra y Córdoba.
+- **En el recorrido alternativo.** Cada alternativa lleva en `interruptions` las vigentes ese día en algún tramo de su recorrido, y su nota termina diciendo entre qué nodos no hay circulación, desde cuándo y según quién. El 10 de noviembre de 2026, un cierre en la alta velocidad entre Madrid y Córdoba señala la alternativa por Despeñaperros y avisa de que está cortada entre Almuradiel-Viso del Marqués y Alcolea de Córdoba; un cierre en la convencional señala la alta velocidad y avisa de que está cortada entre la Bifurcación La Sagra y Córdoba. El rodeo de Madrid a Ciudad Real por Manzanares queda al norte del corte por obras y no lleva aviso.
 
 Vale la fecha simulada, no la de hoy: un cierre simulado en una fecha anterior al inicio de una interrupción, o posterior a su final, no lleva ninguna nota. Está automatizado en `backend/tests/test_integration_db.py` y `frontend/e2e/interrupciones.spec.ts`.
 
@@ -101,7 +134,7 @@ El mismo caso está automatizado en:
 
 - `backend/tests/test_sim_passes.py::test_estimated_pass_is_proportional_to_distance`
 - `backend/tests/test_sim_closure.py::test_hand_calculated_case_ave_02070`
-- `backend/tests/test_integration_db.py::test_closure_hand_case` (contra la base de datos y la API, incluida la alternativa por Alcázar)
+- `backend/tests/test_integration_db.py::test_closure_hand_case` (contra la base de datos y la API, incluidas las alternativas)
 - `frontend/e2e/simulacion.spec.ts` (desde la interfaz)
 
 Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes recorren el tramo ese día; 6 afectados con paso estimado, 5 indeterminados, 85 no afectados.
@@ -110,5 +143,5 @@ Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes r
 
 - Los horarios son los planificados por Renfe. Las interrupciones registradas en `interrupciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
 - Solo hay servicios de Renfe; faltan Iryo, Ouigo, Cercanías y mercancías.
-- El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; la alternativa solo se señala.
+- El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; las alternativas solo se señalan.
 - La estimación proporcional ignora paradas técnicas y limitaciones temporales de velocidad.

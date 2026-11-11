@@ -7,7 +7,7 @@ import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from 
 import type { Trazo } from '../map/layers'
 import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
-import { Legend } from '../panel/Legend'
+import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
 import { NetworkOverview } from '../panel/NetworkOverview'
 import { NodeDetail } from '../panel/NodeDetail'
@@ -197,6 +197,11 @@ export default function App() {
     select(null)
   }
 
+  // En el móvil la leyenda de los trazos va dentro del panel, en la vista de la red y en la de una línea.
+  const leyendaMovil =
+    mobile && network ? (
+      <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} />
+    ) : null
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
@@ -210,6 +215,7 @@ export default function App() {
         feedStart={coverage?.feed_start ?? null}
         feedEnd={coverage?.feed_end ?? null}
         interruptions={interrupted.get(segment.id) ?? []}
+        scenario={route.escenario}
         result={result}
         onResult={setResult}
         onBack={() => setRoute({ selection, simulacion: false })}
@@ -244,7 +250,7 @@ export default function App() {
       />
     )
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} />
+    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} leyenda={leyendaMovil} />
   else
     panel = (
       <LineOverview
@@ -261,6 +267,7 @@ export default function App() {
         onSelect={select}
         onHover={setHoverId}
         compact={mobile}
+        leyenda={leyendaMovil}
       />
     )
 
