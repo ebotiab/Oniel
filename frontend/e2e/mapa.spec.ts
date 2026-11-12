@@ -175,6 +175,23 @@ test.describe('Trazo de la vía', () => {
     await encuadraLaViaUnica(page)
   })
 
+  test('en el móvil la escala y el botón de la atribución caben en un renglón tras el primer toque', async ({ page }, info) => {
+    test.skip(info.project.name !== 'movil', 'en escritorio hay sitio para las dos')
+    await mapaListo(page)
+    const atribucion = page.locator('.maplibregl-ctrl-attrib')
+    const escala = page.locator('.maplibregl-ctrl-scale')
+    // al llegar, la atribución está desplegada y la escala va encima
+    await expect(atribucion).toHaveClass(/maplibregl-compact-show/)
+    // un toque en cualquier parte, aquí en el panel, la pliega
+    await page.getByRole('button', { name: 'Ampliar el panel' }).click()
+    await expect(atribucion).not.toHaveClass(/maplibregl-compact-show/)
+    const [a, e] = [await atribucion.boundingBox(), await escala.boundingBox()]
+    expect(a && e && Math.abs(a.y + a.height - (e.y + e.height)) <= 2 && e.x + e.width <= a.x).toBe(true)
+    // el botón «i» la vuelve a enseñar entera, con su enlace a OpenStreetMap
+    await atribucion.locator('.maplibregl-ctrl-attrib-button').click()
+    await expect(atribucion.getByRole('link', { name: 'OpenStreetMap' })).toBeVisible()
+  })
+
   test('en el móvil la leyenda de los trazos va sobre el esquema y resalta el que se toca', async ({ page }, info) => {
     test.skip(info.project.name !== 'movil', 'en escritorio la leyenda va sobre el mapa')
     await mapaListo(page)
