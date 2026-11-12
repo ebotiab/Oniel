@@ -108,18 +108,18 @@ def test_the_whole_line_is_double_track(albacete: BuiltNetwork) -> None:
 
 def test_signalling_changes_at_villarrobledo_and_la_roda(albacete: BuiltNetwork) -> None:
     """Mapa 4 de la Declaración sobre la Red: «BAB» hasta Villarrobledo, «BAD» hasta La Roda y
-    «BAB ctc» hasta Albacete. Donde el rótulo no lleva «ctc», el mando queda sin dato publicado."""
+    «BAB ctc» hasta Albacete. Donde el rótulo no lleva «ctc», el mando es «sin control centralizado»."""
     by_segment = {s.id.removeprefix(f"{LINE}:"): s.attributes for s in albacete.segments}
     read = {
         k: (a["proteccion_tren"].value, a["bloqueo"].value, a["mando"].value)
         for k, a in by_segment.items()
     }
     assert read == {
-        "alcazar-de-san-juan:campo-de-criptana": ("asfa", "bab", "sin_dato_publicado"),
-        "campo-de-criptana:socuellamos": ("asfa", "bab", "sin_dato_publicado"),
-        "socuellamos:villarrobledo": ("asfa", "bab", "sin_dato_publicado"),
-        "villarrobledo:minaya": ("asfa", "bad", "sin_dato_publicado"),
-        "minaya:la-roda-de-albacete": ("asfa", "bad", "sin_dato_publicado"),
+        "alcazar-de-san-juan:campo-de-criptana": ("asfa", "bab", "sin_ctc"),
+        "campo-de-criptana:socuellamos": ("asfa", "bab", "sin_ctc"),
+        "socuellamos:villarrobledo": ("asfa", "bab", "sin_ctc"),
+        "villarrobledo:minaya": ("asfa", "bad", "sin_ctc"),
+        "minaya:la-roda-de-albacete": ("asfa", "bad", "sin_ctc"),
         "la-roda-de-albacete:la-gineta": ("asfa", "bab", "ctc"),
         "la-gineta:albacete-los-llanos": ("asfa", "bab", "ctc"),
     }
