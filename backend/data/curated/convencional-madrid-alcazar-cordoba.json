@@ -86,7 +86,6 @@
   "connections": [
     {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},
     {"id": "conv-alcazar-levante", "node_id": "alcazar-de-san-juan", "name": "Línea convencional Alcázar–Albacete", "towards": "Albacete, Valencia y Alicante", "status": "no_cargada", "sketch": [[-3.205371, 39.395663], [-3.12, 39.39], [-2.78, 39.28], [-2.5, 39.2]]},
-    {"id": "conv-linares-almeria", "node_id": "linares-baeza", "name": "Línea Linares-Baeza–Almería", "towards": "Jódar, Moreda, Guadix y Almería", "status": "no_cargada", "sketch": [[-3.589140, 38.069085], [-3.5, 38.0], [-3.35, 37.92], [-3.31, 37.75]]},
     {"id": "conv-espeluy-jaen", "node_id": "espeluy", "name": "Línea Espelúy–Jaén", "towards": "Mengíbar y Jaén", "status": "no_cargada", "sketch": [[-3.832160, 38.010259], [-3.80, 37.98], [-3.79, 37.86], [-3.79, 37.78]]},
     {"id": "conv-cordoba-sevilla", "node_id": "cordoba", "name": "Línea convencional Córdoba–Sevilla", "towards": "Posadas, Palma del Río, Lora del Río, Sevilla y Cádiz", "status": "no_cargada", "sketch": [[-4.789453, 37.888291], [-4.84, 37.87], [-4.92, 37.85], [-5.11, 37.80], [-5.29, 37.72]]}
   ],
@@ -159,9 +158,9 @@
     "37603": {"exits": ["manzanares"]},
     "37608": {"exits": ["manzanares"]},
     "37606": {"exits": ["manzanares"]},
-    "56004": {"exits": ["linares-baeza"]},
-    "56009": {"exits": ["linares-baeza"]},
-    "56100": {"exits": ["linares-baeza"]},
+    "56004": {"exits": ["linares-baeza"], "via": {"line": "linares-baeza-moreda-granada", "node": "linares-baeza"}},
+    "56009": {"exits": ["linares-baeza"], "via": {"line": "linares-baeza-moreda-granada", "node": "linares-baeza"}},
+    "56100": {"exits": ["linares-baeza"], "via": {"line": "linares-baeza-moreda-granada", "node": "linares-baeza"}},
     "56200": {"exits": ["linares-baeza"]},
     "56312": {"exits": ["linares-baeza"]},
     "03001": {"exits": ["espeluy"]},

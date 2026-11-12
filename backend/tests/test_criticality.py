@@ -20,10 +20,11 @@ from oniel.routing import Graph, ScenarioError, build_graph, find_routes, route_
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
-LAV, CONV, MZCR = (
+LAV, CONV, MZCR, LBMG = (
     "lav-madrid-sevilla",
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
+    "linares-baeza-moreda-granada",
 )
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
@@ -154,7 +155,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     """La instantánea, con los trenes del día de referencia (13 de noviembre de 2026)."""
     exported = AlternativesOut.model_validate(_read("alternatives.json"))
     assert exported.scope_note == SCOPE_NOTE and "líneas que Oniel tiene cargadas" in SCOPE_NOTE
-    assert exported.line_ids == [LAV, CONV, MZCR]
+    assert exported.line_ids == [LAV, CONV, MZCR, LBMG]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
     counts: dict[str, int] = {}
@@ -164,12 +165,13 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 39
+    assert len(exported.segments) == 45
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
         assert s.with_alternative + s.without_alternative == s.trains
-    # solo al sur de Córdoba, donde Oniel tiene una sola línea, no queda otro camino
+    # no queda otro camino al sur de Córdoba ni en la línea de Linares-Baeza a Granada, que son
+    # ramas con un solo extremo unido al resto de la red cargada
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
@@ -177,7 +179,14 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         CORDOBA_BIF_MALAGA: 108,
         f"{LAV}:bif-malaga:majarabique": 55,
         f"{LAV}:majarabique:sevilla-santa-justa": 53,
+        f"{LBMG}:linares-baeza:jodar-ubeda": 2,
+        f"{LBMG}:jodar-ubeda:cabra-del-santo-cristo": 2,
+        f"{LBMG}:cabra-del-santo-cristo:moreda": 2,
+        f"{LBMG}:bif-almeria:iznalloz": 12,
+        f"{LBMG}:iznalloz:granada": 12,
     }
+    # entre la estación de Moreda y la bifurcación no pasa ningún tren de los horarios
+    assert _of(exported.segments, f"{LBMG}:moreda:bif-almeria").trains == 0
     # el grupo más numeroso de Adamuz – Córdoba: los 43 trenes entre Madrid y Sevilla
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
     assert (top.trains, top.from_node_id, top.to_node_id) == (43, MADRID, SEVILLA)

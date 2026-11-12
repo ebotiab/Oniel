@@ -1,0 +1,103 @@
+{
+  "line": {
+    "id": "linares-baeza-moreda-granada",
+    "name": "Línea convencional Linares-Baeza – Moreda – Granada",
+    "short_name": "410 y 416",
+    "sort_order": 4,
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "Sin electrificar",
+    "max_speed_kmh": 140,
+    "tracks": 1,
+    "opened_on": "1904-05-02",
+    "reference_length_km": 174.2,
+    "pk_origin_km": 8.634,
+    "pk_restarts": [{"node": "moreda", "pk_km": 0.0}],
+    "status": "disponible",
+    "description": "El camino convencional a Granada: baja de Linares-Baeza por Jódar y Cabra del Santo Cristo hasta Moreda y allí gira al oeste hacia Granada, todo en vía única.\n\nPara Adif son dos líneas. Hasta Moreda es el primer trecho de la 410, de Linares-Baeza a Almería, construida entre 1890 y 1899; de Moreda a Granada es la 416, un ramal que se abrió en mayo de 1904. Junto a la estación de Moreda las dos forman un triángulo de vías, de modo que los trenes entre Granada y Almería pasan de una a otra sin entrar en la estación.\n\nPor aquí iban los trenes de Madrid a Granada hasta 2006; desde entonces van por la alta velocidad, por Córdoba y Antequera. Hoy la recorren los Media Distancia de Granada a Almería, entre Granada y Moreda, y un tren al día por sentido de Linares-Baeza a Almería, entre Linares-Baeza y Moreda. Ningún tren de viajeros de los horarios cargados la recorre entera.",
+    "geometry_source": {
+      "source_id": "osm-relation-6641023",
+      "parts": [
+        {
+          "source_id": "osm-relation-6641023",
+          "file": "raw/osm/relation_6641023_talgo_almeria_madrid_2026-11-12.json",
+          "relation_id": 6641023,
+          "from": [-3.589140, 38.069085],
+          "to": [-3.3115002, 37.4285926]
+        },
+        {
+          "source_id": "osm-relation-11350675",
+          "file": "raw/osm/relation_11350675_linea_416_moreda_granada_2026-11-12.json",
+          "relation_id": 11350675,
+          "from": [-3.3115002, 37.4285926],
+          "to": [-3.6086283, 37.1836936]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lineas-410-416"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "linares-baeza", "name": "Linares-Baeza", "kind": "estacion", "adif_code": "50300", "shared": true, "position": {"lon": -3.589140, "lat": 38.069085}, "reference_pk_km": 8.634},
+    {"id": "jodar-ubeda", "name": "Jódar-Úbeda", "kind": "estacion", "adif_code": "56004", "position": {"lon": -3.3501802, "lat": 37.9134753}, "reference_pk_km": 47.247,
+     "description": "Estación del valle del Guadalquivir, abierta en noviembre de 1895 con el primer trecho de la línea. Lleva el nombre de Jódar y el de Úbeda."},
+    {"id": "cabra-del-santo-cristo", "name": "Cabra del Santo Cristo y Alicún", "kind": "estacion", "adif_code": "56009", "position": {"lon": -3.2623676, "lat": 37.6565877}, "reference_pk_km": 94.377,
+     "description": "Estación de sierra, a más de mil metros de altitud, abierta en marzo de 1898. Es la última parada de la provincia de Jaén antes de Moreda."},
+    {"id": "moreda", "name": "Moreda", "kind": "estacion", "adif_code": "56100", "position": {"lon": -3.3107459, "lat": 37.4311254}, "reference_pk_km": 126.124,
+     "description": "Estación de enlace, abierta en octubre de 1896. Aquí se separan dos caminos: el que sigue hacia Guadix y Almería y el que gira hacia Granada. Para Adif es el kilómetro 126,1 de la línea de Linares-Baeza a Almería y el kilómetro cero de la de Granada."},
+    {"id": "bif-almeria", "name": "Bifurcación Almería", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -3.3146869, "lat": 37.4221026}, "reference_pk_km": 1.1,
+     "description": "Vértice del triángulo de vías de Moreda, a un kilómetro de la estación. Aquí se separa de la línea de Granada el enlace por el que los trenes entre Granada y Almería siguen hacia Guadix sin entrar en la estación de Moreda."},
+    {"id": "iznalloz", "name": "Iznalloz", "kind": "estacion", "adif_code": "57003", "position": {"lon": -3.527761, "lat": 37.3958204}, "reference_pk_km": 23.977,
+     "description": "Única estación con parada de viajeros entre Moreda y Granada. La línea cruza el pueblo por un túnel."},
+    {"id": "granada", "name": "Granada", "kind": "estacion", "adif_code": "05000", "position": {"lon": -3.6086283, "lat": 37.1836936}, "reference_pk_km": 56.746,
+     "description": "Estación de la ciudad de Granada y final de la línea de Moreda. A ella llega también la línea de alta velocidad de Antequera, por donde van hoy los trenes a Madrid, Sevilla y Málaga."}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "linares-baeza", "to_node": "granada", "value": 1, "source_id": "wikipedia-lineas-410-416", "checked_on": "2026-11-12", "note": "Vía única en las dos líneas (410 y 416), según sus artículos de Wikipedia, que citan la Declaración sobre la Red de Adif."}
+  ],
+  "connections": [
+    {"id": "conv-moreda-almeria", "node_id": "moreda", "name": "Línea Linares-Baeza–Almería", "towards": "Guadix y Almería", "status": "no_cargada", "sketch": [[-3.3107459, 37.4311254], [-3.3069, 37.4240], [-3.2585, 37.4037], [-3.185, 37.3627], [-3.1270, 37.3169], [-3.02, 37.26]]},
+    {"id": "av-antequera-granada", "node_id": "granada", "name": "Línea de alta velocidad Antequera–Granada", "towards": "Loja, Antequera, Córdoba y Málaga", "status": "no_cargada", "sketch": [[-3.6086283, 37.1836936], [-3.654, 37.199], [-3.75, 37.19], [-3.95, 37.17], [-4.13, 37.175]]}
+  ],
+  "stop_mappings": {
+    "50300": {"node": "linares-baeza"},
+    "56004": {"node": "jodar-ubeda"},
+    "56009": {"node": "cabra-del-santo-cristo"},
+    "56100": {"node": "moreda"},
+    "57003": {"node": "iznalloz"},
+    "05000": {"node": "granada"},
+    "56103": {"exits": ["bif-almeria"]},
+    "56200": {"exits": ["bif-almeria"]},
+    "56301": {"exits": ["bif-almeria"]},
+    "56305": {"exits": ["bif-almeria"]},
+    "56308": {"exits": ["bif-almeria"]},
+    "56310": {"exits": ["bif-almeria"]},
+    "56312": {"exits": ["bif-almeria"]},
+    "05012": {"exits": ["granada"]},
+    "02030": {"exits": ["granada"]},
+    "02003": {"exits": ["granada"]},
+    "50500": {"exits": ["granada"]},
+    "60000": {"exits": ["granada"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en alguna estación de la línea y, además, en Jódar-Úbeda, Cabra del Santo Cristo, Moreda, Iznalloz o Guadix: son los que recorren algún trecho de la línea. Así entran los Media Distancia de Granada a Almería, que la recorren entre Granada y la bifurcación de Moreda, también los que no paran en Iznalloz, y el tren de Linares-Baeza a Almería; quedan fuera los trenes que solo paran en Granada o en Linares-Baeza y siguen por otras líneas.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": ["56004", "56009", "56100", "57003", "56200"],
+    "min_node_stops": 1
+  },
+  "route_overrides": [
+    {
+      "id": "linares-baeza-almeria-por-moreda",
+      "description": "Tren de Linares-Baeza a Almería (uno al día por sentido en los horarios cargados): para en la estación de Moreda y sigue hacia Guadix por la línea 410, sin pasar por la línea de Granada. Para estos viajes Guadix y Almería son una salida por la estación de Moreda, no por la bifurcación que usan los trenes de Granada.",
+      "consecutive_stop_ids": ["56100", "56200"],
+      "stop_mappings": {
+        "56200": {"exits": ["moreda"]},
+        "56312": {"exits": ["moreda"]}
+      }
+    }
+  ]
+}

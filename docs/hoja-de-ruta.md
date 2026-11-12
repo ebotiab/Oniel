@@ -46,6 +46,8 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR del estado de producción por las trazas (12 de noviembre de 2026, #95): las trazas de Logfire llevan como versión el commit desplegado, cada importación y cada exportación es un tramo con su resultado y sus recuentos, y `oniel-data obs estado` dice qué commit corre en producción y desde cuándo, cómo acabó la última importación, los errores desde el despliegue, las respuestas 4xx y 5xx por ruta y las rutas más lentas; `oniel-data obs consulta` ejecuta SQL sobre las trazas. Usa un token de solo lectura que vive fuera del repositorio. Tras fusionar algo de `backend/`, la sesión no da el despliegue por bueno hasta verlo ahí (`CLAUDE.md`, «Estado de producción»; `docs/despliegue.md`, «Logfire»).
 - PR de la evolución del servicio (12 de noviembre de 2026, #27): la ficha de una estación y la de un tramo comparan, en «Más detalle», los trenes de cada horario descargado de un mismo operador, cada uno en su día de referencia («Horario del 8 nov 2026: 56 trenes el 13 nov · horario del 12 nov 2026: 56 trenes el 13 nov»); con un solo horario por operador no enseñan nada. `GET /api/nodes/{id}/history` y `GET /api/segments/{id}/history`, lo mismo en `historico/nodes/` e `historico/segments/` de la instantánea, y sin cambios en la importación, que ya conservaba los pasos de todos los conjuntos. Con los dos ficheros de Renfe de hoy la comparación sale igual en todas partes, porque comparten día de referencia. Queda por decidir la forma con tres o más horarios. `docs/datos.md`, «Evolución del servicio», y `docs/diseno.md`.
 
+- PR de la línea de Linares-Baeza a Granada (12 de noviembre de 2026, #101): cuarta línea, la convencional Linares-Baeza – Moreda – Granada (Adif 410 hasta Moreda y 416 hasta Granada; 173,7 km de vía única sin electrificar), trazada desde OpenStreetMap, con los Media Distancia de Granada a Almería y de Linares-Baeza a Almería. El comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza (487,3 km). Los puntos kilométricos pueden volver a empezar a mitad de línea (`pk_restarts`), y «Añadir otra línea» de `docs/datos.md` se reescribió paso a paso con lo aprendido. Primera de la etapa «Ampliar la red».
+
 ## Principios de arquitectura
 
 Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Estos principios evitan que cada dato o capa nueva traiga su propio caso particular; la incidencia que materializa cada uno va entre paréntesis.
@@ -65,6 +67,17 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 6. [#20](https://github.com/ebotiab/Oniel/issues/20) Datos: señalización y protección del tren por tramo. ASFA, LZB, ERTMS, bloqueo y mando desde la Declaración sobre la Red. Los atributos de tramo (#19) y el patrón de ficha (#15) ya están.
 
 El orden es orientativo. No quedan tareas de arquitectura pendientes: las que siguen se apoyan en mecanismos que ya están.
+
+## Ampliar la red
+
+La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `docs/datos.md`. La primera etapa lleva a Granada y a Jaén, para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Son tres incidencias, en este orden; la primera, la línea convencional Linares-Baeza – Moreda – Granada (#101), ya está hecha:
+
+1. [#102](https://github.com/ebotiab/Oniel/issues/102) Datos: línea convencional Espeluy – Jaén.
+2. [#103](https://github.com/ebotiab/Oniel/issues/103) Datos: línea de alta velocidad Córdoba – Antequera – Granada. Comparte la estación de Granada con la línea de Moreda.
+
+Después, todavía sin incidencia: Levante (la convencional de Alcázar de San Juan a Albacete y la alta velocidad Madrid – Cuenca – Valencia) y Madrid – Zaragoza – Barcelona.
+
+Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una.
 
 ## Pendientes menores
 
