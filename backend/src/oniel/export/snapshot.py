@@ -100,9 +100,15 @@ async def export_snapshot(
         )
     for node in network.nodes:
         calls = await services_repo.calls_at_node(conn, node.id, day)
+        destinations = await services_repo.destinations_from_node(conn, node.id, day)
         _write(
             out_dir / "nodes" / f"{node.id}.json",
-            {"node": node.model_dump(mode="json"), "date": day.isoformat(), "calls": calls},
+            {
+                "node": node.model_dump(mode="json"),
+                "date": day.isoformat(),
+                "calls": calls,
+                "destinations": [d.model_dump(mode="json") for d in destinations],
+            },
         )
     return {
         "out_dir": str(out_dir),

@@ -1205,3 +1205,46 @@
   left: 0;
   right: 0;
 }
+
+/* Destinos directos de una estación: el nombre y su detalle a la izquierda, los trenes a la derecha */
+.lista-destinos {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+
+.lista-destinos li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: start;
+  padding: 7px 0;
+  border-top: 1px solid var(--regla);
+  font-size: 13px;
+}
+
+.lista-destinos .destino {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lista-destinos .enlace {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.lista-destinos strong {
+  font-weight: 600;
+}
+
+.lista-destinos .cuantos {
+  white-space: nowrap;
+}
+
+.destinos-nota {
+  margin-top: 8px;
+}
