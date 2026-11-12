@@ -252,18 +252,22 @@ El fichero de Renfe se refresca solo; el de Ouigo, a mano.
 **Renfe.** El flujo `.github/workflows/gtfs.yml` se ejecuta los lunes a las 06:30 UTC, y a mano desde la pestaña Actions («Refresco del GTFS» → Run workflow). Hace esto:
 
 1. Descarga el fichero publicado. Parte de la URL registrada en `sources.json`, la página del conjunto en data.renfe.com, que es un portal CKAN: su ficha (`/api/3/action/package_show`) da la dirección del zip.
-2. Lo compara con los ficheros de Renfe ya declarados. Si el horario es el mismo, termina sin abrir nada.
+2. Lo compara con el cargado. Si es el mismo fichero, o si los trenes de las líneas cargadas son los mismos en las próximas cuatro semanas y el cargado tiene menos de 28 días, termina sin abrir nada.
 3. Si es nuevo, `oniel-data refresh gtfs` lo guarda en `backend/data/raw/renfe/google_transit_av_ld_md_<fecha>.zip`, lo añade al final de `feeds` y pone al día la fuente (`file`, `retrieved_on` y las frases de validez y de publicación) y las dos tablas de este documento que lo nombran. El fichero anterior sigue declarado.
 4. Ejecuta `validate`, `import all` (que regenera la instantánea), `pytest` y las pruebas Playwright sobre la instantánea nueva.
 5. Abre una PR en la rama `datos/gtfs-<fecha>`, con la etiqueta `refresco-gtfs`, que resume la validez, los viajes por línea y los pasos por tramo que cambian, y lanza el CI sobre esa rama.
 
 El flujo no fusiona nada. Fusionar publica los horarios, y eso lo decide quien revisa la PR.
 
-Para no llenar el correo, abre como mucho una PR por horario nuevo. Si no hay cambios no abre nada. Mientras haya una PR con la etiqueta `refresco-gtfs` abierta, no descarga ni abre otra: la siguiente ejecución tras fusionarla o cerrarla recoge lo que haya publicado entonces.
+Para no llenar el correo, abre una PR solo cuando hay algo que revisar: trenes que cambian, o un fichero cargado que ya es viejo. Mientras haya una PR con la etiqueta `refresco-gtfs` abierta, no descarga ni abre otra: la siguiente ejecución tras fusionarla o cerrarla recoge lo que haya publicado entonces.
 
 Se compara el contenido, no el zip. Renfe sirve su fichero desde varios servidores y cada uno tiene su propio zip, con los mismos ficheros dentro y otros bytes: el 12 de noviembre de 2026, cuatro descargas seguidas dieron tres SHA-256 distintos y un contenido idéntico. Por eso `refresh gtfs` calcula el SHA-256 de los nombres y los bytes de los ficheros ya descomprimidos (`content_sha256`) y lo compara con el de cada fichero declarado. La tabla `datasets` sigue guardando el SHA-256 del zip tal como se descargó.
 
-Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que casi cada lunes el horario es distinto del cargado aunque no cambie ningún tren: lo normal es una PR por semana. Si resulta demasiado, basta cambiar el `cron` del flujo. Cada fichero pesa unos 0,7 MB en el repositorio y alarga `import all`; para retirar uno antiguo se borra de `feeds` y de `backend/data/raw/` y se vuelve a ejecutar `import all`, que retira su conjunto de la base.
+Qué cuenta como cambio. Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que el contenido es casi siempre distinto del cargado aunque no cambie ningún tren. Abrir una PR por eso sería una por semana sin nada que ver. `refresh gtfs` compara lo que Oniel enseña: los trenes que recorren las líneas cargadas en los 28 días siguientes, uno por tren y día, con su número, su producto, sus paradas y sus horas (`oniel.gtfs.refresh.train_days`). No cuenta el `trip_id` ni el `service_id`, que cambian de un fichero a otro con el mismo tren. Si alguno está en un fichero y no en el otro, declara el nuevo. Entre el fichero del 8 y el del 12 de noviembre de 2026 cambiaban 54 de unos 5.000: cuatro Intercity con el horario posterior a Urda prolongado hasta el 22 de noviembre.
+
+Si los trenes son los mismos, el fichero se releva de todos modos cuando el cargado tiene 28 días o más: así el día de referencia no se queda atrás y entra lo que haya cambiado más allá de las cuatro semanas. Los dos plazos son opciones de la orden (`--window-days`, `--max-age-days`), y `--any-change` vuelve a declarar cualquier fichero de contenido distinto. La PR dice por cuál de los dos motivos se abre.
+
+Cada fichero pesa unos 0,7 MB en el repositorio y alarga `import all`; para retirar uno antiguo se borra de `feeds` y de `backend/data/raw/` y se vuelve a ejecutar `import all`, que retira su conjunto de la base.
 
 Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
 

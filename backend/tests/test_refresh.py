@@ -18,9 +18,12 @@ from conftest import (
     OUIGO_FEED,
     OUIGO_SOURCE_ID,
     SOURCES,
+    SPECS,
 )
 
+from oniel.gtfs.reader import GtfsFeed
 from oniel.gtfs.refresh import (
+    RefreshResult,
     ckan_package_api,
     content_sha256,
     expiring_feeds,
@@ -30,7 +33,8 @@ from oniel.gtfs.refresh import (
     spanish_range,
     update_docs,
 )
-from oniel.network.spec import load_feeds, load_sources
+from oniel.gtfs.trips import select_trips_for_spec
+from oniel.network.spec import NetworkSpec, load_feeds, load_sources
 
 DOCS = DATA_DIR.parents[1] / "docs" / "datos.md"
 TODAY = dt.date(2026, 11, 20)
@@ -56,14 +60,30 @@ def data_dir(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def republished(source: Path, target: Path, *, drop_last_trip: bool = False) -> Path:
+def republished(
+    source: Path,
+    target: Path,
+    *,
+    drop_last_trip: bool = False,
+    drop_trip_id: str | None = None,
+    extra_file: bool = False,
+) -> Path:
     """Un GTFS vuelto a empaquetar: otros bytes y, si se le quita un viaje, otro horario."""
     with zipfile.ZipFile(source) as src, zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as out:
         for info in src.infolist():
             data = src.read(info.filename)
-            if drop_last_trip and info.filename == "trips.txt":
-                data = b"".join(data.splitlines(keepends=True)[:-1])
+            if info.filename == "trips.txt":
+                rows = data.splitlines(keepends=True)
+                if drop_last_trip:
+                    rows = rows[:-1]
+                if drop_trip_id is not None:
+                    kept = [r for r in rows if drop_trip_id.encode() not in r]
+                    assert len(kept) == len(rows) - 1
+                    rows = kept
+                data = b"".join(rows)
             out.writestr(info.filename, data)
+        if extra_file:
+            out.writestr("feed_info.txt", "feed_publisher_name\nRenfe\n")
         out.comment = b"publicado otra vez"
     return target
 
@@ -176,6 +196,59 @@ def test_the_source_says_when_the_new_file_is_from_and_what_it_covers(
     )
 
 
+def test_another_file_with_the_same_trains_waits_until_the_loaded_one_is_old(
+    data_dir: Path, tmp_path: Path
+) -> None:
+    sources = data_dir / "curated" / "sources.json"
+    before = sources.read_text(encoding="utf-8")
+    # otro contenido (un fichero más en el zip), los mismos trenes en las líneas cargadas
+    other = republished(FEED, tmp_path / "descarga.zip", extra_file=True)
+    assert content_sha256(other) != content_sha256(FEED)
+
+    def refresh(today: dt.date) -> RefreshResult:
+        return refresh_source(
+            other,
+            source_id=FEED_SOURCE_ID,
+            sources_path=sources,
+            data_dir=data_dir,
+            today=today,
+            spec_paths=SPECS,
+        )
+
+    young = refresh(dt.date(2026, 12, 5))
+    assert (young.changed, young.reason) == (False, "mismos_trenes")
+    assert (young.train_days_changed, young.previous_age_days) == (0, 27)
+    assert sources.read_text(encoding="utf-8") == before
+    assert sorted(p.name for p in (data_dir / "raw" / "renfe").iterdir()) == [FEED.name]
+    # a los 28 días se releva aunque no cambie ningún tren: el día de referencia no se queda atrás
+    old = refresh(dt.date(2026, 12, 6))
+    assert (old.changed, old.reason, old.train_days_changed) == (True, "antiguedad", 0)
+    assert old.file == "raw/renfe/google_transit_av_ld_md_2026-12-06.zip"
+
+
+def test_a_train_that_changes_in_the_coming_weeks_opens_the_refresh(
+    data_dir: Path, tmp_path: Path, feed: GtfsFeed, spec: NetworkSpec
+) -> None:
+    def runs_on(trip_service: str, start: dt.date, days: int) -> int:
+        end = start + dt.timedelta(days=days)
+        return sum(start <= d < end for d in feed.service_dates[trip_service])
+
+    # un tren de la alta velocidad que circula un solo día de las cuatro semanas que se comparan
+    trip = next(
+        t for t in select_trips_for_spec(feed, spec) if runs_on(t.service_id, TODAY, 28) == 1
+    )
+    result = refresh_source(
+        republished(FEED, tmp_path / "descarga.zip", drop_trip_id=trip.trip_id),
+        source_id=FEED_SOURCE_ID,
+        sources_path=data_dir / "curated" / "sources.json",
+        data_dir=data_dir,
+        today=TODAY,
+        spec_paths=SPECS,
+    )
+    assert (result.changed, result.reason, result.train_days_changed) == (True, "trenes", 1)
+    assert (result.window_days, result.previous_age_days) == (28, 12)
+
+
 def test_one_file_per_source_and_day(data_dir: Path, tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="un fichero por fuente y día"):
         refresh_source(
@@ -282,6 +355,9 @@ def test_the_pull_request_says_what_changed(tmp_path: Path) -> None:
             "valid_from": "2026-11-19",
             "valid_to": "2027-09-29",
             "pending": ["`notes` de la fuente"],
+            "reason": "trenes",
+            "train_days_changed": 54,
+            "window_days": 28,
         },
         {"gtfs": [gtfs(FEED_DATASET_ID, 814, 331), gtfs(new_id, 799, 328)]},
         tmp_path,
@@ -292,4 +368,5 @@ def test_the_pull_request_says_what_changed(tmp_path: Path) -> None:
     assert "| `lav:a:b` | 96 | 94 |" in body
     assert "lav:b:c" not in body
     assert "Sin actualizar, a mano: `notes` de la fuente." in body
+    assert "en los próximos 28 días hay 54 trenes-día" in body
     assert "El flujo no fusiona nada." in body
