@@ -3,12 +3,13 @@ import { useEffect, useRef, useState } from 'react'
 import { normalize } from '../app/search'
 import type { Source } from '../data/types'
 import { conceptos, terminos, tituloDe } from './glosario'
-import { hashGlosario, useAbrirGlosario } from './glosarioContexto'
+import { abreAparte } from '../app/navegacion'
+import { rutaGlosario, useAbrirGlosario } from './glosarioContexto'
 import { Dibujo } from './glosarioDibujos'
 import { PieFuente, Plegable } from './Plegable'
 
 interface Props {
-  /** La entrada que pide la URL (`#/glosario/<id>`): se lleva a la vista y se señala. */
+  /** La entrada que pide la URL (`/glosario/<id>`): se lleva a la vista y se señala. */
   entrada: string | null
   /** Fuentes registradas, para citar las referencias de los conceptos. */
   sources: Source[]
@@ -20,9 +21,9 @@ function EnlaceEntrada({ id, children }: { id: string; children: React.ReactNode
   const abrir = useAbrirGlosario()
   return (
     <a
-      href={hashGlosario(id)}
+      href={rutaGlosario(id)}
       onClick={(e) => {
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+        if (abreAparte(e)) return
         e.preventDefault()
         abrir(id)
       }}
@@ -109,7 +110,7 @@ export function GlossaryPage({ entrada, sources, onBack }: Props) {
             ))}
             <li className="aparte">
               <a
-                href="#/glosario"
+                href={rutaGlosario(null)}
                 onClick={(e) => {
                   e.preventDefault()
                   document.getElementById('glosario-palabras')?.scrollIntoView({ block: 'start' })

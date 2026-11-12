@@ -3,6 +3,8 @@
 
 import { createContext, useContext } from 'react'
 
+import { routePath } from '../app/state'
+
 /** Abre el glosario; con un id, en esa entrada (término o concepto). */
 export type AbrirGlosario = (id: string | null) => void
 
@@ -13,6 +15,6 @@ export function useAbrirGlosario(): AbrirGlosario {
 }
 
 /** La ruta de una entrada del glosario, para que el enlace se pueda copiar o abrir en otra pestaña. */
-export function hashGlosario(id: string | null): string {
-  return id ? `#/glosario/${encodeURIComponent(id)}` : '#/glosario'
+export function rutaGlosario(id: string | null): string {
+  return routePath({ selection: null, simulacion: false, glosario: { entrada: id } })
 }

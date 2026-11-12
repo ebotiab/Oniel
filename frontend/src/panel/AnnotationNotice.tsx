@@ -1,5 +1,7 @@
 import type { AnnotationOut } from '../data/types'
-import { annotationHref, annotationLayer } from '../app/annotationLayers'
+import { annotationLayer } from '../app/annotationLayers'
+import { abreAparte, navegar } from '../app/navegacion'
+import { annotationHref } from '../app/state'
 import { formatDateLong, lugar, sourceLabels } from '../app/annotations'
 import { Termino } from './Termino'
 
@@ -39,7 +41,16 @@ export function AnnotationNotice({ annotation: a, pasada = false }: Props) {
       {a.note && <p className="texto suave">{a.note}</p>}
       {href && ficha.enlace && (
         <p className="texto">
-          <a className="enlace" href={href} data-testid={`${ficha.testId}-enlace`}>
+          <a
+            className="enlace"
+            href={href}
+            data-testid={`${ficha.testId}-enlace`}
+            onClick={(e) => {
+              if (abreAparte(e)) return
+              e.preventDefault()
+              navegar(href)
+            }}
+          >
             {ficha.enlace}
           </a>
         </p>

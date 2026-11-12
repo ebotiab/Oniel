@@ -58,7 +58,7 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
       { ...OUIGO, descargado: '2026-11-12', dia: '2026-07-17', trenes: 6 },
       { ...RENFE, descargado: '2026-12-07', dia: '2026-12-11', trenes: 24 },
     ])
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     // es detalle: plegado de entrada
     await expect(page.getByTestId('evolucion')).toBeHidden()
@@ -81,7 +81,7 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
       { ...RENFE, descargado: '2026-11-12', dia: '2026-11-13', trenes: 95 },
       { ...OUIGO, descargado: '2026-12-01', dia: '2026-12-11', trenes: 1 },
     ])
-    await page.goto(`/#/tramo/${TRAMO}`)
+    await page.goto(`/tramo/${TRAMO}`)
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
     const evolucion = page.getByTestId('evolucion')
@@ -104,7 +104,7 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
       { ...OUIGO, descargado: '2026-12-01', dia: '2026-12-11', trenes: 8 },
       { ...RENFE, descargado: '2027-01-04', dia: '2027-01-08', trenes: 22 },
     ])
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
     const renfe = page.getByTestId('evolucion-renfe')
@@ -128,7 +128,7 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
       { ...RENFE, descargado: '2026-11-12', dia: '2026-11-13', trenes: 56, cambio: { ...dias, antes: 1068, ahora: 1083 } },
       { ...OUIGO, descargado: '2026-12-01', dia: '2026-12-11', trenes: 6, cambio: { anterior: '2026-07-02', desde: '2026-11-27', hasta: '2026-12-12', antes: 96, ahora: 96 } },
     ])
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(page.getByTestId('evolucion-renfe')).toHaveText('Renfe Viajeros. Horario del 8 nov 2026: 56 trenes el 13 nov · horario del 12 nov 2026: 56 trenes el 13 nov')
@@ -145,7 +145,7 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
       { ...RENFE, descargado: '2026-11-12', dia: '2026-11-13', trenes: 56, cambio: { ...dias, antes: 1068, ahora: 1083 } },
       { ...RENFE, descargado: '2026-12-07', dia: '2026-12-11', trenes: 54, cambio: { anterior: '2026-11-12', desde: '2026-12-06', hasta: '2027-01-02', antes: 1100, ahora: 1040 } },
     ])
-    await page.goto(`/#/tramo/${TRAMO}`)
+    await page.goto(`/tramo/${TRAMO}`)
     await expect(page.getByTestId('evolucion-renfe').getByRole('listitem')).toHaveText([
       'Horario del 8 nov 2026: 56 trenes el 13 nov',
       'Horario del 12 nov 2026: 56 trenes el 13 nov Del 11 nov al 8 dic, 1.083 trenes: 15 más que en el horario anterior esos mismos días (1.068).',
@@ -159,7 +159,7 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
       { ...OUIGO, descargado: '2026-11-12', dia: '2026-07-17', trenes: 0 },
       { ...OUIGO, descargado: '2026-12-01', dia: '2026-12-11', trenes: 0 },
     ])
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(page.getByTestId('nodo-pk').first()).toBeVisible()
@@ -167,21 +167,21 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
     await expect(page.getByTestId('mas-detalle').getByTestId('pie-fuente').last()).toContainText(/Fuente de los horarios/)
     await expect(page.getByTestId('evolucion')).toHaveCount(0)
     // el detalle sigue abierto al pasar a otra ficha
-    await page.goto(`/#/tramo/${TRAMO}`)
+    await page.goto(`/tramo/${TRAMO}`)
     await expect(page.getByTestId('tramo-pk')).toBeVisible()
     await expect(page.getByTestId('evolucion')).toHaveCount(0)
   })
 
   test('con los horarios cargados, la estación y el tramo comparan los de Renfe', async ({ page }) => {
     // sin datos de prueba: lo que haya en la instantánea o en la API, que hoy son dos horarios de Renfe
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
     // dos horarios van en un renglón; con tres o más, en una lista
     const horario = String.raw`[Hh]orario del \d+ \w+ \d{4}: \d+ trenes el \d+ \w+`
     const texto = new RegExp(`^Renfe Viajeros(\\. ${horario} · ${horario}|(\\s*${horario}){3,})$`)
     await expect(page.getByTestId('evolucion-renfe')).toHaveText(texto)
-    await page.goto(`/#/tramo/${TRAMO}`)
+    await page.goto(`/tramo/${TRAMO}`)
     await expect(page.getByTestId('evolucion-renfe')).toHaveText(texto)
   })
 })
