@@ -37,6 +37,12 @@ const TERMINOS = {
       'La entidad dueña de las vías y de las estaciones: las construye, las mantiene y dirige la circulación de los trenes de todos los operadores. En España son Adif y Adif Alta Velocidad.',
     ver: ['operador', 'quien-dirige-la-circulacion'],
   },
+  asfa: {
+    nombre: 'ASFA',
+    breve:
+      'Anuncio de Señales y Frenado Automático. Repite en la cabina lo que indica cada señal de la vía y frena el tren en algunos casos, como al rebasar una señal que ordena parar. Está en todas las líneas principales; en las convencionales es el sistema de protección del tren.',
+    ver: ['sistemas-que-vigilan-al-tren', 'lzb', 'ertms'],
+  },
   'alta-velocidad': {
     nombre: 'Línea de alta velocidad',
     breve: 'Línea construida para que los trenes circulen a 250 km/h o más, con curvas muy amplias y, en España, ancho de vía estándar.',
@@ -52,6 +58,24 @@ const TERMINOS = {
     nombre: 'Bifurcación',
     breve: 'Punto de una línea donde empieza otra o se juntan varias. Allí un tren puede pasar de una línea a otra.',
   },
+  bloqueo: {
+    nombre: 'Bloqueo',
+    breve:
+      'El sistema que asegura que en cada trozo de vía, o cantón, solo haya un tren a la vez, y que dos trenes no circulen de frente por la misma vía.',
+    ver: ['como-se-separan-los-trenes', 'bloqueo-automatico', 'bloqueo-de-control-automatico'],
+  },
+  'bloqueo-automatico': {
+    nombre: 'Bloqueo automático',
+    breve:
+      'Bloqueo en el que la vía detecta el tren y las señales se cierran y se abren solas. Es de vía única si una sola vía sirve a los dos sentidos, de vía doble si cada vía tiene su sentido, y banalizado si por cualquiera de las dos vías se puede circular en los dos sentidos.',
+    ver: ['bloqueo', 'como-se-separan-los-trenes', 'via-unica', 'via-doble'],
+  },
+  'bloqueo-de-control-automatico': {
+    nombre: 'Bloqueo de control automático',
+    breve:
+      'Bloqueo de las líneas de alta velocidad: la distancia entre trenes se mantiene regulando su velocidad, que el maquinista recibe de forma continua en la cabina en vez de leerla en las señales de la vía.',
+    ver: ['bloqueo', 'como-se-separan-los-trenes', 'lzb', 'ertms'],
+  },
   'cambiador-de-ancho': {
     nombre: 'Cambiador de ancho',
     breve:
@@ -64,10 +88,22 @@ const TERMINOS = {
       'Un supuesto para explorar la red: qué trenes del horario pasarían por un tramo si se cerrara un día, a unas horas. No es un aviso ni una previsión.',
     ver: ['sin-circulacion'],
   },
+  'control-de-trafico-centralizado': {
+    nombre: 'Control de tráfico centralizado (CTC)',
+    breve:
+      'Las señales y los desvíos de las estaciones de un tramo se manejan a distancia desde un puesto de mando, sin que haga falta una persona en cada estación.',
+    ver: ['quien-dirige-la-circulacion', 'puesto-de-mando'],
+  },
   electrificacion: {
     nombre: 'Electrificación',
     breve:
       'La forma en que la línea da corriente a los trenes eléctricos, por el cable que va sobre la vía (la catenaria). En España la alta velocidad usa 25.000 voltios en corriente alterna («25 kV») y la mayor parte de la red convencional, 3.000 voltios en corriente continua («3 kV CC»).',
+  },
+  ertms: {
+    nombre: 'ERTMS',
+    breve:
+      'El sistema europeo común de protección del tren. Supervisa de forma continua la velocidad a la que puede ir el tren y lo frena si la supera. En el nivel 1 la información le llega por balizas en la vía; en el nivel 2, por radio.',
+    ver: ['sistemas-que-vigilan-al-tren', 'lzb', 'asfa'],
   },
   estacion: {
     nombre: 'Estación',
@@ -84,6 +120,12 @@ const TERMINOS = {
     breve:
       'Línea de la red que ya existía antes de la alta velocidad, de ancho ibérico. La comparten trenes de media y larga distancia, cercanías y mercancías, a velocidades más bajas.',
     ver: ['alta-velocidad', 'ancho-de-via'],
+  },
+  lzb: {
+    nombre: 'LZB',
+    breve:
+      'Sistema de protección del tren de origen alemán. Supervisa de forma continua la velocidad a la que puede ir el tren, se la muestra al maquinista en la cabina y lo frena si la supera. En España equipa la alta velocidad Madrid – Sevilla.',
+    ver: ['sistemas-que-vigilan-al-tren', 'ertms', 'asfa'],
   },
   operador: {
     nombre: 'Operador',
@@ -114,11 +156,22 @@ const TERMINOS = {
     breve: 'La hora a la que el tren recorre el tramo sale directamente del horario, porque para en las dos estaciones que lo delimitan.',
     ver: ['horario-publicado', 'paso-estimado'],
   },
+  'proteccion-del-tren': {
+    nombre: 'Protección del tren',
+    breve:
+      'Los sistemas que repiten o sustituyen en la cabina lo que indican las señales y que actúan sobre el freno si no se atienden. En España son el ASFA, el LZB y el ERTMS.',
+    ver: ['sistemas-que-vigilan-al-tren', 'asfa', 'lzb', 'ertms'],
+  },
   'puesto-de-banalizacion': {
     nombre: 'Puesto de banalización',
     breve:
       'Punto de una línea de vía doble con desvíos para pasar de una vía a la otra. Permite que los trenes circulen por cualquiera de las dos vías en los dos sentidos, por ejemplo para sortear un trecho en obras.',
     ver: ['via-doble'],
+  },
+  'puesto-de-mando': {
+    nombre: 'Puesto de mando',
+    breve: 'Centro del administrador de la infraestructura desde el que se sigue y se regula en tiempo real la circulación de los trenes de una zona.',
+    ver: ['quien-dirige-la-circulacion', 'control-de-trafico-centralizado'],
   },
   'punto-de-referencia': {
     nombre: 'Punto de referencia',

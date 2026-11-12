@@ -29,6 +29,37 @@ export interface SegmentAttribute {
   testId?: string
 }
 
+interface ValorDicho {
+  texto: string
+  termino?: TerminoId
+}
+
+/** La fuente se consultó y no da el dato para el tramo: se dice tal cual, que no es lo mismo que no tenerlo. */
+const SIN_DATO_PUBLICADO: ValorDicho = { texto: 'Sin dato publicado' }
+
+const PROTECCION_TREN: Record<string, ValorDicho> = {
+  asfa: { texto: 'ASFA', termino: 'asfa' },
+  lzb_asfa: { texto: 'LZB y ASFA', termino: 'lzb' },
+  ertms_n1: { texto: 'ERTMS de nivel 1', termino: 'ertms' },
+  ertms_n2: { texto: 'ERTMS de nivel 2', termino: 'ertms' },
+  sin_dato_publicado: SIN_DATO_PUBLICADO,
+}
+
+const BLOQUEO: Record<string, ValorDicho> = {
+  bca: { texto: 'De control automático', termino: 'bloqueo-de-control-automatico' },
+  bab: { texto: 'Automático banalizado', termino: 'bloqueo-automatico' },
+  bad: { texto: 'Automático de vía doble', termino: 'bloqueo-automatico' },
+  bau: { texto: 'Automático de vía única', termino: 'bloqueo-automatico' },
+  // un tramo que cambia de bloqueo donde Oniel no tiene nodo
+  bab_bad: { texto: 'Automático: banalizado en una parte y de vía doble en otra', termino: 'bloqueo-automatico' },
+  sin_dato_publicado: SIN_DATO_PUBLICADO,
+}
+
+const MANDO: Record<string, ValorDicho> = {
+  ctc: { texto: 'Control de tráfico centralizado', termino: 'control-de-trafico-centralizado' },
+  sin_dato_publicado: SIN_DATO_PUBLICADO,
+}
+
 export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
   {
     clave: 'tracks',
@@ -38,6 +69,32 @@ export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
     lugar: 'esencial',
     sinDato: 'sin dato',
     testId: 'tramo-vias',
+  },
+  // Señalización: lo que da el mapa 4 de la Declaración sobre la Red (docs/datos.md, «Señalización y
+  // protección del tren»). Las claves de cada valor son las de `ATTRIBUTE_RULES` en el backend.
+  {
+    clave: 'proteccion_tren',
+    etiqueta: 'Protección del tren',
+    terminoEtiqueta: 'proteccion-del-tren',
+    formato: (v) => PROTECCION_TREN[String(v)]?.texto ?? String(v),
+    termino: (v) => PROTECCION_TREN[String(v)]?.termino,
+    lugar: 'detalle',
+  },
+  {
+    clave: 'bloqueo',
+    etiqueta: 'Bloqueo',
+    terminoEtiqueta: 'bloqueo',
+    formato: (v) => BLOQUEO[String(v)]?.texto ?? String(v),
+    termino: (v) => BLOQUEO[String(v)]?.termino,
+    lugar: 'detalle',
+  },
+  {
+    clave: 'mando',
+    etiqueta: 'Mando',
+    terminoEtiqueta: 'puesto-de-mando',
+    formato: (v) => MANDO[String(v)]?.texto ?? String(v),
+    termino: (v) => MANDO[String(v)]?.termino,
+    lugar: 'detalle',
   },
 ]
 
@@ -72,4 +129,25 @@ export function attributeRows(
     if (valor || atributo.sinDato !== undefined) filas.push({ atributo, valor })
   }
   return filas
+}
+
+export interface FuenteAtributos {
+  sourceId: string
+  /** El día más reciente en que se comprobó alguno de sus valores. */
+  checkedOn: string | null
+  /** Las etiquetas de los atributos que da, en el orden de la ficha. */
+  etiquetas: string[]
+}
+
+/** Las fuentes de los atributos que un tramo enseña en un sitio de la ficha: una por fuente, con lo que da cada una. */
+export function attributeSources(filas: FilaAtributo[]): FuenteAtributos[] {
+  const porFuente = new Map<string, FuenteAtributos>()
+  for (const { atributo, valor } of filas) {
+    if (!valor?.source_id) continue
+    const fuente = porFuente.get(valor.source_id) ?? { sourceId: valor.source_id, checkedOn: null, etiquetas: [] }
+    fuente.etiquetas.push(atributo.etiqueta)
+    if (valor.checked_on && (!fuente.checkedOn || valor.checked_on > fuente.checkedOn)) fuente.checkedOn = valor.checked_on
+    porFuente.set(valor.source_id, fuente)
+  }
+  return [...porFuente.values()]
 }
