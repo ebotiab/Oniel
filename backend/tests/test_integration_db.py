@@ -1081,6 +1081,101 @@ async def test_unknown_segment_is_404(client: httpx.AsyncClient) -> None:
     assert r.status_code == 404
 
 
+async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
+    client: httpx.AsyncClient,
+) -> None:
+    """Con un fichero por operador hay un punto por conjunto, cada uno con sus trenes."""
+    segment_id = f"{LAV}:ciudad-real:puertollano"
+    body = (await client.get(f"/api/segments/{segment_id}/history")).json()
+    assert body["id"] == segment_id
+    renfe, ouigo = body["points"]
+    assert renfe == {
+        "dataset_id": "renfe-gtfs-av-ld-md-2026-11-08",
+        "source_id": "renfe-gtfs-av-ld-md",
+        "operator_id": "renfe",
+        "retrieved_on": "2026-11-08",
+        "date": "2026-11-13",
+        "trains": 96,
+        "products": [
+            {"product": "AVE", "trains": 50},
+            {"product": "Intercity", "trains": 22},
+            {"product": "ALVIA", "trains": 14},
+            {"product": "AVLO", "trains": 10},
+        ],
+    }
+    # el fichero de Ouigo empieza en junio: su día de referencia es otro, y se cuenta en él
+    assert (ouigo["dataset_id"], ouigo["operator_id"]) == (OUIGO_DATASET_ID, "ouigo")
+    assert (ouigo["retrieved_on"], ouigo["date"]) == ("2026-11-12", "2026-07-17")
+    assert ouigo["trains"] == 14 and ouigo["products"] == [{"product": "Ouigo", "trains": 14}]
+    # cada punto cuenta los mismos trenes que la ficha del tramo ese día
+    for point in body["points"]:
+        services = (
+            await client.get(f"/api/segments/{segment_id}/services", params={"date": point["date"]})
+        ).json()
+        mine = [
+            p for p in services["passes"] if p["service"]["operator_id"] == point["operator_id"]
+        ]
+        assert len(mine) == point["trains"]
+
+    node = (await client.get("/api/nodes/ciudad-real/history")).json()
+    assert node["id"] == "ciudad-real"
+    assert [(p["operator_id"], p["date"], p["trains"]) for p in node["points"]] == [
+        ("renfe", "2026-11-13", 56),
+        ("ouigo", "2026-07-17", 0),  # Ouigo no para en Ciudad Real: cero, que también es un dato
+    ]
+    assert node["points"][0]["products"][:2] == [
+        {"product": "Intercity", "trains": 20},
+        {"product": "MD", "trains": 14},
+    ]
+    assert node["points"][1]["products"] == []
+    # y los mismos que «Trenes que paran aquí»
+    calls = (await client.get("/api/nodes/ciudad-real/services")).json()["calls"]
+    assert len(calls) == 56
+    madrid = (await client.get("/api/nodes/madrid-puerta-de-atocha/history")).json()["points"]
+    calls = (await client.get("/api/nodes/madrid-puerta-de-atocha/services")).json()["calls"]
+    assert madrid[0]["trains"] == sum(c["operator_id"] == "renfe" for c in calls)
+    # un apeadero sin trenes tiene sus puntos, a cero
+    urda = (await client.get("/api/nodes/urda/history")).json()["points"]
+    assert [p["trains"] for p in urda] == [0, 0]
+
+    assert (await client.get("/api/nodes/no-existe/history")).status_code == 404
+    assert (await client.get("/api/segments/no-existe/history")).status_code == 404
+
+
+async def test_snapshot_history_matches_the_api(
+    client: httpx.AsyncClient, dsn: str, tmp_path: Path
+) -> None:
+    """`historico/` lleva, por nodo y por tramo, lo mismo que responde `/history`."""
+    from oniel.db.pool import connect
+    from oniel.export.snapshot import export_snapshot, safe_name
+
+    async with connect(dsn) as conn:
+        await export_snapshot(conn, tmp_path)
+    network = (await client.get("/api/network")).json()
+    node_ids = {n["id"] for n in network["nodes"]}
+    segment_ids = {s["id"] for s in network["segments"]}
+    assert {p.stem for p in (tmp_path / "historico" / "nodes").iterdir()} == node_ids
+    assert {p.stem for p in (tmp_path / "historico" / "segments").iterdir()} == {
+        safe_name(s) for s in segment_ids
+    }
+    for kind, entity_id in [
+        ("nodes", "ciudad-real"),
+        ("nodes", "cordoba"),
+        ("segments", f"{LAV}:ciudad-real:puertollano"),
+        ("segments", f"{CONV}:andujar:villa-del-rio"),
+    ]:
+        exported = json.loads(
+            (tmp_path / "historico" / kind / f"{safe_name(entity_id)}.json").read_text("utf-8")
+        )
+        assert exported == (await client.get(f"/api/{kind}/{entity_id}/history")).json()
+        assert exported["points"], entity_id
+    # el recuento compacto por conjunto, que lee el resumen del refresco, sigue en su sitio
+    counts = json.loads(
+        (tmp_path / "historico" / OUIGO_DATASET_ID / "segment-counts.json").read_text("utf-8")
+    )
+    assert counts["date"] == "2026-07-17"
+
+
 async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncClient) -> None:
     network = (await client.get("/api/network")).json()
     index = (await client.get("/api/lines")).json()

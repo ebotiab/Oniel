@@ -16,6 +16,7 @@ import type {
   NetworkIndexOut,
   NodeServicesOut,
   SegmentServicesOut,
+  ServiceHistoryOut,
 } from './types'
 
 export type DataMode = 'api' | 'estatico'
@@ -160,6 +161,21 @@ export async function fetchNodeServices(nodeId: string, date?: string): Promise<
     return getJson(`${API_BASE}/api/nodes/${encodeURIComponent(nodeId)}/services${q}`)
   }
   return getJson(`/data/nodes/${encodeURIComponent(nodeId)}.json`)
+}
+
+/**
+ * Los trenes de una estación o de un tramo según cada fichero de horarios importado. Si la API no
+ * lo sirve (una versión anterior, o un fallo), se lee de la instantánea: es el mismo contenido.
+ */
+export async function fetchHistory(kind: 'nodes' | 'segments', id: string): Promise<ServiceHistoryOut> {
+  if (currentMode() === 'api') {
+    try {
+      return await getJson(`${API_BASE}/api/${kind}/${encodeURIComponent(id)}/history`)
+    } catch {
+      /* se intenta con la instantánea */
+    }
+  }
+  return getJson(`/data/historico/${kind}/${safeName(id)}.json`)
 }
 
 const alternativesCache = new Map<string, Promise<AlternativesOut>>()

@@ -8,6 +8,7 @@ import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
 import { FilasAtributos } from './SegmentAttributes'
+import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
@@ -161,6 +162,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
             </p>
           </section>
         )}
+        <ServiceHistory kind="segments" id={segment.id} operators={operators} sources={sources} conFuente />
         {past.length > 0 && (
           <section className="anteriores" data-testid="interrupciones-anteriores">
             <p className="sobre">Interrupciones anteriores en este tramo</p>

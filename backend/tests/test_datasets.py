@@ -248,6 +248,84 @@ async def test_counts_and_coverage_come_from_the_active_dataset(
 
 @requires_db
 @in_db
+async def test_history_compares_the_two_datasets_each_on_its_reference_day(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    """Dos ficheros de la misma fuente: la ficha puede decir cuántos trenes daba cada uno."""
+    from oniel.repo import datasets_repo, services_repo
+
+    segment_id, removed = two_datasets["segment_id"], two_datasets["removed"]
+    assert await datasets_repo.reference_dates(conn) == {
+        FEED_DATASET_ID: REFERENCE,
+        NEWER_ID: REFERENCE,
+    }
+    old, new = await services_repo.segment_history(conn, segment_id)
+    assert (old.dataset_id, old.retrieved_on) == (FEED_DATASET_ID, dt.date(2026, 11, 8))
+    assert (new.dataset_id, new.retrieved_on) == (NEWER_ID, dt.date(2026, 11, 20))
+    assert old.source_id == new.source_id == FEED_SOURCE_ID
+    assert old.operator_id == new.operator_id == FEED_OPERATOR_ID
+    assert old.date == new.date == REFERENCE
+    # al fichero nuevo le falta un tren del día de referencia: uno menos, y de su tipo
+    assert old.trains == two_datasets["before"][segment_id]
+    assert new.trains == old.trains - 1
+    by_product = {p.product: p.trains for p in new.products}
+    assert {p.product: p.trains for p in old.products} == {
+        **by_product,
+        removed.product: by_product.get(removed.product, 0) + 1,
+    }
+    assert sum(p.trains for p in new.products) == new.trains
+    # el punto del conjunto activo cuenta lo mismo que la ficha del tramo
+    assert new.trains == len(await services_repo.passes_on_segment(conn, segment_id, REFERENCE))
+
+    # en una estación en la que paraba el tren retirado, también uno menos
+    found = await services_repo.fetch_service(conn, removed.id)
+    assert found is not None
+    node_id = next(s.node_id for s in found[1] if s.node_id)
+    old, new = await services_repo.node_history(conn, node_id)
+    assert new.trains == old.trains - 1
+    assert new.trains == len(await services_repo.calls_at_node(conn, node_id, REFERENCE))
+    # y en un tramo por el que no pasaba, los mismos
+    other = "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio"
+    assert removed.id not in {
+        d.service.id for d in await services_repo.passes_on_segment(conn, other, REFERENCE)
+    }
+    old, new = await services_repo.segment_history(conn, other)
+    assert old.trains == new.trains > 0 and old.products == new.products
+
+
+@requires_db
+@in_db
+async def test_each_dataset_is_counted_on_its_own_reference_day(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    """Si el día de referencia de un fichero es otro, su punto lleva ese día y sus trenes."""
+    from oniel.repo import datasets_repo, services_repo
+
+    segment_id = two_datasets["segment_id"]
+    later = dt.date(2026, 11, 20)
+    transaction = conn.transaction()
+    await transaction.start()
+    try:
+        # el fichero nuevo, como los que publica Renfe cada noche, ya no trae los días pasados
+        await conn.execute(
+            "DELETE FROM service_dates WHERE dataset_id = $1 AND service_date < $2", NEWER_ID, later
+        )
+        refs = await datasets_repo.reference_dates(conn)
+        assert refs[FEED_DATASET_ID] == REFERENCE and refs[NEWER_ID] >= later
+        old, new = await services_repo.segment_history(conn, segment_id)
+        assert (old.date, new.date) == (REFERENCE, refs[NEWER_ID])
+        assert old.trains == two_datasets["before"][segment_id]
+        assert new.trains == len(
+            await services_repo.passes_on_segment(conn, segment_id, refs[NEWER_ID])
+        )
+        # los días ya calculados se pueden pasar, como hace la exportación
+        assert await services_repo.segment_history(conn, segment_id, refs) == [old, new]
+    finally:
+        await transaction.rollback()
+
+
+@requires_db
+@in_db
 async def test_counts_are_split_by_operator_and_the_reference_day_is_common_to_all(
     conn: asyncpg.Connection, two_datasets: dict[str, Any]
 ) -> None:
@@ -415,8 +493,35 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert history[FEED_DATASET_ID]["counts"] == two_datasets["before"]
     assert history[NEWER_ID]["counts"] == current["counts"]
     assert history[NEWER_ID]["date"] == current["date"] == REFERENCE.isoformat()
+    # y, por tramo y por nodo, los trenes de cada conjunto: lo que compara la ficha
+    by_segment = json.loads(
+        (
+            tmp_path
+            / "historico"
+            / "segments"
+            / f"{two_datasets['segment_id']}.json".replace(":", "--")
+        ).read_text(encoding="utf-8")
+    )
+    assert by_segment["id"] == two_datasets["segment_id"]
+    assert [(p["dataset_id"], p["date"]) for p in by_segment["points"]] == [
+        (FEED_DATASET_ID, REFERENCE.isoformat()),
+        (NEWER_ID, REFERENCE.isoformat()),
+    ]
+    first, second = (p["trains"] for p in by_segment["points"])
+    assert second == first - 1
     # un conjunto que deja de estar declarado se retira, también de la instantánea
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
     assert await conn.fetchval("SELECT count(*) FROM services") == 814
-    assert [p.name for p in (tmp_path / "historico").iterdir()] == [FEED_DATASET_ID]
+    assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
+        [FEED_DATASET_ID, "nodes", "segments"]
+    )
+    by_segment = json.loads(
+        (
+            tmp_path
+            / "historico"
+            / "segments"
+            / f"{two_datasets['segment_id']}.json".replace(":", "--")
+        ).read_text(encoding="utf-8")
+    )
+    assert [p["dataset_id"] for p in by_segment["points"]] == [FEED_DATASET_ID]
