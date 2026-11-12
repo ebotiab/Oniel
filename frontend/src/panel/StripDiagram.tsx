@@ -61,8 +61,13 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
 
   // Rótulos: cada uno quiere la altura de su nodo, pero dos consecutivos han de distar al menos lo que
   // ocupan sus letras (descendentes del de arriba, ascendentes del de abajo) y un margen. Los que no
-  // caben se reparten centrados en torno a sus nodos; el esquema compacto no rotula los secundarios.
-  const labelled = nodes.filter((n) => !(compact && n.rank === 'secundario')).sort((a, b) => a.km - b.km)
+  // caben se reparten centrados en torno a sus nodos; el esquema compacto no rotula los secundarios,
+  // salvo los dos extremos de la línea: sin ellos no se sabría de dónde sale ni a dónde llega (el
+  // ramal de Jaén empieza en Espelúy, que es una estación menor de la línea de la que sale).
+  const kms = nodes.map((n) => n.km)
+  const isEnd = (n: NodeOut) => n.km === Math.min(...kms) || n.km === Math.max(...kms)
+  const unlabelled = (n: NodeOut) => compact && n.rank === 'secundario' && !isEnd(n)
+  const labelled = nodes.filter((n) => !unlabelled(n)).sort((a, b) => a.km - b.km)
   const anchors = labelled.map((n) => y(n.km) + baseline(n))
   const gaps = labelled.slice(1).map((n, i) => LABEL_DESCENT * fontSize(labelled[i]!) + LABEL_ASCENT * fontSize(n) + LABEL_PADDING)
   const labelShift = new Map<string, number>()
@@ -167,7 +172,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
         const stroke = sel ? 'var(--senal-azul)' : 'var(--tinta)'
         const station = n.kind === 'estacion'
         const secondary = n.rank === 'secundario'
-        const hideLabel = compact && secondary
+        const hideLabel = unlabelled(n)
         const hasStub = n.kind === 'bifurcacion' || withConnections.has(n.id)
         return (
           <g

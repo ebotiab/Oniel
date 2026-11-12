@@ -57,12 +57,13 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
         values=frozenset({"asfa", "lzb_asfa", "ertms_n1", "ertms_n2", SIN_DATO_PUBLICADO}),
     ),
     # Bloqueo: de control automático (BCA), automático banalizado (BAB), de vía doble (BAD) o
-    # de vía única (BAU). ``bab_bad`` es un tramo que cambia de uno a otro donde no hay nodo.
+    # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` es un tramo
+    # que cambia de uno a otro donde no hay nodo.
     BLOQUEO: AttributeRule(
         value_type=str,
         required=True,
         sourced=True,
-        values=frozenset({"bca", "bab", "bad", "bau", "bab_bad", SIN_DATO_PUBLICADO}),
+        values=frozenset({"bca", "bab", "bad", "bau", "blau", "bab_bad", SIN_DATO_PUBLICADO}),
     ),
     # Mando: desde dónde se gobiernan las señales y los desvíos del tramo.
     MANDO: AttributeRule(

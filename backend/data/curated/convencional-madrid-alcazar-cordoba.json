@@ -95,7 +95,6 @@
     {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},
     {"id": "conv-alcazar-levante", "node_id": "alcazar-de-san-juan", "name": "Línea convencional Alcázar–Albacete", "towards": "Albacete, Valencia y Alicante", "status": "no_cargada", "sketch": [[-3.205371, 39.395663], [-3.12, 39.39], [-2.78, 39.28], [-2.5, 39.2]]},
     {"id": "conv-linares-almeria", "node_id": "linares-baeza", "name": "Línea Linares-Baeza–Almería", "towards": "Jódar, Moreda, Guadix y Almería", "status": "no_cargada", "sketch": [[-3.589140, 38.069085], [-3.5, 38.0], [-3.35, 37.92], [-3.31, 37.75]]},
-    {"id": "conv-espeluy-jaen", "node_id": "espeluy", "name": "Línea Espelúy–Jaén", "towards": "Mengíbar y Jaén", "status": "no_cargada", "sketch": [[-3.832160, 38.010259], [-3.80, 37.98], [-3.79, 37.86], [-3.79, 37.78]]},
     {"id": "conv-cordoba-sevilla", "node_id": "cordoba", "name": "Línea convencional Córdoba–Sevilla", "towards": "Posadas, Palma del Río, Lora del Río, Sevilla y Cádiz", "status": "no_cargada", "sketch": [[-4.789453, 37.888291], [-4.84, 37.87], [-4.92, 37.85], [-5.11, 37.80], [-5.29, 37.72]]}
   ],
   "stop_mappings": {
@@ -172,8 +171,8 @@
     "56100": {"exits": ["linares-baeza"]},
     "56200": {"exits": ["linares-baeza"]},
     "56312": {"exits": ["linares-baeza"]},
-    "03001": {"exits": ["espeluy"]},
-    "03100": {"exits": ["espeluy"]},
+    "03001": {"exits": ["espeluy"], "via": {"line": "espeluy-jaen", "node": "espeluy"}},
+    "03100": {"exits": ["espeluy"], "via": {"line": "espeluy-jaen", "node": "espeluy"}},
     "50501": {"exits": ["cordoba"]},
     "50502": {"exits": ["cordoba"]},
     "50504": {"exits": ["cordoba"]},
@@ -217,6 +216,20 @@
       "stop_mappings": {
         "50500": {"exits": ["manzanares"], "via": [{"line": "manzanares-ciudad-real", "node": "manzanares"}, {"line": "lav-madrid-sevilla", "node": "ciudad-real"}]}
       }
+    },
+    {
+      "id": "cordoba-jaen-sin-paradas",
+      "description": "Media Distancia entre Jaén y Córdoba, Sevilla o Cádiz que no paran entre Córdoba y Jaén. Solo tienen una parada en esta línea (Córdoba), así que no pasan el filtro de corredor, pero la recorren entre Córdoba y Espelúy, donde toman la línea de Jaén. Por esta línea se resuelven entre Córdoba y Jaén, saliendo por Espelúy.",
+      "consecutive_stop_ids": ["50500", "03100"],
+      "from_stop_id": "50500",
+      "to_stop_id": "03100"
+    },
+    {
+      "id": "linares-baeza-mengibar",
+      "description": "Media Distancia entre Linares-Baeza y Mengíbar-Artichuela, sin más paradas. Solo tienen una parada en esta línea (Linares-Baeza), así que no pasan el filtro de corredor, pero la recorren entre Linares-Baeza y Espelúy, donde toman la línea de Jaén. Por esta línea se resuelven entre sus dos paradas, saliendo por Espelúy.",
+      "consecutive_stop_ids": ["50300", "03001"],
+      "from_stop_id": "50300",
+      "to_stop_id": "03001"
     }
   ]
 }
