@@ -175,6 +175,16 @@ test.describe('Trazo de la vía', () => {
     await encuadraLaViaUnica(page)
   })
 
+  test('en escritorio la escala no queda detrás de la leyenda aunque la atribución esté desplegada', async ({ page }, info) => {
+    test.skip(info.project.name === 'movil', 'la leyenda sobre el mapa solo existe en escritorio')
+    await mapaListo(page)
+    const atribucion = page.locator('.maplibregl-ctrl-attrib')
+    await expect(atribucion).toHaveClass(/maplibregl-compact-show/)
+    const [leyenda, escala, a] = [await page.locator('.leyenda').boundingBox(), await page.locator('.maplibregl-ctrl-scale').boundingBox(), await atribucion.boundingBox()]
+    // la escala va en el renglón de la atribución, a su izquierda y por debajo de la leyenda
+    expect(leyenda && escala && a && escala.y >= leyenda.y + leyenda.height && escala.x + escala.width <= a.x).toBe(true)
+  })
+
   test('en el móvil la escala y el botón de la atribución caben en un renglón tras el primer toque', async ({ page }, info) => {
     test.skip(info.project.name !== 'movil', 'en escritorio hay sitio para las dos')
     await mapaListo(page)

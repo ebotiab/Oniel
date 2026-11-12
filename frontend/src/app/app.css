@@ -13,6 +13,15 @@
   top: 64px;
 }
 
+/* La escala y la atribución van en un solo renglón, abajo a la derecha: en escritorio caben las dos bajo la
+   leyenda; en el móvil, cuando la atribución está desplegada, no caben y la escala sube al renglón de encima. */
+.maplibregl-ctrl-bottom-right {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
 .maplibregl-ctrl-group {
   box-shadow: var(--sombra);
   border: 1px solid var(--regla);
@@ -945,14 +954,8 @@
   grid-template-columns: 1fr 1fr;
 }
 
-/* La franja de mapa que deja la hoja es baja: la escala y el botón de la atribución van en un solo renglón.
-   Con la atribución desplegada no caben juntas y la escala sube al renglón de encima. */
 .movil .maplibregl-ctrl-bottom-right {
   bottom: 152px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: flex-end;
 }
 
 .movil.hoja-abierta .maplibregl-ctrl-bottom-right {
