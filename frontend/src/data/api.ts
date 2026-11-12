@@ -189,7 +189,10 @@ export function fetchAlternatives(date?: string): Promise<AlternativesOut> {
   const key = api ? `api:${date ?? ''}` : 'estatico'
   let pending = alternativesCache.get(key)
   if (!pending) {
-    pending = getJson<AlternativesOut>(api ? `${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}` : '/data/alternatives.json')
+    const estatico = () => getJson<AlternativesOut>('/data/alternatives.json')
+    // Vercel publica el visor unos minutos antes de que Render despliegue la API: si la API aún no
+    // tiene esta ruta (o falla), vale la instantánea, que lleva el mismo cálculo del día de referencia.
+    pending = api ? getJson<AlternativesOut>(`${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}`).catch(estatico) : estatico()
     alternativesCache.set(key, pending)
     pending.catch(() => alternativesCache.delete(key))
   }
