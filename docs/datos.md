@@ -4,7 +4,7 @@
 
 | Id | Qué aporta | Editor | Licencia | Fecha de consulta |
 |---|---|---|---|---|
-| `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-08 |
+| `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-12 |
 | `ouigo-gtfs-nap` | Horarios de alta velocidad de Ouigo España (GTFS) | OUIGO España, en el Punto de Acceso Nacional del Ministerio de Transportes y Movilidad Sostenible | Licencia de datos abiertos del Ministerio (nap.transportes.gob.es/licencia-datos) | 2026-11-12 |
 | `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-11 |
 | `osm-relation-1254828` | Geometría de la LAV Madrid–Sevilla (vías con `ref=010`, operador Adif) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
@@ -224,6 +224,7 @@ Los ficheros se declaran en la lista `feeds` de `backend/data/curated/sources.js
 | Conjunto | Fuente | Operador | Descargado | Cubre |
 |---|---|---|---|---|
 | `renfe-gtfs-av-ld-md-2026-11-08` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-08 | del 7 de noviembre de 2026 al 29 de septiembre de 2027 |
+| `renfe-gtfs-av-ld-md-2026-11-12` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-12 | del 11 de noviembre de 2026 al 29 de septiembre de 2027 |
 | `ouigo-gtfs-nap-2026-11-12` | `ouigo-gtfs-nap` | Ouigo | 2026-11-12 | del 26 de junio al 12 de diciembre de 2026 |
 
 Una entrada de `feeds` admite además `product` (el nombre con el que se rotulan todos los trenes del fichero) y `stop_id_prefix` (un prefijo que se quita de sus códigos de parada); las usa el fichero de Ouigo.
