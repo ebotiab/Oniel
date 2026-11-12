@@ -28,7 +28,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
-    await expect(page.getByTestId('nodo-lineas')).toContainText('Linares-Baeza – Moreda – Granada')
+    await expect(page.getByTestId('nodo-lineas')).toContainText(/Madrid – Córdoba por Alcázar de San Juan\s*convencional\s*Linares-Baeza – Granada por Moreda\s*convencional/)
   })
 
   test('el tramo entre Moreda y la bifurcación dice que no lleva ningún tren', async ({ page }) => {
