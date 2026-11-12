@@ -3,9 +3,9 @@ import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 import type { Map as MapLibreMap } from 'maplibre-gl'
 
-import { annotationHref, dibujoDe, leyendaDe } from '../src/app/annotationLayers.ts'
+import { dibujoDe, leyendaDe } from '../src/app/annotationLayers.ts'
 import { activeAnnotations, formatPartialDate, sourceLabels } from '../src/app/annotations.ts'
-import { parseHash, toHash } from '../src/app/state.ts'
+import { annotationHref, parseRoute, routePath } from '../src/app/state.ts'
 import { composeNetwork } from '../src/data/network.ts'
 import type { NetworkIndexOut } from '../src/data/types.ts'
 
@@ -61,10 +61,10 @@ test.describe('Proyectos: datos y registro de capas', () => {
   })
 
   test('la ficha de un proyecto tiene su ruta, que va y vuelve de la URL', () => {
-    const hash = `#/proyecto/${MORA_ALCAZAR}`
-    expect(annotationHref(proyecto(MORA_ALCAZAR))).toBe(hash)
-    expect(parseHash(hash).selection).toEqual({ type: 'anotacion', kind: 'proyecto', id: MORA_ALCAZAR })
-    expect(toHash(parseHash(hash))).toBe(hash)
+    const ruta = `/proyecto/${MORA_ALCAZAR}`
+    expect(annotationHref(proyecto(MORA_ALCAZAR))).toBe(ruta)
+    expect(parseRoute(ruta).selection).toEqual({ type: 'anotacion', kind: 'proyecto', id: MORA_ALCAZAR })
+    expect(routePath(parseRoute(ruta))).toBe(ruta)
   })
 
   test('las fechas a medias se dicen como se conocen, y el BOE se cita por su identificador', () => {
@@ -83,7 +83,7 @@ test.describe('Proyectos: la vista', () => {
   })
 
   test('la ficha de un proyecto dice el estado, los hitos con su fuente y cuándo se comprobó', async ({ page }) => {
-    await page.goto(`/#/proyecto/${MORA_ALCAZAR}`)
+    await page.goto(`/proyecto/${MORA_ALCAZAR}`)
     const ficha = page.getByTestId('ficha-proyecto')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('ficha-proyecto-estado')).toHaveText(/^Proyecto\s*sin ejecutar$/)
@@ -97,14 +97,14 @@ test.describe('Proyectos: la vista', () => {
     await expect(hitos.nth(2).getByRole('link')).toHaveAttribute('href', 'https://www.boe.es/diario_boe/txt.php?id=BOE-B-2008-232070')
     await expect(page.getByTestId('ficha-proyecto-fuentes')).toContainText('Comprobado el 12 de noviembre de 2026.')
     // la ruta se conserva y «Toda la red» vuelve a la vista de la red
-    await expect(page).toHaveURL(new RegExp(`#/proyecto/${MORA_ALCAZAR}$`))
+    await expect(page).toHaveURL(new RegExp(`/proyecto/${MORA_ALCAZAR}$`))
     await ficha.getByRole('button', { name: '← Toda la red' }).click()
     await expect(page.getByTestId('ficha-proyecto')).toHaveCount(0)
-    await expect(page).toHaveURL(/#\/$/)
+    await expect(page).toHaveURL(/\/$/)
   })
 
   test('un proyecto en obras sobre una vía cargada se explica en la ficha de sus tramos', async ({ page }) => {
-    await page.goto(`/#/tramo/${TRAMO_CON_OBRAS}`)
+    await page.goto(`/tramo/${TRAMO_CON_OBRAS}`)
     const bloque = page.getByTestId('proyecto')
     await expect(bloque).toHaveCount(1)
     await expect(bloque).toContainText('en obras')
@@ -115,12 +115,12 @@ test.describe('Proyectos: la vista', () => {
     await expect(page.getByTestId('interrupcion')).toHaveCount(1)
     await page.getByTestId('proyecto-enlace').click()
     await expect(page.getByTestId('ficha-proyecto')).toBeVisible()
-    await expect(page).toHaveURL(new RegExp(`#/proyecto/${TUNELES}$`))
+    await expect(page).toHaveURL(new RegExp(`/proyecto/${TUNELES}$`))
     await expect(page.getByTestId('ficha-proyecto-fechas')).toContainText('Final previsto: otoño de 2027.')
   })
 
   test('el panel de cobertura enumera los proyectos y lleva a la ficha de cada uno', async ({ page }) => {
-    await page.goto('/#/cobertura')
+    await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
     await expect(lista.getByTestId('proyecto')).toHaveCount(5)
     await expect(lista).toContainText('Variante de Loja')
@@ -155,7 +155,7 @@ test.describe('Proyectos: la vista', () => {
       return { x: caja.left + p.x, y: caja.top + p.y }
     })
     await page.mouse.click(punto.x, punto.y)
-    await expect(page).toHaveURL(new RegExp(`#/proyecto/${MORA_ALCAZAR}$`))
+    await expect(page).toHaveURL(new RegExp(`/proyecto/${MORA_ALCAZAR}$`))
     await expect(page.getByTestId('ficha-proyecto')).toBeAttached()
   })
 })

@@ -80,7 +80,7 @@ Cada recorrido lleva:
 
 **La API.** `GET /api/routes?from=<nodo>&to=<nodo>` devuelve los recorridos y el método. Admite `scenario` (la cadena corta o el JSON), `max_changes`, `max_ratio`, `date` (cada recorrido lleva entonces las interrupciones vigentes ese día en sus tramos) y `avoid_interruptions=true` (con fecha, los tramos interrumpidos se cierran además). `POST /api/simulations/closure` acepta también `scenario`: el cierre del tramo se suma a sus otras modificaciones al buscar la alternativa.
 
-**El visor.** `frontend/src/routing/` hace el mismo cálculo en el cliente sobre la red que compone el visor a partir del índice (`index.json`, que lleva todas las líneas, nodos y tramos), para que el modo estático no dependa de la API; su interfaz es el comparador de recorridos (véase «Comparar recorridos»). La ruta `#/escenario/<cadena>` abre un escenario: hoy, si cierra un tramo, abre la simulación de ese cierre y la URL lo conserva.
+**El visor.** `frontend/src/routing/` hace el mismo cálculo en el cliente sobre la red que compone el visor a partir del índice (`index.json`, que lleva todas las líneas, nodos y tramos), para que el modo estático no dependa de la API; su interfaz es el comparador de recorridos (véase «Comparar recorridos»). La ruta `/escenario/<cadena>` abre un escenario: hoy, si cierra un tramo, abre la simulación de ese cierre y la URL lo conserva.
 
 **Paridad.** Servidor y cliente tienen que dar lo mismo. `backend/tests/test_routing.py` resuelve diez casos sobre la instantánea y los compara con `frontend/e2e/fixtures/rutas-paridad.json`; `frontend/e2e/rutas.spec.ts` resuelve los mismos casos en el cliente contra el mismo fichero y, con la API arrancada, compara además con `GET /api/routes`. Si el cálculo cambia a propósito, el fichero se regenera con `ONIEL_UPDATE_FIXTURES=1 uv run pytest tests/test_routing.py`. Los redondeos usan la misma fórmula en los dos lados.
 
@@ -88,7 +88,7 @@ Límites: el grafo no distingue anchos de vía ni sentidos, no sabe por qué ví
 
 ## Comparar recorridos
 
-El comparador del visor (`#/recorridos/<desde>/<hasta>`) responde a «¿cómo se va de una estación a otra y qué diferencia hay entre un camino y otro?». Calcula en el cliente, con el grafo de `frontend/src/routing/`, así que funciona igual sin API; lo que decide cómo se presentan los recorridos está en `frontend/src/app/recorridos.ts`.
+El comparador del visor (`/recorridos/<desde>/<hasta>`) responde a «¿cómo se va de una estación a otra y qué diferencia hay entre un camino y otro?». Calcula en el cliente, con el grafo de `frontend/src/routing/`, así que funciona igual sin API; lo que decide cómo se presentan los recorridos está en `frontend/src/app/recorridos.ts`.
 
 **Qué recorridos enseña.** Los tres primeros de `find_routes` con su criterio por defecto: sin tope útil de líneas, descartados los que dan un rodeo de más del doble respecto a otro más corto, del más corto al más largo. Tres bastan para los casos que hoy tienen sentido y dejan fuera los zigzags. La lista real con las líneas cargadas (la última fila, desde que están las dos de alta velocidad de Córdoba a Granada; el camino convencional a Granada por Linares-Baeza y Moreda aún no está cargado, así que los tres recorridos llegan por Antequera):
 
@@ -105,7 +105,7 @@ El detalle dice cuántos quedan fuera por ser el cuarto o posteriores; los desca
 
 **Recorridos cortados.** Las interrupciones vigentes hoy y los cierres de un escenario no quitan recorridos de la lista: los señalan, para que se vea cuál se pierde y cuál queda. Si el más corto está cortado, el primero que no lo está se marca como «el más corto que no está cortado». Si todos los que se enseñan están cortados, se busca además el más corto con esos tramos cerrados, mida lo que mida, y se añade a la lista (Manzanares – Ciudad Real con un tramo cerrado: 366,9 km por Madrid). Si no existe, se dice. El 11 de noviembre de 2026, con la alta velocidad interrumpida entre la Bifurcación La Sagra y Córdoba y la convencional entre Almuradiel-Viso del Marqués y Alcolea de Córdoba, los tres recorridos entre Madrid y Córdoba están cortados y no hay otro; entre Madrid y Ciudad Real, el de la alta velocidad está cortado y el de Manzanares queda como alternativa.
 
-**Escenario.** La ruta admite un escenario detrás de las estaciones (`#/recorridos/madrid-puerta-de-atocha/ciudad-real/c~lav-madrid-sevilla:urda:ciudad-real`). Sus enlaces esbozados y sus cambios de velocidad cambian la red; sus cierres se tratan como cortes. Un escenario que no encaja con la red se ignora y el panel lo dice. Todavía no hay un conmutador de enlaces hipotéticos, porque no hay proyectos con trazado cargados (#18): cuando los haya, cada uno será un escenario que se añade a esta ruta. Un enlace esbozado no se dibuja en el mapa.
+**Escenario.** La ruta admite un escenario detrás de las estaciones (`/recorridos/madrid-puerta-de-atocha/ciudad-real/c~lav-madrid-sevilla:urda:ciudad-real`). Sus enlaces esbozados y sus cambios de velocidad cambian la red; sus cierres se tratan como cortes. Un escenario que no encaja con la red se ignora y el panel lo dice. Todavía no hay un conmutador de enlaces hipotéticos, porque no hay proyectos con trazado cargados (#18): cuando los haya, cada uno será un escenario que se añade a esta ruta. Un enlace esbozado no se dibuja en el mapa.
 
 **Trenes directos.** Son los servicios que paran en las dos estaciones, en ese sentido, el día de referencia de los horarios (las paradas de cada nodo: `nodes/<id>.json` o `GET /api/nodes/{id}/services`), siempre que en la primera se pueda subir y en la segunda bajar: algunos trenes solo dejan o solo recogen viajeros en una parada (de Ciudad Real a Madrid pasan 23 y sirven 12). Es el mismo criterio y el mismo número que los destinos directos de la ficha de cada estación (`docs/datos.md`, «Destinos directos»). El tiempo del más rápido es el publicado, de la salida de una a la llegada a la otra. Un tren se asigna a un recorrido cuando pasa por el primer y el último tramo de cada línea que el recorrido encadena (los pasos de cada tramo: `segments/<id>.json` o `GET /api/segments/{id}/services`). El 13 de noviembre de 2026 hay 55 directos de Madrid a Córdoba, 6 de ellos de Ouigo: 43 por la alta velocidad (el más rápido, 1 h 44 min, frente a 1 h 21 min estimados sin paradas) y 12 por Manzanares y Ciudad Real (3 h 45 min, frente a 2 h 28 min). Son trenes del horario publicado: si el recorrido está cortado, la línea roja de la ficha lo dice.
 
@@ -125,25 +125,27 @@ Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tra
 **Cómo se calcula.**
 
 1. De cada tren del día se toman los tramos cargados que recorre (`services_repo.service_paths`; son los mismos pasos que cuentan los recuentos por tramo y por operador).
-2. Para un tramo, el **recorrido** de cada tren es el trozo seguido de esos tramos que contiene al que se mira, del nodo por el que el tren entra en las líneas cargadas al nodo por el que sale (`corridor`). Un AVE de Madrid a Málaga entra por Madrid-Puerta de Atocha y sale por la Bifurcación Málaga-Alta Velocidad; un tren de Madrid a Jaén, por Espelúy. Si los tramos de un tren no forman un camino sin bifurcaciones, su recorrido se queda en el propio tramo.
+2. Para un tramo, el **recorrido** de cada tren es el trozo seguido de esos tramos que contiene al que se mira, del nodo por el que el tren entra en las líneas cargadas al nodo por el que sale (`corridor`). Un AVE de Madrid a Málaga entra por Madrid-Puerta de Atocha y sale por la Bifurcación Málaga-Alta Velocidad; un Media Distancia de Jaén a Cádiz entra por Jaén y sale por Córdoba. Si los tramos de un tren no forman un camino sin bifurcaciones, su recorrido se queda en el propio tramo.
 3. Los trenes con el mismo recorrido forman un **grupo**: comparten extremos y camino, así que comparten respuesta.
 4. Con el tramo cerrado (un escenario de un cierre), `find_routes` busca los caminos entre los dos extremos del grupo, sin descartar ninguno por largo. Si hay alguno, el más corto es **el otro camino**, y se compara con el recorrido del tren medido con la misma vara (`route_along`): kilómetros por cada línea y minutos a la velocidad habitual de cada tramo, sin paradas. Si no hay ninguno, el grupo no tiene alternativa.
 
 Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
 
-**Lo que sale** con los trenes del 13 de noviembre de 2026 (229 trenes, 39 tramos):
+**Lo que sale** con los trenes del 13 de noviembre de 2026 (243 trenes, 41 tramos):
 
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
 | Córdoba – Bifurcación Málaga (LAV) | 108 | Ninguno |
 | Bifurcación Málaga – Majarabique (LAV) | 55 | Ninguno |
 | Majarabique – Sevilla-Santa Justa (LAV) | 53 | Ninguno |
+| Espelúy – Mengíbar-Artichuela (línea de Jaén) | 50 | Ninguno |
+| Mengíbar-Artichuela – Jaén (línea de Jaén) | 44 | Ninguno |
 | Ciudad Real – Córdoba (LAV, cuatro tramos) | 108 | Para los 43 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 24 desviados por Manzanares, 7 km y 38 min más |
 | Madrid – Ciudad Real (LAV, cuatro tramos) | 84 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
 | Manzanares – Ciudad Real (tres tramos) | 38 | Para los 24 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
-| Manzanares – Linares-Baeza (convencional) | 18 a 26 | Para los 16 de Madrid a Espelúy, por la alta velocidad hasta Córdoba y de vuelta: 105 km más y 29 min menos |
+| Manzanares – Linares-Baeza (convencional) | 18 a 26 | Para los 16 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 28 min menos |
 
-Los 36 tramos al norte de Córdoba tienen otro camino para todos sus trenes. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
+Los otros 36 tramos tienen otro camino para todos sus trenes. Los cinco que no lo tienen son los tres al sur de Córdoba, donde Oniel solo tiene cargada una línea, y los dos del ramal de Jaén, que acaba en una estación término: ahí la respuesta no depende de qué líneas estén cargadas. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
 
 **La API y la instantánea.** `GET /api/alternatives` (con `?date=` para otro día) devuelve un elemento por tramo: trenes, reparto por operador, cuántos tienen otro camino y cuántos no, y los grupos, del más numeroso al menos, cada uno con sus extremos, lo que mide y tarda su recorrido y, si existe, el otro camino (kilómetros, minutos, diferencia con el recorrido, vía única, líneas y estaciones principales). La instantánea lo lleva en `alternatives.json`, que el visor no pide al arrancar (`docs/datos.md`, «Instantánea estática»). Si la API no tiene la ruta o falla, el visor lee ese fichero: Vercel publica el visor unos minutos antes de que Render despliegue la API, y en ese rato una ruta nueva da 404. El cliente no repite el cálculo: necesitaría los tramos de todos los trenes del día.
 

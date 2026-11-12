@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test.describe('Clave del esquema: cada símbolo dice qué es', () => {
   test('la alta velocidad enseña estación, puestos técnicos, bifurcación y conexión, y cada nombre abre su nota', async ({ page }) => {
-    await page.goto('/#/linea/lav-madrid-sevilla')
+    await page.goto('/linea/lav-madrid-sevilla')
     await expect(page.getByTestId('esquema')).toBeVisible()
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
@@ -25,10 +25,10 @@ test.describe('Clave del esquema: cada símbolo dice qué es', () => {
   })
 
   test('solo salen los símbolos que tiene la línea', async ({ page }) => {
-    await page.goto('/#/linea/manzanares-ciudad-real')
+    await page.goto('/linea/manzanares-ciudad-real')
     await expect(page.getByTestId('esquema')).toBeVisible()
     await expect(page.getByTestId('clave-esquema').getByRole('listitem')).toHaveText(['Estación', 'Conexión con otra línea'])
-    await page.goto('/#/linea/convencional-madrid-alcazar-cordoba')
+    await page.goto('/linea/convencional-madrid-alcazar-cordoba')
     await expect(page.getByTestId('clave-esquema').getByRole('listitem')).toHaveText(['Estación', 'Punto de referencia', 'Bifurcación', 'Conexión con otra línea'])
   })
 })

@@ -10,7 +10,7 @@ async function abrirHoja(page: Page) {
 
 test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
   test('en un tramo el detalle está plegado, se abre y muestra los puntos kilométricos y la fuente', async ({ page }) => {
-    await page.goto(`/#/tramo/${TRAMO}`)
+    await page.goto(`/tramo/${TRAMO}`)
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     // a la vista, sin abrir nada: cuánto mide, a qué velocidad se circula y cuántas vías tiene
@@ -29,7 +29,7 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
   })
 
   test('en un nodo el detalle está plegado, se abre y muestra el punto kilométrico, el código y la fuente', async ({ page }) => {
-    await page.goto('/#/nodo/urda')
+    await page.goto('/nodo/urda')
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha).toBeVisible()
     // lo técnico no es lo primero que se lee
@@ -45,7 +45,7 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
   })
 
   test('el detalle se abre con el teclado y sigue abierto al pasar a otra ficha', async ({ page }) => {
-    await page.goto(`/#/tramo/${TRAMO}`)
+    await page.goto(`/tramo/${TRAMO}`)
     const resumen = page.getByTestId('mas-detalle').locator('summary')
     await resumen.focus()
     await page.keyboard.press('Enter')
@@ -65,25 +65,25 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
   test('la línea a la vista y el panel de cobertura tienen su ruta en la URL', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
-    await expect(page).toHaveURL(/#\/$/)
+    await expect(page).toHaveURL(/\/$/)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
-    await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
+    await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     // el enlace abre esa misma línea
-    await page.goto('/#/linea/convencional-madrid-alcazar-cordoba')
+    await page.goto('/linea/convencional-madrid-alcazar-cordoba')
     await page.reload()
     await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     // «Toda la línea» vuelve a la línea del tramo, con su ruta
-    await page.goto('/#/tramo/manzanares-ciudad-real:daimiel:almagro')
+    await page.goto('/tramo/manzanares-ciudad-real:daimiel:almagro')
     await page.reload()
     await page.getByRole('button', { name: '← Toda la línea' }).click()
-    await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
+    await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
     // «Toda la red» vuelve a la vista de la red, que es la raíz
     await page.getByTestId('volver-red').click()
-    await expect(page).toHaveURL(/#\/$/)
+    await expect(page).toHaveURL(/\/$/)
     // la cobertura
     await page.getByTestId('boton-cobertura').click()
-    await expect(page).toHaveURL(/#\/cobertura$/)
+    await expect(page).toHaveURL(/\/cobertura$/)
     await page.reload()
     await expect(page.getByTestId('panel-cobertura')).toBeVisible()
   })

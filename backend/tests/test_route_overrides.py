@@ -10,7 +10,17 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-from conftest import CONV_SPEC, DATA_DIR, FEED, MZCR_SPEC, SPEC, SPECS
+from conftest import (
+    CONV_SPEC,
+    DATA_DIR,
+    FEED,
+    JAEN_SPEC,
+    LAV_GRANADA_SPEC,
+    LAV_MALAGA_SPEC,
+    MZCR_SPEC,
+    SPEC,
+    SPECS,
+)
 from pydantic import ValidationError
 
 from oniel.geo import haversine_km
@@ -39,6 +49,8 @@ RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
     "atocha-cercanias-cordoba-por-manzanares": 4,
 }
+#: La convencional tiene además las reglas de los trenes de Jaén que solo paran una vez en ella.
+JAEN_RULES = {"cordoba-jaen-sin-paradas": 42, "linares-baeza-mengibar": 20}
 
 
 def hm(h: int, m: int) -> int:
@@ -203,7 +215,7 @@ def test_the_diverted_trains_enter_the_three_lines(
     conv_trips = select_trips_for_spec(feed, conv_spec)
     mzcr_trips = select_trips_for_spec(feed, mzcr_spec)
     assert len(lav_trips) == 335  # ya entraban por el filtro de corredor
-    assert len(conv_trips) == 479 + 24  # entran por las reglas de recorrido
+    assert len(conv_trips) == 479 + 24 + 62  # los 24 y los 62 de Jaén entran por las reglas
     assert len(mzcr_trips) == 130 + 24  # no paran en la línea: también por las reglas
     for line_spec, trips in ((spec, lav_trips), (conv_spec, conv_trips), (mzcr_spec, mzcr_trips)):
         matched = [route_for_trip(line_spec, t) for t in trips]
@@ -211,7 +223,7 @@ def test_the_diverted_trains_enter_the_three_lines(
             r.id: sum(1 for m in matched if m is not None and m.override.id == r.id)
             for r in line_spec.route_overrides
         }
-        assert by_rule == RULES
+        assert by_rule == (RULES | JAEN_RULES if line_spec is conv_spec else RULES)
     diverted = (
         {t.trip_id for t in conv_trips}
         & {t.trip_id for t in lav_trips}
@@ -502,14 +514,19 @@ def test_via_legs_say_why_a_chain_cannot_be_followed(lines: Lines) -> None:
 
 def test_validate_reports_the_rules_and_no_problems() -> None:
     reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
-    for path, r in reports.items():
+    expected = {
+        SPEC.name: RULES,
+        CONV_SPEC.name: RULES | JAEN_RULES,
+        MZCR_SPEC.name: RULES,
+        JAEN_SPEC.name: {},
+        LAV_MALAGA_SPEC.name: {},
+        LAV_GRANADA_SPEC.name: {},
+    }
+    for name, r in reports.items():
         assert r["problems"] == []
-        # las dos líneas de alta velocidad de Córdoba a Granada no tienen reglas de recorrido
-        assert r["gtfs"]["route_overrides"] == (
-            {} if path.startswith("lav-") and path != SPEC.name else RULES
-        )
+        assert r["gtfs"]["route_overrides"] == expected[name]
         assert "indeterminado" not in r["gtfs"]["passes"]
-    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 503
+    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 565
     assert reports[SPEC.name]["gtfs"]["trips"] == 335
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 154
     assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 130 * 3, "estimado": 24 * 3}
@@ -525,7 +542,7 @@ def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:
     ]
     broken = tmp_path / CONV_SPEC.name
     broken.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
-    report = validate_all(broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC])
+    report = validate_all(broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC])
     assert report["problems"] == [
         f"la regla {rule['id']}: el «via» de la parada 50500 no se sostiene: cordoba no es un"
         f" nodo de la línea {MZCR}"

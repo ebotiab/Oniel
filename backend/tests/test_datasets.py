@@ -212,9 +212,9 @@ async def test_a_new_file_keeps_the_previous_dataset(
     assert old["operator_id"] == new["operator_id"] == FEED_OPERATOR_ID
     assert (old["valid_from"], old["valid_to"]) == (dt.date(2026, 11, 7), dt.date(2027, 9, 29))
     # el anterior sigue entero y el nuevo tiene un viaje menos
-    assert await _count(conn, "services", FEED_DATASET_ID) == 851
-    assert await _count(conn, "services", NEWER_ID) == 850
-    passes = (3126 + 115) + (2469 + 683) + (72 + 390) + (727 + 69) + 586
+    assert await _count(conn, "services", FEED_DATASET_ID) == 913
+    assert await _count(conn, "services", NEWER_ID) == 912
+    passes = (3126 + 115) + (2741 + 683) + (72 + 390) + (402 + 20) + (727 + 69) + 586
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -274,6 +274,29 @@ async def test_history_compares_the_two_datasets_each_on_its_reference_day(
         removed.product: by_product.get(removed.product, 0) + 1,
     }
     assert sum(p.trains for p in new.products) == new.trains
+    # el primero de la fuente no tiene con quién compararse; el segundo, con él y en los mismos
+    # días: las cuatro primeras semanas que cubren los dos
+    assert old.change is None and new.change is not None
+    change = new.change
+    assert (change.previous_dataset_id, change.previous_retrieved_on) == (
+        FEED_DATASET_ID,
+        dt.date(2026, 11, 8),
+    )
+    assert (change.date_from, change.date_to) == (dt.date(2026, 11, 7), dt.date(2026, 12, 4))
+    # el tren retirado falta todos los días de esas semanas en los que circulaba
+    days = await conn.fetchval(
+        """
+        SELECT count(*) FROM service_dates WHERE dataset_id = $1 AND service_id = $2
+          AND service_date BETWEEN $3 AND $4
+        """,
+        FEED_DATASET_ID,
+        removed.id,
+        change.date_from,
+        change.date_to,
+    )
+    assert isinstance(days, int) and days >= 1
+    assert change.trains_after == change.trains_before - days
+    assert change.trains_before > 28 * new.trains / 2
     # el punto del conjunto activo cuenta lo mismo que la ficha del tramo
     assert new.trains == len(await services_repo.passes_on_segment(conn, segment_id, REFERENCE))
 
@@ -291,6 +314,7 @@ async def test_history_compares_the_two_datasets_each_on_its_reference_day(
     }
     old, new = await services_repo.segment_history(conn, other)
     assert old.trains == new.trains > 0 and old.products == new.products
+    assert new.change is not None and new.change.trains_before == new.change.trains_after > 0
 
 
 @requires_db
@@ -318,6 +342,14 @@ async def test_each_dataset_is_counted_on_its_own_reference_day(
         assert new.trains == len(
             await services_repo.passes_on_segment(conn, segment_id, refs[NEWER_ID])
         )
+        # la comparación en los mismos días no depende del día de referencia: sigue contando las
+        # cuatro semanas desde que valen los dos ficheros, y al nuevo le faltan los días borrados
+        assert new.change is not None
+        assert (new.change.date_from, new.change.date_to) == (
+            dt.date(2026, 11, 7),
+            dt.date(2026, 12, 4),
+        )
+        assert 0 < new.change.trains_after < new.change.trains_before
         # los días ya calculados se pueden pasar, como hace la exportación
         assert await services_repo.segment_history(conn, segment_id, refs) == [old, new]
     finally:
@@ -441,8 +473,8 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     )
     assert again["dataset"]["id"] == NEWER_ID and again["dataset"]["reused"] is True
     assert await conn.fetchval("SELECT count(*) FROM datasets") == 2
-    assert await _count(conn, "services", NEWER_ID) == 850
-    assert await conn.fetchval("SELECT count(*) FROM services") == 851 + 850
+    assert await _count(conn, "services", NEWER_ID) == 912
+    assert await conn.fetchval("SELECT count(*) FROM services") == 913 + 912
 
 
 @requires_db
@@ -473,7 +505,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     both = [feed(FEED, dt.date(2026, 11, 8)), feed(two_datasets["newer"], dt.date(2026, 11, 20))]
     result = await run(both, tmp_path)
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
-    assert [g["trips_imported"] for g in result["gtfs"]] == [851, 850]
+    assert [g["trips_imported"] for g in result["gtfs"]] == [913, 912]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
     coverage = json.loads((tmp_path / "coverage.json").read_text(encoding="utf-8"))
@@ -512,7 +544,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     # un conjunto que deja de estar declarado se retira, también de la instantánea
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
-    assert await conn.fetchval("SELECT count(*) FROM services") == 851
+    assert await conn.fetchval("SELECT count(*) FROM services") == 913
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]
     )

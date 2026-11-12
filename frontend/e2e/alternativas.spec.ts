@@ -24,11 +24,11 @@ test.describe('Tramos sin alternativa', () => {
     await page.goto('/')
     await expect(page.getByTestId('recuento-red')).not.toContainText('despertando el servidor')
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
-    await page.goto('/#/cobertura')
+    await page.goto('/cobertura')
     await abrirPanel(page)
-    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(15)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(17)
     await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
-    await page.goto('/#/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
+    await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
     expect(pedidas).toBeGreaterThan(0)
   })
@@ -42,14 +42,14 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidos).toEqual([])
-    await page.goto('/#/tramo/lav-madrid-sevilla:adamuz:cordoba')
+    await page.goto('/tramo/lav-madrid-sevilla:adamuz:cordoba')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toBeVisible()
     expect(pedidos.length).toBeGreaterThan(0)
   })
 
   test('un tramo con otro camino dice cuánto añade, y el desglose va en «Más detalle»', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:adamuz:cordoba')
+    await page.goto('/tramo/lav-madrid-sevilla:adamuz:cordoba')
     await abrirPanel(page)
     // lo esencial, a la vista: cuántos trenes, si tienen otro camino y dónde se ha buscado
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
@@ -60,7 +60,7 @@ test.describe('Tramos sin alternativa', () => {
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(detalle).toBeVisible()
     const grupos = detalle.locator('li')
-    // los de Málaga y los de Granada son ahora grupos distintos: unos dejan la red cargada en
+    // los de Málaga y los de Granada son grupos distintos: unos dejan la red cargada en
     // Antequera-Santa Ana y los otros llegan a Granada
     await expect(grupos).toHaveCount(6)
     await expect(grupos.first()).toHaveText(
@@ -77,7 +77,7 @@ test.describe('Tramos sin alternativa', () => {
   })
 
   test('al sur de Córdoba, el tramo dice que sus trenes no tienen otro camino en las líneas cargadas', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
+    await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
       'Si este tramo se cortara, sus 108 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
@@ -91,7 +91,7 @@ test.describe('Tramos sin alternativa', () => {
   })
 
   test('para un tren desviado, el otro camino puede ser más corto', async ({ page }) => {
-    await page.goto('/#/tramo/manzanares-ciudad-real:almagro:ciudad-real')
+    await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
       'Si este tramo se cortara, sus 38 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (14, entre Madrid-Puerta de Atocha y Antequera-Santa Ana), 90 km y 1 h 7 min menos.',
@@ -99,7 +99,7 @@ test.describe('Tramos sin alternativa', () => {
   })
 
   test('la cobertura lista los tramos sin alternativa y pliega los demás', async ({ page }) => {
-    await page.goto('/#/cobertura')
+    await page.goto('/cobertura')
     await abrirPanel(page)
     const apartado = page.getByTestId('tramos-sin-alternativa')
     await expect(page.getByRole('heading', { name: 'Tramos con más trenes y sin alternativa' })).toBeVisible()
@@ -111,16 +111,21 @@ test.describe('Tramos sin alternativa', () => {
     const filas = page.getByTestId('lista-sin-alternativa').locator('li')
     // al sur de Córdoba no hay otro camino cargado ni a Sevilla ni, por Antequera, a Granada: los 3
     // tramos de la línea de Sevilla, los 4 de la de Málaga y los 8 de la de Granada
-    await expect(filas).toHaveCount(15)
+    await expect(filas).toHaveCount(17)
     await expect(filas.nth(0)).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
     await expect(filas.nth(0)).toContainText('108 trenes')
     await expect(filas.nth(1)).toContainText('77 trenes')
     await expect(filas.nth(5)).toContainText('55 trenes')
     await expect(filas.nth(6)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
     await expect(filas.nth(6)).toContainText('53 trenes')
-    await expect(filas.nth(7)).toContainText('26 trenes')
-    await expect(filas.nth(14)).toContainText('Antequera-Santa Ana – Bifurcación Bobadilla')
-    await expect(filas.nth(14)).toContainText('20 trenes')
+    // y los dos del ramal de Jaén, que acaba en una estación término
+    await expect(filas.nth(7)).toContainText('Espelúy – Mengíbar-Artichuela')
+    await expect(filas.nth(7)).toContainText('50 trenes')
+    await expect(filas.nth(8)).toContainText('Mengíbar-Artichuela – Jaén')
+    await expect(filas.nth(8)).toContainText('44 trenes')
+    await expect(filas.nth(9)).toContainText('26 trenes')
+    await expect(filas.nth(16)).toContainText('Antequera-Santa Ana – Bifurcación Bobadilla')
+    await expect(filas.nth(16)).toContainText('20 trenes')
     await expect(apartado).toContainText('Trenes del viernes, 13 de noviembre de 2026')
     await expect(apartado).not.toContainText(/criticidad/i)
     // los demás, plegados: 36 tramos con lo que añade su otro camino
@@ -136,7 +141,7 @@ test.describe('Tramos sin alternativa', () => {
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // cada fila lleva a la ficha de su tramo
     await filas.nth(0).getByRole('button').click()
-    await expect(page).toHaveURL(/#\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
+    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
   })
 })

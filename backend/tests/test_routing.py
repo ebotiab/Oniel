@@ -36,7 +36,6 @@ LAV, CONV, MZCR = (
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
 )
-LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
 MADRID, CIUDAD_REAL, MANZANARES, CORDOBA = (
     "madrid-puerta-de-atocha",
     "ciudad-real",
@@ -68,7 +67,7 @@ def graph(network: Red) -> Graph:
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
-    assert len(graph.edges) == len(network.segments) == 39 + 4 + 8
+    assert len(graph.edges) == len(network.segments) == 41 + 4 + 8
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}

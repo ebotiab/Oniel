@@ -30,7 +30,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('recuento-red')).toHaveText(/^5 líneas · 1\.187 km/)
+    await expect(page.getByTestId('recuento-red')).toHaveText(/^6 líneas · 1\.220 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -43,7 +43,9 @@ test.describe('Carga de la red por partes', () => {
     // geometría: la red mantiene su tope y ellas tienen el suyo. Cuando no quepan, su detalle se pedirá aparte.
     const { annotations, interruptions, ...red } = JSON.parse(indice.toString('utf-8')) as Record<string, unknown>
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
-    expect(bytes(red)).toBeLessThan(70_000)
+    // Con seis líneas y 53 tramos, cada uno con sus cuatro atributos, la red del índice son 84 KB
+    // (22 KB comprimido el índice entero): el tope sube de 70 a 100 KB (docs/datos.md, «Medidas»).
+    expect(bytes(red)).toBeLessThan(100_000)
     expect(bytes({ annotations, interruptions })).toBeLessThan(40_000)
     expect(indice.byteLength).toBeLessThan(linea.byteLength)
   })
@@ -74,7 +76,7 @@ test.describe('Carga de la red por partes', () => {
 
   test('un enlace directo a un tramo de una línea sin cargar muestra el tramo y pide su línea', async ({ page }) => {
     const pedidas = partesPedidas(page)
-    await page.goto(`/#/tramo/${MZCR}:daimiel:almagro`)
+    await page.goto(`/tramo/${MZCR}:daimiel:almagro`)
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByRole('heading', { name: /Daimiel/ })).toBeVisible()
@@ -85,12 +87,12 @@ test.describe('Carga de la red por partes', () => {
     // «Toda la línea» lleva a su esquema, ya con el detalle cargado
     await page.getByRole('button', { name: /Toda la línea/ }).click()
     await expect(page.getByTestId('esquema')).toBeVisible()
-    await expect(page).toHaveURL(new RegExp(`#/linea/${MZCR}$`))
+    await expect(page).toHaveURL(new RegExp(`/linea/${MZCR}$`))
   })
 
   test('un enlace directo a una estación muestra su descripción, que llega con la línea', async ({ page }) => {
     const pedidas = partesPedidas(page)
-    await page.goto('/#/nodo/puertollano')
+    await page.goto('/nodo/puertollano')
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Puertollano' })).toBeVisible()

@@ -28,14 +28,16 @@ export interface Comparador {
 }
 
 /**
- * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
- * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/escenario/<cadena>,
- * #/recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), #/glosario,
- * #/glosario/<entrada>, #/cobertura y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
- * (#/proyecto/<id>).
+ * Ruta en la dirección. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
+ * / (la vista de la red), /linea/<id>, /tramo/<id>, /nodo/<id>, /tramo/<id>/cierre, /escenario/<cadena>,
+ * /recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), /glosario,
+ * /glosario/<entrada>, /cobertura y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
+ * (/proyecto/<id>).
+ *
+ * `parseRoute` interpreta la ruta y `routePath` la construye: ninguna vista arma direcciones a mano.
  */
-export function parseHash(hash: string): Route {
-  const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
+export function parseRoute(pathname: string): Route {
+  const parts = pathname.split('/').filter(Boolean).map(decode)
   const [kind, id, action] = parts
   if ((kind === 'tramo' || kind === 'nodo') && id) {
     return { selection: { type: kind, id }, simulacion: kind === 'tramo' && action === 'cierre' }
@@ -62,27 +64,51 @@ export function parseHash(hash: string): Route {
   return { selection: null, simulacion: false }
 }
 
+/** Un trozo de la ruta tal y como se escribió; si no se puede descodificar (un «%» suelto), se deja como está. */
+function decode(part: string): string {
+  try {
+    return decodeURIComponent(part)
+  } catch {
+    return part
+  }
+}
+
+/**
+ * Hasta noviembre de 2026 las rutas iban detrás de una almohadilla (`/#/tramo/<id>`). Esos enlaces siguen
+ * valiendo: devuelve la ruta limpia que corresponde a ese hash, o nulo si el hash no es una ruta antigua
+ * (por ejemplo `#panel`, el salto al contenido).
+ */
+export function legacyHashPath(hash: string): string | null {
+  return hash.startsWith('#/') ? hash.slice(1) : null
+}
+
 /** Un identificador o un escenario en la URL, con los dos puntos y el punto y coma a la vista. */
 function code(value: string): string {
   return encodeURIComponent(value).replace(/%3A/gi, ':').replace(/%3B/gi, ';')
 }
 
-export function toHash(route: Route): string {
-  if (route.cobertura) return '#/cobertura'
-  if (route.glosario) return route.glosario.entrada ? `#/glosario/${encodeURIComponent(route.glosario.entrada)}` : '#/glosario'
+export function routePath(route: Route): string {
+  if (route.cobertura) return '/cobertura'
+  if (route.glosario) return route.glosario.entrada ? `/glosario/${encodeURIComponent(route.glosario.entrada)}` : '/glosario'
   if (route.recorridos) {
     const { from, to, escenario } = route.recorridos
     const parts = escenario ? [from ?? '-', to ?? '-', escenario] : to ? [from ?? '-', to] : from ? [from] : []
-    return ['#/recorridos', ...parts.map(code)].join('/')
+    return ['/recorridos', ...parts.map(code)].join('/')
   }
-  if (!route.selection) return route.linea ? `#/linea/${encodeURIComponent(route.linea)}` : '#/'
-  if (route.escenario && route.simulacion) return `#/escenario/${code(route.escenario)}`
+  if (!route.selection) return route.linea ? `/linea/${encodeURIComponent(route.linea)}` : '/'
+  if (route.escenario && route.simulacion) return `/escenario/${code(route.escenario)}`
   if (route.selection.type === 'anotacion') {
     const ruta = annotationLayer(route.selection.kind)?.ruta
-    return ruta ? `#/${ruta}/${encodeURIComponent(route.selection.id)}` : '#/'
+    return ruta ? `/${ruta}/${encodeURIComponent(route.selection.id)}` : '/'
   }
-  const base = `#/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
+  const base = `/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
   return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base
+}
+
+/** El enlace a la ficha propia de una anotación; nulo si su tipo no la tiene. */
+export function annotationHref(a: { kind: string; id: string }): string | null {
+  if (!annotationLayer(a.kind)?.ruta) return null
+  return routePath({ selection: { type: 'anotacion', kind: a.kind, id: a.id }, simulacion: false })
 }
 
 export function formatKm(km: number): string {

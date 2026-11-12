@@ -45,6 +45,11 @@
     {"id": "antequera-santa-ana", "name": "Antequera-Santa Ana", "kind": "estacion", "adif_code": "02003", "position": {"lon": -4.7197084, "lat": 37.0701682}, "reference_pk_km": 96.772,
      "description": "Estación abierta el 16 de diciembre de 2006, a 17 km al oeste de Antequera. Aquí se separan los caminos: la línea de Córdoba sigue hacia Málaga y, poco antes de los andenes, sale la de Granada. Tiene además un cambiador de ancho por el que los trenes de Madrid pasan a la línea convencional de Ronda y Algeciras."}
   ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "bif-malaga", "to_node": "antequera-santa-ana", "value": "ertms_n1_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos de «ERTMS N1 y 2» (se comprobó el color con el de la leyenda) y de ASFA de alta velocidad junto a la línea, entre Córdoba y Antequera-Santa Ana."},
+    {"attribute": "bloqueo", "from_node": "bif-malaga", "to_node": "antequera-santa-ana", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: trazo magenta de BCA a lo largo de la línea."},
+    {"attribute": "mando", "from_node": "bif-malaga", "to_node": "antequera-santa-ana", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."}
+  ],
   "connections": [
     {"id": "lav-antequera-malaga", "node_id": "antequera-santa-ana", "name": "LAV Córdoba–Málaga hasta Málaga", "towards": "Málaga", "status": "no_cargada", "sketch": [[-4.7197084, 37.0701682], [-4.7146, 37.0426], [-4.7249, 37.0079], [-4.7357, 36.955], [-4.7115, 36.8869], [-4.6745, 36.8218], [-4.6292, 36.7619], [-4.5635, 36.7152], [-4.479, 36.6991], [-4.4336, 36.7112]]}
   ],

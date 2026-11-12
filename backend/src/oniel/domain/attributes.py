@@ -28,14 +28,61 @@ class AttributeRule:
     required: bool = False
     #: Campo de ``LineSpec`` con el valor de la línea entera, que vale donde no hay sección.
     line_field: str | None = None
+    #: Los valores que admite, si es una lista cerrada de claves que el visor traduce.
+    values: frozenset[str] | None = None
+    #: Cada sección ha de citar su fuente y el día en que se comprobó.
+    sourced: bool = False
 
 
 TRACKS = "tracks"
+PROTECCION_TREN = "proteccion_tren"
+BLOQUEO = "bloqueo"
+MANDO = "mando"
+
+#: La fuente consultada no da el dato para ese tramo. Es un valor declarado, con su fuente y su
+#: fecha como cualquier otro: dice que se miró y no estaba, que no es lo mismo que no haber mirado.
+SIN_DATO_PUBLICADO = "sin_dato_publicado"
 
 #: Atributos con alguna exigencia. Los demás son opcionales, sin valor por línea y de tipo libre.
 ATTRIBUTE_RULES: dict[str, AttributeRule] = {
     # El número de vías lo usan el mapa, el esquema y el cálculo de recorridos: no puede faltar.
     TRACKS: AttributeRule(value_type=int, required=True, line_field="tracks"),
+    # Señalización, según el mapa 4 de la Declaración sobre la Red (docs/datos.md, «Señalización
+    # y protección del tren»). Los tres cubren toda línea cargada y cada sección cita su fuente.
+    # Sistema de protección del tren: ASFA, o LZB con ASFA de respaldo.
+    PROTECCION_TREN: AttributeRule(
+        value_type=str,
+        required=True,
+        sourced=True,
+        values=frozenset(
+            {
+                "asfa",
+                "lzb_asfa",
+                "ertms_n1",
+                "ertms_n2",
+                # ERTMS con ASFA de respaldo, como lo dibuja el mapa en las líneas de Málaga y Granada
+                "ertms_n1_n2_asfa",
+                "ertms_n2_asfa",
+                SIN_DATO_PUBLICADO,
+            }
+        ),
+    ),
+    # Bloqueo: de control automático (BCA), automático banalizado (BAB), de vía doble (BAD) o
+    # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` es un tramo
+    # que cambia de uno a otro donde no hay nodo.
+    BLOQUEO: AttributeRule(
+        value_type=str,
+        required=True,
+        sourced=True,
+        values=frozenset({"bca", "bab", "bad", "bau", "blau", "bab_bad", SIN_DATO_PUBLICADO}),
+    ),
+    # Mando: desde dónde se gobiernan las señales y los desvíos del tramo.
+    MANDO: AttributeRule(
+        value_type=str,
+        required=True,
+        sourced=True,
+        values=frozenset({"ctc", SIN_DATO_PUBLICADO}),
+    ),
 }
 
 

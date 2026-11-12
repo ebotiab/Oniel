@@ -43,6 +43,26 @@
       "checked_on": "2026-11-10"
     },
     {
+      "id": "espeluy-jaen-sin-trenes-2026-09-06",
+      "kind": "interrupcion",
+      "status": "vigente",
+      "line_id": "espeluy-jaen",
+      "from_node": "espeluy",
+      "to_node": "jaen",
+      "start_date": "2026-09-06",
+      "expected_end_date": null,
+      "expected_end_text": "otoño de 2027",
+      "ended_on": null,
+      "reason": "Los trenes de Jaén hacen por carretera su recorrido hasta Almuradiel-Viso del Marqués y hasta Córdoba, por las obras de la línea Madrid – Córdoba para la autopista ferroviaria Algeciras–Madrid–Zaragoza.",
+      "note": "Según Renfe, desde el 6 de septiembre de 2026 los Media Distancia Madrid – Jaén van por carretera entre Jaén y Almuradiel-Viso del Marqués, con sus paradas intermedias, y entre Jaén y Córdoba ya se viajaba por carretera desde antes, por los daños de un temporal. El 10 de noviembre de 2026 los paneles de la estación de Jaén lo indicaban en todos sus trenes. Las fuentes no hablan de obras en esta línea: no llegan trenes de viajeros porque no pueden seguir por la línea principal. La previsión de fin es la de esas obras, de Adif y recogida por la prensa.",
+      "source_ids": [
+        "renfe-nota-md-jaen-madrid-2026-09",
+        "adif-salidas-y-llegadas",
+        "el-estrecho-digital-corte-algeciras"
+      ],
+      "checked_on": "2026-11-10"
+    },
+    {
       "id": "lav-madrid-andalucia-2026-01-19",
       "kind": "interrupcion",
       "status": "terminada",

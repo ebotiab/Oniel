@@ -198,6 +198,29 @@
       "notes": "Fuente de verificación, no de geometría; revisión del 3 de septiembre de 2025 (oldid 169316239), consultada por la API de Wikipedia. La ficha da 125,7 km de longitud, que no coincide con sus propios puntos kilométricos (114,2 km entre Antequera-Santa Ana y Granada): Oniel usa los puntos kilométricos. Dice que la línea es de doble vía, lo que no vale para el tramo en servicio: el artículo de Antequera AV dice que el trazado es de vía única y Adif licita la duplicación (BOE-B-2025-42383). Los códigos de estación (02030 Antequera AV, 05012 Loja, 05000 Granada) y las fechas de apertura de Antequera AV (25 de enero de 2023), de reapertura de Loja (26 de junio de 2019) y de las estaciones de Loja (1866) y Granada (1874) se tomaron de los artículos de cada estación (oldid 170126507, 169248777 y 175973047). El artículo de Loja da otro punto kilométrico (61,7), contado desde otro origen. El PB de Íllora no se ha cargado como nodo: queda a 1,6 km de la bifurcación Tocón."
     },
     {
+      "id": "osm-relation-11351146",
+      "name": "Trazado de la línea convencional Espeluy–Jaén (relación OSM 11351146, línea 402 de Adif, ancho ibérico, vía única electrificada a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11351146",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Los 32,3 km de la relación, entre la aguja del km 340,1 de la línea 400 y la estación de Jaén, por Mengíbar-Artichuela; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación es de infraestructura («Línea Jaén-Espeluy», nombre oficial «Espeluy-aguja km 340,1 a Jaén», ref=402) y son 11 vías encadenadas, todas con operator=Adif, ancho 1668 mm, 3000 V en continua, passenger_lines=1 y maxspeed=160. Empieza en la aguja en la que se separa de la línea 400, a 0,9 km de la estación de Espeluy por el lado de Linares-Baeza, y termina a 26 m del punto de la estación de Jaén. Oniel dibuja la línea desde la estación de Espeluy: ese primer trozo se toma de la relación 11351144 (línea 400), ya registrada. La relación no trae la vía que une la estación de Espeluy con el ramal por el oeste. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
+      "file": "raw/osm/relation_11351146_linea_402_espeluy_jaen_2026-11-12.json"
+    },
+    {
+      "id": "wikipedia-linea-402",
+      "name": "Artículo «Línea Espeluy-Jaén» de Wikipedia en español (número de línea de Adif, longitud, puntos kilométricos, vía única, historia)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Espeluy-Ja%C3%A9n",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Catalogación de Adif como línea 402, longitud (32,8 km), ancho ibérico, vía única electrificada, inicio en «Espeluy-aguja km 340,1», puntos kilométricos de esa aguja (152,1), de Mengíbar-Artichuela (148,0) y de Jaén (119,2), apertura en julio de 1881, enlace directo para los trenes de Madrid construido a mediados de los años setenta y cierre del trazado entre Jaén y Campo Real en octubre de 1984.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 30 de diciembre de 2025 (oldid 171249150), consultada por la API de Wikipedia, junto con los artículos «Estación de Jaén» (oldid 174008767) y «Estación de Mengíbar-Artichuela» (oldid 165497983), de donde salen los códigos de estación (03100 y 03001, los mismos que las paradas del GTFS de Renfe) y la descripción de cada una. Los puntos kilométricos son los de la antigua línea Linares–Puente Genil y decrecen hacia Jaén; Oniel no los guarda en los nodos porque la estación de Espeluy, de donde dibuja la línea, no tiene punto kilométrico en ella."
+    },
+    {
       "id": "adif-mapa-red",
       "name": "Mapa de la red ferroviaria española y referencias de la línea 010",
       "publisher": "Adif / Adif Alta Velocidad",
@@ -207,6 +230,18 @@
       "retrieved_on": "2026-11-08",
       "coverage": "Verificación del trazado (mapa de la red, capa de vía doble electrificada en ancho estándar), códigos de estación de Adif y puntos kilométricos de estaciones, PAET y bifurcaciones de la línea 010.",
       "notes": "El servicio WFS/WMS de IDEAdif (https://ideadif.adif.es/gservices/Tramificacion/wfs) devolvía HTTP 503 el 8 de noviembre de 2026; el importador admite cargar su GeoJSON cuando vuelva a estar disponible. Los PK se contrastaron además con la tabla de instalaciones de la línea en Wikipedia (CC BY-SA 4.0)."
+    },
+    {
+      "id": "adif-declaracion-red-2026-mapas",
+      "name": "Declaración sobre la Red 2026 de Adif Alta Velocidad. Mapas (edición de 27 de febrero de 2026), mapa 4: sistemas de seguridad y bloqueos",
+      "publisher": "Adif Alta Velocidad; Adif",
+      "url": "https://www.adifaltavelocidad.es/sobre-adif-av/declaracion-red",
+      "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las tres líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF).",
+      "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
+      "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },
     {
       "id": "adif-obras-autopista-ferroviaria",

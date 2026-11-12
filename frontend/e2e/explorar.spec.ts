@@ -9,11 +9,11 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la cabecera dice cuánta red hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('recuento-red')).toHaveText(/^5 líneas · 1\.187 km/)
+    await expect(page.getByTestId('recuento-red')).toHaveText(/^6 líneas · 1\.220 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
-    await page.goto('/#/linea/lav-madrid-sevilla')
+    await page.goto('/linea/lav-madrid-sevilla')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
     await page.getByTestId('esquema-tramo-5').click() // Ciudad Real – Puertollano
@@ -25,7 +25,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
     await expect(page.getByTestId('lista-servicios').locator('li').first()).toBeVisible()
     await expect(page.getByTestId('lista-servicios')).toContainText(/AVE|AVLO|ALVIA|Intercity/)
-    await expect(page).toHaveURL(/#\/tramo\/lav-madrid-sevilla:ciudad-real:puertollano/)
+    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:ciudad-real:puertollano/)
   })
 
   test('desde la lista de la red se llega a la línea convencional por Alcázar', async ({ page }) => {
@@ -44,7 +44,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Línea convencional, vía única')
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
     await expect(page.getByTestId('lista-servicios')).toContainText(/MD/)
-    await expect(page).toHaveURL(/#\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
+    await expect(page).toHaveURL(/\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
   })
 
   test('la lista lleva a la línea Manzanares – Ciudad Real, de vía única, con los trenes desviados', async ({ page }) => {
@@ -52,11 +52,11 @@ test.describe('Explorar la red', () => {
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
-    // la lista tiene las cinco líneas, también en la hoja del móvil, y ya no hay pestañas
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(5)
+    // la lista tiene las seis líneas, también en la hoja del móvil, y ya no hay pestañas
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(6)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
-    await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
+    await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
     await expect(page.getByTestId('ficha-linea')).toHaveText(/64,4 km.*hasta 140 km\/h/)
     // el número de línea, el ancho y la electrificación están en el detalle, plegado
@@ -67,7 +67,7 @@ test.describe('Explorar la red', () => {
     await page.getByTestId('esquema-tramo-2').click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
-    await expect(page).toHaveURL(/#\/tramo\/manzanares-ciudad-real:daimiel:almagro/)
+    await expect(page).toHaveURL(/\/tramo\/manzanares-ciudad-real:daimiel:almagro/)
     const lista = page.getByTestId('lista-servicios')
     await expect(lista).toContainText(/MD \d{5}/)
     await expect(lista).toContainText(/ALVIA \d{5}/)
@@ -81,14 +81,14 @@ test.describe('Explorar la red', () => {
   })
 
   test('Manzanares y Ciudad Real unen la línea nueva con las otras dos', async ({ page }) => {
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await expect(page.getByRole('heading', { name: 'Ciudad Real' })).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
     await expect(page.getByTestId('nodo-lineas')).toContainText(/Madrid – Sevilla\s*alta velocidad\s*Manzanares – Ciudad Real\s*convencional/)
     await expect(page.getByRole('button', { name: 'Almagro – Ciudad Real' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Ciudad Real – Puertollano' })).toBeVisible()
     await expect(page.getByText(/Línea convencional Ciudad Real–Badajoz hacia Puertollano/)).toBeVisible()
-    await page.goto('/#/nodo/manzanares')
+    await page.goto('/nodo/manzanares')
     await expect(page.getByRole('heading', { name: 'Manzanares' })).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
     await expect(page.getByRole('button', { name: 'Manzanares – Daimiel' })).toBeVisible()
@@ -98,7 +98,7 @@ test.describe('Explorar la red', () => {
   })
 
   test('la cabecera de la línea es breve y la descripción se despliega por párrafos', async ({ page }) => {
-    await page.goto('/#/linea/lav-madrid-sevilla')
+    await page.goto('/linea/lav-madrid-sevilla')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
@@ -118,7 +118,7 @@ test.describe('Explorar la red', () => {
   })
 
   test('seleccionar una estación muestra qué tramos salen de ella y qué trenes paran', async ({ page }) => {
-    await page.goto('/#/nodo/cordoba')
+    await page.goto('/nodo/cordoba')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Córdoba' })).toBeVisible()
     await expect(page.getByText(/Tramos que salen de aquí/)).toBeVisible()
@@ -130,7 +130,7 @@ test.describe('Explorar la red', () => {
   })
 
   test('los puntos de referencia explican qué son con lenguaje neutro', async ({ page }) => {
-    await page.goto('/#/nodo/urda')
+    await page.goto('/nodo/urda')
     await expect(page.getByRole('heading', { name: 'Urda' })).toBeVisible()
     await expect(page.getByText(/Puesto de adelantamiento y estacionamiento/).first()).toBeVisible()
     await expect(page.getByRole('complementary', { name: /Contexto de 2026/ })).toBeVisible()
@@ -159,7 +159,7 @@ test.describe('Explorar la red', () => {
       ['convencional-madrid-alcazar-cordoba', 'rabanales'],
       ['manzanares-ciudad-real', 'almagro'],
     ] as const) {
-      await page.goto(`/#/linea/${lineId}`)
+      await page.goto(`/linea/${lineId}`)
       await expect(page.getByTestId(`esquema-nodo-${nodeId}`)).toBeAttached()
       // Cajas de todos los textos de los nodos (nombre y kilómetro); dos no pueden compartir área.
       const boxes = await page
