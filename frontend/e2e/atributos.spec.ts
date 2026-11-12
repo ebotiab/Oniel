@@ -81,5 +81,7 @@ test.describe('Atributos de tramo: de las secciones de la línea a la ficha', ()
     await page.goto(`/#/tramo/${DOBLE}`)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
+    // el visor sigue pidiendo datos en segundo plano: las peticiones retenidas al acabar no son un fallo
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
   })
 })
