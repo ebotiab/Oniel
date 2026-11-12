@@ -9,7 +9,30 @@ async function abrirPanel(page: Page) {
   if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
 }
 
+const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
+
 test.describe('Tramos sin alternativa', () => {
+  test('si la API todavía no tiene el análisis, el visor usa la instantánea', async ({ page }) => {
+    test.skip(estatico, 'sin API el visor ya lee la instantánea')
+    // una API anterior a este apartado: el visor se publica antes de que el servidor se despliegue
+    let pedidas = 0
+    await page.route('**/api/alternatives*', (route) => {
+      pedidas++
+      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+    })
+    // se espera a que el visor hable ya con la API: antes de eso leería la instantánea de todos modos
+    await page.goto('/')
+    await expect(page.getByTestId('recuento-red')).not.toContainText('despertando el servidor')
+    await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
+    await page.goto('/#/cobertura')
+    await abrirPanel(page)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(3)
+    await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
+    await page.goto('/#/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
+    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
+    expect(pedidas).toBeGreaterThan(0)
+  })
+
   test('el arranque no pide el análisis: llega al abrir un tramo', async ({ page }) => {
     const pedidos: string[] = []
     page.on('request', (r) => {
