@@ -183,6 +183,7 @@ jobs:
           ONIEL_E2E_STATIC: "1"
 
       - name: Abrir la PR
+        id: pr
         if: steps.refresco.outputs.cambio == 'true'
         env:
           FECHA: ${{ steps.refresco.outputs.fecha }}
@@ -214,8 +215,10 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      # Solo si falló una comprobación (y por eso el paso de la PR ni empezó); si lo que falla es
+      # abrir la PR, la ejecución en rojo ya lo dice.
       - name: Abrir una incidencia si el fichero nuevo no pasa las comprobaciones
-        if: failure() && steps.refresco.outputs.cambio == 'true'
+        if: failure() && steps.refresco.outputs.cambio == 'true' && steps.pr.outcome == 'skipped'
         env:
           CONJUNTO: ${{ steps.refresco.outputs.conjunto }}
         run: |
