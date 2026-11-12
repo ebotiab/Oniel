@@ -145,15 +145,17 @@ No se usa `base='full'`: añade cientos de puntos por minuto (procesador por nú
 
 Logfire agrupa las excepciones repetidas en incidencias y avisa cuando aparece una nueva o se reabre una resuelta (la función se llama «Error tracking»; antes, «Issues»). Necesita que el fallo llegue como excepción, no como un aviso de nivel error, y así llegan los de Oniel: una excepción no controlada en la API queda en el tramo de la petición con su traza (`is_exception`, nivel 17) y una importación que falla, en el tramo `import all` con `outcome = failed`. Lo comprueban `tests/test_observability.py` y `tests/test_importing.py`. Los `HTTPException` (404, 422) quedan como excepciones de nivel aviso: son respuestas correctas, no errores del servidor.
 
-Se activa por proyecto, a mano, en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Enable Issues → elegir los canales de aviso (o ninguno, para verlos solo en Logfire) → Enable Issue Tracking. Las incidencias tardan unos minutos en aparecer. Desactivarla borra las incidencias acumuladas.
+Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo». Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
 
 ### Alertas
 
-Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso son Slack o un webhook genérico (la documentación trae también PagerDuty y Opsgenie); no hay correo. Se crean una vez en la organización y se eligen en cada alerta. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
+Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso se crean una vez en la organización y se eligen en cada alerta: correo a miembros de la organización, Slack, webhook genérico, PagerDuty u Opsgenie. Oniel tiene uno, «Correo», que escribe al correo de la cuenta `ebotiab`; la documentación de Logfire no menciona todavía el canal de correo, pero el formulario lo ofrece. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
 
-Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres consultas están probadas con `oniel-data obs consulta` el 12 de noviembre de 2026; las tres van con «Fire when: the query starts having results».
+El plan personal no deja comprobar más a menudo que cada 10 minutos, y la ventana no puede pasar de cuatro veces ese intervalo: un fallo tarda hasta 10 minutos en avisar.
 
-**1. La API no arranca.** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: última hora. Cadencia: cada 5 minutos.
+Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres alertas están creadas en el proyecto desde el 12 de noviembre de 2026, con el canal «Correo», comprobación cada 10 minutos y aviso en «First match after no matches» (avisa cuando la consulta empieza a dar filas, no en cada comprobación). Sus consultas, probadas antes con `oniel-data obs consulta`, son las de abajo; si se cambian en Logfire, se cambian aquí.
+
+**1. «Oniel: la API no arranca».** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: últimos 30 minutos.
 
 ```sql
 SELECT service_version AS version,
@@ -169,7 +171,7 @@ HAVING max(start_timestamp) FILTER (WHERE span_name = 'import all started') < no
            < max(start_timestamp) FILTER (WHERE span_name = 'import all started'))
 ```
 
-**2. Respuestas 5xx.** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos. Cadencia: cada 5 minutos.
+**2. «Oniel: respuestas 5xx».** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos.
 
 ```sql
 SELECT span_name AS peticion, http_response_status_code AS estado,
@@ -183,7 +185,7 @@ GROUP BY 1, 2, 3
 ORDER BY veces DESC
 ```
 
-**3. Importación fallida o sin terminar.** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: última hora. Cadencia: cada 10 minutos.
+**3. «Oniel: importación fallida o sin terminar».** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: últimos 30 minutos.
 
 ```sql
 SELECT 'fallida' AS problema, start_timestamp AS inicio, service_version AS version,
@@ -205,7 +207,7 @@ WHERE s.deployment_environment = 'production' AND s.service_name = 'oniel-data'
   AND f.span_id IS NULL
 ```
 
-La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Crear las alertas y el canal es configuración de la cuenta y lo decide quien la administra.
+La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Las alertas y el canal son configuración de la cuenta: los cambia quien la administra, en la web de Logfire.
 
 ### Qué dicen las trazas de un despliegue
 
