@@ -195,6 +195,18 @@ async def _replace_nodes_and_segments(conn: asyncpg.Connection, net: BuiltNetwor
             {"type": "LineString", "coordinates": round_coords(s.coords)},
             s.source_id,
         )
+    # Las filas anteriores se han ido con sus tramos (ON DELETE CASCADE).
+    await conn.executemany(
+        """
+        INSERT INTO segment_attributes (segment_id, attribute, value, source_id, checked_on)
+        VALUES ($1,$2,$3,$4,$5)
+        """,
+        [
+            (s.id, attribute, a.value, a.source_id, a.checked_on)
+            for s in net.segments
+            for attribute, a in sorted(s.attributes.items())
+        ],
+    )
 
 
 async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
@@ -282,6 +294,7 @@ def network_as_json(net: BuiltNetwork) -> dict[str, Any]:
                 "max_speed_kmh": s.max_speed_kmh,
                 "typical_speed_kmh": s.typical_speed_kmh,
                 "tracks": s.tracks,
+                "attributes": {k: a.value for k, a in sorted(s.attributes.items())},
             }
             for s in net.segments
         ],

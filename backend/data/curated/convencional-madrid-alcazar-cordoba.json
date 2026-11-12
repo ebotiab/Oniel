@@ -79,9 +79,9 @@
     {"id": "rabanales", "name": "Campus Universitario de Rabanales", "kind": "estacion", "adif_code": "50417", "rank": "secundario", "position": {"lon": -4.720635, "lat": 37.912601}},
     {"id": "cordoba", "name": "Córdoba", "kind": "estacion", "adif_code": "50500", "shared": true, "position": {"lon": -4.789453, "lat": 37.888291}, "reference_pk_km": 442.0}
   ],
-  "track_sections": [
-    {"from_node": "santa-cruz-de-mudela", "to_node": "vadollano", "tracks": 1, "note": "Vía única por el paso de Despeñaperros."},
-    {"from_node": "linares-baeza", "to_node": "cordoba", "tracks": 1, "note": "Vía única entre Linares-Baeza y Lora del Río, según Wikipedia y el rutómetro de la FCMAF."}
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "santa-cruz-de-mudela", "to_node": "vadollano", "value": 1, "source_id": "wikipedia-lineas-300-400", "checked_on": "2026-11-08", "note": "Vía única por el paso de Despeñaperros."},
+    {"attribute": "tracks", "from_node": "linares-baeza", "to_node": "cordoba", "value": 1, "source_id": "wikipedia-lineas-300-400", "checked_on": "2026-11-08", "note": "Vía única entre Linares-Baeza y Lora del Río, según Wikipedia y el rutómetro de la FCMAF."}
   ],
   "connections": [
     {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},
