@@ -104,7 +104,8 @@ jobs:
       - name: Lint (oxlint)
         run: npm run lint
 
-      - name: Compilar el visor (vite build)
+      # `npm run build` comprueba además las hojas de estilo compiladas (frontend/scripts/comprobar-css.mjs)
+      - name: Compilar el visor (vite build) y comprobar sus hojas de estilo
         run: npm run build
 
       - name: Versión de Playwright instalada
