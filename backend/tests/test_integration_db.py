@@ -621,10 +621,12 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
     # la vuelta por Córdoba (613,5 km) pasa del doble del más corto y no se devuelve
     assert [route["line_ids"] for route in body["routes"]] == [[LAV], [CONV, MZCR]]
     assert [route["length_km"] for route in body["routes"]] == [170.8, 260.5]
-    r = await client.get(
-        "/api/routes",
-        params={"from": "madrid-puerta-de-atocha", "to": "ciudad-real", "max_ratio": "4"},
-    )
+    # con el recorrido por Manzanares comparte Madrid – Manzanares, y desde allí recorre 417,4 km
+    # para lo que el otro hace en 64,4 km: 6,5 veces. Con un tope de 4 sigue fuera; con 7, entra.
+    wide = {"from": "madrid-puerta-de-atocha", "to": "ciudad-real"}
+    r = await client.get("/api/routes", params={**wide, "max_ratio": "4"})
+    assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5]
+    r = await client.get("/api/routes", params={**wide, "max_ratio": "7"})
     assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5, 613.5]
     assert body["routes"][0]["time_min"] == 40
     assert "velocidad habitual" in body["method"]

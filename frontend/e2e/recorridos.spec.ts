@@ -48,6 +48,18 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
     expect(c.recorridos[1]!.tramosClave).toHaveLength(6)
   })
 
+  test('Sevilla – Manzanares: sin la vuelta por Madrid y con nombres que distinguen los dos recorridos', () => {
+    const c = compararRecorridos(grafo, red, 'sevilla-santa-justa', 'manzanares', sinCortes)
+    // el que sube de Ciudad Real a Madrid para volver (666,4 km) ya no aparece
+    expect(c.recorridos.map((r) => r.route.length_km)).toEqual([363.9, 371.2])
+    expect(c.ocultos).toBe(0)
+    // los dos pasan por Córdoba: el que cambia allí de línea dice además cuál toma
+    expect(c.recorridos.map((r) => r.titulo)).toEqual(['Por Ciudad Real', 'Por Córdoba y la línea convencional'])
+    const vuelta = compararRecorridos(grafo, red, 'manzanares', 'sevilla-santa-justa', sinCortes)
+    expect(vuelta.recorridos.map((r) => r.route.length_km)).toEqual([363.9, 371.2])
+    expect(vuelta.recorridos.map((r) => r.titulo)).toEqual(['Por Ciudad Real', 'Por Córdoba y la línea convencional'])
+  })
+
   test('un cierre en la alta velocidad señala el recorrido por Manzanares como alternativa', () => {
     const c = compararRecorridos(grafo, red, MADRID, 'ciudad-real', sinCortes, `c~${URDA_CIUDAD_REAL}`)
     expect(c.recorridos.map((r) => r.route.length_km)).toEqual([170.8, 260.5])
@@ -174,6 +186,19 @@ test.describe('Comparador de recorridos: la vista', () => {
     await page.getByRole('button', { name: 'Quitar el supuesto' }).click()
     await expect(page).toHaveURL(/#\/recorridos\/madrid-puerta-de-atocha\/ciudad-real$/)
     await expect(recorridos).toHaveCount(2)
+  })
+
+  test('Sevilla – Manzanares: dos recorridos con nombres distintos y ningún tren directo', async ({ page }) => {
+    await page.goto('/#/recorridos/sevilla-santa-justa/manzanares')
+    const recorridos = page.getByTestId('recorrido')
+    await expect(recorridos).toHaveCount(2)
+    await expect(recorridos.nth(0)).toContainText('Por Ciudad Real')
+    await expect(recorridos.nth(0)).toContainText('363,9 km')
+    await expect(recorridos.nth(1)).toContainText('Por Córdoba y la línea convencional')
+    await expect(recorridos.nth(1)).toContainText('371,2 km')
+    // la vuelta por Madrid, de 666,4 km, no se enseña
+    await expect(page.getByTestId('comparador')).not.toContainText('666,4')
+    await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Dos recorridos, del más corto al más largo\. No hay trenes directos en este sentido en el horario del .+\.$/)
   })
 
   test('la ficha de una estación abre el comparador con ella como salida', async ({ page }) => {
