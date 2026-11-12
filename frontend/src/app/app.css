@@ -850,6 +850,29 @@
   min-height: 32px;
 }
 
+/* Clave de los símbolos del esquema, bajo él: mismo renglón que la leyenda de trazos del móvil */
+.clave-esquema {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--t-12);
+  line-height: 1.4;
+  color: var(--tinta-2);
+}
+
+.clave-esquema li {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.clave-simbolo {
+  flex: none;
+}
+
 /* Móvil: hoja inferior */
 .movil .cabecera {
   height: 52px;

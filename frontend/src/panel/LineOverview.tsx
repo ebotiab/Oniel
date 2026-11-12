@@ -5,6 +5,7 @@ import { capasDe } from '../app/annotationLayers'
 import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, listaEs } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
+import { ClaveEsquema } from './ClaveEsquema'
 import { StripDiagram } from './StripDiagram'
 import { Termino } from './Termino'
 
@@ -142,6 +143,7 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
         onHover={onHover}
         compact={compact}
       />
+      <ClaveEsquema nodes={network.nodes.filter((n) => n.line_id === line.id)} connections={network.connections} />
       {!compact && (
         <p className="nota-esquema" data-testid="nota-esquema">
           {conBarras && dia ? `Las barras cuentan los trenes de cada tramo el ${formatDate(dia)}, según los horarios de ${conHorarios.length ? listaEs(conHorarios) : 'los operadores cargados'}${sinHorarios.length ? `; no incluyen los de ${listaEs(sinHorarios)}` : ''}. ` : ''}
