@@ -95,6 +95,22 @@ test.describe('Navegar por el mapa', () => {
   })
 })
 
+/** Espera a que el mapa deje de moverse y devuelve su encuadre: [[oeste, sur], [este, norte]]. */
+async function encuadre(page: Page) {
+  await page.waitForFunction(() => !(globalThis as unknown as ConMapa).__onielMap!.isMoving())
+  return page.evaluate(() => (globalThis as unknown as ConMapa).__onielMap!.getBounds().toArray() as [[number, number], [number, number]])
+}
+
+/** El encuadre enseña Despeñaperros (vía única) y deja fuera Madrid, que queda más al norte. */
+async function encuadraLaViaUnica(page: Page) {
+  await expect
+    .poll(async () => {
+      const [[oeste, sur], [este, norte]] = await encuadre(page)
+      return oeste < -3.5 && este > -3.5 && sur < 38.4 && norte > 38.4 && norte < 40.4
+    })
+    .toBe(true)
+}
+
 test.describe('Trazo de la vía', () => {
   test('el mapa separa el tipo de línea del número de vías y el esquema usa los mismos trazos', async ({ page }) => {
     await mapaListo(page)
@@ -134,10 +150,12 @@ test.describe('Trazo de la vía', () => {
     await expect(page.getByTestId('leyenda-via-unica')).toHaveText('Vía única')
     expect(await opacidad()).toBe('1')
 
-    // pasar por encima resalta sin fijar
+    // pasar por encima resalta sin fijar y sin mover el mapa
+    const antes = await encuadre(page)
     await page.getByTestId('leyenda-via-unica').hover()
     await expect(mapa).toHaveAttribute('data-resaltado', 'via-unica')
     expect(await opacidad()).toContain('vias')
+    expect(await encuadre(page)).toEqual(antes)
     await page.mouse.move(700, 400)
     await expect(mapa).not.toHaveAttribute('data-resaltado')
     expect(await opacidad()).toBe('1')
@@ -151,6 +169,10 @@ test.describe('Trazo de la vía', () => {
     await page.getByTestId('leyenda-alta-velocidad').click()
     await page.mouse.move(700, 400)
     await expect(mapa).not.toHaveAttribute('data-resaltado')
+
+    // al fijar un trazo, el mapa lo encuadra
+    await page.getByTestId('leyenda-via-unica').click()
+    await encuadraLaViaUnica(page)
   })
 
   test('en el móvil la leyenda de los trazos va sobre el esquema y resalta el que se toca', async ({ page }, info) => {
@@ -169,6 +191,8 @@ test.describe('Trazo de la vía', () => {
     await page.getByTestId('leyenda-via-unica').click()
     await expect(mapa).toHaveAttribute('data-resaltado', 'via-unica')
     await expect(page.getByTestId('leyenda-via-unica')).toHaveAttribute('aria-pressed', 'true')
+    // y el mapa lo encuadra, aunque esa línea no tenga vía única
+    await encuadraLaViaUnica(page)
     await page.getByTestId('leyenda-via-unica').click()
     await expect(mapa).not.toHaveAttribute('data-resaltado')
 

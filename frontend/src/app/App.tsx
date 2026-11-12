@@ -42,6 +42,9 @@ export default function App() {
   const [coverage, setCoverage] = useState<CoverageOut | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [highlight, setHighlight] = useState<Trazo | null>(null)
+  // Trazo que la leyenda pide encuadrar en el mapa al fijarlo.
+  const [frame, setFrame] = useState<{ trazo: Trazo; n: number } | null>(null)
+  const pinTrazo = useCallback((trazo: Trazo) => setFrame((f) => ({ trazo, n: (f?.n ?? 0) + 1 })), [])
   const [route, setRoute] = useState(() => parseHash(window.location.hash))
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
@@ -232,7 +235,8 @@ export default function App() {
     },
     [comparador, compare],
   )
-  const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
+  // La hoja del móvil mide 66vh abierta y 150 px plegada (app.css): el mapa encuadra en lo que queda a la vista.
+  const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.66) : 150 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
 
   // «Toda la línea» vuelve a la línea que se estaba viendo, también si se llegó por un enlace directo.
   const backToLine = () => {
@@ -243,7 +247,7 @@ export default function App() {
   // En el móvil la leyenda de los trazos va dentro del panel, sobre el esquema de la línea.
   const leyendaMovil =
     mobile && network ? (
-      <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} />
+      <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} onPin={pinTrazo} />
     ) : null
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
@@ -343,6 +347,7 @@ export default function App() {
         closedSegmentId={closedSegmentId}
         interrupted={interrupted}
         highlight={highlight}
+        frame={frame}
         onSelect={comparador ? pickOnMap : select}
         onHover={setHoverId}
         onNearLines={wantNear}
@@ -391,6 +396,7 @@ export default function App() {
           singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false}
           highlight={highlight}
           onHighlight={setHighlight}
+          onPin={pinTrazo}
         />
       )}
     </div>

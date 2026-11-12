@@ -13,6 +13,8 @@ interface Props {
   /** Trazo resaltado en el mapa: el que se toca en la leyenda o sobre el que se pasa. */
   highlight: Trazo | null
   onHighlight: (trazo: Trazo | null) => void
+  /** Se ha fijado un trazo con un clic o un toque: el mapa lo encuadra. */
+  onPin?: (trazo: Trazo) => void
 }
 
 /** Muestra de un trazo con el mismo dibujo que el mapa: filete claro, trazos blancos o trazos espaciados. */
@@ -30,7 +32,7 @@ export function Muestra({ trazo }: { trazo: Trazo }) {
   )
 }
 
-export function Legend({ closed, interrupted, lines, singleTrack, highlight, onHighlight }: Props) {
+export function Legend({ closed, interrupted, lines, singleTrack, highlight, onHighlight, onPin }: Props) {
   const kinds = new Set(lines.map(lineKind))
   const several = kinds.size > 1
   // Fijado con un toque o un clic; al pasar por encima se resalta sin fijar.
@@ -46,6 +48,7 @@ export function Legend({ closed, interrupted, lines, singleTrack, highlight, onH
         const next = pinned === trazo ? null : trazo
         setPinned(next)
         onHighlight(next)
+        if (next) onPin?.(next)
       }}
       onMouseEnter={() => onHighlight(trazo)}
       onMouseLeave={() => onHighlight(pinned)}
@@ -95,13 +98,15 @@ interface TrazosProps {
   singleTrack: boolean
   highlight: Trazo | null
   onHighlight: (trazo: Trazo | null) => void
+  /** Se ha fijado un trazo con un clic o un toque: el mapa lo encuadra. */
+  onPin?: (trazo: Trazo) => void
 }
 
 /**
  * Leyenda del móvil: solo los trazos de la vía, en un renglón dentro del panel. Un toque resalta ese
  * trazo en el mapa y otro lo suelta; al salir de la vista (por ejemplo, al abrir un tramo) se suelta solo.
  */
-export function LeyendaTrazos({ lines, singleTrack, highlight, onHighlight }: TrazosProps) {
+export function LeyendaTrazos({ lines, singleTrack, highlight, onHighlight, onPin }: TrazosProps) {
   const kinds = new Set(lines.map(lineKind))
   // onHighlight es el setter de estado de App, estable: el efecto solo se deshace al desmontar.
   useEffect(() => () => onHighlight(null), [onHighlight])
@@ -120,7 +125,11 @@ export function LeyendaTrazos({ lines, singleTrack, highlight, onHighlight }: Tr
           aria-pressed={highlight === trazo}
           title="Resaltar en el mapa"
           data-testid={`leyenda-${trazo}`}
-          onClick={() => onHighlight(highlight === trazo ? null : trazo)}
+          onClick={() => {
+            const next = highlight === trazo ? null : trazo
+            onHighlight(next)
+            if (next) onPin?.(next)
+          }}
         >
           <Muestra trazo={trazo} />
           <span>{texto}</span>
