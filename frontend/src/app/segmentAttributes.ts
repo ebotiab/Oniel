@@ -43,6 +43,8 @@ const PROTECCION_TREN: Record<string, ValorDicho> = {
   ertms_n1: { texto: 'ERTMS de nivel 1', termino: 'ertms' },
   ertms_n1_asfa: { texto: 'ERTMS de nivel 1 y ASFA', termino: 'ertms' },
   ertms_n2: { texto: 'ERTMS de nivel 2', termino: 'ertms' },
+  ertms_n1_n2_asfa: { texto: 'ERTMS de niveles 1 y 2 y ASFA', termino: 'ertms' },
+  ertms_n2_asfa: { texto: 'ERTMS de nivel 2 y ASFA', termino: 'ertms' },
   sin_dato_publicado: SIN_DATO_PUBLICADO,
 }
 

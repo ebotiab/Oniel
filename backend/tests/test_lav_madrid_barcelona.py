@@ -185,7 +185,7 @@ def test_sources_and_operators_are_registered(bcn_spec: NetworkSpec) -> None:
     }
     assert all(o.source_id in sources for o in bcn_spec.operators)
     # la fuente de Iryo dice ya que opera también en esta línea
-    assert "Madrid–Zaragoza–Barcelona" in str(sources["iryo-web"].coverage)
+    assert "Zaragoza y Barcelona" in str(sources["iryo-web"].coverage)
 
 
 def test_bypasses_and_continuations_are_connections_not_loaded(bcn_spec: NetworkSpec) -> None:

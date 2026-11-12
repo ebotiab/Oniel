@@ -208,17 +208,18 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     report = validate_attributes(SPECS, SOURCES, DATA_DIR)
     assert report["problems"] == []
     by_line = {line["line"]: line for line in report["attributes"]}
+    granada = by_line["lav-antequera-granada"]
     for line in by_line.values():
-        required = ["bloqueo", "mando", "proteccion_tren", "tracks"]
-        assert {k: line["covered_segments"][k] for k in required} == dict.fromkeys(
-            required, line["segments"]
+        covered = dict(line["covered_segments"])
+        # el ancho mixto solo se declara donde lo hay: el paso por Loja y la entrada a Granada
+        assert covered.pop("gauge", None) == (3 if line is granada else None)
+        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona
+        barcelona = line["line"] == "lav-madrid-barcelona"
+        assert covered.pop("max_speed_kmh", None) == (3 if barcelona else None)
+        assert covered == dict.fromkeys(
+            ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
         )
-    # la velocidad declarada es opcional: solo la llevan tres tramos de la línea de Barcelona
-    assert {
-        name: line["covered_segments"].get("max_speed_kmh")
-        for name, line in by_line.items()
-        if "max_speed_kmh" in line["covered_segments"]
-    } == {"lav-madrid-barcelona": 3}
+    assert granada["sections"] == 4 + 3
     # dos de vía única, seis de bloqueo, una de protección del tren y una de mando
     assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 10
 

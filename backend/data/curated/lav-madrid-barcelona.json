@@ -3,7 +3,7 @@
     "id": "lav-madrid-barcelona",
     "name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
     "short_name": "050",
-    "sort_order": 8,
+    "sort_order": 9,
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

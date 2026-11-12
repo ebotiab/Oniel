@@ -26,7 +26,7 @@ async function abrirDetalle(page: Page, tramo: string) {
 
 test.describe('Señalización: protección del tren, bloqueo y mando de cada tramo', () => {
   test('todos los tramos de la instantánea traen los tres, con la fuente y la fecha', () => {
-    expect(red.segments).toHaveLength(41)
+    expect(red.segments).toHaveLength(66)
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
         expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE, checked_on: '2026-11-12' })
@@ -56,6 +56,15 @@ test.describe('Señalización: protección del tren, bloqueo y mando de cada tra
     await abrirDetalle(page, ALTA_VELOCIDAD)
     await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('LZB y ASFA')
     await expect(page.getByTestId('tramo-atributo-bloqueo')).toHaveText('De control automático')
+    await expect(page.getByTestId('tramo-atributo-mando')).toHaveText('Sin dato publicado')
+  })
+
+  test('las líneas de alta velocidad de Córdoba a Granada dicen su ERTMS, con el ASFA de respaldo', async ({ page }) => {
+    await abrirDetalle(page, 'lav-cordoba-malaga:bif-malaga:la-marota')
+    await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de niveles 1 y 2 y ASFA')
+    await expect(page.getByTestId('tramo-atributo-bloqueo')).toHaveText('De control automático')
+    await abrirDetalle(page, 'lav-antequera-granada:bif-riofrio:loja')
+    await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de nivel 2 y ASFA')
     await expect(page.getByTestId('tramo-atributo-mando')).toHaveText('Sin dato publicado')
   })
 

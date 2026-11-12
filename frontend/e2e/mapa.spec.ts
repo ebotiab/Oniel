@@ -101,12 +101,16 @@ async function encuadre(page: Page) {
   return page.evaluate(() => (globalThis as unknown as ConMapa).__onielMap!.getBounds().toArray() as [[number, number], [number, number]])
 }
 
-/** El encuadre enseña Despeñaperros (vía única) y deja fuera Madrid, que queda más al norte. */
+/**
+ * El encuadre enseña la vía única de punta a punta: Despeñaperros, al norte, y Granada, al sur, donde
+ * acaba la línea de Moreda. No llega al norte de la península: en el móvil el lienzo sigue por detrás
+ * de la hoja y alcanza Madrid, pero no los Pirineos.
+ */
 async function encuadraLaViaUnica(page: Page) {
   await expect
     .poll(async () => {
       const [[oeste, sur], [este, norte]] = await encuadre(page)
-      return oeste < -3.5 && este > -3.5 && sur < 38.4 && norte > 38.4 && norte < 40.4
+      return oeste < -3.61 && este > -3.5 && sur < 37.18 && norte > 38.4 && norte < 42.5
     })
     .toBe(true)
 }
@@ -120,7 +124,8 @@ test.describe('Trazo de la vía', () => {
       for (const f of map.querySourceFeatures('oniel-segments')) vistos.add(`${f.properties.tipo}/${f.properties.vias}`)
       return [...vistos].sort()
     })
-    expect(trazos).toEqual(['alta-velocidad/2', 'convencional/1', 'convencional/2'])
+    // la alta velocidad de vía única es la de Antequera a Granada desde la bifurcación Archidona
+    expect(trazos).toEqual(['alta-velocidad/1', 'alta-velocidad/2', 'convencional/1', 'convencional/2'])
     // cada trazo tiene su capa de dibujo: filete, trazos blancos y trazos espaciados
     const capas = await page.evaluate(() => {
       const map = (globalThis as unknown as ConMapa).__onielMap!

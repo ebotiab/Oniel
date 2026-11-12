@@ -176,6 +176,22 @@ class AttributeSection(BaseModel):
         return self
 
 
+class PkRestart(BaseModel):
+    """Nodo en el que la numeración de puntos kilométricos vuelve a empezar.
+
+    Una línea de Oniel puede juntar dos líneas de Adif, cada una con su kilometraje (de
+    Linares-Baeza a Moreda, el de la línea 410; de Moreda a Granada, el de la 416, que empieza en
+    cero en Moreda). Los nodos que siguen a ``node`` comparan su PK de referencia con ``pk_km``
+    más la distancia medida desde ese nodo; el propio nodo conserva el PK de la numeración
+    anterior.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    node: str
+    pk_km: float = 0.0
+
+
 class LineSpec(BaseModel):
     id: str
     name: str
@@ -194,6 +210,8 @@ class LineSpec(BaseModel):
     #: PK de referencia del origen de la línea, cuando su numeración no empieza en cero (la de
     #: Manzanares a Ciudad Real continúa la de Madrid: Manzanares es el PK 197,3).
     pk_origin_km: float = 0.0
+    #: Nodos en los que la numeración vuelve a empezar, si la línea junta varias de Adif.
+    pk_restarts: list[PkRestart] = Field(default_factory=list)
     #: Diferencia admitida entre el PK de referencia y el kilómetro medido sobre la geometría.
     pk_tolerance_km: float = 1.5
     status: Literal["disponible", "prevista"] = "disponible"
@@ -282,6 +300,9 @@ class NetworkSpec(BaseModel):
             if c.node_id not in ids:
                 raise ValueError(f"la conexión {c.id} apunta a un nodo desconocido {c.node_id}")
         self._check_mappings(self.stop_mappings, ids, "la parada")
+        for restart in self.line.pk_restarts:
+            if restart.node not in ids:
+                raise ValueError(f"pk_restarts apunta a un nodo desconocido {restart.node}")
         for t in self.attribute_sections:
             for ref in (t.from_node, t.to_node):
                 if ref not in ids:

@@ -10,7 +10,20 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-from conftest import BCN_SPEC, CONV_SPEC, DATA_DIR, FEED, JAEN_SPEC, MZCR_SPEC, SPEC, SPECS
+from conftest import (
+    ALBACETE_SPEC,
+    BCN_SPEC,
+    CONV_SPEC,
+    DATA_DIR,
+    FEED,
+    JAEN_SPEC,
+    LAV_GRANADA_SPEC,
+    LAV_MALAGA_SPEC,
+    LBMG_SPEC,
+    MZCR_SPEC,
+    SPEC,
+    SPECS,
+)
 from pydantic import ValidationError
 
 from oniel.geo import haversine_km
@@ -38,16 +51,6 @@ LAV, CONV, MZCR = (
 RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
     "atocha-cercanias-cordoba-por-manzanares": 4,
-}
-#: La alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de Huesca
-#: y el Alvia que sale por Camp de Tarragona hacia València y Córdoba.
-BCN_RULES = {
-    "calatayud-tudela-por-plasencia-de-jalon": 28,
-    "calatayud-pamplona-por-plasencia-de-jalon": 3,
-    "madrid-tudela-por-plasencia-de-jalon": 59,
-    "zaragoza-huesca": 15,
-    "barcelona-andalucia-con-parada-en-madrid": 0,
-    "barcelona-cordoba-por-valencia": 14,
 }
 #: La convencional tiene además las reglas de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42, "linares-baeza-mengibar": 20}
@@ -519,16 +522,33 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         CONV_SPEC.name: RULES | JAEN_RULES,
         MZCR_SPEC.name: RULES,
         JAEN_SPEC.name: {},
-        BCN_SPEC.name: BCN_RULES,
+        # la línea de Linares-Baeza a Granada tiene su propia regla: los trenes a Almería que
+        # paran en Moreda salen por la estación y no por la bifurcación
+        LBMG_SPEC.name: {"linares-baeza-almeria-por-moreda": 4},
+        ALBACETE_SPEC.name: {},
+        LAV_MALAGA_SPEC.name: {},
+        LAV_GRANADA_SPEC.name: {},
+        # la alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de
+        # Huesca y el Alvia que sale por Camp de Tarragona hacia València y Córdoba
+        BCN_SPEC.name: {
+            "calatayud-tudela-por-plasencia-de-jalon": 28,
+            "calatayud-pamplona-por-plasencia-de-jalon": 3,
+            "madrid-tudela-por-plasencia-de-jalon": 59,
+            "zaragoza-huesca": 15,
+            "barcelona-andalucia-con-parada-en-madrid": 0,
+            "barcelona-cordoba-por-valencia": 14,
+        },
     }
     # la regla de los Ouigo de Barcelona a Andalucía no encaja con ningún viaje de Renfe: lo
     # dice el informe de este fichero, y el de todos los ficheros juntos ya no (validate de la CLI)
     ouigo_only = "barcelona-andalucia-con-parada-en-madrid"
+    unused = [f"la regla de recorrido {ouigo_only} no encaja con ningún viaje del GTFS"]
     for name, r in reports.items():
-        unused = [f"la regla de recorrido {ouigo_only} no encaja con ningún viaje del GTFS"]
         assert r["problems"] == (unused if name == BCN_SPEC.name else [])
         assert r["gtfs"]["route_overrides"] == expected[name]
         assert "indeterminado" not in r["gtfs"]["passes"]
+    granada = reports[LBMG_SPEC.name]["gtfs"]
+    assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
     assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 565
     assert reports[SPEC.name]["gtfs"]["trips"] == 335
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 154
@@ -546,7 +566,9 @@ def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:
     ]
     broken = tmp_path / CONV_SPEC.name
     broken.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
-    report = validate_all(broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC])
+    report = validate_all(
+        broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC, LBMG_SPEC, ALBACETE_SPEC]
+    )
     assert report["problems"] == [
         f"la regla {rule['id']}: el «via» de la parada 50500 no se sostiene: cordoba no es un"
         f" nodo de la línea {MZCR}"

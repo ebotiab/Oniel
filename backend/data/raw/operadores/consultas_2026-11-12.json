@@ -1,5 +1,5 @@
 {
-  "descripcion": "Registro de la consulta hecha el 12 de noviembre de 2026 para saber si Iryo opera en la línea de alta velocidad Madrid–Zaragoza–Barcelona. Queda qué decía la página ese día, resumido con palabras propias (no se reproduce el texto original). Las consultas del día anterior sobre la publicación de sus horarios están en consultas_2026-11-11.json y siguen valiendo.",
+  "descripcion": "Registro de la consulta hecha el 12 de noviembre de 2026 para saber por qué líneas cargadas circula Iryo además de la de Madrid a Sevilla. La página consultada cambia, así que aquí queda qué decía ese día, resumido con palabras propias (no se reproduce el texto original).",
   "consultado_el": "2026-11-12",
   "consultas": [
     {
@@ -7,8 +7,8 @@
       "titulo": "Destinos iryo",
       "editor": "Iryo",
       "url": "https://iryo.eu/es/destinos",
-      "resumen": "La página enumera trece destinos: Madrid, Barcelona, Zaragoza, Valencia, Sevilla, Málaga, Cuenca, Córdoba, Alicante, Albacete, Tarragona, Puertollano y Ciudad Real. De Zaragoza dice que está entre Madrid y Barcelona. Sigue sin enlazar ningún fichero de horarios ni una sección de datos abiertos: solo ofrece el buscador de billetes.",
-      "que_aporta": "Que Iryo opera trenes por la línea de alta velocidad Madrid–Zaragoza–Barcelona, con Zaragoza, Tarragona y Barcelona entre sus destinos, y que sigue sin publicar sus horarios en un formato reutilizable."
+      "resumen": "La página enumera trece destinos: Madrid, Barcelona, Zaragoza, Valencia, Sevilla, Málaga, Cuenca, Córdoba, Alicante, Albacete, Tarragona, Puertollano y Ciudad Real. De Zaragoza dice que está entre Madrid y Barcelona. No figuran Antequera, Loja ni Granada. Sigue sin enlazar ningún fichero de horarios: solo ofrece el buscador de billetes.",
+      "que_aporta": "Que los trenes de Iryo a Málaga recorren la línea de alta velocidad Córdoba–Málaga sin parar entre Córdoba y Málaga, que Iryo no circula por la de Antequera a Granada y que opera por la línea de alta velocidad Madrid–Zaragoza–Barcelona, con Zaragoza, Tarragona y Barcelona entre sus destinos."
     }
   ]
 }

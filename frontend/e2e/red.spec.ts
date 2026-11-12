@@ -27,14 +27,18 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^4 líneas · 1\.009 km\s*32 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^8 líneas · 1\.524 km\s*48 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
-    await expect(red.getByRole('region', { name: 'Alta velocidad' }).locator('.fila-linea')).toHaveText([/^Madrid – Sevilla470,5 km · hasta 300 km\/h/])
-    await expect(red.getByRole('region', { name: 'Línea convencional' }).locator('.fila-linea')).toHaveCount(3)
-    // no arranca en ninguna línea: ni esquema ni pestañas, y con cuatro líneas no hace falta filtro
+    await expect(red.getByRole('region', { name: 'Alta velocidad' }).locator('.fila-linea')).toHaveText([
+      /^Madrid – Sevilla470,5 km · hasta 300 km\/h/,
+      /^Córdoba – Málaga96,9 km · hasta 300 km\/h/,
+      /^Antequera – Granada114,1 km · hasta 300 km\/h/,
+    ])
+    await expect(red.getByRole('region', { name: 'Línea convencional' }).locator('.fila-linea')).toHaveCount(5)
+    // no arranca en ninguna línea: ni esquema ni pestañas, y con ocho líneas aparece ya el filtro de la lista
     await expect(page.getByTestId('esquema')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
-    await expect(page.getByTestId('filtro-lineas')).toHaveCount(0)
+    await expect(page.getByTestId('filtro-lineas')).toBeVisible()
     await expect(page).toHaveURL(/\/$/)
   })
 
@@ -89,15 +93,19 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('recuento-red')).toContainText(/^64 líneas · /)
+    await expect(page.getByTestId('recuento-red')).toContainText(/^68 líneas · /)
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     // el recuento solo gana las cifras de más: no enumera
     expect((await page.getByTestId('recuento-red').locator('.pill-texto').boundingBox())!.width).toBeLessThan(anchoConTres + 40)
     const lista = page.getByTestId('lista-lineas')
-    await expect(lista.locator('.fila-linea')).toHaveCount(64)
+    await expect(lista.locator('.fila-linea')).toHaveCount(68)
     const filtro = page.getByTestId('filtro-lineas')
     await filtro.fill('alcazar')
-    await expect(lista.locator('.fila-linea')).toHaveText([/^Madrid – Córdoba por Alcázar de San Juan/])
+    // dos líneas pasan por Alcázar: la de Madrid a Córdoba y la que sale de allí hacia Albacete
+    await expect(lista.locator('.fila-linea')).toHaveText([
+      /^Madrid – Córdoba por Alcázar de San Juan/,
+      /^Alcázar de San Juan – Albacete/,
+    ])
     await filtro.fill('zzz')
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     await expect(lista).toContainText('Ninguna línea coincide con ese nombre.')
