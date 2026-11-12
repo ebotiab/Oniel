@@ -60,6 +60,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 6. [#20](https://github.com/ebotiab/Oniel/issues/20) Datos: señalización y protección del tren por tramo. ASFA, LZB, ERTMS, bloqueo y mando desde la Declaración sobre la Red. Depende de #19 y #15.
 9. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Los recuentos por operador (#22) y el grafo de rutas (#23) ya están.
 11. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Los destinos directos por estación (#26) y los conjuntos de datos fechados (#21) ya están.
+12. [#90](https://github.com/ebotiab/Oniel/issues/90) Visor: el glosario como página propia, con un dibujo por concepto. Sin mapa, con índice, los términos aparte con buscador y las referencias discretas. La propuesta se enseña al usuario antes de implementarla. El glosario (#16) ya está.
 
 El orden es orientativo. La tarea de arquitectura que queda (#19) desbloquea las que la siguen; conviene hacerla antes que sus dependientes y no en paralelo con ellas.
 
