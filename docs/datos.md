@@ -404,10 +404,11 @@ Las pruebas usan dos ficheros: el fijo del 8 de noviembre y una copia sin un tre
 | `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y, de una estación, sus paradas y sus destinos directos el día de referencia (véase «Destinos directos»). | Al abrir su ficha. |
 | `historico/nodes/<id>.json`, `historico/segments/<id>.json` | Los trenes de cada conjunto de datos en una estación o un tramo (véase «Evolución del servicio»). | Al abrir su ficha. |
 | `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos. | No lo lee el visor: lo usa el resumen del refresco de horarios. |
+| `alternatives.json` | Trenes por tramo el día de referencia y si las líneas cargadas les ofrecen otro camino con el tramo cortado (`docs/simulacion.md`, «Tramos sin alternativa»). 93 KB, 3,2 KB con gzip (12 de noviembre de 2026). | Al abrir la ficha de un tramo o el panel de cobertura; nunca al arrancar. |
 
 La red entera en un solo fichero (`network.json`, con `segment-counts.json`) dejó de exportarse el 11 de noviembre de 2026: el visor ya no la descargaba y las pruebas del grafo de rutas leen el índice.
 
-La API ofrece lo equivalente: `GET /api/lines` (el índice) y `GET /api/lines/{id}` (el detalle, con `?date=` para los recuentos de otro día). `GET /api/network` sigue devolviendo la red entera.
+La API ofrece lo equivalente: `GET /api/lines` (el índice), `GET /api/lines/{id}` (el detalle, con `?date=` para los recuentos de otro día) y `GET /api/alternatives`. `GET /api/network` sigue devolviendo la red entera.
 
 Qué va en el índice y por qué. Lleva todos los nodos y todos los tramos, no solo los principales: con ellos el buscador encuentra cualquier estación, un enlace directo a cualquier tramo o nodo sabe de qué línea es antes de pedirla, y el cálculo de recorridos en el cliente tiene el grafo entero (nodos, tramos, longitudes y velocidades) sin descargar ninguna línea. Lo que se deja fuera es lo que pesa: la geometría completa y los textos de los nodos. La geometría del índice se simplifica con una tolerancia de 200 m (Douglas-Peucker, `oniel.geo.simplify`, `INDEX_TOLERANCE_M`); los extremos de cada tramo no se mueven. Hasta el zoom 8 un píxel del mapa son más de 230 m, así que el trazo simplificado y el completo se dibujan igual; al acercarse más, el visor ya ha pedido la línea y sustituye su geometría por la completa. Los recuentos de cada línea llevan el máximo de toda la red (`network_max_count`) para que las barras del esquema tengan la misma escala en todas las líneas.
 

@@ -488,3 +488,62 @@ class RoutesOut(BaseModel):
     max_ratio: float
     routes: list[RouteOut]
     method: str
+
+
+class AlternativeRouteOut(BaseModel):
+    """El camino más corto que queda entre dos nodos con un tramo cerrado, y lo que añade."""
+
+    length_km: float
+    time_min: int | None
+    #: Diferencia con el recorrido del tren; negativa si el otro camino es más corto.
+    extra_km: float
+    extra_min: int | None
+    single_track_km: float
+    line_ids: list[str]
+    #: Estaciones principales intermedias, en el orden en que se recorren.
+    via: list[str]
+
+
+class SegmentTrainGroupOut(BaseModel):
+    """Trenes de un tramo que siguen el mismo recorrido por las líneas cargadas."""
+
+    #: Nodos por los que el grupo entra y sale de las líneas cargadas.
+    from_node_id: str
+    from_name: str
+    to_node_id: str
+    to_name: str
+    trains: int
+    by_operator: dict[str, int]
+    #: Lo que mide y tarda ese recorrido, con la misma vara que la alternativa.
+    length_km: float
+    time_min: int | None
+    line_ids: list[str]
+    #: Nulo si con el tramo cerrado no queda ningún camino en las líneas cargadas.
+    alternative: AlternativeRouteOut | None
+
+
+class SegmentAlternativesOut(BaseModel):
+    """Los trenes de un tramo un día y cuántos tienen otro camino si el tramo se corta."""
+
+    segment_id: str
+    trains: int
+    by_operator: dict[str, int]
+    with_alternative: int
+    without_alternative: int
+    #: Del grupo con más trenes al que menos.
+    groups: list[SegmentTrainGroupOut]
+
+
+class AlternativesOut(BaseModel):
+    """Trenes por tramo y alternativa en las líneas cargadas, para toda la red."""
+
+    #: Día de los trenes; nulo si no hay horarios cargados.
+    date: dt.date | None
+    #: Las líneas en las que se busca el otro camino: «sin alternativa» se refiere solo a ellas.
+    line_ids: list[str]
+    #: Operadores que circulan por esas líneas y cuyos trenes no están contados.
+    missing_operator_ids: list[str]
+    scope_note: str
+    method: str
+    #: Un elemento por tramo, en el orden de la red.
+    segments: list[SegmentAlternativesOut]

@@ -1237,6 +1237,37 @@ async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncCli
     assert (await client.get("/api/lines/no-existe")).status_code == 404
 
 
+async def test_alternatives_count_the_trains_of_each_segment(client: httpx.AsyncClient) -> None:
+    out = (await client.get("/api/alternatives")).json()
+    counts = (await client.get("/api/segment-counts")).json()
+    assert out["date"] == counts["date"] == "2026-11-13"
+    assert out["line_ids"] == [LAV, CONV, MZCR]
+    assert out["missing_operator_ids"] == ["iryo"]
+    assert "líneas que Oniel tiene cargadas" in out["scope_note"]
+    by_id = {s["segment_id"]: s for s in out["segments"]}
+    assert len(by_id) == 39
+    assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
+    # al sur de Córdoba no hay otra línea cargada: ningún tren tiene otro camino
+    south = by_id[f"{LAV}:cordoba:bif-malaga"]
+    assert (south["trains"], south["without_alternative"]) == (108, 108)
+    assert all(g["alternative"] is None for g in south["groups"])
+    # al norte, la línea convencional salva el tramo: 97 km más para los trenes de Madrid a Sevilla
+    north = by_id[f"{LAV}:adamuz:cordoba"]
+    assert (north["trains"], north["without_alternative"]) == (108, 0)
+    top = north["groups"][0]
+    assert (top["trains"], top["from_name"], top["to_name"]) == (
+        43,
+        "Madrid-Puerta de Atocha",
+        "Sevilla-Santa Justa",
+    )
+    assert top["alternative"]["line_ids"] == [CONV, LAV]
+    assert (top["alternative"]["extra_km"], top["alternative"]["extra_min"]) == (97.0, 104)
+    # otro día, otros trenes
+    sunday = (await client.get("/api/alternatives", params={"date": "2026-11-15"})).json()
+    assert sunday["date"] == "2026-11-15"
+    assert sunday["segments"] != out["segments"]
+
+
 async def test_snapshot_parts_add_up_to_the_whole_network(
     imported: dict[str, Any], dsn: str, tmp_path: Path
 ) -> None:
@@ -1261,6 +1292,10 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         return json.loads((tmp_path / name).read_text(encoding="utf-8"))
 
     index = read("index.json")
+    # trenes por tramo y alternativa: el mismo resultado que da la API, en un fichero aparte
+    async with connect(dsn) as conn:
+        alternatives = await network_repo.fetch_segment_alternatives(conn)
+    assert read("alternatives.json") == alternatives.model_dump(mode="json")
     # la red entera ya no se exporta en un solo fichero: el visor no lo descargaba
     assert not (tmp_path / "network.json").exists()
     assert not (tmp_path / "segment-counts.json").exists()

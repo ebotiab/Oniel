@@ -1,7 +1,8 @@
 """Exporta la red y los servicios a JSON estático para el visor cuando no hay API.
 
 El visor arranca con ``index.json`` (el índice ligero de toda la red) y pide ``lines/<id>.json``
-al abrir cada línea, que trae también sus pasos por tramo. La red entera en una sola respuesta
+al abrir cada línea, que trae también sus pasos por tramo. ``alternatives.json`` (trenes por
+tramo y si la red cargada les ofrece otro camino) va aparte y tampoco se pide al arrancar. La red entera en una sola respuesta
 solo la da la API (``GET /api/network``).
 """
 
@@ -47,6 +48,10 @@ async def export_snapshot(
         detail = await network_repo.fetch_line_detail(conn, line.id, day)
         assert detail is not None
         _write(lines_dir / f"{safe_name(line.id)}.json", detail.model_dump(mode="json"))
+    # Trenes por tramo y alternativa en la red cargada: un fichero propio, que el visor solo pide
+    # al abrir la ficha de un tramo o el panel de cobertura.
+    alternatives = await network_repo.fetch_segment_alternatives(conn, day)
+    _write(out_dir / "alternatives.json", alternatives.model_dump(mode="json"))
     # Histórico compacto, con cada conjunto de datos en su propio día de referencia: los pasos por
     # tramo de cada conjunto (los lee el resumen del refresco de horarios) y, por tramo y por nodo,
     # los trenes de cada conjunto, que es lo que la ficha compara y lo mismo que responde la API
