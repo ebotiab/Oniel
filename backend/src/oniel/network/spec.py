@@ -10,6 +10,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from oniel.domain.annotations import ANNOTATION_KINDS, Scope
+from oniel.domain.attributes import ATTRIBUTE_RULES, AttributeScalar, value_matches
 
 NodeKind = Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
 NodeRank = Literal["principal", "secundario"]
@@ -135,13 +136,39 @@ class GeometrySource(BaseModel):
         return self
 
 
-class TrackSection(BaseModel):
-    """Número de vías entre dos nodos; lo que no se declara usa ``line.tracks``."""
+class AttributeSection(BaseModel):
+    """El valor de un atributo de tramo entre dos nodos de la línea, en cualquier orden.
 
+    Todos los tramos que quedan entre ``from_node`` y ``to_node`` reciben ``value``. Dos secciones
+    del mismo atributo no pueden pisarse. ``source_id`` es una fuente de ``sources.json`` y
+    ``checked_on``, el día en que el valor se contrastó con ella; ``note`` es para quien mantiene
+    el fichero y no se publica. Lo que cada atributo exige está en
+    ``oniel.domain.attributes.ATTRIBUTE_RULES``.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    attribute: str = Field(pattern=r"^[a-z][a-z0-9_]*$")
     from_node: str
     to_node: str
-    tracks: int
+    value: AttributeScalar
+    source_id: str | None = None
+    checked_on: dt.date | None = None
     note: str | None = None
+
+    @model_validator(mode="after")
+    def _consistent(self) -> AttributeSection:
+        where = f"la sección de «{self.attribute}» {self.from_node}–{self.to_node}"
+        if self.from_node == self.to_node:
+            raise ValueError(f"{where} empieza y termina en el mismo nodo")
+        if isinstance(self.value, str) and not self.value.strip():
+            raise ValueError(f"{where} no tiene valor")
+        rule = ATTRIBUTE_RULES.get(self.attribute)
+        if rule is not None and not value_matches(self.value, rule.value_type):
+            raise ValueError(
+                f"{where} vale {self.value!r} y el atributo es de tipo {rule.value_type.__name__}"
+            )
+        return self
 
 
 class LineSpec(BaseModel):
@@ -154,7 +181,9 @@ class LineSpec(BaseModel):
     gauge_mm: int | None = None
     electrification: str | None = None
     max_speed_kmh: int | None = None
-    tracks: int = 2
+    #: Número de vías de la línea entera; las secciones del atributo ``tracks`` lo cambian por
+    #: tramos. Si falta, las secciones tienen que cubrir toda la línea.
+    tracks: int | None = None
     opened_on: str | None = None
     reference_length_km: float | None = None
     #: PK de referencia del origen de la línea, cuando su numeración no empieza en cero (la de
@@ -221,11 +250,23 @@ class NetworkSpec(BaseModel):
     line: LineSpec
     operators: list[OperatorSpec]
     nodes: list[NodeSpec]
-    track_sections: list[TrackSection] = Field(default_factory=list)
+    attribute_sections: list[AttributeSection] = Field(default_factory=list)
     connections: list[ConnectionSpec] = Field(default_factory=list)
     stop_mappings: dict[str, StopMapping] = Field(default_factory=dict)
     corridor_filter: CorridorFilter = Field(default_factory=CorridorFilter)
     route_overrides: list[RouteOverride] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _no_track_sections(cls, data: Any) -> Any:
+        # La forma anterior se retiró: aceptarla en silencio dejaría la línea entera con el valor
+        # por defecto y sin sus tramos de vía única.
+        if isinstance(data, dict) and "track_sections" in data:
+            raise ValueError(
+                "track_sections ya no existe: el número de vías se declara en attribute_sections"
+                ' con "attribute": "tracks" y el número en "value"'
+            )
+        return data
 
     @model_validator(mode="after")
     def _consistent(self) -> NetworkSpec:
@@ -236,10 +277,13 @@ class NetworkSpec(BaseModel):
             if c.node_id not in ids:
                 raise ValueError(f"la conexión {c.id} apunta a un nodo desconocido {c.node_id}")
         self._check_mappings(self.stop_mappings, ids, "la parada")
-        for t in self.track_sections:
+        for t in self.attribute_sections:
             for ref in (t.from_node, t.to_node):
                 if ref not in ids:
-                    raise ValueError(f"el tramo de vías {t.from_node}–{t.to_node} apunta a {ref}")
+                    raise ValueError(
+                        f"la sección de «{t.attribute}» {t.from_node}–{t.to_node} apunta a un"
+                        f" nodo desconocido {ref}"
+                    )
         rule_ids = [r.id for r in self.route_overrides]
         if len(set(rule_ids)) != len(rule_ids):
             raise ValueError("ids de regla de recorrido repetidos en route_overrides")

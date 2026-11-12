@@ -148,6 +148,45 @@ def validate_operators(
     }
 
 
+def validate_attributes(
+    spec_paths: Sequence[Path], sources_path: Path, data_dir: Path
+) -> dict[str, Any]:
+    """Comprueba los atributos de tramo de las líneas: reparto, cobertura y fuentes.
+
+    Construir la línea ya falla si dos secciones del mismo atributo se pisan o si uno obligatorio
+    no cubre todos los tramos; aquí ese fallo se recoge como problema, y se comprueba además que
+    cada sección cita una fuente registrada. El informe dice, por línea y atributo, cuántos
+    tramos tienen valor.
+    """
+    problems: list[str] = []
+    sources = {s.id for s in load_sources(sources_path)}
+    lines: list[dict[str, Any]] = []
+    for path in spec_paths:
+        spec = load_network_spec(path)
+        for section in spec.attribute_sections:
+            if section.source_id is not None and section.source_id not in sources:
+                problems.append(
+                    f"{spec.line.id}: la sección de «{section.attribute}»"
+                    f" {section.from_node}–{section.to_node} cita una fuente no registrada"
+                    f" ({section.source_id})"
+                )
+        try:
+            net = build_network(spec, data_dir)
+        except ValueError as error:
+            problems.append(str(error))
+            continue
+        covered: Counter[str] = Counter(k for s in net.segments for k in s.attributes)
+        lines.append(
+            {
+                "line": spec.line.id,
+                "segments": len(net.segments),
+                "sections": len(spec.attribute_sections),
+                "covered_segments": dict(sorted(covered.items())),
+            }
+        )
+    return {"attributes": lines, "problems": problems}
+
+
 def unused_route_overrides(reports: Sequence[dict[str, Any]]) -> list[str]:
     """Reglas de recorrido que no encajan con ningún viaje de ninguno de los ficheros validados."""
     used: Counter[tuple[str, str]] = Counter()

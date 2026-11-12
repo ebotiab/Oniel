@@ -242,6 +242,7 @@ def validate_cmd(
         unused_route_overrides,
         validate_all,
         validate_annotations,
+        validate_attributes,
         validate_operators,
     )
 
@@ -253,6 +254,12 @@ def validate_cmd(
         if feed
         else [(settings.data_dir / f.file, f.stop_id_prefix) for f in _declared_feeds(sources)]
     )
+    # Los atributos de tramo van primero: si una línea no se puede construir por ellos, se dice
+    # como problema y no se sigue con los horarios.
+    attributes = validate_attributes(context, sources, settings.data_dir)
+    if attributes["problems"]:
+        _echo_json([attributes])
+        raise typer.Exit(code=1)
     reports = [
         validate_all(
             path,
@@ -273,6 +280,7 @@ def validate_cmd(
     reports.append(validate_annotations(annotations, sources, context, settings.data_dir))
     # Los operadores y sus ficheros de horarios también se contrastan con todas las líneas.
     reports.append(validate_operators(context, sources, settings.data_dir))
+    reports.append(attributes)
     _echo_json(reports)
     if any(r["problems"] for r in reports):
         raise typer.Exit(code=1)

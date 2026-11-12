@@ -9,6 +9,7 @@
     "gauge_mm": 1435,
     "electrification": "25 kV 50 Hz",
     "max_speed_kmh": 300,
+    "tracks": 2,
     "opened_on": "1992-04-21",
     "reference_length_km": 471.8,
     "status": "disponible",

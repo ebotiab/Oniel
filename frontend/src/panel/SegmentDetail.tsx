@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
 import type { AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
-import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop, tracksLabel } from '../app/state'
+import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop } from '../app/state'
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
+import { FilasAtributos } from './SegmentAttributes'
 import { Termino } from './Termino'
 
 interface Props {
@@ -92,12 +93,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           </dt>
           <dd>{segment.max_speed_kmh ? `${segment.max_speed_kmh} km/h` : 'sin dato'}</dd>
         </div>
-        <div>
-          <dt>Vías</dt>
-          <dd data-testid="tramo-vias">
-            {segment.tracks === 1 || segment.tracks === 2 ? <Termino id={segment.tracks === 1 ? 'via-unica' : 'via-doble'}>{tracksLabel(segment.tracks)}</Termino> : tracksLabel(segment.tracks)}
-          </dd>
-        </div>
+        <FilasAtributos segment={segment} line={line} lugar="esencial" />
       </dl>
 
       <Plegable>
@@ -116,6 +112,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
             </dt>
             <dd>{segment.typical_speed_kmh ? `${segment.typical_speed_kmh} km/h` : 'sin dato'}</dd>
           </div>
+          <FilasAtributos segment={segment} line={line} lugar="detalle" />
         </dl>
         <p className="suave">
           El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea. La velocidad habitual es la que Oniel usa para
