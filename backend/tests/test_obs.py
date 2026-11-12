@@ -252,8 +252,9 @@ def test_status_without_traces_says_so() -> None:
     status = obs.production_status(_reader(empty), now=NOW)
     text = obs.format_status(status, commit="7ba2694")
     assert "la API no ha enviado trazas en los últimos 7 días" in text
-    assert "ninguna registrada en los últimos 7 días" in text
+    assert "ninguna de la versión 7ba2694 registrada en los últimos 7 días" in text
     assert "El commit 7ba2694 NO es el desplegado todavía." in text
+    assert "ninguna registrada en los últimos 7 días" in obs.format_status(status)
     assert text.count("  ninguno") == 1 and "sin peticiones en ese periodo" in text
 
 
@@ -267,6 +268,89 @@ def test_data_version_ahead_of_the_api_is_flagged() -> None:
     text = obs.format_status(status, commit="7ba2694")
     assert "oniel-data: 7ba2694" in text and "No coincide con la API" in text
     assert "NO es el desplegado todavía" in text
+
+
+OLD = "6dc0573c0ffee000000000000000000000000def"
+
+
+def _overlapping_deploy() -> dict[str, list[dict[str, Any]]]:
+    """El despliegue del 12 de noviembre de 2026 tras la PR 119 (#120): la importación de la versión
+    nueva empieza medio segundo antes que la de la anterior, que se la salta y acaba mucho antes."""
+    versions = _answers()["GROUP BY service_name, service_version"]
+    versions[2]["service_version"] = OLD
+    return _answers(
+        **{
+            "GROUP BY service_name, service_version": versions,
+            "'import all started'": [
+                _import_row(
+                    "skipped",
+                    start_timestamp="2026-11-12T16:02:00.501Z",
+                    duration=1.1,
+                    service_version=OLD,
+                    attributes=json.dumps({"outcome": "skipped", "if_changed": True}),
+                ),
+                {
+                    **_import_row(),
+                    "kind": "log",
+                    "start_timestamp": "2026-11-12T16:02:00.500Z",
+                    "service_version": OLD,
+                    "duration": None,
+                    "attributes": "{}",
+                },
+                _import_row(start_timestamp="2026-11-12T16:02:00.001Z"),
+                {
+                    **_import_row(),
+                    "kind": "log",
+                    "start_timestamp": "2026-11-12T16:02:00Z",
+                    "duration": None,
+                    "attributes": "{}",
+                },
+            ],
+        }
+    )
+
+
+def test_overlapping_imports_report_the_deployed_version() -> None:
+    status = obs.production_status(_reader(_overlapping_deploy()), now=NOW)
+    assert [(run.version, run.outcome) for run in status.imports] == [
+        (OLD, "skipped"),
+        (COMMIT, "completed"),
+    ]
+    assert status.last_import is not None and status.last_import.version == COMMIT
+    assert status.last_import.detail == {"lines": 3, "trips_imported": 1650}
+    assert obs.commit_deployed(status, "7ba2694")
+
+    for commit in ("7ba2694", None):
+        text = obs.format_status(status, commit=commit)
+        imports = text.split("Última importación\n")[1].split("\n\n")[0].splitlines()
+        assert imports == [
+            "  completada el 2026-11-12 16:02 UTC en 82 s (versión 7ba2694)",
+            "    lines=3, trips_imported=1650",
+            "  La más reciente es de otra versión; no cuenta para la desplegada:",
+            "    omitida el 2026-11-12 16:02 UTC en 1 s (versión 6dc0573): los datos y el código "
+            "no han cambiado (--if-changed)",
+        ]
+
+    # Con --commit de la versión anterior se ve la suya, y la API dice que no es la desplegada.
+    text = obs.format_status(status, commit="6dc0573")
+    assert "El commit 6dc0573 NO es el desplegado todavía." in text
+    assert "Última importación\n  omitida el 2026-11-12 16:02 UTC" in text
+    assert "La más reciente es de otra versión" not in text
+
+
+def test_import_of_the_commit_still_running_is_not_deployed() -> None:
+    answers = _overlapping_deploy()
+    answers["'import all started'"] = answers["'import all started'"][:2] + [
+        answers["'import all started'"][3]
+    ]  # sin el tramo de la versión nueva: su importación sigue en curso
+    status = obs.production_status(_reader(answers), now=NOW)
+    run = status.import_for("7ba2694")
+    assert run is not None and run.outcome == "running"
+    assert status.last_import is run
+    assert not obs.commit_deployed(status, "7ba2694")
+    text = obs.format_status(status, commit="7ba2694")
+    assert "en curso desde 2026-11-12 16:02 UTC (versión 7ba2694)" in text
+    assert "su importación no ha terminado bien" in text
 
 
 def test_reader_explains_failures() -> None:
@@ -326,6 +410,40 @@ def test_wait_for_commit_polls_until_it_is_deployed() -> None:
         is old
     )
     assert len(calls) <= 3
+
+
+def test_wait_for_commit_waits_for_its_import_and_stops_if_it_fails() -> None:
+    answers = _overlapping_deploy()
+    rows = answers["'import all started'"]
+    running = obs.production_status(
+        _reader(answers | {"'import all started'": [*rows[:2], rows[3]]}), now=NOW
+    )
+    done = obs.production_status(_reader(answers), now=NOW)
+    pending = [running, running, done]
+    slept: list[float] = []
+    clock = iter(range(0, 10_000, 30))
+    status = obs.wait_for_commit(
+        lambda: pending.pop(0),
+        "7ba2694",
+        timeout_s=600,
+        sleep=slept.append,
+        clock=lambda: next(clock),
+    )
+    assert status is done and slept == [30.0, 30.0]
+
+    failed_row = _import_row(level=17, is_exception=True, exception_type="RuntimeError")
+    failed = obs.production_status(
+        _reader(answers | {"'import all started'": [*rows[:2], failed_row]}), now=NOW
+    )
+    assert obs.import_failed(failed, "7ba2694") and not obs.commit_deployed(failed, "7ba2694")
+    slept.clear()
+    assert (
+        obs.wait_for_commit(
+            lambda: failed, "7ba2694", timeout_s=600, sleep=slept.append, clock=lambda: 0.0
+        )
+        is failed
+    )
+    assert slept == []
 
 
 def test_cli_without_token_says_so_and_does_not_fail(monkeypatch: pytest.MonkeyPatch) -> None:
