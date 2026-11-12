@@ -100,6 +100,30 @@ async def daily_counts(
     return {r["segment_id"]: r["n"] for r in rows}
 
 
+async def daily_counts_by_operator(
+    conn: asyncpg.Connection, date: dt.date
+) -> dict[str, dict[str, int]]:
+    """Pasos por tramo un día, separados por operador; solo de los conjuntos activos ese día.
+
+    Por cada tramo, la suma de sus operadores es el recuento de :func:`daily_counts`.
+    """
+    rows = await conn.fetch(
+        f"""
+        SELECT p.segment_id, s.operator_id, count(*) AS n
+        FROM service_segment_passes p
+        JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
+        JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
+        WHERE d.service_date = $1 AND p.dataset_id IN {active_ids_sql("$1")}
+        GROUP BY p.segment_id, s.operator_id ORDER BY p.segment_id, s.operator_id
+        """,
+        date,
+    )
+    out: dict[str, dict[str, int]] = {}
+    for r in rows:
+        out.setdefault(r["segment_id"], {})[r["operator_id"]] = r["n"]
+    return out
+
+
 async def fetch_service(
     conn: asyncpg.Connection, service_id: str
 ) -> tuple[ServiceOut, list[StopOut]] | None:
@@ -139,7 +163,7 @@ async def calls_at_node(
 ) -> list[dict[str, Any]]:
     rows = await conn.fetch(
         f"""
-        SELECT s.id, s.train_number, s.product, s.origin_name, s.destination_name, ss.arrival_s, ss.departure_s, ss.seq,
+        SELECT s.id, s.operator_id, s.train_number, s.product, s.origin_name, s.destination_name, ss.arrival_s, ss.departure_s, ss.seq,
                (SELECT max(seq) FROM service_stops x
                 WHERE x.dataset_id = s.dataset_id AND x.service_id = s.id) AS last_seq
         FROM service_stops ss
@@ -156,6 +180,7 @@ async def calls_at_node(
     return [
         {
             "service_id": r["id"],
+            "operator_id": r["operator_id"],
             "train_number": r["train_number"],
             "product": r["product"],
             "origin_name": r["origin_name"],

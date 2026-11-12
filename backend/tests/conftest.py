@@ -24,6 +24,14 @@ FEED = DATA_DIR / "raw" / "renfe" / "google_transit_av_ld_md_2026-11-08.zip"
 FEED_SOURCE_ID = "renfe-gtfs-av-ld-md"
 FEED_OPERATOR_ID = "renfe"
 FEED_DATASET_ID = "renfe-gtfs-av-ld-md-2026-11-08"
+#: Fichero de Ouigo España, descargado del Punto de Acceso Nacional el 12 de noviembre de 2026.
+#: También es fijo y por su nombre. Sus paradas llevan el código UIC («0071» y el de Adif).
+OUIGO_FEED = DATA_DIR / "raw" / "ouigo" / "gtfs_ouigo_2026-11-12.zip"
+OUIGO_SOURCE_ID = "ouigo-gtfs-nap"
+OUIGO_OPERATOR_ID = "ouigo"
+OUIGO_DATASET_ID = "ouigo-gtfs-nap-2026-11-12"
+OUIGO_STOP_ID_PREFIX = "0071"
+OUIGO_PRODUCT = "Ouigo"
 
 
 @pytest.fixture(scope="session")
@@ -39,6 +47,11 @@ def built(spec: NetworkSpec) -> BuiltNetwork:
 @pytest.fixture(scope="session")
 def feed() -> GtfsFeed:
     return read_feed(FEED)
+
+
+@pytest.fixture(scope="session")
+def ouigo_feed() -> GtfsFeed:
+    return read_feed(OUIGO_FEED, stop_id_prefix=OUIGO_STOP_ID_PREFIX)
 
 
 def database_url_for_tests() -> str | None:

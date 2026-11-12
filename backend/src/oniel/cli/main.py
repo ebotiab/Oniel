@@ -182,6 +182,8 @@ def import_gtfs_cmd(
                     operator_id=f.operator_id,
                     retrieved_on=f.retrieved_on,
                     data_dir=settings.data_dir,
+                    product=f.product,
+                    stop_id_prefix=f.stop_id_prefix,
                 )
                 for f in _declared_feeds()
             ]
@@ -231,19 +233,41 @@ def validate_cmd(
     sources: Annotated[Path, typer.Option(help="Registro de fuentes")] = SOURCES_DEFAULT,
 ) -> None:
     """Comprueba la red, la resolución de los horarios y las interrupciones sin tocar la base de datos."""
-    from oniel.validate import validate_all, validate_interruptions
+    from oniel.validate import (
+        unused_route_overrides,
+        validate_all,
+        validate_interruptions,
+        validate_operators,
+    )
 
     # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
     # parada puede ser salida hacia otra línea y medir la distancia por ella.
     context = list(dict.fromkeys([*SPECS_DEFAULT, *_specs(spec)]))
-    feeds = [feed] if feed else [settings.data_dir / f.file for f in _declared_feeds(sources)]
+    feeds: list[tuple[Path, str | None]] = (
+        [(feed, None)]
+        if feed
+        else [(settings.data_dir / f.file, f.stop_id_prefix) for f in _declared_feeds(sources)]
+    )
     reports = [
-        validate_all(path, feed_path, settings.data_dir, [p for p in context if p != path])
-        for feed_path in feeds
+        validate_all(
+            path,
+            feed_path,
+            settings.data_dir,
+            [p for p in context if p != path],
+            stop_id_prefix=prefix,
+            require_rules=False,
+        )
+        for feed_path, prefix in feeds
         for path in _specs(spec)
     ]
+    # Cada regla de recorrido tiene que encajar con algún viaje de alguno de los ficheros.
+    reports.append(
+        {"route_overrides": "todos los ficheros", "problems": unused_route_overrides(reports)}
+    )
     # Las interrupciones se contrastan con todas las líneas configuradas, se valide una o todas.
     reports.append(validate_interruptions(interruptions, sources, context, settings.data_dir))
+    # Los operadores y sus ficheros de horarios también se contrastan con todas las líneas.
+    reports.append(validate_operators(context, sources, settings.data_dir))
     _echo_json(reports)
     if any(r["problems"] for r in reports):
         raise typer.Exit(code=1)

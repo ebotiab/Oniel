@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
-import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut, Source } from '../data/types'
+import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, productLabel, shortStop } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
 import { PieFuente, Plegable } from './Plegable'
@@ -11,6 +11,8 @@ interface Props {
   network: NetworkOut
   /** Fuentes registradas, para citar al pie del detalle las de sus líneas. */
   sources: Source[]
+  /** Operadores registrados, para nombrar al de cada tren cuando paran los de varios. */
+  operators: Operator[]
   referenceDate: string | null
   /** Interrupciones vigentes hoy, por id de tramo. */
   interrupted: Map<string, InterruptionOut[]>
@@ -22,7 +24,7 @@ interface Props {
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, referenceDate, interrupted, onSelectSegment, onGoLine, onCompare, onBack }: Props) {
+export function NodeDetail({ node, network, sources, operators, referenceDate, interrupted, onSelectSegment, onGoLine, onCompare, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -47,6 +49,10 @@ export function NodeDetail({ node, network, sources, referenceDate, interrupted,
       alive = false
     }
   }, [node.id, referenceDate, station])
+
+  // El operador de cada tren solo se nombra si aquí paran los de más de uno.
+  const severalOperators = new Set(calls?.calls.map((c) => c.operator_id)).size > 1
+  const operatorName = (id: string | undefined) => operators.find((o) => o.id === id)?.name ?? id ?? ''
 
   return (
     <section className="detalle" aria-labelledby="detalle-titulo" data-testid="detalle-nodo">
@@ -179,6 +185,7 @@ export function NodeDetail({ node, network, sources, referenceDate, interrupted,
                     </strong>{' '}
                     <span className="suave">
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}
+                      {severalOperators ? ` · ${operatorName(c.operator_id)}` : ''}
                     </span>
                   </span>
                 </li>

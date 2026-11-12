@@ -69,6 +69,14 @@ Trazo de la vía (decidido el 11 de noviembre de 2026, con las variantes delante
 - Los estados van encima del dibujo y no lo cambian: el rojo de «sin circulación» y el azul de la selección tiñen la tinta y conservan el filete o los trazos; el halo y el engrosado siguen marcando la selección y el cierre simulado.
 - Los nodos secundarios (apeaderos y estaciones menores) se dibujan más pequeños, con rótulo en gris y solo a partir del zoom 7,5; en el esquema compacto del móvil se ven como marcas sin rótulo.
 
+Trenes por operador (decidido el 11 de noviembre de 2026, entre tres opciones)
+- La barra de cada tramo del esquema y su cifra son el total de todos los operadores con horarios cargados. El esquema no reparte la barra ni añade tinta: de quién son los trenes se lee en el panel del tramo.
+- El panel del tramo abre «Trenes que lo recorren» con un renglón que da el reparto, de más a menos trenes («Renfe Viajeros 96 · Ouigo España 10»), o «Solo Renfe Viajeros» cuando todos son de un operador. Debajo, la lista se agrupa por operador, cada grupo con su nombre y su cifra como cabecera; con un solo operador no lleva cabeceras.
+- Si por la línea opera alguien que no publica sus horarios en un formato abierto, una frase en gris lo dice tras el reparto («No están los trenes de Iryo…»), y la nota bajo el esquema añade «no incluyen los de Iryo». Sin color y sin iconos: es una ausencia de datos, no un estado de la vía.
+- En la ficha de una estación, el operador de cada tren solo se nombra cuando paran los de más de uno.
+- Se descartaron la barra partida en dos tonos de tinta (con pocos trenes de un operador frente a muchos de otro, su parte quedaba en dos o tres píxeles) y la cifra al pasar el cursor (no funciona al tacto sin seleccionar el tramo). Los operadores no llevan colores de marca: el color sigue siendo solo señal.
+- El panel de cobertura enumera los operadores de trenes, primero los que tienen horarios cargados, cada uno con su fuente, su licencia y la validez de sus horarios.
+
 Interrupciones del servicio (decidido el 10 de noviembre de 2026)
 - El rojo ya significaba «cierre»: un tramo con una interrupción vigente hoy se dibuja con la vía en rojo, en el mapa y en el esquema, con su grosor y su dibujo de siempre. No hay iconos, animaciones ni avisos emergentes.
 - Se distingue del cierre simulado por el énfasis: el cierre simulado lleva el trazo grueso y un halo rojo; la interrupción real, solo el color. Un tramo interrumpido sigue en rojo al seleccionarlo: la selección la dicen el grosor y el halo azul (en el esquema, un borde azul alrededor del rojo).

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+from collections.abc import Sequence
 from typing import Any
 
 import asyncpg
@@ -33,8 +34,14 @@ from oniel.repo.datasets_repo import CURRENT_IDS_SQL
 from oniel.routing import Graph, build_graph
 
 
-def coverage_notice(lines: list[LineSummary]) -> str:
-    """Aviso de cobertura construido a partir de las líneas cargadas."""
+def _listed(names: list[str]) -> str:
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" y {names[-1]}"
+
+
+def coverage_notice(lines: list[LineSummary], operators: Sequence[Operator] = ()) -> str:
+    """Aviso de cobertura construido a partir de las líneas cargadas y de sus operadores."""
+    loaded = [o.name for o in operators if o.timetable == "cargado"] or ["Renfe"]
+    missing = [o.name for o in operators if o.timetable == "no_publicado"]
     names = [line.name[0].lower() + line.name[1:] for line in lines]
     if not names:
         listed = "ninguna línea todavía"
@@ -42,9 +49,16 @@ def coverage_notice(lines: list[LineSummary]) -> str:
         listed = f"únicamente la {names[0]}"
     else:
         listed = "la " + ", la ".join(names[:-1]) + f" y la {names[-1]}"
+    absent = (
+        f" No están los trenes de {_listed(missing)}, que no publica"
+        f"{'n' if len(missing) > 1 else ''} sus horarios en un formato abierto."
+        if missing
+        else ""
+    )
     return (
-        f"Esta versión de Oniel carga {listed}, con los servicios de Renfe que las recorren."
-        " Los horarios son los publicados por Renfe y no reflejan interrupciones ni"
+        f"Esta versión de Oniel carga {listed}, con los servicios de {_listed(loaded)} que las"
+        f" recorren.{absent} Los horarios son los publicados por"
+        f" {'cada operador' if len(loaded) > 1 else loaded[0]} y no reflejan interrupciones ni"
         " alteraciones del servicio; las interrupciones que Oniel conoce se señalan aparte, con"
         " su fuente y la fecha en que se comprobaron."
     )
@@ -73,7 +87,9 @@ async def fetch_sources(conn: asyncpg.Connection) -> list[Source]:
 
 
 async def fetch_operators(conn: asyncpg.Connection) -> list[Operator]:
-    rows = await conn.fetch("SELECT id, name, role FROM operators ORDER BY id")
+    rows = await conn.fetch(
+        "SELECT id, name, role, source_id, timetable FROM operators ORDER BY id"
+    )
     return [Operator(**dict(r)) for r in rows]
 
 
@@ -82,7 +98,9 @@ async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
         """
         SELECT l.*, o.id AS op_id, o.name AS op_name, o.role AS op_role,
                (SELECT count(*) FROM line_nodes ln WHERE ln.line_id = l.id) AS node_count,
-               (SELECT count(*) FROM segments s WHERE s.line_id = l.id) AS segment_count
+               (SELECT count(*) FROM segments s WHERE s.line_id = l.id) AS segment_count,
+               ARRAY(SELECT lo.operator_id FROM line_operators lo
+                     WHERE lo.line_id = l.id ORDER BY lo.operator_id) AS operator_ids
         FROM lines l LEFT JOIN operators o ON o.id = l.infrastructure_manager_id
         ORDER BY l.sort_order, l.id
         """
@@ -98,6 +116,7 @@ async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
                 sort_order=r["sort_order"],
                 mode=r["mode"],
                 infrastructure_manager=op,
+                operator_ids=list(r["operator_ids"]),
                 gauge_mm=r["gauge_mm"],
                 electrification=r["electrification"],
                 max_speed_kmh=r["max_speed_kmh"],
@@ -382,6 +401,7 @@ async def fetch_line_detail(
     if day is None:
         _, _, day = await feed_bounds(conn)
     counts = await services_repo.daily_counts(conn, day) if day else {}
+    by_operator = await services_repo.daily_counts_by_operator(conn, day) if day else {}
     return LineDetailOut(
         line=line,
         nodes=nodes,
@@ -396,6 +416,7 @@ async def fetch_line_detail(
         interruptions=await fetch_interruptions(conn, line_id=line_id),
         date=day,
         counts={k: v for k, v in counts.items() if k in segment_ids},
+        counts_by_operator={k: v for k, v in by_operator.items() if k in segment_ids},
         network_max_count=max(counts.values(), default=0),
     )
 
@@ -424,16 +445,17 @@ async def fetch_coverage(conn: asyncpg.Connection) -> CoverageOut:
         f"SELECT count(DISTINCT train_number) FROM services WHERE dataset_id IN {CURRENT_IDS_SQL}",
     )
     start, end, ref = await feed_bounds(conn)
+    operators = await fetch_operators(conn)
     return CoverageOut(
         lines=lines,
         total_length_km=round(sum(line.length_km for line in lines), 1),
         station_count=station_count,
         service_count=service_count,
-        operators=await fetch_operators(conn),
+        operators=operators,
         feed_start=start,
         feed_end=end,
         reference_date=ref,
         datasets=await datasets_repo.fetch_active_datasets(conn, ref) if ref else [],
         sources=await fetch_sources(conn),
-        notice=coverage_notice(lines),
+        notice=coverage_notice(lines, operators),
     )

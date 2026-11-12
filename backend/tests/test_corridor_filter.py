@@ -87,6 +87,48 @@ def test_high_speed_filter_is_unchanged(feed: GtfsFeed, spec: NetworkSpec) -> No
     assert len(trips) == 335
 
 
+def test_ouigo_trains_run_only_along_the_high_speed_line(
+    ouigo_feed: GtfsFeed, spec: NetworkSpec, conv_spec: NetworkSpec
+) -> None:
+    """El fichero de Ouigo usa códigos UIC y rotula «TGV 6477»: al leerlo quedan los códigos de
+    Adif y el número de tren, y sus viajes por Córdoba y Madrid-Puerta de Atocha entran en la LAV."""
+    assert ouigo_feed.agency_name == "OUIGO Espana" and len(ouigo_feed.trips) == 69
+    assert ouigo_feed.stops["60000"].name == "Madrid-Puerta de Atocha"
+    assert not any(stop_id.startswith("0071") for stop_id in ouigo_feed.stops)
+    trips = select_trips_for_spec(ouigo_feed, spec)
+    # 8 Madrid–Sevilla, 13 Madrid–Málaga y 4 que enlazan Barcelona con Sevilla o Málaga por Madrid
+    assert len(trips) == 25 and len({t.train_number for t in trips}) == 20
+    assert all(t.train_number.isdigit() for t in trips)
+    ends = Counter(
+        " – ".join(
+            sorted({_stop_names(ouigo_feed, t.trip_id)[0], _stop_names(ouigo_feed, t.trip_id)[-1]})
+        )
+        for t in trips
+    )
+    assert ends == {
+        "Madrid-Puerta de Atocha – Sevilla-Santa Justa": 8,
+        "Madrid-Puerta de Atocha – Malaga Maria Zambrano": 13,
+        "Barcelona-Sants – Sevilla-Santa Justa": 2,
+        "Barcelona-Sants – Malaga Maria Zambrano": 2,
+    }
+    # ninguno para en una estación de la línea convencional
+    assert select_trips_for_spec(ouigo_feed, conv_spec) == []
+    # y todas sus paradas tienen asignación en la LAV
+    for trip in trips:
+        assert ouigo_feed.stop_ids_of(trip) <= set(spec.stop_mappings)
+
+
+def test_stop_names_and_train_numbers_are_normalised() -> None:
+    from oniel.gtfs.reader import stop_name, train_number
+
+    assert stop_name("MADRID-PUERTA DE ATOCHA") == "Madrid-Puerta de Atocha"
+    assert stop_name("ELCHE AV/ELX AV") == "Elche Av/Elx Av"
+    assert stop_name("Córdoba-Julio Anguita") == "Córdoba-Julio Anguita"
+    assert train_number("TGV 6477", "TGV") == "6477"
+    assert train_number("02070", "AVE") == "02070"
+    assert train_number("6477", "") == "6477"
+
+
 def test_coverage_notice_lists_the_loaded_lines() -> None:
     from oniel.domain.schemas import LineSummary
 

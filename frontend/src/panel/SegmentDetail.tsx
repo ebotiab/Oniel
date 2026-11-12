@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
-import type { InterruptionOut, NetworkOut, SegmentOut, SegmentServicesOut, Source } from '../data/types'
-import { formatDate, formatKm, lineKind, productLabel, shortStop, tracksLabel } from '../app/state'
+import type { InterruptionOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
+import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop, tracksLabel } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
@@ -12,6 +12,8 @@ interface Props {
   network: NetworkOut
   /** Fuentes registradas, para citar al pie del detalle la del tramo. */
   sources: Source[]
+  /** Operadores registrados, para nombrar al de cada tren. */
+  operators: Operator[]
   referenceDate: string | null
   /** Interrupciones del servicio vigentes hoy en este tramo. */
   interruptions: InterruptionOut[]
@@ -20,7 +22,7 @@ interface Props {
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, sources, referenceDate, interruptions, onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ segment, network, sources, operators, referenceDate, interruptions, onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
@@ -38,6 +40,17 @@ export function SegmentDetail({ segment, network, sources, referenceDate, interr
 
   const byProduct = new Map<string, number>()
   for (const p of services?.passes ?? []) byProduct.set(productLabel(p.service.product), (byProduct.get(productLabel(p.service.product)) ?? 0) + 1)
+
+  // Los trenes de cada operador, del que más tiene al que menos; dentro, por hora de paso.
+  const operatorName = (id: string) => operators.find((o) => o.id === id)?.name ?? id
+  const byOperator = new Map<string, SegmentPassOut[]>()
+  for (const p of services?.passes ?? []) byOperator.set(p.service.operator_id, [...(byOperator.get(p.service.operator_id) ?? []), p])
+  const groups = [...byOperator.entries()]
+    .map(([id, passes]) => ({ id, name: operatorName(id), passes }))
+    .sort((a, b) => b.passes.length - a.passes.length || a.name.localeCompare(b.name, 'es'))
+
+  // Operadores que circulan por la línea y no publican sus horarios: sus trenes no están en la lista.
+  const missing = operators.filter((o) => o.timetable === 'no_publicado' && line?.operator_ids?.includes(o.id))
 
   return (
     <section className="detalle" aria-labelledby="detalle-titulo" data-testid="detalle-tramo">
@@ -123,27 +136,50 @@ export function SegmentDetail({ segment, network, sources, referenceDate, interr
       ))}
       {services && (
         <>
+          {/* lo primero, de quién son los trenes: el total de la barra del esquema, por operador */}
+          {groups.length > 0 && (
+            <p className="texto datos" data-testid="tramo-operadores">
+              {groups.length === 1 ? `Solo ${groups[0]!.name}` : groups.map((g) => `${g.name} ${g.passes.length}`).join(' · ')}
+            </p>
+          )}
+          {missing.length > 0 && (
+            <p className="suave" data-testid="tramo-operadores-sin-horarios">
+              No están los trenes de {listaEs(missing.map((o) => o.name))}, que también opera{missing.length > 1 ? 'n' : ''} en esta línea: no publica
+              {missing.length > 1 ? 'n' : ''} sus horarios en un formato abierto.
+            </p>
+          )}
           <p className="suave">
             {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con horario publicado en {services.counts.publicado},
             estimado en {services.counts.estimado}
             {services.counts.indeterminado ? `, indeterminado en ${services.counts.indeterminado}` : ''}.
           </p>
-          <ol className="lista-servicios" data-testid="lista-servicios">
-            {services.passes.map((p) => (
-              <li key={`${p.service.id}-${p.enter}`}>
-                <span className="hora datos">{p.enter ?? '—'}</span>
-                <span className="tren">
-                  <strong>
-                    {productLabel(p.service.product)} {p.service.train_number}
-                  </strong>{' '}
-                  <span className="suave">
-                    {shortStop(p.service.origin_name)} → {shortStop(p.service.destination_name)}
-                  </span>
-                </span>
-                <KindBadge kind={p.kind} title={p.basis} />
-              </li>
+          <div data-testid="lista-servicios">
+            {groups.map((g) => (
+              <div key={g.id} data-testid={`trenes-${g.id}`}>
+                {groups.length > 1 && (
+                  <h4 className="operador">
+                    {g.name} <span className="datos suave">· {g.passes.length}</span>
+                  </h4>
+                )}
+                <ol className="lista-servicios">
+                  {g.passes.map((p) => (
+                    <li key={`${p.service.id}-${p.enter}`}>
+                      <span className="hora datos">{p.enter ?? '—'}</span>
+                      <span className="tren">
+                        <strong>
+                          {productLabel(p.service.product)} {p.service.train_number}
+                        </strong>{' '}
+                        <span className="suave">
+                          {shortStop(p.service.origin_name)} → {shortStop(p.service.destination_name)}
+                        </span>
+                      </span>
+                      <KindBadge kind={p.kind} title={p.basis} />
+                    </li>
+                  ))}
+                </ol>
+              </div>
             ))}
-          </ol>
+          </div>
         </>
       )}
     </section>

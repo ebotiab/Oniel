@@ -67,25 +67,35 @@ async def feed_bounds(
 ) -> tuple[dt.date | None, dt.date | None, dt.date | None]:
     """Primer y último día con servicio y día de referencia, de un conjunto o de los vigentes.
 
-    El día de referencia es el laborable con más servicios de los primeros treinta días.
+    Con varios conjuntos vigentes (uno por fuente: cada operador publica el suyo) los días son los
+    que cubren todos a la vez, del comienzo más tardío al final más temprano, para que el día de
+    referencia tenga los trenes de todos los operadores. Si no coinciden en ningún día, se devuelve
+    el periodo que cubren entre todos. El día de referencia es el laborable con más servicios de
+    los primeros treinta días.
     """
     scope = "dataset_id = $1" if dataset_id else f"dataset_id IN {CURRENT_IDS_SQL}"
     args = [dataset_id] if dataset_id else []
     r = await conn.fetchrow(
-        f"SELECT min(service_date) AS a, max(service_date) AS b FROM service_dates WHERE {scope}",
+        f"""
+        SELECT max(a) AS a, min(b) AS b, min(a) AS first, max(b) AS last
+        FROM (SELECT min(service_date) AS a, max(service_date) AS b
+              FROM service_dates WHERE {scope} GROUP BY dataset_id) per_dataset
+        """,
         *args,
     )
     if r is None or r["a"] is None:
         return None, None, None
+    start, end = (r["a"], r["b"]) if r["a"] <= r["b"] else (r["first"], r["last"])
     n = len(args) + 1
     ref = await conn.fetchrow(
         f"""
         SELECT service_date FROM service_dates
-        WHERE {scope} AND service_date BETWEEN ${n} AND ${n} + 30
+        WHERE {scope} AND service_date BETWEEN ${n} AND least(${n} + 30, ${n + 1})
           AND extract(isodow FROM service_date) <= 5
         GROUP BY service_date ORDER BY count(*) DESC, service_date LIMIT 1
         """,
         *args,
-        r["a"],
+        start,
+        end,
     )
-    return r["a"], r["b"], ref["service_date"] if ref else r["a"]
+    return start, end, ref["service_date"] if ref else start

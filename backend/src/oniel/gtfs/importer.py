@@ -142,12 +142,16 @@ async def import_gtfs(
     operator_id: str,
     retrieved_on: dt.date | None = None,
     data_dir: Path | None = None,
+    product: str | None = None,
+    stop_id_prefix: str | None = None,
 ) -> dict[str, Any]:
     """Importa un fichero GTFS como conjunto de datos, sin tocar los demás conjuntos.
 
     El conjunto se identifica por el SHA-256 del fichero: repetir la importación del mismo fichero
     sustituye sus servicios (las reglas de recorrido pueden haber cambiado) y no duplica nada.
-    ``retrieved_on`` es el día de descarga; si no se da, se lee del nombre del fichero.
+    ``retrieved_on`` es el día de descarga; si no se da, se lee del nombre del fichero. Con
+    ``product`` todos los trenes del fichero se rotulan con ese nombre en vez de con el suyo, y con
+    ``stop_id_prefix`` se quita ese prefijo de sus códigos de parada (véase ``FeedSpec``).
     """
     retrieved = retrieved_on or retrieved_on_from_name(feed_path)
     if retrieved is None:
@@ -160,7 +164,10 @@ async def import_gtfs(
     paths = [spec_paths] if isinstance(spec_paths, Path) else list(spec_paths)
     specs = [load_network_spec(p) for p in paths]
     with logfire.span("import gtfs {feed}", feed=feed_path.name):
-        feed = read_feed(feed_path)
+        feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix)
+        if product:
+            for trip in feed.trips.values():
+                trip.product = product
         plans: dict[str, _TripPlan] = {}
         per_line: dict[str, dict[str, Any]] = {}
         unmapped: Counter[str] = Counter()
@@ -227,7 +234,9 @@ async def import_gtfs(
                 if not dates:
                     continue
                 await _insert_service(conn, plan, dates, dataset_id, operator_id, run_id)
-            for spec in specs:
+            # Nombre y coordenadas de las paradas asignadas: los pone un fichero con sus propios
+            # códigos, no uno que toma prestados los de Adif quitando un prefijo.
+            for spec in [] if stop_id_prefix else specs:
                 for stop_id in spec.stop_mappings:
                     stop = feed.stops.get(stop_id)
                     if stop:

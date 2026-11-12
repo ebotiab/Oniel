@@ -12,7 +12,20 @@ import httpx
 import pytest
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
-from conftest import DATA_DIR, FEED, SOURCES, SPECS, database_url_for_tests, requires_db
+from conftest import (
+    DATA_DIR,
+    FEED,
+    OUIGO_DATASET_ID,
+    OUIGO_FEED,
+    OUIGO_OPERATOR_ID,
+    OUIGO_PRODUCT,
+    OUIGO_SOURCE_ID,
+    OUIGO_STOP_ID_PREFIX,
+    SOURCES,
+    SPECS,
+    database_url_for_tests,
+    requires_db,
+)
 
 LAV, CONV, MZCR = (
     "lav-madrid-sevilla",
@@ -61,6 +74,16 @@ async def imported(dsn: str) -> dict[str, Any]:
             operator_id="renfe",
             data_dir=DATA_DIR,
         )
+        ouigo1 = await import_gtfs(
+            conn,
+            OUIGO_FEED,
+            SPECS,
+            source_id=OUIGO_SOURCE_ID,
+            operator_id=OUIGO_OPERATOR_ID,
+            data_dir=DATA_DIR,
+            product=OUIGO_PRODUCT,
+            stop_id_prefix=OUIGO_STOP_ID_PREFIX,
+        )
         # repetir la importación debe dejar exactamente el mismo estado
         net2 = [await import_network(conn, s, SOURCES, DATA_DIR) for s in SPECS]
         cuts2 = await import_interruptions(conn, INTERRUPTIONS, SOURCES, DATA_DIR)
@@ -71,6 +94,16 @@ async def imported(dsn: str) -> dict[str, Any]:
             source_id="renfe-gtfs-av-ld-md",
             operator_id="renfe",
             data_dir=DATA_DIR,
+        )
+        ouigo2 = await import_gtfs(
+            conn,
+            OUIGO_FEED,
+            SPECS,
+            source_id=OUIGO_SOURCE_ID,
+            operator_id=OUIGO_OPERATOR_ID,
+            data_dir=DATA_DIR,
+            product=OUIGO_PRODUCT,
+            stop_id_prefix=OUIGO_STOP_ID_PREFIX,
         )
         counts = {
             t: await conn.fetchval(f"SELECT count(*) FROM {t}")
@@ -90,6 +123,7 @@ async def imported(dsn: str) -> dict[str, Any]:
     return {
         "net": (net1, net2),
         "gtfs": (gtfs1, gtfs2),
+        "ouigo": (ouigo1, ouigo2),
         "interruptions": (cuts1, cuts2),
         "counts": counts,
     }
@@ -111,12 +145,24 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         assert gtfs1["lines"][line_id]["route_overrides"] == RULES
     assert gtfs1["lines"][MZCR]["passes"] == {"publicado": 130 * 3, "estimado": 24 * 3}
     assert "indeterminado" not in gtfs1["passes"] and gtfs1["unmapped_stops"] == {}
+    # Ouigo: 25 viajes Madrid–Córdoba–Sevilla o Málaga (4 de ellos vienen de Barcelona o siguen
+    # hasta allí), todos por la LAV y ninguno por las líneas convencionales. Solo paran en Madrid,
+    # Córdoba y Sevilla, así que el paso por cada tramo es estimado: 245 pasos.
+    ouigo1, ouigo2 = imported["ouigo"]
+    assert ouigo1["trips_imported"] == ouigo2["trips_imported"] == 25
+    assert ouigo1["train_numbers"] == 20
+    assert ouigo1["lines"][LAV]["trips"] == 25
+    assert ouigo1["lines"][CONV]["trips"] == ouigo1["lines"][MZCR]["trips"] == 0
+    assert ouigo1["passes"] == {"estimado": 245} and ouigo1["unmapped_stops"] == {}
+    assert ouigo1["resolution"] == {"completa": 25}
+    assert ouigo1["dataset"]["id"] == ouigo2["dataset"]["id"] == OUIGO_DATASET_ID
+    assert (ouigo1["feed_start"], ouigo1["feed_end"]) == ("2026-06-26", "2026-12-12")
     c = imported["counts"]
-    assert c["lines"] == 3 and c["segments"] == 11 + 25 + 3 and c["services"] == 814
-    assert c["service_segment_passes"] == (3126 + 115) + (2469 + 683) + (72 + 390)
-    assert c["import_runs"] == 2
+    assert c["lines"] == 3 and c["segments"] == 11 + 25 + 3 and c["services"] == 814 + 25
+    assert c["service_segment_passes"] == (3126 + 115) + (2469 + 683) + (72 + 390) + 245
+    assert c["import_runs"] == 4
     # el mismo fichero dos veces es un solo conjunto de datos, reconocido por su SHA-256
-    assert c["datasets"] == 1
+    assert c["datasets"] == 2
     assert gtfs1["dataset"]["id"] == gtfs2["dataset"]["id"] == "renfe-gtfs-av-ld-md-2026-11-08"
     assert (gtfs1["dataset"]["reused"], gtfs2["dataset"]["reused"]) == (False, True)
 
@@ -390,7 +436,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert r.status_code == 200
     cov = r.json()
     # Daimiel y Almagro son las dos estaciones nuevas; sus trenes ya contaban en la convencional
-    assert cov["station_count"] == 6 + 22 + 2 and cov["service_count"] == 99 + 99
+    assert cov["station_count"] == 6 + 22 + 2 and cov["service_count"] == 99 + 99 + 20
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -407,15 +453,79 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "y la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [LAV, CONV, MZCR]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
-    (dataset,) = cov["datasets"]
+    # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
+    ouigo, dataset = cov["datasets"]
     assert dataset["id"] == "renfe-gtfs-av-ld-md-2026-11-08"
     assert dataset["source_id"] == "renfe-gtfs-av-ld-md" and dataset["operator_id"] == "renfe"
     assert dataset["file"] == "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
     assert dataset["retrieved_on"] == "2026-11-08"
-    assert (dataset["valid_from"], dataset["valid_to"]) == (cov["feed_start"], cov["feed_end"])
-    assert dataset["valid_from"] <= cov["reference_date"] <= dataset["valid_to"]
+    assert (ouigo["id"], ouigo["operator_id"]) == (OUIGO_DATASET_ID, OUIGO_OPERATOR_ID)
+    assert (ouigo["valid_from"], ouigo["valid_to"]) == ("2026-06-26", "2026-12-12")
+    # los horarios «válidos» son los días que cubren los dos ficheros a la vez: empiezan con el
+    # de Renfe y terminan con el de Ouigo, y el día de referencia cae dentro de los dos
+    assert (cov["feed_start"], cov["feed_end"]) == (dataset["valid_from"], ouigo["valid_to"])
+    assert cov["reference_date"] == "2026-11-13"
+    for d in cov["datasets"]:
+        assert d["valid_from"] <= cov["reference_date"] <= d["valid_to"]
+    # los operadores de trenes, con su fuente y si sus horarios están cargados
+    operators = {o["id"]: o for o in cov["operators"] if o["role"] == "operador"}
+    assert {k: (o["timetable"], o["source_id"]) for k, o in operators.items()} == {
+        "renfe": ("cargado", "renfe-gtfs-av-ld-md"),
+        "ouigo": ("cargado", OUIGO_SOURCE_ID),
+        "iryo": ("no_publicado", "iryo-web"),
+    }
+    assert {line["id"]: line["operator_ids"] for line in cov["lines"]} == {
+        LAV: ["iryo", "ouigo", "renfe"],
+        CONV: ["renfe"],
+        MZCR: ["renfe"],
+    }
+    assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
+    assert "No están los trenes de Iryo, que no publica sus horarios" in cov["notice"]
     assert "interrupciones" in cov["notice"]
     assert cov["reference_date"] is not None
+
+
+async def test_segment_counts_are_split_by_operator(client: httpx.AsyncClient) -> None:
+    """El 13/11/2026: 12 trenes de Ouigo entre Madrid y la bifurcación de Málaga y 6 hasta Sevilla;
+    en las líneas convencionales, solo Renfe."""
+    body = (await client.get("/api/segment-counts", params={"date": "2026-11-13"})).json()
+    split, totals = body["by_operator"], body["counts"]
+    assert {s: sum(by.values()) for s, by in split.items()} == totals
+    assert split[f"{LAV}:madrid-puerta-de-atocha:bif-torrejon-de-velasco"] == {
+        "renfe": 72,
+        "ouigo": 12,
+    }
+    assert split[f"{LAV}:ciudad-real:puertollano"] == {"renfe": 96, "ouigo": 12}
+    assert split[f"{LAV}:cordoba:bif-malaga"] == {"renfe": 96, "ouigo": 12}
+    assert split[f"{LAV}:bif-malaga:majarabique"] == {"renfe": 49, "ouigo": 6}
+    assert split[f"{LAV}:majarabique:sevilla-santa-justa"] == {"renfe": 47, "ouigo": 6}
+    lav = [by for s, by in split.items() if s.startswith(f"{LAV}:")]
+    assert len(lav) == 11 and all(set(by) == {"renfe", "ouigo"} for by in lav)
+    assert all(set(by) == {"renfe"} for s, by in split.items() if not s.startswith(f"{LAV}:"))
+    # las listas de trenes del tramo y de la estación llevan el operador de cada servicio
+    r = await client.get(
+        f"/api/segments/{LAV}:ciudad-real:puertollano/services", params={"date": "2026-11-13"}
+    )
+    passes = r.json()["passes"]
+    ouigo = [p for p in passes if p["service"]["operator_id"] == "ouigo"]
+    assert len(passes) == 108 and len(ouigo) == 12
+    assert {p["service"]["product"] for p in ouigo} == {"Ouigo"}
+    assert {p["kind"] for p in ouigo} == {"estimado"}
+    first = ouigo[0]["service"]
+    assert (first["train_number"], first["origin_name"], first["destination_name"]) == (
+        "6476",
+        "Madrid-Puerta de Atocha",
+        "Sevilla-Santa Justa",
+    )
+    calls = (await client.get("/api/nodes/cordoba/services", params={"date": "2026-11-13"})).json()[
+        "calls"
+    ]
+    assert len([c for c in calls if c["operator_id"] == "ouigo"]) == 12
+    assert {c["operator_id"] for c in calls} == {"renfe", "ouigo"}
+    conv = (
+        await client.get("/api/nodes/alcazar-de-san-juan/services", params={"date": "2026-11-13"})
+    ).json()["calls"]
+    assert {c["operator_id"] for c in conv} == {"renfe"}
 
 
 async def test_segment_services_on_a_weekday(client: httpx.AsyncClient) -> None:
@@ -726,6 +836,11 @@ async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncCli
         segments += detail["segments"]
         features += detail["segment_features"]["features"]
         merged |= detail["counts"]
+        # el reparto por operador de cada tramo suma su recuento, y hoy todo es de Renfe
+        assert detail["counts_by_operator"] == {
+            s: counts["by_operator"][s] for s in detail["counts"]
+        }
+    assert {s: sum(by.values()) for s, by in counts["by_operator"].items()} == counts["counts"]
     # las líneas, juntas, suman lo mismo que la red entera
     assert nodes == network["nodes"]
     assert segments == network["segments"]
@@ -751,6 +866,9 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         counts = {
             "date": day,
             "counts": await services_repo.daily_counts(conn, dt.date.fromisoformat(day)),
+            "by_operator": await services_repo.daily_counts_by_operator(
+                conn, dt.date.fromisoformat(day)
+            ),
         }
     network = whole.model_dump(mode="json")
 
@@ -774,10 +892,14 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "segment_features"
     ]["features"]
     merged: dict[str, int] = {}
+    by_operator: dict[str, dict[str, int]] = {}
     for d in details:
         assert d["date"] == counts["date"]
         merged |= d["counts"]
+        by_operator |= d["counts_by_operator"]
     assert merged == counts["counts"]
+    assert by_operator == counts["by_operator"]
+    assert {s: sum(by.values()) for s, by in by_operator.items()} == counts["counts"]
     # el índice pesa una fracción de la red entera: es lo que el visor descarga al arrancar
     assert (tmp_path / "index.json").stat().st_size < len(whole.model_dump_json()) / 5
     # una línea que deja de estar cargada no deja su fichero en la instantánea

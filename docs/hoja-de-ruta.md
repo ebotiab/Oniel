@@ -1,6 +1,6 @@
 # Hoja de ruta de Oniel
 
-Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 11 de noviembre de 2026.
+Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 12 de noviembre de 2026.
 
 Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
@@ -33,6 +33,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR 36 (11 de noviembre de 2026): patrón de ficha del visor. Tramo, nodo y línea dicen primero lo esencial en lenguaje llano y guardan lo técnico bajo «Más detalle», con la fuente y la fecha al pie; la línea a la vista y la cobertura tienen ruta en la URL. `docs/diseno.md` recoge el patrón («Patrón de ficha» y «Rutas»).
 - PR 46 (11 de noviembre de 2026): grafo de rutas y escenarios (#23). `oniel.routing` une todas las líneas en un grafo y calcula los recorridos entre dos nodos (kilómetros, tiempo estimado, vía única, líneas) sobre un escenario serializable: cerrar tramos, añadir un enlace esbozado, cambiar una velocidad. La alternativa de la simulación de cierre sale de ahí, igual que antes para una línea y ahora también por varias encadenadas (Madrid – Ciudad Real por Manzanares). `GET /api/routes`, el mismo cálculo en `frontend/src/routing/` y la ruta `#/escenario/…`; `docs/simulacion.md`, «Grafo y escenarios».
 - PR del comparador de recorridos (12 de noviembre de 2026, #24): vista «Comparar recorridos» (`#/recorridos/<desde>/<hasta>`), que se abre desde la vista de la red o desde la ficha de una estación. Enseña hasta tres caminos entre dos estaciones, del más corto al más largo, con kilómetros, tiempo estimado, vía única, estaciones y trenes directos; señala los cortados por una interrupción o por un cierre hipotético y cuál queda como alternativa, y funciona sin API. Los recorridos ya no se limitan por número de líneas: se descartan los que miden más del doble que el más corto. `docs/simulacion.md`, «Comparar recorridos», y `docs/diseno.md`.
+- PR de los trenes por operador (12 de noviembre de 2026, #22): los pasos por tramo se reparten por operador en `GET /api/segment-counts` y en la instantánea, y Ouigo entra como segundo operador de la alta velocidad con su GTFS del Punto de Acceso Nacional (12 trenes al día por el tronco Madrid – Córdoba y 6 hasta Sevilla el día de referencia). Iryo no publica sus horarios en un formato abierto: queda registrado como operador de la línea sin horarios y el visor dice en cada tramo que sus trenes faltan. El panel del tramo abre con el reparto y agrupa los trenes por operador; la barra del esquema es el total (`docs/diseno.md`, «Trenes por operador»). El día de referencia sale de los días que cubren todos los ficheros a la vez; `docs/datos.md`, «Operadores y sus horarios».
 
 ## Principios de arquitectura
 
@@ -55,8 +56,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
 5. [#19](https://github.com/ebotiab/Oniel/issues/19) Datos: atributos de tramo por secciones. Un mecanismo para todos; `tracks` lo estrena.
 6. [#20](https://github.com/ebotiab/Oniel/issues/20) Datos: señalización y protección del tren por tramo. ASFA, LZB, ERTMS, bloqueo y mando desde la Declaración sobre la Red. Depende de #19 y #15.
-7. [#22](https://github.com/ebotiab/Oniel/issues/22) Datos: trenes diarios por tramo y por operador, con Iryo y Ouigo. Se apoya en los conjuntos de datos fechados, ya hechos (#21).
-9. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Depende de #22; el grafo de rutas ya está (#23).
+9. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Los recuentos por operador (#22) y el grafo de rutas (#23) ya están.
 10. [#26](https://github.com/ebotiab/Oniel/issues/26) Visor: cobertura por estación, destinos directos y frecuencias.
 11. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #26; los conjuntos de datos fechados ya están (#21).
 12. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Se apoya en los conjuntos de datos fechados, ya hechos (#21).

@@ -5,6 +5,14 @@
       "source_id": "renfe-gtfs-av-ld-md",
       "operator_id": "renfe",
       "retrieved_on": "2026-11-08"
+    },
+    {
+      "file": "raw/ouigo/gtfs_ouigo_2026-11-12.zip",
+      "source_id": "ouigo-gtfs-nap",
+      "operator_id": "ouigo",
+      "retrieved_on": "2026-11-12",
+      "product": "Ouigo",
+      "stop_id_prefix": "0071"
     }
   ],
   "sources": [
@@ -19,6 +27,30 @@
       "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant), larga distancia (Alvia, Intercity, Euromed) y media distancia (MD, Regional Exprés, Regional, Proximidad) de toda España; Oniel importa los que recorren las líneas cargadas. Validez del fichero del 7 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
       "notes": "Fichero google_transit.zip publicado el 8 de noviembre de 2026. Son horarios planificados: no reflejan las interrupciones registradas en interrupciones.json (la de la alta velocidad Madrid–Andalucía, desde el 28 de octubre de 2026, y la de la línea convencional por obras, desde el 6 de septiembre de 2026) ni otras alteraciones del servicio.",
       "file": "raw/renfe/google_transit_av_ld_md_2026-11-08.zip"
+    },
+    {
+      "id": "ouigo-gtfs-nap",
+      "name": "Horarios de alta velocidad de Ouigo España (GTFS)",
+      "publisher": "OUIGO España, en el Punto de Acceso Nacional de Transporte Multimodal del Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://nap.transportes.gob.es/ConjuntoDato/Detail/1515",
+      "license": "Licencia de datos abiertos del Ministerio de Transportes y Movilidad Sostenible",
+      "license_url": "https://nap.transportes.gob.es/licencia-datos",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Servicios regulares de alta velocidad de Ouigo España: 69 viajes en 11 rutas entre 16 estaciones (Madrid, Barcelona, Zaragoza, Valencia, Alicante, Murcia, Valladolid, Córdoba, Sevilla y Málaga, entre otras). Oniel importa los que recorren las líneas cargadas: los Madrid–Córdoba–Sevilla y los Madrid–Córdoba–Málaga, incluidos los que vienen de Barcelona. Validez del fichero del 26 de junio al 12 de diciembre de 2026.",
+      "notes": "Datos en bruto del Punto de Acceso Nacional. Powered by MITRAMS (https://www.transportes.gob.es/). Fichero 20260702_060101_Ouigo.zip, actualizado en el Punto de Acceso el 2 de julio de 2026 y descargado el 12 de noviembre de 2026 con una cuenta de usuario; es una conversión de los horarios que el operador comunica a la base europea MERITS de la UIC. Rotula todos los trenes como TGV: Oniel los muestra como Ouigo. Identifica las paradas con el código UIC (0071 seguido del código de estación de Adif). Son horarios planificados: no reflejan la interrupción de la alta velocidad Madrid–Andalucía registrada en interrupciones.json.",
+      "file": "raw/ouigo/gtfs_ouigo_2026-11-12.zip"
+    },
+    {
+      "id": "iryo-web",
+      "name": "Web de Iryo y catálogos de datos de transporte: Iryo no publica sus horarios en un formato abierto",
+      "publisher": "Iryo; Ministerio de Transportes y Movilidad Sostenible (Punto de Acceso Nacional)",
+      "url": "https://iryo.eu/es/destinos",
+      "license": "Consulta pública; © Iryo",
+      "license_url": null,
+      "retrieved_on": "2026-11-11",
+      "coverage": "Que Iryo opera trenes de alta velocidad por la línea Madrid–Sevilla y que no publica sus horarios en GTFS ni en otro formato reutilizable: no figura entre los conjuntos ferroviarios del Punto de Acceso Nacional (nap.transportes.gob.es) ni en su propia web.",
+      "notes": "Oniel no carga los trenes de Iryo ni reconstruye sus horarios por otros medios: los recuentos de la línea de alta velocidad no los incluyen y el visor lo dice. Lo consultado el 11 de noviembre de 2026 está resumido en el registro de consultas de ese día.",
+      "file": "raw/operadores/consultas_2026-11-11.json"
     },
     {
       "id": "osm-relation-1254828",

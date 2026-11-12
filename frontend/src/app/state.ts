@@ -116,6 +116,9 @@ const SHORT_STOP_NAMES: Record<string, string> = {
   'Madrid-Atocha Cercanías': 'Madrid-Atocha',
   'Córdoba-Julio Anguita': 'Córdoba',
   'Málaga María Zambrano': 'Málaga',
+  // el fichero de Ouigo escribe los nombres sin tildes
+  'Malaga Maria Zambrano': 'Málaga',
+  'Cordoba-Central': 'Córdoba',
   'Villanueva de Córdoba-Los Pedroches': 'Villanueva de Córdoba',
   'Madrid-Chamartín-Clara Campoamor': 'Madrid-Chamartín',
   'Cuenca-Fernando Zóbel': 'Cuenca',
@@ -140,6 +143,11 @@ const PRODUCT_LABELS: Record<string, string> = {
 }
 
 /** Nombre del producto comercial tal y como lo entiende un visitante. */
+/** «Iryo», «Iryo y Ouigo», «Renfe, Iryo y Ouigo». */
+export function listaEs(items: string[]): string {
+  return new Intl.ListFormat('es', { style: 'long', type: 'conjunction' }).format(items)
+}
+
 export function productLabel(product: string): string {
   return PRODUCT_LABELS[product] ?? product
 }

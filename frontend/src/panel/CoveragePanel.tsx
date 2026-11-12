@@ -42,10 +42,46 @@ export function CoveragePanel({ coverage, interruptions, status, onClose }: Prop
       </dl>
       <p className="suave">
         Horarios válidos del {coverage.feed_start ? formatDate(coverage.feed_start) : '–'} al {coverage.feed_end ? formatDate(coverage.feed_end) : '–'}.
-        Operadores: {coverage.operators.map((o) => o.name).join(', ')}.
         {status === 'ausente' ? ' Esta vista previa muestra una instantánea estática; la simulación necesita el servidor.' : ''}
         {status === 'buscando' ? ' El servidor se está despertando; hasta que responda se muestra la instantánea estática.' : ''}
       </p>
+      <h3 className="subtitulo">Operadores de trenes</h3>
+      <ul className="fuentes" data-testid="cobertura-operadores">
+        {coverage.operators
+          .filter((o) => o.role === 'operador')
+          // primero los que tienen horarios cargados
+          .sort((a, b) => Number(a.timetable === 'no_publicado') - Number(b.timetable === 'no_publicado'))
+          .map((o) => {
+            const source = coverage.sources.find((s) => s.id === o.source_id)
+            const dataset = coverage.datasets?.find((d) => d.operator_id === o.id)
+            return (
+              <li key={o.id}>
+                <strong>{o.name}</strong>
+                <br />
+                {o.timetable === 'no_publicado' ? (
+                  <span className="suave">
+                    No publica sus horarios en un formato abierto: sus trenes no están cargados ni contados.
+                    {source?.url && (
+                      <>
+                        {' '}
+                        Consultado en{' '}
+                        <a href={source.url} target="_blank" rel="noreferrer">
+                          {source.url.replace(/^https?:\/\//, '')}
+                        </a>
+                        {source.retrieved_on ? ` el ${formatDate(source.retrieved_on)}` : ''}.
+                      </>
+                    )}
+                  </span>
+                ) : (
+                  <span className="suave">
+                    {source ? `${source.name} · ${source.publisher} · ${source.license}` : 'Sin fuente registrada'}
+                    {dataset ? ` · válidos del ${formatDate(dataset.valid_from)} al ${formatDate(dataset.valid_to)}` : ''}
+                  </span>
+                )}
+              </li>
+            )
+          })}
+      </ul>
       <h3 className="subtitulo">Interrupciones del servicio</h3>
       {interruptions.length > 0 ? (
         <div data-testid="cobertura-interrupciones">
@@ -62,7 +98,7 @@ export function CoveragePanel({ coverage, interruptions, status, onClose }: Prop
       )}
       <h3 className="subtitulo">Pendiente de cargar</h3>
       <p className="texto suave">
-        El resto de la red ferroviaria española, otros operadores (Iryo, Ouigo, mercancías) y otros medios de transporte. El modelo
+        El resto de la red ferroviaria española, los trenes de Cercanías y de mercancías y otros medios de transporte. El modelo
         de datos ya los contempla: cada línea, nodo y servicio lleva su fuente, su licencia y su fecha.
       </p>
       <h3 className="subtitulo">Fuentes</h3>
@@ -72,7 +108,15 @@ export function CoveragePanel({ coverage, interruptions, status, onClose }: Prop
             <strong>{s.name}</strong>
             <br />
             <span className="suave">
-              {s.publisher} · {s.license} · {s.retrieved_on ? `consultado el ${formatDate(s.retrieved_on)}` : ''}
+              {s.publisher} ·{' '}
+              {s.license_url ? (
+                <a href={s.license_url} target="_blank" rel="noreferrer">
+                  {s.license}
+                </a>
+              ) : (
+                s.license
+              )}{' '}
+              · {s.retrieved_on ? `consultado el ${formatDate(s.retrieved_on)}` : ''}
             </span>
             {s.coverage && <p className="suave">{s.coverage}</p>}
             {s.notes && <p className="suave nota">{s.notes}</p>}

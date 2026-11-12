@@ -21,6 +21,20 @@ export interface Operator {
   id: string
   name: string
   role: 'operador' | 'administrador_infraestructura'
+  /** Fuente registrada de la que salen sus datos (sus horarios, si es un operador). */
+  source_id?: string | null
+  /** De un operador de trenes: si sus horarios están cargados o no los publica en abierto. */
+  timetable?: 'cargado' | 'no_publicado' | null
+}
+
+/** Un fichero de horarios importado: de qué fuente y operador es y qué días cubre. */
+export interface DatasetOut {
+  id: string
+  source_id: string
+  operator_id: string | null
+  retrieved_on: string
+  valid_from: string
+  valid_to: string
 }
 
 export interface LineSummary {
@@ -30,6 +44,8 @@ export interface LineSummary {
   sort_order: number
   mode: string
   infrastructure_manager: Operator | null
+  /** Operadores de trenes que circulan por la línea, tengan o no sus horarios cargados. */
+  operator_ids?: string[]
   gauge_mm: number | null
   electrification: string | null
   max_speed_kmh: number | null
@@ -173,6 +189,8 @@ export interface LineDetailOut {
   interruptions?: InterruptionOut[]
   date: string | null
   counts: Record<string, number>
+  /** Los mismos pasos separados por operador: por id de tramo, cuántos son de cada uno. */
+  counts_by_operator?: Record<string, Record<string, number>>
   /** El mayor recuento de toda la red ese día, para dibujar las barras de todas las líneas a la misma escala. */
   network_max_count: number
 }
@@ -186,6 +204,8 @@ export interface CoverageOut {
   feed_start: string | null
   feed_end: string | null
   reference_date: string | null
+  /** Conjuntos de datos activos el día de referencia, uno por fuente de horarios. */
+  datasets?: DatasetOut[]
   sources: Source[]
   notice: string
 }
@@ -225,6 +245,7 @@ export interface SegmentServicesOut {
 
 export interface NodeCall {
   service_id: string
+  operator_id?: string
   train_number: string
   product: string
   origin_name: string | null
