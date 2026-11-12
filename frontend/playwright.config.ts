@@ -8,6 +8,11 @@ import { defineConfig, devices } from '@playwright/test'
 // también dentro de un mismo fichero (`fullyParallel`); eso deja además que `--shard` reparta por
 // pruebas y no por ficheros, que son muy desiguales. En el CI la batería va en cuatro fragmentos
 // (.github/workflows/ci.yml) y cada runner de GitHub tiene cuatro núcleos: un proceso por núcleo.
+//
+// En local el tope son dos procesos: suele haber varias sesiones probando a la vez en el mismo
+// equipo y, con el valor por defecto de Playwright (la mitad de los núcleos cada una), se quitan
+// la máquina unas a otras y todas tardan más. ONIEL_E2E_WORKERS lo cambia cuando se prueba a solas.
+const localWorkers = Number(process.env.ONIEL_E2E_WORKERS ?? 2)
 const port = Number(process.env.ONIEL_E2E_PORT ?? 5199)
 const baseURL = `http://127.0.0.1:${port}`
 
@@ -16,7 +21,7 @@ export default defineConfig({
   timeout: 60_000,
   expect: { timeout: 15_000 },
   fullyParallel: true,
-  workers: process.env.CI ? 4 : undefined,
+  workers: process.env.CI ? 4 : localWorkers,
   retries: process.env.CI ? 1 : 0,
   // En el CI, `github` anota los fallos en la PR y `list` deja en el registro cada prueba con su
   // tiempo y, al final, las que solo pasaron al reintentar.

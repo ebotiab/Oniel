@@ -81,7 +81,7 @@ Las pruebas de integración con PostgreSQL se activan con `ONIEL_TEST_DATABASE_U
 cd frontend && npm run typecheck && npx playwright install chromium && npx playwright test
 ```
 
-Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación). Si otra sesión ocupa el puerto 5199, `ONIEL_E2E_PORT` lo cambia.
+Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación). Si otra sesión ocupa el puerto 5199, `ONIEL_E2E_PORT` lo cambia. En local usa dos procesos, para que varias sesiones a la vez no saturen el equipo; `ONIEL_E2E_WORKERS=4` lo sube cuando se prueba a solas.
 
 La batería completa son más de 200 pruebas en dos tamaños de pantalla. Mientras se trabaja basta con los ficheros de lo que se toca, sobre la instantánea:
 
@@ -89,7 +89,7 @@ La batería completa son más de 200 pruebas en dos tamaños de pantalla. Mientr
 cd frontend && ONIEL_E2E_STATIC=1 npx playwright test e2e/fichas.spec.ts
 ```
 
-La batería entera sobre la instantánea la pasa el CI en cada pull request. La que va contra la API local (sin `ONIEL_E2E_STATIC`) no la pasa el CI: hay que pasarla a mano cuando se toca la simulación o la API.
+La batería entera sobre la instantánea la pasa el CI en cada pull request. Las pruebas que necesitan la API local (sin `ONIEL_E2E_STATIC`) no las pasa el CI: cuando se toca la simulación o la API hay que pasar a mano sus ficheros (`alternativas`, `arranque`, `interrupciones`, `rutas` y `simulacion`).
 
 ## Comprobaciones
 

@@ -31,8 +31,9 @@ Los comandos están en el README y no se repiten aquí: «Arrancar desde cero» 
 En local, antes de abrir la PR, la sesión pasa lo rápido y lo que ha tocado, no todo otra vez:
 
 - Las comprobaciones rápidas de la mitad tocada, siempre: formato, lint y tipos en el backend; tipos, lint y compilación en el visor. Son segundos.
-- Las pruebas de lo tocado. En el backend, `pytest` (un minuto) y `oniel-data validate` si cambian datos. En el visor, los ficheros de Playwright del comportamiento tocado y los nuevos, con `ONIEL_E2E_STATIC=1` (por ejemplo `npx playwright test e2e/fichas.spec.ts`). La batería completa de Playwright se deja al CI, que la pasa en menos tiempo que una sesión en local.
-- Lo que el CI no cubre: con la API local arrancada, `npx playwright test` sin esa variable prueba también la simulación. Hay que pasarlo cuando se toca la simulación o la API.
+- Las pruebas de lo tocado. En el backend, `pytest` (un minuto) y `oniel-data validate` si cambian datos. En el visor, los ficheros de Playwright del comportamiento tocado y los nuevos, con `ONIEL_E2E_STATIC=1` (por ejemplo `npx playwright test e2e/fichas.spec.ts`). La batería completa de Playwright no se pasa en local: la pasa el CI, en menos tiempo y sin ocupar el equipo. Tampoco cuando la tarea toca datos o regenera la instantánea; para eso están los ficheros de lo tocado.
+- Lo que el CI no cubre: las pruebas que necesitan la API (`alternativas`, `arranque`, `interrupciones`, `rutas` y `simulacion`, las que llevan `test.skip(estatico, …)`). Cuando se toca la simulación o la API se pasan esos ficheros con la API local arrancada y sin `ONIEL_E2E_STATIC`, no la batería entera.
+- En local Playwright usa dos procesos (`frontend/playwright.config.ts`), porque varias sesiones prueban a la vez en el mismo equipo y con más se frenan entre todas. No se sube ese tope desde una sesión; `ONIEL_E2E_WORKERS` queda para quien prueba a solas.
 
 Tras fusionar `main` en la rama no se repite en local lo que el CI va a volver a pasar: se resuelven los conflictos, se pasan las comprobaciones rápidas, se regenera la instantánea si toca y se sube.
 
