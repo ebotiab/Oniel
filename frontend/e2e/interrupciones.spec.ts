@@ -142,7 +142,8 @@ test.describe('Interrupciones del servicio', () => {
   test('el resultado de la simulación señala el tramo y la alternativa interrumpidos ese día', async ({ page }) => {
     test.skip(estatico, 'la simulación necesita la API')
     await page.goto('/#/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre')
-    await page.getByTestId('sim-fecha').fill('2026-11-10')
+    // un día que cubren los horarios cargados (el de las demás pruebas de la simulación), con las dos interrupciones vigentes
+    await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('08:00')
     await page.getByTestId('sim-fin').fill('09:00')
     await page.getByTestId('sim-calcular').click()
