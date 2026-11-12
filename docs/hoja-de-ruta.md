@@ -77,6 +77,8 @@ Activado el 12 de noviembre de 2026 con la protección clásica de rama, por `gh
 - **Sin exigir la rama al día** (`strict: false`): una PR con el CI en verde se fusiona aunque `main` haya avanzado desde que se abrió. Con varias sesiones en paralelo, `true` añadiría una vuelta de CI por PR.
 - Sin force push ni borrado de `main`.
 
+Desde el 12 de noviembre de 2026 el repositorio tiene además activada la fusión automática («Allow auto-merge», `gh api -X PATCH repos/ebotiab/Oniel -f allow_auto_merge=true`). No es parte de la regla ni la relaja: permite marcar una PR con `gh pr merge --squash --auto` para que GitHub la fusione cuando las comprobaciones obligatorias pasen.
+
 Para ver la regla:
 
 ```bash
