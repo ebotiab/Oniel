@@ -15,6 +15,18 @@ async function mapaListo(page: Page) {
 }
 
 test.describe('Navegar por el mapa', () => {
+  test('la vía se dibuja sin esperar a las teselas del mapa base', async ({ page }) => {
+    // Las teselas de OpenFreeMap no llegan nunca: como con una conexión muy lenta.
+    await page.route(/tiles\.openfreemap\.org\/.*\.pbf/, () => {})
+    await page.goto('/')
+    await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.getSource('oniel-segments') !== undefined)
+    const estado = await page.evaluate(() => {
+      const map = (globalThis as unknown as ConMapa).__onielMap!
+      return { cargado: map.loaded(), capaDeVia: map.getLayer('oniel-segments') !== undefined }
+    })
+    expect(estado).toEqual({ cargado: false, capaDeVia: true })
+  })
+
   test('el mapa no sale de la península ni de sus vecinos', async ({ page }) => {
     await mapaListo(page)
     const vistas = await page.evaluate(() => {
@@ -53,6 +65,33 @@ test.describe('Navegar por el mapa', () => {
       return { bearing: map.getBearing(), pitch: map.getPitch() }
     })
     expect(giro).toEqual({ bearing: 0, pitch: 0 })
+  })
+
+  test('al ensanchar la ventana de móvil a escritorio, el tramo seleccionado se vuelve a encuadrar fuera del panel', async ({ page }) => {
+    const avisos: string[] = []
+    page.on('console', (m) => {
+      if (/cannot fit/i.test(m.text())) avisos.push(m.text())
+    })
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/#/tramo/lav-madrid-sevilla:urda:ciudad-real')
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+    await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.loaded() === true)
+    await page.setViewportSize({ width: 1280, height: 800 })
+    // los dos extremos del tramo (Urda y Ciudad Real) caben en el hueco que deja el panel, de 440 px
+    const extremos = () =>
+      page.evaluate(() => {
+        const map = (globalThis as unknown as ConMapa).__onielMap!
+        if (map.isMoving()) return null
+        return [map.project([-3.821849, 39.418953]), map.project([-3.913263, 38.985441])].map((p) => ({ x: p.x, y: p.y }))
+      })
+    await expect
+      .poll(async () => {
+        const e = await extremos()
+        return e !== null && e.every((p) => p.x > 440 && p.x < 1280 && p.y > 0 && p.y < 800)
+      })
+      .toBe(true)
+    // MapLibre no ha descartado el encuadre por medir todavía el lienzo del móvil
+    expect(avisos).toEqual([])
   })
 })
 
