@@ -39,7 +39,12 @@ test.describe('Carga de la red por partes', () => {
     // El índice lleva toda la red con la geometría simplificada: pesa mucho menos que una sola línea grande.
     const indice = await (await request.get('/data/index.json')).body()
     const linea = await (await request.get(`/data/lines/${CONV}.json`)).body()
-    expect(indice.byteLength).toBeLessThan(70_000)
+    // Las anotaciones de red (interrupciones, proyectos) van enteras en el índice y no dependen de la
+    // geometría: la red mantiene su tope y ellas tienen el suyo. Cuando no quepan, su detalle se pedirá aparte.
+    const { annotations, interruptions, ...red } = JSON.parse(indice.toString('utf-8')) as Record<string, unknown>
+    const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
+    expect(bytes(red)).toBeLessThan(70_000)
+    expect(bytes({ annotations, interruptions })).toBeLessThan(40_000)
     expect(indice.byteLength).toBeLessThan(linea.byteLength)
   })
 
