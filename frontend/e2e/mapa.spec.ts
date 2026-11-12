@@ -101,12 +101,16 @@ async function encuadre(page: Page) {
   return page.evaluate(() => (globalThis as unknown as ConMapa).__onielMap!.getBounds().toArray() as [[number, number], [number, number]])
 }
 
-/** El encuadre enseña Despeñaperros (vía única) y deja fuera Madrid, que queda más al norte. */
+/**
+ * El encuadre enseña la vía única de punta a punta: Despeñaperros, al norte, y Granada, al sur, donde
+ * acaba la línea de Moreda. No llega al norte de la península: en el móvil el lienzo sigue por detrás
+ * de la hoja y alcanza Madrid, pero no los Pirineos.
+ */
 async function encuadraLaViaUnica(page: Page) {
   await expect
     .poll(async () => {
       const [[oeste, sur], [este, norte]] = await encuadre(page)
-      return oeste < -3.5 && este > -3.5 && sur < 38.4 && norte > 38.4 && norte < 40.4
+      return oeste < -3.61 && este > -3.5 && sur < 37.18 && norte > 38.4 && norte < 42.5
     })
     .toBe(true)
 }

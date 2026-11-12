@@ -1,0 +1,442 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-12T17:10:49Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 348597701,
+  "lat": 36.9514966,
+  "lon": -2.4875137,
+  "tags": {
+    "name": "Gádor",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "56308",
+    "ref:EU:PLC": "ES56308",
+    "train": "yes",
+    "uic_ref": "7156308",
+    "wikidata": "Q5846274",
+    "wikipedia": "es:Estación de Gádor"
+  }
+},
+{
+  "type": "node",
+  "id": 1091494222,
+  "lat": 37.7771622,
+  "lon": -3.2320186,
+  "tags": {
+    "name": "Larva",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5846550"
+  }
+},
+{
+  "type": "node",
+  "id": 1857241320,
+  "lat": 37.4311254,
+  "lon": -3.3107459,
+  "tags": {
+    "name": "Moreda",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/w/56100-moreda",
+    "wikidata": "Q5846767"
+  }
+},
+{
+  "type": "node",
+  "id": 2364846599,
+  "lat": 37.3958204,
+  "lon": -3.5277610,
+  "tags": {
+    "name": "Iznalloz",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q2918573"
+  }
+},
+{
+  "type": "node",
+  "id": 2366145381,
+  "lat": 37.6565877,
+  "lon": -3.2623676,
+  "tags": {
+    "name": "Cabra del Santo Cristo-Alicún",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845891"
+  }
+},
+{
+  "type": "node",
+  "id": 2675627429,
+  "lat": 38.1357775,
+  "lon": -3.5579490,
+  "tags": {
+    "name": "Vadollano",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7201979115,
+  "lat": 37.1836936,
+  "lon": -3.6086283,
+  "tags": {
+    "addr:street": "Avenida de Andaluces",
+    "name": "Granada",
+    "nohousenumber": "yes",
+    "opening_hours": "Mo-Su 05:25-00:00",
+    "operator": "Adif",
+    "owner": "Adif AV",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "05000",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7747872372,
+  "lat": 36.8834626,
+  "lon": -2.4362812,
+  "tags": {
+    "name": "Huércal-Viator",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "56310",
+    "ref:EU:PLC": "ES56310",
+    "train": "yes",
+    "uic_ref": "7156310",
+    "wikidata": "Q15214252",
+    "wikipedia": "es:Estación de Huércal-Viator"
+  }
+},
+{
+  "type": "node",
+  "id": 7747872373,
+  "lat": 37.0417785,
+  "lon": -2.5243676,
+  "tags": {
+    "name": "Fuente Santa",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7747872374,
+  "lat": 36.9716891,
+  "lon": -2.5258164,
+  "tags": {
+    "name": "Santa Fe y Alhama",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7747872375,
+  "lat": 37.1086081,
+  "lon": -2.5915757,
+  "tags": {
+    "name": "Gérgal",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846295",
+    "wikimedia_commons": "File:Estación ffcc Gérgal 11.jpg",
+    "wikipedia": "es:Estación de Gérgal"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890740,
+  "lat": 37.1674546,
+  "lon": -2.7839810,
+  "tags": {
+    "name": "Abla y Abrucena",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q97285849"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890743,
+  "lat": 37.1847160,
+  "lon": -2.8394834,
+  "tags": {
+    "name": "Fiñana",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846242"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890775,
+  "lat": 37.2214542,
+  "lon": -2.9491191,
+  "tags": {
+    "alt_name": "Estación de Tren de Huéneja-Dólar",
+    "name": "Huéneja-Dólar",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q16303199",
+    "wikimedia_commons": "File:Huéneja Dólar estacion.jpg",
+    "wikipedia": "es:Estación de Huéneja-Dólar"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890785,
+  "lat": 37.3168751,
+  "lon": -3.1270157,
+  "tags": {
+    "name": "Guadix",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846339"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890786,
+  "lat": 37.3452602,
+  "lon": -3.1632117,
+  "tags": {
+    "name": "Benalúa",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5845804"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890787,
+  "lat": 37.4052424,
+  "lon": -3.2506152,
+  "tags": {
+    "name": "Huélago-Darro y Diezma",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890804,
+  "lat": 37.3627369,
+  "lon": -3.1849733,
+  "tags": {
+    "name": "Fonelas",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q16564454"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890822,
+  "lat": 37.8921489,
+  "lon": -3.2824539,
+  "tags": {
+    "name": "Los Propios y Cazorla",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5846637"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890825,
+  "lat": 37.9134753,
+  "lon": -3.3501802,
+  "tags": {
+    "name": "Jódar - Úbeda",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/-/56004-j%C3%B3dar-%C3%9Abeda",
+    "wikidata": "Q5846435"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890826,
+  "lat": 37.9555142,
+  "lon": -3.5357201,
+  "tags": {
+    "name": "Begíjar",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5845790",
+    "wikipedia": "es:Estación de Begíjar"
+  }
+},
+{
+  "type": "node",
+  "id": 7747890828,
+  "lat": 38.0690845,
+  "lon": -3.5891403,
+  "tags": {
+    "addr:city": "Linares-Baeza",
+    "name": "Linares-Baeza",
+    "opening_hours": "Mo-Su 05:30-23:00",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/-/50300-linares-baeza",
+    "wikidata": "Q5846599"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980449,
+  "lat": 37.4239647,
+  "lon": -3.3068045,
+  "tags": {
+    "name": "Bifurcación Almería",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980450,
+  "lat": 37.4221026,
+  "lon": -3.3146869,
+  "tags": {
+    "name": "Bifurcación Granada",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980451,
+  "lat": 37.3997462,
+  "lon": -3.4228537,
+  "tags": {
+    "name": "Píñar",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5847008"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980467,
+  "lat": 37.3323784,
+  "lon": -3.5964364,
+  "tags": {
+    "name": "Deifontes",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5846108"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980479,
+  "lat": 37.2332223,
+  "lon": -3.6457966,
+  "tags": {
+    "name": "Albolote",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5845616"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653203,
+  "lat": 38.0197971,
+  "lon": -3.6374159,
+  "tags": {
+    "name": "Las Madrigueras",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653204,
+  "lat": 38.0005057,
+  "lon": -3.7073468,
+  "tags": {
+    "name": "Jabalquinto",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 8019139592,
+  "lat": 37.4220407,
+  "lon": -3.3146166,
+  "tags": {
+    "name": "Bifurcación Granada",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 10958058855,
+  "lat": 37.1989235,
+  "lon": -3.6539576,
+  "tags": {
+    "name": "Bifurcación La Chana",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 13658542817,
+  "lat": 37.2166532,
+  "lon": -3.6957025,
+  "tags": {
+    "name": "Atarfe - Santa Fe",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "05002",
+    "ref:EU:PLC": "ES05002",
+    "train": "yes",
+    "uic_ref": "7105002",
+    "wikidata": "Q98633130",
+    "wikipedia": "es:Estación de Atarfe-Santa Fe"
+  }
+}
+
+  ]
+}

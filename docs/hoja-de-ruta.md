@@ -50,6 +50,8 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR de la línea de Jaén (12 de noviembre de 2026, #102): cuarta línea, el ramal convencional Espelúy – Jaén (Adif 402, 33,2 km de vía única), trazado desde OpenStreetMap, con sus 221 Media Distancia de Madrid, Córdoba, Sevilla y Cádiz. Sale de la estación de Espelúy, que ya era un nodo de la convencional, y termina en Jaén: sus dos tramos entran entre los tramos sin alternativa. 62 de sus trenes solo paran una vez en la convencional y entran en ella por dos reglas de recorrido (la convencional pasa de 503 a 565 viajes). Desde el 6 de septiembre de 2026 sus trenes van por carretera, y queda registrado como interrupción de la línea. Su señalización trae un valor nuevo de bloqueo, el de liberación automática en vía única (BLAU). `docs/datos.md`, «Cómo se construyó la línea Espelúy–Jaén».
 - PR de las direcciones limpias (12 de noviembre de 2026, #107): las rutas del visor dejan la almohadilla (`/glosario/<entrada>` en vez de `/#/glosario/<entrada>`) y pasan a la History API, con `parseRoute` y `routePath` como únicas funciones que las leen y las escriben. Vercel sirve `index.html` para las rutas del visor sin tocar `/data/` ni `/assets/`, y los enlaces antiguos con almohadilla llevan a la dirección limpia sin recargar. Queda abierto para después, ya que cada vista tiene dirección propia: título y vista previa por vista, y un mapa del sitio para buscadores.
 
+- PR de la línea de Linares-Baeza a Granada (12 de noviembre de 2026, #101): la convencional Linares-Baeza – Moreda – Granada (Adif 410 hasta Moreda y 416 hasta Granada; 173,7 km de vía única sin electrificar), trazada desde OpenStreetMap, con su señalización (ASFA y bloqueo automático de vía única con CTC) y con los Media Distancia de Granada a Almería y de Linares-Baeza a Almería. El comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza (487,3 km). Los puntos kilométricos pueden volver a empezar a mitad de línea (`pk_restarts`), y «Añadir otra línea» de `docs/datos.md` se reescribió paso a paso con lo aprendido. Primera de la etapa «Ampliar la red».
+
 ## Principios de arquitectura
 
 Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Estos principios evitan que cada dato o capa nueva traiga su propio caso particular; la incidencia que materializa cada uno va entre paréntesis.
@@ -66,7 +68,17 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-No queda ninguna tarea abierta en la lista: la última, la señalización por tramo (#20), se cerró el 12 de noviembre de 2026. Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
+No queda ninguna tarea abierta en la lista: la última, la señalización por tramo (#20), se cerró el 12 de noviembre de 2026. Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa». Las líneas que quedan por cargar van aparte, en «Ampliar la red».
+
+## Ampliar la red
+
+La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `docs/datos.md`. La primera etapa lleva a Granada y a Jaén, para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Son tres incidencias, en este orden; las dos primeras, la línea convencional Linares-Baeza – Moreda – Granada (#101) y el ramal Espelúy – Jaén (#102), ya están hechas:
+
+1. [#103](https://github.com/ebotiab/Oniel/issues/103) Datos: línea de alta velocidad Córdoba – Antequera – Granada. Comparte la estación de Granada con la línea de Moreda.
+
+Después, todavía sin incidencia: Levante (la convencional de Alcázar de San Juan a Albacete y la alta velocidad Madrid – Cuenca – Valencia) y Madrid – Zaragoza – Barcelona.
+
+Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una.
 
 ## Pendientes menores
 

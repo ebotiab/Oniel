@@ -35,6 +35,23 @@ def loaded_line(net: BuiltNetwork) -> LoadedLine:
     return LoadedLine(net.spec, nodes)
 
 
+def expected_pk_km(net: BuiltNetwork, km: float) -> float:
+    """PK que corresponde a un kilómetro medido de la línea, según su numeración.
+
+    Lo normal es el kilómetro más el PK del origen. Si la línea declara nodos en los que la
+    numeración vuelve a empezar (``pk_restarts``), pasado el último de ellos se cuenta desde ahí.
+    """
+    line = net.spec.line
+    expected = km + line.pk_origin_km
+    restart_km = None
+    for restart in line.pk_restarts:
+        at = net.node(restart.node).km
+        if at < km and (restart_km is None or at > restart_km):
+            restart_km = at
+            expected = restart.pk_km + km - at
+    return expected
+
+
 def validate_annotations(
     path: Path, sources_path: Path, spec_paths: Sequence[Path], data_dir: Path
 ) -> dict[str, Any]:
@@ -238,7 +255,9 @@ def validate_all(
     for n in net.nodes:
         ref = n.spec.reference_pk_km
         # el PK de referencia se compara con el kilómetro medido más el PK del origen de la línea
-        delta = None if ref is None else round(n.km + spec.line.pk_origin_km - ref, 2)
+        # o, pasado un nodo en el que la numeración vuelve a empezar, contado desde ese nodo
+        expected_pk = expected_pk_km(net, n.km)
+        delta = None if ref is None else round(expected_pk - ref, 2)
         pk_checks.append(
             {
                 "node": n.spec.id,
@@ -254,8 +273,7 @@ def validate_all(
             and n.spec.position.km is None
         ):
             problems.append(
-                f"el nodo {n.spec.id} queda en el km {n.km + spec.line.pk_origin_km:.1f} y la"
-                f" referencia es {ref}"
+                f"el nodo {n.spec.id} queda en el km {expected_pk:.1f} y la referencia es {ref}"
             )
 
     feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix)
