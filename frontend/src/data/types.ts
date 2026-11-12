@@ -111,11 +111,46 @@ export interface SourceRef {
 }
 
 /**
- * Interrupción del servicio entre dos nodos de una línea. Está vigente los días
- * start_date <= día < ended_on, o sin límite mientras ended_on sea nulo.
+ * Anotación de red: algo que pasa sobre la red entre dos fechas según una fuente. `kind` dice qué
+ * es y `status`, en qué estado está. El alcance es uno de tres: de un nodo a otro de una línea
+ * (con los tramos que quedan entre ambos en `segment_ids`), un nodo (`node_id`) o una `geometry`
+ * propia. Está vigente los días start_date <= día < ended_on, sin límite por el lado que sea nulo.
  */
-export interface InterruptionOut {
+export interface AnnotationOut {
   id: string
+  kind: string
+  status: string
+  line_id: string | null
+  from_node_id: string | null
+  to_node_id: string | null
+  from_name: string | null
+  to_name: string | null
+  km_from: number | null
+  km_to: number | null
+  /** Tramos afectados; vacío si el alcance es un nodo o una geometría propia. */
+  segment_ids: string[]
+  node_id: string | null
+  node_name: string | null
+  geometry: GeoJSON.Geometry | null
+  start_date: string | null
+  expected_end_date: string | null
+  expected_end_text: string | null
+  ended_on: string | null
+  title: string | null
+  reason: string | null
+  note: string | null
+  sources: SourceRef[]
+  checked_on: string
+  /** Solo en los tipos que cortan la circulación: «Horario publicado; sin circulación real desde el … (fuente)». */
+  schedule_note: string | null
+}
+
+/**
+ * Interrupción del servicio: la anotación de tipo `interrupcion`, que va siempre de un nodo a otro
+ * de una línea, tiene fecha de inicio y corta la circulación en sus tramos.
+ */
+export interface InterruptionOut extends AnnotationOut {
+  kind: 'interrupcion'
   line_id: string
   from_node_id: string
   to_node_id: string
@@ -123,18 +158,16 @@ export interface InterruptionOut {
   to_name: string
   km_from: number
   km_to: number
-  segment_ids: string[]
   start_date: string
-  expected_end_date: string | null
-  expected_end_text: string | null
-  ended_on: string | null
   reason: string
-  note: string | null
-  sources: SourceRef[]
-  checked_on: string
-  /** «Horario publicado; sin circulación real desde el … (fuente)». */
   schedule_note: string
 }
+
+/**
+ * Una interrupción tal y como la sirven las respuestas anteriores a las anotaciones (clave
+ * `interruptions`, que queda como alias temporal): sin tipo ni estado.
+ */
+export type LegacyInterruption = Omit<InterruptionOut, 'kind' | 'status' | 'node_id' | 'node_name' | 'geometry' | 'title'>
 
 export interface Feature<P = Record<string, unknown>> {
   type: 'Feature'
@@ -160,8 +193,8 @@ export interface NetworkOut {
   segment_features: FeatureCollection
   node_features: FeatureCollection
   connection_features: FeatureCollection
-  /** Todas las registradas, vigentes o no. Falta en las respuestas anteriores a esta capa. */
-  interruptions?: InterruptionOut[]
+  /** Todas las anotaciones registradas, vigentes o no; el visor decide por fecha. */
+  annotations: AnnotationOut[]
 }
 
 /** Un nodo en el índice: sin descripción ni detalles, que llegan con su línea. */
@@ -175,7 +208,10 @@ export interface NetworkIndexOut {
   segment_features: FeatureCollection<Omit<SegmentOut, 'id'>>
   connections: ConnectionOut[]
   connection_features: FeatureCollection
-  interruptions?: InterruptionOut[]
+  /** Falta en las respuestas de una API anterior a las anotaciones, que solo trae el alias. */
+  annotations?: AnnotationOut[]
+  /** Alias temporal de las anotaciones de tipo `interrupcion`. */
+  interruptions?: LegacyInterruption[]
   simplify_tolerance_m: number
 }
 
@@ -186,7 +222,7 @@ export interface LineDetailOut {
   segments: SegmentOut[]
   segment_features: FeatureCollection
   connections: ConnectionOut[]
-  interruptions?: InterruptionOut[]
+  annotations?: AnnotationOut[]
   date: string | null
   counts: Record<string, number>
   /** Los mismos pasos separados por operador: por id de tramo, cuántos son de cada uno. */

@@ -18,7 +18,7 @@ import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
-import { activeInterruptions, bySegment } from './interruptions'
+import { activeAnnotations, bySegment, isInterruption } from './annotations'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
 import { networkCount, parseHash, toHash, todayIso, type Comparador, type Route, type Selection } from './state'
@@ -227,10 +227,13 @@ export default function App() {
   }, [loaded, near, lineId])
   const lineDetail = lineId ? details[lineId] : undefined
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
-  // Interrupciones vigentes hoy: se marcan en rojo en el mapa y en el esquema, y se explican en el panel.
+  // Anotaciones vigentes hoy: cada tipo se marca en el mapa y en el esquema y se explica en el panel
+  // como diga su capa (annotationLayers.ts). Las interrupciones, además, cortan recorridos y avisan
+  // en la simulación.
   const today = useMemo(() => todayIso(), [])
-  const interruptions = useMemo(() => activeInterruptions(network, today), [network, today])
-  const interrupted = useMemo(() => bySegment(interruptions), [interruptions])
+  const annotations = useMemo(() => activeAnnotations(network, today), [network, today])
+  const annotated = useMemo(() => bySegment(annotations), [annotations])
+  const interrupted = useMemo(() => bySegment(annotations.filter(isInterruption)), [annotations])
   const referenceDate = coverage?.reference_date ?? null
 
   // Comparador de recorridos. Una estación de la URL que no existe cuenta como sin elegir.
@@ -280,7 +283,7 @@ export default function App() {
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
   else if (showCoverage && coverage)
-    panel = <CoveragePanel coverage={coverage} interruptions={interruptions} status={status} onClose={() => setShowCoverage(false)} />
+    panel = <CoveragePanel coverage={coverage} annotations={annotations} status={status} onClose={() => setShowCoverage(false)} />
   else if (route.glosario) panel = <GlossaryPanel entrada={route.glosario.entrada} sources={coverage?.sources ?? []} onBack={closeGlossary} />
   else if (comparador)
     panel = (
@@ -319,7 +322,7 @@ export default function App() {
         sources={coverage?.sources ?? []}
         operators={coverage?.operators ?? []}
         referenceDate={referenceDate}
-        interruptions={interrupted.get(segment.id) ?? []}
+        annotations={annotated.get(segment.id) ?? []}
         onSimulate={() => setRoute({ selection, simulacion: true })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
         onBack={backToLine}
@@ -334,7 +337,7 @@ export default function App() {
         sources={coverage?.sources ?? []}
         operators={coverage?.operators ?? []}
         referenceDate={referenceDate}
-        interrupted={interrupted}
+        annotated={annotated}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
         onGoLine={showLine}
@@ -343,7 +346,7 @@ export default function App() {
       />
     )
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} onGlossary={() => openGlossary(null)} />
+    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} onGlossary={() => openGlossary(null)} />
   else
     panel = (
       <LineOverview
@@ -356,7 +359,7 @@ export default function App() {
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
-        interruptions={interruptions}
+        annotations={annotations}
         onSelect={select}
         onHover={setHoverId}
         compact={mobile}
@@ -378,7 +381,7 @@ export default function App() {
           selection={selection}
           hoverId={hoverId}
           closedSegmentId={closedSegmentId}
-          interrupted={interrupted}
+          annotated={annotated}
           highlight={highlight}
           frame={frame}
           onSelect={comparador ? pickOnMap : select}
@@ -431,7 +434,7 @@ export default function App() {
       {!mobile && (
         <Legend
           closed={closedSegmentId !== null}
-          interrupted={interruptions.length > 0}
+          annotations={annotations}
           lines={lines}
           singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false}
           highlight={highlight}

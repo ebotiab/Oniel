@@ -1,18 +1,21 @@
-import type { CoverageOut, InterruptionOut } from '../data/types'
+import { Fragment } from 'react'
+
+import type { AnnotationOut, CoverageOut } from '../data/types'
 import type { ApiStatus } from '../data/api'
 import { formatDate, formatKm } from '../app/state'
-import { InterruptionNotice } from './InterruptionNotice'
+import { ANNOTATION_LAYERS } from '../app/annotationLayers'
+import { AnnotationNotice } from './AnnotationNotice'
 import { Termino } from './Termino'
 
 interface Props {
   coverage: CoverageOut
-  /** Interrupciones del servicio vigentes hoy. */
-  interruptions: InterruptionOut[]
+  /** Anotaciones de red vigentes hoy; cada tipo tiene su apartado. */
+  annotations: AnnotationOut[]
   status: ApiStatus
   onClose: () => void
 }
 
-export function CoveragePanel({ coverage, interruptions, status, onClose }: Props) {
+export function CoveragePanel({ coverage, annotations, status, onClose }: Props) {
   return (
     <section className="detalle cobertura" aria-labelledby="cob-titulo" data-testid="panel-cobertura">
       <button type="button" className="enlace volver" onClick={onClose}>
@@ -85,20 +88,24 @@ export function CoveragePanel({ coverage, interruptions, status, onClose }: Prop
             )
           })}
       </ul>
-      <h3 className="subtitulo">Interrupciones del servicio</h3>
-      {interruptions.length > 0 ? (
-        <div data-testid="cobertura-interrupciones">
-          <p className="texto suave">
-            Tramos de las líneas cargadas en los que hoy no circulan trenes. Se registran y se revisan a mano, cada una con sus fuentes y la fecha de la
-            última comprobación.
-          </p>
-          {interruptions.map((i) => (
-            <InterruptionNotice key={i.id} interruption={i} />
-          ))}
-        </div>
-      ) : (
-        <p className="texto suave">Oniel no tiene registrada ninguna interrupción vigente hoy en las líneas cargadas.</p>
-      )}
+      {ANNOTATION_LAYERS.map(({ kind, cobertura }) => {
+        const vigentes = annotations.filter((a) => a.kind === kind)
+        return (
+          <Fragment key={kind}>
+            <h3 className="subtitulo">{cobertura.titulo}</h3>
+            {vigentes.length > 0 ? (
+              <div data-testid={cobertura.testId}>
+                <p className="texto suave">{cobertura.entrada}</p>
+                {vigentes.map((a) => (
+                  <AnnotationNotice key={a.id} annotation={a} />
+                ))}
+              </div>
+            ) : (
+              <p className="texto suave">{cobertura.vacio}</p>
+            )}
+          </Fragment>
+        )
+      })}
       <h3 className="subtitulo">Pendiente de cargar</h3>
       <p className="texto suave">
         El resto de la red ferroviaria española, los trenes de Cercanías y de mercancías y otros medios de transporte. El modelo

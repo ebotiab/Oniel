@@ -3,7 +3,7 @@
 // Las definiciones son propias, en español llano y tono neutro: explican, no reproducen el texto citado.
 // Un término nuevo en una ficha entra aquí y se muestra con el componente `Termino`.
 
-import type { NodeKind } from '../data/types'
+import type { NodeKind } from '../data/types.ts'
 
 interface DefTermino {
   /** Como se titula en el glosario y en la nota. */

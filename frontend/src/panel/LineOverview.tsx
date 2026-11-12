@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
-import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
-import { formatDateLong, mainSourceLabel } from '../app/interruptions'
+import type { AnnotationOut, CoverageOut, NetworkOut } from '../data/types'
+import { capasDe } from '../app/annotationLayers'
 import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, listaEs } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
@@ -20,8 +20,8 @@ interface Props {
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
-  /** Interrupciones vigentes hoy en cualquier línea; aquí se muestran las de la línea a la vista. */
-  interruptions: InterruptionOut[]
+  /** Anotaciones vigentes hoy en cualquier línea; aquí se muestran las de la línea a la vista. */
+  annotations: AnnotationOut[]
   onSelect: (sel: Selection) => void
   onHover: (id: string | null) => void
   compact: boolean
@@ -29,7 +29,7 @@ interface Props {
   leyenda?: ReactNode
 }
 
-export function LineOverview({ network, coverage, counts, countsMax, lineId, onShowNetwork, selection, hoverId, closedSegmentId, interruptions, onSelect, onHover, compact, leyenda = null }: Props) {
+export function LineOverview({ network, coverage, counts, countsMax, lineId, onShowNetwork, selection, hoverId, closedSegmentId, annotations, onSelect, onHover, compact, leyenda = null }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -45,7 +45,7 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
   const ficha = [`${formatKm(line.length_km)} km`, line.max_speed_kmh ? `hasta ${line.max_speed_kmh} km/h` : null].filter((d): d is string => Boolean(d))
   // En el móvil la cabecera no lleva la frase de entrada: la descripción entera va en el detalle.
   const parrafos = compact ? [entrada, ...resto].filter((p): p is string => Boolean(p)) : resto
-  const cuts = interruptions.filter((i) => i.line_id === line.id && i.segment_ids.length > 0)
+  const cuts = annotations.filter((a) => a.line_id === line.id && a.segment_ids.length > 0)
   const dia = coverage?.reference_date ?? null
   // De quién son los trenes que cuentan las barras, y de quién faltan porque no publica sus horarios.
   const operadores = (coverage?.operators ?? []).filter((o) => line.operator_ids?.includes(o.id))
@@ -110,19 +110,22 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
           <PieFuente de="del trazado" sources={[coverage?.sources.find((s) => s.id === line.source_id)]} />
         </Plegable>
       </div>
-      {cuts.length > 0 && (
-        <ul className="cortes-linea" aria-label="Tramos sin circulación hoy" data-testid="cortes-linea">
-          {cuts.map((i) => (
-            <li key={i.id}>
-              <button type="button" className="enlace" onClick={() => onSelect({ type: 'tramo', id: i.segment_ids[0]! })}>
-                Sin circulación entre {i.from_name} y {i.to_name}
-              </button>{' '}
-              <span className="suave">
-                desde el {formatDateLong(i.start_date)} ({mainSourceLabel(i)})
-              </span>
-            </li>
-          ))}
-        </ul>
+      {capasDe(cuts).map(
+        ({ kind, lista }) =>
+          lista && (
+            <ul key={kind} className="cortes-linea" aria-label={lista.rotulo} data-testid={lista.testId}>
+              {cuts
+                .filter((a) => a.kind === kind)
+                .map((a) => (
+                  <li key={a.id}>
+                    <button type="button" className="enlace" onClick={() => onSelect({ type: 'tramo', id: a.segment_ids[0]! })}>
+                      {lista.enlace(a)}
+                    </button>{' '}
+                    <span className="suave">{lista.detalle(a)}</span>
+                  </li>
+                ))}
+            </ul>
+          ),
       )}
       {leyenda}
       <StripDiagram
@@ -131,7 +134,7 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
         selection={selection}
         hoverId={hoverId}
         closedSegmentId={closedSegmentId}
-        interruptions={cuts}
+        annotations={cuts}
         counts={counts}
         countsMax={countsMax}
         countsLabel={conBarras && dia ? `trenes el ${formatDayShort(dia)}` : null}

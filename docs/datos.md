@@ -117,26 +117,64 @@ Con la línea cargada desaparece la conexión a trazos que salía de Manzanares,
 - **Paradas que están en otra línea cargada.** Una asignación con `via` indica que la parada es un nodo de otra línea y por dónde se llega a ella: la línea y el nodo por el que el tren entra. Si el camino cruza más de una línea, `via` es una lista, un trecho por línea (de Manzanares a Córdoba: la línea de Manzanares a Ciudad Real y, desde Ciudad Real, la alta velocidad). El reparto de tiempos usa entonces los kilómetros por esas líneas en vez de la línea recta, y el visor explica por dónde sigue el tren. Las asignaciones generales también lo usan: Daimiel, Almagro y Ciudad Real son, para la convencional, salidas por Manzanares hacia la tercera línea, y Alcázar de San Juan o Madrid son, para la tercera, salidas por Manzanares hacia la convencional. Así los 24 trenes desviados aparecen en los tramos Madrid–Manzanares de la convencional, en los tres de la línea de Manzanares a Ciudad Real y en Ciudad Real–Córdoba de la alta velocidad, y en ningún otro. `oniel-data validate` avisa si una regla deja de encajar con algún viaje del GTFS o si un `via` no se puede seguir (una línea que no está cargada, un nodo de enlace que no es común a las dos líneas, una parada que no es nodo de la última).
 - **Estaciones compartidas.** Madrid-Puerta de Atocha agrupa en un solo nodo la estación de alta velocidad (60000) y Madrid-Atocha Cercanías (18000), de donde salen los trenes convencionales: forman el mismo complejo. La tabla `stop_mappings` asigna 18000 al nodo, de modo que esos trenes aparecen en «Trenes que paran aquí». Ciudad Real es una sola estación para la alta velocidad y para la línea de Manzanares: su nodo lo define la LAV y la tercera línea lo incorpora con `shared: true`, igual que hace con Manzanares, que define la convencional.
 
+## Anotaciones de red
+
+Una anotación es algo que pasa sobre la red entre dos fechas según una fuente: hoy, una interrupción del servicio; después, una obra o un proyecto. Todas comparten un modelo (`AnnotationSpec`, en `oniel.network.spec`), un fichero curado, una tabla (`annotations`) y un endpoint (`GET /api/annotations`), de modo que un tipo nuevo no trae su propia fontanería.
+
+**Un solo fichero.** Todas van en `backend/data/curated/anotaciones.json`, en la lista `annotations`, cada una con su `kind`. Se prefirió a un fichero por tipo porque así los ids son únicos sin más comprobación, hay un cargador y una orden de importación, y un tipo nuevo no añade ficheros ni configuración. Cada tipo se sigue revisando a su ritmo: lo que marca la revisión es el `checked_on` de cada entrada, no el fichero.
+
+| Campo | Qué es |
+|---|---|
+| `id` | Identificador estable y único entre todos los tipos. |
+| `kind` | El tipo, uno de los declarados (hoy, `interrupcion`). |
+| `status` | El estado, uno de los que admite su tipo. |
+| Alcance | Uno de tres, y solo uno: `line_id` con `from_node` y `to_node` (de un nodo a otro de una línea, en el orden del kilometraje, con todos los tramos que quedan entre ambos); `node_id` (un nodo de la red cargada); o `geometry` (una geometría GeoJSON propia, en WGS 84, para lo que no cuelga de la red cargada). |
+| `start_date`, `expected_end_date`, `expected_end_text`, `ended_on` | Las fechas, en días completos. La anotación está vigente los días `start_date` ≤ día < `ended_on`, sin límite por el lado que falte. |
+| `title`, `reason` | El nombre propio de lo anotado y el motivo o la descripción en una frase neutra. Hace falta al menos uno; cada tipo dice cuál exige. |
+| `note` | Precisión opcional. |
+| `source_ids` | Ids de `sources.json`. La primera es la fuente principal, y tiene que tener URL. |
+| `checked_on` | Día de la última comprobación en las fuentes. |
+
+**Los tipos se declaran en el código**, en `ANNOTATION_KINDS` (`backend/src/oniel/domain/annotations.py`). Cada uno dice sus estados válidos, cuáles de ellos dan la anotación por terminada (llevan `ended_on`, y solo ellos), qué alcances admite, qué campos opcionales exige y si corta la circulación en sus tramos:
+
+| Tipo | Estados | Alcances | Exige | Corta la circulación |
+|---|---|---|---|---|
+| `interrupcion` | `vigente`, `terminada` (con `ended_on`) | de nodo a nodo | `start_date`, `reason` | Sí |
+
+**Añadir un tipo** son dos entradas, sin migración, endpoint ni capa nuevos:
+
+1. Declararlo en `ANNOTATION_KINDS` con sus estados, sus alcances y los campos que exige. Desde ahí lo validan `oniel-data validate` y la importación, lo guarda la tabla `annotations` (el tipo y el estado son texto: no hay que tocar el esquema) y lo sirven `GET /api/annotations`, el índice y el detalle de cada línea.
+2. Darle una entrada en el registro de capas del visor, `frontend/src/app/annotationLayers.ts`: cómo se marcan sus tramos en el mapa y en el esquema, su entrada de leyenda, su ficha, sus notas en las listas y su apartado en «Qué hay en esta versión». El mapa, la leyenda, el esquema y los paneles leen de ese registro. Los colores y los textos de la entrada son una decisión de diseño: se proponen y se anotan en `docs/diseno.md`. Un tipo sin entrada se sirve pero no se enseña.
+
+Lo que no está hecho todavía es el dibujo en el mapa de una anotación con geometría propia: llegará como un campo más de la entrada del registro con el primer tipo que la use (los proyectos, #18). Las anotaciones de un nodo se sirven con el detalle de las líneas a las que pertenece.
+
+`oniel-data validate` comprueba el fichero sin base de datos y termina con código 1 si algo no encaja: que el tipo está declarado y el estado es de los suyos; que hay un alcance y solo uno, y que su tipo lo admite; que están los campos que el tipo exige; que el estado y `ended_on` van juntos; que las fechas tienen orden (ni la previsión ni el final son anteriores al inicio, y el final no es posterior a la comprobación); que la línea está cargada, los dos nodos son suyos y van en el orden del kilometraje, o que el nodo suelto está en alguna línea cargada; y que las fuentes están en `sources.json`, la principal con URL. `oniel-data import annotations` carga el fichero en la tabla `annotations` (también lo hace `import all`, después de la red) y, si no encaja con la red cargada, lo rechaza sin tocar lo que había.
+
+La API las sirve en `GET /api/annotations`, con `?kind=` (solo las de ese tipo; uno sin declarar da un 422) y `?on=AAAA-MM-DD` (solo las vigentes ese día), y dentro del índice (`GET /api/lines`), del detalle de cada línea y de `GET /api/network`, en `annotations`. La instantánea las lleva en `index.json` y en `lines/<id>.json`.
+
+**`interruptions` queda solo como alias.** `GET /api/interruptions` (con `?date=`) responde lo mismo que `GET /api/annotations?kind=interrupcion`, y el índice, el detalle de línea y `GET /api/network` repiten en `interruptions` las anotaciones de ese tipo. Están para los visores anteriores: el visor se publica en Vercel antes de que Render termine de desplegar la API, y un visor abierto en el navegador sigue vivo tras un despliegue. Por lo mismo, el visor nuevo lee `interruptions` como anotaciones cuando una API anterior no trae `annotations`. Cuando no quede ninguno de los dos casos, el alias se retira. Los campos `interruptions` de los pasos por tramo, la simulación y los recorridos no son alias: son las anotaciones que cortan la circulación en ese tramo o recorrido ese día.
+
 ## Interrupciones del servicio
 
-Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/interrupciones.json`, una entrada por interrupción. El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo.
+Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/anotaciones.json`, una entrada de tipo `interrupcion` por interrupción (véase «Anotaciones de red»). El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo.
 
 | Campo | Qué es |
 |---|---|
 | `id` | Identificador estable: línea, motivo y fecha de inicio. |
+| `kind`, `status` | `interrupcion`, y `vigente` o `terminada`. |
 | `line_id` | Línea cargada a la que afecta. |
 | `from_node`, `to_node` | Nodos extremos, de esa línea y en el orden de su kilometraje. Afecta a todos los tramos que quedan entre ambos. |
 | `start_date` | Primer día sin circulación. |
 | `expected_end_date`, `expected_end_text` | Previsión de fin que publica la fuente, como fecha o como texto («otoño de 2027»). Opcionales: sin ellos, el visor dice que no hay fecha prevista. |
-| `ended_on` | Día en que se reanudó la circulación. Sin él, la interrupción sigue vigente. |
+| `ended_on` | Día en que se reanudó la circulación. Sin él, la interrupción sigue vigente; con él, su estado es `terminada`. |
 | `reason` | Motivo en una frase neutra. |
 | `note` | Opcional: hasta dónde llegan los trenes, qué sigue en servicio, qué se sabe de la reanudación y según quién. |
 | `source_ids` | Ids de `sources.json`. La primera es la fuente principal: la que se cita junto a la fecha («… (Adif)»). |
 | `checked_on` | Día de la última comprobación en las fuentes. |
 
-Una interrupción está vigente los días `start_date` ≤ día < `ended_on`. Al terminar no se borra: se le pone `ended_on` y queda como registro, y sigue marcando los trenes de las fechas en que estuvo vigente, por ejemplo al simular un cierre en una fecha pasada.
+Una interrupción está vigente los días `start_date` ≤ día < `ended_on`. Al terminar no se borra: se le pone `ended_on` y el estado `terminada`, y queda como registro, y sigue marcando los trenes de las fechas en que estuvo vigente, por ejemplo al simular un cierre en una fecha pasada.
 
-`oniel-data validate` comprueba el fichero sin base de datos y termina con código 1 si algo no encaja: que cada entrada cumple el esquema; que las fechas tienen orden (ni la previsión ni el final son anteriores al inicio, y el final no es posterior a la comprobación); que la línea está cargada; que los dos nodos son de esa línea y van en el orden del kilometraje, y que las fuentes están en `sources.json`, la principal con URL. `oniel-data import interruptions` carga el fichero en la tabla `interruptions` (también lo hace `import all`, después de la red) y, si no encaja con la red cargada, lo rechaza sin tocar lo que había. La API las sirve en `GET /api/interruptions` (con `?date=AAAA-MM-DD`, solo las vigentes ese día) y dentro de `GET /api/network`, que es de donde las lee el visor; la instantánea las lleva en `network.json`, y cada fichero de tramo, las vigentes en el día de referencia.
+Se validan, se importan y se sirven como cualquier anotación (véase «Anotaciones de red»). Además, por ser un tipo que corta la circulación, cada una lleva su nota de horario (`schedule_note`), y los pasos por tramo, la simulación y los recorridos traen las vigentes en su día; cada fichero de tramo de la instantánea, las vigentes en el día de referencia.
 
 ### Interrupciones registradas
 
@@ -164,11 +202,11 @@ No hay actualización automática: Adif no publica estos avisos como datos abier
 
 Cada cuánto: una vez por semana mientras haya alguna interrupción sin fecha de fin (hoy, la de la alta velocidad); una vez al mes si todas tienen una previsión lejana; y siempre que una fuente anuncie un cambio (una reanudación, otra previsión, un corte nuevo) o se refresque el GTFS.
 
-Lo recuerda un flujo de GitHub Actions, `.github/workflows/recordatorio-interrupciones.yml`. Cada día a las 07:00 UTC (y a mano, desde la pestaña Actions) lee `interrupciones.json` y, si alguna entrada sin `ended_on` tiene un `checked_on` de más de siete días, abre la incidencia «Revisar las interrupciones del servicio», con la etiqueta `revision-interrupciones` y la lista de entradas pendientes. Mientras haya una abierta con esa etiqueta no abre otra, así que la PR de la revisión debe cerrarla. El flujo solo lee el fichero: no consulta ninguna fuente ni cambia ningún dato. Como se ejecuta a diario, el aviso llega al octavo día desde la última revisión.
+Lo recuerda un flujo de GitHub Actions, `.github/workflows/recordatorio-interrupciones.yml`. Cada día a las 07:00 UTC (y a mano, desde la pestaña Actions) lee `anotaciones.json` y, si alguna interrupción sin `ended_on` tiene un `checked_on` de más de siete días, abre la incidencia «Revisar las interrupciones del servicio», con la etiqueta `revision-interrupciones` y la lista de entradas pendientes. Mientras haya una abierta con esa etiqueta no abre otra, así que la PR de la revisión debe cerrarla. El flujo solo lee el fichero: no consulta ninguna fuente ni cambia ningún dato. Como se ejecuta a diario, el aviso llega al octavo día desde la última revisión.
 
 1. Consultar las fuentes de cada entrada: el estado de la red y los avisos de Adif, la sala de prensa de Renfe y los paneles de salidas y llegadas de las estaciones de los extremos.
 2. Resumir lo consultado, con palabras propias, en `backend/data/raw/interrupciones/consultas_<fecha>.json`, y poner al día `sources.json` (`retrieved_on`, `file` y las fuentes nuevas que hagan falta).
-3. Editar `interrupciones.json`. `checked_on` cambia siempre. Si la circulación se reanudó, se pone `ended_on`; si cambió la previsión, se corrige; si hay otro corte, se añade una entrada. Si un corte se reabre solo en parte, se acortan sus extremos o se divide en dos entradas. No se infiere nada: lo que la fuente no dice, no se escribe.
+3. Editar `anotaciones.json`. `checked_on` cambia siempre. Si la circulación se reanudó, se pone `ended_on` y el estado pasa a `terminada`; si cambió la previsión, se corrige; si hay otro corte, se añade una entrada. Si un corte se reabre solo en parte, se acortan sus extremos o se divide en dos entradas. No se infiere nada: lo que la fuente no dice, no se escribe.
 4. `uv run oniel-data validate`, `uv run oniel-data import all` (regenera la instantánea) y las pruebas. La tabla de arriba se pone al día en la misma PR.
 5. Al fusionar, Render reimporta la base. La instantánea va dentro del visor, así que hay que publicarlo (`docs/despliegue.md`): hasta entonces, quien entre con la API dormida ve la interrupción anterior.
 
@@ -229,7 +267,9 @@ Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que
 
 Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
 
-El CI de la PR lo lanza el propio flujo (`gh workflow run ci.yml --ref datos/gtfs-<fecha>`), porque GitHub no ejecuta los flujos de `pull_request` en una PR que abre otro flujo con su token. Los resultados aparecen en la PR como en cualquier otra. Si alguien sube otro commit a esa rama, el CI se lanza a mano desde la pestaña Actions.
+El CI de esa PR. GitHub retiene los flujos de `pull_request` de una PR que abre otro flujo con su token: en la PR aparece el aviso «Approve workflows to run» y `Backend` y `Frontend` no se ejecutan como comprobaciones suyas hasta que quien la revisa lo pulsa. Para no depender de ese clic, el flujo lanza además el CI sobre la rama (`gh workflow run ci.yml --ref datos/gtfs-<fecha>`): su resultado queda en el commit y en la pestaña Actions, aunque la lista de comprobaciones de la PR no lo enseñe. Así ocurrió en la primera ejecución, el 12 de noviembre de 2026 (PR 71): el CI lanzado pasó, y al aprobar el retenido pasó también, ya dentro de la PR.
+
+La PR lleva la instantánea regenerada, así que entra en conflicto con `main` si entre tanto se fusiona otra PR que también la regenere. Lo más sencillo entonces es cerrarla sin fusionar, borrar su rama y lanzar el flujo a mano: abre otra con lo publicado ese día sobre el `main` actual.
 
 A mano, lo mismo en local:
 
@@ -270,8 +310,8 @@ Recuentos que comprueban las pruebas, con los ficheros fijos y el 13 de noviembr
 
 | Fichero | Qué lleva | Cuándo lo pide el visor |
 |---|---|---|
-| `index.json` | El índice de toda la red: las líneas, todos los nodos sin sus textos, los tramos con sus datos y la geometría simplificada, las conexiones a trazos y las interrupciones. | Al arrancar. |
-| `lines/<id>.json` | El detalle de una línea: sus nodos con descripción y detalles, sus tramos con la geometría completa, sus conexiones e interrupciones y los pasos por tramo del día de referencia. | Al abrir la línea, al seleccionar un tramo o un nodo suyo (también por enlace directo) o al acercar el mapa a ella (zoom 8 o más). |
+| `index.json` | El índice de toda la red: las líneas, todos los nodos sin sus textos, los tramos con sus datos y la geometría simplificada, las conexiones a trazos y las anotaciones de red (con `interruptions` como alias temporal). | Al arrancar. |
+| `lines/<id>.json` | El detalle de una línea: sus nodos con descripción y detalles, sus tramos con la geometría completa, sus conexiones, sus anotaciones y los pasos por tramo del día de referencia. | Al abrir la línea, al seleccionar un tramo o un nodo suyo (también por enlace directo) o al acercar el mapa a ella (zoom 8 o más). |
 | `coverage.json` | Cobertura, conjuntos de datos y fuentes. | Al arrancar. |
 | `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y, de una estación, sus paradas y sus destinos directos el día de referencia (véase «Destinos directos»). | Al abrir su ficha. |
 | `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos (véase «Conjuntos de datos»). | Todavía no se lee. |
@@ -345,7 +385,7 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 - `datasets`: un conjunto de datos por fichero de horarios importado, con su fuente, su operador, el fichero, su SHA-256, el día de descarga (`retrieved_on`), los días que cubre (`valid_from`, `valid_to`) y cuándo se importó. El id es legible: la fuente y el día de descarga (`renfe-gtfs-av-ld-md-2026-11-08`).
 - `services`, `service_dates`, `service_stops`: horarios por tren y día, con el operador y el conjunto de datos del que salen (`dataset_id`, que forma parte de la clave). Cada viaje del GTFS se guarda una sola vez por conjunto aunque recorra varias líneas, y el mismo viaje puede estar en varios conjuntos.
 - `service_segment_passes`: el paso de cada tren por cada tramo, precalculado con las reglas de simulación, línea a línea y por conjunto de datos. Un tren que cambia de línea tiene pasos en cada una solo entre las paradas que le corresponden.
-- `interruptions`: interrupciones del servicio entre dos nodos de una línea, con sus fechas, el motivo, las fuentes y el día de la última comprobación. Los tramos afectados no se guardan: salen del orden de esos dos nodos en `line_nodes`, de modo que reimportar la red no las deja huérfanas.
+- `annotations`: anotaciones de red (hoy, las interrupciones del servicio), con su tipo, su estado, su alcance (de un nodo a otro de una línea, un nodo o una geometría propia), sus fechas, el título o el motivo, las fuentes y el día de la última comprobación. Los tramos afectados no se guardan: salen del orden de los dos nodos en `line_nodes`, de modo que reimportar la red no las deja huérfanas. El tipo y el estado son texto y los comprueba la importación contra los tipos declarados, así que un tipo nuevo no necesita migración. Sustituye a la tabla `interruptions`, que la migración `0007` traslada y retira.
 - `import_runs`: historial de importaciones con estadísticas.
 
 ## Añadir otra línea

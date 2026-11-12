@@ -4,11 +4,10 @@
 
 import type { ExpressionSpecification, LayerSpecification } from 'maplibre-gl'
 
-export const PAPEL = '#EDEFE9'
-export const TINTA = '#17201E'
-export const TINTA_3 = '#8B9490'
-export const AZUL = '#1E4F9A'
-export const ROJA = '#B4232A'
+import { CAPAS_CON_TRAZO } from '../app/annotationLayers'
+import { AZUL, PAPEL, ROJA, TINTA, TINTA_3 } from './colors'
+
+export { AZUL, PAPEL, ROJA, TINTA, TINTA_3 }
 
 export const SRC = {
   segments: 'oniel-segments',
@@ -52,25 +51,30 @@ const emphasised: ExpressionSpecification = [
   ['boolean', ['feature-state', 'cerrado'], false],
 ]
 
-/** Tramo con una interrupción del servicio vigente hoy (propiedad `interrumpido`, no un estado). */
-const interrupted: ExpressionSpecification = ['boolean', ['get', 'interrumpido'], false]
+/**
+ * Tramo con una anotación vigente hoy de un tipo con trazo propio. Cada capa del registro marca
+ * sus tramos con una propiedad (no un estado): `interrumpido` la de las interrupciones.
+ */
+const marcado = (propiedad: string): ExpressionSpecification => ['boolean', ['get', propiedad], false]
+/** Por cada capa con trazo, su condición y el valor que le toca; van seguidos dentro de un `case`. */
+const porCapa = (valor: (capa: (typeof CAPAS_CON_TRAZO)[number]) => string | number) =>
+  CAPAS_CON_TRAZO.flatMap((capa) => [marcado(capa.propiedad), valor(capa)])
 
 // El rojo es «sin circulación»: real (interrupción vigente) o simulada (cierre). Un tramo
 // interrumpido sigue en rojo cuando se selecciona; la selección la marcan el grosor y el halo azul.
-const segmentColor: ExpressionSpecification = [
+const segmentColor = [
   'case',
   ['boolean', ['feature-state', 'cerrado'], false],
   ROJA,
-  interrupted,
-  ROJA,
+  ...porCapa((capa) => capa.color),
   ['boolean', ['feature-state', 'seleccionado'], false],
   AZUL,
   ['boolean', ['feature-state', 'elegido'], false],
   AZUL,
   TINTA,
-]
+] as ExpressionSpecification
 
-const haloColor: ExpressionSpecification = [
+const haloColor = [
   'case',
   ['boolean', ['feature-state', 'cerrado'], false],
   ROJA,
@@ -78,10 +82,12 @@ const haloColor: ExpressionSpecification = [
   AZUL,
   ['boolean', ['feature-state', 'elegido'], false],
   AZUL,
-  interrupted,
-  ROJA,
+  ...porCapa((capa) => capa.color),
   TINTA,
-]
+] as ExpressionSpecification
+
+/** Opacidad del halo de un tramo seleccionado: más marcada si además lleva una anotación con trazo. */
+const haloSeleccionado = ['case', ...porCapa((capa) => capa.haloSeleccionado), 0.16] as ExpressionSpecification
 
 const esAltaVelocidad: ExpressionSpecification = ['all', altaVelocidad, ['!', viaUnica]]
 const esConvencional: ExpressionSpecification = ['all', ['!', altaVelocidad], ['!', viaUnica]]
@@ -151,7 +157,7 @@ export function onielLayers(): LayerSpecification[] {
           ['boolean', ['feature-state', 'cerrado'], false],
           0.2,
           ['boolean', ['feature-state', 'seleccionado'], false],
-          ['case', interrupted, 0.3, 0.16],
+          haloSeleccionado,
           ['boolean', ['feature-state', 'elegido'], false],
           0.16,
           ['boolean', ['feature-state', 'hover'], false],

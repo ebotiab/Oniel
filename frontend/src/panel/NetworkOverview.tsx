@@ -1,12 +1,13 @@
 import { formatCount, networkCount } from '../app/state'
-import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
+import type { AnnotationOut, CoverageOut, NetworkOut } from '../data/types'
+import { capasDe } from '../app/annotationLayers'
 import { LineList } from './LineList'
 
 interface Props {
   network: NetworkOut
   coverage: CoverageOut | null
-  /** Interrupciones vigentes hoy en cualquier línea. */
-  interruptions: InterruptionOut[]
+  /** Anotaciones vigentes hoy en cualquier línea. */
+  annotations: AnnotationOut[]
   onPickLine: (id: string) => void
   onShowCoverage: () => void
   onCompare: () => void
@@ -14,8 +15,11 @@ interface Props {
 }
 
 /** Vista de la red: lo que se ve cuando no hay ninguna línea elegida. Dice qué hay cargado y por dónde empezar. */
-export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage, onCompare, onGlossary }: Props) {
-  const cortadas = new Set(interruptions.filter((i) => i.segment_ids.length > 0).map((i) => i.line_id))
+export function NetworkOverview({ network, coverage, annotations, onPickLine, onShowCoverage, onCompare, onGlossary }: Props) {
+  // Qué capas tienen algún tramo anotado hoy en cada línea: su nota va junto al nombre.
+  const notas = new Map(
+    network.lines.map((l) => [l.id, capasDe(annotations.filter((a) => a.line_id === l.id && a.segment_ids.length > 0))] as const),
+  )
   const ficha = [networkCount(network.lines), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
   return (
     <section className="vista-red" aria-labelledby="red-titulo" data-testid="vista-red">
@@ -33,7 +37,7 @@ export function NetworkOverview({ network, coverage, interruptions, onPickLine, 
         </p>
       </div>
       <h3 className="subtitulo">Líneas</h3>
-      <LineList lines={network.lines} interruptedLineIds={cortadas} onPick={onPickLine} />
+      <LineList lines={network.lines} notes={notas} onPick={onPickLine} />
       <p className="nota-esquema">
         <button type="button" className="enlace" onClick={onCompare} data-testid="boton-recorridos">
           Comparar recorridos

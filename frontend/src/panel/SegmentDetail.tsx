@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchSegmentServices } from '../data/api'
-import type { InterruptionOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
+import type { AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
 import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop, tracksLabel } from '../app/state'
-import { InterruptionNotice } from './InterruptionNotice'
+import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
 import { Termino } from './Termino'
@@ -16,14 +16,14 @@ interface Props {
   /** Operadores registrados, para nombrar al de cada tren. */
   operators: Operator[]
   referenceDate: string | null
-  /** Interrupciones del servicio vigentes hoy en este tramo. */
-  interruptions: InterruptionOut[]
+  /** Anotaciones de red vigentes hoy en este tramo. */
+  annotations: AnnotationOut[]
   onSimulate: () => void
   onSelectNode: (id: string) => void
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, sources, operators, referenceDate, interruptions, onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ segment, network, sources, operators, referenceDate, annotations, onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
@@ -122,8 +122,8 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
       </Plegable>
 
-      {interruptions.map((i) => (
-        <InterruptionNotice key={i.id} interruption={i} />
+      {annotations.map((a) => (
+        <AnnotationNotice key={a.id} annotation={a} />
       ))}
 
       <div className="acciones">
