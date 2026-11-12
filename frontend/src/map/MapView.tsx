@@ -10,7 +10,6 @@ import {
   setWorkerUrl,
 } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
-import 'maplibre-gl/dist/maplibre-gl.css'
 import { useEffect, useRef } from 'react'
 
 import type { InterruptionOut, NetworkOut } from '../data/types'
