@@ -41,8 +41,8 @@
      "description": "Estación con trenes de Media Distancia. El ferrocarril llegó desde Daimiel el 21 de enero de 1861 y siguió hasta Ciudad Real el 14 de marzo."},
     {"id": "ciudad-real", "name": "Ciudad Real", "kind": "estacion", "adif_code": "37200", "shared": true, "position": {"lon": -3.913633, "lat": 38.9853}, "reference_pk_km": 261.783}
   ],
-  "track_sections": [
-    {"from_node": "manzanares", "to_node": "ciudad-real", "tracks": 1, "note": "Vía única en toda la línea, según Wikipedia y la ficha de la línea 522 de la FCMAF."}
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "manzanares", "to_node": "ciudad-real", "value": 1, "source_id": "wikipedia-linea-522", "checked_on": "2026-11-10", "note": "Vía única en toda la línea, según Wikipedia y la ficha de la línea 522 de la FCMAF."}
   ],
   "connections": [
     {"id": "conv-ciudad-real-badajoz", "node_id": "ciudad-real", "name": "Línea convencional Ciudad Real–Badajoz", "towards": "Puertollano, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.913633, 38.9853], [-3.975, 38.955], [-4.035, 38.9], [-4.1, 38.83]]}

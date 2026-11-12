@@ -189,13 +189,17 @@ def _segment(r: asyncpg.Record) -> SegmentOut:
         max_speed_kmh=r["max_speed_kmh"],
         typical_speed_kmh=r["typical_speed_kmh"],
         tracks=r["tracks"],
+        attributes=_geom(r["attributes"]),
         status=r["status"],
         source_id=r["source_id"],
     )
 
 
 SEGMENT_SQL = """
-    SELECT s.*, a.name AS from_name, b.name AS to_name, l.sort_order
+    SELECT s.*, a.name AS from_name, b.name AS to_name, l.sort_order,
+           COALESCE((SELECT jsonb_object_agg(sa.attribute, jsonb_build_object(
+                         'value', sa.value, 'source_id', sa.source_id, 'checked_on', sa.checked_on))
+                     FROM segment_attributes sa WHERE sa.segment_id = s.id), '{}'::jsonb) AS attributes
     FROM segments s JOIN nodes a ON a.id = s.from_node_id JOIN nodes b ON b.id = s.to_node_id
     JOIN lines l ON l.id = s.line_id
 """
