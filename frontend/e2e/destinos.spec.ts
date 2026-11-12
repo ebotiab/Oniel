@@ -45,8 +45,8 @@ test.describe('Destinos directos de una estación', () => {
     await abrirHoja(page)
     const filas = page.getByTestId('lista-destinos').getByRole('listitem')
     await expect(filas.nth(0)).toContainText('Córdoba')
-    await expect(filas.nth(0)).toContainText('de 06:00 a 21:20 · Renfe Viajeros 49, Ouigo España 6')
-    await expect(filas.nth(0)).toContainText('55 trenes')
+    await expect(filas.nth(0)).toContainText('de 06:00 a 21:20 · Renfe Viajeros 47, Ouigo España 6')
+    await expect(filas.nth(0)).toContainText('53 trenes')
     await expect(filas.filter({ hasText: 'Antequera' })).toContainText('· Renfe Viajeros')
   })
 
@@ -55,7 +55,7 @@ test.describe('Destinos directos de una estación', () => {
     await abrirHoja(page)
     await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 12 trenes directos en este sentido')
     await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
-    await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 55 trenes directos en este sentido')
+    await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 53 trenes directos en este sentido')
   })
 
   test('un nodo que no es estación no tiene destinos; el detalle de una estación dice cómo se cuentan', async ({ page }) => {

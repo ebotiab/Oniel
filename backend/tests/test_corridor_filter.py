@@ -32,10 +32,10 @@ def test_conventional_filter_selects_the_trains_that_use_the_line(
 ) -> None:
     trips = select_trips_for_spec(feed, conv_spec)
     products = Counter(t.product for t in trips)
-    assert products["MD"] > 300 and products["PROXIMDAD"] > 50
-    # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 4 Alvia y 20 Intercity Madrid-Atocha
+    assert products["MD"] == 290 and products["PROXIMDAD"] > 50
+    # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 2 Alvia y 20 Intercity Madrid-Atocha
     # Cercanías–Andalucía por las reglas de recorrido (van por esta línea hasta Manzanares)
-    assert products["ALVIA"] == 8 + 4 and products["Intercity"] == 20
+    assert products["ALVIA"] == 8 + 2 and products["Intercity"] == 20
     assert "AVE" not in products and "AVLO" not in products
     names = {
         _stop_names(feed, t.trip_id)[0] + " → " + _stop_names(feed, t.trip_id)[-1] for t in trips
@@ -84,7 +84,7 @@ def test_madrid_jaen_train_passes_through_despenaperros_as_estimated(
 
 def test_high_speed_filter_is_unchanged(feed: GtfsFeed, spec: NetworkSpec) -> None:
     trips = select_trips_for_spec(feed, spec)
-    assert len(trips) == 335
+    assert len(trips) == 317
 
 
 def test_ouigo_trains_run_only_along_the_high_speed_line(
