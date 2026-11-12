@@ -70,7 +70,11 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-No queda ninguna tarea abierta en la lista: la última, la señalización por tramo (#20), se cerró el 12 de noviembre de 2026. Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa». Las líneas que quedan por cargar van aparte, en «Ampliar la red».
+Una tarea abierta, aparte de las líneas que quedan por cargar, que van en «Ampliar la red»:
+
+1. [#120](https://github.com/ebotiab/Oniel/issues/120) Infraestructura: `obs estado` enseña la importación de la versión anterior cuando dos coinciden en un despliegue. Solo toca el código del backend y su documentación, así que puede ir en paralelo con las tareas de datos. Mientras esté abierta, tras fusionar algo de `backend/` conviene confirmar la importación del commit nuevo con `oniel-data obs consulta` si «Última importación» nombra otra versión.
+
+Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
 ## Ampliar la red
 
