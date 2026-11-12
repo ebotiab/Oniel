@@ -26,7 +26,7 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
     await page.goto('/cobertura')
     await abrirPanel(page)
-    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(4)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(11)
     await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
     await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
@@ -111,10 +111,11 @@ test.describe('Tramos sin alternativa', () => {
     )
     // del que más trenes lleva al que menos
     const filas = page.getByTestId('lista-sin-alternativa').locator('li')
-    // los dos que llevan a Sevilla y los dos del ramal de Jaén. Granada está unida por los dos
-    // lados (la convencional de Moreda y la alta velocidad de Antequera), así que ni sus líneas ni
+    // los dos que llevan a Sevilla, los dos del ramal de Jaén y los siete de Alcázar de San Juan a
+    // Albacete, una rama unida al resto por un solo extremo. Granada está unida por los dos lados
+    // (la convencional de Moreda y la alta velocidad de Antequera), así que ni sus líneas ni
     // Córdoba – Bifurcación Málaga figuran ya: sus trenes tienen otro camino
-    await expect(filas).toHaveCount(4)
+    await expect(filas).toHaveCount(11)
     await expect(filas.nth(0)).toContainText('Bifurcación Málaga-Alta Velocidad – Cambiador de Majarabique')
     await expect(filas.nth(0)).toContainText('55 trenes')
     await expect(filas.nth(1)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
@@ -124,7 +125,12 @@ test.describe('Tramos sin alternativa', () => {
     await expect(filas.nth(2)).toContainText('50 trenes')
     await expect(filas.nth(3)).toContainText('Mengíbar-Artichuela – Jaén')
     await expect(filas.nth(3)).toContainText('44 trenes')
+    // de Alcázar de San Juan a Albacete, hasta que se cargue otra línea que llegue a Albacete
+    await expect(filas.nth(4)).toContainText('17 trenes')
+    await expect(filas.nth(4)).toContainText('Línea convencional Alcázar de San Juan – Albacete')
+    await expect(filas.nth(10)).toContainText('17 trenes')
     await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
+    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Linares-Baeza – Moreda – Granada')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(apartado).not.toContainText('Moreda – Bifurcación Almería')
     await expect(apartado).toContainText('Trenes del viernes, 13 de noviembre de 2026')

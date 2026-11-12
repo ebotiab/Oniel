@@ -1,0 +1,130 @@
+{
+  "line": {
+    "id": "alcazar-albacete",
+    "name": "Línea convencional Alcázar de San Juan – Albacete",
+    "short_name": "300",
+    "sort_order": 6,
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 200,
+    "tracks": 2,
+    "opened_on": "1855-03-18",
+    "reference_length_km": 130.6,
+    "pk_origin_km": 148.1,
+    "status": "disponible",
+    "description": "La rama de Levante: en Alcázar de San Juan se separa de la línea que baja a Andalucía y cruza la llanura de La Mancha hasta Albacete, por Socuéllamos, Villarrobledo y La Roda.\n\nPara Adif no es una línea aparte, sino el trecho central de su línea 300, de Madrid a Valencia: la misma por la que se llega de Madrid a Alcázar de San Juan. Oniel la enseña con nombre propio porque en Alcázar el camino se abre en dos, y así cada rama se consulta por separado: la de Andalucía, que sigue en la línea Madrid – Alcázar de San Juan – Córdoba, y esta. Se abrió el 18 de marzo de 1855, como parte del ferrocarril de Madrid a Alicante.\n\nPasado Albacete, la línea continúa hacia Almansa y La Encina, donde se reparte entre Valencia y Alicante; esa continuación todavía no está cargada.\n\nEn los horarios de Renfe la recorren trenes de Media Distancia y Regional Exprés que van de Madrid, Alcázar de San Juan o Ciudad Real a Albacete, Alicante y Valencia, y el Alvia de Barcelona a Córdoba. Los trenes de alta velocidad de Madrid a Albacete y Alicante no pasan por aquí: van por Cuenca, por otra línea que llega a la misma estación de Albacete.",
+    "geometry_source": {
+      "source_id": "osm-relation-18368327",
+      "parts": [
+        {
+          "source_id": "osm-relation-18368327",
+          "file": "raw/osm/relation_18368327_linea_300_madrid_valencia_2026-11-08.json",
+          "relation_id": 18368327,
+          "from": [
+            -3.205371,
+            39.395663
+          ],
+          "to": [
+            -1.84845,
+            38.999384
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-300-alcazar-albacete"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "alcazar-de-san-juan", "name": "Alcázar de San Juan", "kind": "estacion", "adif_code": "60400", "shared": true, "position": {"lon": -3.205371, "lat": 39.395663}, "reference_pk_km": 148.1},
+    {"id": "campo-de-criptana", "name": "Campo de Criptana", "kind": "estacion", "adif_code": "60402", "rank": "secundario", "position": {"lon": -3.1177032, "lat": 39.3943842}, "reference_pk_km": 155.8},
+    {"id": "socuellamos", "name": "Socuéllamos", "kind": "estacion", "adif_code": "60406", "position": {"lon": -2.775571, "lat": 39.278776}, "reference_pk_km": 188.7, "description": "La estación está en una variante que apartó las vías del centro del pueblo; por eso su punto kilométrico no es el del trazado original."},
+    {"id": "villarrobledo", "name": "Villarrobledo", "kind": "estacion", "adif_code": "60500", "position": {"lon": -2.598621, "lat": 39.260868}, "reference_pk_km": 204.3},
+    {"id": "minaya", "name": "Minaya", "kind": "estacion", "adif_code": "60503", "rank": "secundario", "position": {"lon": -2.348403, "lat": 39.240738}, "reference_pk_km": 226.1},
+    {"id": "la-roda-de-albacete", "name": "La Roda de Albacete", "kind": "estacion", "adif_code": "60505", "position": {"lon": -2.162547, "lat": 39.199594}, "reference_pk_km": 242.9},
+    {"id": "la-gineta", "name": "La Gineta", "kind": "estacion", "adif_code": "60507", "rank": "secundario", "position": {"lon": -2.000155, "lat": 39.111665}, "reference_pk_km": 260.2},
+    {"id": "albacete-los-llanos", "name": "Albacete-Los Llanos", "kind": "estacion", "adif_code": "60600", "position": {"lon": -1.84845, "lat": 38.999384}, "reference_pk_km": 278.7, "description": "La estación de Albacete. Tiene vías de dos anchos: a las de ancho ibérico llegan los trenes de esta línea y a las de ancho estándar, los de alta velocidad de Madrid por Cuenca y los de Alicante. La línea convencional sigue desde aquí hacia Almansa, Valencia y Alicante."}
+  ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "alcazar-de-san-juan", "to_node": "albacete-los-llanos", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos «Tren tierra y ASFA conv.» junto a la línea, entre Alcázar y Albacete. Las vías de OSM dicen railway:asfa=yes."},
+    {"attribute": "bloqueo", "from_node": "alcazar-de-san-juan", "to_node": "villarrobledo", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAB», sin «ctc», y trazo marrón de Alcázar de San Juan a Villarrobledo."},
+    {"attribute": "bloqueo", "from_node": "villarrobledo", "to_node": "la-roda-de-albacete", "value": "bad", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAD», sin «ctc», y trazo verde de Villarrobledo a La Roda de Albacete."},
+    {"attribute": "bloqueo", "from_node": "la-roda-de-albacete", "to_node": "albacete-los-llanos", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón de La Roda de Albacete a Albacete-Los Llanos."},
+    {"attribute": "mando", "from_node": "alcazar-de-san-juan", "to_node": "la-roda-de-albacete", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: los rótulos «BAB» y «BAD» de Alcázar a La Roda no llevan «ctc»; la leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD». El mapa no dice desde dónde se gobierna el tramo."},
+    {"attribute": "mando", "from_node": "la-roda-de-albacete", "to_node": "albacete-los-llanos", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
+  ],
+  "connections": [
+    {"id": "conv-albacete-levante", "node_id": "albacete-los-llanos", "name": "Línea convencional Albacete–La Encina", "towards": "Almansa, La Encina, Valencia, Alicante y Murcia", "status": "no_cargada", "sketch": [[-1.84845, 38.999384], [-1.6, 38.93], [-1.35, 38.9], [-1.105446, 38.867822]]},
+    {"id": "lav-albacete-madrid-levante", "node_id": "albacete-los-llanos", "name": "LAV Madrid–Levante", "towards": "Cuenca y Madrid por un lado; Alicante y Murcia por el otro", "status": "no_cargada", "sketch": [[-1.84845, 38.999384], [-1.87, 39.12], [-1.93, 39.3], [-2.0, 39.5]]}
+  ],
+  "stop_mappings": {
+    "60400": {"node": "alcazar-de-san-juan"},
+    "60402": {"node": "campo-de-criptana"},
+    "60406": {"node": "socuellamos"},
+    "60500": {"node": "villarrobledo"},
+    "60503": {"node": "minaya"},
+    "60505": {"node": "la-roda-de-albacete"},
+    "60507": {"node": "la-gineta"},
+    "60600": {"node": "albacete-los-llanos"},
+    "18000": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60200": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60202": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60203": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60206": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60207": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60300": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "60301": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50002": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50100": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50102": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50200": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50202": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50207": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50300": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50400": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50403": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50407": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50413": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50417": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "50500": {"exits": ["alcazar-de-san-juan"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}},
+    "94002": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
+    "94004": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
+    "37200": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
+    "17000": {"exits": ["alcazar-de-san-juan"]},
+    "60800": {"exits": ["albacete-los-llanos"]},
+    "60900": {"exits": ["albacete-los-llanos"]},
+    "60901": {"exits": ["albacete-los-llanos"]},
+    "60902": {"exits": ["albacete-los-llanos"]},
+    "60905": {"exits": ["albacete-los-llanos"]},
+    "60911": {"exits": ["albacete-los-llanos"]},
+    "60913": {"exits": ["albacete-los-llanos"]},
+    "60914": {"exits": ["albacete-los-llanos"]},
+    "64100": {"exits": ["albacete-los-llanos"]},
+    "64200": {"exits": ["albacete-los-llanos"]},
+    "65000": {"exits": ["albacete-los-llanos"]},
+    "65300": {"exits": ["albacete-los-llanos"]},
+    "65311": {"exits": ["albacete-los-llanos"]},
+    "65312": {"exits": ["albacete-los-llanos"]},
+    "65402": {"exits": ["albacete-los-llanos"]},
+    "65422": {"exits": ["albacete-los-llanos"]},
+    "04104": {"exits": ["albacete-los-llanos"]},
+    "71801": {"exits": ["albacete-los-llanos"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea y en alguna de las intermedias (de Campo de Criptana a La Gineta), a las que solo se llega por ella. Así entran los Media Distancia y Regional Exprés de Madrid, Alcázar de San Juan y Ciudad Real a Albacete, Alicante y Valencia y el Alvia de Barcelona a Córdoba, y quedan fuera los trenes que solo tocan la línea en Albacete: los de alta velocidad, que llegan por Cuenca, y los regionales e Intercity de Albacete a Valencia, Murcia y Cartagena.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [
+      "60402",
+      "60406",
+      "60500",
+      "60503",
+      "60505",
+      "60507"
+    ],
+    "min_node_stops": 2
+  }
+}

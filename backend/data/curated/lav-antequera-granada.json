@@ -3,7 +3,7 @@
     "id": "lav-antequera-granada",
     "name": "Línea de alta velocidad Antequera – Granada",
     "short_name": "036",
-    "sort_order": 7,
+    "sort_order": 8,
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

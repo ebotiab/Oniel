@@ -20,18 +20,32 @@ from oniel.routing import Graph, ScenarioError, build_graph, find_routes, route_
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
-LAV, CONV, MZCR, JAEN, LBMG = (
+LAV, CONV, MZCR, JAEN, LBMG, ALBACETE = (
     "lav-madrid-sevilla",
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
     "espeluy-jaen",
     "linares-baeza-moreda-granada",
+    "alcazar-albacete",
 )
 LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
 CORDOBA_BIF_MALAGA = f"{LAV}:cordoba:bif-malaga"
 ALMAGRO_CIUDAD_REAL = f"{MZCR}:almagro:ciudad-real"
+ALBACETE_NODES = [
+    "alcazar-de-san-juan",
+    "campo-de-criptana",
+    "socuellamos",
+    "villarrobledo",
+    "minaya",
+    "la-roda-de-albacete",
+    "la-gineta",
+    "albacete-los-llanos",
+]
+ALBACETE_SEGMENTS = [
+    f"{ALBACETE}:{a}:{b}" for a, b in zip(ALBACETE_NODES, ALBACETE_NODES[1:], strict=False)
+]
 
 
 def _read(name: str) -> Any:
@@ -164,7 +178,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     """La instantánea, con los trenes del día de referencia (13 de noviembre de 2026)."""
     exported = AlternativesOut.model_validate(_read("alternatives.json"))
     assert exported.scope_note == SCOPE_NOTE and "líneas que Oniel tiene cargadas" in SCOPE_NOTE
-    assert exported.line_ids == [LAV, CONV, MZCR, JAEN, LBMG, LAV_MALAGA, LAV_GRANADA]
+    assert exported.line_ids == [LAV, CONV, MZCR, JAEN, LBMG, ALBACETE, LAV_MALAGA, LAV_GRANADA]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
     counts: dict[str, int] = {}
@@ -174,7 +188,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 47 + 4 + 8
+    assert len(exported.segments) == 54 + 4 + 8
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -189,7 +203,9 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{LAV}:majarabique:sevilla-santa-justa": 53,
         f"{JAEN}:espeluy:mengibar-artichuela": 50,
         f"{JAEN}:mengibar-artichuela:jaen": 44,
-    }
+        # de Alcázar de San Juan a Albacete, mientras no esté cargada otra línea que llegue a
+        # Albacete: sus 17 trenes la recorren entera
+    } | dict.fromkeys(ALBACETE_SEGMENTS, 17)
     # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
     # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
     # trenes tienen otro camino, aunque sea por una línea de otro ancho
