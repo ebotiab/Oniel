@@ -148,7 +148,9 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     map.keyboard.disableRotation()
     map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-right')
-    map.on('load', () => {
+    // La red se añade en cuanto el estilo está listo ('style.load'), sin esperar a 'load', que no salta
+    // hasta que llegan las teselas y los rótulos del mapa base: con una conexión lenta eran varios segundos.
+    map.once('style.load', () => {
       readyRef.current = true
       if (networkRef.current) addNetwork(map, networkRef.current)
     })
@@ -298,6 +300,11 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     if (!map || !network) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const pad = framePadding({ left: padding.left, bottom: padding.bottom })
+    // Al pasar de móvil a escritorio el margen cambia antes de que MapLibre haya medido el lienzo nuevo:
+    // con el ancho antiguo el margen del panel no cabe y el encuadre se descarta. Se mide antes de encuadrar.
+    const caja = map.getContainer()
+    const lienzo = map.getCanvas()
+    if (caja.clientWidth !== lienzo.clientWidth || caja.clientHeight !== lienzo.clientHeight) map.resize()
     if (!selection) {
       const key = lineId ? `linea:${lineId}` : 'red'
       if (framedRef.current === key) return
