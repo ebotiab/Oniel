@@ -228,7 +228,9 @@ Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que
 
 Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
 
-El CI de la PR lo lanza el propio flujo (`gh workflow run ci.yml --ref datos/gtfs-<fecha>`), porque GitHub no ejecuta los flujos de `pull_request` en una PR que abre otro flujo con su token. Los resultados aparecen en la PR como en cualquier otra. Si alguien sube otro commit a esa rama, el CI se lanza a mano desde la pestaña Actions.
+El CI de esa PR. GitHub retiene los flujos de `pull_request` de una PR que abre otro flujo con su token: en la PR aparece el aviso «Approve workflows to run» y `Backend` y `Frontend` no se ejecutan como comprobaciones suyas hasta que quien la revisa lo pulsa. Para no depender de ese clic, el flujo lanza además el CI sobre la rama (`gh workflow run ci.yml --ref datos/gtfs-<fecha>`): su resultado queda en el commit y en la pestaña Actions, aunque la lista de comprobaciones de la PR no lo enseñe. Así ocurrió en la primera ejecución, el 12 de noviembre de 2026 (PR 71): el CI lanzado pasó, y al aprobar el retenido pasó también, ya dentro de la PR.
+
+La PR lleva la instantánea regenerada, así que entra en conflicto con `main` si entre tanto se fusiona otra PR que también la regenere. Lo más sencillo entonces es cerrarla sin fusionar, borrar su rama y lanzar el flujo a mano: abre otra con lo publicado ese día sobre el `main` actual.
 
 A mano, lo mismo en local:
 

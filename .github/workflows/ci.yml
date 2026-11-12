@@ -8,8 +8,8 @@ on:
   pull_request:
   push:
     branches: [main]
-  # A mano, y desde el refresco del GTFS (gtfs.yml): GitHub no ejecuta los flujos de `pull_request`
-  # en una PR que abre otro flujo, así que aquel lanza este sobre la rama de su PR.
+  # A mano, y desde el refresco del GTFS (gtfs.yml): GitHub retiene los flujos de `pull_request`
+  # de una PR que abre otro flujo hasta que alguien los aprueba, así que aquel lanza este sobre la rama.
   workflow_dispatch:
 
 permissions:
