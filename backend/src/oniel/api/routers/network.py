@@ -6,7 +6,9 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query
 
 from oniel.api.deps import ConnectionDep
+from oniel.domain.annotations import ANNOTATION_KINDS
 from oniel.domain.schemas import (
+    AnnotationOut,
     CoverageOut,
     InterruptionOut,
     LineDetailOut,
@@ -56,6 +58,27 @@ async def get_sources(conn: ConnectionDep) -> list[Source]:
     return await network_repo.fetch_sources(conn)
 
 
+@router.get("/annotations")
+async def get_annotations(
+    conn: ConnectionDep,
+    kind: Annotated[
+        str | None,
+        Query(description="Solo las de ese tipo (interrupcion); sin él, las de todos"),
+    ] = None,
+    on: Annotated[
+        dt.date | None,
+        Query(description="Solo las vigentes ese día; sin él, todas las registradas"),
+    ] = None,
+) -> list[AnnotationOut]:
+    """Anotaciones de red registradas, con su tipo, alcance, estado, fechas y fuentes."""
+    if kind is not None and kind not in ANNOTATION_KINDS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Tipo de anotación sin declarar; los declarados son: {', '.join(ANNOTATION_KINDS)}",
+        )
+    return await network_repo.fetch_annotations(conn, kind=kind, day=on)
+
+
 @router.get("/interruptions")
 async def get_interruptions(
     conn: ConnectionDep,
@@ -64,7 +87,7 @@ async def get_interruptions(
         Query(description="Solo las vigentes ese día; sin él, todas las registradas"),
     ] = None,
 ) -> list[InterruptionOut]:
-    """Interrupciones del servicio registradas, con sus tramos, fechas y fuentes."""
+    """Alias de ``/annotations?kind=interrupcion``: las interrupciones del servicio registradas."""
     return await network_repo.fetch_interruptions(conn, day=date)
 
 

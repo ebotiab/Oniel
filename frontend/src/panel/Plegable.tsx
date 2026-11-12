@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 
 import type { Source } from '../data/types'
-import { formatDateLong } from '../app/interruptions'
+import { formatDateLong } from '../app/annotations'
 
 const PREFIJO = 'oniel:plegable:'
 

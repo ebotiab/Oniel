@@ -18,7 +18,7 @@ import datetime as dt
 from dataclasses import dataclass
 from typing import Literal
 
-from oniel.domain.interruptions import alternative_note
+from oniel.domain.annotations import alternative_note
 from oniel.domain.schemas import ClosureAlternative, InterruptionOut
 from oniel.routing import Graph, Route, Scenario, closure_detours
 from oniel.sim.passes import SegmentPass
@@ -115,6 +115,9 @@ def alternatives(
             " Oniel no reasigna los trenes afectados a esta alternativa; solo señala que existe."
         )
         for i in blocking:
+            # Lo que corta un tramo va siempre de un nodo a otro y tiene fecha de inicio.
+            if i.from_name is None or i.to_name is None or i.start_date is None:
+                continue
             publisher = i.sources[0].publisher if i.sources else "fuente sin registrar"
             note += alternative_note(i.from_name, i.to_name, i.start_date, publisher)
         first = route.legs[0]

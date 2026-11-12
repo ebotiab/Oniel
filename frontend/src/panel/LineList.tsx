@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react'
 
 import { normalize } from '../app/search'
+import type { AnnotationLayer } from '../app/annotationLayers'
 import { formatKm, lineKind, lineShortLabel } from '../app/state'
 import type { LineSummary } from '../data/types'
 import { Muestra } from './Legend'
 
 interface Props {
   lines: LineSummary[]
-  /** Líneas con algún tramo sin circulación hoy. */
-  interruptedLineIds: Set<string>
+  /** Capas de anotaciones con algo vigente hoy en cada línea, por id de línea. */
+  notes: Map<string, AnnotationLayer[]>
   onPick: (id: string) => void
 }
 
@@ -24,7 +25,7 @@ const GROUPS = [
  * Lista de las líneas cargadas, agrupada por tipo. Es la misma con tres líneas que con cien: cada línea
  * ocupa un renglón doble, la lista se desplaza dentro del panel y, cuando son muchas, se filtra por nombre.
  */
-export function LineList({ lines, interruptedLineIds, onPick }: Props) {
+export function LineList({ lines, notes, onPick }: Props) {
   const [query, setQuery] = useState('')
   const filterable = lines.length >= FILTER_FROM
   const shown = useMemo(() => {
@@ -72,7 +73,14 @@ export function LineList({ lines, interruptedLineIds, onPick }: Props) {
                     <span className="fila-linea-nombre">{lineShortLabel(l)}</span>
                     <span className="fila-linea-detalle datos">
                       {formatKm(l.length_km)} km{l.max_speed_kmh ? ` · hasta ${l.max_speed_kmh} km/h` : ''}
-                      {interruptedLineIds.has(l.id) && <span className="senal roja">un tramo sin circulación</span>}
+                      {notes.get(l.id)?.map(
+                        ({ kind, lista }) =>
+                          lista && (
+                            <span key={kind} className={`senal ${lista.senal.clase}`}>
+                              {lista.senal.texto}
+                            </span>
+                          ),
+                      )}
                     </span>
                   </button>
                 </li>

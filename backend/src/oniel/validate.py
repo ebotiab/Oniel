@@ -1,4 +1,4 @@
-"""Validaciones sin base de datos: red construida, PK de referencia, horarios e interrupciones."""
+"""Validaciones sin base de datos: red construida, PK de referencia, horarios y anotaciones."""
 
 from __future__ import annotations
 
@@ -16,12 +16,12 @@ from oniel.gtfs.trips import (
     select_trips_for_spec,
     via_legs,
 )
+from oniel.network.annotations import check_annotations
 from oniel.network.build import BuiltNetwork, build_network
-from oniel.network.interruptions import check_interruptions
 from oniel.network.spec import (
     OperatorSpec,
+    load_annotations,
     load_feeds,
-    load_interruptions,
     load_network_spec,
     load_sources,
 )
@@ -35,39 +35,44 @@ def loaded_line(net: BuiltNetwork) -> LoadedLine:
     return LoadedLine(net.spec, nodes)
 
 
-def validate_interruptions(
+def validate_annotations(
     path: Path, sources_path: Path, spec_paths: Sequence[Path], data_dir: Path
 ) -> dict[str, Any]:
-    """Comprueba el fichero de interrupciones contra las líneas cargadas y el registro de fuentes.
+    """Comprueba el fichero de anotaciones contra las líneas cargadas y el registro de fuentes.
 
-    Un fichero que no cumple el esquema (campos, orden de las fechas, ids repetidos) no llega a
-    contrastarse con la red: el error del modelo es el único problema que se devuelve.
+    Un fichero que no cumple el esquema (tipo, estado, alcance, campos, orden de las fechas, ids
+    repetidos) no llega a contrastarse con la red: el error del modelo es el único problema que se
+    devuelve.
     """
     try:
-        interruptions = load_interruptions(path)
+        annotations = load_annotations(path)
     except (ValueError, OSError) as error:
-        return {"interruptions": path.name, "entries": [], "problems": [str(error)]}
+        return {"annotations": path.name, "entries": [], "problems": [str(error)]}
     line_nodes: dict[str, list[str]] = {}
     for spec_path in spec_paths:
         net = build_network(load_network_spec(spec_path), data_dir)
         line_nodes[net.spec.line.id] = [n.spec.id for n in sorted(net.nodes, key=lambda n: n.km)]
     sources = {s.id: s.url for s in load_sources(sources_path)}
     return {
-        "interruptions": path.name,
+        "annotations": path.name,
         "entries": [
             {
-                "id": i.id,
-                "line": i.line_id,
-                "from": i.from_node,
-                "to": i.to_node,
-                "start_date": i.start_date.isoformat(),
-                "ended_on": i.ended_on.isoformat() if i.ended_on else None,
-                "checked_on": i.checked_on.isoformat(),
-                "sources": i.source_ids,
+                "id": a.id,
+                "kind": a.kind,
+                "status": a.status,
+                "scope": a.scope,
+                "line": a.line_id,
+                "from": a.from_node,
+                "to": a.to_node,
+                "node": a.node_id,
+                "start_date": a.start_date.isoformat() if a.start_date else None,
+                "ended_on": a.ended_on.isoformat() if a.ended_on else None,
+                "checked_on": a.checked_on.isoformat(),
+                "sources": a.source_ids,
             }
-            for i in interruptions
+            for a in annotations
         ],
-        "problems": check_interruptions(interruptions, line_nodes, sources),
+        "problems": check_annotations(annotations, line_nodes, sources),
     }
 
 
