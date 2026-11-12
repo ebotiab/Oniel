@@ -31,6 +31,7 @@ class Settings(BaseSettings):
         "convencional-madrid-alcazar-cordoba",
         "manzanares-ciudad-real",
         "espeluy-jaen",
+        "linares-baeza-moreda-granada",
         "lav-cordoba-malaga",
         "lav-antequera-granada",
     ]

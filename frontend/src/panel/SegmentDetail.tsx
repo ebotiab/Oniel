@@ -220,16 +220,23 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
               {fraseTramo(alternativa)}
             </p>
           )}
-          <p className="suave">
-            {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
-            {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
-            {services.counts.indeterminado > 0 && (
-              <>
-                , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
-              </>
-            )}
-            .
-          </p>
+          {/* un tramo puede no llevar ningún tren de los horarios: se dice, en vez de un recuento a cero */}
+          {services.passes.length === 0 ? (
+            <p className="suave" data-testid="tramo-sin-trenes">
+              Ningún tren de los horarios cargados recorre este tramo ese día.
+            </p>
+          ) : (
+            <p className="suave">
+              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
+              {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
+              {services.counts.indeterminado > 0 && (
+                <>
+                  , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
+                </>
+              )}
+              .
+            </p>
+          )}
           <div data-testid="lista-servicios">
             {groups.map((g) => (
               <div key={g.id} data-testid={`trenes-${g.id}`}>

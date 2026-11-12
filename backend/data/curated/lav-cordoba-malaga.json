@@ -3,7 +3,7 @@
     "id": "lav-cordoba-malaga",
     "name": "Línea de alta velocidad Córdoba – Málaga",
     "short_name": "030",
-    "sort_order": 4,
+    "sort_order": 6,
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

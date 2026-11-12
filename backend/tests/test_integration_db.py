@@ -28,11 +28,12 @@ from conftest import (
     requires_db,
 )
 
-LAV, CONV, MZCR, JAEN = (
+LAV, CONV, MZCR, JAEN, LBMG = (
     "lav-madrid-sevilla",
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
     "espeluy-jaen",
+    "linares-baeza-moreda-granada",
 )
 LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
 RULES = {
@@ -146,10 +147,12 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # cada viaje se guarda una sola vez. De los 565 de la convencional, 62 entran por las reglas
     # de los trenes de Jaén que solo paran una vez en ella (42 Córdoba – Jaén sin paradas y 20
     # Linares-Baeza – Mengíbar-Artichuela).
+    # De los 38 de la línea de Linares-Baeza a Granada, 12 son Alvia Madrid – Granada –
+    # Almería que ya estaban en la LAV y 26, Media Distancia que no pasan por ninguna otra línea.
     # Las dos líneas de alta velocidad de Córdoba a Granada traen 199 y 74 viajes. De ellos, 37 no
     # estaban: los 23 Avant de Sevilla a Málaga y a Granada, los 6 de Málaga a Granada y los 8 AVE
     # de Barcelona a Málaga y a Granada, que no paran en Madrid.
-    assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == 335 + 565 - 24 + 37
+    assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == 335 + 565 - 24 + 26 + 37
     assert gtfs1["lines"][LAV_MALAGA]["trips"] == 199
     assert gtfs1["lines"][LAV_GRANADA]["trips"] == 74
     assert gtfs1["lines"][LAV_MALAGA]["passes"] == {"estimado": 727, "publicado": 69}
@@ -166,6 +169,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # publicados; los demás entran o salen por Espelúy sin parar en la estación
     assert gtfs1["lines"][JAEN]["passes"] == {"publicado": 20, "estimado": 402}
     assert gtfs1["lines"][MZCR]["passes"] == {"publicado": 130 * 3, "estimado": 24 * 3}
+    assert gtfs1["lines"][LBMG]["trips"] == 26 + 12
+    assert gtfs1["lines"][LBMG]["route_overrides"] == {"linares-baeza-almeria-por-moreda": 4}
+    assert gtfs1["lines"][LBMG]["passes"] == {"publicado": 18, "estimado": 62}
     assert "indeterminado" not in gtfs1["passes"] and gtfs1["unmapped_stops"] == {}
     # Ouigo: 25 viajes Madrid–Córdoba–Sevilla o Málaga (4 de ellos vienen de Barcelona o siguen
     # hasta allí), todos por la LAV y ninguno por las líneas convencionales. Solo paran en Madrid,
@@ -176,6 +182,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert ouigo1["lines"][LAV]["trips"] == 25
     assert ouigo1["lines"][CONV]["trips"] == ouigo1["lines"][MZCR]["trips"] == 0
     assert ouigo1["lines"][JAEN]["trips"] == 0
+    assert ouigo1["lines"][LBMG]["trips"] == 0
     # los 15 de Málaga siguen por la línea de Córdoba a Málaga sin parar hasta Málaga: 4 tramos
     assert ouigo1["lines"][LAV_MALAGA]["trips"] == 15 and ouigo1["lines"][LAV_GRANADA]["trips"] == 0
     assert ouigo1["lines"][LAV_MALAGA]["passes"] == {"estimado": 15 * 4}
@@ -184,9 +191,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert ouigo1["dataset"]["id"] == ouigo2["dataset"]["id"] == OUIGO_DATASET_ID
     assert (ouigo1["feed_start"], ouigo1["feed_end"]) == ("2026-06-26", "2026-12-12")
     c = imported["counts"]
-    assert c["lines"] == 6 and c["segments"] == 11 + 25 + 3 + 2 + 4 + 8
-    assert c["services"] == 876 + 37 + 25
-    renfe_passes = (3126 + 115) + (2741 + 683) + (72 + 390) + (402 + 20) + (727 + 69) + 586
+    assert c["lines"] == 7 and c["segments"] == 11 + 25 + 3 + 2 + 6 + 4 + 8
+    assert c["services"] == 876 + 26 + 37 + 25
+    renfe_passes = (3126 + 115) + (2741 + 683) + (72 + 390) + (402 + 20) + (62 + 18)
+    renfe_passes += (727 + 69) + 586
     assert c["service_segment_passes"] == renfe_passes + 245 + 60
     assert c["import_runs"] == 4
     # el mismo fichero dos veces es un solo conjunto de datos, reconocido por su SHA-256
@@ -272,7 +280,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "bif-torrejon-de-velasco",
         "bif-la-sagra",
     ]
-    assert len(data["segment_features"]["features"]) == 11 + 25 + 3 + 2 + 4 + 8
+    assert len(data["segment_features"]["features"]) == 11 + 25 + 3 + 2 + 6 + 4 + 8
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
     # Ciudad Real sale a trazos la convencional hacia Badajoz
@@ -287,7 +295,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     ]
     assert sum(1 for f in data["node_features"]["features"] if f["id"] == "cordoba") == 1
     single = [s for s in data["segments"] if s["tracks"] == 1]
-    assert {s["line_id"] for s in single} == {CONV, MZCR, JAEN, LAV_GRANADA}
+    assert {s["line_id"] for s in single} == {CONV, MZCR, JAEN, LBMG, LAV_GRANADA}
     # de Antequera a Granada, vía única desde la bifurcación Archidona: 5 de sus 8 tramos
     assert [s["id"].split(":")[1] for s in single if s["line_id"] == LAV_GRANADA] == [
         "bif-archidona",
@@ -298,16 +306,23 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     ]
     assert sum(1 for s in data["segments"] if s["line_id"] == JAEN and s["tracks"] == 1) == 2
     assert sum(1 for s in data["segments"] if s["line_id"] == MZCR and s["tracks"] == 1) == 3
+    assert sum(1 for s in data["segments"] if s["line_id"] == LBMG and s["tracks"] == 1) == 6
     assert [line["id"] for line in data["lines"]] == [
         LAV,
         CONV,
         MZCR,
         JAEN,
+        LBMG,
         LAV_MALAGA,
         LAV_GRANADA,
     ]
-    # la conexión a trazos hacia Málaga ya no sale de la bifurcación: sale de Antequera-Santa Ana
-    assert "lav-cordoba-malaga" not in connections
+    # la conexión a trazos de Linares-Baeza hacia Almería también desaparece: la línea cargada
+    # llega a Moreda, y de allí sale a trazos lo que falta hasta Guadix y Almería
+    assert "conv-linares-almeria" not in connections
+    assert connections["conv-moreda-almeria"] == "moreda"
+    # y la de Granada hacia Antequera: la alta velocidad está cargada y sus conexiones a trazos
+    # salen de Antequera-Santa Ana, hacia Málaga, y de la bifurcación Bobadilla
+    assert "av-antequera-granada" not in connections and "lav-cordoba-malaga" not in connections
     assert connections["lav-antequera-malaga"] == "antequera-santa-ana"
     assert connections["enlace-malaga-granada"] == "bif-bobadilla"
     # la tercera línea une las otras dos: Manzanares es de la convencional y Ciudad Real, de la LAV
@@ -341,9 +356,9 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     async with connect(dsn) as conn:
         rows = await conn.fetch("SELECT segment_id, attribute, value FROM segment_attributes")
         columns = await conn.fetch("SELECT id, tracks FROM segments")
-    # el número de vías y los tres de señalización, en los 53 tramos
+    # el número de vías y los tres de señalización, en los 59 tramos
     gauge = {r["segment_id"] for r in rows if r["attribute"] == "gauge"}
-    assert len(rows) - len(gauge) == 4 * (11 + 25 + 3 + 2 + 4 + 8)
+    assert len(rows) - len(gauge) == 4 * (11 + 25 + 3 + 2 + 6 + 4 + 8)
     # y el ancho mixto, solo en el paso por Loja y en la entrada a Granada
     assert gauge == {
         f"{LAV_GRANADA}:bif-riofrio:loja",
@@ -640,7 +655,10 @@ async def test_closure_of_an_interrupted_segment_says_so(client: httpx.AsyncClie
     # la simulación sigue calculándose sobre el horario publicado
     assert res["items"] and sum(res["counts"].values()) == len(res["items"])
     # la alternativa por Despeñaperros cruza el corte por obras, y el rodeo por Manzanares también
-    by_manzanares, alt = res["alternatives"]
+    # (los otros dos, por Moreda y Granada, salen de la convencional antes de los túneles o
+    # después, y se comprueban en las pruebas del grafo)
+    by_manzanares, alt, *by_granada = res["alternatives"]
+    assert [a["line_ids"][-2:] for a in by_granada] == [[LAV_GRANADA, LAV_MALAGA]] * 2
     assert alt["line_ids"] == ["convencional-madrid-alcazar-cordoba"]
     assert by_manzanares["line_ids"] == [MZCR, CONV]
     assert [i["id"] for i in by_manzanares["interruptions"]] == [WORKS_CUT]
@@ -664,7 +682,7 @@ async def test_closure_before_the_interruptions_has_no_notes(client: httpx.Async
     res = r.json()
     assert res["interruptions"] == []
     assert not any("interrupción real" in c for c in res["caveats"])
-    assert len(res["alternatives"]) == 2
+    assert len(res["alternatives"]) == 4
     for alt in res["alternatives"]:
         assert alt["interruptions"] == [] and "no está disponible" not in alt["note"]
 
@@ -702,12 +720,13 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     cov = r.json()
     # Daimiel y Almagro son las dos estaciones de la tercera línea, y Mengíbar-Artichuela y Jaén,
     # las de la cuarta; con esta hay 9 servicios más el día de referencia, los trenes de Jaén
-    # que no entraban en la convencional
-    # y Puente Genil-Herrera, Antequera-Santa Ana, Antequera AV, Loja y Granada, las cinco de las
-    # líneas de alta velocidad de Córdoba a Granada, con 30 números de tren nuevos: los Avant de
-    # Sevilla y de Málaga y los AVE de Barcelona que no paran en Madrid
-    assert cov["station_count"] == 6 + 22 + 2 + 2 + 5
-    assert cov["service_count"] == 99 + 99 + 20 + 9 + 30
+    # que no entraban en la convencional. La de Linares-Baeza a Granada trae cinco estaciones
+    # más y los 12 Media Distancia de ese día que no pasan por ninguna otra línea
+    # Las de alta velocidad de Córdoba a Granada añaden Puente Genil-Herrera, Antequera-Santa Ana,
+    # Antequera AV y Loja (Granada ya estaba) y 30 números de tren: los Avant de Sevilla y de
+    # Málaga y los AVE de Barcelona que no paran en Madrid
+    assert cov["station_count"] == 6 + 22 + 2 + 2 + 5 + 4
+    assert cov["service_count"] == 99 + 99 + 20 + 9 + 12 + 30
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -718,14 +737,26 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "fcmaf-linea-522",
         "osm-relation-11351146",
         "wikipedia-linea-402",
+        "osm-relation-6641023",
+        "osm-relation-11350675",
+        "wikipedia-lineas-410-416",
         "adif-mapa-red",
         "adif-estado-de-la-red",
         "adif-aviso-obras-autopista-ferroviaria",
     }
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
+    assert "la línea convencional Espelúy – Jaén" in cov["notice"]
     assert "y la línea de alta velocidad Antequera – Granada" in cov["notice"]
-    assert [line["id"] for line in cov["lines"]] == [LAV, CONV, MZCR, JAEN, LAV_MALAGA, LAV_GRANADA]
+    assert [line["id"] for line in cov["lines"]] == [
+        LAV,
+        CONV,
+        MZCR,
+        JAEN,
+        LBMG,
+        LAV_MALAGA,
+        LAV_GRANADA,
+    ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
     ouigo, dataset = cov["datasets"]
@@ -753,6 +784,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         CONV: ["renfe"],
         MZCR: ["renfe"],
         JAEN: ["renfe"],
+        LBMG: ["renfe"],
         LAV_MALAGA: ["iryo", "ouigo", "renfe"],
         LAV_GRANADA: ["renfe"],
     }
@@ -972,8 +1004,10 @@ async def test_closure_between_manzanares_and_ciudad_real_affects_the_diverted_t
     assert sum(res["counts"].values()) == len(res["items"])
     # ninguna línea sola une los dos lados del tramo; el grafo encuentra el rodeo por dos:
     # la convencional hasta Madrid (o hasta Córdoba) y la alta velocidad hasta Ciudad Real
-    by_madrid, by_cordoba = res["alternatives"]
+    by_madrid, by_cordoba, by_granada = res["alternatives"]
     assert by_madrid["line_ids"] == by_cordoba["line_ids"] == [CONV, LAV]
+    assert by_granada["line_ids"] == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA, LAV]
+    assert by_granada["length_km"] == 689.5
     assert (by_madrid["from_node_id"], by_madrid["to_node_id"]) == ("manzanares", "ciudad-real")
     assert (by_madrid["length_km"], by_madrid["closed_line_length_km"]) == (366.9, 64.4)
     assert [leg["to_name"] for leg in by_madrid["legs"]] == [
@@ -1004,7 +1038,12 @@ async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
     # la línea convencional une Madrid y Córdoba a ambos lados del tramo cerrado
     # y, más ceñido al tramo, el rodeo de Ciudad Real a Córdoba por Manzanares (dos líneas)
     alt = [a for a in res["alternatives"] if len(a["legs"]) == 1]
-    assert [a["line_ids"] for a in res["alternatives"]] == [[MZCR, CONV], [CONV]]
+    lines = [a["line_ids"] for a in res["alternatives"]]
+    assert lines[:2] == [[MZCR, CONV], [CONV]]
+    # y los dos que bajan por Moreda y Granada hasta la bifurcación de Málaga, mucho más largos
+    by_granada = [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
+    assert lines[2:] == [[MZCR, *by_granada], by_granada]
+    assert [a["length_km"] for a in res["alternatives"]] == [309.0, 440.7, 566.6, 698.3]
     assert [a["line_id"] for a in alt] == [CONV]
     assert alt[0]["from_node_id"] == "madrid-puerta-de-atocha" and alt[0]["to_node_id"] == "cordoba"
     assert alt[0]["length_km"] > alt[0]["closed_line_length_km"]
@@ -1066,7 +1105,11 @@ async def test_closure_between_urda_and_ciudad_real_finds_the_detour_through_man
         },
     )
     assert r.status_code == 200
-    detour, whole_line = r.json()["alternatives"]
+    detour, whole_line, by_granada = r.json()["alternatives"]
+    assert (
+        by_granada["line_ids"] == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
+        and by_granada["to_node_id"] == "bif-malaga"
+    )
     assert detour["line_ids"] == [CONV, MZCR]
     assert (detour["from_node_id"], detour["to_node_id"]) == (
         "madrid-puerta-de-atocha",
@@ -1092,7 +1135,10 @@ async def test_closure_with_a_scenario_adds_its_other_changes(client: httpx.Asyn
     }
     r = await client.post("/api/simulations/closure", json=body)
     assert r.status_code == 200
-    assert [a["line_ids"] for a in r.json()["alternatives"]] == [[CONV]]
+    assert [a["line_ids"] for a in r.json()["alternatives"]] == [
+        [CONV],
+        [CONV, LBMG, LAV_GRANADA, LAV_MALAGA],
+    ]
     r = await client.post("/api/simulations/closure", json={**body, "scenario": "c~no:existe"})
     assert r.status_code == 422 and "Escenario no válido" in r.json()["detail"]
 
@@ -1333,16 +1379,19 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     out = (await client.get("/api/alternatives")).json()
     counts = (await client.get("/api/segment-counts")).json()
     assert out["date"] == counts["date"] == "2026-11-13"
-    assert out["line_ids"] == [LAV, CONV, MZCR, JAEN, LAV_MALAGA, LAV_GRANADA]
+    assert out["line_ids"] == [LAV, CONV, MZCR, JAEN, LBMG, LAV_MALAGA, LAV_GRANADA]
     assert out["missing_operator_ids"] == ["iryo"]
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
-    assert len(by_id) == 41 + 4 + 8
+    assert len(by_id) == 47 + 4 + 8
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
-    # al sur de Córdoba no hay otra línea cargada: ningún tren tiene otro camino
-    south = by_id[f"{LAV}:cordoba:bif-malaga"]
-    assert (south["trains"], south["without_alternative"]) == (108, 108)
+    # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
+    south = by_id[f"{LAV}:bif-malaga:majarabique"]
+    assert (south["trains"], south["without_alternative"]) == (55, 55)
     assert all(g["alternative"] is None for g in south["groups"])
+    # entre Córdoba y la bifurcación de Málaga sí, desde que Granada está unida por los dos lados
+    first = by_id[f"{LAV}:cordoba:bif-malaga"]
+    assert (first["trains"], first["without_alternative"]) == (108, 0)
     # al norte, la línea convencional salva el tramo: 97 km más para los trenes de Madrid a Sevilla
     north = by_id[f"{LAV}:adamuz:cordoba"]
     assert (north["trains"], north["without_alternative"]) == (108, 0)
@@ -1391,7 +1440,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
     # la red entera ya no se exporta en un solo fichero: el visor no lo descargaba
     assert not (tmp_path / "network.json").exists()
     assert not (tmp_path / "segment-counts.json").exists()
-    assert result["lines"] == [LAV, CONV, MZCR, JAEN, LAV_MALAGA, LAV_GRANADA]
+    assert result["lines"] == [LAV, CONV, MZCR, JAEN, LBMG, LAV_MALAGA, LAV_GRANADA]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]
     )

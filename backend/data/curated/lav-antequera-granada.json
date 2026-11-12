@@ -3,7 +3,7 @@
     "id": "lav-antequera-granada",
     "name": "Línea de alta velocidad Antequera – Granada",
     "short_name": "036",
-    "sort_order": 5,
+    "sort_order": 7,
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,
@@ -56,8 +56,7 @@
      "description": "Final del paso por Loja: aquí termina la vía con tercer carril de la línea antigua y los trenes vuelven a un trazado propio hacia Granada."},
     {"id": "bif-la-chana", "name": "Bifurcación La Chana", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -3.6539576, "lat": 37.1989235},
      "description": "A la entrada de Granada. Desde aquí la línea de alta velocidad y la convencional que viene de Moreda entran en la ciudad una al lado de la otra."},
-    {"id": "granada", "name": "Granada", "kind": "estacion", "adif_code": "05000", "position": {"lon": -3.6086283, "lat": 37.1836936}, "reference_pk_km": 211.021,
-     "description": "Final de la línea. La estación es de 1874 y recibe la alta velocidad desde el 26 de junio de 2019. De aquí sale también la línea convencional hacia Moreda, Guadix y Almería."}
+    {"id": "granada", "name": "Granada", "kind": "estacion", "adif_code": "05000", "shared": true, "position": {"lon": -3.6086283, "lat": 37.1836936}, "reference_pk_km": 211.021}
   ],
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "antequera-santa-ana", "to_node": "granada", "value": "ertms_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos de «ERTMS N2» y de ASFA de alta velocidad junto a la línea, entre Antequera-Santa Ana y Granada."},
@@ -69,8 +68,7 @@
     {"attribute": "gauge", "from_node": "bif-la-chana", "to_node": "granada", "value": "mixto", "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM, gauge=1435;1668 desde la bifurcación La Chana hasta la estación de Granada."}
   ],
   "connections": [
-    {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga–Granada", "towards": "Málaga, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7197, 37.0177]]},
-    {"id": "conv-granada-moreda", "node_id": "granada", "name": "Línea convencional Granada–Moreda", "towards": "Moreda, Guadix, Almería y Linares-Baeza", "status": "no_cargada", "sketch": [[-3.6086283, 37.1836936], [-3.6539576, 37.1989235], [-3.6458, 37.2332], [-3.5964, 37.3324], [-3.5278, 37.3958]]}
+    {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga–Granada", "towards": "Málaga, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7197, 37.0177]]}
   ],
   "stop_mappings": {
     "02003": {"node": "antequera-santa-ana"},

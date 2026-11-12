@@ -26,7 +26,7 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
     await page.goto('/cobertura')
     await abrirPanel(page)
-    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(17)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(4)
     await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
     await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
@@ -60,33 +60,35 @@ test.describe('Tramos sin alternativa', () => {
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(detalle).toBeVisible()
     const grupos = detalle.locator('li')
-    // los de Málaga y los de Granada son grupos distintos: unos dejan la red cargada en
-    // Antequera-Santa Ana y los otros llegan a Granada
-    await expect(grupos).toHaveCount(6)
+    // los de Málaga, los de Granada y los de Almería son grupos distintos: unos dejan la red
+    // cargada en Antequera-Santa Ana y los otros llegan a Granada o siguen hacia Moreda
+    await expect(grupos).toHaveCount(7)
     await expect(grupos.first()).toHaveText(
       '43 trenes entre Madrid-Puerta de Atocha y Sevilla-Santa Justa: otro camino por la línea convencional Madrid – Alcázar de San Juan – Córdoba y la línea de alta velocidad Madrid – Sevilla, 97 km y 1 h 44 min más (567,3 km en vez de 470,3).',
     )
     // los desviados por Manzanares ya dan un rodeo: para ellos el otro camino añade poco
     await expect(grupos.nth(2)).toContainText('14 trenes entre Madrid-Puerta de Atocha y Antequera-Santa Ana')
     await expect(grupos.nth(2)).toContainText('7 km y 37 min más')
-    await expect(grupos.nth(3)).toContainText('10 trenes entre Madrid-Puerta de Atocha y Granada')
+    // para los de Granada el otro camino, por Moreda, es más corto
+    await expect(grupos.nth(4)).toContainText('8 trenes entre Madrid-Puerta de Atocha y Granada')
+    await expect(grupos.nth(4)).toContainText('82 km')
     // el detalle dice qué significa y qué no mira el cálculo
     await expect(detalle).toContainText('no hay otro camino en las líneas que Oniel tiene cargadas, no que no exista en la red real')
     await expect(detalle).toContainText('no mira si el tren cabe por él')
     await expect(page.getByTestId('detalle-tramo')).not.toContainText(/criticidad/i)
   })
 
-  test('al sur de Córdoba, el tramo dice que sus trenes no tienen otro camino en las líneas cargadas', async ({ page }) => {
-    await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
+  test('hacia Sevilla, el tramo dice que sus trenes no tienen otro camino en las líneas cargadas', async ({ page }) => {
+    await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 108 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
+      'Si este tramo se cortara, sus 55 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
     )
     // Iryo también pasa por aquí y sus trenes no están: la ficha lo dice junto al recuento
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toContainText('Iryo')
     await page.getByTestId('mas-detalle').locator('summary').click()
     const grupos = page.getByTestId('tramo-alternativa-detalle').locator('li')
-    await expect(grupos).toHaveCount(6)
+    await expect(grupos).toHaveCount(3)
     for (const grupo of await grupos.all()) await expect(grupo).toContainText('sin otro camino en las líneas cargadas.')
   })
 
@@ -109,39 +111,38 @@ test.describe('Tramos sin alternativa', () => {
     )
     // del que más trenes lleva al que menos
     const filas = page.getByTestId('lista-sin-alternativa').locator('li')
-    // al sur de Córdoba no hay otro camino cargado ni a Sevilla ni, por Antequera, a Granada: los 3
-    // tramos de la línea de Sevilla, los 4 de la de Málaga y los 8 de la de Granada
-    await expect(filas).toHaveCount(17)
-    await expect(filas.nth(0)).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
-    await expect(filas.nth(0)).toContainText('108 trenes')
-    await expect(filas.nth(1)).toContainText('77 trenes')
-    await expect(filas.nth(5)).toContainText('55 trenes')
-    await expect(filas.nth(6)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
-    await expect(filas.nth(6)).toContainText('53 trenes')
+    // los dos que llevan a Sevilla y los dos del ramal de Jaén. Granada está unida por los dos
+    // lados (la convencional de Moreda y la alta velocidad de Antequera), así que ni sus líneas ni
+    // Córdoba – Bifurcación Málaga figuran ya: sus trenes tienen otro camino
+    await expect(filas).toHaveCount(4)
+    await expect(filas.nth(0)).toContainText('Bifurcación Málaga-Alta Velocidad – Cambiador de Majarabique')
+    await expect(filas.nth(0)).toContainText('55 trenes')
+    await expect(filas.nth(1)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
+    await expect(filas.nth(1)).toContainText('53 trenes')
     // y los dos del ramal de Jaén, que acaba en una estación término
-    await expect(filas.nth(7)).toContainText('Espelúy – Mengíbar-Artichuela')
-    await expect(filas.nth(7)).toContainText('50 trenes')
-    await expect(filas.nth(8)).toContainText('Mengíbar-Artichuela – Jaén')
-    await expect(filas.nth(8)).toContainText('44 trenes')
-    await expect(filas.nth(9)).toContainText('26 trenes')
-    await expect(filas.nth(16)).toContainText('Antequera-Santa Ana – Bifurcación Bobadilla')
-    await expect(filas.nth(16)).toContainText('20 trenes')
+    await expect(filas.nth(2)).toContainText('Espelúy – Mengíbar-Artichuela')
+    await expect(filas.nth(2)).toContainText('50 trenes')
+    await expect(filas.nth(3)).toContainText('Mengíbar-Artichuela – Jaén')
+    await expect(filas.nth(3)).toContainText('44 trenes')
+    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
+    // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
+    await expect(apartado).not.toContainText('Moreda – Bifurcación Almería')
     await expect(apartado).toContainText('Trenes del viernes, 13 de noviembre de 2026')
     await expect(apartado).not.toContainText(/criticidad/i)
-    // los demás, plegados: 36 tramos con lo que añade su otro camino
+    // los demás, plegados: 54 tramos con lo que añade su otro camino
     const resto = page.getByTestId('tramos-con-alternativa')
-    await expect(resto.locator('summary')).toHaveText('Los otros 36 tramos tienen otro camino')
+    await expect(resto.locator('summary')).toHaveText('Los otros 54 tramos tienen otro camino')
     await expect(page.getByTestId('lista-con-alternativa')).toBeHidden()
     await resto.locator('summary').click()
     const otros = page.getByTestId('lista-con-alternativa').locator('li')
-    await expect(otros).toHaveCount(36)
+    await expect(otros).toHaveCount(54)
     await expect(otros.first()).toContainText('Ciudad Real – Puertollano')
     await expect(otros.first()).toContainText('108 trenes')
     await expect(otros.first()).toContainText('+97 km · +1 h 44 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // cada fila lleva a la ficha de su tramo
     await filas.nth(0).getByRole('button').click()
-    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
+    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:bif-malaga:majarabique$/)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
   })
 })

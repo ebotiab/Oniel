@@ -20,41 +20,16 @@ from oniel.routing import Graph, ScenarioError, build_graph, find_routes, route_
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
-LAV, CONV, MZCR, JAEN = (
+LAV, CONV, MZCR, JAEN, LBMG = (
     "lav-madrid-sevilla",
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
     "espeluy-jaen",
+    "linares-baeza-moreda-granada",
 )
 LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
-#: Los nodos de las dos líneas de alta velocidad de Córdoba a Granada, en orden.
-MALAGA_NODES = (
-    "bif-malaga",
-    "la-marota",
-    "santaella",
-    "puente-genil-herrera",
-    "antequera-santa-ana",
-)
-GRANADA_NODES = (
-    "antequera-santa-ana",
-    "bif-bobadilla",
-    "antequera-av",
-    "bif-archidona",
-    "bif-riofrio",
-    "loja",
-    "bif-tocon",
-    "bif-la-chana",
-    "granada",
-)
-
-
-def _pairs(nodes: tuple[str, ...]) -> list[tuple[str, str]]:
-    """Los tramos de una línea: cada nodo con el siguiente."""
-    return list(zip(nodes, nodes[1:], strict=False))
-
-
 CORDOBA_BIF_MALAGA = f"{LAV}:cordoba:bif-malaga"
 ALMAGRO_CIUDAD_REAL = f"{MZCR}:almagro:ciudad-real"
 
@@ -108,12 +83,19 @@ def test_the_conventional_line_is_the_alternative_to_high_speed_between_madrid_a
     assert alternative.via[:2] == ["Aranjuez", "Alcázar de San Juan"]
 
 
-def test_south_of_cordoba_there_is_no_other_way_in_the_loaded_lines(graph: Graph) -> None:
+def test_towards_sevilla_there_is_no_other_way_in_the_loaded_lines(graph: Graph) -> None:
     trains = [ServicePath("ave-1", "renfe", _path(graph, MADRID, SEVILLA))]
     result = segment_alternatives(graph, trains)
-    south = _of(result, CORDOBA_BIF_MALAGA)
+    south = _of(result, f"{LAV}:bif-malaga:majarabique")
     assert (south.trains, south.with_alternative, south.without_alternative) == (1, 0, 1)
     assert south.groups[0].alternative is None
+    # entre Córdoba y la bifurcación de Málaga sí lo hay desde que Granada está unida por los dos
+    # lados: por Linares-Baeza, Moreda, Granada y Antequera, 340 km más largo
+    first = _of(result, CORDOBA_BIF_MALAGA)
+    assert (first.with_alternative, first.without_alternative) == (1, 0)
+    assert first.groups[0].alternative is not None
+    assert first.groups[0].alternative.line_ids == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA, LAV]
+    assert first.groups[0].alternative.extra_km == 340.2
     # el mismo tren, al norte de Córdoba, sí tiene otro camino
     north = _of(result, ADAMUZ_CORDOBA)
     assert north.without_alternative == 0
@@ -182,7 +164,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     """La instantánea, con los trenes del día de referencia (13 de noviembre de 2026)."""
     exported = AlternativesOut.model_validate(_read("alternatives.json"))
     assert exported.scope_note == SCOPE_NOTE and "líneas que Oniel tiene cargadas" in SCOPE_NOTE
-    assert exported.line_ids == [LAV, CONV, MZCR, JAEN, LAV_MALAGA, LAV_GRANADA]
+    assert exported.line_ids == [LAV, CONV, MZCR, JAEN, LBMG, LAV_MALAGA, LAV_GRANADA]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
     counts: dict[str, int] = {}
@@ -192,30 +174,39 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 41 + 4 + 8
+    assert len(exported.segments) == 47 + 4 + 8
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
         assert s.with_alternative + s.without_alternative == s.trains
-    # no queda otro camino al sur de Córdoba, donde Oniel tiene una sola línea, ni en el ramal
-    # de Jaén, que acaba en una estación término
+    # no queda otro camino hacia Sevilla, adonde Oniel solo llega por la alta velocidad, ni en
+    # el ramal de Jaén, que acaba en una estación término
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
-    assert (
-        without
-        == {
-            CORDOBA_BIF_MALAGA: 108,
-            f"{LAV}:bif-malaga:majarabique": 55,
-            f"{LAV}:majarabique:sevilla-santa-justa": 53,
-            f"{JAEN}:espeluy:mengibar-artichuela": 50,
-            f"{JAEN}:mengibar-artichuela:jaen": 44,
-            # ni, por la bifurcación de Málaga, hacia Antequera y Granada
-            **{f"{LAV_MALAGA}:{a}:{b}": 77 for a, b in _pairs(MALAGA_NODES)},
-            f"{LAV_GRANADA}:antequera-santa-ana:bif-bobadilla": 20,  # sin los 6 Avant de Málaga
-            **{f"{LAV_GRANADA}:{a}:{b}": 26 for a, b in _pairs(GRANADA_NODES[1:])},
-        }
+    assert without == {
+        f"{LAV}:bif-malaga:majarabique": 55,
+        f"{LAV}:majarabique:sevilla-santa-justa": 53,
+        f"{JAEN}:espeluy:mengibar-artichuela": 50,
+        f"{JAEN}:mengibar-artichuela:jaen": 44,
+    }
+    # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
+    # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
+    # trenes tienen otro camino, aunque sea por una línea de otro ancho
+    first = _of(exported.segments, CORDOBA_BIF_MALAGA)
+    assert (first.trains, first.without_alternative) == (108, 0)
+    loja = _of(exported.segments, f"{LAV_GRANADA}:loja:bif-tocon")
+    assert (loja.trains, loja.without_alternative) == (26, 0)
+    # para los 8 trenes de Madrid a Granada, el otro camino, por Moreda, es 81,7 km más corto
+    to_granada = next(
+        g for g in loja.groups if (g.from_node_id, g.to_node_id) == (MADRID, "granada")
     )
+    assert to_granada.trains == 8 and to_granada.alternative is not None
+    assert to_granada.alternative.line_ids == [CONV, LBMG]
+    assert to_granada.alternative.extra_km == -81.7
+    assert _of(exported.segments, f"{LAV_MALAGA}:bif-malaga:la-marota").trains == 77
+    # entre la estación de Moreda y la bifurcación no pasa ningún tren de los horarios
+    assert _of(exported.segments, f"{LBMG}:moreda:bif-almeria").trains == 0
     # el grupo más numeroso de Adamuz – Córdoba: los 43 trenes entre Madrid y Sevilla
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
     assert (top.trains, top.from_node_id, top.to_node_id) == (43, MADRID, SEVILLA)
