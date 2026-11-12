@@ -14,6 +14,7 @@
 | `osm-relation-6759901` | Geometría de la línea 522 Manzanares–Ciudad Real (vías de la relación del servicio regional Alcázar de San Juan–Badajoz) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-10 |
 | `wikipedia-linea-522` | Número de línea de Adif, PK, longitud, vía única y fechas de apertura de la línea Manzanares–Ciudad Real (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-10 |
 | `fcmaf-linea-522` | Tipo de vía, electrificación, PK, códigos de estación y velocidades de la línea 522 (verificación) | Federación Castellano Manchega de Amigos del Ferrocarril | Consulta pública; © FCMAF | 2026-11-10 |
+| `adif-declaracion-red-2026-mapas` | Sistema de protección del tren, bloqueo y control de tráfico centralizado de cada tramo (mapa 4 de la Declaración sobre la Red 2026) | Adif Alta Velocidad; Adif | Consulta pública; © Adif Alta Velocidad y Adif | 2026-11-12 |
 | `adif-mapa-red` | Verificación del trazado, códigos de estación y puntos kilométricos de la línea 010 | Adif / Adif Alta Velocidad | Consulta pública | 2026-11-08 |
 | `adif-obras-autopista-ferroviaria` | Corte de la línea convencional al sur de Venta de Cárdenas por obras (información de Adif en prensa) | Adif; Europa Press / Demócrata | Consulta pública | 2026-11-08 |
 | `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio | Adif | Consulta pública | 2026-11-12 |
@@ -467,7 +468,7 @@ Las anotaciones de red viajan enteras en el índice, con sus textos, sus hitos y
 
 ## Atributos de tramo
 
-Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Hoy lo usa el número de vías (`tracks`); la señalización, el bloqueo, el mando o una electrificación parcial entrarán igual, sin columna, migración ni reparto propios.
+Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Lo usan el número de vías (`tracks`) y, desde #20, la protección del tren, el bloqueo y el mando (véase «Señalización y protección del tren»); una electrificación parcial entrará igual, sin columna, migración ni reparto propios.
 
 **Cómo se declara.** En la especificación de la línea, en la lista `attribute_sections`:
 
@@ -482,13 +483,13 @@ Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones,
 
 Dos secciones del mismo atributo no pueden pisarse; sí pueden tocarse en un nodo, y dos atributos distintos pueden cubrir los mismos tramos.
 
-**Qué exige cada atributo.** Un atributo es opcional y de tipo libre salvo que tenga una regla en `ATTRIBUTE_RULES` (`oniel.domain.attributes`). La regla dice el tipo de su valor, si es obligatorio (todo tramo de la línea ha de tenerlo) y qué campo de la línea da el valor donde ninguna sección lo declara. `tracks` es un entero, obligatorio, y toma el valor de `line.tracks`: una línea de vía doble con dos tramos de vía única declara `"tracks": 2` en la línea y dos secciones con valor 1. El valor que viene de la línea no lleva fuente propia. Si una línea no declara `tracks` ni lo cubren sus secciones, no se construye.
+**Qué exige cada atributo.** Un atributo es opcional y de tipo libre salvo que tenga una regla en `ATTRIBUTE_RULES` (`oniel.domain.attributes`). La regla dice el tipo de su valor, si es obligatorio (todo tramo de la línea ha de tenerlo) y qué campo de la línea da el valor donde ninguna sección lo declara. Puede decir además la lista cerrada de valores que admite (`values`) y que cada sección ha de citar su fuente y su fecha (`sourced`); una sección que no lo cumple no se carga. `tracks` es un entero, obligatorio, y toma el valor de `line.tracks`: una línea de vía doble con dos tramos de vía única declara `"tracks": 2` en la línea y dos secciones con valor 1. El valor que viene de la línea no lleva fuente propia. Si una línea no declara `tracks` ni lo cubren sus secciones, no se construye.
 
 **`track_sections` se retiró.** La forma anterior, propia del número de vías, se convirtió a `attribute_sections` en las tres líneas en vez de conservarse como abreviatura: así hay una sola manera de declarar un atributo y un solo reparto que probar. Una especificación que todavía la traiga no se carga, con un mensaje que dice cómo escribirla; aceptarla en silencio habría dejado la línea sin sus tramos de vía única. Al convertirlas, las secciones de vía única recibieron la fuente que ya citaban sus notas (los artículos de Wikipedia registrados) y, como fecha de comprobación, el día en que se consultó.
 
 **Qué pasa después.** `distribute_attributes` (`oniel.network.build`) hace el reparto al construir la línea. La importación guarda una fila por tramo y atributo en `segment_attributes`, y la API y la instantánea los sirven en `attributes` de cada tramo: por clave, el valor, el id de la fuente y la fecha de comprobación. `oniel-data validate` empieza por los atributos: dice por línea cuántos tramos cubre cada uno y falla si dos secciones se pisan, si un atributo obligatorio no cubre toda la línea o si una sección cita una fuente que no está registrada.
 
-Cada atributo añade unos 100 bytes por tramo al índice: con el número de vías en los 39 tramos, `index.json` pasó de 82,0 a 85,5 KB (16,9 KB comprimido) el 12 de noviembre de 2026.
+Cada atributo añade unos 100 bytes por tramo al índice: con el número de vías en los 39 tramos, `index.json` pasó de 82,0 a 85,5 KB (16,9 KB comprimido) el 12 de noviembre de 2026. Con los tres de señalización pasó de 85,5 a 98,3 KB (de 16,8 a 17,4 KB comprimido): se repiten mucho y comprimen bien.
 
 `tracks` sigue además como columna de `segments` y como campo de cada tramo, con el mismo valor: lo leen el mapa, el esquema y el cálculo de recorridos, que no necesitan saber de atributos.
 
@@ -500,6 +501,55 @@ Cada atributo añade unos 100 bytes por tramo al índice: con el número de vía
 2. Declarar sus secciones en `attribute_sections` de cada línea. Si ha de cubrir la línea entera, tiene un tipo fijo o un valor por línea, añadir su regla a `ATTRIBUTE_RULES`.
 3. Añadir su entrada a `SEGMENT_ATTRIBUTES`. Cómo se llama, cómo se dice cada valor y dónde va en la ficha son decisiones de diseño: se proponen y se anotan en `docs/diseno.md`.
 4. `uv run oniel-data validate`, `import all` y subir la instantánea regenerada.
+
+## Señalización y protección del tren
+
+Cada tramo dice qué sistema de protección del tren tiene, qué bloqueo y si su mando es centralizado. Son tres atributos de tramo (`proteccion_tren`, `bloqueo` y `mando`), obligatorios en toda línea cargada, de valores cerrados y con fuente y fecha en cada sección.
+
+**La fuente.** La Declaración sobre la Red 2026 de Adif y de Adif Alta Velocidad, vigente el 12 de noviembre de 2026 (`adif-declaracion-red-2026-mapas`). El apartado 2.3.10 de los dos libros remite a los mapas para los bloqueos y los sistemas de protección de cada línea y no los da en tabla: el dato por tramo solo está en el mapa 4, «Sistemas de seguridad, bloqueos» (página 8 del PDF de mapas, edición de 27 de febrero de 2026). El mapa es el mismo en los documentos de las dos entidades; el fichero guardado es el de Adif Alta Velocidad (`raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf`, 10,8 MB). adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas: se baja con un navegador desde la página de la Declaración.
+
+**Cómo se lee el mapa.** Es un esquema de toda la red. El bloqueo va en un trazo de puntos paralelo a cada línea, con un color por tipo y un rótulo («BAB ctc», «BAU ctc», «BCA»); los sistemas de seguridad van en símbolos sueltos junto a la línea. Se leyó ampliado a 900 ppp, tramo a tramo, y el valor se declaró de nodo a nodo donde el rótulo o el color cambian.
+
+| En el mapa | Atributo | Valor en Oniel | En la ficha |
+|---|---|---|---|
+| Símbolo «Tren tierra y ASFA conv.» | `proteccion_tren` | `asfa` | ASFA |
+| Símbolos «LZB» y «ASFA - AV» | `proteccion_tren` | `lzb_asfa` | LZB y ASFA |
+| Rótulo «BCA» | `bloqueo` | `bca` | De control automático |
+| Rótulo «BAB» | `bloqueo` | `bab` | Automático banalizado |
+| Rótulo «BAD» | `bloqueo` | `bad` | Automático de vía doble |
+| Rótulo «BAU» | `bloqueo` | `bau` | Automático de vía única |
+| «ctc» tras el rótulo del bloqueo | `mando` | `ctc` | Control de tráfico centralizado |
+| Nada sobre el mando | `mando` | `sin_dato_publicado` | Sin dato publicado |
+
+Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan; ninguna de las cargadas los usa. El tren tierra y el GSM-R, que el mapa dibuja con los sistemas de seguridad, son radiotelefonía y no se recogen.
+
+**Lo que quedó declarado** (comprobado el 12 de noviembre de 2026):
+
+| Línea | De nodo a nodo | Protección del tren | Bloqueo | Mando |
+|---|---|---|---|---|
+| Alta velocidad Madrid – Sevilla | Madrid-Puerta de Atocha – Sevilla-Santa Justa | LZB y ASFA | BCA | sin dato publicado |
+| Convencional Madrid – Alcázar – Córdoba | Madrid-Puerta de Atocha – Cinco Casas | ASFA | BAB | CTC |
+| | Cinco Casas – Manzanares | ASFA | BAB y BAD (`bab_bad`) | CTC |
+| | Manzanares – Santa Cruz de Mudela | ASFA | BAB | CTC |
+| | Santa Cruz de Mudela – Vadollano | ASFA | BAU | CTC |
+| | Vadollano – Linares-Baeza | ASFA | BAB | CTC |
+| | Linares-Baeza – Córdoba | ASFA | BAU | CTC |
+| Manzanares – Ciudad Real | Manzanares – Ciudad Real | ASFA | BAU | CTC |
+
+El bloqueo de vía única cae justo en los tramos que Oniel ya tenía como vía única por otras fuentes; una prueba lo comprueba.
+
+**Límites de la fuente, y cómo se dejaron** (acordado con el usuario el 12 de noviembre de 2026):
+
+- **El mando de la alta velocidad no está publicado.** El mapa solo dice «ctc» junto a los bloqueos automáticos; junto al BCA de la línea Madrid – Sevilla no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos. Sus once tramos llevan `sin_dato_publicado`: un valor declarado, con la fuente en la que se buscó y la fecha, que la ficha dice tal cual. No se dedujo de otras líneas ni de otras publicaciones.
+- **Ningún tramo dice qué puesto de mando lo gobierna.** `mando` recoge solo si hay control de tráfico centralizado, que es lo que da el mapa.
+- **Cinco Casas – Manzanares cambia de bloqueo donde no hay nodo.** El mapa pasa de «BAB ctc» a «BAD ctc» en Herrera de la Mancha (PK 183,7 según `wikipedia-lineas-300-400`), que Oniel no tiene como nodo. El tramo lleva un valor mixto, `bab_bad`, que la ficha dice como «Automático: banalizado en una parte y de vía doble en otra». Si Herrera de la Mancha entra algún día como nodo, el tramo se parte y el valor mixto sobra.
+- **Manzanares – Ciudad Real se leyó por el color.** El único rótulo cercano, «BAD ctc», está junto a Manzanares, sobre el trazo de vía doble Herrera – Manzanares de la línea 400. La línea 522 es de vía única y lleva el trazo naranja, que en la leyenda de vía única es «BAU ctc».
+- **Los símbolos de los sistemas van por línea, no por tramo.** El mapa no dice dónde empieza o acaba un sistema dentro de una línea. En el tronco que la alta velocidad Madrid – Sevilla comparte a la salida de Madrid con la de Levante hay también símbolos de ERTMS, que el mapa enlaza con la otra línea; Oniel declara para la Madrid – Sevilla lo que el mapa pone a lo largo de ella.
+- El capítulo 2 de la Declaración avisa de que su contenido es informativo y de que, si discrepa de la normativa de seguridad, prevalece esta.
+
+**Tono.** Estos datos se enseñan como lo que son: qué sistema hay en cada tramo, según quién y comprobado cuándo. Oniel no los relaciona con los accidentes de 2026 ni con sus causas.
+
+**Cómo se revisa.** La Declaración se actualiza varias veces al año y la del ejercicio siguiente se publica con meses de antelación. Al revisar: descargar los mapas de la edición vigente a `raw/adif/` con la fecha, registrar la fuente nueva, releer el mapa 4 sobre las líneas cargadas y poner al día `value`, `source_id` y `checked_on` de las secciones. `oniel-data validate` falla si algún tramo de una línea cargada se queda sin alguno de los tres, si un valor no es de los admitidos o si una sección no cita su fuente y su fecha.
 
 ## Modelo de datos
 

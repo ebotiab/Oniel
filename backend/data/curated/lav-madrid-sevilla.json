@@ -66,6 +66,11 @@
     {"id": "sevilla-santa-justa", "name": "Sevilla-Santa Justa", "kind": "estacion", "adif_code": "51003", "position": {"lon": -5.974927, "lat": 37.392496}, "reference_pk_km": 470.5,
      "description": "Final de la línea. Estación pasante que conecta con la red convencional hacia Cádiz, Huelva y Málaga."}
   ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "lzb_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos de LZB y de ASFA de alta velocidad a lo largo de toda la línea. El mapa los sitúa por línea, no tramo a tramo."},
+    {"attribute": "bloqueo", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo BCA de Madrid a Sevilla."},
+    {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."}
+  ],
   "connections": [
     {"id": "tunel-atocha-chamartin", "node_id": "madrid-puerta-de-atocha", "name": "Túnel Atocha–Chamartín", "towards": "Madrid-Chamartín y la red de alta velocidad del norte", "status": "no_cargada", "sketch": [[-3.690886, 40.406442], [-3.6829524, 40.4711789]]},
     {"id": "lav-madrid-levante", "node_id": "bif-torrejon-de-velasco", "name": "LAV Madrid–Levante", "towards": "Cuenca, Valencia, Albacete y Alicante", "status": "no_cargada", "sketch": [[-3.75006, 40.19457], [-3.62, 40.09], [-3.35, 39.98]]},
