@@ -53,6 +53,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 
 - PR de la línea de Linares-Baeza a Granada (12 de noviembre de 2026, #101): la convencional Linares-Baeza – Moreda – Granada (Adif 410 hasta Moreda y 416 hasta Granada; 173,7 km de vía única sin electrificar), trazada desde OpenStreetMap, con su señalización (ASFA y bloqueo automático de vía única con CTC) y con los Media Distancia de Granada a Almería y de Linares-Baeza a Almería. El comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza (487,3 km). Los puntos kilométricos pueden volver a empezar a mitad de línea (`pk_restarts`), y «Añadir otra línea» de `docs/datos.md` se reescribió paso a paso con lo aprendido. Primera de la etapa «Ampliar la red».
 - PR de la línea de Alcázar de San Juan a Albacete (12 de noviembre de 2026, #114): la rama de Levante, el trecho central de la línea 300 de Adif (130,8 km de vía doble), trazada desde la relación de OpenStreetMap que ya se usaba de Madrid a Alcázar, con sus 149 Media Distancia, Regional Exprés y Alvia. Entra como línea propia, «Alcázar de San Juan – Albacete», sin tocar la que ya estaba cargada (`docs/datos.md` dice por qué). El comparador encuentra Madrid – Albacete por Alcázar (277,6 km) y la ficha de Alcázar enseña los destinos de Levante. Albacete-Los Llanos queda definida para que la comparta la alta velocidad (#116). El mapa de Adif no pone control de tráfico centralizado entre Alcázar y La Roda: ese mando va como «sin dato publicado». Primera de la etapa de Levante.
+- PR de la alta velocidad de Barcelona (12 de noviembre de 2026, #117): la línea Madrid – Zaragoza – Barcelona (Adif 050; 627,0 km por las estaciones de Zaragoza-Delicias y Lleida-Pirineus, con siete estaciones, siete PAET, seis bifurcaciones y el cambiador de Plasencia de Jalón), trazada desde OpenStreetMap, con Renfe y Ouigo cargados e Iryo declarado sin horarios, su señalización (ERTMS de nivel 1 y ASFA, bloqueo de control automático) y sus conexiones a trazos: los dos baipases, Huesca, Plasencia de Jalón, el Corredor Mediterráneo, la continuación a Francia y el enlace de Vallecas con la alta velocidad de Sevilla. El comparador da Madrid – Barcelona (627,0 km, 2 h 13 min sin paradas) y Madrid – Zaragoza. El día de referencia pasa al jueves 12 de noviembre. Atributo nuevo `max_speed_kmh`, para los tramos sin velocidad en la geometría. Queda aparte cargar los baipases de Zaragoza y de Lleida como líneas, para que los trenes que no paran en esas estaciones no figuren pasando por ellas, y el enlace de Vallecas. Detalle en `docs/datos.md`, «Cómo se construyó la línea de alta velocidad Madrid–Zaragoza–Barcelona».
 
 ## Principios de arquitectura
 
@@ -89,8 +90,7 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 **Después.**
 
-4. [#117](https://github.com/ebotiab/Oniel/issues/117) Datos: línea de alta velocidad Madrid – Zaragoza – Barcelona. Sale de Madrid-Puerta de Atocha; no comparte más nodos con lo cargado, así que puede ir en paralelo con Levante.
-5. [#118](https://github.com/ebotiab/Oniel/issues/118) Datos: alta velocidad Antequera – Málaga, que completa Córdoba – Málaga. Depende de #103.
+4. [#118](https://github.com/ebotiab/Oniel/issues/118) Datos: alta velocidad Antequera – Málaga, que completa Córdoba – Málaga. Depende de #103.
 
 Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
 
