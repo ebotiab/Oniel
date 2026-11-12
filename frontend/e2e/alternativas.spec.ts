@@ -26,7 +26,7 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
     await page.goto('/cobertura')
     await abrirPanel(page)
-    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(10)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(17)
     await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
     await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
@@ -106,9 +106,10 @@ test.describe('Tramos sin alternativa', () => {
     )
     // del que más trenes lleva al que menos
     const filas = page.getByTestId('lista-sin-alternativa').locator('li')
-    // los tres al sur de Córdoba, los dos del ramal de Jaén y los cinco con trenes de la línea de
-    // Linares-Baeza a Granada, que es una rama unida al resto por un solo extremo
-    await expect(filas).toHaveCount(10)
+    // los tres al sur de Córdoba, los dos del ramal de Jaén, los siete de Alcázar de San Juan a
+    // Albacete y los cinco con trenes de la línea de Linares-Baeza a Granada: las dos últimas son
+    // ramas unidas al resto por un solo extremo
+    await expect(filas).toHaveCount(17)
     await expect(filas.nth(0)).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
     await expect(filas.nth(0)).toContainText('108 trenes')
     await expect(filas.nth(1)).toContainText('55 trenes')
@@ -119,9 +120,13 @@ test.describe('Tramos sin alternativa', () => {
     await expect(filas.nth(3)).toContainText('50 trenes')
     await expect(filas.nth(4)).toContainText('Mengíbar-Artichuela – Jaén')
     await expect(filas.nth(4)).toContainText('44 trenes')
-    await expect(filas.nth(5)).toContainText('12 trenes')
-    await expect(filas.nth(5)).toContainText('Línea convencional Linares-Baeza – Moreda – Granada')
-    await expect(filas.nth(9)).toContainText('2 trenes')
+    // de Alcázar de San Juan a Albacete, hasta que se cargue otra línea que llegue a Albacete
+    await expect(filas.nth(5)).toContainText('17 trenes')
+    await expect(filas.nth(5)).toContainText('Línea convencional Alcázar de San Juan – Albacete')
+    await expect(filas.nth(11)).toContainText('17 trenes')
+    await expect(filas.nth(12)).toContainText('12 trenes')
+    await expect(filas.nth(12)).toContainText('Línea convencional Linares-Baeza – Moreda – Granada')
+    await expect(filas.nth(16)).toContainText('2 trenes')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(apartado).not.toContainText('Moreda – Bifurcación Almería')
     await expect(apartado).toContainText('Trenes del viernes, 13 de noviembre de 2026')

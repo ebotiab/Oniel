@@ -51,6 +51,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR de las direcciones limpias (12 de noviembre de 2026, #107): las rutas del visor dejan la almohadilla (`/glosario/<entrada>` en vez de `/#/glosario/<entrada>`) y pasan a la History API, con `parseRoute` y `routePath` como únicas funciones que las leen y las escriben. Vercel sirve `index.html` para las rutas del visor sin tocar `/data/` ni `/assets/`, y los enlaces antiguos con almohadilla llevan a la dirección limpia sin recargar. Queda abierto para después, ya que cada vista tiene dirección propia: título y vista previa por vista, y un mapa del sitio para buscadores.
 
 - PR de la línea de Linares-Baeza a Granada (12 de noviembre de 2026, #101): la convencional Linares-Baeza – Moreda – Granada (Adif 410 hasta Moreda y 416 hasta Granada; 173,7 km de vía única sin electrificar), trazada desde OpenStreetMap, con su señalización (ASFA y bloqueo automático de vía única con CTC) y con los Media Distancia de Granada a Almería y de Linares-Baeza a Almería. El comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza (487,3 km). Los puntos kilométricos pueden volver a empezar a mitad de línea (`pk_restarts`), y «Añadir otra línea» de `docs/datos.md` se reescribió paso a paso con lo aprendido. Primera de la etapa «Ampliar la red».
+- PR de la línea de Alcázar de San Juan a Albacete (12 de noviembre de 2026, #114): la rama de Levante, el trecho central de la línea 300 de Adif (130,8 km de vía doble), trazada desde la relación de OpenStreetMap que ya se usaba de Madrid a Alcázar, con sus 149 Media Distancia, Regional Exprés y Alvia. Entra como línea propia, «Alcázar de San Juan – Albacete», sin tocar la que ya estaba cargada (`docs/datos.md` dice por qué). El comparador encuentra Madrid – Albacete por Alcázar (277,6 km) y la ficha de Alcázar enseña los destinos de Levante. Albacete-Los Llanos queda definida para que la comparta la alta velocidad (#116). El mapa de Adif no pone control de tráfico centralizado entre Alcázar y La Roda: ese mando va como «sin dato publicado». Primera de la etapa de Levante.
 
 ## Principios de arquitectura
 
@@ -72,13 +73,23 @@ No queda ninguna tarea abierta en la lista: la última, la señalización por tr
 
 ## Ampliar la red
 
-La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `docs/datos.md`. La primera etapa lleva a Granada y a Jaén, para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Son tres incidencias, en este orden; las dos primeras, la línea convencional Linares-Baeza – Moreda – Granada (#101) y el ramal Espelúy – Jaén (#102), ya están hechas:
+La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `docs/datos.md`, y por etapas. Las incidencias abiertas, en este orden:
+
+**Granada y Jaén.** Para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. La línea convencional Linares-Baeza – Moreda – Granada (#101) y el ramal Espelúy – Jaén (#102) ya están hechas; queda:
 
 1. [#103](https://github.com/ebotiab/Oniel/issues/103) Datos: línea de alta velocidad Córdoba – Antequera – Granada. Comparte la estación de Granada con la línea de Moreda.
 
-Después, todavía sin incidencia: Levante (la convencional de Alcázar de San Juan a Albacete y la alta velocidad Madrid – Cuenca – Valencia) y Madrid – Zaragoza – Barcelona.
+**Levante.** Para ver por qué los trenes de Madrid a Valencia y Alicante dejaron el camino de Alcázar y Albacete. La línea convencional Alcázar de San Juan – Albacete (#114) ya está hecha; quedan:
 
-Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una.
+2. [#115](https://github.com/ebotiab/Oniel/issues/115) Datos: línea de alta velocidad Madrid – Cuenca – Valencia. Sale de la alta velocidad Madrid – Sevilla poco después de Madrid.
+3. [#116](https://github.com/ebotiab/Oniel/issues/116) Datos: ramal de alta velocidad a Albacete y Alicante. Sale de la anterior pasado Cuenca y comparte la estación de Albacete-Los Llanos con la línea de Alcázar: con él, de Madrid a Albacete hay dos caminos. Depende de #115.
+
+**Después.**
+
+4. [#117](https://github.com/ebotiab/Oniel/issues/117) Datos: línea de alta velocidad Madrid – Zaragoza – Barcelona. Sale de Madrid-Puerta de Atocha; no comparte más nodos con lo cargado, así que puede ir en paralelo con Levante.
+5. [#118](https://github.com/ebotiab/Oniel/issues/118) Datos: alta velocidad Antequera – Málaga, que completa Córdoba – Málaga. Depende de #103.
+
+Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
 
 ## Pendientes menores
 
