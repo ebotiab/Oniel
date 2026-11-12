@@ -1,0 +1,2221 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-12T22:34:34Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 87493325,
+  "bounds": {
+    "minlat": 40.1859056,
+    "minlon": -3.7498482,
+    "maxlat": 40.2002795,
+    "maxlon": -3.7484759
+  },
+  "geometry": [
+    { "lat": 40.1859056, "lon": -3.7484759 },
+    { "lat": 40.1866655, "lon": -3.7487584 },
+    { "lat": 40.1874481, "lon": -3.7490161 },
+    { "lat": 40.1883814, "lon": -3.7492736 },
+    { "lat": 40.1892573, "lon": -3.7494644 },
+    { "lat": 40.1900715, "lon": -3.7496092 },
+    { "lat": 40.1908760, "lon": -3.7497121 },
+    { "lat": 40.1919750, "lon": -3.7497972 },
+    { "lat": 40.1932386, "lon": -3.7498437 },
+    { "lat": 40.1944385, "lon": -3.7498482 },
+    { "lat": 40.1954675, "lon": -3.7498214 },
+    { "lat": 40.1973772, "lon": -3.7497103 },
+    { "lat": 40.2002795, "lon": -3.7495403 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 87493328,
+  "bounds": {
+    "minlat": 40.1729705,
+    "minlon": -3.7469571,
+    "maxlat": 40.1828656,
+    "maxlon": -3.7368840
+  },
+  "geometry": [
+    { "lat": 40.1729705, "lon": -3.7368840 },
+    { "lat": 40.1743370, "lon": -3.7385836 },
+    { "lat": 40.1773534, "lon": -3.7422871 },
+    { "lat": 40.1783313, "lon": -3.7433328 },
+    { "lat": 40.1789573, "lon": -3.7439440 },
+    { "lat": 40.1796007, "lon": -3.7445391 },
+    { "lat": 40.1803716, "lon": -3.7451912 },
+    { "lat": 40.1812592, "lon": -3.7458831 },
+    { "lat": 40.1817788, "lon": -3.7462536 },
+    { "lat": 40.1828656, "lon": -3.7469571 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 93587289,
+  "bounds": {
+    "minlat": 40.1828656,
+    "minlon": -3.7484759,
+    "maxlat": 40.1859056,
+    "maxlon": -3.7469571
+  },
+  "geometry": [
+    { "lat": 40.1828656, "lon": -3.7469571 },
+    { "lat": 40.1833294, "lon": -3.7472351 },
+    { "lat": 40.1840394, "lon": -3.7476160 },
+    { "lat": 40.1846853, "lon": -3.7479439 },
+    { "lat": 40.1853314, "lon": -3.7482409 },
+    { "lat": 40.1859056, "lon": -3.7484759 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "bridge": "viaduct",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 93587304,
+  "bounds": {
+    "minlat": 40.1828114,
+    "minlon": -3.7487581,
+    "maxlat": 40.1856541,
+    "maxlon": -3.7472291
+  },
+  "geometry": [
+    { "lat": 40.1856541, "lon": -3.7487581 },
+    { "lat": 40.1850968, "lon": -3.7485065 },
+    { "lat": 40.1847340, "lon": -3.7483318 },
+    { "lat": 40.1840404, "lon": -3.7479660 },
+    { "lat": 40.1834718, "lon": -3.7476441 },
+    { "lat": 40.1828114, "lon": -3.7472291 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "bridge": "viaduct",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 93587312,
+  "bounds": {
+    "minlat": 40.1856541,
+    "minlon": -3.7503411,
+    "maxlat": 40.2035406,
+    "maxlon": -3.7487581
+  },
+  "geometry": [
+    { "lat": 40.2035406, "lon": -3.7495447 },
+    { "lat": 40.2004881, "lon": -3.7497256 },
+    { "lat": 40.1996252, "lon": -3.7497731 },
+    { "lat": 40.1984796, "lon": -3.7498559 },
+    { "lat": 40.1971623, "lon": -3.7499828 },
+    { "lat": 40.1957124, "lon": -3.7501641 },
+    { "lat": 40.1946882, "lon": -3.7502751 },
+    { "lat": 40.1939933, "lon": -3.7503207 },
+    { "lat": 40.1933818, "lon": -3.7503411 },
+    { "lat": 40.1925438, "lon": -3.7503371 },
+    { "lat": 40.1918779, "lon": -3.7503009 },
+    { "lat": 40.1912981, "lon": -3.7502544 },
+    { "lat": 40.1907224, "lon": -3.7501828 },
+    { "lat": 40.1898926, "lon": -3.7500526 },
+    { "lat": 40.1890059, "lon": -3.7498755 },
+    { "lat": 40.1882318, "lon": -3.7496732 },
+    { "lat": 40.1873763, "lon": -3.7494130 },
+    { "lat": 40.1865723, "lon": -3.7491259 },
+    { "lat": 40.1856541, "lon": -3.7487581 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 93587323,
+  "bounds": {
+    "minlat": 40.1729350,
+    "minlon": -3.7472291,
+    "maxlat": 40.1828114,
+    "maxlon": -3.7369196
+  },
+  "geometry": [
+    { "lat": 40.1828114, "lon": -3.7472291 },
+    { "lat": 40.1821998, "lon": -3.7468221 },
+    { "lat": 40.1811688, "lon": -3.7460849 },
+    { "lat": 40.1802873, "lon": -3.7453560 },
+    { "lat": 40.1795168, "lon": -3.7446682 },
+    { "lat": 40.1788820, "lon": -3.7440529 },
+    { "lat": 40.1782462, "lon": -3.7434112 },
+    { "lat": 40.1773076, "lon": -3.7423451 },
+    { "lat": 40.1743042, "lon": -3.7386225 },
+    { "lat": 40.1729350, "lon": -3.7369196 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 96172497,
+  "bounds": {
+    "minlat": 39.9880075,
+    "minlon": -3.8367460,
+    "maxlat": 40.1898937,
+    "maxlon": -3.7502037
+  },
+  "geometry": [
+    { "lat": 39.9880075, "lon": -3.8367460 },
+    { "lat": 39.9889869, "lon": -3.8364613 },
+    { "lat": 39.9905908, "lon": -3.8360021 },
+    { "lat": 39.9930463, "lon": -3.8352921 },
+    { "lat": 39.9953383, "lon": -3.8346317 },
+    { "lat": 39.9972617, "lon": -3.8341083 },
+    { "lat": 39.9983052, "lon": -3.8337798 },
+    { "lat": 39.9996746, "lon": -3.8334150 },
+    { "lat": 40.0006317, "lon": -3.8331500 },
+    { "lat": 40.0020767, "lon": -3.8327150 },
+    { "lat": 40.0049560, "lon": -3.8318873 },
+    { "lat": 40.0078522, "lon": -3.8310483 },
+    { "lat": 40.0088237, "lon": -3.8307784 },
+    { "lat": 40.0112329, "lon": -3.8300738 },
+    { "lat": 40.0150417, "lon": -3.8289928 },
+    { "lat": 40.0202996, "lon": -3.8274623 },
+    { "lat": 40.0226967, "lon": -3.8267950 },
+    { "lat": 40.0242448, "lon": -3.8263438 },
+    { "lat": 40.0274621, "lon": -3.8254062 },
+    { "lat": 40.0288128, "lon": -3.8250240 },
+    { "lat": 40.0301177, "lon": -3.8246106 },
+    { "lat": 40.0315247, "lon": -3.8240819 },
+    { "lat": 40.0324303, "lon": -3.8237132 },
+    { "lat": 40.0334928, "lon": -3.8232583 },
+    { "lat": 40.0345818, "lon": -3.8227098 },
+    { "lat": 40.0356834, "lon": -3.8221149 },
+    { "lat": 40.0391861, "lon": -3.8200585 },
+    { "lat": 40.0408046, "lon": -3.8190973 },
+    { "lat": 40.0430705, "lon": -3.8177182 },
+    { "lat": 40.0484096, "lon": -3.8145585 },
+    { "lat": 40.0501621, "lon": -3.8134796 },
+    { "lat": 40.0519667, "lon": -3.8124067 },
+    { "lat": 40.0543173, "lon": -3.8110258 },
+    { "lat": 40.0555456, "lon": -3.8102940 },
+    { "lat": 40.0590981, "lon": -3.8081632 },
+    { "lat": 40.0635806, "lon": -3.8055282 },
+    { "lat": 40.0666872, "lon": -3.8036434 },
+    { "lat": 40.0765145, "lon": -3.7977739 },
+    { "lat": 40.0776275, "lon": -3.7971169 },
+    { "lat": 40.0787856, "lon": -3.7964885 },
+    { "lat": 40.0801606, "lon": -3.7958200 },
+    { "lat": 40.0811128, "lon": -3.7953944 },
+    { "lat": 40.0820489, "lon": -3.7950199 },
+    { "lat": 40.0834811, "lon": -3.7945119 },
+    { "lat": 40.0844400, "lon": -3.7942050 },
+    { "lat": 40.0854083, "lon": -3.7939700 },
+    { "lat": 40.0870732, "lon": -3.7936043 },
+    { "lat": 40.0888017, "lon": -3.7932645 },
+    { "lat": 40.0911298, "lon": -3.7928053 },
+    { "lat": 40.0941476, "lon": -3.7922099 },
+    { "lat": 40.0958960, "lon": -3.7918685 },
+    { "lat": 40.0980380, "lon": -3.7914538 },
+    { "lat": 40.0993517, "lon": -3.7911837 },
+    { "lat": 40.1017934, "lon": -3.7907113 },
+    { "lat": 40.1052545, "lon": -3.7900197 },
+    { "lat": 40.1063720, "lon": -3.7897777 },
+    { "lat": 40.1070044, "lon": -3.7896324 },
+    { "lat": 40.1075644, "lon": -3.7894686 },
+    { "lat": 40.1080568, "lon": -3.7893276 },
+    { "lat": 40.1089489, "lon": -3.7890474 },
+    { "lat": 40.1102353, "lon": -3.7885772 },
+    { "lat": 40.1115383, "lon": -3.7880476 },
+    { "lat": 40.1129207, "lon": -3.7874100 },
+    { "lat": 40.1142335, "lon": -3.7867085 },
+    { "lat": 40.1156966, "lon": -3.7858376 },
+    { "lat": 40.1170013, "lon": -3.7849899 },
+    { "lat": 40.1184886, "lon": -3.7839802 },
+    { "lat": 40.1221771, "lon": -3.7814383 },
+    { "lat": 40.1240649, "lon": -3.7801539 },
+    { "lat": 40.1254294, "lon": -3.7792121 },
+    { "lat": 40.1270723, "lon": -3.7780885 },
+    { "lat": 40.1289811, "lon": -3.7767750 },
+    { "lat": 40.1307420, "lon": -3.7755634 },
+    { "lat": 40.1321592, "lon": -3.7746028 },
+    { "lat": 40.1340678, "lon": -3.7732918 },
+    { "lat": 40.1373420, "lon": -3.7710546 },
+    { "lat": 40.1385924, "lon": -3.7701917 },
+    { "lat": 40.1403423, "lon": -3.7689702 },
+    { "lat": 40.1422670, "lon": -3.7676760 },
+    { "lat": 40.1433168, "lon": -3.7669464 },
+    { "lat": 40.1446204, "lon": -3.7660659 },
+    { "lat": 40.1454785, "lon": -3.7654546 },
+    { "lat": 40.1466055, "lon": -3.7646719 },
+    { "lat": 40.1470904, "lon": -3.7643420 },
+    { "lat": 40.1476504, "lon": -3.7639611 },
+    { "lat": 40.1491313, "lon": -3.7629540 },
+    { "lat": 40.1501208, "lon": -3.7623347 },
+    { "lat": 40.1508228, "lon": -3.7618998 },
+    { "lat": 40.1516288, "lon": -3.7614411 },
+    { "lat": 40.1524908, "lon": -3.7609861 },
+    { "lat": 40.1535333, "lon": -3.7604762 },
+    { "lat": 40.1543686, "lon": -3.7600943 },
+    { "lat": 40.1559190, "lon": -3.7594614 },
+    { "lat": 40.1583670, "lon": -3.7585587 },
+    { "lat": 40.1594720, "lon": -3.7581373 },
+    { "lat": 40.1606998, "lon": -3.7576201 },
+    { "lat": 40.1620586, "lon": -3.7570103 },
+    { "lat": 40.1631728, "lon": -3.7564592 },
+    { "lat": 40.1656674, "lon": -3.7551890 },
+    { "lat": 40.1666994, "lon": -3.7546807 },
+    { "lat": 40.1679742, "lon": -3.7540678 },
+    { "lat": 40.1690524, "lon": -3.7536322 },
+    { "lat": 40.1695862, "lon": -3.7534241 },
+    { "lat": 40.1705680, "lon": -3.7530821 },
+    { "lat": 40.1712327, "lon": -3.7528677 },
+    { "lat": 40.1718746, "lon": -3.7526785 },
+    { "lat": 40.1727994, "lon": -3.7524345 },
+    { "lat": 40.1745051, "lon": -3.7520537 },
+    { "lat": 40.1790204, "lon": -3.7511686 },
+    { "lat": 40.1805573, "lon": -3.7509065 },
+    { "lat": 40.1815511, "lon": -3.7507683 },
+    { "lat": 40.1824905, "lon": -3.7506736 },
+    { "lat": 40.1835985, "lon": -3.7505940 },
+    { "lat": 40.1848196, "lon": -3.7505152 },
+    { "lat": 40.1898937, "lon": -3.7502037 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 190053592,
+  "bounds": {
+    "minlat": 40.1470904,
+    "minlon": -3.7643420,
+    "maxlat": 40.1717532,
+    "maxlon": -3.7332466
+  },
+  "geometry": [
+    { "lat": 40.1470904, "lon": -3.7643420 },
+    { "lat": 40.1475467, "lon": -3.7639949 },
+    { "lat": 40.1480162, "lon": -3.7636462 },
+    { "lat": 40.1491028, "lon": -3.7628926 },
+    { "lat": 40.1500972, "lon": -3.7622529 },
+    { "lat": 40.1508014, "lon": -3.7618251 },
+    { "lat": 40.1516070, "lon": -3.7613597 },
+    { "lat": 40.1524692, "lon": -3.7609023 },
+    { "lat": 40.1535058, "lon": -3.7603863 },
+    { "lat": 40.1543449, "lon": -3.7600078 },
+    { "lat": 40.1550238, "lon": -3.7597076 },
+    { "lat": 40.1558917, "lon": -3.7593788 },
+    { "lat": 40.1583340, "lon": -3.7584754 },
+    { "lat": 40.1594463, "lon": -3.7580608 },
+    { "lat": 40.1606743, "lon": -3.7575366 },
+    { "lat": 40.1620232, "lon": -3.7569296 },
+    { "lat": 40.1631485, "lon": -3.7563817 },
+    { "lat": 40.1643077, "lon": -3.7557689 },
+    { "lat": 40.1656262, "lon": -3.7550069 },
+    { "lat": 40.1664207, "lon": -3.7544328 },
+    { "lat": 40.1670727, "lon": -3.7538765 },
+    { "lat": 40.1675421, "lon": -3.7534112 },
+    { "lat": 40.1680347, "lon": -3.7528664 },
+    { "lat": 40.1685697, "lon": -3.7522146 },
+    { "lat": 40.1691203, "lon": -3.7514236 },
+    { "lat": 40.1695176, "lon": -3.7507796 },
+    { "lat": 40.1699450, "lon": -3.7499857 },
+    { "lat": 40.1702486, "lon": -3.7493557 },
+    { "lat": 40.1705506, "lon": -3.7486218 },
+    { "lat": 40.1708153, "lon": -3.7479059 },
+    { "lat": 40.1710722, "lon": -3.7470661 },
+    { "lat": 40.1712772, "lon": -3.7462775 },
+    { "lat": 40.1714094, "lon": -3.7456432 },
+    { "lat": 40.1715245, "lon": -3.7450159 },
+    { "lat": 40.1716164, "lon": -3.7443424 },
+    { "lat": 40.1716953, "lon": -3.7435819 },
+    { "lat": 40.1717386, "lon": -3.7428794 },
+    { "lat": 40.1717532, "lon": -3.7422261 },
+    { "lat": 40.1717486, "lon": -3.7415408 },
+    { "lat": 40.1717171, "lon": -3.7408598 },
+    { "lat": 40.1716677, "lon": -3.7402708 },
+    { "lat": 40.1716251, "lon": -3.7398389 },
+    { "lat": 40.1715221, "lon": -3.7391254 },
+    { "lat": 40.1714350, "lon": -3.7386212 },
+    { "lat": 40.1712864, "lon": -3.7379251 },
+    { "lat": 40.1711147, "lon": -3.7372398 },
+    { "lat": 40.1709426, "lon": -3.7366424 },
+    { "lat": 40.1707912, "lon": -3.7361746 },
+    { "lat": 40.1706225, "lon": -3.7357117 },
+    { "lat": 40.1704052, "lon": -3.7351645 },
+    { "lat": 40.1701048, "lon": -3.7344906 },
+    { "lat": 40.1697667, "lon": -3.7338200 },
+    { "lat": 40.1694415, "lon": -3.7332466 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 197614308,
+  "bounds": {
+    "minlat": 40.1568676,
+    "minlon": -3.7227517,
+    "maxlat": 40.1616553,
+    "maxlon": -3.7168495
+  },
+  "geometry": [
+    { "lat": 40.1568676, "lon": -3.7168495 },
+    { "lat": 40.1616553, "lon": -3.7227517 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "man_made": "wildlife_crossing",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 197614309,
+  "bounds": {
+    "minlat": 40.1568386,
+    "minlon": -3.7227891,
+    "maxlat": 40.1616238,
+    "maxlon": -3.7168832
+  },
+  "geometry": [
+    { "lat": 40.1616238, "lon": -3.7227891 },
+    { "lat": 40.1568386, "lon": -3.7168832 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "man_made": "wildlife_crossing",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199322480,
+  "bounds": {
+    "minlat": 40.2091546,
+    "minlon": -3.7492231,
+    "maxlat": 40.2817967,
+    "maxlon": -3.7045235
+  },
+  "geometry": [
+    { "lat": 40.2817967, "lon": -3.7045235 },
+    { "lat": 40.2799636, "lon": -3.7075262 },
+    { "lat": 40.2779748, "lon": -3.7099992 },
+    { "lat": 40.2765913, "lon": -3.7115174 },
+    { "lat": 40.2757891, "lon": -3.7122630 },
+    { "lat": 40.2754272, "lon": -3.7126210 },
+    { "lat": 40.2740669, "lon": -3.7139665 },
+    { "lat": 40.2719173, "lon": -3.7161039 },
+    { "lat": 40.2705871, "lon": -3.7175684 },
+    { "lat": 40.2698258, "lon": -3.7185716 },
+    { "lat": 40.2690563, "lon": -3.7195962 },
+    { "lat": 40.2672757, "lon": -3.7220853 },
+    { "lat": 40.2665228, "lon": -3.7233352 },
+    { "lat": 40.2637212, "lon": -3.7278075 },
+    { "lat": 40.2616728, "lon": -3.7306630 },
+    { "lat": 40.2601083, "lon": -3.7325512 },
+    { "lat": 40.2591749, "lon": -3.7335168 },
+    { "lat": 40.2573802, "lon": -3.7353002 },
+    { "lat": 40.2564484, "lon": -3.7360810 },
+    { "lat": 40.2545242, "lon": -3.7375080 },
+    { "lat": 40.2524117, "lon": -3.7389242 },
+    { "lat": 40.2492713, "lon": -3.7405317 },
+    { "lat": 40.2468971, "lon": -3.7414388 },
+    { "lat": 40.2441693, "lon": -3.7422612 },
+    { "lat": 40.2411924, "lon": -3.7429867 },
+    { "lat": 40.2335019, "lon": -3.7448844 },
+    { "lat": 40.2300659, "lon": -3.7457373 },
+    { "lat": 40.2248235, "lon": -3.7472367 },
+    { "lat": 40.2233152, "lon": -3.7476578 },
+    { "lat": 40.2217345, "lon": -3.7480203 },
+    { "lat": 40.2211571, "lon": -3.7481422 },
+    { "lat": 40.2206281, "lon": -3.7482481 },
+    { "lat": 40.2191495, "lon": -3.7484874 },
+    { "lat": 40.2178971, "lon": -3.7486473 },
+    { "lat": 40.2158510, "lon": -3.7488404 },
+    { "lat": 40.2151239, "lon": -3.7488994 },
+    { "lat": 40.2133420, "lon": -3.7489826 },
+    { "lat": 40.2114268, "lon": -3.7490737 },
+    { "lat": 40.2091546, "lon": -3.7492231 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid-Valencia",
+    "official_name": "Madrid-Chamartín-Clara Campoamor a Valencia-Joaquín Sorolla",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199504797,
+  "bounds": {
+    "minlat": 40.1944395,
+    "minlon": -3.7499516,
+    "maxlat": 40.1973772,
+    "maxlon": -3.7497103
+  },
+  "geometry": [
+    { "lat": 40.1944395, "lon": -3.7499516 },
+    { "lat": 40.1961359, "lon": -3.7498181 },
+    { "lat": 40.1967640, "lon": -3.7497660 },
+    { "lat": 40.1973772, "lon": -3.7497103 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "crossover",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199504811,
+  "bounds": {
+    "minlat": 40.2090629,
+    "minlon": -3.7491038,
+    "maxlat": 40.2091477,
+    "maxlon": -3.7491008
+  },
+  "geometry": [
+    { "lat": 40.2090629, "lon": -3.7491038 },
+    { "lat": 40.2091477, "lon": -3.7491008 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199504814,
+  "bounds": {
+    "minlat": 40.2002795,
+    "minlon": -3.7495403,
+    "maxlat": 40.2090410,
+    "maxlon": -3.7487583
+  },
+  "geometry": [
+    { "lat": 40.2002795, "lon": -3.7495403 },
+    { "lat": 40.2052241, "lon": -3.7492482 },
+    { "lat": 40.2058439, "lon": -3.7491985 },
+    { "lat": 40.2065741, "lon": -3.7491234 },
+    { "lat": 40.2074918, "lon": -3.7490062 },
+    { "lat": 40.2082728, "lon": -3.7488900 },
+    { "lat": 40.2090410, "lon": -3.7487583 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid-Valencia",
+    "official_name": "Madrid-Chamartín-Clara Campoamor a Valencia-Joaquín Sorolla",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199504818,
+  "bounds": {
+    "minlat": 40.2090661,
+    "minlon": -3.7491543,
+    "maxlat": 40.2091505,
+    "maxlon": -3.7491504
+  },
+  "geometry": [
+    { "lat": 40.2091505, "lon": -3.7491504 },
+    { "lat": 40.2090661, "lon": -3.7491543 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199504824,
+  "bounds": {
+    "minlat": 40.2091273,
+    "minlon": -3.7487456,
+    "maxlat": 40.2176077,
+    "maxlon": -3.7480601
+  },
+  "geometry": [
+    { "lat": 40.2091273, "lon": -3.7487456 },
+    { "lat": 40.2100175, "lon": -3.7485777 },
+    { "lat": 40.2117524, "lon": -3.7483176 },
+    { "lat": 40.2126905, "lon": -3.7482345 },
+    { "lat": 40.2137392, "lon": -3.7481567 },
+    { "lat": 40.2146568, "lon": -3.7481004 },
+    { "lat": 40.2165903, "lon": -3.7480601 },
+    { "lat": 40.2176077, "lon": -3.7481022 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid-Valencia",
+    "official_name": "Madrid-Chamartín-Clara Campoamor a Valencia-Joaquín Sorolla",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199504826,
+  "bounds": {
+    "minlat": 40.2090410,
+    "minlon": -3.7487583,
+    "maxlat": 40.2091273,
+    "maxlon": -3.7487456
+  },
+  "geometry": [
+    { "lat": 40.2090410, "lon": -3.7487583 },
+    { "lat": 40.2091273, "lon": -3.7487456 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid-Valencia",
+    "official_name": "Madrid-Chamartín-Clara Campoamor a Valencia-Joaquín Sorolla",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199507774,
+  "bounds": {
+    "minlat": 40.1672124,
+    "minlon": -3.7546622,
+    "maxlat": 40.1678666,
+    "maxlon": -3.7539440
+  },
+  "geometry": [
+    { "lat": 40.1678666, "lon": -3.7539440 },
+    { "lat": 40.1675360, "lon": -3.7543306 },
+    { "lat": 40.1672124, "lon": -3.7546622 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199507778,
+  "bounds": {
+    "minlat": 40.1678666,
+    "minlon": -3.7539440,
+    "maxlat": 40.1720555,
+    "maxlon": -3.7414542
+  },
+  "geometry": [
+    { "lat": 40.1720555, "lon": -3.7414542 },
+    { "lat": 40.1720233, "lon": -3.7424178 },
+    { "lat": 40.1719945, "lon": -3.7430535 },
+    { "lat": 40.1719269, "lon": -3.7438635 },
+    { "lat": 40.1718059, "lon": -3.7448064 },
+    { "lat": 40.1716923, "lon": -3.7454648 },
+    { "lat": 40.1715549, "lon": -3.7461944 },
+    { "lat": 40.1713931, "lon": -3.7468958 },
+    { "lat": 40.1711388, "lon": -3.7478037 },
+    { "lat": 40.1708787, "lon": -3.7486017 },
+    { "lat": 40.1703970, "lon": -3.7498248 },
+    { "lat": 40.1700219, "lon": -3.7506321 },
+    { "lat": 40.1696529, "lon": -3.7513590 },
+    { "lat": 40.1691757, "lon": -3.7521680 },
+    { "lat": 40.1688229, "lon": -3.7526921 },
+    { "lat": 40.1683351, "lon": -3.7533666 },
+    { "lat": 40.1678666, "lon": -3.7539440 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 199507780,
+  "bounds": {
+    "minlat": 40.1682970,
+    "minlon": -3.7414542,
+    "maxlat": 40.1720555,
+    "maxlon": -3.7300297
+  },
+  "geometry": [
+    { "lat": 40.1682970, "lon": -3.7300297 },
+    { "lat": 40.1686247, "lon": -3.7304606 },
+    { "lat": 40.1689399, "lon": -3.7309073 },
+    { "lat": 40.1692419, "lon": -3.7313692 },
+    { "lat": 40.1695305, "lon": -3.7318457 },
+    { "lat": 40.1698052, "lon": -3.7323361 },
+    { "lat": 40.1700655, "lon": -3.7328397 },
+    { "lat": 40.1703112, "lon": -3.7333557 },
+    { "lat": 40.1705418, "lon": -3.7338835 },
+    { "lat": 40.1707571, "lon": -3.7344222 },
+    { "lat": 40.1709568, "lon": -3.7349712 },
+    { "lat": 40.1711405, "lon": -3.7355296 },
+    { "lat": 40.1713080, "lon": -3.7360967 },
+    { "lat": 40.1714591, "lon": -3.7366717 },
+    { "lat": 40.1715936, "lon": -3.7372536 },
+    { "lat": 40.1717112, "lon": -3.7378418 },
+    { "lat": 40.1718118, "lon": -3.7384354 },
+    { "lat": 40.1718952, "lon": -3.7390335 },
+    { "lat": 40.1719614, "lon": -3.7396353 },
+    { "lat": 40.1720102, "lon": -3.7402399 },
+    { "lat": 40.1720416, "lon": -3.7408465 },
+    { "lat": 40.1720555, "lon": -3.7414542 }
+  ],
+  "tags": {
+    "bridge": "viaduct",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 204513584,
+  "bounds": {
+    "minlat": 39.9907849,
+    "minlon": -3.8360015,
+    "maxlat": 40.1898956,
+    "maxlon": -3.7502576
+  },
+  "geometry": [
+    { "lat": 40.1898956, "lon": -3.7502576 },
+    { "lat": 40.1848326, "lon": -3.7505661 },
+    { "lat": 40.1836086, "lon": -3.7506412 },
+    { "lat": 40.1824975, "lon": -3.7507250 },
+    { "lat": 40.1815490, "lon": -3.7508236 },
+    { "lat": 40.1805661, "lon": -3.7509644 },
+    { "lat": 40.1790308, "lon": -3.7512160 },
+    { "lat": 40.1745102, "lon": -3.7520953 },
+    { "lat": 40.1728103, "lon": -3.7524895 },
+    { "lat": 40.1718840, "lon": -3.7527291 },
+    { "lat": 40.1712501, "lon": -3.7529137 },
+    { "lat": 40.1705813, "lon": -3.7531271 },
+    { "lat": 40.1696005, "lon": -3.7534744 },
+    { "lat": 40.1690554, "lon": -3.7536818 },
+    { "lat": 40.1679828, "lon": -3.7541245 },
+    { "lat": 40.1667111, "lon": -3.7547306 },
+    { "lat": 40.1656795, "lon": -3.7552424 },
+    { "lat": 40.1631892, "lon": -3.7565115 },
+    { "lat": 40.1620787, "lon": -3.7570561 },
+    { "lat": 40.1607118, "lon": -3.7576651 },
+    { "lat": 40.1594904, "lon": -3.7581922 },
+    { "lat": 40.1583749, "lon": -3.7586007 },
+    { "lat": 40.1559336, "lon": -3.7595055 },
+    { "lat": 40.1543828, "lon": -3.7601461 },
+    { "lat": 40.1535506, "lon": -3.7605326 },
+    { "lat": 40.1525051, "lon": -3.7610413 },
+    { "lat": 40.1516439, "lon": -3.7614976 },
+    { "lat": 40.1508400, "lon": -3.7619600 },
+    { "lat": 40.1501336, "lon": -3.7623791 },
+    { "lat": 40.1491519, "lon": -3.7629983 },
+    { "lat": 40.1477317, "lon": -3.7639617 },
+    { "lat": 40.1466240, "lon": -3.7647171 },
+    { "lat": 40.1455100, "lon": -3.7654895 },
+    { "lat": 40.1446404, "lon": -3.7660988 },
+    { "lat": 40.1433516, "lon": -3.7669666 },
+    { "lat": 40.1422800, "lon": -3.7677115 },
+    { "lat": 40.1403614, "lon": -3.7690170 },
+    { "lat": 40.1386061, "lon": -3.7702319 },
+    { "lat": 40.1373573, "lon": -3.7710880 },
+    { "lat": 40.1340601, "lon": -3.7733535 },
+    { "lat": 40.1324647, "lon": -3.7744477 },
+    { "lat": 40.1307556, "lon": -3.7756135 },
+    { "lat": 40.1289983, "lon": -3.7768247 },
+    { "lat": 40.1270921, "lon": -3.7781339 },
+    { "lat": 40.1254625, "lon": -3.7792486 },
+    { "lat": 40.1240912, "lon": -3.7801877 },
+    { "lat": 40.1221977, "lon": -3.7814874 },
+    { "lat": 40.1185150, "lon": -3.7840150 },
+    { "lat": 40.1170254, "lon": -3.7850396 },
+    { "lat": 40.1157324, "lon": -3.7858722 },
+    { "lat": 40.1142531, "lon": -3.7867587 },
+    { "lat": 40.1129229, "lon": -3.7874506 },
+    { "lat": 40.1115526, "lon": -3.7880913 },
+    { "lat": 40.1102467, "lon": -3.7886306 },
+    { "lat": 40.1089628, "lon": -3.7890916 },
+    { "lat": 40.1080737, "lon": -3.7893757 },
+    { "lat": 40.1075637, "lon": -3.7895177 },
+    { "lat": 40.1070093, "lon": -3.7896685 },
+    { "lat": 40.1063707, "lon": -3.7898163 },
+    { "lat": 40.1052741, "lon": -3.7900680 },
+    { "lat": 40.1017914, "lon": -3.7907649 },
+    { "lat": 40.0993560, "lon": -3.7912417 },
+    { "lat": 40.0980388, "lon": -3.7915061 },
+    { "lat": 40.0959010, "lon": -3.7919172 },
+    { "lat": 40.0941545, "lon": -3.7922538 },
+    { "lat": 40.0911308, "lon": -3.7928647 },
+    { "lat": 40.0888094, "lon": -3.7933131 },
+    { "lat": 40.0870754, "lon": -3.7936521 },
+    { "lat": 40.0854113, "lon": -3.7940264 },
+    { "lat": 40.0844486, "lon": -3.7942786 },
+    { "lat": 40.0834881, "lon": -3.7945743 },
+    { "lat": 40.0820685, "lon": -3.7950759 },
+    { "lat": 40.0811235, "lon": -3.7954499 },
+    { "lat": 40.0801785, "lon": -3.7958732 },
+    { "lat": 40.0787943, "lon": -3.7965458 },
+    { "lat": 40.0776497, "lon": -3.7971749 },
+    { "lat": 40.0765396, "lon": -3.7978253 },
+    { "lat": 40.0667029, "lon": -3.8036947 },
+    { "lat": 40.0591250, "lon": -3.8082081 },
+    { "lat": 40.0555620, "lon": -3.8103451 },
+    { "lat": 40.0543464, "lon": -3.8110646 },
+    { "lat": 40.0519997, "lon": -3.8124494 },
+    { "lat": 40.0501861, "lon": -3.8135465 },
+    { "lat": 40.0484281, "lon": -3.8146042 },
+    { "lat": 40.0430819, "lon": -3.8177650 },
+    { "lat": 40.0408242, "lon": -3.8191575 },
+    { "lat": 40.0392032, "lon": -3.8201024 },
+    { "lat": 40.0356964, "lon": -3.8221695 },
+    { "lat": 40.0346051, "lon": -3.8227595 },
+    { "lat": 40.0335125, "lon": -3.8233084 },
+    { "lat": 40.0324472, "lon": -3.8237832 },
+    { "lat": 40.0315458, "lon": -3.8241415 },
+    { "lat": 40.0301282, "lon": -3.8246598 },
+    { "lat": 40.0288249, "lon": -3.8250675 },
+    { "lat": 40.0274840, "lon": -3.8254572 },
+    { "lat": 40.0226964, "lon": -3.8268451 },
+    { "lat": 40.0223953, "lon": -3.8269303 },
+    { "lat": 40.0203102, "lon": -3.8275205 },
+    { "lat": 40.0150550, "lon": -3.8290368 },
+    { "lat": 40.0112329, "lon": -3.8301263 },
+    { "lat": 40.0088300, "lon": -3.8308241 },
+    { "lat": 40.0078589, "lon": -3.8310971 },
+    { "lat": 40.0049603, "lon": -3.8319312 },
+    { "lat": 40.0020810, "lon": -3.8327641 },
+    { "lat": 40.0006394, "lon": -3.8331815 },
+    { "lat": 39.9996855, "lon": -3.8334593 },
+    { "lat": 39.9983221, "lon": -3.8338263 },
+    { "lat": 39.9972763, "lon": -3.8341374 },
+    { "lat": 39.9953385, "lon": -3.8346904 },
+    { "lat": 39.9930355, "lon": -3.8353487 },
+    { "lat": 39.9907849, "lon": -3.8360015 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 218690192,
+  "bounds": {
+    "minlat": 40.1321592,
+    "minlon": -3.7746028,
+    "maxlat": 40.1340601,
+    "maxlon": -3.7733535
+  },
+  "geometry": [
+    { "lat": 40.1340601, "lon": -3.7733535 },
+    { "lat": 40.1321592, "lon": -3.7746028 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "railway": "rail",
+    "service": "crossover",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 230997896,
+  "bounds": {
+    "minlat": 40.0917773,
+    "minlon": -3.6893833,
+    "maxlat": 40.1343802,
+    "maxlon": -3.6729433
+  },
+  "geometry": [
+    { "lat": 40.0917773, "lon": -3.6743746 },
+    { "lat": 40.0941145, "lon": -3.6737465 },
+    { "lat": 40.0966531, "lon": -3.6732559 },
+    { "lat": 40.0980442, "lon": -3.6730873 },
+    { "lat": 40.0996488, "lon": -3.6729699 },
+    { "lat": 40.1011584, "lon": -3.6729433 },
+    { "lat": 40.1024907, "lon": -3.6730084 },
+    { "lat": 40.1040886, "lon": -3.6731410 },
+    { "lat": 40.1052227, "lon": -3.6733292 },
+    { "lat": 40.1060088, "lon": -3.6734510 },
+    { "lat": 40.1072964, "lon": -3.6737262 },
+    { "lat": 40.1096237, "lon": -3.6744007 },
+    { "lat": 40.1109153, "lon": -3.6748597 },
+    { "lat": 40.1125861, "lon": -3.6755584 },
+    { "lat": 40.1136312, "lon": -3.6760694 },
+    { "lat": 40.1151261, "lon": -3.6768400 },
+    { "lat": 40.1258407, "lon": -3.6829093 },
+    { "lat": 40.1278140, "lon": -3.6841210 },
+    { "lat": 40.1289538, "lon": -3.6848782 },
+    { "lat": 40.1296822, "lon": -3.6853956 },
+    { "lat": 40.1304061, "lon": -3.6859439 },
+    { "lat": 40.1313100, "lon": -3.6866399 },
+    { "lat": 40.1321520, "lon": -3.6873404 },
+    { "lat": 40.1331112, "lon": -3.6881805 },
+    { "lat": 40.1343802, "lon": -3.6893833 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tracks": "1",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 337790451,
+  "bounds": {
+    "minlat": 40.2035273,
+    "minlon": -3.7494211,
+    "maxlat": 40.2090629,
+    "maxlon": -3.7491038
+  },
+  "geometry": [
+    { "lat": 40.2035273, "lon": -3.7494211 },
+    { "lat": 40.2090629, "lon": -3.7491038 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 502979332,
+  "bounds": {
+    "minlat": 40.2035406,
+    "minlon": -3.7495447,
+    "maxlat": 40.2090707,
+    "maxlon": -3.7492268
+  },
+  "geometry": [
+    { "lat": 40.2090707, "lon": -3.7492268 },
+    { "lat": 40.2035406, "lon": -3.7495447 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid-Valencia",
+    "official_name": "Madrid-Chamartín-Clara Campoamor a Valencia-Joaquín Sorolla",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 502979333,
+  "bounds": {
+    "minlat": 40.2090707,
+    "minlon": -3.7492268,
+    "maxlat": 40.2091546,
+    "maxlon": -3.7492231
+  },
+  "geometry": [
+    { "lat": 40.2091546, "lon": -3.7492231 },
+    { "lat": 40.2090707, "lon": -3.7492268 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid-Valencia",
+    "official_name": "Madrid-Chamartín-Clara Campoamor a Valencia-Joaquín Sorolla",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 502981580,
+  "bounds": {
+    "minlat": 40.2002795,
+    "minlon": -3.7495403,
+    "maxlat": 40.2035273,
+    "maxlon": -3.7494211
+  },
+  "geometry": [
+    { "lat": 40.2002795, "lon": -3.7495403 },
+    { "lat": 40.2035273, "lon": -3.7494211 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "crossover",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 502981581,
+  "bounds": {
+    "minlat": 40.2035406,
+    "minlon": -3.7495447,
+    "maxlat": 40.2069104,
+    "maxlon": -3.7492779
+  },
+  "geometry": [
+    { "lat": 40.2069104, "lon": -3.7492779 },
+    { "lat": 40.2044190, "lon": -3.7494752 },
+    { "lat": 40.2035406, "lon": -3.7495447 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "crossover",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 542945985,
+  "bounds": {
+    "minlat": 40.0917739,
+    "minlon": -3.6894342,
+    "maxlat": 40.1343541,
+    "maxlon": -3.6730063
+  },
+  "geometry": [
+    { "lat": 40.1343541, "lon": -3.6894342 },
+    { "lat": 40.1330806, "lon": -3.6882188 },
+    { "lat": 40.1321316, "lon": -3.6873886 },
+    { "lat": 40.1312918, "lon": -3.6866974 },
+    { "lat": 40.1303904, "lon": -3.6859922 },
+    { "lat": 40.1296591, "lon": -3.6854472 },
+    { "lat": 40.1289331, "lon": -3.6849310 },
+    { "lat": 40.1277917, "lon": -3.6841692 },
+    { "lat": 40.1258208, "lon": -3.6829784 },
+    { "lat": 40.1151087, "lon": -3.6768886 },
+    { "lat": 40.1136202, "lon": -3.6761133 },
+    { "lat": 40.1125769, "lon": -3.6756067 },
+    { "lat": 40.1108979, "lon": -3.6749093 },
+    { "lat": 40.1096107, "lon": -3.6744503 },
+    { "lat": 40.1072977, "lon": -3.6737918 },
+    { "lat": 40.1060002, "lon": -3.6735049 },
+    { "lat": 40.1052249, "lon": -3.6733843 },
+    { "lat": 40.1040799, "lon": -3.6732165 },
+    { "lat": 40.1024919, "lon": -3.6730764 },
+    { "lat": 40.1011584, "lon": -3.6730063 },
+    { "lat": 40.0996484, "lon": -3.6730309 },
+    { "lat": 40.0980391, "lon": -3.6731360 },
+    { "lat": 40.0966552, "lon": -3.6733132 },
+    { "lat": 40.0941209, "lon": -3.6738039 },
+    { "lat": 40.0917739, "lon": -3.6744333 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tracks": "1",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 542945988,
+  "bounds": {
+    "minlat": 40.1466240,
+    "minlon": -3.7647171,
+    "maxlat": 40.1672124,
+    "maxlon": -3.7546622
+  },
+  "geometry": [
+    { "lat": 40.1672124, "lon": -3.7546622 },
+    { "lat": 40.1667373, "lon": -3.7551194 },
+    { "lat": 40.1661306, "lon": -3.7556599 },
+    { "lat": 40.1653363, "lon": -3.7562500 },
+    { "lat": 40.1648229, "lon": -3.7566000 },
+    { "lat": 40.1639333, "lon": -3.7570868 },
+    { "lat": 40.1633870, "lon": -3.7573484 },
+    { "lat": 40.1625056, "lon": -3.7576850 },
+    { "lat": 40.1605953, "lon": -3.7582255 },
+    { "lat": 40.1595980, "lon": -3.7585131 },
+    { "lat": 40.1586586, "lon": -3.7587673 },
+    { "lat": 40.1577016, "lon": -3.7590492 },
+    { "lat": 40.1569126, "lon": -3.7593127 },
+    { "lat": 40.1559747, "lon": -3.7596296 },
+    { "lat": 40.1544136, "lon": -3.7602586 },
+    { "lat": 40.1535806, "lon": -3.7606306 },
+    { "lat": 40.1525314, "lon": -3.7611430 },
+    { "lat": 40.1516711, "lon": -3.7615991 },
+    { "lat": 40.1508670, "lon": -3.7620545 },
+    { "lat": 40.1501636, "lon": -3.7624828 },
+    { "lat": 40.1477460, "lon": -3.7639999 },
+    { "lat": 40.1466240, "lon": -3.7647171 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 542945989,
+  "bounds": {
+    "minlat": 40.1625430,
+    "minlon": -3.7300297,
+    "maxlat": 40.1682970,
+    "maxlon": -3.7238803
+  },
+  "geometry": [
+    { "lat": 40.1625430, "lon": -3.7238803 },
+    { "lat": 40.1636003, "lon": -3.7251326 },
+    { "lat": 40.1644684, "lon": -3.7261398 },
+    { "lat": 40.1649033, "lon": -3.7265988 },
+    { "lat": 40.1653266, "lon": -3.7270126 },
+    { "lat": 40.1666325, "lon": -3.7282306 },
+    { "lat": 40.1673751, "lon": -3.7289668 },
+    { "lat": 40.1682970, "lon": -3.7300297 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584446775,
+  "bounds": {
+    "minlat": 40.2091505,
+    "minlon": -3.7491504,
+    "maxlat": 40.2184961,
+    "maxlon": -3.7483206
+  },
+  "geometry": [
+    { "lat": 40.2184961, "lon": -3.7483206 },
+    { "lat": 40.2173426, "lon": -3.7485333 },
+    { "lat": 40.2166201, "lon": -3.7486137 },
+    { "lat": 40.2156966, "lon": -3.7487194 },
+    { "lat": 40.2147650, "lon": -3.7488096 },
+    { "lat": 40.2091505, "lon": -3.7491504 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584446776,
+  "bounds": {
+    "minlat": 40.2091477,
+    "minlon": -3.7491008,
+    "maxlat": 40.2184888,
+    "maxlon": -3.7482723
+  },
+  "geometry": [
+    { "lat": 40.2091477, "lon": -3.7491008 },
+    { "lat": 40.2147631, "lon": -3.7487616 },
+    { "lat": 40.2156920, "lon": -3.7486845 },
+    { "lat": 40.2166166, "lon": -3.7485789 },
+    { "lat": 40.2173349, "lon": -3.7484783 },
+    { "lat": 40.2184888, "lon": -3.7482723 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584446967,
+  "bounds": {
+    "minlat": 40.1528351,
+    "minlon": -3.7139939,
+    "maxlat": 40.1545182,
+    "maxlon": -3.7118252
+  },
+  "geometry": [
+    { "lat": 40.1528351, "lon": -3.7118252 },
+    { "lat": 40.1545182, "lon": -3.7139939 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "crossover",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584446968,
+  "bounds": {
+    "minlat": 40.1407705,
+    "minlon": -3.6991442,
+    "maxlat": 40.1426272,
+    "maxlon": -3.6969118
+  },
+  "geometry": [
+    { "lat": 40.1426272, "lon": -3.6991442 },
+    { "lat": 40.1407705, "lon": -3.6969118 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "crossover",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447055,
+  "bounds": {
+    "minlat": 40.1494257,
+    "minlon": -3.7086636,
+    "maxlat": 40.1501571,
+    "maxlon": -3.7077329
+  },
+  "geometry": [
+    { "lat": 40.1501571, "lon": -3.7086636 },
+    { "lat": 40.1497547, "lon": -3.7081600 },
+    { "lat": 40.1494257, "lon": -3.7077329 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "siding",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447056,
+  "bounds": {
+    "minlat": 40.1495118,
+    "minlon": -3.7085167,
+    "maxlat": 40.1502642,
+    "maxlon": -3.7076115
+  },
+  "geometry": [
+    { "lat": 40.1495118, "lon": -3.7076115 },
+    { "lat": 40.1498890, "lon": -3.7080494 },
+    { "lat": 40.1502642, "lon": -3.7085167 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "siding",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447057,
+  "bounds": {
+    "minlat": 40.1450007,
+    "minlon": -3.7030492,
+    "maxlat": 40.1458295,
+    "maxlon": -3.7019842
+  },
+  "geometry": [
+    { "lat": 40.1450007, "lon": -3.7019842 },
+    { "lat": 40.1454779, "lon": -3.7025770 },
+    { "lat": 40.1458295, "lon": -3.7030492 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "siding",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447058,
+  "bounds": {
+    "minlat": 40.1448895,
+    "minlon": -3.7031583,
+    "maxlat": 40.1457475,
+    "maxlon": -3.7021244
+  },
+  "geometry": [
+    { "lat": 40.1457475, "lon": -3.7031583 },
+    { "lat": 40.1453247, "lon": -3.7026682 },
+    { "lat": 40.1448895, "lon": -3.7021244 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "siding",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447059,
+  "bounds": {
+    "minlat": 40.1450828,
+    "minlon": -3.7084601,
+    "maxlat": 40.1500739,
+    "maxlon": -3.7022644
+  },
+  "geometry": [
+    { "lat": 40.1500739, "lon": -3.7084601 },
+    { "lat": 40.1494257, "lon": -3.7077329 },
+    { "lat": 40.1460628, "lon": -3.7035815 },
+    { "lat": 40.1457475, "lon": -3.7031583 },
+    { "lat": 40.1450828, "lon": -3.7022644 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "siding",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447060,
+  "bounds": {
+    "minlat": 40.1451040,
+    "minlon": -3.7084200,
+    "maxlat": 40.1501019,
+    "maxlon": -3.7022186
+  },
+  "geometry": [
+    { "lat": 40.1501019, "lon": -3.7084200 },
+    { "lat": 40.1495118, "lon": -3.7076115 },
+    { "lat": 40.1462038, "lon": -3.7034694 },
+    { "lat": 40.1458844, "lon": -3.7031121 },
+    { "lat": 40.1458295, "lon": -3.7030492 },
+    { "lat": 40.1451040, "lon": -3.7022186 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "siding",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447061,
+  "bounds": {
+    "minlat": 40.1343541,
+    "minlon": -3.6907937,
+    "maxlat": 40.1356860,
+    "maxlon": -3.6894342
+  },
+  "geometry": [
+    { "lat": 40.1356860, "lon": -3.6907937 },
+    { "lat": 40.1343541, "lon": -3.6894342 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tracks": "1",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447062,
+  "bounds": {
+    "minlat": 40.1343802,
+    "minlon": -3.6907588,
+    "maxlat": 40.1357165,
+    "maxlon": -3.6893833
+  },
+  "geometry": [
+    { "lat": 40.1343802, "lon": -3.6893833 },
+    { "lat": 40.1357165, "lon": -3.6907588 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tracks": "1",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447063,
+  "bounds": {
+    "minlat": 40.1357165,
+    "minlon": -3.7168495,
+    "maxlat": 40.1568676,
+    "maxlon": -3.6907588
+  },
+  "geometry": [
+    { "lat": 40.1357165, "lon": -3.6907588 },
+    { "lat": 40.1366873, "lon": -3.6918416 },
+    { "lat": 40.1376891, "lon": -3.6930191 },
+    { "lat": 40.1426272, "lon": -3.6991442 },
+    { "lat": 40.1451040, "lon": -3.7022186 },
+    { "lat": 40.1501019, "lon": -3.7084200 },
+    { "lat": 40.1528351, "lon": -3.7118252 },
+    { "lat": 40.1568676, "lon": -3.7168495 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tracks": "1",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447065,
+  "bounds": {
+    "minlat": 40.1356860,
+    "minlon": -3.7168832,
+    "maxlat": 40.1568386,
+    "maxlon": -3.6907937
+  },
+  "geometry": [
+    { "lat": 40.1568386, "lon": -3.7168832 },
+    { "lat": 40.1545182, "lon": -3.7139939 },
+    { "lat": 40.1500739, "lon": -3.7084601 },
+    { "lat": 40.1450828, "lon": -3.7022644 },
+    { "lat": 40.1407705, "lon": -3.6969118 },
+    { "lat": 40.1376586, "lon": -3.6930492 },
+    { "lat": 40.1366678, "lon": -3.6918819 },
+    { "lat": 40.1356860, "lon": -3.6907937 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "tracks": "1",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447066,
+  "bounds": {
+    "minlat": 40.1898956,
+    "minlon": -3.7502576,
+    "maxlat": 40.1919146,
+    "maxlon": -3.7501410
+  },
+  "geometry": [
+    { "lat": 40.1919146, "lon": -3.7501410 },
+    { "lat": 40.1898956, "lon": -3.7502576 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447067,
+  "bounds": {
+    "minlat": 40.1898937,
+    "minlon": -3.7502037,
+    "maxlat": 40.1919153,
+    "maxlon": -3.7500904
+  },
+  "geometry": [
+    { "lat": 40.1898937, "lon": -3.7502037 },
+    { "lat": 40.1919153, "lon": -3.7500904 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "-1",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447068,
+  "bounds": {
+    "minlat": 40.1919153,
+    "minlon": -3.7500904,
+    "maxlat": 40.2035273,
+    "maxlon": -3.7494211
+  },
+  "geometry": [
+    { "lat": 40.1919153, "lon": -3.7500904 },
+    { "lat": 40.1937331, "lon": -3.7499951 },
+    { "lat": 40.1944395, "lon": -3.7499516 },
+    { "lat": 40.1954731, "lon": -3.7498985 },
+    { "lat": 40.2035273, "lon": -3.7494211 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 584447069,
+  "bounds": {
+    "minlat": 40.1919146,
+    "minlon": -3.7501410,
+    "maxlat": 40.2069104,
+    "maxlon": -3.7492779
+  },
+  "geometry": [
+    { "lat": 40.2069104, "lon": -3.7492779 },
+    { "lat": 40.1981040, "lon": -3.7497935 },
+    { "lat": 40.1979598, "lon": -3.7498060 },
+    { "lat": 40.1954767, "lon": -3.7499480 },
+    { "lat": 40.1919146, "lon": -3.7501410 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 656097719,
+  "bounds": {
+    "minlat": 40.1616553,
+    "minlon": -3.7368840,
+    "maxlat": 40.1729705,
+    "maxlon": -3.7227517
+  },
+  "geometry": [
+    { "lat": 40.1616553, "lon": -3.7227517 },
+    { "lat": 40.1625430, "lon": -3.7238803 },
+    { "lat": 40.1644405, "lon": -3.7262753 },
+    { "lat": 40.1729705, "lon": -3.7368840 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 656097723,
+  "bounds": {
+    "minlat": 40.1616238,
+    "minlon": -3.7369196,
+    "maxlat": 40.1729350,
+    "maxlon": -3.7227891
+  },
+  "geometry": [
+    { "lat": 40.1729350, "lon": -3.7369196 },
+    { "lat": 40.1644157, "lon": -3.7263248 },
+    { "lat": 40.1623452, "lon": -3.7237158 },
+    { "lat": 40.1616238, "lon": -3.7227891 }
+  ],
+  "tags": {
+    "alt_name": "40 - Bifurcación Torrejón de Velasco - Valencia Joaquín Sorolla",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "285",
+    "name": "Línea de Alta Velocidad Madrid - Cuenca - Valencia",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "040",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 855788059,
+  "bounds": {
+    "minlat": 40.2069104,
+    "minlon": -3.7492779,
+    "maxlat": 40.2090661,
+    "maxlon": -3.7491543
+  },
+  "geometry": [
+    { "lat": 40.2090661, "lon": -3.7491543 },
+    { "lat": 40.2069104, "lon": -3.7492779 }
+  ],
+  "tags": {
+    "construction:railway:etcs": "2",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "270",
+    "name": "Línea de alta velocidad Madrid - Sevilla",
+    "operator": "Adif",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:asfa_200": "yes",
+    "railway:lzb": "yes",
+    "railway:traffic_mode": "passenger",
+    "ref": "010",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1274570210,
+  "bounds": {
+    "minlat": 40.1981040,
+    "minlon": -3.7497935,
+    "maxlat": 40.2004881,
+    "maxlon": -3.7497256
+  },
+  "geometry": [
+    { "lat": 40.1981040, "lon": -3.7497935 },
+    { "lat": 40.1988023, "lon": -3.7497710 },
+    { "lat": 40.1992462, "lon": -3.7497541 },
+    { "lat": 40.2004881, "lon": -3.7497256 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "200",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "service": "crossover",
+    "tracks": "1",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1465619252,
+  "bounds": {
+    "minlat": 40.1623452,
+    "minlon": -3.7331462,
+    "maxlat": 40.1693845,
+    "maxlon": -3.7237158
+  },
+  "geometry": [
+    { "lat": 40.1693845, "lon": -3.7331462 },
+    { "lat": 40.1693445, "lon": -3.7330757 },
+    { "lat": 40.1686282, "lon": -3.7320122 },
+    { "lat": 40.1623452, "lon": -3.7237158 }
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1465619253,
+  "bounds": {
+    "minlat": 40.1693845,
+    "minlon": -3.7332466,
+    "maxlat": 40.1694415,
+    "maxlon": -3.7331462
+  },
+  "geometry": [
+    { "lat": 40.1694415, "lon": -3.7332466 },
+    { "lat": 40.1693845, "lon": -3.7331462 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "160",
+    "passenger_lines": "2",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:track_ref": "24 - Yeles aguja km 34,397 - Bifurcación Blancales",
+    "railway:traffic_mode": "passenger",
+    "ref": "24",
+    "usage": "main",
+    "voltage": "25000"
+  }
+}
+
+  ]
+}

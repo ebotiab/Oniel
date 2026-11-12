@@ -41,6 +41,7 @@ const PROTECCION_TREN: Record<string, ValorDicho> = {
   asfa: { texto: 'ASFA', termino: 'asfa' },
   lzb_asfa: { texto: 'LZB y ASFA', termino: 'lzb' },
   ertms_n1: { texto: 'ERTMS de nivel 1', termino: 'ertms' },
+  ertms_n1_asfa: { texto: 'ERTMS de nivel 1 y ASFA', termino: 'ertms' },
   ertms_n2: { texto: 'ERTMS de nivel 2', termino: 'ertms' },
   ertms_n1_n2_asfa: { texto: 'ERTMS de niveles 1 y 2 y ASFA', termino: 'ertms' },
   ertms_n2_asfa: { texto: 'ERTMS de nivel 2 y ASFA', termino: 'ertms' },
@@ -55,6 +56,8 @@ const BLOQUEO: Record<string, ValorDicho> = {
   blau: { texto: 'De liberación automática en vía única', termino: 'bloqueo' },
   // un tramo que cambia de bloqueo donde Oniel no tiene nodo
   bab_bad: { texto: 'Automático: banalizado en una parte y de vía doble en otra', termino: 'bloqueo-automatico' },
+  // la alta velocidad cambia de bloqueo a la entrada de Valencia: «BSL» es el de señalización lateral
+  bca_bsl: { texto: 'De control automático en una parte y de señalización lateral en otra', termino: 'bloqueo-de-control-automatico' },
   sin_dato_publicado: SIN_DATO_PUBLICADO,
 }
 

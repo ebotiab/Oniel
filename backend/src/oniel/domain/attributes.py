@@ -59,6 +59,8 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
                 "asfa",
                 "lzb_asfa",
                 "ertms_n1",
+                # ERTMS de nivel 1 con ASFA de respaldo: la alta velocidad de Valencia
+                "ertms_n1_asfa",
                 "ertms_n2",
                 # ERTMS con ASFA de respaldo, como lo dibuja el mapa en las líneas de Málaga y Granada
                 "ertms_n1_n2_asfa",
@@ -68,13 +70,16 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
         ),
     ),
     # Bloqueo: de control automático (BCA), automático banalizado (BAB), de vía doble (BAD) o
-    # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` es un tramo
-    # que cambia de uno a otro donde no hay nodo.
+    # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` y ``bca_bsl``
+    # son tramos que cambian de uno a otro donde no hay nodo; el segundo acaba en el bloqueo de
+    # señalización lateral (BSL) de la entrada de la alta velocidad a Valencia.
     BLOQUEO: AttributeRule(
         value_type=str,
         required=True,
         sourced=True,
-        values=frozenset({"bca", "bab", "bad", "bau", "blau", "bab_bad", SIN_DATO_PUBLICADO}),
+        values=frozenset(
+            {"bca", "bab", "bad", "bau", "blau", "bab_bad", "bca_bsl", SIN_DATO_PUBLICADO}
+        ),
     ),
     # Mando: desde dónde se gobiernan las señales y los desvíos del tramo. ``sin_ctc`` es un
     # tramo cuyo bloqueo el mapa rotula sin «ctc», cuando la leyenda distingue los dos casos:

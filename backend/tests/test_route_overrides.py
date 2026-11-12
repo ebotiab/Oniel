@@ -105,6 +105,20 @@ def test_rule_validation() -> None:
         StopMapping.model_validate({"node": "n", "via": {"line": "l", "node": "m"}})
 
 
+def test_track_km_only_goes_with_an_exit_that_has_no_via() -> None:
+    """La distancia por vía de una fuente es para una parada a la que no llega ninguna línea
+    cargada: no vale en un nodo de la línea ni junto a un «via», que ya mide el camino."""
+    assert StopMapping.model_validate({"exits": ["n"], "track_km": 36.1}).track_km == 36.1
+    assert StopMapping.model_validate({"exits": ["n"]}).track_km is None
+    for wrong in (
+        {"node": "n", "track_km": 36.1},
+        {"exits": ["n"], "via": {"line": "l", "node": "m"}, "track_km": 36.1},
+        {"exits": ["n"], "track_km": 0},
+    ):
+        with pytest.raises(ValidationError):
+            StopMapping.model_validate(wrong)
+
+
 def test_via_is_one_leg_or_a_chain_of_them() -> None:
     one = StopMapping.model_validate({"exits": ["n"], "via": {"line": "l", "node": "m"}})
     assert [(v.line, v.node) for v in one.via] == [("l", "m")]
