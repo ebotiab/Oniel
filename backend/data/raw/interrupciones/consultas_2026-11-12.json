@@ -1,5 +1,5 @@
 {
-  "descripcion": "Registro de las consultas hechas el 12 de noviembre de 2026 para registrar en backend/data/curated/anotaciones.json la interrupción, ya terminada, de la alta velocidad entre Villanueva de Córdoba y Córdoba a principios de 2026. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "descripcion": "Registro de las consultas hechas el 12 de noviembre de 2026: las que sirvieron para registrar en backend/data/curated/anotaciones.json la interrupción, ya terminada, de la alta velocidad entre Villanueva de Córdoba y Córdoba a principios de 2026, y las de la revisión de ese día de la interrupción vigente de la alta velocidad. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
   "consultado_el": "2026-11-12",
   "consultas": [
     {
@@ -28,6 +28,46 @@
       "fecha_de_la_pagina": "Sin fecha visible; la dirección la sitúa en marzo de 2026",
       "resumen": "Nota de prensa: desde el 20 de marzo cambian los horarios del servicio por carretera entre Jaén y Córdoba, que se presta por los daños de un temporal en la infraestructura y se mantiene hasta que acaben los trabajos en la vía. No dice qué día empezó el corte ni entre qué estaciones está cortada la vía.",
       "que_aporta": "Nada que se pueda registrar: sigue sin haber una fecha de inicio en una fuente oficial para el corte entre Jaén y Córdoba, que por eso no tiene entrada propia."
+    },
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red. Información del tráfico ferroviario",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-12 11:53",
+      "resumen": "El aviso para Andalucía, Castilla-La Mancha y Madrid no ha cambiado respecto al 10 de noviembre: la circulación en la línea de alta velocidad Madrid-Andalucía sigue interrumpida por el alcance entre dos trenes del 28 de octubre, se sigue prestando servicio en los tramos Madrid-Toledo y Málaga-Sevilla y no hay fecha de reanudación. La cabecera de la web repite que la alta velocidad entre Madrid y Andalucía sigue interrumpida. No dice nada de trenes entre Ciudad Real y Puertollano.",
+      "que_aporta": "Que la interrupción de la alta velocidad sigue vigente el 12 de noviembre de 2026, con los mismos tramos abiertos y sin fecha."
+    },
+    {
+      "source_id": "adif-salidas-y-llegadas",
+      "titulo": "Salidas y llegadas de las estaciones de Córdoba y Ciudad Real",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estaciones",
+      "fecha_de_la_pagina": "2026-11-12, a las 14:08",
+      "paginas": [
+        "https://www.adif.es/w/50500-c%C3%B3rdoba-j.-anguita",
+        "https://www.adif.es/w/37200-ciudad-real"
+      ],
+      "resumen": "Córdoba: en las horas que muestra el panel salen Avant a Sevilla, Málaga y Granada y trenes de Proximidad a Alcolea de Córdoba, Campus Universitario de Rabanales, Villarrubia y Palma del Río; los Media Distancia a Jaén indican recorrido por carretera; no figura ningún tren hacia Madrid ni hacia Puertollano. Ciudad Real: la tabla de salidas no cargó y la lista que devolvió la página mezclaba salidas y llegadas, así que no se pudo leer con fiabilidad qué trenes circulaban.",
+      "que_aporta": "Que por el sur nada ha cambiado: de Córdoba no sale ningún tren hacia Madrid. El panel de Ciudad Real queda por leer en la siguiente revisión."
+    },
+    {
+      "source_id": "enclm-avant-ciudad-real-puertollano-2026-11",
+      "titulo": "Renfe recupera este viernes los trenes Avant entre Ciudad Real y Puertollano tras el accidente de Urda",
+      "editor": "En Castilla-La Mancha (ENCLM)",
+      "url": "https://www.encastillalamancha.es/ciudad-real/renfe-recupera-este-viernes-los-trenes-avant-entre-ciudad-real-y-puertollano-tras-el-accidente-de-urda/",
+      "fecha_de_la_pagina": "2026-11-12 09:52",
+      "resumen": "Noticia: según los horarios publicados por Renfe, el viernes 13 de noviembre vuelven a circular trenes Avant entre Ciudad Real y Puertollano, siete por sentido, interrumpidos desde el 28 de octubre. La alta velocidad con Madrid sigue interrumpida y sin fecha; entre Ciudad Real y Madrid se viaja en trenes por la línea convencional o en autobús, y desde Puertollano hay que cambiar en Ciudad Real. No cita ninguna nota de Renfe ni menciona a Adif. Otro medio, CLM24, publicó lo mismo ese día con los mismos horarios.",
+      "que_aporta": "El anuncio, todavía no cumplido el día de la consulta, de que el tramo entre Ciudad Real y Puertollano vuelve a tener trenes el 13 de noviembre de 2026."
+    },
+    {
+      "source_id": null,
+      "titulo": "Renfe prorroga el plan alternativo de transporte por carretera para conectar Madrid, Ciudad Real y Puertollano",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/renfe-prorroga-plan-alternativo-transporte-por-carretera-entre-madrid-ciudad-real-puertollano",
+      "fecha_de_la_pagina": "Sin fecha visible; el texto la sitúa en torno al 5 de noviembre de 2026",
+      "resumen": "Nota de prensa: el servicio de autobuses entre Madrid, Ciudad Real y Puertollano, que empezó el 31 de octubre, se prorroga en principio hasta el jueves 12 de noviembre. No dice nada de trenes Avant ni del 13 de noviembre.",
+      "que_aporta": "Nada que cambie lo registrado: no se encontró una nota de Renfe ni de Adif sobre la vuelta de los Avant."
     }
   ]
 }
