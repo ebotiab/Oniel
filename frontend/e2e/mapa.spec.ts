@@ -185,6 +185,10 @@ test.describe('Trazo de la vía', () => {
     // un toque en cualquier parte, aquí en el panel, la pliega
     await page.getByRole('button', { name: 'Ampliar el panel' }).click()
     await expect(atribucion).not.toHaveClass(/maplibregl-compact-show/)
+    // con la hoja abierta el mapa es muy bajo y la escala se quita; al recogerla, vuelve junto a «i»
+    await expect(escala).toBeHidden()
+    await page.getByRole('button', { name: 'Reducir el panel' }).click()
+    await expect(escala).toBeVisible()
     const [a, e] = [await atribucion.boundingBox(), await escala.boundingBox()]
     expect(a && e && Math.abs(a.y + a.height - (e.y + e.height)) <= 2 && e.x + e.width <= a.x).toBe(true)
     // el botón «i» la vuelve a enseñar entera, con su enlace a OpenStreetMap
