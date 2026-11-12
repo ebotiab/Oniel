@@ -306,7 +306,7 @@ Cómo se importa:
 
 Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<operador>/` con el día de descarga en el nombre, añadirlo a `feeds` (y poner al día `retrieved_on`, cobertura y notas de su fuente), ejecutar `validate` e `import all` y subir la instantánea. Con el de Renfe, los tres primeros pasos los hace `oniel-data refresh gtfs` (véase «Refresco de los horarios»). Los recuentos de las pruebas no cambian: usan siempre el fichero de Renfe del 8 de noviembre de 2026 y el de Ouigo del 12 de noviembre de 2026 por su nombre (`backend/tests/conftest.py`).
 
-La instantánea estática lleva solo el estado actual. Para la evolución futura guarda además `frontend/public/data/historico/<conjunto>/segment-counts.json`: los pasos por tramo de cada conjunto en su propio día de referencia. Pesa 2,8 KB por conjunto con los 39 tramos de hoy (medido el 11 de noviembre de 2026), y el visor todavía no lo lee.
+La instantánea estática lleva el estado actual y, en `frontend/public/data/historico/`, lo que hace falta para comparar los conjuntos entre sí (véase «Evolución del servicio»).
 
 ### Refresco de los horarios
 
@@ -371,6 +371,27 @@ La ficha de una estación dice a qué otras estaciones se llega desde ella sin c
 
 Recuentos que comprueban las pruebas, con los ficheros fijos y el 13 de noviembre de 2026: Ciudad Real tiene 49 destinos directos, 14 de ellos en la red (Córdoba 20 trenes, Madrid-Puerta de Atocha 12, Sevilla-Santa Justa 12, Puertollano 11); de Madrid-Puerta de Atocha a Córdoba hay 55 trenes, 49 de Renfe y 6 de Ouigo.
 
+## Evolución del servicio
+
+La ficha de una estación y la de un tramo dicen, dentro de «Más detalle», cuántos trenes daba cada horario descargado de un mismo operador: «Renfe Viajeros. Horario del 8 nov 2026: 56 trenes el 13 nov · horario del 12 nov 2026: 56 trenes el 13 nov». Sale de los conjuntos de datos ya importados, sin ninguna fuente nueva. Son cifras con su fecha y su fuente: Oniel no dice por qué cambia el servicio de un horario a otro.
+
+**Qué se conserva.** `import gtfs` e `import all` guardan los servicios, las paradas y los pasos por tramo de todos los ficheros declarados en `feeds`, no solo los del conjunto activo; por eso la comparación es una consulta y no hizo falta cambiar la importación. El histórico empieza con el fichero de Renfe del 8 de noviembre de 2026 y dura lo que duren los ficheros en `backend/data/raw/` y en `feeds`.
+
+**Cómo se cuenta** (`services_repo.node_history` y `segment_history`). Un punto por conjunto de datos, del descargado antes al más reciente. Cada conjunto se cuenta en su propio día de referencia (`datasets_repo.reference_dates`: el laborable con más servicios de sus primeros treinta días) y sin mirar cuál está activo: es lo que decía ese fichero. En una estación son los trenes que paran, las mismas filas que «Trenes que paran aquí»; en un tramo, los trenes que lo recorren, contando como la ficha del tramo los del día anterior que lo terminan pasada la medianoche. Cada punto lleva el conjunto, su fuente, su operador, el día de descarga, el día de referencia, el total y el reparto por tipo de servicio. Como cada fichero es de un operador, el reparto por operador son los puntos mismos. Un conjunto sin trenes da un punto con cero.
+
+**Qué se compara.** Los ficheros de una misma fuente, que son los que se relevan entre sí. El visor enseña una línea por fuente con dos o más conjuntos y algún tren; con un solo fichero por operador no enseña nada. El fichero de Ouigo es uno solo, así que hoy solo se compara Renfe.
+
+**Dónde viaja.** `GET /api/nodes/{id}/history` y `GET /api/segments/{id}/history` devuelven `{ id, points }`. La instantánea lleva lo mismo en `historico/nodes/<id>.json` e `historico/segments/<id>.json`, que el visor pide al abrir la ficha; si la API no lo sirve, lee la instantánea. Medido el 12 de noviembre de 2026 con tres conjuntos: 38 ficheros de nodos (27,0 KB en total) y 39 de tramos (34,4 KB); el de Córdoba pesa 1,1 KB y se descarga en 0,3 KB con gzip. Cada conjunto nuevo añade unos 0,3 KB por fichero. `historico/<conjunto>/segment-counts.json` (los pasos por tramo de cada conjunto en su día de referencia, 2,8 KB por conjunto) sigue exportándose: lo lee el resumen de la PR del refresco de horarios.
+
+**Límites.**
+
+- Con los dos ficheros de Renfe de hoy, la comparación sale igual en todas las estaciones y en todos los tramos: el día de referencia de los dos es el viernes 13 de noviembre de 2026 y ese día tienen los mismos trenes. Lo que cambia entre ellos son cuatro Intercity entre el 16 y el 22 de noviembre (véase «Refresco de los horarios»), que un solo día de referencia no recoge.
+- Si los días de referencia de dos ficheros son distintos, parte de la diferencia puede venir del día de la semana y no del horario; la ficha lo dice.
+- Solo están los trenes que recorren las líneas cargadas, y no los de Iryo, como en el resto de Oniel.
+- Horarios anteriores al 8 de noviembre de 2026 solo entrarían como una fuente registrada con su fichero; no se reconstruye nada de memoria.
+
+Las pruebas usan dos ficheros: el fijo del 8 de noviembre y una copia sin un tren del día de referencia (`feed_without_trip`, en `backend/tests/test_datasets.py`), con la que el tramo y la estación de ese tren dan uno menos. Recuentos que comprueban, con los ficheros fijos: por el tramo Ciudad Real – Puertollano de la alta velocidad, 96 trenes de Renfe el 13 de noviembre de 2026 (50 AVE, 22 Intercity, 14 Alvia y 10 AVLO) y 14 de Ouigo el 17 de julio, el día de referencia de su fichero; en Ciudad Real paran 56 de Renfe.
+
 ## Instantánea estática
 
 `oniel-data import all` (o `export snapshot`) deja en `frontend/public/data` todo lo que el visor necesita sin API. La red va por partes, para que el arranque no pese más cada vez que se añade una línea:
@@ -381,7 +402,8 @@ Recuentos que comprueban las pruebas, con los ficheros fijos y el 13 de noviembr
 | `lines/<id>.json` | El detalle de una línea: sus nodos con descripción y detalles, sus tramos con la geometría completa, sus conexiones, sus anotaciones y los pasos por tramo del día de referencia. | Al abrir la línea, al seleccionar un tramo o un nodo suyo (también por enlace directo) o al acercar el mapa a ella (zoom 8 o más). |
 | `coverage.json` | Cobertura, conjuntos de datos y fuentes. | Al arrancar. |
 | `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y, de una estación, sus paradas y sus destinos directos el día de referencia (véase «Destinos directos»). | Al abrir su ficha. |
-| `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos (véase «Conjuntos de datos»). | Todavía no se lee. |
+| `historico/nodes/<id>.json`, `historico/segments/<id>.json` | Los trenes de cada conjunto de datos en una estación o un tramo (véase «Evolución del servicio»). | Al abrir su ficha. |
+| `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos. | No lo lee el visor: lo usa el resumen del refresco de horarios. |
 
 La red entera en un solo fichero (`network.json`, con `segment-counts.json`) dejó de exportarse el 11 de noviembre de 2026: el visor ya no la descargaba y las pruebas del grafo de rutas leen el índice.
 

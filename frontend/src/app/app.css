@@ -533,7 +533,8 @@
   border-left-color: var(--regla);
 }
 
-.anteriores {
+.anteriores,
+.evolucion {
   margin-top: 14px;
 }
 

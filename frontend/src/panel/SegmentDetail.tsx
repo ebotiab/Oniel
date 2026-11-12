@@ -6,6 +6,7 @@ import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop, track
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
+import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
@@ -122,6 +123,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
+        <ServiceHistory kind="segments" id={segment.id} operators={operators} sources={sources} conFuente />
         {past.length > 0 && (
           <section className="anteriores" data-testid="interrupciones-anteriores">
             <p className="sobre">Interrupciones anteriores en este tramo</p>

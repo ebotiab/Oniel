@@ -366,6 +366,37 @@ class NodeServicesOut(BaseModel):
     destinations: list[DestinationOut] = Field(default_factory=list)
 
 
+class HistoryProductOut(BaseModel):
+    """Trenes de un tipo de servicio en un punto del histórico."""
+
+    product: str
+    trains: int
+
+
+class HistoryPointOut(BaseModel):
+    """Los trenes de un conjunto de datos en una estación o un tramo, en su día de referencia."""
+
+    dataset_id: str
+    source_id: str
+    operator_id: str | None = None
+    #: Día en que se descargó el fichero de horarios.
+    retrieved_on: dt.date
+    #: Día de referencia del conjunto: el laborable con más servicios de sus primeros treinta días.
+    date: dt.date
+    trains: int
+    #: Por tipo de servicio, del que más trenes tiene al que menos.
+    products: list[HistoryProductOut] = Field(default_factory=list)
+
+
+class ServiceHistoryOut(BaseModel):
+    """Cómo cambia el servicio de un nodo o de un tramo de un fichero de horarios a otro."""
+
+    #: Id del nodo o del tramo.
+    id: str
+    #: Un punto por conjunto de datos, del descargado antes al más reciente.
+    points: list[HistoryPointOut]
+
+
 class ClosureRequest(BaseModel):
     segment_id: str
     date: dt.date

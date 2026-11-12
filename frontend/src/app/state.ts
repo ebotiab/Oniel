@@ -116,6 +116,12 @@ export function formatDayShort(iso: string): string {
   return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', '')
 }
 
+/** Día, mes abreviado y año («8 nov 2026»), para fechar un dato en un renglón. */
+export function formatDayShortYear(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`)
+  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }).replace('.', '')
+}
+
 export const KIND_LABEL: Record<string, string> = {
   estacion: 'Estación',
   paet: 'Puesto de adelantamiento y estacionamiento',

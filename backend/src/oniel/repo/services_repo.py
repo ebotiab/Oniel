@@ -10,7 +10,15 @@ from typing import Any
 
 import asyncpg
 
-from oniel.domain.schemas import DestinationOperatorOut, DestinationOut, ServiceOut, StopOut
+from oniel.domain.schemas import (
+    DestinationOperatorOut,
+    DestinationOut,
+    HistoryPointOut,
+    HistoryProductOut,
+    ServiceOut,
+    StopOut,
+)
+from oniel.repo import datasets_repo
 from oniel.repo.datasets_repo import active_ids_sql
 from oniel.sim.passes import SegmentPass
 
@@ -308,6 +316,95 @@ async def destinations_from_node(
         )
         for r in rows
     )
+
+
+#: Conjuntos ($2) con el día de referencia de cada uno ($3), para contar cada uno en el suyo.
+_REFS_SQL = "SELECT * FROM unnest($2::text[], $3::date[]) AS r(dataset_id, day)"
+
+#: Trenes que paran en un nodo ($1), por conjunto y tipo de servicio: las mismas filas que
+#: :func:`calls_at_node`, sin limitarse a los conjuntos activos.
+NODE_HISTORY_SQL = f"""
+    WITH refs AS ({_REFS_SQL})
+    SELECT r.dataset_id, s.product, count(*) AS n
+    FROM refs r
+    JOIN service_stops ss ON ss.dataset_id = r.dataset_id
+    JOIN stop_mappings m ON m.stop_id = ss.stop_id AND m.node_id = $1
+    JOIN services s ON s.dataset_id = ss.dataset_id AND s.id = ss.service_id
+    JOIN service_dates d
+      ON d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = r.day
+    GROUP BY r.dataset_id, s.product
+"""
+
+#: Trenes que recorren un tramo ($1), por conjunto y tipo de servicio: los pasos del día y los del
+#: día anterior que terminan pasada la medianoche, como :func:`passes_on_segment`.
+SEGMENT_HISTORY_SQL = f"""
+    WITH refs AS ({_REFS_SQL})
+    SELECT r.dataset_id, s.product, count(*) AS n
+    FROM refs r
+    JOIN service_segment_passes p ON p.dataset_id = r.dataset_id AND p.segment_id = $1
+    JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
+    JOIN service_dates d ON d.dataset_id = s.dataset_id AND d.service_id = s.id
+     AND (d.service_date = r.day
+          OR (d.service_date = r.day - 1
+              AND p.exit_s IS NOT NULL AND p.exit_s + p.exit_margin_s >= 86400))
+    GROUP BY r.dataset_id, s.product
+"""
+
+
+async def _history(
+    conn: asyncpg.Connection, sql: str, entity_id: str, refs: dict[str, dt.date] | None
+) -> list[HistoryPointOut]:
+    """Un punto por conjunto de datos, del descargado antes al más reciente.
+
+    Cada conjunto se cuenta en su propio día de referencia y sin mirar cuál está activo: es lo que
+    decía ese fichero de horarios cuando se descargó. Un conjunto sin trenes aquí da un punto con
+    cero, que también es un dato (el de otro operador, o una estación que se queda sin servicio).
+    """
+    if refs is None:
+        refs = await datasets_repo.reference_dates(conn)
+    datasets = [d for d in await datasets_repo.fetch_datasets(conn) if d.id in refs]
+    rows = await conn.fetch(
+        sql, entity_id, [d.id for d in datasets], [refs[d.id] for d in datasets]
+    )
+    by_dataset: dict[str, Counter[str]] = {}
+    for r in rows:
+        by_dataset.setdefault(r["dataset_id"], Counter())[r["product"]] = r["n"]
+    points = []
+    for d in datasets:
+        products = by_dataset.get(d.id, Counter())
+        points.append(
+            HistoryPointOut(
+                dataset_id=d.id,
+                source_id=d.source_id,
+                operator_id=d.operator_id,
+                retrieved_on=d.retrieved_on,
+                date=refs[d.id],
+                trains=sum(products.values()),
+                products=[
+                    HistoryProductOut(product=p, trains=n)
+                    for p, n in sorted(products.items(), key=lambda kv: (-kv[1], kv[0]))
+                ],
+            )
+        )
+    return points
+
+
+async def node_history(
+    conn: asyncpg.Connection, node_id: str, refs: dict[str, dt.date] | None = None
+) -> list[HistoryPointOut]:
+    """Trenes que paran en un nodo según cada conjunto de datos, en el día de referencia de cada uno.
+
+    ``refs`` son los días de referencia ya calculados (:func:`datasets_repo.reference_dates`), para
+    no repetirlos al exportar todos los nodos.
+    """
+    return await _history(conn, NODE_HISTORY_SQL, node_id, refs)
+
+
+async def segment_history(
+    conn: asyncpg.Connection, segment_id: str, refs: dict[str, dt.date] | None = None
+) -> list[HistoryPointOut]:
+    """Trenes que recorren un tramo según cada conjunto de datos, en su día de referencia."""
+    return await _history(conn, SEGMENT_HISTORY_SQL, segment_id, refs)
 
 
 def fmt_time(seconds: float) -> str:
