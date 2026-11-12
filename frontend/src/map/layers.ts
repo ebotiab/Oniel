@@ -13,9 +13,15 @@ export const SRC = {
   segments: 'oniel-segments',
   nodes: 'oniel-nodes',
   connections: 'oniel-connections',
+  annotations: 'oniel-annotations',
 } as const
 
 export const LAYER = {
+  annotationsHalo: 'oniel-annotations-halo',
+  annotationsDots: 'oniel-annotations-puntos',
+  annotationsDashes: 'oniel-annotations-trazos',
+  annotationLabels: 'oniel-annotation-labels',
+  annotationsHit: 'oniel-annotations-hit',
   connections: 'oniel-connections',
   connectionLabels: 'oniel-connection-labels',
   segmentsCasing: 'oniel-segments-casing',
@@ -45,6 +51,7 @@ const isStation: ExpressionSpecification = ['==', ['get', 'kind'], 'estacion']
 const isSecondary: ExpressionSpecification = ['==', ['get', 'rank'], 'secundario']
 const altaVelocidad: ExpressionSpecification = ['==', ['get', 'tipo'], TIPO_ALTA_VELOCIDAD]
 const viaUnica: ExpressionSpecification = ['==', ['get', 'vias'], 1]
+const seleccionado: ExpressionSpecification = ['boolean', ['feature-state', 'seleccionado'], false]
 const emphasised: ExpressionSpecification = [
   'any',
   ['boolean', ['feature-state', 'seleccionado'], false],
@@ -144,6 +151,64 @@ export function onielLayers(): LayerSpecification[] {
         'text-max-angle': 30,
       },
       paint: { 'text-color': '#6B7470', 'text-halo-color': PAPEL, 'text-halo-width': 1.6 },
+    },
+    // Anotaciones con geometría propia (los proyectos): en tinta y sin color, bajo la vía. Línea de
+    // puntos lo que solo existe sobre el papel; trazos largos lo que está en obras. La selección las
+    // tiñe de azul, como a la vía.
+    {
+      id: LAYER.annotationsHalo,
+      type: 'line',
+      source: SRC.annotations,
+      paint: {
+        'line-color': AZUL,
+        'line-width': ['interpolate', ['linear'], ['zoom'], 5, 10, 10, 18],
+        'line-opacity': ['case', seleccionado, 0.16, 0],
+      },
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+    },
+    {
+      id: LAYER.annotationsDots,
+      type: 'line',
+      source: SRC.annotations,
+      filter: ['==', ['get', 'dibujo'], 'puntos'],
+      paint: {
+        'line-color': ['case', seleccionado, AZUL, TINTA],
+        'line-width': ['interpolate', ['linear'], ['zoom'], 5, 2.6, 12, 4.2],
+        'line-dasharray': [0.01, 2],
+      },
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+    },
+    {
+      id: LAYER.annotationsDashes,
+      type: 'line',
+      source: SRC.annotations,
+      filter: ['==', ['get', 'dibujo'], 'trazos'],
+      paint: {
+        'line-color': ['case', seleccionado, AZUL, TINTA],
+        'line-width': ['interpolate', ['linear'], ['zoom'], 5, 2, 12, 3.4],
+        'line-dasharray': [3.2, 2],
+      },
+    },
+    {
+      id: LAYER.annotationLabels,
+      type: 'symbol',
+      source: SRC.annotations,
+      minzoom: 6.5,
+      layout: {
+        'symbol-placement': 'line',
+        'text-field': ['get', 'name'],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': 10.5,
+        'text-max-angle': 30,
+        'text-offset': [0, -0.9],
+      },
+      paint: { 'text-color': '#4B5551', 'text-halo-color': PAPEL, 'text-halo-width': 1.6 },
+    },
+    {
+      id: LAYER.annotationsHit,
+      type: 'line',
+      source: SRC.annotations,
+      paint: { 'line-color': TINTA, 'line-width': 20, 'line-opacity': 0 },
     },
     {
       id: LAYER.segmentsHalo,

@@ -88,8 +88,8 @@ async def import_annotations(
                     """
                     INSERT INTO annotations (id, kind, status, line_id, from_node_id, to_node_id,
                         node_id, geometry, start_date, expected_end_date, expected_end_text,
-                        ended_on, title, reason, note, source_ids, checked_on)
-                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+                        ended_on, title, reason, note, source_ids, checked_on, milestones)
+                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
                     """,
                     a.id,
                     a.kind,
@@ -108,6 +108,7 @@ async def import_annotations(
                     a.note,
                     a.source_ids,
                     a.checked_on,
+                    [m.model_dump() for m in a.milestones],
                 )
         stats: dict[str, Any] = {
             "annotations": len(annotations),

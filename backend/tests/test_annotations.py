@@ -53,8 +53,8 @@ def spec(**changes: Any) -> AnnotationSpec:
 
 
 def test_the_curated_file_loads_and_every_entry_has_source_and_check_date() -> None:
-    interruptions = load_annotations(ANNOTATIONS)
-    assert {i.id for i in interruptions if i.kind == "interrupcion"} >= {
+    interruptions = [a for a in load_annotations(ANNOTATIONS) if a.kind == "interrupcion"]
+    assert {i.id for i in interruptions} >= {
         "lav-madrid-andalucia-2026-10-28",
         "convencional-obras-autopista-ferroviaria-2026-09-06",
     }
@@ -298,3 +298,100 @@ def test_a_new_kind_only_needs_its_declaration() -> None:
 def test_a_node_annotation_must_point_to_a_loaded_node() -> None:
     (problem,) = check_annotations([toy(geometry=None, node_id="z")], LINE_NODES, SOURCE_URLS)
     assert problem == "el juguete variante apunta al nodo z, que no está en ninguna línea cargada"
+
+
+def project(**changes: Any) -> AnnotationSpec:
+    base: dict[str, Any] = {
+        "id": "enlace",
+        "kind": "proyecto",
+        "status": "en_estudio",
+        "geometry": LINE,
+        "title": "Enlace de prueba",
+        "reason": "Une dos líneas de prueba.",
+        "milestones": [
+            {"date": "2022", "text": "Se licita el estudio.", "source_id": "aviso"},
+            {"date": "2025-03", "text": "Se anuncia.", "source_id": "aviso"},
+            {"date": "2026-01-08", "text": "Empieza el estudio.", "source_id": "aviso"},
+        ],
+        "source_ids": ["aviso"],
+        "checked_on": "2026-03-10",
+    }
+    return AnnotationSpec.model_validate({**base, **changes})
+
+
+def test_the_project_kind_declares_its_statuses_and_admits_every_scope() -> None:
+    kind = ANNOTATION_KINDS["proyecto"]
+    assert kind.statuses == (
+        "en_estudio",
+        "en_proyecto",
+        "licitado",
+        "en_obras",
+        "parado",
+        "sin_ejecutar",
+        "en_servicio",
+    )
+    assert set(kind.scopes) == {"tramo", "nodo", "geometria"} and not kind.cuts_service
+    sketch = project()
+    assert sketch.scope == "geometria" and sketch.label == "el proyecto enlace"
+    # sin fecha de inicio, un proyecto consta desde siempre y hasta que entra en servicio
+    assert sketch.active_on(dt.date(2000, 1, 1))
+    on_line = project(geometry=None, line_id="linea", from_node="a", to_node="c", status="en_obras")
+    assert check_annotations([sketch, on_line], LINE_NODES, SOURCE_URLS) == []
+    opened = project(status="en_servicio", ended_on="2026-03-01")
+    assert not opened.active_on(dt.date(2026, 3, 1))
+
+
+@pytest.mark.parametrize(
+    ("changes", "message"),
+    [
+        ({"status": "vigente"}, "un estado que su tipo no admite, vigente"),
+        ({"title": None}, "no tiene title, que su tipo exige"),
+        ({"reason": None}, "no tiene reason, que su tipo exige"),
+        ({"status": "en_servicio"}, "el estado en_servicio no encaja con ended_on"),
+        (
+            {"geometry": {"type": "LineString", "coordinates": [[40.4, -3.7], [39.9, -4.0]]}},
+            "puntos fuera de la península",
+        ),
+        ({"geometry": {"type": "LineString", "coordinates": [["a", "b"]]}}, "mal formadas"),
+    ],
+)
+def test_a_project_with_inconsistent_fields_is_rejected(
+    changes: dict[str, Any], message: str
+) -> None:
+    with pytest.raises(ValidationError, match=message):
+        project(**changes)
+
+
+@pytest.mark.parametrize(
+    ("milestones", "message"),
+    [
+        ([{"date": "primavera de 2010", "text": "x", "source_id": "aviso"}], "date"),
+        ([{"date": "2010-13", "text": "x", "source_id": "aviso"}], "date"),
+        ([{"date": "2010", "text": "", "source_id": "aviso"}], "text"),
+        ([{"date": "2010", "text": "x", "source_id": "otra"}], "cita la fuente otra"),
+        ([{"date": "2026-04", "text": "x", "source_id": "aviso"}], "posterior a la comprobación"),
+        (
+            [
+                {"date": "2025-03", "text": "x", "source_id": "aviso"},
+                {"date": "2022", "text": "y", "source_id": "aviso"},
+            ],
+            "del más antiguo al más reciente",
+        ),
+    ],
+)
+def test_milestones_need_a_known_date_a_text_and_one_of_the_sources(
+    milestones: list[dict[str, str]], message: str
+) -> None:
+    with pytest.raises(ValidationError, match=message):
+        project(milestones=milestones)
+
+
+def test_every_project_in_the_curated_file_has_dated_milestones_and_registered_sources() -> None:
+    projects = [a for a in load_annotations(ANNOTATIONS) if a.kind == "proyecto"]
+    assert len(projects) >= 4
+    sources = {s.id: s for s in load_sources(SOURCES)}
+    for p in projects:
+        assert p.title and p.reason and p.milestones, p.id
+        for source_id in p.source_ids:
+            source = sources[source_id]
+            assert source.url and source.license and source.retrieved_on, source_id

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 
 import type { AnnotationOut, LineSummary } from '../data/types'
-import { capasDe } from '../app/annotationLayers'
+import { leyendaDe } from '../app/annotationLayers'
 import { lineKind } from '../app/state'
 import type { Trazo } from '../map/layers'
 
@@ -76,15 +76,12 @@ export function Legend({ closed, annotations, lines, singleTrack, highlight, onH
       {singleTrack && tipo('via-unica', 'Vía única')}
       <span className="muestra conexion" aria-hidden="true" />
       <span>Conexión no cargada todavía</span>
-      {capasDe(annotations).map(
-        ({ kind, leyenda }) =>
-          leyenda && (
-            <Fragment key={kind}>
-              <span className={`muestra ${leyenda.clase}`} aria-hidden="true" data-testid={leyenda.testId} />
-              <span>{leyenda.texto}</span>
-            </Fragment>
-          ),
-      )}
+      {leyendaDe(annotations).map((entrada) => (
+        <Fragment key={entrada.testId}>
+          <span className={`muestra ${entrada.clase}`} aria-hidden="true" data-testid={entrada.testId} />
+          <span>{entrada.texto}</span>
+        </Fragment>
+      ))}
       <span className="muestra seleccion" aria-hidden="true" />
       <span>Tramo seleccionado</span>
       {closed && (

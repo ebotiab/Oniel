@@ -178,12 +178,17 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
               {formatKm(s.length_km)} km{memberships.length > 1 && lineOf(s.line_id) ? ` · ${lineShortLabel(lineOf(s.line_id)!)}` : ''}
               {s.tracks === 1 ? ' · vía única' : ''}
             </span>
-            {capasDe(annotated.get(s.id)).map(({ kind, ficha }) => (
-              <Fragment key={kind}>
-                {' '}
-                <span className={`senal ${ficha.senal.clase}`}>{ficha.senal.texto}</span>
-              </Fragment>
-            ))}
+            {capasDe(annotated.get(s.id))
+              .filter((capa) => capa.trazo)
+              .map(({ kind, ficha }) => {
+                const senal = ficha.senal(annotated.get(s.id)!.find((a) => a.kind === kind)!)
+                return (
+                  <Fragment key={kind}>
+                    {' '}
+                    <span className={`senal ${senal.clase}`}>{senal.texto}</span>
+                  </Fragment>
+                )
+              })}
           </li>
         ))}
         {connections.map((c) => (

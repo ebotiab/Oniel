@@ -8,6 +8,7 @@ import type { Trazo } from '../map/layers'
 import type { RecorridosEnMapa } from '../map/MapView'
 import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
+import { AnnotationDetail } from '../panel/AnnotationDetail'
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
@@ -204,6 +205,11 @@ export default function App() {
   }, [loaded, near, lineId])
   const lineDetail = lineId ? details[lineId] : undefined
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
+  // Una anotación con ficha propia (un proyecto). Se busca entre todas: su ficha vale aunque ya no esté vigente.
+  const annotation = useMemo(
+    () => (selection?.type === 'anotacion' ? (network?.annotations.find((a) => a.id === selection.id && a.kind === selection.kind) ?? null) : null),
+    [network, selection],
+  )
   // Anotaciones vigentes hoy: cada tipo se marca en el mapa y en el esquema y se explica en el panel
   // como diga su capa (annotationLayers.ts). Las interrupciones, además, cortan recorridos y avisan
   // en la simulación.
@@ -321,6 +327,8 @@ export default function App() {
         onBack={backToLine}
       />
     )
+  else if (annotation)
+    panel = <AnnotationDetail key={annotation.id} annotation={annotation} onSelectSegment={(id) => select({ type: 'tramo', id })} onBack={() => showLine(null)} />
   else if (!lineId)
     panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} />
   else
@@ -357,13 +365,14 @@ export default function App() {
           hoverId={hoverId}
           closedSegmentId={closedSegmentId}
           annotated={annotated}
+          annotations={annotations}
           highlight={highlight}
           frame={frame}
           onSelect={comparador ? pickOnMap : select}
           onHover={setHoverId}
           onNearLines={wantNear}
           padding={padding}
-          lineId={selection ? null : lineId}
+          lineId={selection ? null : annotation ? null : lineId}
           recorridos={recorridosEnMapa}
         />
       </Suspense>

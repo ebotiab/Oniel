@@ -536,6 +536,53 @@
   margin-top: 6px;
 }
 
+/* Proyecto: el mismo bloque, con el filete gris del contexto. No es una señal: no lleva color. */
+.proyecto {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--papel-2);
+  border-left: 3px solid var(--tinta-3);
+}
+
+.proyecto .sobre {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-bottom: 0;
+}
+
+.proyecto .texto {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.proyecto .suave {
+  margin-top: 6px;
+}
+
+/* Hitos de una anotación: la fecha en una columna estrecha y, al lado, qué pasó y según quién. */
+.hitos {
+  list-style: none;
+  margin: 6px 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+.hitos li {
+  display: grid;
+  grid-template-columns: 9.5em 1fr;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.hito-fecha {
+  color: var(--tinta-2);
+}
+
 /* Una línea de texto junto a una lista de trenes o un formulario: el horario existe, los trenes no circulan */
 .nota-horario {
   margin: 8px 0 6px;
@@ -758,6 +805,15 @@
 
 .muestra.sin-circulacion {
   border-top: 3px solid var(--senal-roja);
+}
+
+/* Proyectos: en tinta y sin color. Puntos, lo que solo existe sobre el papel; trazos, lo que está en obras. */
+.muestra.de-proyecto {
+  border-top: 3px dotted var(--tinta);
+}
+
+.muestra.de-proyecto-en-obras {
+  border-top: 3px dashed var(--tinta);
 }
 
 /* Leyenda de los trazos dentro del panel (móvil): un renglón que salta de línea si no cabe. */
