@@ -67,6 +67,17 @@ La importación es repetible: crea el esquema si falta, sustituye los servicios 
 
 `ONIEL_CORS_ORIGINS` debe incluir el dominio del visor (`["https://oniel.vercel.app"]` por defecto); los dominios de vista previa `*.vercel.app` se aceptan por expresión regular.
 
+## Refresco automático del GTFS
+
+`.github/workflows/gtfs.yml` descarga cada lunes el GTFS de Renfe y, si el horario ha cambiado, abre una PR con el fichero nuevo, `sources.json` y la instantánea regenerada. Qué hace paso a paso, cómo compara y qué queda manual (Ouigo) está en `docs/datos.md`, «Refresco de los horarios». Aquí va lo que toca al despliegue.
+
+- **No publica nada.** El flujo abre la PR y lanza el CI sobre su rama; no fusiona. Al fusionarla una persona, Render reimporta la base (el commit toca `backend/`) y Vercel publica el visor con la instantánea nueva, como con cualquier PR de datos.
+- **Permisos.** Usa solo el `GITHUB_TOKEN` de la ejecución, con `contents: write` (subir la rama), `pull-requests: write` (abrir la PR), `issues: write` (las etiquetas y las incidencias de aviso) y `actions: write` (lanzar el CI). No necesita ningún secreto.
+- **Ajuste del repositorio.** Para que un flujo pueda abrir una PR hace falta marcar Settings → Actions → General → Workflow permissions → «Allow GitHub Actions to create and approve pull requests». Sin él, el paso «Abrir la PR» falla con «GitHub Actions is not permitted to create or approve pull requests». El flujo no aprueba ninguna PR.
+- **El CI de esa PR.** GitHub no ejecuta los flujos de `pull_request` cuando la PR la abre otro flujo con su token. Por eso `ci.yml` admite `workflow_dispatch` y el refresco lo lanza sobre la rama; las comprobaciones `Backend` y `Frontend` aparecen en la PR porque van asociadas al commit.
+- **Base de datos.** El flujo importa en un PostgreSQL de servicio que desaparece al terminar, igual que el CI. No toca la base de Render.
+- **Lo que crece.** Cada fichero de Renfe declarado alarga `import all` (unos 6 s en local; bastante más en el plan gratuito de Render, donde solo se ejecuta cuando cambia el commit desplegado). Con una PR por semana conviene retirar de vez en cuando los ficheros antiguos que no se quieran comparar.
+
 ## Logfire
 
 Proyecto `oniel` en la organización personal `ebotiab` (región US): https://logfire-us.pydantic.dev/ebotiab/oniel

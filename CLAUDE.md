@@ -19,7 +19,7 @@ Interfaz, documentación, comentarios del código, nombres y mensajes de las pru
 - [docs/simulacion.md](docs/simulacion.md): método de la simulación, recorrido alternativo, caso comprobado a mano y límites conocidos.
 - [docs/despliegue.md](docs/despliegue.md): Vercel (visor), Render (API y PostgreSQL), Logfire y base de datos local.
 - [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): el orden de las tareas pendientes y los principios de arquitectura; el brief de cada tarea está en su incidencia de GitHub (`gh issue view <número>`). Cada sesión nueva coge la siguiente cuyas dependencias estén cerradas.
-- `.github/workflows/ci.yml`: lo que comprueba el CI en cada PR y en `main`. `.github/workflows/recordatorio-interrupciones.yml`: comprueba cada día si toca revisar las interrupciones y abre una incidencia. `.vscode/`: intérprete `backend/.venv`, Ruff como formateador y pytest desde `backend/`.
+- `.github/workflows/ci.yml`: lo que comprueba el CI en cada PR y en `main`. `.github/workflows/recordatorio-interrupciones.yml`: comprueba cada día si toca revisar las interrupciones y abre una incidencia. `.github/workflows/gtfs.yml`: descarga cada lunes el GTFS de Renfe y, si el horario cambió, abre una PR con el fichero nuevo y la instantánea (`docs/datos.md`, «Refresco de los horarios»); no fusiona nada. `.vscode/`: intérprete `backend/.venv`, Ruff como formateador y pytest desde `backend/`.
 
 ## Arrancar y comprobar
 
