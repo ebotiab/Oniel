@@ -351,6 +351,15 @@ export interface HistoryPoint {
   date: string
   trains: number
   products: { product: string; trains: number }[]
+  /** Frente al fichero anterior de su fuente, contados los dos en los mismos días. Falta en el primero. */
+  change?: {
+    previous_dataset_id: string
+    previous_retrieved_on: string
+    date_from: string
+    date_to: string
+    trains_before: number
+    trains_after: number
+  } | null
 }
 
 /** Un punto por fichero de horarios importado, del descargado antes al más reciente. */
