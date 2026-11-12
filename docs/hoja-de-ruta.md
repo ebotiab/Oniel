@@ -67,29 +67,35 @@ El orden es orientativo. La tarea de arquitectura que queda (#19) desbloquea las
 
 Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: hoy, la clave de los símbolos del esquema de línea.
 
-## Proteger `main` exigiendo el CI
+## `main` protegida: solo entra por PR y con el CI en verde
 
-Es una decisión del usuario; no está activado. El repositorio es público, así que la protección de ramas está disponible en el plan gratuito. Las comprobaciones se llaman como los trabajos de `.github/workflows/ci.yml`: `Backend` y `Frontend`. Tienen que haberse ejecutado al menos una vez para aparecer en la lista de la web; la API acepta los nombres directamente.
+Activado el 12 de noviembre de 2026 con la protección clásica de rama, por `gh api`. El repositorio es público, así que está disponible en el plan gratuito. Lo que exige:
 
-Desde la web: Settings → Branches → Add branch protection rule → nombre `main` → «Require status checks to pass before merging» → añadir `Backend` y `Frontend` → Create. O con un conjunto de reglas: Settings → Rules → Rulesets → New branch ruleset → objetivo `main` → «Require status checks to pass» con las dos comprobaciones → Active.
+- **Comprobaciones obligatorias** `Backend` y `Frontend`, los `name:` de los trabajos de `.github/workflows/ci.yml` (con `app_id` 15368, el de GitHub Actions). Si se renombra un trabajo hay que cambiarlo también en la regla, o ninguna PR podrá fusionarse.
+- **Pull request obligatoria**, sin aprobaciones (`required_approving_review_count: 0`): no se puede hacer push directo a `main`.
+- **Se aplica también a los administradores** (`enforce_admins: true`). Es lo que hace que la regla valga para las sesiones, que actúan con el usuario del propietario: sin esto, `gh pr merge` fusionaría igual con el CI en rojo.
+- **Sin exigir la rama al día** (`strict: false`): una PR con el CI en verde se fusiona aunque `main` haya avanzado desde que se abrió. Con varias sesiones en paralelo, `true` añadiría una vuelta de CI por PR.
+- Sin force push ni borrado de `main`.
 
-Con `gh api` (protección clásica):
+Para ver la regla:
+
+```bash
+gh api repos/ebotiab/Oniel/branches/main/protection
+```
+
+Para cambiarla, repetir el `PUT` con la configuración completa, porque la API sustituye toda la regla:
 
 ```bash
 gh api -X PUT repos/ebotiab/Oniel/branches/main/protection --input - <<'JSON'
 {
-  "required_status_checks": { "strict": false, "checks": [{ "context": "Backend" }, { "context": "Frontend" }] },
-  "enforce_admins": false,
-  "required_pull_request_reviews": null,
-  "restrictions": null
+  "required_status_checks": { "strict": false, "checks": [{ "context": "Backend", "app_id": 15368 }, { "context": "Frontend", "app_id": 15368 }] },
+  "enforce_admins": true,
+  "required_pull_request_reviews": { "required_approving_review_count": 0 },
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
 }
 JSON
 ```
 
-Qué significa cada opción:
-
-- `strict: false` permite fusionar una PR cuyo CI está en verde aunque `main` haya avanzado desde que se creó. Con `true`, cada PR tendría que actualizarse (y volver a pasar el CI) antes de fusionarse; con varias sesiones en paralelo eso añade una vuelta por PR. Se puede empezar en `false`.
-- `required_pull_request_reviews: null` no exige PR: un push directo a `main` seguiría siendo posible. Para exigir PR sin exigir aprobaciones (una persona sola con sesiones aisladas), sustituirlo por `{ "required_approving_review_count": 0 }`.
-- `enforce_admins: false` deja al administrador saltarse la regla en caso de urgencia; `true` la aplica también a él.
-
-Para ver el estado o retirarla: `gh api repos/ebotiab/Oniel/branches/main/protection` y `gh api -X DELETE repos/ebotiab/Oniel/branches/main/protection`.
+Para retirarla del todo: `gh api -X DELETE repos/ebotiab/Oniel/branches/main/protection`. Desde la web está en Settings → Branches → regla `main`. Si hace falta fusionar algo con el CI en rojo (un arreglo del propio CI, por ejemplo), lo más limpio es arreglar el CI en la misma PR; retirar la protección y volverla a poner es el último recurso.
