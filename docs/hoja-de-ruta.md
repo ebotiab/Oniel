@@ -65,7 +65,7 @@ El orden es orientativo. No quedan tareas de arquitectura pendientes: las que si
 
 ## Pendientes menores
 
-Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: hoy, la clave de los símbolos del esquema de línea.
+Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: hoy no queda ninguno sin marcar.
 
 ## `main` protegida: solo entra por PR y con el CI en verde
 
