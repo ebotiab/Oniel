@@ -1102,11 +1102,14 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
             {"product": "ALVIA", "trains": 14},
             {"product": "AVLO", "trains": 10},
         ],
+        # con un solo fichero de la fuente no hay anterior con el que comparar
+        "change": None,
     }
     # el fichero de Ouigo empieza en junio: su día de referencia es otro, y se cuenta en él
     assert (ouigo["dataset_id"], ouigo["operator_id"]) == (OUIGO_DATASET_ID, "ouigo")
     assert (ouigo["retrieved_on"], ouigo["date"]) == ("2026-11-12", "2026-07-17")
     assert ouigo["trains"] == 14 and ouigo["products"] == [{"product": "Ouigo", "trains": 14}]
+    assert ouigo["change"] is None
     # cada punto cuenta los mismos trenes que la ficha del tramo ese día
     for point in body["points"]:
         services = (
