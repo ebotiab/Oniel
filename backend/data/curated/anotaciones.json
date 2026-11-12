@@ -40,6 +40,25 @@
         "el-estrecho-digital-corte-algeciras"
       ],
       "checked_on": "2026-11-10"
+    },
+    {
+      "id": "lav-madrid-andalucia-2026-01-19",
+      "kind": "interrupcion",
+      "status": "terminada",
+      "line_id": "lav-madrid-sevilla",
+      "from_node": "villanueva-de-cordoba",
+      "to_node": "cordoba",
+      "start_date": "2026-01-19",
+      "expected_end_date": null,
+      "expected_end_text": null,
+      "ended_on": "2026-02-17",
+      "reason": "Circulación suspendida tras el accidente ferroviario del 18 de enero de 2026 en Adamuz (Córdoba).",
+      "note": "El accidente fue a las 19.45 h del 18 de enero de 2026 y el día 19 estuvo suspendida toda la alta velocidad entre Madrid y Andalucía, según Adif. Desde el 20 de enero, según Renfe, el trayecto entre Villanueva de Córdoba y Córdoba se hizo por carretera, hasta la reapertura del 17 de febrero de 2026.",
+      "source_ids": [
+        "adif-comunicado-adamuz-2026-01-19",
+        "renfe-nota-servicios-malaga-2026-04"
+      ],
+      "checked_on": "2026-11-12"
     }
   ]
 }

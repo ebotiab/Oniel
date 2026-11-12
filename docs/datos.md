@@ -20,6 +20,8 @@
 | `adif-aviso-obras-autopista-ferroviaria` | Aviso de la interrupción por obras entre Córdoba y Santa Cruz de Mudela | Adif | Consulta pública | 2026-11-10 |
 | `adif-salidas-y-llegadas` | Paneles de salidas y llegadas de cuatro estaciones: hasta dónde llegan los trenes a cada lado de una interrupción | Adif | Consulta pública | 2026-11-10 |
 | `renfe-nota-md-jaen-madrid-2026-09` | Inicio de las obras el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel | Renfe | Consulta pública | 2026-11-10 |
+| `adif-comunicado-adamuz-2026-01-19` | Accidente del 18 de enero de 2026 en Adamuz y suspensión de la alta velocidad Madrid–Andalucía el día 19 | Adif | Consulta pública | 2026-11-12 |
+| `renfe-nota-servicios-malaga-2026-04` | Trayecto por carretera entre Villanueva de Córdoba y Córdoba desde el 20 de enero de 2026 y reapertura del 17 de febrero de 2026 | Renfe | Consulta pública | 2026-11-12 |
 | `el-estrecho-digital-corte-algeciras` | Previsión de fin de las obras (otoño de 2027) y límite del corte de la vía en Venta de Cárdenas | El Estrecho Digital | © del medio; se cita el dato | 2026-11-10 |
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
 | `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
@@ -156,7 +158,7 @@ La API las sirve en `GET /api/annotations`, con `?kind=` (solo las de ese tipo; 
 
 ## Interrupciones del servicio
 
-Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/anotaciones.json`, una entrada de tipo `interrupcion` por interrupción (véase «Anotaciones de red»). El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo.
+Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/anotaciones.json`, una entrada de tipo `interrupcion` por interrupción (véase «Anotaciones de red»). El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo. Las que ya terminaron no se dibujan: quedan en el detalle de cada tramo al que afectaron, como «Interrupciones anteriores en este tramo».
 
 | Campo | Qué es |
 |---|---|
@@ -185,14 +187,22 @@ Comprobadas el 10 de noviembre de 2026. Lo que decía cada fuente ese día está
 | Alta velocidad Madrid – Sevilla | Bifurcación La Sagra – Córdoba (6 tramos, 290,9 km) | 28 de octubre de 2026 | Sin fecha | Suspensión de la circulación tras el accidente del 28 de octubre de 2026 en el entorno de Urda | `adif-estado-de-la-red` |
 | Convencional Madrid – Alcázar – Córdoba | Almuradiel-Viso del Marqués – Alcolea de Córdoba (9 tramos, 174,3 km) | 6 de septiembre de 2026 | Otoño de 2027 | Obras de adaptación a la autopista ferroviaria Algeciras–Madrid–Zaragoza | `adif-aviso-obras-autopista-ferroviaria` |
 
+Terminadas, registradas el 12 de noviembre de 2026 (lo consultado ese día está en `backend/data/raw/interrupciones/consultas_2026-11-12.json`):
+
+| Línea | De – a | Desde | Reanudación | Motivo | Fuente principal |
+|---|---|---|---|---|---|
+| Alta velocidad Madrid – Sevilla | Villanueva de Córdoba – Córdoba (2 tramos, 58,4 km) | 19 de enero de 2026 | 17 de febrero de 2026 | Suspensión de la circulación tras el accidente del 18 de enero de 2026 en Adamuz | `adif-comunicado-adamuz-2026-01-19` |
+
 Cómo se fijaron los extremos:
+
+- **Alta velocidad, enero y febrero de 2026.** La nota de Adif del 19 de enero de 2026 sitúa el accidente a las 19.45 h del día 18 y da por suspendida, al menos durante todo el día 19, la alta velocidad entre Madrid y Andalucía. Una nota de Renfe del 23 de abril de 2026 dice que el trayecto entre Villanueva de Córdoba y Córdoba se hizo por carretera desde el 20 de enero hasta la reapertura del servicio en Adamuz, el 17 de febrero. Se registra el trozo que estuvo sin trenes todo el periodo, entre esas dos estaciones, desde el 19 de enero, el primer día completo sin circulación; que ese día la suspensión alcanzó a toda la línea lo dice la nota de la entrada. La reapertura no se ha encontrado en una nota de Adif: la fecha es la de Renfe.
 
 - **Alta velocidad.** La página de estado de la red de Adif mantiene el aviso de que la circulación en la línea Madrid–Andalucía sigue interrumpida desde el accidente y da por abiertos los tramos Madrid–Toledo y Málaga–Sevilla. Los paneles de salidas de Ciudad Real dan por suspendidos todos los trenes de alta velocidad, también los que van a Puertollano, y en los de Córdoba no sale ninguno hacia Madrid, pero sí a Sevilla, Málaga y Granada. En Oniel eso deja abiertos Madrid – Bifurcación La Sagra y Córdoba – Sevilla, y sin circulación los seis tramos entre La Sagra y Córdoba. No hay fecha de reanudación: la nota de la entrada recoge la estimación del Ministerio de Transportes del 3 de noviembre de 2026, condicionada a una autorización judicial.
 - **Línea convencional.** Las fuentes dan tres límites distintos por el norte. El aviso de Adif habla de servicio interrumpido entre Córdoba y Santa Cruz de Mudela; la información de Adif en prensa sitúa el corte de la vía entre Venta de Cárdenas y Algeciras; la nota de Renfe y los paneles de Santa Cruz de Mudela y Jaén dicen que los Media Distancia Madrid–Jaén hacen por carretera el trayecto entre Almuradiel y Jaén. Se registra lo que ve el viajero: los trenes llegan a Almuradiel-Viso del Marqués y no pasan de ahí. Por el sur, los paneles de Córdoba muestran trenes de Proximidad hasta Alcolea de Córdoba y el recorrido Córdoba–Jaén por carretera, así que el extremo es Alcolea. La fecha de inicio es la de la nota de Renfe; la previsión de fin es de Adif, recogida por la prensa, y no es un compromiso.
 
 Límites de lo registrado:
 
-- Entre Jaén y Córdoba ya se viajaba por carretera antes de las obras, por los daños de un temporal de enero de 2026, según la nota de Renfe. La prensa da fechas distintas para ese corte y un restablecimiento intermedio, y no se encontró una fecha en una fuente oficial: no tiene entrada propia, y los tramos entre Espelúy y Alcolea figuran sin circulación desde el 6 de septiembre de 2026 aunque no la tenían desde antes.
+- Entre Jaén y Córdoba ya se viajaba por carretera antes de las obras, por los daños de un temporal de enero de 2026, según la nota de Renfe. La prensa da fechas distintas para ese corte y un restablecimiento intermedio, y no se encontró una fecha en una fuente oficial (una nota de Renfe de marzo de 2026 sobre los horarios de ese servicio por carretera tampoco la da): no tiene entrada propia, y los tramos entre Espelúy y Alcolea figuran sin circulación desde el 6 de septiembre de 2026 aunque no la tenían desde antes.
 - Los 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía del GTFS (válidos del 8 al 15 de noviembre de 2026) no figuran en los paneles de Ciudad Real del 10 de noviembre. Sus pasos por la alta velocidad entre Ciudad Real y Córdoba llevan la nota de la interrupción; los de la convencional entre Madrid y Manzanares y los de la línea de Manzanares a Ciudad Real no, porque esos tramos no están interrumpidos. Oniel no sabe si circulan.
 - Una interrupción es de todo el servicio entre dos nodos y por días completos. No se registran reducciones de frecuencia, limitaciones de velocidad ni cortes de unas horas.
 
@@ -210,7 +220,7 @@ Lo recuerda un flujo de GitHub Actions, `.github/workflows/recordatorio-interrup
 4. `uv run oniel-data validate`, `uv run oniel-data import all` (regenera la instantánea) y las pruebas. La tabla de arriba se pone al día en la misma PR.
 5. Al fusionar, Render reimporta la base. La instantánea va dentro del visor, así que hay que publicarlo (`docs/despliegue.md`): hasta entonces, quien entre con la API dormida ve la interrupción anterior.
 
-Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
+Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes y la de enero y febrero ya había terminado. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
 
 ## Conjuntos de datos
 

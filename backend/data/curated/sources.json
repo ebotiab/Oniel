@@ -234,6 +234,30 @@
       "file": "raw/interrupciones/consultas_2026-11-10.json"
     },
     {
+      "id": "adif-comunicado-adamuz-2026-01-19",
+      "name": "Nota de prensa «Comunicado de prensa sobre el accidente ferroviario ocurrido en Adamuz»",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/comunicado-de-prensa-sobre-el-accidente-ferroviario-ocurrido-en-adamuz",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Accidente del 18 de enero de 2026 en Adamuz (Córdoba) y suspensión de la alta velocidad entre Madrid y Andalucía el 19 de enero de 2026.",
+      "notes": "Publicada el 19 de enero de 2026. No da fecha de reanudación.",
+      "file": "raw/interrupciones/consultas_2026-11-12.json"
+    },
+    {
+      "id": "renfe-nota-servicios-malaga-2026-04",
+      "name": "Nota de prensa «Renfe restablece los servicios directos de alta velocidad con origen y destino Málaga desde el 30 de abril»",
+      "publisher": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/04/renfe-restablece-servicios-av-malaga",
+      "license": "Consulta pública; © Renfe",
+      "license_url": null,
+      "retrieved_on": "2026-11-12",
+      "coverage": "Trayecto por carretera entre Villanueva de Córdoba y Córdoba desde el 20 de enero de 2026 y reapertura de la alta velocidad en Adamuz el 17 de febrero de 2026.",
+      "notes": "Publicada el 23 de abril de 2026. Da esas fechas al hacer balance de los planes alternativos por carretera.",
+      "file": "raw/interrupciones/consultas_2026-11-12.json"
+    },
+    {
       "id": "boe-reglamento-circulacion-ferroviaria",
       "name": "Reglamento de Circulación Ferroviaria (Real Decreto 664/2015, de 17 de julio), texto consolidado",
       "publisher": "Agencia Estatal Boletín Oficial del Estado",

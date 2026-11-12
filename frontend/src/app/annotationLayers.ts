@@ -45,6 +45,8 @@ export interface AnnotationLayer {
     testId: string
     /** Renglón de fechas: desde cuándo y lo que se sabe del final. */
     fechas: (a: AnnotationOut) => string
+    /** Cómo se enseña una que ya terminó, en el detalle del tramo: sin color de señal. Sin esto, no se enseña. */
+    pasada?: { rotulo: string; senal: Senal; testId: string }
   }
   /** Notas en las listas: junto a una línea de la red y en la cabecera de la línea. */
   lista: {
@@ -83,6 +85,7 @@ const interrupcion: AnnotationLayer = {
     senal: SIN_CIRCULACION,
     testId: 'interrupcion',
     fechas: (a) => `${a.start_date ? `Desde el ${formatDateLong(a.start_date)}. ` : ''}${endLabel(a)}`,
+    pasada: { rotulo: 'Interrupción anterior', senal: { clase: 'gris', texto: 'interrupción terminada' }, testId: 'interrupcion-anterior' },
   },
   lista: {
     senal: { clase: 'roja', texto: 'un tramo sin circulación' },

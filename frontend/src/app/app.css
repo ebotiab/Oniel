@@ -528,6 +528,15 @@
   border-left: 3px solid var(--senal-roja);
 }
 
+/* Una interrupción que ya terminó es un registro, no una señal: sin rojo */
+.interrupcion.pasada {
+  border-left-color: var(--regla);
+}
+
+.anteriores {
+  margin-top: 14px;
+}
+
 .interrupcion .sobre {
   display: flex;
   flex-wrap: wrap;

@@ -18,12 +18,14 @@ interface Props {
   referenceDate: string | null
   /** Anotaciones de red vigentes hoy en este tramo. */
   annotations: AnnotationOut[]
+  /** Interrupciones ya terminadas que afectaron a este tramo: van en el detalle, como registro. */
+  past?: AnnotationOut[]
   onSimulate: () => void
   onSelectNode: (id: string) => void
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, sources, operators, referenceDate, annotations, onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
@@ -120,6 +122,14 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
+        {past.length > 0 && (
+          <section className="anteriores" data-testid="interrupciones-anteriores">
+            <p className="sobre">Interrupciones anteriores en este tramo</p>
+            {past.map((a) => (
+              <AnnotationNotice key={a.id} annotation={a} pasada />
+            ))}
+          </section>
+        )}
       </Plegable>
 
       {annotations.map((a) => (

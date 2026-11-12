@@ -83,6 +83,7 @@ Interrupciones del servicio (decidido el 10 de noviembre de 2026)
 - La leyenda añade «Sin circulación hoy» con una muestra roja fina, solo cuando hay alguna interrupción vigente. En el móvil la leyenda del panel solo lleva los trazos: la interrupción la explica la línea de texto que va sobre el esquema.
 - En el panel, la interrupción es un bloque como el del contexto de un nodo, con el filete en rojo: la etiqueta «sin circulación» y los extremos, el motivo, desde cuándo y hasta cuándo se prevé, una nota opcional, las fuentes con enlace y la fecha de la última comprobación. Aparece en el tramo, en los nodos del corte y en el panel de cobertura.
 - Donde hay una lista de trenes o un formulario sobre un tramo interrumpido, basta una línea de texto con un filete rojo: «Horario publicado; sin circulación real desde el … (fuente).» Sobre el esquema de la línea, otra línea por interrupción dice qué está cortado, desde cuándo y según quién, y lleva al primer tramo.
+- Una interrupción que ya terminó es un registro, no una señal (12 de noviembre de 2026). No se dibuja en el mapa ni en el esquema y no aparece en las listas de «hoy». Queda en «Más detalle» de cada tramo al que afectó, bajo «Interrupciones anteriores en este tramo», con el mismo bloque que una vigente pero sin rojo: el filete en el gris de las reglas y la etiqueta «interrupción terminada» en gris.
 - Alineación a la izquierda en todo el texto. Sin mayúsculas sostenidas, sin etiquetas numeradas.
 
 Patrón de ficha (aplicado el 11 de noviembre de 2026 a tramo, nodo y línea)

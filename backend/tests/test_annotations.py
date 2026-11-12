@@ -67,6 +67,19 @@ def test_the_curated_file_loads_and_every_entry_has_source_and_check_date() -> N
             assert source.url and source.license and source.retrieved_on
 
 
+def test_the_curated_file_keeps_an_ended_interruption_as_a_record() -> None:
+    ended = [a for a in load_annotations(ANNOTATIONS) if a.ended_on is not None]
+    assert [a.id for a in ended] == ["lav-madrid-andalucia-2026-01-19"]
+    adamuz = ended[0]
+    assert (adamuz.from_node, adamuz.to_node) == ("villanueva-de-cordoba", "cordoba")
+    assert adamuz.status == "terminada"
+    # vigente desde el primer día completo sin trenes hasta la víspera de la reapertura
+    assert not adamuz.active_on(dt.date(2026, 1, 18))
+    assert adamuz.active_on(dt.date(2026, 1, 19))
+    assert adamuz.active_on(dt.date(2026, 2, 16))
+    assert not adamuz.active_on(dt.date(2026, 2, 17))
+
+
 def test_the_curated_file_fits_the_loaded_lines() -> None:
     report = validate_annotations(ANNOTATIONS, SOURCES, SPECS, DATA_DIR)
     assert report["problems"] == []

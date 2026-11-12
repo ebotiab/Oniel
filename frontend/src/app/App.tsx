@@ -18,7 +18,7 @@ import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
-import { activeAnnotations, bySegment, isInterruption } from './annotations'
+import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
 import { networkCount, parseHash, toHash, todayIso, type Comparador, type Route, type Selection } from './state'
@@ -234,6 +234,7 @@ export default function App() {
   const annotations = useMemo(() => activeAnnotations(network, today), [network, today])
   const annotated = useMemo(() => bySegment(annotations), [annotations])
   const interrupted = useMemo(() => bySegment(annotations.filter(isInterruption)), [annotations])
+  const pasadas = useMemo(() => bySegment(pastInterruptions(network, today)), [network, today])
   const referenceDate = coverage?.reference_date ?? null
 
   // Comparador de recorridos. Una estación de la URL que no existe cuenta como sin elegir.
@@ -323,6 +324,7 @@ export default function App() {
         operators={coverage?.operators ?? []}
         referenceDate={referenceDate}
         annotations={annotated.get(segment.id) ?? []}
+        past={pasadas.get(segment.id) ?? []}
         onSimulate={() => setRoute({ selection, simulacion: true })}
         onSelectNode={(id) => select({ type: 'nodo', id })}
         onBack={backToLine}
