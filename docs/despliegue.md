@@ -2,7 +2,7 @@
 
 ## Visor en Vercel
 
-Proyecto `oniel` en la cuenta personal de Vercel (ámbito `enrique-botia-barbera-s-projects`), conectado desde el 11 de noviembre de 2026 al repositorio `ebotiab/Oniel`, con directorio raíz `frontend` y rama de producción `main`. Lo demás está en `frontend/vercel.json`: el framework (Vite), la orden de compilación, la carpeta de salida, las cabeceras de caché y cuándo se salta una compilación.
+Proyecto `oniel` en la cuenta personal de Vercel (ámbito `enrique-botia-barbera-s-projects`), conectado desde el 11 de noviembre de 2026 al repositorio `ebotiab/Oniel`, con directorio raíz `frontend` y rama de producción `main`. Lo demás está en `frontend/vercel.json`: el framework (Vite), la orden de compilación, la carpeta de salida, las cabeceras de caché y cuándo se salta una compilación. La orden de compilación (`npm run build`) termina comprobando las hojas de estilo compiladas (`frontend/scripts/comprobar-css.mjs`): si a una le falta una llave o las reglas de base quedan anidadas, la compilación falla y ese despliegue no se publica. Se añadió el 12 de noviembre de 2026, después de que una llave sin cerrar dejara producción sin estilos entre las PR 75 y 82.
 
 ### Despliegue automático
 

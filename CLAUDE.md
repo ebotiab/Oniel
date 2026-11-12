@@ -26,7 +26,7 @@ Interfaz, documentación, comentarios del código, nombres y mensajes de las pru
 Los comandos están en el README y no se repiten aquí: «Arrancar desde cero» (Docker para PostgreSQL, uv y Node 20), «Pruebas» y «Comprobaciones». Antes de abrir una PR tiene que estar todo en verde, que es exactamente lo que ejecuta el CI:
 
 - Backend: `ruff format --check`, `ruff check`, `mypy` (estricto), `pyright` (modo `standard`, el mismo que Pylance), `pytest` con `ONIEL_TEST_DATABASE_URL` apuntando a una base `oniel_test`, y `oniel-data validate`.
-- Frontend: `npm run typecheck`, `npm run lint`, `npm run build` y Playwright con `ONIEL_E2E_STATIC=1` (la instantánea estática, sin servidor). Con la API local arrancada, `npx playwright test` sin esa variable prueba también la simulación; hay que pasarlo cuando se toca la simulación o la API.
+- Frontend: `npm run typecheck`, `npm run lint`, `npm run build` (que al final comprueba las hojas de estilo compiladas) y Playwright con `ONIEL_E2E_STATIC=1` (la instantánea estática, sin servidor). Con la API local arrancada, `npx playwright test` sin esa variable prueba también la simulación; hay que pasarlo cuando se toca la simulación o la API.
 
 El editor no debe mostrar avisos que esas órdenes no den: `.vscode/settings.json` fija el intérprete y Ruff, y `backend/pyproject.toml` deja pyright al mismo nivel que Pylance. El frontend no tiene formateador configurado: no se reformatean ficheros enteros.
 

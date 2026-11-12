@@ -88,10 +88,10 @@ cd backend && uv run ruff format --check . && uv run ruff check . && uv run mypy
 ```
 
 ```bash
-cd frontend && npm run typecheck && npm run lint
+cd frontend && npm run typecheck && npm run lint && npm run build
 ```
 
-Ruff formatea y ordena importaciones; mypy (estricto) y pyright (modo `standard`, el mismo que Pylance) tipan el backend; `tsc` y oxlint cubren el visor, incluidas las pruebas Playwright. El directorio `.vscode/` fija el intérprete de `backend/.venv` y Ruff como formateador, de modo que el editor no muestre avisos que estas órdenes no muestren.
+Ruff formatea y ordena importaciones; mypy (estricto) y pyright (modo `standard`, el mismo que Pylance) tipan el backend; `tsc` y oxlint cubren el visor, incluidas las pruebas Playwright. `npm run build` compila el visor y termina con `frontend/scripts/comprobar-css.mjs`, que falla si a una hoja de estilos le falta una llave o si las reglas de base (`:root`, `body`) no quedan en el primer nivel de la hoja compilada: las pruebas Playwright corren contra el servidor de desarrollo y no ven un fallo que solo aparece al compilar. Vercel ejecuta la misma orden, así que una hoja rota no se publica. El directorio `.vscode/` fija el intérprete de `backend/.venv` y Ruff como formateador, de modo que el editor no muestre avisos que estas órdenes no muestren.
 
 El CI de GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) ejecuta estas mismas órdenes y las pruebas en cada pull request y en cada push a `main`: el backend con PostgreSQL 17 (incluidas las pruebas de integración y `oniel-data validate`) y el visor con Node 20 y Playwright sobre la instantánea estática.
 
