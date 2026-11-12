@@ -2,9 +2,26 @@
 // salen todas las líneas, nodos y tramos (el grafo entero, para buscar, enlazar y calcular
 // recorridos); de cada línea cargada, los textos de sus nodos y la geometría completa.
 
-import type { Feature, LineDetailOut, NetworkIndexOut, NetworkOut, NodeOut } from './types.ts'
+import type { AnnotationOut, Feature, LineDetailOut, NetworkIndexOut, NetworkOut, NodeOut } from './types.ts'
 
 export type LineDetails = Readonly<Record<string, LineDetailOut>>
+
+/**
+ * Las anotaciones del índice. Una API anterior a ellas solo trae `interruptions`: se leen como
+ * anotaciones de ese tipo, para que el visor nuevo funcione mientras la API se actualiza.
+ */
+function annotationsOf(index: NetworkIndexOut): AnnotationOut[] {
+  if (index.annotations) return index.annotations
+  return (index.interruptions ?? []).map((i) => ({
+    ...i,
+    kind: 'interrupcion',
+    status: i.ended_on ? 'terminada' : 'vigente',
+    node_id: null,
+    node_name: null,
+    geometry: null,
+    title: null,
+  }))
+}
 
 export function composeNetwork(index: NetworkIndexOut, details: LineDetails): NetworkOut {
   const loaded = Object.values(details)
@@ -45,6 +62,6 @@ export function composeNetwork(index: NetworkIndexOut, details: LineDetails): Ne
     },
     node_features: { type: 'FeatureCollection', features: nodeFeatures },
     connection_features: index.connection_features,
-    interruptions: index.interruptions ?? [],
+    annotations: annotationsOf(index),
   }
 }

@@ -116,6 +116,7 @@ async def export_snapshot(
         "lines": [line.id for line in network.lines],
         "segments": len(network.segments),
         "nodes": len(network.nodes),
+        "annotations": len(network.annotations),
         "interruptions": len(network.interruptions),
         "datasets": [d.id for d in datasets],
     }

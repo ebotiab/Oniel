@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
-import type { LineSummary } from '../data/types'
+import type { AnnotationOut, LineSummary } from '../data/types'
+import { capasDe } from '../app/annotationLayers'
 import { lineKind } from '../app/state'
 import type { Trazo } from '../map/layers'
 
 interface Props {
   closed: boolean
-  /** Hay algún tramo con una interrupción del servicio vigente hoy. */
-  interrupted: boolean
+  /** Anotaciones vigentes hoy: cada tipo con entrada de leyenda aparece mientras tenga alguna. */
+  annotations: AnnotationOut[]
   lines: LineSummary[]
   singleTrack: boolean
   /** Trazo resaltado en el mapa: el que se toca en la leyenda o sobre el que se pasa. */
@@ -32,7 +33,7 @@ export function Muestra({ trazo }: { trazo: Trazo }) {
   )
 }
 
-export function Legend({ closed, interrupted, lines, singleTrack, highlight, onHighlight, onPin }: Props) {
+export function Legend({ closed, annotations, lines, singleTrack, highlight, onHighlight, onPin }: Props) {
   const kinds = new Set(lines.map(lineKind))
   const several = kinds.size > 1
   // Fijado con un toque o un clic; al pasar por encima se resalta sin fijar.
@@ -75,11 +76,14 @@ export function Legend({ closed, interrupted, lines, singleTrack, highlight, onH
       {singleTrack && tipo('via-unica', 'Vía única')}
       <span className="muestra conexion" aria-hidden="true" />
       <span>Conexión no cargada todavía</span>
-      {interrupted && (
-        <>
-          <span className="muestra sin-circulacion" aria-hidden="true" data-testid="leyenda-interrupcion" />
-          <span>Sin circulación hoy</span>
-        </>
+      {capasDe(annotations).map(
+        ({ kind, leyenda }) =>
+          leyenda && (
+            <Fragment key={kind}>
+              <span className={`muestra ${leyenda.clase}`} aria-hidden="true" data-testid={leyenda.testId} />
+              <span>{leyenda.texto}</span>
+            </Fragment>
+          ),
       )}
       <span className="muestra seleccion" aria-hidden="true" />
       <span>Tramo seleccionado</span>

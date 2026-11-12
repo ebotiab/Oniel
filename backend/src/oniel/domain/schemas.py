@@ -5,8 +5,9 @@ from __future__ import annotations
 import datetime as dt
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
+from oniel.domain.annotations import INTERRUPTION
 from oniel.routing.graph import Route, RouteLeg
 from oniel.routing.scenario import Scenario
 
@@ -107,34 +108,65 @@ class SourceRef(BaseModel):
     url: str | None = None
 
 
-class InterruptionOut(BaseModel):
-    """Interrupción del servicio entre dos nodos de una línea, con sus fechas y sus fuentes.
+class AnnotationOut(BaseModel):
+    """Anotación de red: algo que pasa sobre la red entre dos fechas según una fuente.
 
-    Está vigente los días ``start_date <= día < ended_on`` (sin límite si ``ended_on`` es nulo).
+    ``kind`` dice qué es (``interrupcion`` hoy) y ``status``, en qué estado está. El alcance es uno
+    de tres: entre dos nodos de una línea (``line_id``, ``from_node_id``, ``to_node_id``, con sus
+    nombres, sus kilómetros y los tramos que quedan entre ambos en ``segment_ids``), un nodo
+    (``node_id``) o una ``geometry`` propia. Está vigente los días ``start_date <= día < ended_on``
+    (sin límite por el lado que sea nulo).
     """
 
     id: str
-    line_id: str
-    from_node_id: str
-    to_node_id: str
-    from_name: str
-    to_name: str
-    km_from: float
-    km_to: float
-    segment_ids: list[str]
-    start_date: dt.date
+    kind: str
+    status: str
+    line_id: str | None = None
+    from_node_id: str | None = None
+    to_node_id: str | None = None
+    from_name: str | None = None
+    to_name: str | None = None
+    km_from: float | None = None
+    km_to: float | None = None
+    #: Tramos de la red afectados; vacío si el alcance es un nodo o una geometría propia.
+    segment_ids: list[str] = Field(default_factory=list)
+    node_id: str | None = None
+    node_name: str | None = None
+    geometry: dict[str, Any] | None = None
+    start_date: dt.date | None = None
     expected_end_date: dt.date | None = None
     expected_end_text: str | None = None
     ended_on: dt.date | None = None
-    reason: str
+    title: str | None = None
+    reason: str | None = None
     note: str | None = None
     sources: list[SourceRef]
     checked_on: dt.date
-    #: Nota para los pasos por tramo: «Horario publicado; sin circulación real desde el … (fuente)».
-    schedule_note: str
+    #: Nota para los pasos por tramo cuando el tipo corta la circulación: «Horario publicado; sin
+    #: circulación real desde el … (fuente)». Nula en los demás tipos.
+    schedule_note: str | None = None
 
     def active_on(self, day: dt.date) -> bool:
-        return self.start_date <= day and (self.ended_on is None or day < self.ended_on)
+        started = self.start_date is None or self.start_date <= day
+        return started and (self.ended_on is None or day < self.ended_on)
+
+
+#: Una interrupción del servicio es una anotación de tipo ``interrupcion``: el nombre queda como
+#: alias para lo que solo trata con ellas (pasos por tramo, simulación, recorridos).
+InterruptionOut = AnnotationOut
+
+
+class WithAnnotations(BaseModel):
+    """Respuesta que lleva las anotaciones de red y, como alias temporal, las interrupciones."""
+
+    #: Todas las anotaciones registradas, vigentes o ya terminadas; el visor decide por fecha.
+    annotations: list[AnnotationOut] = Field(default_factory=list)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def interruptions(self) -> list[AnnotationOut]:
+        """Alias temporal: las anotaciones de tipo ``interrupcion``, para los visores anteriores."""
+        return [a for a in self.annotations if a.kind == INTERRUPTION]
 
 
 class Feature(BaseModel):
@@ -149,7 +181,7 @@ class FeatureCollection(BaseModel):
     features: list[Feature]
 
 
-class NetworkOut(BaseModel):
+class NetworkOut(WithAnnotations):
     """Todo lo que el visor necesita para dibujar la red disponible."""
 
     lines: list[LineSummary]
@@ -160,8 +192,6 @@ class NetworkOut(BaseModel):
     segment_features: FeatureCollection
     node_features: FeatureCollection
     connection_features: FeatureCollection
-    #: Todas las interrupciones registradas, vigentes o ya terminadas; el visor decide por fecha.
-    interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
 class NodeIndexOut(BaseModel):
@@ -180,12 +210,12 @@ class NodeIndexOut(BaseModel):
     seq: int
 
 
-class NetworkIndexOut(BaseModel):
+class NetworkIndexOut(WithAnnotations):
     """Índice ligero de toda la red: lo que el visor descarga al arrancar.
 
     Lleva las líneas, todos los nodos sin sus textos, los tramos con la geometría simplificada
     (sus datos van en ``properties``, como en ``NetworkOut.segment_features``), las conexiones y
-    las interrupciones. El detalle de cada línea se pide aparte (``LineDetailOut``).
+    las anotaciones. El detalle de cada línea se pide aparte (``LineDetailOut``).
     """
 
     lines: list[LineSummary]
@@ -193,13 +223,15 @@ class NetworkIndexOut(BaseModel):
     segment_features: FeatureCollection
     connections: list[ConnectionOut]
     connection_features: FeatureCollection
-    interruptions: list[InterruptionOut] = Field(default_factory=list)
     #: Tolerancia con la que se ha simplificado la geometría de los tramos, en metros.
     simplify_tolerance_m: float
 
 
-class LineDetailOut(BaseModel):
-    """El detalle de una línea: nodos con sus textos, tramos con la geometría completa y recuentos."""
+class LineDetailOut(WithAnnotations):
+    """El detalle de una línea: nodos con sus textos, tramos con la geometría completa y recuentos.
+
+    ``annotations`` son las registradas en la línea o en sus nodos, vigentes o ya terminadas.
+    """
 
     line: LineSummary
     nodes: list[NodeOut]
@@ -207,8 +239,6 @@ class LineDetailOut(BaseModel):
     segment_features: FeatureCollection
     #: Conexiones que salen de algún nodo de la línea.
     connections: list[ConnectionOut]
-    #: Interrupciones registradas en la línea, vigentes o ya terminadas.
-    interruptions: list[InterruptionOut] = Field(default_factory=list)
     #: Día de los recuentos; nulo si no hay horarios cargados.
     date: dt.date | None = None
     #: Pasos por tramo ese día, por id de tramo; los tramos sin pasos no aparecen.

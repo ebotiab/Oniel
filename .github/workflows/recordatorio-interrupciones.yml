@@ -2,7 +2,7 @@
 #
 # Las interrupciones se revisan a mano (docs/datos.md, «Cómo se actualiza»): Adif no publica sus avisos
 # como datos abiertos. Este flujo no consulta ninguna fuente ni cambia ningún dato: solo lee
-# backend/data/curated/interrupciones.json y, si alguna interrupción sin fecha de fin (`ended_on`) lleva
+# backend/data/curated/anotaciones.json y, si alguna anotación de tipo interrupción sin fecha de fin (`ended_on`) lleva
 # más de siete días sin revisarse (`checked_on`), abre una incidencia que lo recuerda. Si ya hay una
 # abierta con la etiqueta del recordatorio, no abre otra.
 name: Recordatorio de revisión de las interrupciones
@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  FICHERO: backend/data/curated/interrupciones.json
+  FICHERO: backend/data/curated/anotaciones.json
   ETIQUETA: revision-interrupciones
   DIAS: "7"
 
@@ -40,8 +40,8 @@ jobs:
           limite="$(date -u -d "${DIAS} days ago" +%F)"
           # Las fechas van en ISO (AAAA-MM-DD), así que compararlas como texto las ordena bien.
           lista="$(jq -r --arg limite "$limite" '
-            .interruptions[]
-            | select(.ended_on == null and .checked_on < $limite)
+            .annotations[]
+            | select(.kind == "interrupcion" and .ended_on == null and .checked_on < $limite)
             | "- `\(.id)`: \(.line_id), de `\(.from_node)` a `\(.to_node)`. Última revisión: \(.checked_on)."
           ' "$FICHERO")"
           if [ -z "$lista" ]; then

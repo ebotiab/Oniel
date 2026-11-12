@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { fetchNodeServices, fetchSegmentServices } from '../data/api'
 import type { NetworkOut, Source } from '../data/types'
-import { formatDateLong, mainSourceLabel } from '../app/interruptions'
+import { formatDateLong, mainSourceLabel } from '../app/annotations'
 import { enumerar, formatDuracion, trenesDelRecorrido, trenesDirectos, type Comparacion, type Recorrido, type TrenDirecto } from '../app/recorridos'
 import { formatDayShort, formatKm, shortStop, type Comparador } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'

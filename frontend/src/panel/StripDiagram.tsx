@@ -1,4 +1,6 @@
-import type { InterruptionOut, NetworkOut, NodeOut, SegmentOut } from '../data/types'
+import type { AnnotationOut, NetworkOut, NodeOut, SegmentOut } from '../data/types'
+import { trazoDe } from '../app/annotationLayers'
+import { bySegment } from '../app/annotations'
 import type { Selection } from '../app/state'
 import { formatKm, lineKind } from '../app/state'
 import { spreadLabels } from './layout'
@@ -9,8 +11,8 @@ interface Props {
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
-  /** Interrupciones vigentes hoy: sus tramos llevan la vía en rojo, como en el mapa. */
-  interruptions?: InterruptionOut[]
+  /** Anotaciones vigentes hoy: sus tramos llevan la vía como en el mapa (en rojo, las interrupciones). */
+  annotations?: AnnotationOut[]
   counts: Record<string, number> | null
   /** Recuento que llena la barra: el mayor de toda la red. Sin él, el mayor de `counts`. */
   countsMax?: number | null
@@ -37,8 +39,8 @@ function label(n: NodeOut): string {
 }
 
 /** Esquema vertical de una línea: estaciones, puestos y bifurcaciones sobre una escala de kilómetros. */
-export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, interruptions = [], counts, countsMax = null, countsLabel = null, onSelect, onHover, compact = false }: Props) {
-  const cut = new Set(interruptions.flatMap((i) => i.segment_ids))
+export function StripDiagram({ network, lineId, selection, hoverId, closedSegmentId, annotations = [], counts, countsMax = null, countsLabel = null, onSelect, onHover, compact = false }: Props) {
+  const annotated = bySegment(annotations)
   const nodes = network.nodes.filter((n) => n.line_id === lineId)
   const segments = network.segments.filter((s) => s.line_id === lineId)
   const line = network.lines.find((l) => l.id === lineId)
@@ -89,7 +91,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
         const w = single ? 2 : highSpeed ? 5 : 3
         return (
           <g key={`via-${s.id}`} data-trazo={trazo}>
-            <line x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke={cut.has(s.id) ? 'var(--senal-roja)' : 'var(--tinta)'} strokeWidth={w} />
+            <line x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke={trazoDe(annotated.get(s.id))?.colorCss ?? 'var(--tinta)'} strokeWidth={w} />
             {trazo === 'alta-velocidad' ? (
               <line x1={X} y1={y(s.km_from)} x2={X} y2={y(s.km_to)} stroke="var(--papel)" strokeWidth={1.5} />
             ) : (
@@ -115,8 +117,8 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
         const sel = isSelSeg(s)
         const closed = closedSegmentId === s.id
         const hov = hoverId === s.id
-        const interrupted = cut.has(s.id)
-        const color = closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : interrupted ? 'var(--senal-roja)' : 'var(--tinta)'
+        const trazo = trazoDe(annotated.get(s.id))
+        const color = closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : (trazo?.colorCss ?? 'var(--tinta)')
         const n = counts?.[s.id]
         const inset = Math.min(6, Math.max(2, (y2 - y1) / 4))
         return (
@@ -125,10 +127,10 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             className="esquema-tramo"
             role="button"
             tabIndex={0}
-            aria-label={`Tramo ${s.from_name} – ${s.to_name}, ${formatKm(s.length_km)} km${s.tracks === 1 ? ', vía única' : ''}${interrupted ? ', sin circulación hoy' : ''}`}
+            aria-label={`Tramo ${s.from_name} – ${s.to_name}, ${formatKm(s.length_km)} km${s.tracks === 1 ? ', vía única' : ''}${trazo ? `, ${trazo.descripcion}` : ''}`}
             aria-pressed={sel}
             data-testid={`esquema-tramo-${s.seq}`}
-            data-interrumpido={interrupted ? 'true' : undefined}
+            {...(trazo ? { [`data-${trazo.propiedad}`]: 'true' } : {})}
             onClick={() => onSelect({ type: 'tramo', id: s.id })}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -145,7 +147,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
               <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={color} strokeWidth={sel || closed ? 7 : 5} opacity={sel || closed ? 1 : 0.35} strokeLinecap="round" />
             )}
             {/* seleccionado e interrumpido: el rojo de la vía sigue a la vista dentro del azul de la selección */}
-            {sel && interrupted && !closed && <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke="var(--senal-roja)" strokeWidth={3} strokeLinecap="round" />}
+            {sel && trazo && !closed && <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={trazo.colorCss} strokeWidth={3} strokeLinecap="round" />}
             {!compact && n !== undefined && maxCount > 0 && y2 - y1 > 14 && (
               <g className="esquema-conteo" aria-hidden="true">
                 <rect x={X + 9} y={y1 + inset + 2} width={Math.max(2, (n / maxCount) * 26)} height={Math.max(2, y2 - y1 - 2 * inset - 4)} rx={1} fill={closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : 'var(--tinta)'} opacity={sel || closed ? 0.22 : 0.1} />
