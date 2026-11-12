@@ -10,7 +10,7 @@ import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { AnnotationDetail } from '../panel/AnnotationDetail'
 import { CoveragePanel } from '../panel/CoveragePanel'
-import { GlossaryPanel } from '../panel/GlossaryPanel'
+import { GlossaryPage } from '../panel/GlossaryPage'
 import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
@@ -152,8 +152,8 @@ export default function App() {
     setShowCoverage(false)
     setSheetOpen(true)
   }, [])
-  // El glosario se abre encima de lo que se estaba viendo y «Volver» lo devuelve: la ficha de la que salió
-  // el término, la línea o la vista de la red.
+  // El glosario es una página entera, sin mapa, que se abre encima de lo que se estaba viendo; «Volver al mapa»
+  // lo devuelve: la ficha de la que salió el término, la línea o la vista de la red.
   const vuelta = useRef<{ route: Route; cobertura: boolean } | null>(null)
   const openGlossary = useCallback(
     (entrada: string | null) => {
@@ -291,7 +291,6 @@ export default function App() {
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
   else if (showCoverage && coverage)
     panel = <CoveragePanel coverage={coverage} annotations={annotations} status={status} onClose={() => setShowCoverage(false)} />
-  else if (route.glosario) panel = <GlossaryPanel entrada={route.glosario.entrada} sources={coverage?.sources ?? []} onBack={closeGlossary} />
   else if (comparador)
     panel = (
       <ComparePanel
@@ -378,15 +377,19 @@ export default function App() {
     )
 
   const lines = network?.lines ?? []
+  // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
+  const enGlosario = Boolean(route.glosario)
+  const [mapaMontado, setMapaMontado] = useState(!enGlosario)
+  if (!enGlosario && !mapaMontado) setMapaMontado(true)
 
   return (
     <GlosarioContext value={openGlossary}>
-    <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''}`}>
+    <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''} ${enGlosario ? 'en-glosario' : ''}`}>
       <a className="visually-hidden" href="#panel">
         Ir al panel de la línea
       </a>
       <Suspense fallback={<div className="mapa" aria-hidden="true" />}>
-        <MapView
+        {mapaMontado && <MapView
           network={network}
           selection={selection}
           hoverId={hoverId}
@@ -401,7 +404,7 @@ export default function App() {
           padding={padding}
           lineId={selection ? null : annotation ? null : lineId}
           recorridos={recorridosEnMapa}
-        />
+        />}
       </Suspense>
       <header className="cabecera">
         <div className="cabecera-inicio">
@@ -453,6 +456,7 @@ export default function App() {
           onPin={pinTrazo}
         />
       )}
+      {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} onBack={closeGlossary} />}
     </div>
     </GlosarioContext>
   )
