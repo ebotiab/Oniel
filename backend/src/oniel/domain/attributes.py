@@ -54,7 +54,18 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
         value_type=str,
         required=True,
         sourced=True,
-        values=frozenset({"asfa", "lzb_asfa", "ertms_n1", "ertms_n2", SIN_DATO_PUBLICADO}),
+        values=frozenset(
+            {
+                "asfa",
+                "lzb_asfa",
+                "ertms_n1",
+                "ertms_n2",
+                # ERTMS con ASFA de respaldo, como lo dibuja el mapa en las líneas de Málaga y Granada
+                "ertms_n1_n2_asfa",
+                "ertms_n2_asfa",
+                SIN_DATO_PUBLICADO,
+            }
+        ),
     ),
     # Bloqueo: de control automático (BCA), automático banalizado (BAB), de vía doble (BAD) o
     # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` es un tramo

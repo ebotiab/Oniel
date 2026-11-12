@@ -124,7 +124,8 @@ test.describe('Trazo de la vía', () => {
       for (const f of map.querySourceFeatures('oniel-segments')) vistos.add(`${f.properties.tipo}/${f.properties.vias}`)
       return [...vistos].sort()
     })
-    expect(trazos).toEqual(['alta-velocidad/2', 'convencional/1', 'convencional/2'])
+    // la alta velocidad de vía única es la de Antequera a Granada desde la bifurcación Archidona
+    expect(trazos).toEqual(['alta-velocidad/1', 'alta-velocidad/2', 'convencional/1', 'convencional/2'])
     // cada trazo tiene su capa de dibujo: filete, trazos blancos y trazos espaciados
     const capas = await page.evaluate(() => {
       const map = (globalThis as unknown as ConMapa).__onielMap!

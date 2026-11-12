@@ -208,10 +208,15 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     report = validate_attributes(SPECS, SOURCES, DATA_DIR)
     assert report["problems"] == []
     by_line = {line["line"]: line for line in report["attributes"]}
+    granada = by_line["lav-antequera-granada"]
     for line in by_line.values():
-        assert line["covered_segments"] == dict.fromkeys(
+        covered = dict(line["covered_segments"])
+        # el ancho mixto solo se declara donde lo hay: el paso por Loja y la entrada a Granada
+        assert covered.pop("gauge", None) == (3 if line is granada else None)
+        assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
         )
+    assert granada["sections"] == 4 + 3
     # dos de vía única, seis de bloqueo, una de protección del tren y una de mando
     assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 10
 
