@@ -80,7 +80,7 @@ test.describe('Atributos de tramo: de las secciones de la línea a la ficha', ()
       for (const s of datos.segments ?? []) if (s.id === DOBLE) s.attributes.tracks.value = 1
       await route.fulfill({ response: res, json: datos })
     })
-    await page.goto(`/#/tramo/${DOBLE}`)
+    await page.goto(`/tramo/${DOBLE}`)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
     // el visor sigue pidiendo datos en segundo plano: las peticiones retenidas al acabar no son un fallo

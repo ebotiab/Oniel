@@ -73,7 +73,7 @@ test.describe('Navegar por el mapa', () => {
       if (/cannot fit/i.test(m.text())) avisos.push(m.text())
     })
     await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto('/#/tramo/lav-madrid-sevilla:urda:ciudad-real')
+    await page.goto('/tramo/lav-madrid-sevilla:urda:ciudad-real')
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.loaded() === true)
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -221,7 +221,7 @@ test.describe('Trazo de la vía', () => {
     await expect(leyenda).toHaveCount(0)
 
     // en la vista de una línea, los tres trazos sobre el esquema
-    await page.goto('/#/linea/lav-madrid-sevilla')
+    await page.goto('/linea/lav-madrid-sevilla')
     await expect(leyenda.getByRole('button')).toHaveText(['Alta velocidad', 'Línea convencional', 'Vía única'])
     await page.getByTestId('leyenda-via-unica').click()
     await expect(mapa).toHaveAttribute('data-resaltado', 'via-unica')

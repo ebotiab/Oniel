@@ -13,7 +13,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await page.goto('/')
     await abrirHoja(page)
     await page.getByTestId(`linea-${LINEA}`).click()
-    await expect(page).toHaveURL(new RegExp(`#/linea/${LINEA}$`))
+    await expect(page).toHaveURL(new RegExp(`/linea/${LINEA}$`))
     await expect(page.getByRole('heading', { name: 'Línea convencional Linares-Baeza – Moreda – Granada' })).toBeVisible()
     await expect(page.getByTestId('ficha-linea')).toHaveText(/173,7 km.*hasta 140 km\/h/)
     await page.getByTestId('mas-detalle').locator('summary').click()
@@ -24,7 +24,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   })
 
   test('Linares-Baeza es una sola estación para las dos líneas que pasan por ella', async ({ page }) => {
-    await page.goto('/#/nodo/linares-baeza')
+    await page.goto('/nodo/linares-baeza')
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
@@ -32,7 +32,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   })
 
   test('el tramo entre Moreda y la bifurcación dice que no lleva ningún tren', async ({ page }) => {
-    await page.goto(`/#/tramo/${LINEA}:moreda:bif-almeria`)
+    await page.goto(`/tramo/${LINEA}:moreda:bif-almeria`)
     await abrirHoja(page)
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
@@ -45,7 +45,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   })
 
   test('los trenes de Granada a Almería recorren la línea hasta la bifurcación', async ({ page }) => {
-    await page.goto(`/#/tramo/${LINEA}:iznalloz:granada`)
+    await page.goto(`/tramo/${LINEA}:iznalloz:granada`)
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-operadores')).toHaveText('Solo Renfe Viajeros')
@@ -54,7 +54,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   })
 
   test('el comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza', async ({ page }) => {
-    await page.goto('/#/recorridos/madrid-puerta-de-atocha/granada')
+    await page.goto('/recorridos/madrid-puerta-de-atocha/granada')
     await abrirHoja(page)
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos).toHaveCount(3)

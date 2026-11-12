@@ -2,7 +2,7 @@
 
 Web en español para descubrir cómo está conectada la red ferroviaria española. Se abre con un mapa interactivo en el que se recorre la línea, se seleccionan estaciones y tramos y, como herramienta secundaria, se simula un cierre hipotético de un tramo en una franja horaria.
 
-Esta versión cubre cuatro líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz; la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif); la **línea convencional Manzanares–Ciudad Real** (Adif, línea 522, de vía única), que une las otras dos, y la **línea convencional Linares-Baeza–Moreda–Granada** (Adif, líneas 410 y 416, de vía única y sin electrificar), el camino convencional a Granada, con los servicios de Renfe que las recorren y los de Ouigo en la alta velocidad (Iryo no publica sus horarios en un formato abierto y sus trenes no están). Comparten nodos (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real y Linares-Baeza), así que la simulación de un cierre señala los recorridos alternativos cuando existen, por una línea o por varias encadenadas. Los horarios son los planificados; las interrupciones vigentes del servicio (obras, cortes tras un accidente) se registran a mano en `backend/data/curated/anotaciones.json`, con su fuente y la fecha de comprobación, y el visor las marca en rojo.
+Esta versión cubre cinco líneas: la **línea de alta velocidad Madrid–Sevilla** (Adif, línea 010), incluidos los entornos de Urda y Adamuz; la **línea convencional Madrid–Aranjuez–Alcázar de San Juan–Manzanares–Despeñaperros–Linares-Baeza–Córdoba** (la antigua línea de Andalucía, tramos de las líneas 300 y 400 de Adif), y la **línea convencional Manzanares–Ciudad Real** (Adif, línea 522, de vía única), que une las otras dos; el **ramal convencional Espelúy–Jaén** (Adif, línea 402, de vía única), que sale de la segunda, y la **línea convencional Linares-Baeza–Moreda–Granada** (Adif, líneas 410 y 416, de vía única y sin electrificar), el camino convencional a Granada, con los servicios de Renfe que las recorren y los de Ouigo en la alta velocidad (Iryo no publica sus horarios en un formato abierto y sus trenes no están). Comparten nodos (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real, Espelúy y Linares-Baeza), así que la simulación de un cierre señala los recorridos alternativos cuando existen, por una línea o por varias encadenadas. Los horarios son los planificados; las interrupciones vigentes del servicio (obras, cortes tras un accidente) se registran a mano en `backend/data/curated/anotaciones.json`, con su fuente y la fecha de comprobación, y el visor las marca en rojo.
 
 - Diseño: [docs/diseno.md](docs/diseno.md)
 - Datos y procedencia: [docs/datos.md](docs/datos.md)
@@ -81,7 +81,7 @@ Las pruebas de integración con PostgreSQL se activan con `ONIEL_TEST_DATABASE_U
 cd frontend && npm run typecheck && npx playwright install chromium && npx playwright test
 ```
 
-Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación). Si otra sesión ocupa el puerto 5199, `ONIEL_E2E_PORT` lo cambia.
+Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación). Si otra sesión ocupa el puerto 5199, `ONIEL_E2E_PORT` lo cambia. En local usa dos procesos, para que varias sesiones a la vez no saturen el equipo; `ONIEL_E2E_WORKERS=4` lo sube cuando se prueba a solas.
 
 La batería completa son más de 200 pruebas en dos tamaños de pantalla. Mientras se trabaja basta con los ficheros de lo que se toca, sobre la instantánea:
 
@@ -89,7 +89,7 @@ La batería completa son más de 200 pruebas en dos tamaños de pantalla. Mientr
 cd frontend && ONIEL_E2E_STATIC=1 npx playwright test e2e/fichas.spec.ts
 ```
 
-La batería entera sobre la instantánea la pasa el CI en cada pull request. La que va contra la API local (sin `ONIEL_E2E_STATIC`) no la pasa el CI: hay que pasarla a mano cuando se toca la simulación o la API.
+La batería entera sobre la instantánea la pasa el CI en cada pull request. Las pruebas que necesitan la API local (sin `ONIEL_E2E_STATIC`) no las pasa el CI: cuando se toca la simulación o la API hay que pasar a mano sus ficheros (`alternativas`, `arranque`, `interrupciones`, `rutas` y `simulacion`).
 
 ## Comprobaciones
 

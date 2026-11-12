@@ -30,7 +30,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('recuento-red')).toHaveText(/^4 líneas · 1\.149 km/)
+    await expect(page.getByTestId('recuento-red')).toHaveText(/^5 líneas · 1\.182 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -75,7 +75,7 @@ test.describe('Carga de la red por partes', () => {
 
   test('un enlace directo a un tramo de una línea sin cargar muestra el tramo y pide su línea', async ({ page }) => {
     const pedidas = partesPedidas(page)
-    await page.goto(`/#/tramo/${MZCR}:daimiel:almagro`)
+    await page.goto(`/tramo/${MZCR}:daimiel:almagro`)
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByRole('heading', { name: /Daimiel/ })).toBeVisible()
@@ -86,12 +86,12 @@ test.describe('Carga de la red por partes', () => {
     // «Toda la línea» lleva a su esquema, ya con el detalle cargado
     await page.getByRole('button', { name: /Toda la línea/ }).click()
     await expect(page.getByTestId('esquema')).toBeVisible()
-    await expect(page).toHaveURL(new RegExp(`#/linea/${MZCR}$`))
+    await expect(page).toHaveURL(new RegExp(`/linea/${MZCR}$`))
   })
 
   test('un enlace directo a una estación muestra su descripción, que llega con la línea', async ({ page }) => {
     const pedidas = partesPedidas(page)
-    await page.goto('/#/nodo/puertollano')
+    await page.goto('/nodo/puertollano')
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Puertollano' })).toBeVisible()

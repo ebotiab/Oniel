@@ -140,6 +140,29 @@
       "notes": "Fuente de verificación, no de geometría. Sus puntos kilométricos coinciden con los de Wikipedia. Da la tensión como 3.300 V en continua; Oniel la anota como 3 kV CC, el valor nominal que usa en las demás líneas convencionales."
     },
     {
+      "id": "osm-relation-11351146",
+      "name": "Trazado de la línea convencional Espeluy–Jaén (relación OSM 11351146, línea 402 de Adif, ancho ibérico, vía única electrificada a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11351146",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Los 32,3 km de la relación, entre la aguja del km 340,1 de la línea 400 y la estación de Jaén, por Mengíbar-Artichuela; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación es de infraestructura («Línea Jaén-Espeluy», nombre oficial «Espeluy-aguja km 340,1 a Jaén», ref=402) y son 11 vías encadenadas, todas con operator=Adif, ancho 1668 mm, 3000 V en continua, passenger_lines=1 y maxspeed=160. Empieza en la aguja en la que se separa de la línea 400, a 0,9 km de la estación de Espeluy por el lado de Linares-Baeza, y termina a 26 m del punto de la estación de Jaén. Oniel dibuja la línea desde la estación de Espeluy: ese primer trozo se toma de la relación 11351144 (línea 400), ya registrada. La relación no trae la vía que une la estación de Espeluy con el ramal por el oeste. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
+      "file": "raw/osm/relation_11351146_linea_402_espeluy_jaen_2026-11-12.json"
+    },
+    {
+      "id": "wikipedia-linea-402",
+      "name": "Artículo «Línea Espeluy-Jaén» de Wikipedia en español (número de línea de Adif, longitud, puntos kilométricos, vía única, historia)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Espeluy-Ja%C3%A9n",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Catalogación de Adif como línea 402, longitud (32,8 km), ancho ibérico, vía única electrificada, inicio en «Espeluy-aguja km 340,1», puntos kilométricos de esa aguja (152,1), de Mengíbar-Artichuela (148,0) y de Jaén (119,2), apertura en julio de 1881, enlace directo para los trenes de Madrid construido a mediados de los años setenta y cierre del trazado entre Jaén y Campo Real en octubre de 1984.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 30 de diciembre de 2025 (oldid 171249150), consultada por la API de Wikipedia, junto con los artículos «Estación de Jaén» (oldid 174008767) y «Estación de Mengíbar-Artichuela» (oldid 165497983), de donde salen los códigos de estación (03100 y 03001, los mismos que las paradas del GTFS de Renfe) y la descripción de cada una. Los puntos kilométricos son los de la antigua línea Linares–Puente Genil y decrecen hacia Jaén; Oniel no los guarda en los nodos porque la estación de Espeluy, de donde dibuja la línea, no tiene punto kilométrico en ella."
+    },
+    {
       "id": "osm-relation-6641023",
       "name": "Trazado de la línea convencional Linares-Baeza–Moreda (vías de la relación OSM 6641023, línea 410 de Adif, ancho ibérico, vía única sin electrificar)",
       "publisher": "Colaboradores de OpenStreetMap",
@@ -193,7 +216,7 @@
       "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
       "retrieved_on": "2026-11-12",
-      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las cuatro líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF).",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF).",
       "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
       "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },

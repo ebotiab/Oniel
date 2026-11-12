@@ -17,7 +17,7 @@ const MANZANARES_CIUDAD_REAL = 'manzanares-ciudad-real:manzanares:daimiel'
 
 /** En el móvil la ficha vive en la hoja inferior: hay que ampliarla para verla entera. */
 async function abrirDetalle(page: Page, tramo: string) {
-  await page.goto(`/#/tramo/${tramo}`)
+  await page.goto(`/tramo/${tramo}`)
   await expect(page.getByTestId('detalle-tramo')).toBeVisible()
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })
   if (await asa.isVisible()) await asa.click()
@@ -26,7 +26,7 @@ async function abrirDetalle(page: Page, tramo: string) {
 
 test.describe('Señalización: protección del tren, bloqueo y mando de cada tramo', () => {
   test('todos los tramos de la instantánea traen los tres, con la fuente y la fecha', () => {
-    expect(red.segments).toHaveLength(45)
+    expect(red.segments).toHaveLength(47)
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
         expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE, checked_on: '2026-11-12' })
@@ -39,7 +39,7 @@ test.describe('Señalización: protección del tren, bloqueo y mando de cada tra
   })
 
   test('van plegados bajo «Más detalle», con su fuente y la fecha en que se comprobaron', async ({ page }) => {
-    await page.goto(`/#/tramo/${VIA_UNICA}`)
+    await page.goto(`/tramo/${VIA_UNICA}`)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-atributo-bloqueo')).toBeHidden()
     await abrirDetalle(page, VIA_UNICA)
@@ -81,11 +81,11 @@ test.describe('Señalización: protección del tren, bloqueo y mando de cada tra
     await ficha.getByRole('button', { name: 'De control automático' }).click()
     await expect(nota).toContainText('Bloqueo de control automático')
     await nota.getByRole('link', { name: 'Ver en el glosario' }).click()
-    await expect(page).toHaveURL(/#\/glosario\/bloqueo-de-control-automatico$/)
+    await expect(page).toHaveURL(/\/glosario\/bloqueo-de-control-automatico$/)
     await expect(page.getByTestId('pagina-glosario')).toContainText('Bloqueo de control automático')
     // los términos nuevos están en la página, cada uno con su ruta
     for (const id of ['asfa', 'lzb', 'ertms', 'bloqueo-automatico', 'control-de-trafico-centralizado', 'puesto-de-mando', 'proteccion-del-tren']) {
-      await page.goto(`/#/glosario/${id}`)
+      await page.goto(`/glosario/${id}`)
       await expect(page.getByTestId(`glosario-${id}`)).toHaveAttribute('aria-current', 'true')
     }
   })

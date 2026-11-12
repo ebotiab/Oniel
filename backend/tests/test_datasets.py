@@ -213,9 +213,9 @@ async def test_a_new_file_keeps_the_previous_dataset(
     assert (old["valid_from"], old["valid_to"]) == (dt.date(2026, 11, 7), dt.date(2027, 9, 29))
     # el anterior sigue entero y el nuevo tiene un viaje menos; 26 de cada uno son los Media
     # Distancia de la línea de Linares-Baeza a Granada, que no pasan por ninguna otra
-    assert await _count(conn, "services", FEED_DATASET_ID) == 814 + 26
-    assert await _count(conn, "services", NEWER_ID) == 813 + 26
-    passes = (3126 + 115) + (2469 + 683) + (72 + 390) + (62 + 18)
+    assert await _count(conn, "services", FEED_DATASET_ID) == 876 + 26
+    assert await _count(conn, "services", NEWER_ID) == 875 + 26
+    passes = (3126 + 115) + (2741 + 683) + (72 + 390) + (402 + 20) + (62 + 18)
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -474,8 +474,8 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     )
     assert again["dataset"]["id"] == NEWER_ID and again["dataset"]["reused"] is True
     assert await conn.fetchval("SELECT count(*) FROM datasets") == 2
-    assert await _count(conn, "services", NEWER_ID) == 839
-    assert await conn.fetchval("SELECT count(*) FROM services") == 840 + 839
+    assert await _count(conn, "services", NEWER_ID) == 901
+    assert await conn.fetchval("SELECT count(*) FROM services") == 902 + 901
 
 
 @requires_db
@@ -506,7 +506,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     both = [feed(FEED, dt.date(2026, 11, 8)), feed(two_datasets["newer"], dt.date(2026, 11, 20))]
     result = await run(both, tmp_path)
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
-    assert [g["trips_imported"] for g in result["gtfs"]] == [840, 839]
+    assert [g["trips_imported"] for g in result["gtfs"]] == [902, 901]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
     coverage = json.loads((tmp_path / "coverage.json").read_text(encoding="utf-8"))
@@ -545,7 +545,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     # un conjunto que deja de estar declarado se retira, también de la instantánea
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
-    assert await conn.fetchval("SELECT count(*) FROM services") == 840
+    assert await conn.fetchval("SELECT count(*) FROM services") == 902
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]
     )

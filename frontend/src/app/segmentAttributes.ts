@@ -50,6 +50,7 @@ const BLOQUEO: Record<string, ValorDicho> = {
   bab: { texto: 'Automático banalizado', termino: 'bloqueo-automatico' },
   bad: { texto: 'Automático de vía doble', termino: 'bloqueo-automatico' },
   bau: { texto: 'Automático de vía única', termino: 'bloqueo-automatico' },
+  blau: { texto: 'De liberación automática en vía única', termino: 'bloqueo' },
   // un tramo que cambia de bloqueo donde Oniel no tiene nodo
   bab_bad: { texto: 'Automático: banalizado en una parte y de vía doble en otra', termino: 'bloqueo-automatico' },
   sin_dato_publicado: SIN_DATO_PUBLICADO,

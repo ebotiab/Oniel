@@ -8,7 +8,7 @@ async function abrirHoja(page: Page) {
 
 test.describe('Glosario: cada término a un toque y el glosario como página propia, por URL', () => {
   test('tocar el tipo de punto en la ficha de Urda muestra la definición de PAET y lleva a su entrada', async ({ page }) => {
-    await page.goto('/#/nodo/urda')
+    await page.goto('/nodo/urda')
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha).toBeVisible()
     await abrirHoja(page)
@@ -31,7 +31,7 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     expect(caja.y + caja.height).toBeLessThanOrEqual(pantalla.height)
     // de la nota a la entrada completa, que queda en la URL
     await nota.getByRole('link', { name: 'Ver en el glosario' }).click()
-    await expect(page).toHaveURL(/#\/glosario\/paet$/)
+    await expect(page).toHaveURL(/\/glosario\/paet$/)
     await expect(page.getByTestId('glosario-paet')).toHaveAttribute('aria-current', 'true')
     await expect(page.getByTestId('glosario-paet')).toBeInViewport()
     // la página tapa el visor: ni el mapa ni el panel quedan a la vista
@@ -39,12 +39,12 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(page.locator('#panel')).toBeHidden()
     // «Volver al mapa» devuelve a la ficha de la que salió el término
     await page.getByTestId('glosario-volver').click()
-    await expect(page).toHaveURL(/#\/nodo\/urda$/)
+    await expect(page).toHaveURL(/\/nodo\/urda$/)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
   })
 
   test('la nota se abre y se cierra con el teclado', async ({ page }) => {
-    await page.goto('/#/nodo/urda')
+    await page.goto('/nodo/urda')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await abrirHoja(page)
     const termino = page.getByTestId('detalle-nodo').getByRole('button', { name: 'Puesto de adelantamiento y estacionamiento' })
@@ -56,8 +56,8 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(termino).toHaveAttribute('aria-expanded', 'false')
   })
 
-  test('#/glosario/via-unica abre la palabra, y de ella se llega a su concepto, con su dibujo y su referencia', async ({ page }) => {
-    await page.goto('/#/glosario/via-unica')
+  test('/glosario/via-unica abre la palabra, y de ella se llega a su concepto, con su dibujo y su referencia', async ({ page }) => {
+    await page.goto('/glosario/via-unica')
     const pagina = page.getByTestId('pagina-glosario')
     await expect(pagina).toBeVisible()
     const entrada = page.getByTestId('glosario-via-unica')
@@ -66,7 +66,7 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(entrada).toContainText('Una sola vía para los dos sentidos')
     // de un término a su concepto, con su ruta
     await entrada.getByRole('link', { name: 'Vía única: cómo se cruzan los trenes' }).click()
-    await expect(page).toHaveURL(/#\/glosario\/cruces-en-via-unica$/)
+    await expect(page).toHaveURL(/\/glosario\/cruces-en-via-unica$/)
     const concepto = page.getByTestId('glosario-cruces-en-via-unica')
     await expect(concepto).toHaveAttribute('aria-current', 'true')
     await expect(concepto).toBeInViewport()
@@ -89,7 +89,7 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
   })
 
   test('la página abre con el índice de los conceptos, todos con dibujo, y cabe en la pantalla', async ({ page }) => {
-    await page.goto('/#/glosario')
+    await page.goto('/glosario')
     const pagina = page.getByTestId('pagina-glosario')
     await expect(page.getByRole('heading', { level: 1, name: 'Glosario' })).toBeVisible()
     // si la hoja de estilos se rompe, la página deja de tapar el visor
@@ -114,14 +114,14 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     expect(ancho[0]).toBeLessThanOrEqual(ancho[1]!)
     // del índice a un concepto, que queda en la URL
     await indice.getByRole('link', { name: 'Marcha a la vista' }).click()
-    await expect(page).toHaveURL(/#\/glosario\/marcha-a-la-vista$/)
+    await expect(page).toHaveURL(/\/glosario\/marcha-a-la-vista$/)
     await expect(page.getByTestId('glosario-marcha-a-la-vista')).toBeInViewport()
     await indice.getByRole('link', { name: 'Palabras, de la A a la Z' }).click()
     await expect(page.getByRole('heading', { name: 'Palabras' })).toBeInViewport()
   })
 
   test('las palabras se filtran sin acentos, por el nombre o por la definición', async ({ page }) => {
-    await page.goto('/#/glosario')
+    await page.goto('/glosario')
     const palabras = page.locator('.glosario-palabra')
     const todas = await palabras.count()
     expect(todas).toBeGreaterThan(20)
@@ -150,14 +150,14 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     } else {
       await page.getByTestId('boton-glosario').click()
     }
-    await expect(page).toHaveURL(/#\/glosario$/)
+    await expect(page).toHaveURL(/\/glosario$/)
     await expect(page.getByRole('heading', { level: 1, name: 'Glosario' })).toBeVisible()
     await page.getByTestId('glosario-volver').click()
     await expect(page.getByTestId('vista-red')).toBeVisible()
     // el renglón al pie de la vista de la red
     await abrirHoja(page)
     await page.getByTestId('boton-glosario-red').click()
-    await expect(page).toHaveURL(/#\/glosario$/)
+    await expect(page).toHaveURL(/\/glosario$/)
     await page.getByTestId('glosario-volver').click()
     // y el buscador encuentra un término por su nombre, sin acentos
     const lupa = page.getByTestId('buscador-abrir')
@@ -168,11 +168,11 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(resultado).toContainText('Vía única')
     await expect(resultado).toContainText('Glosario')
     await campo.press('Enter')
-    await expect(page).toHaveURL(/#\/glosario\/via-unica$/)
+    await expect(page).toHaveURL(/\/glosario\/via-unica$/)
   })
 
   test('en un tramo, la etiqueta de cada tren y los datos técnicos son términos', async ({ page }) => {
-    await page.goto('/#/tramo/manzanares-ciudad-real:daimiel:almagro')
+    await page.goto('/tramo/manzanares-ciudad-real:daimiel:almagro')
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await abrirHoja(page)

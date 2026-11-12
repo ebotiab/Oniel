@@ -45,7 +45,7 @@ export interface AnnotationLayer {
   geometria: { dibujo: (a: AnnotationOut) => Dibujo; aviso: string } | null
   /** Entradas de la leyenda del mapa; cada una aparece mientras haya alguna anotación vigente que la cumpla. */
   leyenda: { clase: string; texto: string; testId: string; termino?: TerminoId; cuando?: (a: AnnotationOut) => boolean }[]
-  /** Segmento de la URL de la ficha propia de cada anotación (`#/<ruta>/<id>`); nulo si el tipo no la tiene. */
+  /** Segmento de la URL de la ficha propia de cada anotación (`/<ruta>/<id>`); nulo si el tipo no la tiene. */
   ruta: string | null
   /** Ficha: el bloque que explica una anotación en el panel, y su ficha propia si tiene ruta. */
   ficha: {
@@ -198,15 +198,9 @@ export function capasDe(annotations: readonly AnnotationOut[] | undefined): Anno
   return ANNOTATION_LAYERS.filter((l) => annotations.some((a) => a.kind === l.kind))
 }
 
-/** La capa de la anotación cuya ficha propia tiene esta ruta (`#/<ruta>/<id>`). */
+/** La capa de la anotación cuya ficha propia tiene esta ruta (`/<ruta>/<id>`). */
 export function layerByRoute(ruta: string): AnnotationLayer | undefined {
   return ANNOTATION_LAYERS.find((l) => l.ruta === ruta)
-}
-
-/** El enlace a la ficha propia de una anotación; nulo si su tipo no la tiene. */
-export function annotationHref(a: AnnotationOut): string | null {
-  const ruta = annotationLayer(a.kind)?.ruta
-  return ruta ? `#/${ruta}/${encodeURIComponent(a.id)}` : null
 }
 
 /** Las entradas de leyenda que tocan con estas anotaciones, en el orden del registro. */

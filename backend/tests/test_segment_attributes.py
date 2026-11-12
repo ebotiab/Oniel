@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from conftest import CONV_SPEC, DATA_DIR, MZCR_SPEC, SOURCES, SPEC, SPECS
+from conftest import CONV_SPEC, DATA_DIR, JAEN_SPEC, MZCR_SPEC, SOURCES, SPEC, SPECS
 from pydantic import ValidationError
 
 from oniel.domain.attributes import (
@@ -261,6 +261,10 @@ def test_the_signalling_is_what_the_network_statement_map_says() -> None:
     assert {k for k, v in bloqueo.items() if v == "bau"} == {k for k, v in tracks.items() if v == 1}
     assert set(values(MZCR_SPEC, BLOQUEO).values()) == {"bau"}
     assert set(values(MZCR_SPEC, MANDO).values()) == {"ctc"}
+    # el ramal de Jaén: ASFA y CTC, con bloqueo de liberación automática en vía única
+    assert set(values(JAEN_SPEC, PROTECCION_TREN).values()) == {"asfa"}
+    assert set(values(JAEN_SPEC, BLOQUEO).values()) == {"blau"}
+    assert set(values(JAEN_SPEC, MANDO).values()) == {"ctc"}
 
 
 def test_a_signalling_section_needs_a_known_value_a_source_and_a_date() -> None:
