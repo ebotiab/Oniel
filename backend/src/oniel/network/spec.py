@@ -168,6 +168,11 @@ class AttributeSection(BaseModel):
             raise ValueError(
                 f"{where} vale {self.value!r} y el atributo es de tipo {rule.value_type.__name__}"
             )
+        if rule is not None and rule.values is not None and self.value not in rule.values:
+            admitted = ", ".join(sorted(rule.values))
+            raise ValueError(f"{where} vale {self.value!r} y el atributo solo admite: {admitted}")
+        if rule is not None and rule.sourced and not (self.source_id and self.checked_on):
+            raise ValueError(f"{where} no dice su fuente o el día en que se comprobó")
         return self
 
 
