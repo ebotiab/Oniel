@@ -62,6 +62,8 @@ cd backend && uv run oniel-data --help
 | `import all` | Todo lo anterior más la exportación estática; con `--if-changed` se salta si datos y código no cambiaron desde la última |
 | `validate` | Comprueba la red, la resolución de cada fichero de horarios declarado y las anotaciones de red sin base de datos (`--spec` repetible; sin él, todas) |
 | `export snapshot` | Exporta JSON estático para el visor |
+| `refresh gtfs` | Descarga el GTFS publicado por Renfe y, si el horario no es ninguno de los declarados, guarda el fichero y lo declara en `sources.json`; después tocan `validate` e `import all`. Lo usa el flujo semanal `.github/workflows/gtfs.yml` (`docs/datos.md`, «Refresco de los horarios») |
+| `refresh expiring` | Lista los ficheros de horarios de descarga manual a los que les quedan pocos días de validez |
 | `sources` | Lista las fuentes con licencia y fecha |
 | `logfire-test` | Envía una traza de prueba a Logfire |
 
