@@ -20,6 +20,7 @@ from oniel.domain.schemas import (
     InterruptionOut,
     LineDetailOut,
     LineSummary,
+    MilestoneOut,
     NetworkIndexOut,
     NetworkOut,
     NodeIndexOut,
@@ -76,6 +77,11 @@ def simplified_geometry(geometry: dict[str, Any], tolerance_m: float) -> dict[st
         return geometry
     coords = simplify([(c[0], c[1]) for c in geometry["coordinates"]], tolerance_m)
     return {"type": "LineString", "coordinates": [[lon, lat] for lon, lat in coords]}
+
+
+def _milestones(value: Any) -> list[dict[str, Any]]:
+    loaded = json.loads(value) if isinstance(value, str) else value
+    return list(loaded or [])
 
 
 def _geom(value: Any) -> dict[str, Any]:
@@ -310,6 +316,7 @@ async def fetch_annotations(
                 title=r["title"],
                 reason=r["reason"],
                 note=r["note"],
+                milestones=[MilestoneOut(**m) for m in _milestones(r["milestones"])],
                 sources=refs,
                 checked_on=r["checked_on"],
                 schedule_note=(

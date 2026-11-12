@@ -60,6 +60,321 @@
         "renfe-nota-servicios-malaga-2026-04"
       ],
       "checked_on": "2026-11-12"
+    },
+    {
+      "id": "proyecto-lav-mora-alcazar",
+      "kind": "proyecto",
+      "status": "sin_ejecutar",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -3.80123,
+            39.59611
+          ],
+          [
+            -3.62,
+            39.5
+          ],
+          [
+            -3.565,
+            39.478
+          ],
+          [
+            -3.36,
+            39.445
+          ],
+          [
+            -3.205285,
+            39.395729
+          ]
+        ]
+      },
+      "title": "Línea de alta velocidad Madrid – Jaén: tramo Mora – Alcázar de San Juan",
+      "reason": "Tramo de unos 67 km de una línea de alta velocidad nueva entre Madrid y Jaén. Saldría de la línea Madrid – Sevilla en Los Yébenes (Toledo) y llegaría a Alcázar de San Juan (Ciudad Real), con una estación junto a Consuegra y Madridejos.",
+      "note": "El estudio informativo se aprobó en 2008 y en 2009 se encargaron los proyectos de tres subtramos. Oniel no ha encontrado ningún anuncio de licitación de obras ni ninguna fuente oficial posterior a 2010 que diga en qué estado está.",
+      "milestones": [
+        {
+          "date": "2006-07-21",
+          "text": "El estudio informativo sale a información pública.",
+          "source_id": "boe-b-2006-173112"
+        },
+        {
+          "date": "2008-07-03",
+          "text": "Declaración de impacto ambiental favorable, con un trazado de 67,4 km.",
+          "source_id": "boe-a-2008-13633"
+        },
+        {
+          "date": "2008-09-04",
+          "text": "Se aprueba definitivamente el estudio informativo.",
+          "source_id": "boe-b-2008-232070"
+        },
+        {
+          "date": "2009-12-09",
+          "text": "Se adjudica la redacción del proyecto del subtramo Madridejos – Herencia.",
+          "source_id": "boe-b-2010-755"
+        },
+        {
+          "date": "2009-12-14",
+          "text": "Se adjudica la redacción del proyecto del subtramo Consuegra – Madridejos.",
+          "source_id": "boe-b-2010-761"
+        },
+        {
+          "date": "2009-12-21",
+          "text": "Se adjudica la redacción del proyecto del subtramo Mora – Consuegra.",
+          "source_id": "boe-b-2010-2558"
+        }
+      ],
+      "source_ids": [
+        "boe-b-2008-232070",
+        "boe-a-2008-13633",
+        "boe-b-2006-173112",
+        "boe-b-2010-2558",
+        "boe-b-2010-761",
+        "boe-b-2010-755",
+        "osm-nominatim-lugares"
+      ],
+      "checked_on": "2026-11-12"
+    },
+    {
+      "id": "proyecto-conexion-lav-cordoba-jaen",
+      "kind": "proyecto",
+      "status": "en_estudio",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -4.532324,
+            38.041656
+          ],
+          [
+            -4.447913,
+            37.955141
+          ]
+        ]
+      },
+      "title": "Baipás entre la alta velocidad Madrid – Sevilla y la línea de Córdoba a Jaén",
+      "reason": "Enlace de vía única entre la línea de alta velocidad Madrid – Sevilla y la línea convencional de Córdoba a Jaén, con un cambiador de ancho nuevo, para que los trenes de Madrid a Jaén no tengan que entrar en Córdoba.",
+      "note": "El trazado no está elegido: lo decidirá el estudio informativo, que se redacta desde enero de 2026. Las fuentes oficiales no dicen por dónde irá; la prensa del día del anuncio lo sitúa por Adamuz y Pedro Abad y lo llama «baipás de Montoro».",
+      "milestones": [
+        {
+          "date": "2022-02-22",
+          "text": "Se licita el estudio de viabilidad.",
+          "source_id": "boe-b-2022-5464"
+        },
+        {
+          "date": "2022-06-09",
+          "text": "Se adjudica el estudio de viabilidad.",
+          "source_id": "boe-b-2022-23466"
+        },
+        {
+          "date": "2025-03-07",
+          "text": "El Ministerio de Transportes da por positivo el estudio de viabilidad y anuncia el estudio informativo.",
+          "source_id": "mitma-nota-baipas-cordoba-jaen-2025-03"
+        },
+        {
+          "date": "2025-07-22",
+          "text": "Se licita el estudio informativo.",
+          "source_id": "boe-b-2025-27219"
+        },
+        {
+          "date": "2025-11-22",
+          "text": "Se adjudica el estudio informativo.",
+          "source_id": "boe-b-2026-635"
+        },
+        {
+          "date": "2026-01-08",
+          "text": "Se formaliza el contrato y empieza la redacción del estudio informativo.",
+          "source_id": "mitma-nota-baipas-cordoba-jaen-2026-01"
+        }
+      ],
+      "source_ids": [
+        "mitma-nota-baipas-cordoba-jaen-2026-01",
+        "mitma-nota-baipas-cordoba-jaen-2025-03",
+        "boe-b-2026-635",
+        "boe-b-2025-27219",
+        "boe-b-2022-23466",
+        "boe-b-2022-5464",
+        "europa-press-baipas-montoro-2025-03",
+        "osm-nominatim-lugares"
+      ],
+      "checked_on": "2026-11-12"
+    },
+    {
+      "id": "proyecto-variante-de-loja",
+      "kind": "proyecto",
+      "status": "en_obras",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -4.2074,
+            37.154
+          ],
+          [
+            -4.15,
+            37.148
+          ],
+          [
+            -4.075,
+            37.158
+          ],
+          [
+            -4.061,
+            37.2034
+          ]
+        ]
+      },
+      "title": "Variante de Loja",
+      "reason": "Trazado nuevo de unos 19 km en la línea de alta velocidad Antequera – Granada, al sur de Loja (Granada), entre Riofrío y Huétor-Tájar.",
+      "note": "Se construye por tramos. En febrero de 2025, según el Ministerio de Transportes, el de Riofrío estaba en obras, el de la A-92 tenía las obras adjudicadas, el del Valle del Genil estaba pendiente de licitar y el viaducto sobre la línea convencional estaba terminado. La línea Antequera – Granada no está cargada en Oniel.",
+      "milestones": [
+        {
+          "date": "2010-04-20",
+          "text": "El estudio informativo sale a información pública.",
+          "source_id": "boe-b-2010-13908"
+        },
+        {
+          "date": "2011-04-07",
+          "text": "Declaración de impacto ambiental favorable.",
+          "source_id": "boe-a-2011-7131"
+        },
+        {
+          "date": "2011-04-28",
+          "text": "Se aprueba definitivamente el estudio informativo.",
+          "source_id": "boe-b-2011-16289"
+        },
+        {
+          "date": "2023-10-19",
+          "text": "Se licitan las obras del tramo de Riofrío.",
+          "source_id": "boe-b-2023-30155"
+        },
+        {
+          "date": "2024-07-31",
+          "text": "Se licitan las obras del tramo de la A-92.",
+          "source_id": "boe-b-2024-27845"
+        },
+        {
+          "date": "2025-02-21",
+          "text": "El Ministerio de Transportes da el tramo de Riofrío por en obras.",
+          "source_id": "moncloa-nota-variante-de-loja-2025-02"
+        },
+        {
+          "date": "2025-04-21",
+          "text": "Se licitan las obras del tramo del Valle del Genil.",
+          "source_id": "boe-b-2025-14442"
+        }
+      ],
+      "source_ids": [
+        "moncloa-nota-variante-de-loja-2025-02",
+        "boe-a-2011-7131",
+        "boe-b-2011-16289",
+        "boe-b-2010-13908",
+        "boe-b-2023-30155",
+        "boe-b-2024-27845",
+        "boe-b-2025-14442",
+        "osm-nominatim-lugares"
+      ],
+      "checked_on": "2026-11-12"
+    },
+    {
+      "id": "proyecto-duplicacion-antequera-granada",
+      "kind": "proyecto",
+      "status": "licitado",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -4.424,
+              37.1345
+            ],
+            [
+              -4.2074,
+              37.154
+            ]
+          ],
+          [
+            [
+              -4.061,
+              37.2034
+            ],
+            [
+              -3.9666,
+              37.2373
+            ],
+            [
+              -3.8628,
+              37.2541
+            ],
+            [
+              -3.7589,
+              37.2326
+            ],
+            [
+              -3.6866,
+              37.2227
+            ],
+            [
+              -3.6285,
+              37.1909
+            ]
+          ]
+        ]
+      },
+      "title": "Duplicación de vía de la alta velocidad Antequera – Granada",
+      "reason": "Duplicación de la vía de la línea de alta velocidad Antequera – Granada entre la bifurcación de Archidona y la bifurcación de La Chana, a la entrada de Granada.",
+      "note": "Oniel solo ha comprobado en una fuente oficial la licitación de las obras de electrificación. La Variante de Loja, en el centro del tramo, es un proyecto aparte. La línea Antequera – Granada no está cargada en Oniel.",
+      "milestones": [
+        {
+          "date": "2025-11-18",
+          "text": "Se licitan las obras de electrificación de la duplicación.",
+          "source_id": "boe-b-2025-42383"
+        }
+      ],
+      "source_ids": [
+        "boe-b-2025-42383",
+        "osm-nominatim-lugares"
+      ],
+      "checked_on": "2026-11-12"
+    },
+    {
+      "id": "proyecto-galibo-tuneles-venta-de-cardenas-montoro",
+      "kind": "proyecto",
+      "status": "en_obras",
+      "line_id": "convencional-madrid-alcazar-cordoba",
+      "from_node": "venta-de-cardenas",
+      "to_node": "alcolea-de-cordoba",
+      "start_date": "2026-09-06",
+      "expected_end_text": "otoño de 2027",
+      "title": "Adaptación de 13 túneles para la autopista ferroviaria",
+      "reason": "Ampliación del gálibo, el hueco libre que necesita un tren, de 13 túneles entre Venta de Cárdenas y Montoro, para que por la línea puedan circular trenes que llevan semirremolques de camión entre Algeciras y Zaragoza.",
+      "note": "Los túneles son los de Venta de Cárdenas (cuatro), Las Correderas (tres), Santa Elena, Calancha, Vilches, Espeluy, Andújar y Montoro. Adif sitúa las obras entre Venta de Cárdenas y Los Cansinos, que queda entre Montoro y Alcolea de Córdoba; Oniel no conoce el punto exacto de cada túnel. La fecha de inicio es la del corte del servicio de viajeros y el final es una previsión de Adif recogida por la prensa.",
+      "milestones": [
+        {
+          "date": "2024-10-28",
+          "text": "Se licitan las obras.",
+          "source_id": "boe-b-2024-38950"
+        },
+        {
+          "date": "2025-03-25",
+          "text": "Se adjudican las obras.",
+          "source_id": "boe-b-2025-17998"
+        },
+        {
+          "date": "2026-09-06",
+          "text": "Empieza el corte del servicio de viajeros por las obras.",
+          "source_id": "renfe-nota-md-jaen-madrid-2026-09"
+        }
+      ],
+      "source_ids": [
+        "boe-b-2025-17998",
+        "boe-b-2024-38950",
+        "adif-obras-autopista-ferroviaria",
+        "renfe-nota-md-jaen-madrid-2026-09",
+        "el-estrecho-digital-corte-algeciras"
+      ],
+      "checked_on": "2026-11-12"
     }
   ]
 }

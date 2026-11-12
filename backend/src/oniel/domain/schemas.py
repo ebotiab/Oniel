@@ -108,6 +108,17 @@ class SourceRef(BaseModel):
     url: str | None = None
 
 
+class MilestoneOut(BaseModel):
+    """Un hito fechado de una anotación: la fecha conocida (año, mes o día), qué pasó y su fuente.
+
+    ``source_id`` es el id de una de las ``sources`` de la anotación, para no repetirla entera.
+    """
+
+    date: str
+    text: str
+    source_id: str
+
+
 class AnnotationOut(BaseModel):
     """Anotación de red: algo que pasa sobre la red entre dos fechas según una fuente.
 
@@ -140,6 +151,8 @@ class AnnotationOut(BaseModel):
     title: str | None = None
     reason: str | None = None
     note: str | None = None
+    #: Hitos fechados, del más antiguo al más reciente.
+    milestones: list[MilestoneOut] = Field(default_factory=list)
     sources: list[SourceRef]
     checked_on: dt.date
     #: Nota para los pasos por tramo cuando el tipo corta la circulación: «Horario publicado; sin

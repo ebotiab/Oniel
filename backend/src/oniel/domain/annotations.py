@@ -37,6 +37,7 @@ class AnnotationKind:
 
 
 INTERRUPTION = "interrupcion"
+PROJECT = "proyecto"
 
 ANNOTATION_KINDS: dict[str, AnnotationKind] = {
     kind.id: kind
@@ -49,6 +50,24 @@ ANNOTATION_KINDS: dict[str, AnnotationKind] = {
             scopes=("tramo",),
             required=("start_date", "reason"),
             cuts_service=True,
+        ),
+        # Lo previsto, en obras o parado alrededor de la red: una línea o un enlace nuevos (con
+        # geometría propia, un esbozo), o una actuación sobre un tramo o un nodo que ya existe.
+        AnnotationKind(
+            id=PROJECT,
+            label="el proyecto",
+            statuses=(
+                "en_estudio",
+                "en_proyecto",
+                "licitado",
+                "en_obras",
+                "parado",
+                "sin_ejecutar",
+                "en_servicio",
+            ),
+            ended_statuses=frozenset({"en_servicio"}),
+            scopes=("tramo", "nodo", "geometria"),
+            required=("title", "reason"),
         ),
     )
 }

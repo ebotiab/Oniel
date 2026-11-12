@@ -306,6 +306,36 @@ class FeedSpec(BaseModel):
 GEOMETRY_TYPES = ("Point", "LineString", "MultiLineString", "Polygon", "MultiPolygon")
 
 
+#: Caja en la que tiene que caer una geometría propia: la península y sus vecinos.
+GEOMETRY_BOUNDS = (-12.5, 34.0, 6.0, 46.0)
+
+
+def _positions(coordinates: Any) -> list[tuple[float, float]]:
+    """Las posiciones (longitud, latitud) de unas coordenadas GeoJSON, a cualquier profundidad."""
+    if (
+        isinstance(coordinates, list)
+        and len(coordinates) >= 2
+        and all(isinstance(v, int | float) and not isinstance(v, bool) for v in coordinates)
+    ):
+        return [(float(coordinates[0]), float(coordinates[1]))]
+    if isinstance(coordinates, list) and coordinates:
+        return [p for part in coordinates for p in _positions(part)]
+    raise ValueError("coordenadas mal formadas")
+
+
+class MilestoneSpec(BaseModel):
+    """Un hito fechado de una anotación, con la fuente que da la fecha."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    #: Lo que se sabe de la fecha: el año, el mes o el día (``AAAA``, ``AAAA-MM`` o ``AAAA-MM-DD``).
+    date: str = Field(pattern=r"^\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\d|3[01]))?)?$")
+    #: Qué pasó, en una frase neutra.
+    text: str = Field(min_length=1)
+    #: Id de ``sources.json``; tiene que estar entre las fuentes de la anotación.
+    source_id: str
+
+
 class AnnotationSpec(BaseModel):
     """Algo que pasa sobre la red entre dos fechas según una fuente (data/curated/anotaciones.json).
 
@@ -340,6 +370,8 @@ class AnnotationSpec(BaseModel):
     reason: str | None = Field(default=None, min_length=1)
     #: Precisión opcional: hasta dónde llegan los trenes, qué sigue en servicio.
     note: str | None = None
+    #: Hitos fechados, del más antiguo al más reciente, cada uno con la fuente que da su fecha.
+    milestones: list[MilestoneSpec] = Field(default_factory=list)
     #: Ids de ``sources.json``; la primera es la fuente principal, la que se cita junto a la fecha.
     source_ids: list[str] = Field(min_length=1)
     #: Día de la última comprobación en las fuentes.
@@ -400,6 +432,28 @@ class AnnotationSpec(BaseModel):
                 f"{label}: geometry tiene que ser una geometría GeoJSON con coordenadas"
                 f" ({', '.join(GEOMETRY_TYPES)})"
             )
+        if self.geometry is not None:
+            try:
+                positions = _positions(self.geometry["coordinates"])
+            except ValueError as error:
+                raise ValueError(f"{label}: geometry tiene {error}") from None
+            west, south, east, north = GEOMETRY_BOUNDS
+            if not all(west <= lon <= east and south <= lat <= north for lon, lat in positions):
+                raise ValueError(
+                    f"{label}: geometry tiene puntos fuera de la península; las coordenadas"
+                    " van como longitud y latitud"
+                )
+        dates = [m.date for m in self.milestones]
+        if dates != sorted(dates):
+            raise ValueError(f"{label}: los hitos van del más antiguo al más reciente")
+        for m in self.milestones:
+            if m.source_id not in self.source_ids:
+                raise ValueError(
+                    f"{label}: el hito de {m.date} cita la fuente {m.source_id}, que no está"
+                    " entre sus source_ids"
+                )
+            if m.date[:10] > self.checked_on.isoformat():
+                raise ValueError(f"{label}: el hito de {m.date} es posterior a la comprobación")
         for name in kind.required:
             if getattr(self, name) is None:
                 raise ValueError(f"{label} no tiene {name}, que su tipo exige")

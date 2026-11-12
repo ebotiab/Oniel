@@ -12,7 +12,7 @@ import {
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { useEffect, useRef } from 'react'
 
-import { CAPAS_CON_TRAZO } from '../app/annotationLayers'
+import { CAPAS_CON_TRAZO, dibujoDe } from '../app/annotationLayers'
 import type { AnnotationOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
@@ -27,6 +27,8 @@ interface Props {
   closedSegmentId: string | null
   /** Anotaciones vigentes hoy, por id de tramo: sus tramos se dibujan como diga la capa de su tipo. */
   annotated: Map<string, AnnotationOut[]>
+  /** Anotaciones vigentes hoy: las que tienen geometría propia se dibujan como diga su capa. */
+  annotations: AnnotationOut[]
   /** Trazo que resalta la leyenda: los demás se atenúan. */
   highlight?: Trazo | null
   /** Trazo que la leyenda pide encuadrar al fijarlo; `n` cambia en cada petición para repetir el encuadre. */
@@ -117,10 +119,10 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, annotated, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, annotated, annotations, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
-  const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
+  const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number>; annotations: Map<string, number> }>({ segments: new Map(), nodes: new Map(), annotations: new Map() })
   const readyRef = useRef(false)
   // Lo último que encuadró el mapa: 'red', una línea o una selección. De entrada, la red.
   const framedRef = useRef('red')
@@ -132,6 +134,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
   // Se deduce de la red, así que cambia a la vez que ella: addNetwork lo lee de aquí.
   const annotatedRef = useRef(annotated)
   annotatedRef.current = annotated
+  const annotationsRef = useRef(annotations)
+  annotationsRef.current = annotations
   const highlightRef = useRef(highlight)
   highlightRef.current = highlight
   const stateRef = useRef({ selection, hoverId, closedSegmentId, recorridos })
@@ -232,7 +236,14 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
       })),
     })
     const conns = withNumericIds(net.connection_features)
-    idsRef.current = { segments: segs.index, nodes: nodes.index }
+    // Las anotaciones con geometría propia y capa que las dibuje: una línea de puntos o de trazos con su nombre.
+    const notes = withNumericIds({
+      features: annotationsRef.current.flatMap((a) => {
+        const dibujo = dibujoDe(a)
+        return dibujo && a.geometry ? [{ id: a.id, geometry: a.geometry, properties: { kind: a.kind, dibujo, name: a.title ?? '' } }] : []
+      }),
+    })
+    idsRef.current = { segments: segs.index, nodes: nodes.index, annotations: notes.index }
     const existing = map.getSource(SRC.segments) as GeoJSONSource | undefined
     if (existing) {
       // La red ya está dibujada: la geometría completa de una línea recién cargada, o la red de la API,
@@ -240,6 +251,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
       existing.setData(segs.data)
       ;(map.getSource(SRC.nodes) as GeoJSONSource).setData(nodes.data)
       ;(map.getSource(SRC.connections) as GeoJSONSource).setData(conns.data)
+      ;(map.getSource(SRC.annotations) as GeoJSONSource).setData(notes.data)
       applyStates(map)
       reportNearLines(map)
       return
@@ -247,6 +259,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     map.addSource(SRC.segments, { type: 'geojson', data: segs.data })
     map.addSource(SRC.nodes, { type: 'geojson', data: nodes.data })
     map.addSource(SRC.connections, { type: 'geojson', data: conns.data })
+    map.addSource(SRC.annotations, { type: 'geojson', data: notes.data })
     for (const layer of onielLayers()) {
       try {
         map.addLayer(layer)
@@ -266,10 +279,13 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
       const segHits = map.queryRenderedFeatures(e.point, { layers: [LAYER.segmentsHit] })
       const segId = pick(segHits)
       if (segId) return callbacks.current.onSelect({ type: 'tramo', id: segId })
+      // Debajo de la vía: una anotación con geometría propia solo se toca donde no hay red cargada.
+      const note = map.queryRenderedFeatures(e.point, { layers: [LAYER.annotationsHit] })[0]
+      if (note) return callbacks.current.onSelect({ type: 'anotacion', kind: String(note.properties.kind), id: String(note.properties.oniel_id) })
       callbacks.current.onSelect(null)
     })
     map.on('mousemove', (e: MapMouseEvent) => {
-      const hits = map.queryRenderedFeatures(e.point, { layers: [LAYER.nodesStations, LAYER.nodesMinor, LAYER.segmentsHit] })
+      const hits = map.queryRenderedFeatures(e.point, { layers: [LAYER.nodesStations, LAYER.nodesMinor, LAYER.segmentsHit, LAYER.annotationsHit] })
       const id = pick(hits)
       map.getCanvas().style.cursor = id ? 'pointer' : ''
       const segHit = hits.find((h: MapGeoJSONFeature) => h.layer.id === LAYER.segmentsHit)
@@ -297,7 +313,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
 
   function applyStates(map: MapLibreMap) {
     const { selection, hoverId, closedSegmentId, recorridos } = stateRef.current
-    const { segments, nodes } = idsRef.current
+    const { segments, nodes, annotations: notes } = idsRef.current
     const enRecorrido = new Set(recorridos?.todos)
     const elegido = new Set(recorridos?.elegido)
     const extremos = new Set(recorridos?.extremos)
@@ -312,6 +328,9 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
           elegido: elegido.has(id),
         },
       )
+    }
+    for (const [id, fid] of notes) {
+      map.setFeatureState({ source: SRC.annotations, id: fid }, { seleccionado: selection?.type === 'anotacion' && selection.id === id })
     }
     for (const [id, fid] of nodes) {
       map.setFeatureState({ source: SRC.nodes, id: fid }, { seleccionado: (selection?.type === 'nodo' && selection.id === id) || extremos.has(id) })
@@ -364,6 +383,24 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
       return
     }
     framedRef.current = `${selection.type}:${selection.id}`
+    if (selection.type === 'anotacion') {
+      // Una anotación se encuadra entera: su geometría propia o, si va de nodo a nodo, sus tramos.
+      const a = annotationsRef.current.find((x) => x.id === selection.id)
+      if (!a) return
+      const b = new LngLatBounds()
+      const extend = (coords: unknown): void => {
+        if (!Array.isArray(coords)) return
+        if (typeof coords[0] === 'number' && typeof coords[1] === 'number') b.extend([coords[0], coords[1]])
+        else for (const part of coords) extend(part)
+      }
+      if (a.geometry && 'coordinates' in a.geometry) extend(a.geometry.coordinates)
+      const ids = new Set(a.segment_ids)
+      for (const f of network.segment_features.features) if (ids.has(f.id) && 'coordinates' in f.geometry) extend(f.geometry.coordinates)
+      const n = a.node_id ? network.nodes.find((x) => x.id === a.node_id) : undefined
+      if (n) b.extend([n.lon, n.lat])
+      if (!b.isEmpty()) map.fitBounds(b, { padding: pad, maxZoom: 10, duration: reduced ? 0 : 700 })
+      return
+    }
     if (selection.type === 'tramo') {
       const f = network.segment_features.features.find((x) => x.id === selection.id)
       if (!f || f.geometry.type !== 'LineString') return

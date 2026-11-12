@@ -1,0 +1,70 @@
+{
+  "descripcion": "Registro de las consultas hechas el 12 de noviembre de 2026 para los proyectos de backend/data/curated/anotaciones.json. Los anuncios del BOE se guardan enteros en raw/proyectos/boe/; aquí queda, con palabras propias, qué decían ese día las páginas que no son del BOE y de dónde salen los puntos de cada esbozo.",
+  "consultado_el": "2026-11-12",
+  "consultas": [
+    {
+      "source_id": "mitma-nota-baipas-cordoba-jaen-2025-03",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/vie-07032025-1219",
+      "fecha_de_la_pagina": "2025-03-07",
+      "resumen": "El ministro anuncia una inversión de 400 millones de euros para conectar Jaén con la alta velocidad. El estudio de viabilidad del baipás entre la línea Madrid – Sevilla y el corredor Córdoba – Jaén es positivo y se licitará el estudio informativo. De cinco alternativas la mejor es la A, de unos 17,5 km con los ramales de conexión. Todas son de vía única. No nombra los municipios por los que pasa.",
+      "que_aporta": "La fecha del anuncio, el resultado del estudio de viabilidad y la longitud aproximada."
+    },
+    {
+      "source_id": "mitma-nota-baipas-cordoba-jaen-2026-01",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/jue-08012026-1158",
+      "fecha_de_la_pagina": "2026-01-08",
+      "resumen": "El Ministerio formaliza el contrato del estudio informativo, lo que permite empezar a redactarlo. Describe la actuación como una conexión o baipás entre la línea de alta velocidad y la línea convencional entre Córdoba y Jaén, con un cambiador de anchos nuevo, para que los trenes a Jaén no entren en la estación de Córdoba. La elección entre las cinco alternativas queda para el estudio informativo.",
+      "que_aporta": "Qué une el proyecto, su estado (estudio informativo en redacción) y que el trazado no está elegido."
+    },
+    {
+      "source_id": "europa-press-baipas-montoro-2025-03",
+      "editor": "Europa Press, publicado por Forbes España",
+      "url": "https://forbes.es/turismo/643611/puente-anuncia-400-millones-para-conectar-con-alta-velocidad-en-montoro-y-reducir-a-tres-horas-el-viaje-a-madrid/",
+      "fecha_de_la_pagina": "2025-03-07",
+      "resumen": "Teletipo sobre el mismo anuncio. Sitúa el baipás en Montoro, le da unos 19 km con los ramales y dice que pasaría por Pedro Abad y Adamuz.",
+      "que_aporta": "Los dos municipios del esbozo. Es prensa y no coincide con la nota oficial en la longitud."
+    },
+    {
+      "source_id": "moncloa-nota-variante-de-loja-2025-02",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible, en la web de La Moncloa",
+      "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/paginas/2025/210225-ave-madrid-granada.aspx",
+      "fecha_de_la_pagina": "2025-02-21",
+      "resumen": "Visita del ministro a las obras de la Variante de Loja, un tramo de unos 19 km de la línea de alta velocidad Antequera – Granada, con plataforma para vía doble de ancho estándar, por un itinerario nuevo al sur de la ciudad y de la autovía A-92. Estado de sus cuatro tramos: Riofrío (3,2 km), obras en ejecución; A-92 (6,3 km), obras adjudicadas; Valle del Genil (7,9 km), proyecto aprobado en diciembre de 2024 y en trámite para licitar; viaducto sobre la línea convencional Bobadilla – Granada (1,7 km), concluido.",
+      "que_aporta": "Que la variante está en obras y el estado de cada tramo en esa fecha."
+    }
+  ],
+  "esbozos": {
+    "fuente_de_las_coordenadas": "osm-nominatim-lugares",
+    "nota": "Cada esbozo une con rectas los puntos de esta lista. Los puntos de la red cargada salen de la geometría de Oniel; los demás son la situación del municipio o del lugar en OpenStreetMap, redondeada. No son el trazado del proyecto.",
+    "proyecto-lav-mora-alcazar": [
+      "Línea Madrid – Sevilla, km 99,3 (Los Yébenes), calculado sobre la geometría cargada",
+      "Norte de Consuegra",
+      "Entre Consuegra y Madridejos",
+      "Norte de Villafranca de los Caballeros",
+      "Alcázar de San Juan (nodo de la red cargada)"
+    ],
+    "proyecto-conexion-lav-cordoba-jaen": [
+      "Punto de la línea Madrid – Sevilla más cercano a Adamuz",
+      "Punto de la línea convencional más cercano a Pedro Abad"
+    ],
+    "proyecto-variante-de-loja": [
+      "Riofrío (Loja)",
+      "Sur de Loja",
+      "Salar",
+      "Estación de Huétor-Tájar"
+    ],
+    "proyecto-duplicacion-antequera-granada": [
+      "Estación de Archidona",
+      "Riofrío (Loja)",
+      "— la Variante de Loja queda entre las dos partes —",
+      "Estación de Huétor-Tájar",
+      "Tocón",
+      "Estación de Íllora",
+      "Pinos Puente",
+      "Atarfe",
+      "La Chana (Granada)"
+    ]
+  }
+}

@@ -26,6 +26,11 @@
 | `el-estrecho-digital-corte-algeciras` | Previsión de fin de las obras (otoño de 2027) y límite del corte de la vía en Venta de Cárdenas | El Estrecho Digital | © del medio; se cita el dato | 2026-11-10 |
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
 | `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
+| `boe-a-…` y `boe-b-…` (19 fuentes) | Un anuncio del Boletín Oficial del Estado por fuente: estudios informativos, declaraciones de impacto ambiental, licitaciones y adjudicaciones de los proyectos (véase «Proyectos») | Boletín Oficial del Estado | Reutilización citando la fuente | 2026-11-12 |
+| `mitma-nota-baipas-cordoba-jaen-2025-03`, `mitma-nota-baipas-cordoba-jaen-2026-01` | Anuncio del baipás entre la alta velocidad y la línea de Córdoba a Jaén y comienzo de su estudio informativo | Ministerio de Transportes y Movilidad Sostenible | Consulta pública | 2026-11-12 |
+| `moncloa-nota-variante-de-loja-2025-02` | Estado de los tramos de la Variante de Loja en febrero de 2025 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-12 |
+| `europa-press-baipas-montoro-2025-03` | Municipios por los que pasaría el baipás, según la prensa del día del anuncio | Europa Press; Forbes España | © de la agencia; se cita el dato | 2026-11-12 |
+| `osm-nominatim-lugares` | Situación de los municipios y lugares por los que pasan los esbozos de los proyectos | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
 
 El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»); el de Renfe lo descarga cada semana un flujo de GitHub Actions, que abre una PR cuando el horario publicado ha cambiado (véase «Refresco de los horarios»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto. Lo mismo vale para la consulta sobre los horarios de Iryo (`raw/operadores/consultas_2026-11-11.json`).
@@ -135,6 +140,7 @@ Una anotación es algo que pasa sobre la red entre dos fechas según una fuente:
 | `start_date`, `expected_end_date`, `expected_end_text`, `ended_on` | Las fechas, en días completos. La anotación está vigente los días `start_date` ≤ día < `ended_on`, sin límite por el lado que falte. |
 | `title`, `reason` | El nombre propio de lo anotado y el motivo o la descripción en una frase neutra. Hace falta al menos uno; cada tipo dice cuál exige. |
 | `note` | Precisión opcional. |
+| `milestones` | Opcional: hitos fechados, del más antiguo al más reciente. Cada uno lleva `date` (lo que se sabe de la fecha: `AAAA`, `AAAA-MM` o `AAAA-MM-DD`), `text` (qué pasó, en una frase neutra) y `source_id`, que tiene que ser una de las fuentes de la anotación. |
 | `source_ids` | Ids de `sources.json`. La primera es la fuente principal, y tiene que tener URL. |
 | `checked_on` | Día de la última comprobación en las fuentes. |
 
@@ -143,15 +149,16 @@ Una anotación es algo que pasa sobre la red entre dos fechas según una fuente:
 | Tipo | Estados | Alcances | Exige | Corta la circulación |
 |---|---|---|---|---|
 | `interrupcion` | `vigente`, `terminada` (con `ended_on`) | de nodo a nodo | `start_date`, `reason` | Sí |
+| `proyecto` | `en_estudio`, `en_proyecto`, `licitado`, `en_obras`, `parado`, `sin_ejecutar`, `en_servicio` (con `ended_on`) | de nodo a nodo, un nodo o geometría propia | `title`, `reason` | No |
 
 **Añadir un tipo** son dos entradas, sin migración, endpoint ni capa nuevos:
 
 1. Declararlo en `ANNOTATION_KINDS` con sus estados, sus alcances y los campos que exige. Desde ahí lo validan `oniel-data validate` y la importación, lo guarda la tabla `annotations` (el tipo y el estado son texto: no hay que tocar el esquema) y lo sirven `GET /api/annotations`, el índice y el detalle de cada línea.
-2. Darle una entrada en el registro de capas del visor, `frontend/src/app/annotationLayers.ts`: cómo se marcan sus tramos en el mapa y en el esquema, su entrada de leyenda, su ficha, sus notas en las listas y su apartado en «Qué hay en esta versión». El mapa, la leyenda, el esquema y los paneles leen de ese registro. Los colores y los textos de la entrada son una decisión de diseño: se proponen y se anotan en `docs/diseno.md`. Un tipo sin entrada se sirve pero no se enseña.
+2. Darle una entrada en el registro de capas del visor, `frontend/src/app/annotationLayers.ts`: cómo se marcan sus tramos en el mapa y en el esquema, cómo se dibuja su geometría propia (línea de puntos o de trazos), sus entradas de leyenda, su ficha y la ruta de su ficha propia, sus notas en las listas y su apartado en «Qué hay en esta versión». El mapa, la leyenda, el esquema y los paneles leen de ese registro. Los colores y los textos de la entrada son una decisión de diseño: se proponen y se anotan en `docs/diseno.md`. Un tipo sin entrada se sirve pero no se enseña.
 
-Lo que no está hecho todavía es el dibujo en el mapa de una anotación con geometría propia: llegará como un campo más de la entrada del registro con el primer tipo que la use (los proyectos, #18). Las anotaciones de un nodo se sirven con el detalle de las líneas a las que pertenece.
+Una anotación con geometría propia se dibuja en el mapa con el trazo que diga su capa y, si la capa declara una ruta, tiene ficha propia (`#/proyecto/<id>`); las que van de nodo a nodo salen además en la ficha de sus tramos y de sus estaciones. Lo que no está hecho todavía es enseñar en la ficha de una estación las anotaciones de alcance `nodo`: no hay ninguna registrada. Las anotaciones de un nodo se sirven con el detalle de las líneas a las que pertenece.
 
-`oniel-data validate` comprueba el fichero sin base de datos y termina con código 1 si algo no encaja: que el tipo está declarado y el estado es de los suyos; que hay un alcance y solo uno, y que su tipo lo admite; que están los campos que el tipo exige; que el estado y `ended_on` van juntos; que las fechas tienen orden (ni la previsión ni el final son anteriores al inicio, y el final no es posterior a la comprobación); que la línea está cargada, los dos nodos son suyos y van en el orden del kilometraje, o que el nodo suelto está en alguna línea cargada; y que las fuentes están en `sources.json`, la principal con URL. `oniel-data import annotations` carga el fichero en la tabla `annotations` (también lo hace `import all`, después de la red) y, si no encaja con la red cargada, lo rechaza sin tocar lo que había.
+`oniel-data validate` comprueba el fichero sin base de datos y termina con código 1 si algo no encaja: que el tipo está declarado y el estado es de los suyos; que hay un alcance y solo uno, y que su tipo lo admite; que están los campos que el tipo exige; que el estado y `ended_on` van juntos; que las fechas tienen orden (ni la previsión ni el final son anteriores al inicio, y el final no es posterior a la comprobación); que una geometría propia tiene coordenadas bien formadas y dentro de la península; que los hitos van en orden, no son posteriores a la comprobación y citan fuentes de la propia anotación; que la línea está cargada, los dos nodos son suyos y van en el orden del kilometraje, o que el nodo suelto está en alguna línea cargada; y que las fuentes están en `sources.json`, la principal con URL. `oniel-data import annotations` carga el fichero en la tabla `annotations` (también lo hace `import all`, después de la red) y, si no encaja con la red cargada, lo rechaza sin tocar lo que había.
 
 La API las sirve en `GET /api/annotations`, con `?kind=` (solo las de ese tipo; uno sin declarar da un 422) y `?on=AAAA-MM-DD` (solo las vigentes ese día), y dentro del índice (`GET /api/lines`), del detalle de cada línea y de `GET /api/network`, en `annotations`. La instantánea las lleva en `index.json` y en `lines/<id>.json`.
 
@@ -223,6 +230,49 @@ Lo recuerda un flujo de GitHub Actions, `.github/workflows/recordatorio-interrup
 5. Al fusionar, Render reimporta la base. La instantánea va dentro del visor, así que hay que publicarlo (`docs/despliegue.md`): hasta entonces, quien entre con la API dormida ve la interrupción anterior.
 
 Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes y la de enero y febrero ya había terminado. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
+
+## Proyectos
+
+Lo que está previsto, en obras o parado alrededor de las líneas cargadas, como anotaciones de tipo `proyecto` en `anotaciones.json` (véase «Anotaciones de red»). Oniel dice el estado según la fuente, los hitos con su fecha y de dónde sale cada uno; no valora los proyectos ni explica por qué avanzan o no.
+
+| Campo | Qué es en un proyecto |
+|---|---|
+| `status` | `en_estudio` (estudio de viabilidad o informativo), `en_proyecto` (proyecto constructivo en redacción), `licitado` (obras licitadas), `en_obras`, `parado`, `sin_ejecutar` (aprobado en su día y sin obras) o `en_servicio` (terminado: lleva `ended_on` y deja de mostrarse como proyecto). |
+| Alcance | `geometry` para una línea o un enlace nuevos: un esbozo. O `line_id` con `from_node` y `to_node` para una actuación sobre una vía cargada. |
+| `title`, `reason` | El nombre con el que se entiende y, en una frase llana, qué es y qué une. |
+| `note` | Lo que hace falta para no leer de más: qué no dicen las fuentes, qué es previsión, qué línea no está cargada. |
+| `milestones` | Los hitos con fecha que da una fuente: información pública, declaración de impacto ambiental, aprobación, licitaciones, adjudicaciones, inicio de obras. |
+| `start_date`, `expected_end_date`, `expected_end_text` | Solo cuando hay obras: desde cuándo y hasta cuándo se prevén. |
+
+**El estado no se deduce.** Se escribe el que sostiene la fuente oficial más reciente que se ha leído, y la nota dice hasta dónde llega esa fuente. `sin_ejecutar` describe lo encontrado (un estudio aprobado y ningún anuncio de obras), no una decisión de nadie: ninguna fuente oficial leída da por descartado ningún proyecto.
+
+**Los esbozos.** Un proyecto con geometría propia se dibuja como una línea que une con rectas el punto de la red cargada del que sale y los lugares que nombra su fuente (los municipios, situados con OpenStreetMap). No es el trazado del proyecto, y la ficha lo dice. Qué puntos une cada esbozo está en `backend/data/raw/proyectos/consultas_2026-11-12.json`.
+
+### Proyectos registrados
+
+Comprobados el 12 de noviembre de 2026. Los anuncios del BOE están enteros en `backend/data/raw/proyectos/boe/`; lo que decían ese día las demás páginas, resumido con palabras propias, en `backend/data/raw/proyectos/consultas_2026-11-12.json`.
+
+| Proyecto | Estado | Alcance | Último hito comprobado | Fuente principal |
+|---|---|---|---|---|
+| Línea de alta velocidad Madrid – Jaén: tramo Mora – Alcázar de San Juan | `sin_ejecutar` | Esbozo desde la alta velocidad Madrid – Sevilla (km 99,3, en Los Yébenes) hasta Alcázar de San Juan | Adjudicación de la redacción de tres proyectos, diciembre de 2009 | `boe-b-2008-232070` |
+| Baipás entre la alta velocidad Madrid – Sevilla y la línea de Córdoba a Jaén | `en_estudio` | Esbozo entre la alta velocidad junto a Adamuz y la línea convencional junto a Pedro Abad | Comienzo de la redacción del estudio informativo, 8 de enero de 2026 | `mitma-nota-baipas-cordoba-jaen-2026-01` |
+| Variante de Loja | `en_obras` | Esbozo entre Riofrío y Huétor-Tájar, en una línea que Oniel no tiene cargada | Licitación del tramo del Valle del Genil, 21 de abril de 2025 | `moncloa-nota-variante-de-loja-2025-02` |
+| Duplicación de vía de la alta velocidad Antequera – Granada | `licitado` | Esbozo en dos partes, a cada lado de la Variante de Loja, en una línea que Oniel no tiene cargada | Licitación de la electrificación, 18 de noviembre de 2025 | `boe-b-2025-42383` |
+| Adaptación de 13 túneles para la autopista ferroviaria | `en_obras` | Línea convencional, de Venta de Cárdenas a Alcolea de Córdoba (8 tramos) | Corte del servicio de viajeros, 6 de septiembre de 2026 | `boe-b-2025-17998` |
+
+Lo que conviene saber de cada uno:
+
+- **Mora – Alcázar.** El estudio informativo se aprobó el 4 de septiembre de 2008 y entre el 9 y el 21 de diciembre de 2009 se adjudicó la redacción de los proyectos de tres subtramos. No se encontró ningún anuncio de licitación de obras ni ninguna fuente oficial posterior a 2010 sobre su estado. La prensa de 2026 atribuye al Ministerio haberlo descartado, sin citar un documento: no se registra. Sale de la línea Madrid – Sevilla en Los Yébenes, no en Mora, según la declaración de impacto ambiental.
+- **Baipás.** El nombre oficial es «conexión de la línea de alta velocidad Madrid-Sevilla con el corredor Córdoba-Jaén»; «baipás de Montoro» es de la prensa. El trazado no está elegido: el estudio de viabilidad comparó cinco alternativas y la nota del Ministerio del 8 de enero de 2026 deja la elección al estudio informativo. Los municipios del esbozo (Adamuz y Pedro Abad) solo los da la prensa, y la longitud no coincide entre la nota oficial (unos 17,5 km) y el teletipo (unos 19 km): no se escribe ninguna.
+- **Variante de Loja.** El estado por tramos es de la nota del Ministerio del 21 de febrero de 2025; después solo consta en el BOE la licitación del tramo del Valle del Genil. Las adjudicaciones de las obras solo se encontraron en la prensa y no se registran.
+- **Duplicación Antequera – Granada.** Solo se usa la licitación de la electrificación. Hay además anuncios de expropiaciones, que no se guardan porque traen nombres de particulares, y una adjudicación de la obra principal que solo recoge la prensa.
+- **Túneles.** El contrato, de Adif, nombra 13 túneles: Venta de Cárdenas 1 a 4, Las Correderas 1 a 3, Santa Elena, Calancha, Vilches, Espeluy, Andújar y Montoro. Ninguna fuente da el punto kilométrico de cada uno; Adif sitúa las obras entre Venta de Cárdenas y Los Cansinos, que queda entre Montoro y Alcolea de Córdoba, y por eso el proyecto llega hasta Alcolea. Es la misma obra que causa la interrupción entre Almuradiel-Viso del Marqués y Alcolea de Córdoba: la interrupción dice hasta dónde llegan los trenes; el proyecto, dónde están las obras. Las fechas de inicio y de final previsto son las de esa interrupción.
+
+Límites: no están los proyectos de fuera del entorno de las líneas cargadas; los importes y los adjudicatarios no se registran; y un proyecto sobre una vía cargada no cambia el dibujo de la vía.
+
+### Cómo se revisan los proyectos
+
+A mano, como las interrupciones, pero sin urgencia: cuando una fuente oficial publica un paso nuevo (una aprobación, una licitación, un inicio de obras) o, a falta de eso, un par de veces al año. Se consulta el BOE por el nombre del proyecto y la sala de prensa del Ministerio de Transportes (su web rechaza las descargas automáticas: se lee en un navegador); adif.es también las rechaza. Cada anuncio del BOE que se cite se descarga con `https://www.boe.es/diario_boe/xml.php?id=<identificador>` a `backend/data/raw/proyectos/boe/`, con la fecha en el nombre, y se registra en `sources.json`; los que traen nombres de particulares (expropiaciones) no se guardan. Después se añade el hito, se corrige el estado si la fuente lo sostiene, se pone al día `checked_on` y se regenera la instantánea, con la tabla de arriba al día en la misma PR. El recordatorio automático de las interrupciones no mira los proyectos.
 
 ## Conjuntos de datos
 
@@ -387,6 +437,8 @@ El JavaScript va en dos ficheros. MapLibre es tres cuartas partes del total (295
 
 La vía tampoco espera a las tipografías del mapa base, aunque aparezca casi a la vez que los rótulos. Comprobado en producción el 12 de noviembre de 2026 con el mismo móvil emulado y 4G lenta, dos pasadas por caso: con las tipografías de OpenFreeMap sin tocar la vía se dibuja a los 4,9 – 6,4 s; retrasándolas 5 s, a los 4,9 – 5,2 s; retrasándolas 10 s, a los 5,0 – 5,1 s, y bloqueándolas del todo, a los 5,3 – 5,6 s. El mapa las pide hacia los 4,2 s, cuando el estilo termina de cargar, que es también cuando se añade la vía: de ahí la coincidencia. Lo que marca esos 5 s es lo que va antes, la descarga de MapLibre y del estilo.
 
+Las anotaciones de red viajan enteras en el índice, con sus textos, sus hitos y sus fuentes, porque las de geometría propia no cuelgan de ninguna línea. Medido el 12 de noviembre de 2026, con tres interrupciones y cinco proyectos: `index.json` pesa 79,0 KB (15,9 KB comprimido), de los que unos 30 KB sin comprimir son anotaciones (24 KB, más 7 KB del alias `interruptions`); cada proyecto añade unos 3,5 KB sin comprimir. Las pruebas miden por separado que la red del índice siga siendo menos de una quinta parte de la red entera y que las anotaciones no pasen de 40 KB. Cuando no quepan, lo siguiente es dejar en el índice lo que el mapa necesita de cada anotación y pedir su detalle aparte, como el de las líneas; retirar el alias ya ahorra 7 KB.
+
 ## Modelo de datos
 
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
@@ -402,7 +454,7 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 - `datasets`: un conjunto de datos por fichero de horarios importado, con su fuente, su operador, el fichero, su SHA-256, el día de descarga (`retrieved_on`), los días que cubre (`valid_from`, `valid_to`) y cuándo se importó. El id es legible: la fuente y el día de descarga (`renfe-gtfs-av-ld-md-2026-11-08`).
 - `services`, `service_dates`, `service_stops`: horarios por tren y día, con el operador y el conjunto de datos del que salen (`dataset_id`, que forma parte de la clave). Cada viaje del GTFS se guarda una sola vez por conjunto aunque recorra varias líneas, y el mismo viaje puede estar en varios conjuntos.
 - `service_segment_passes`: el paso de cada tren por cada tramo, precalculado con las reglas de simulación, línea a línea y por conjunto de datos. Un tren que cambia de línea tiene pasos en cada una solo entre las paradas que le corresponden.
-- `annotations`: anotaciones de red (hoy, las interrupciones del servicio), con su tipo, su estado, su alcance (de un nodo a otro de una línea, un nodo o una geometría propia), sus fechas, el título o el motivo, las fuentes y el día de la última comprobación. Los tramos afectados no se guardan: salen del orden de los dos nodos en `line_nodes`, de modo que reimportar la red no las deja huérfanas. El tipo y el estado son texto y los comprueba la importación contra los tipos declarados, así que un tipo nuevo no necesita migración. Sustituye a la tabla `interruptions`, que la migración `0007` traslada y retira.
+- `annotations`: anotaciones de red (las interrupciones del servicio y los proyectos), con su tipo, su estado, su alcance (de un nodo a otro de una línea, un nodo o una geometría propia), sus fechas, el título o el motivo, los hitos fechados (`milestones`, una lista en JSON), las fuentes y el día de la última comprobación. Los tramos afectados no se guardan: salen del orden de los dos nodos en `line_nodes`, de modo que reimportar la red no las deja huérfanas. El tipo y el estado son texto y los comprueba la importación contra los tipos declarados, así que un tipo nuevo no necesita migración. Sustituye a la tabla `interruptions`, que la migración `0007` traslada y retira.
 - `import_runs`: historial de importaciones con estadísticas.
 
 ## Añadir otra línea

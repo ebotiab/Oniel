@@ -111,6 +111,16 @@ export interface SourceRef {
 }
 
 /**
+ * Un hito fechado de una anotación: la fecha conocida (AAAA, AAAA-MM o AAAA-MM-DD), qué pasó y el
+ * id de su fuente, que es una de las `sources` de la anotación.
+ */
+export interface Milestone {
+  date: string
+  text: string
+  source_id: string
+}
+
+/**
  * Anotación de red: algo que pasa sobre la red entre dos fechas según una fuente. `kind` dice qué
  * es y `status`, en qué estado está. El alcance es uno de tres: de un nodo a otro de una línea
  * (con los tramos que quedan entre ambos en `segment_ids`), un nodo (`node_id`) o una `geometry`
@@ -139,6 +149,8 @@ export interface AnnotationOut {
   title: string | null
   reason: string | null
   note: string | null
+  /** Hitos fechados, del más antiguo al más reciente. Falta en las respuestas anteriores a los proyectos. */
+  milestones?: Milestone[]
   sources: SourceRef[]
   checked_on: string
   /** Solo en los tipos que cortan la circulación: «Horario publicado; sin circulación real desde el … (fuente)». */

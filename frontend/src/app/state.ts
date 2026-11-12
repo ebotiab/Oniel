@@ -1,7 +1,9 @@
 import type { LineSummary } from '../data/types.ts'
+import { annotationLayer, layerByRoute } from './annotationLayers.ts'
 import { scenarioFromCode } from '../routing/scenario.ts'
 
-export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: string } | null
+/** Lo seleccionado: un tramo, un nodo o una anotación con ficha propia (un proyecto), con su tipo. */
+export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: string } | { type: 'anotacion'; kind: string; id: string } | null
 
 export interface Route {
   selection: Selection
@@ -29,7 +31,8 @@ export interface Comparador {
  * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
  * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/escenario/<cadena>,
  * #/recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), #/glosario,
- * #/glosario/<entrada> y #/cobertura.
+ * #/glosario/<entrada>, #/cobertura y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
+ * (#/proyecto/<id>).
  */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
@@ -37,6 +40,8 @@ export function parseHash(hash: string): Route {
   if ((kind === 'tramo' || kind === 'nodo') && id) {
     return { selection: { type: kind, id }, simulacion: kind === 'tramo' && action === 'cierre' }
   }
+  const capa = kind ? layerByRoute(kind) : undefined
+  if (capa && id) return { selection: { type: 'anotacion', kind: capa.kind, id }, simulacion: false }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
   if (kind === 'glosario') return { selection: null, simulacion: false, glosario: { entrada: id ?? null } }
@@ -72,6 +77,10 @@ export function toHash(route: Route): string {
   }
   if (!route.selection) return route.linea ? `#/linea/${encodeURIComponent(route.linea)}` : '#/'
   if (route.escenario && route.simulacion) return `#/escenario/${code(route.escenario)}`
+  if (route.selection.type === 'anotacion') {
+    const ruta = annotationLayer(route.selection.kind)?.ruta
+    return ruta ? `#/${ruta}/${encodeURIComponent(route.selection.id)}` : '#/'
+  }
   const base = `#/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
   return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base
 }

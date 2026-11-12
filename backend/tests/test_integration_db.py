@@ -40,6 +40,7 @@ RULES = {
 ANNOTATIONS = DATA_DIR / "curated" / "anotaciones.json"
 LAV_CUT = "lav-madrid-andalucia-2026-10-28"
 WORKS_CUT = "convencional-obras-autopista-ferroviaria-2026-09-06"
+TUNNELS_PROJECT = "proyecto-galibo-tuneles-venta-de-cardenas-montoro"
 #: Día en que se comprobaron las dos interrupciones iniciales: ambas estaban vigentes. Las pruebas
 #: que dependen de la fecha usan este día, que no cambia aunque después se registre su final.
 CHECKED = "2026-11-10"
@@ -336,7 +337,9 @@ async def test_annotations_endpoint_filters_by_kind_and_day(client: httpx.AsyncC
     assert cuts == [a for a in everything if a["kind"] == "interrupcion"]
     on = (await client.get("/api/annotations", params={"on": "2026-09-06"})).json()
     assert {a["id"] for a in on} & {LAV_CUT, WORKS_CUT} == {WORKS_CUT}
-    assert on == (await client.get("/api/interruptions", params={"date": "2026-09-06"})).json()
+    assert [a for a in on if a["kind"] == "interrupcion"] == (
+        await client.get("/api/interruptions", params={"date": "2026-09-06"})
+    ).json()
     unknown = await client.get("/api/annotations", params={"kind": "no-declarado"})
     assert unknown.status_code == 422 and "interrupcion" in unknown.json()["detail"]
 
@@ -350,9 +353,44 @@ async def test_index_and_lines_carry_annotations_with_interruptions_as_an_alias(
         a for a in index["annotations"] if a["kind"] == "interrupcion"
     ]
     line = (await client.get(f"/api/lines/{CONV}")).json()
-    assert [a["id"] for a in line["annotations"]] == [WORKS_CUT]
-    assert line["interruptions"] == line["annotations"]
+    # la línea lleva sus anotaciones de cualquier tipo; el alias, solo las interrupciones
+    assert {a["id"] for a in line["annotations"]} == {WORKS_CUT, TUNNELS_PROJECT}
+    assert [a["id"] for a in line["interruptions"]] == [WORKS_CUT]
     assert (await client.get(f"/api/lines/{MZCR}")).json()["annotations"] == []
+
+
+async def test_projects_are_served_with_their_status_milestones_and_sketch(
+    client: httpx.AsyncClient,
+) -> None:
+    projects = (await client.get("/api/annotations", params={"kind": "proyecto"})).json()
+    by_id = {p["id"]: p for p in projects}
+    assert len(by_id) == 5
+    mora = by_id["proyecto-lav-mora-alcazar"]
+    assert mora["status"] == "sin_ejecutar" and mora["start_date"] is None
+    # un esbozo propio, sin tramos de la red, que arranca en la alta velocidad y acaba en Alcázar
+    assert mora["geometry"]["type"] == "LineString" and mora["segment_ids"] == []
+    assert mora["geometry"]["coordinates"][-1] == [-3.205285, 39.395729]
+    assert [m["date"] for m in mora["milestones"]] == sorted(m["date"] for m in mora["milestones"])
+    for p in projects:
+        assert p["title"] and p["reason"] and p["milestones"], p["id"]
+        # cada hito cita una de las fuentes del proyecto, y un proyecto no corta la circulación
+        assert {m["source_id"] for m in p["milestones"]} <= {s["id"] for s in p["sources"]}
+        assert p["schedule_note"] is None
+    tunnels = by_id[TUNNELS_PROJECT]
+    assert (tunnels["status"], tunnels["line_id"]) == ("en_obras", CONV)
+    assert (tunnels["from_name"], tunnels["to_name"]) == ("Venta de Cárdenas", "Alcolea de Córdoba")
+    assert len(tunnels["segment_ids"]) == 8 and tunnels["geometry"] is None
+    # los proyectos no son interrupciones: ni en el alias ni en los pasos ni en los recorridos
+    cuts = {a["id"] for a in (await client.get("/api/interruptions")).json()}
+    assert not cuts & set(by_id)
+    segment = tunnels["segment_ids"][0]
+    services = (
+        await client.get(f"/api/segments/{segment}/services", params={"date": CHECKED})
+    ).json()
+    assert [i["id"] for i in services["interruptions"]] == [WORKS_CUT]
+    # un proyecto sin fecha de inicio consta desde siempre; el de las obras, desde que empezaron
+    before = (await client.get("/api/annotations", params={"on": "2026-09-05"})).json()
+    assert {a["id"] for a in before} == set(by_id) - {TUNNELS_PROJECT}
 
 
 async def test_annotations_of_every_scope_are_stored_and_read_back(
@@ -1114,8 +1152,17 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
     assert merged == counts["counts"]
     assert by_operator == counts["by_operator"]
     assert {s: sum(by.values()) for s, by in by_operator.items()} == counts["counts"]
-    # el índice pesa una fracción de la red entera: es lo que el visor descarga al arrancar
-    assert (tmp_path / "index.json").stat().st_size < len(whole.model_dump_json()) / 5
+    # el índice pesa una fracción de la red entera: es lo que el visor descarga al arrancar. Las
+    # anotaciones van enteras en los dos y no dependen de la geometría, así que se miden aparte
+    notes = {"annotations", "interruptions"}
+
+    def size(payload: dict[str, Any], keys: set[str]) -> int:
+        part = {k: v for k, v in payload.items() if k in keys}
+        return len(json.dumps(part, ensure_ascii=False).encode())
+
+    assert size(index, set(index) - notes) < size(network, set(network) - notes) / 5
+    # y tienen su propio tope: cuando no quepan, su detalle tendrá que pedirse aparte
+    assert size(index, notes) < 40_000
     # una línea que deja de estar cargada no deja su fichero en la instantánea
     (tmp_path / "lines" / "retirada.json").write_text("{}", encoding="utf-8")
     async with connect(dsn) as conn:
