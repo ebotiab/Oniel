@@ -446,6 +446,45 @@ def test_wait_for_commit_waits_for_its_import_and_stops_if_it_fails() -> None:
     assert slept == []
 
 
+def test_wait_for_commit_waits_out_the_rate_limit() -> None:
+    """Con el token compartido entre sesiones, Logfire responde 429 a menudo tras un despliegue."""
+    done = obs.production_status(_reader(_answers()), now=NOW)
+    limited = obs.LogfireRateLimited("429", retry_after_s=67.0)
+    replies: list[obs.Status | Exception] = [limited, limited, done]
+    slept: list[float] = []
+    now = [0.0]
+
+    def fetch() -> obs.Status:
+        reply = replies.pop(0)
+        if isinstance(reply, Exception):
+            raise reply
+        return reply
+
+    def sleep(seconds: float) -> None:
+        slept.append(seconds)
+        now[0] += seconds
+
+    status = obs.wait_for_commit(fetch, "7ba2694", timeout_s=900, sleep=sleep, clock=lambda: now[0])
+    assert status is done and slept == [68.0, 68.0]
+
+    # sin nada visto y sin tiempo para esperar, el límite sale como error
+    def always_limited() -> obs.Status:
+        raise obs.LogfireRateLimited("429", retry_after_s=120.0)
+
+    with pytest.raises(obs.LogfireRateLimited):
+        obs.wait_for_commit(always_limited, "7ba2694", timeout_s=60, sleep=sleep, clock=lambda: 0.0)
+
+
+def test_rate_limit_carries_retry_after() -> None:
+    def limited(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(429, headers={"Retry-After": "94"}, json={})
+
+    reader = obs.LogfireReader("x", transport=httpx.MockTransport(limited))
+    with pytest.raises(obs.LogfireRateLimited, match="reintentar en 94 s") as caught:
+        reader.query("select 1", since=NOW)
+    assert caught.value.retry_after_s == 94.0
+
+
 def test_cli_without_token_says_so_and_does_not_fail(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(obs, "read_token", lambda: None)
     for args in (["obs", "estado"], ["obs", "consulta", "select 1"]):

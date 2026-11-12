@@ -57,6 +57,25 @@ class LogfireError(Exception):
     """La API de consultas no respondió o rechazó la consulta."""
 
 
+class LogfireRateLimited(LogfireError):
+    """Logfire limita las consultas con token de lectura (429): se puede reintentar más tarde.
+
+    El token es del proyecto y lo comparten todas las sesiones que consultan a la vez, así que
+    tras un despliegue es fácil llegar al límite.
+    """
+
+    def __init__(self, message: str, retry_after_s: float | None = None) -> None:
+        super().__init__(message)
+        self.retry_after_s = retry_after_s
+
+
+def _retry_after(value: str | None) -> float | None:
+    try:
+        return max(float(value), 0.0) if value else None
+    except ValueError:
+        return None
+
+
 def read_token(env: Mapping[str, str] | None = None, token_file: Path = TOKEN_FILE) -> str | None:
     """Token de lectura: primero la variable de entorno, después el fichero local."""
     environ = os.environ if env is None else env
@@ -132,9 +151,11 @@ class LogfireReader:
                 "docs/despliegue.md, «Logfire», dice cómo se renueva."
             )
         if response.status_code == 429:
-            raise LogfireError(
+            retry_after = response.headers.get("Retry-After")
+            raise LogfireRateLimited(
                 "Logfire ha limitado las consultas con token de lectura (429); "
-                f"reintentar en {response.headers.get('Retry-After', '?')} s."
+                f"reintentar en {retry_after or '?'} s.",
+                _retry_after(retry_after),
             )
         if response.status_code >= 400:
             raise LogfireError(
@@ -431,10 +452,24 @@ def wait_for_commit(
     clock: Callable[[], float] = time.monotonic,
 ) -> Status:
     """Repite la consulta hasta que el commit sea el desplegado con su importación terminada, hasta
-    que esa importación falle o hasta que se agote el tiempo."""
+    que esa importación falle o hasta que se agote el tiempo.
+
+    Si Logfire limita las consultas (429), espera lo que pide y vuelve a probar dentro del mismo
+    plazo. Agotado el plazo, devuelve lo último que vio o, si no llegó a ver nada, el límite.
+    """
     deadline = clock() + timeout_s
+    status: Status | None = None
     while True:
-        status = fetch()
+        try:
+            status = fetch()
+        except LogfireRateLimited as exc:
+            pause = (exc.retry_after_s if exc.retry_after_s is not None else interval_s) + 1.0
+            if clock() + pause > deadline:
+                if status is None:
+                    raise
+                return status
+            sleep(pause)
+            continue
         done = commit_deployed(status, commit) or import_failed(status, commit)
         if done or clock() + interval_s > deadline:
             return status
