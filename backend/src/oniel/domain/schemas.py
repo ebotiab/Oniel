@@ -323,10 +323,34 @@ class SegmentServicesOut(BaseModel):
     interruptions: list[InterruptionOut] = Field(default_factory=list)
 
 
+class DestinationOperatorOut(BaseModel):
+    operator_id: str
+    trains: int
+
+
+class DestinationOut(BaseModel):
+    """Una estación a la que se llega sin cambiar de tren desde un nodo, un día."""
+
+    #: Nodo de la red cargada, si el destino está en ella; si no, solo se conoce la parada.
+    node_id: str | None = None
+    stop_id: str
+    name: str
+    trains: int
+    #: Tipos de servicio (producto comercial), del que más trenes tiene al que menos.
+    products: list[str]
+    #: Trenes de cada operador, del que más tiene al que menos; suman ``trains``.
+    operators: list[DestinationOperatorOut]
+    #: Primera y última salida del nodo hacia el destino, ``HH:MM``.
+    first_departure: str
+    last_departure: str
+
+
 class NodeServicesOut(BaseModel):
     node: NodeOut
     date: dt.date
     calls: list[dict[str, Any]]
+    #: Destinos directos del día, del más frecuente al menos.
+    destinations: list[DestinationOut] = Field(default_factory=list)
 
 
 class ClosureRequest(BaseModel):

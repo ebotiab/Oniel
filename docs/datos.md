@@ -283,6 +283,24 @@ uv run oniel-data import all        # regenera la instantánea
 
 Para que no se pase la fecha, el mismo flujo ejecuta cada semana `oniel-data refresh expiring`: si a un fichero vigente que no se refresca solo le quedan 21 días o menos de validez, abre la incidencia «Descargar a mano los horarios que están a punto de caducar», una sola mientras siga abierta. Si la validez termina sin relevo, los ficheros vigentes dejan de coincidir en algún día, `validate` falla y el refresco de Renfe tampoco abre su PR.
 
+## Destinos directos
+
+La ficha de una estación dice a qué otras estaciones se llega desde ella sin cambiar de tren el día de referencia: cuántos trenes, de qué tipo de servicio, de qué operador y entre qué horas salen. Sale de los horarios ya importados (`services`, `service_stops`, `service_dates`), sin ninguna fuente nueva.
+
+**Cómo se cuenta** (`services_repo.destinations_from_node`). De cada tren que para en el nodo ese día, en los conjuntos de datos activos, se toman sus paradas posteriores y se agrupan por destino: el nodo de la red, si la parada está en ella, o la parada del fichero de horarios, con su nombre, si no lo está (Málaga, Badajoz, Alicante). Cada tren cuenta una vez por destino. La lista va del destino con más trenes al que menos y, a igualdad, por nombre. De cada destino se guardan los tipos de servicio y los trenes de cada operador, del que más tiene al que menos, y la primera y la última salida del nodo.
+
+**Subir y bajar.** El fichero de horarios marca las paradas en las que un tren solo deja viajeros (`pickup_type` 1) o solo los recoge (`drop_off_type` 1), y hay que respetarlo: un tren al que no se puede subir aquí, o del que no se puede bajar allí, no une las dos estaciones. No son solo las cabeceras: el 13 de noviembre de 2026 pasan por Ciudad Real 23 trenes hacia Madrid, pero 11 de ellos (diez Intercity de Málaga y Sevilla a Madrid-Atocha Cercanías y un Alvia de Cádiz) solo dejan viajeros allí, así que a Madrid se puede ir en 12. En sentido contrario pasa lo mismo: de 21 trenes de Madrid que paran en Ciudad Real, sirven 11. Las paradas de cada nodo (`calls`) llevan por eso dos campos, `boards` y `alights`.
+
+**El mismo número que el comparador.** El comparador de recorridos cuenta los trenes directos entre dos estaciones en el cliente, con las paradas de los dos nodos; desde esta tarea aplica el mismo criterio de subida y bajada. Una prueba recorre todos los pares de nodos de la red y exige que las dos cuentas coincidan (`test_direct_destinations_match_the_route_comparator`).
+
+**Qué trenes faltan.** Solo se importan los trenes que recorren alguna de las líneas cargadas, así que en una estación de la que salen otras líneas (Madrid, Córdoba, Sevilla, Alcázar de San Juan) no están los destinos de los trenes que no pisan las cargadas: de Madrid-Puerta de Atocha no sale Barcelona. Tampoco están los trenes de Iryo, que no publica sus horarios. Y son horarios publicados: una interrupción vigente no descuenta trenes. La ficha dice las tres cosas.
+
+**Dónde viaja.** En `GET /api/nodes/{id}/services` (campo `destinations`, con `?date=` para otro día) y en `nodes/<id>.json`, que el visor ya pedía al abrir la ficha de la estación: el arranque no cambia. Medido el 12 de noviembre de 2026, la carpeta `nodes/` pasa de 300 a 484 KB en disco; el fichero mayor, el de Córdoba (62 destinos), lleva 13,7 KB de destinos y se descarga en 5,2 KB con gzip.
+
+**Destinos fuera de la red.** Se nombran, sin enlace. Sus coordenadas están en la base (`stop_mappings` guarda las de `stops.txt` de todas las paradas de los trenes importados), pero no se exportan: nada las dibuja todavía.
+
+Recuentos que comprueban las pruebas, con los ficheros fijos y el 13 de noviembre de 2026: Ciudad Real tiene 49 destinos directos, 14 de ellos en la red (Córdoba 20 trenes, Madrid-Puerta de Atocha 12, Sevilla-Santa Justa 12, Puertollano 11); de Madrid-Puerta de Atocha a Córdoba hay 55 trenes, 49 de Renfe y 6 de Ouigo.
+
 ## Instantánea estática
 
 `oniel-data import all` (o `export snapshot`) deja en `frontend/public/data` todo lo que el visor necesita sin API. La red va por partes, para que el arranque no pese más cada vez que se añade una línea:
@@ -292,7 +310,7 @@ Para que no se pase la fecha, el mismo flujo ejecuta cada semana `oniel-data ref
 | `index.json` | El índice de toda la red: las líneas, todos los nodos sin sus textos, los tramos con sus datos y la geometría simplificada, las conexiones a trazos y las anotaciones de red (con `interruptions` como alias temporal). | Al arrancar. |
 | `lines/<id>.json` | El detalle de una línea: sus nodos con descripción y detalles, sus tramos con la geometría completa, sus conexiones, sus anotaciones y los pasos por tramo del día de referencia. | Al abrir la línea, al seleccionar un tramo o un nodo suyo (también por enlace directo) o al acercar el mapa a ella (zoom 8 o más). |
 | `coverage.json` | Cobertura, conjuntos de datos y fuentes. | Al arrancar. |
-| `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y las paradas de una estación el día de referencia. | Al abrir su ficha. |
+| `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y, de una estación, sus paradas y sus destinos directos el día de referencia (véase «Destinos directos»). | Al abrir su ficha. |
 | `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos (véase «Conjuntos de datos»). | Todavía no se lee. |
 
 La red entera en un solo fichero (`network.json`, con `segment-counts.json`) dejó de exportarse el 11 de noviembre de 2026: el visor ya no la descargaba y las pruebas del grafo de rutas leen el índice.

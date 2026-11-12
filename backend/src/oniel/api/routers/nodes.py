@@ -27,5 +27,8 @@ async def get_node_services(
         raise HTTPException(404, f"No hay ningún nodo con id {node_id}")
     day = await resolve_date(conn, date)
     return NodeServicesOut(
-        node=node, date=day, calls=await services_repo.calls_at_node(conn, node_id, day)
+        node=node,
+        date=day,
+        calls=await services_repo.calls_at_node(conn, node_id, day),
+        destinations=await services_repo.destinations_from_node(conn, node_id, day),
     )

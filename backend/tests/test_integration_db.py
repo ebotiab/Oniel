@@ -650,6 +650,96 @@ async def test_segment_counts_are_split_by_operator(client: httpx.AsyncClient) -
     assert {c["operator_id"] for c in conv} == {"renfe"}
 
 
+def _direct_trains(origin: list[dict[str, Any]], dest: list[dict[str, Any]]) -> int:
+    """Trenes directos como los cuenta el comparador del visor (``trenesDirectos``)."""
+    arrivals = {c["service_id"]: c for c in dest}
+    n = 0
+    for c in origin:
+        to = arrivals.get(c["service_id"])
+        if to is None or not c["boards"] or not to["alights"]:
+            continue
+        departure: str | None = c["departure"] or c["arrival"]
+        arrival: str | None = to["arrival"] or to["departure"]
+        if not departure or not arrival:
+            continue
+        n += _minutes(arrival) > _minutes(departure)
+    return n
+
+
+def _minutes(hhmm: str) -> int:
+    return int(hhmm[:2]) * 60 + int(hhmm[3:5]) + (1440 if hhmm.endswith("(+1)") else 0)
+
+
+async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -> None:
+    """El 13/11/2026, con el GTFS real: a dónde se llega desde Ciudad Real sin cambiar de tren."""
+    body = (
+        await client.get("/api/nodes/ciudad-real/services", params={"date": "2026-11-13"})
+    ).json()
+    dest = body["destinations"]
+    by_node = {d["node_id"]: d for d in dest if d["node_id"]}
+    assert {
+        "madrid-puerta-de-atocha",
+        "sevilla-santa-justa",
+        "cordoba",
+        "puertollano",
+        "alcazar-de-san-juan",
+    } <= set(by_node)
+    assert "ciudad-real" not in by_node
+    # del más frecuente al menos
+    assert [d["trains"] for d in dest] == sorted((d["trains"] for d in dest), reverse=True)
+    assert (dest[0]["node_id"], dest[0]["name"], dest[0]["trains"]) == ("cordoba", "Córdoba", 20)
+    assert dest[0]["products"] == ["Intercity", "AVLO", "AVE", "ALVIA"]
+    assert dest[0]["operators"] == [{"operator_id": "renfe", "trains": 20}]
+    assert (dest[0]["first_departure"], dest[0]["last_departure"]) == ("07:55", "22:01")
+    # Por Ciudad Real pasan 23 trenes hacia Madrid, pero 11 solo dejan viajeros allí (los
+    # Intercity y un Alvia que vienen de Andalucía): a Madrid se puede ir en 12
+    assert by_node["madrid-puerta-de-atocha"]["trains"] == 12
+    assert by_node["alcazar-de-san-juan"]["products"] == ["MD"]
+    # fuera de la red cargada, el destino lleva el nombre de la parada del fichero
+    outside = {d["name"]: d["trains"] for d in dest if d["node_id"] is None}
+    assert outside["Málaga María Zambrano"] == 8 and outside["Badajoz"] == 1
+    assert len(dest) == 49 and len(by_node) == 14
+
+
+async def test_direct_destinations_carry_each_operator(client: httpx.AsyncClient) -> None:
+    body = (
+        await client.get(
+            "/api/nodes/madrid-puerta-de-atocha/services", params={"date": "2026-11-13"}
+        )
+    ).json()
+    cordoba = body["destinations"][0]
+    assert (cordoba["node_id"], cordoba["trains"]) == ("cordoba", 55)
+    assert cordoba["operators"] == [
+        {"operator_id": "renfe", "trains": 49},
+        {"operator_id": "ouigo", "trains": 6},
+    ]
+    assert all(
+        sum(o["trains"] for o in d["operators"]) == d["trains"] for d in body["destinations"]
+    )
+    # un nodo que no es estación no tiene paradas ni destinos
+    urda = (await client.get("/api/nodes/urda/services", params={"date": "2026-11-13"})).json()
+    assert urda["calls"] == [] and urda["destinations"] == []
+
+
+async def test_direct_destinations_match_the_route_comparator(client: httpx.AsyncClient) -> None:
+    """El comparador cuenta los trenes directos con las paradas de los dos nodos; la ficha de la
+    estación, con una consulta. Tienen que dar el mismo número para cada par de la red."""
+    nodes = {n["id"] for n in (await client.get("/api/network")).json()["nodes"]}
+    services = {
+        n: (await client.get(f"/api/nodes/{n}/services", params={"date": "2026-11-13"})).json()
+        for n in sorted(nodes)
+    }
+    pairs = 0
+    for origin, body in services.items():
+        expected = {d["node_id"]: d["trains"] for d in body["destinations"] if d["node_id"]}
+        counted = {
+            to: _direct_trains(body["calls"], services[to]["calls"]) for to in nodes - {origin}
+        }
+        assert {to: n for to, n in counted.items() if n} == expected, origin
+        pairs += len(expected)
+    assert pairs > 300
+
+
 async def test_segment_services_on_a_weekday(client: httpx.AsyncClient) -> None:
     r = await client.get(
         "/api/segments/lav-madrid-sevilla:ciudad-real:puertollano/services",
