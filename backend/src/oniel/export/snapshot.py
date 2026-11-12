@@ -17,7 +17,7 @@ from typing import Any
 import asyncpg
 import logfire
 
-from oniel.domain.schemas import SegmentPassOut, SegmentServicesOut
+from oniel.domain.schemas import SegmentPassOut, SegmentServicesOut, ServiceHistoryOut
 from oniel.repo import datasets_repo, network_repo, services_repo
 from oniel.sim.service import direction_label, shifted_times
 
@@ -72,15 +72,30 @@ async def _export_snapshot(
     # al abrir la ficha de un tramo o el panel de cobertura.
     alternatives = await network_repo.fetch_segment_alternatives(conn, day)
     _write(out_dir / "alternatives.json", alternatives.model_dump(mode="json"))
-    # Histórico compacto: los pasos por tramo de cada conjunto de datos en su propio día de
-    # referencia, para poder comparar más adelante cómo cambia el servicio. La carpeta se rehace
-    # entera para que no queden conjuntos retirados.
+    # Histórico compacto, con cada conjunto de datos en su propio día de referencia: los pasos por
+    # tramo de cada conjunto (los lee el resumen del refresco de horarios) y, por tramo y por nodo,
+    # los trenes de cada conjunto, que es lo que la ficha compara y lo mismo que responde la API
+    # en `/history`. La carpeta se rehace entera para que no queden conjuntos retirados.
     history_dir = out_dir / "historico"
     if history_dir.exists():
         shutil.rmtree(history_dir)
     datasets = await datasets_repo.fetch_datasets(conn)
+    refs = await datasets_repo.reference_dates(conn)
+    for segment in network.segments:
+        history = ServiceHistoryOut(
+            id=segment.id, points=await services_repo.segment_history(conn, segment.id, refs)
+        )
+        _write(
+            history_dir / "segments" / f"{safe_name(segment.id)}.json",
+            history.model_dump(mode="json"),
+        )
+    for node_id in dict.fromkeys(node.id for node in network.nodes):
+        history = ServiceHistoryOut(
+            id=node_id, points=await services_repo.node_history(conn, node_id, refs)
+        )
+        _write(history_dir / "nodes" / f"{node_id}.json", history.model_dump(mode="json"))
     for dataset in datasets:
-        _, _, ref = await datasets_repo.feed_bounds(conn, dataset.id)
+        ref = refs.get(dataset.id)
         if ref is None:
             continue
         _write(

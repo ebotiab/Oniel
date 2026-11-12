@@ -340,6 +340,25 @@ export interface NodeServicesOut {
   destinations?: Destination[]
 }
 
+/** Los trenes de un fichero de horarios en una estación o un tramo, en su día de referencia. */
+export interface HistoryPoint {
+  dataset_id: string
+  source_id: string
+  operator_id?: string | null
+  /** Día en que se descargó el fichero. */
+  retrieved_on: string
+  /** Día de referencia del fichero: el laborable con más servicios de sus primeros treinta días. */
+  date: string
+  trains: number
+  products: { product: string; trains: number }[]
+}
+
+/** Un punto por fichero de horarios importado, del descargado antes al más reciente. */
+export interface ServiceHistoryOut {
+  id: string
+  points: HistoryPoint[]
+}
+
 export interface ClosureRequest {
   segment_id: string
   date: string

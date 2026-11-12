@@ -99,3 +99,13 @@ async def feed_bounds(
         end,
     )
     return start, end, ref["service_date"] if ref else start
+
+
+async def reference_dates(conn: asyncpg.Connection) -> dict[str, dt.date]:
+    """Día de referencia propio de cada conjunto guardado; sin los que no tienen ningún servicio."""
+    out: dict[str, dt.date] = {}
+    for dataset in await fetch_datasets(conn):
+        _, _, ref = await feed_bounds(conn, dataset.id)
+        if ref is not None:
+            out[dataset.id] = ref
+    return out

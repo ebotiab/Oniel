@@ -7,7 +7,12 @@ import asyncpg
 from fastapi import APIRouter, HTTPException, Query
 
 from oniel.api.deps import ConnectionDep
-from oniel.domain.schemas import SegmentOut, SegmentPassOut, SegmentServicesOut
+from oniel.domain.schemas import (
+    SegmentOut,
+    SegmentPassOut,
+    SegmentServicesOut,
+    ServiceHistoryOut,
+)
 from oniel.repo import network_repo, services_repo
 from oniel.sim.service import direction_label, shifted_times
 
@@ -69,4 +74,13 @@ async def get_segment_services(
         passes=passes,
         counts=counts,
         interruptions=await network_repo.fetch_interruptions(conn, day=day, segment_id=segment.id),
+    )
+
+
+@router.get("/{segment_id}/history")
+async def get_segment_history(segment_id: str, conn: ConnectionDep) -> ServiceHistoryOut:
+    """Trenes que recorren el tramo según cada fichero de horarios, en el día de referencia de cada uno."""
+    segment = await _segment_or_404(conn, segment_id)
+    return ServiceHistoryOut(
+        id=segment.id, points=await services_repo.segment_history(conn, segment.id)
     )

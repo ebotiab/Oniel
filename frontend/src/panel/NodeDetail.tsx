@@ -9,6 +9,7 @@ import { AnnotationNotice } from './AnnotationNotice'
 import { DirectDestinations } from './DirectDestinations'
 import { TERMINO_DE_NODO } from './glosario'
 import { PieFuente, Plegable } from './Plegable'
+import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
@@ -134,6 +135,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
               Un destino directo es una estación en la que para, después de esta, un tren al que se puede subir aquí. No cuentan las paradas en las
               que el tren solo recoge viajeros. Solo están los trenes que recorren alguna de las líneas cargadas en Oniel.
             </p>
+            <ServiceHistory kind="nodes" id={node.id} operators={operators} sources={sources} />
             <PieFuente de="de los horarios" sources={timetables} />
           </>
         )}
