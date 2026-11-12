@@ -65,6 +65,8 @@ const segmentColor: ExpressionSpecification = [
   ROJA,
   ['boolean', ['feature-state', 'seleccionado'], false],
   AZUL,
+  ['boolean', ['feature-state', 'elegido'], false],
+  AZUL,
   TINTA,
 ]
 
@@ -73,6 +75,8 @@ const haloColor: ExpressionSpecification = [
   ['boolean', ['feature-state', 'cerrado'], false],
   ROJA,
   ['boolean', ['feature-state', 'seleccionado'], false],
+  AZUL,
+  ['boolean', ['feature-state', 'elegido'], false],
   AZUL,
   interrupted,
   ROJA,
@@ -105,6 +109,12 @@ export function opacidadDeVia(resaltado: Trazo | null): ExpressionSpecification 
   const es = resaltado === 'via-unica' ? viaUnica : resaltado === 'alta-velocidad' ? esAltaVelocidad : esConvencional
   return ['case', es, 1, 0.18]
 }
+
+/**
+ * Opacidad de la vía mientras se comparan recorridos: los tramos de los recorridos a la vista,
+ * enteros; el resto de la red, atenuado. El elegido lo dicen el azul y el halo de la selección.
+ */
+export const OPACIDAD_RECORRIDOS: ExpressionSpecification = ['case', ['boolean', ['feature-state', 'recorrido'], false], 1, 0.18]
 
 export function onielLayers(): LayerSpecification[] {
   return [
@@ -142,6 +152,8 @@ export function onielLayers(): LayerSpecification[] {
           0.2,
           ['boolean', ['feature-state', 'seleccionado'], false],
           ['case', interrupted, 0.3, 0.16],
+          ['boolean', ['feature-state', 'elegido'], false],
+          0.16,
           ['boolean', ['feature-state', 'hover'], false],
           0.1,
           0,

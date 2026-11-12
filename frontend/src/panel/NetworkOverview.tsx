@@ -9,10 +9,11 @@ interface Props {
   interruptions: InterruptionOut[]
   onPickLine: (id: string) => void
   onShowCoverage: () => void
+  onCompare: () => void
 }
 
 /** Vista de la red: lo que se ve cuando no hay ninguna línea elegida. Dice qué hay cargado y por dónde empezar. */
-export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage }: Props) {
+export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage, onCompare }: Props) {
   const cortadas = new Set(interruptions.filter((i) => i.segment_ids.length > 0).map((i) => i.line_id))
   const ficha = [networkCount(network.lines), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
   return (
@@ -32,6 +33,12 @@ export function NetworkOverview({ network, coverage, interruptions, onPickLine, 
       </div>
       <h3 className="subtitulo">Líneas</h3>
       <LineList lines={network.lines} interruptedLineIds={cortadas} onPick={onPickLine} />
+      <p className="nota-esquema">
+        <button type="button" className="enlace" onClick={onCompare} data-testid="boton-recorridos">
+          Comparar recorridos
+        </button>
+        : por dónde se va de una estación a otra y qué diferencia hay entre un camino y otro.
+      </p>
       <p className="nota-esquema">
         <button type="button" className="enlace" onClick={onShowCoverage} data-testid="boton-cobertura">
           Cobertura y fuentes

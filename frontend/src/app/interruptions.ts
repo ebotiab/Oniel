@@ -1,6 +1,6 @@
 // Interrupciones del servicio: cuáles están vigentes un día y cómo se dicen sus fechas.
 
-import type { InterruptionOut, NetworkOut } from '../data/types'
+import type { InterruptionOut, NetworkOut } from '../data/types.ts'
 
 /** Vigente los días start_date <= día < ended_on (ended_on es el día en que vuelve a haber trenes). */
 export function isActive(i: InterruptionOut, day: string): boolean {

@@ -367,5 +367,6 @@ class RoutesOut(BaseModel):
     scenario_code: str
     date: dt.date | None = None
     max_changes: int
+    max_ratio: float
     routes: list[RouteOut]
     method: str

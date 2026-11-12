@@ -14,7 +14,7 @@ const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 // genera y comprueba `backend/tests/test_routing.py`; aquí el cliente tiene que dar lo mismo sobre
 // la instantánea estática: le basta el índice, que lleva todas las líneas, nodos y tramos.
 interface Paridad {
-  routes: { from: string; to: string; scenario: string; max_changes: number; expected: Route[] }[]
+  routes: { from: string; to: string; scenario: string; max_changes: number; max_ratio: number | null; expected: Route[] }[]
   detours: { segment_id: string; scenario: string; expected: Detour[] }[]
 }
 const leer = <T>(ruta: string) => JSON.parse(readFileSync(new URL(ruta, import.meta.url), 'utf-8')) as T
@@ -28,21 +28,24 @@ test.describe('Grafo de rutas en el cliente', () => {
   test('da los mismos recorridos que el servidor en los casos compartidos', () => {
     const grafo = buildGraph(red)
     for (const caso of paridad.routes) {
-      expect(findRoutes(grafo, caso.from, caso.to, scenarioFromCode(caso.scenario), caso.max_changes), `${caso.from} → ${caso.to}`).toEqual(caso.expected)
+      expect(findRoutes(grafo, caso.from, caso.to, scenarioFromCode(caso.scenario), caso.max_changes, caso.max_ratio), `${caso.from} → ${caso.to}`).toEqual(caso.expected)
     }
     for (const caso of paridad.detours) {
       expect(closureDetours(grafo, caso.segment_id, scenarioFromCode(caso.scenario)), caso.segment_id).toEqual(caso.expected)
     }
   })
 
-  test('Madrid – Córdoba tiene dos recorridos y Madrid – Ciudad Real, tres, uno por Manzanares', () => {
+  test('Madrid – Córdoba tiene cuatro recorridos y Madrid – Ciudad Real, dos, uno por Manzanares', () => {
     const grafo = buildGraph(red)
-    expect(findRoutes(grafo, MADRID, 'cordoba').map((r) => r.length_km)).toEqual([343.6, 440.7])
+    // sin tope útil de líneas entra el de los Alvia desviados (433,3 km por tres líneas)
+    expect(findRoutes(grafo, MADRID, 'cordoba').map((r) => r.length_km)).toEqual([343.6, 433.3, 440.7, 479.8])
     const aCiudadReal = findRoutes(grafo, MADRID, 'ciudad-real')
-    expect(aCiudadReal.map((r) => r.length_km)).toEqual([170.8, 260.5, 613.5])
+    // la vuelta por Córdoba (613,5 km) pasa del doble del más corto y se descarta
+    expect(aCiudadReal.map((r) => r.length_km)).toEqual([170.8, 260.5])
     expect(aCiudadReal[1]?.line_ids).toEqual(['convencional-madrid-alcazar-cordoba', 'manzanares-ciudad-real'])
+    expect(findRoutes(grafo, MADRID, 'ciudad-real', undefined, 1, null).map((r) => r.length_km)).toEqual([170.8, 260.5, 613.5])
     // con Urda – Ciudad Real cerrado desaparece el recorrido directo
-    expect(findRoutes(grafo, MADRID, 'ciudad-real', closureScenario(URDA_CIUDAD_REAL)).map((r) => r.length_km)).toEqual([260.5, 613.5])
+    expect(findRoutes(grafo, MADRID, 'ciudad-real', closureScenario(URDA_CIUDAD_REAL)).map((r) => r.length_km)).toEqual([260.5])
   })
 
   test('el escenario va y vuelve de la cadena corta de la URL', () => {
@@ -59,7 +62,7 @@ test.describe('Grafo de rutas en el cliente', () => {
   test('la API da lo mismo que el cliente', async ({ request }) => {
     test.skip(estatico, 'compara con la API')
     const caso = paridad.routes[3]!
-    const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, max_changes: caso.max_changes } })
+    const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, max_changes: caso.max_changes, max_ratio: 100 } })
     expect(respuesta.ok()).toBe(true)
     const cuerpo = (await respuesta.json()) as { routes: (Route & { interruptions?: unknown })[]; scenario_code: string }
     expect(cuerpo.scenario_code).toBe(caso.scenario)
@@ -69,7 +72,7 @@ test.describe('Grafo de rutas en el cliente', () => {
       return copia
     })
     const redApi = composeNetwork((await (await request.get('/api/lines')).json()) as NetworkIndexOut, {})
-    expect(findRoutes(buildGraph(redApi), caso.from, caso.to, scenarioFromCode(caso.scenario), caso.max_changes)).toEqual(delServidor)
+    expect(findRoutes(buildGraph(redApi), caso.from, caso.to, scenarioFromCode(caso.scenario), caso.max_changes, 100)).toEqual(delServidor)
   })
 })
 
