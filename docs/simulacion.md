@@ -132,24 +132,24 @@ Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tra
 
 Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
 
-**Lo que sale** con los trenes del 13 de noviembre de 2026 (256 trenes, 54 tramos):
+**Lo que sale** con los trenes del 13 de noviembre de 2026 (247 trenes; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
 
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
 | Bifurcación Málaga – Majarabique (LAV) | 55 | Ninguno |
 | Majarabique – Sevilla-Santa Justa (LAV) | 53 | Ninguno |
-| Espelúy – Mengíbar-Artichuela (línea de Jaén) | 50 | Ninguno |
-| Mengíbar-Artichuela – Jaén (línea de Jaén) | 44 | Ninguno |
-| Alcázar de San Juan – Albacete (siete tramos) | 17 | Ninguno |
-| Córdoba – Bifurcación Málaga (LAV) | 108 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 43 de Madrid a Sevilla, 340 km y 3 h más; para los 8 de Madrid a Granada, 82 km menos y 1 h 14 min más |
-| Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 77 | Para los 29 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 22 min más |
-| Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 20 a 26 | Para los 8 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 14 min más |
+| Espelúy – Mengíbar-Artichuela (línea de Jaén) | 26 | Ninguno |
+| Mengíbar-Artichuela – Jaén (línea de Jaén) | 26 | Ninguno |
+| Alcázar de San Juan – Albacete (siete tramos) | 13 | Ninguno |
+| Córdoba – Bifurcación Málaga (LAV) | 104 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 43 de Madrid a Sevilla, 340 km y 3 h más; para los 6 de Madrid a Granada, 82 km menos y 1 h 14 min más |
+| Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 73 | Para los 29 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 22 min más |
+| Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 18 a 24 | Para los 6 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 14 min más |
 | Bifurcación Almería – Iznalloz – Granada (dos tramos) | 12 | Para los 10 de Granada a Almería, la vuelta por Antequera, Córdoba y Linares-Baeza: 415 km y 2 h 11 min más |
 | Linares-Baeza – Moreda (tres tramos) | 2 | La vuelta por Córdoba, Antequera y Granada |
-| Ciudad Real – Córdoba (LAV, cuatro tramos) | 108 | Para los 43 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 24 desviados por Manzanares, 7 km y 38 min más |
-| Madrid – Ciudad Real (LAV, cuatro tramos) | 84 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
-| Manzanares – Ciudad Real (tres tramos) | 38 | Para los 24 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
-| Manzanares – Linares-Baeza (convencional) | 18 a 26 | Para los 16 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 28 min menos |
+| Ciudad Real – Córdoba (LAV, cuatro tramos) | 104 | Para los 43 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
+| Madrid – Ciudad Real (LAV, cuatro tramos) | 82 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
+| Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
+| Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 28 min menos |
 
 Los otros 54 tramos tienen otro camino para todos sus trenes. Los once que no lo tienen son los dos que llevan a Sevilla desde la bifurcación de Málaga, donde Oniel solo tiene cargada una línea; los dos del ramal de Jaén, que acaba en una estación término (ahí la respuesta no depende de qué líneas estén cargadas), y los siete de la línea de Alcázar de San Juan a Albacete, una rama unida al resto por un solo extremo hasta que se cargue la alta velocidad a Albacete por Cuenca. Desde que están cargadas las dos líneas de alta velocidad de Córdoba a Granada, Granada queda unida por los dos lados, y ni sus líneas ni el tramo de Córdoba a la bifurcación de Málaga salen ya sin alternativa: el otro camino da la vuelta por el lazo, a veces por una línea sin electrificar y de otro ancho, que es justo lo que el cálculo no mira (límite 2, abajo). El tramo entre la estación de Moreda y la Bifurcación Almería no lleva ningún tren de los horarios. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
 
@@ -161,7 +161,7 @@ Los otros 54 tramos tienen otro camino para todos sus trenes. Los once que no lo
 
 1. Nada fuera de las líneas cargadas. Un tramo «sin alternativa» puede tenerla en la red real, y uno «con alternativa» puede tener otra mejor que Oniel no conoce.
 2. Si el tren puede tomar el otro camino. El grafo no distingue anchos de vía ni electrificación, y no mira las paradas que el tren dejaría de hacer.
-3. La capacidad de la vía. No se modela cuántos trenes caben por el otro camino, ni los cruces en vía única; que 84 trenes «tengan otro camino» por una línea de vía única no quiere decir que quepan.
+3. La capacidad de la vía. No se modela cuántos trenes caben por el otro camino, ni los cruces en vía única; que 82 trenes «tengan otro camino» por una línea de vía única no quiere decir que quepan.
 4. Los trenes que faltan: los de Iryo, Cercanías y mercancías. La carga real de cada tramo es mayor.
 5. Los viajeros. Cuenta trenes, no plazas ni personas, y un tren que recorre varios tramos cuenta en cada uno.
 6. El viaje fuera de las líneas cargadas. Los extremos de un grupo son por donde el tren entra y sale de ellas, no su origen y su destino.
@@ -195,9 +195,9 @@ Los horarios de Renfe del 8 al 15 de noviembre de 2026 incluyen 24 Intercity y A
 
 Antes de cargar la tercera línea, los 64,4 km entre Manzanares y Ciudad Real se medían como 47 km en línea recta: la salida estimada de Manzanares era hacia las 8:05 y la explicación lo decía. Con la línea cargada el reparto usa la distancia real y el tren aparece en «Trenes que lo recorren» de Manzanares–Daimiel, Daimiel–Almagro y Almagro–Ciudad Real.
 
-Los 4 Alvia que no paran en Ciudad Real (Madrid–Córdoba en 3 h 45, el mismo tiempo que los anteriores) reparten ese tiempo entre las tres líneas: 196,1 km por la convencional, 64,4 km por la de Manzanares a Ciudad Real y 172,8 km por la alta velocidad, 433,3 km en total. En la convencional, Córdoba es para ellos una salida por Manzanares, y el camino hasta ella cruza las otras dos líneas; en la LAV, Madrid-Atocha Cercanías es una entrada por Ciudad Real, con el camino inverso; y la línea de Manzanares a Ciudad Real la cruzan sin parar, entre una parada de la convencional y otra de la alta velocidad. Las tres líneas reparten el mismo tiempo con la misma distancia total, así que las horas encajan en los enlaces: el Alvia 09366 de las 6:00 sale de la convencional en Manzanares hacia las 7:41 y entra en la alta velocidad en Ciudad Real hacia las 8:15. En la línea que cruza, el margen es de ±30 min: el 30 % de los 102 minutos que hay desde la salida publicada de Madrid hasta Manzanares.
+Los 2 Alvia que no paran en Ciudad Real (Madrid–Córdoba en 3 h 45, el mismo tiempo que los anteriores) reparten ese tiempo entre las tres líneas: 196,1 km por la convencional, 64,4 km por la de Manzanares a Ciudad Real y 172,8 km por la alta velocidad, 433,3 km en total. En la convencional, Córdoba es para ellos una salida por Manzanares, y el camino hasta ella cruza las otras dos líneas; en la LAV, Madrid-Atocha Cercanías es una entrada por Ciudad Real, con el camino inverso; y la línea de Manzanares a Ciudad Real la cruzan sin parar, entre una parada de la convencional y otra de la alta velocidad. Las tres líneas reparten el mismo tiempo con la misma distancia total, así que las horas encajan en los enlaces: el Alvia 09366 de las 6:00 sale de la convencional en Manzanares hacia las 7:41 y entra en la alta velocidad en Ciudad Real hacia las 8:15. En la línea que cruza, el margen es de ±30 min: el 30 % de los 102 minutos que hay desde la salida publicada de Madrid hasta Manzanares.
 
-Simulación de un cierre de Almagro – Ciudad Real el 13 de noviembre de 2026 de 8:00 a 9:00 (resultado de la API el 10 de noviembre de 2026): 38 trenes recorren el tramo ese día; 5 afectados (un MD con horario publicado y, con paso estimado, los Intercity 10270 y 10182 y los dos Alvia 09366), 2 indeterminados y 31 no afectados.
+Simulación de un cierre de Almagro – Ciudad Real el 13 de noviembre de 2026 de 8:00 a 9:00 (resultado de la API el 13 de noviembre de 2026, con un tren por número y día): 32 trenes recorren el tramo ese día; 4 afectados (un MD con horario publicado y, con paso estimado, los Intercity 10270 y 10182 y el Alvia 09366), 2 indeterminados y 26 no afectados.
 
 Está automatizado en `backend/tests/test_route_overrides.py`, `backend/tests/test_sim_passes.py` (el tren que cruza una línea sin parar), `backend/tests/test_integration_db.py` y `frontend/e2e/simulacion.spec.ts`.
 
@@ -221,7 +221,7 @@ El mismo caso está automatizado en:
 - `backend/tests/test_integration_db.py::test_closure_hand_case` (contra la base de datos y la API, incluidas las alternativas)
 - `frontend/e2e/simulacion.spec.ts` (desde la interfaz)
 
-Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes recorren el tramo ese día; 6 afectados con paso estimado, 5 indeterminados, 85 no afectados.
+Resultado completo de la API para ese caso (8 de noviembre de 2026, antes de cargar Ouigo y de juntar los trenes repetidos): 96 trenes recorren el tramo ese día; 6 afectados con paso estimado, 5 indeterminados, 85 no afectados.
 
 ## Limitaciones conocidas
 
