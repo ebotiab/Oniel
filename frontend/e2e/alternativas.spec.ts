@@ -24,11 +24,11 @@ test.describe('Tramos sin alternativa', () => {
     await page.goto('/')
     await expect(page.getByTestId('recuento-red')).not.toContainText('despertando el servidor')
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
-    await page.goto('/#/cobertura')
+    await page.goto('/cobertura')
     await abrirPanel(page)
     await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(5)
     await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
-    await page.goto('/#/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
+    await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
     expect(pedidas).toBeGreaterThan(0)
   })
@@ -42,14 +42,14 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidos).toEqual([])
-    await page.goto('/#/tramo/lav-madrid-sevilla:adamuz:cordoba')
+    await page.goto('/tramo/lav-madrid-sevilla:adamuz:cordoba')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toBeVisible()
     expect(pedidos.length).toBeGreaterThan(0)
   })
 
   test('un tramo con otro camino dice cuánto añade, y el desglose va en «Más detalle»', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:adamuz:cordoba')
+    await page.goto('/tramo/lav-madrid-sevilla:adamuz:cordoba')
     await abrirPanel(page)
     // lo esencial, a la vista: cuántos trenes, si tienen otro camino y dónde se ha buscado
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
@@ -74,7 +74,7 @@ test.describe('Tramos sin alternativa', () => {
   })
 
   test('al sur de Córdoba, el tramo dice que sus trenes no tienen otro camino en las líneas cargadas', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
+    await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
       'Si este tramo se cortara, sus 108 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
@@ -88,7 +88,7 @@ test.describe('Tramos sin alternativa', () => {
   })
 
   test('para un tren desviado, el otro camino puede ser más corto', async ({ page }) => {
-    await page.goto('/#/tramo/manzanares-ciudad-real:almagro:ciudad-real')
+    await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
       'Si este tramo se cortara, sus 38 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (14, entre Madrid-Puerta de Atocha y Bifurcación Málaga-Alta Velocidad), 90 km y 1 h 6 min menos.',
@@ -96,7 +96,7 @@ test.describe('Tramos sin alternativa', () => {
   })
 
   test('la cobertura lista los tramos sin alternativa y pliega los demás', async ({ page }) => {
-    await page.goto('/#/cobertura')
+    await page.goto('/cobertura')
     await abrirPanel(page)
     const apartado = page.getByTestId('tramos-sin-alternativa')
     await expect(page.getByRole('heading', { name: 'Tramos con más trenes y sin alternativa' })).toBeVisible()
@@ -132,7 +132,7 @@ test.describe('Tramos sin alternativa', () => {
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // cada fila lleva a la ficha de su tramo
     await filas.nth(0).getByRole('button').click()
-    await expect(page).toHaveURL(/#\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
+    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
   })
 })

@@ -17,7 +17,7 @@ test.describe('El ramal de Espelúy a Jaén', () => {
     await expect(primero).toContainText('Jaén')
     await expect(primero).toContainText('Estación')
     await campo.press('Enter')
-    await expect(page).toHaveURL(/#\/nodo\/jaen$/)
+    await expect(page).toHaveURL(/\/nodo\/jaen$/)
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Jaén' })).toBeVisible()
     await expect(ficha).toContainText('Estación término')
@@ -28,7 +28,7 @@ test.describe('El ramal de Espelúy a Jaén', () => {
   })
 
   test('la línea tiene su ficha, con Espelúy como enlace y dos tramos de vía única', async ({ page }) => {
-    await page.goto('/#/linea/espeluy-jaen')
+    await page.goto('/linea/espeluy-jaen')
     await expect(page.getByRole('heading', { name: 'Línea convencional Espelúy – Jaén' })).toBeVisible()
     await expect(page.locator('body')).toContainText('Un ramal de vía única')
     const esquema = page.getByTestId('esquema')
@@ -38,7 +38,7 @@ test.describe('El ramal de Espelúy a Jaén', () => {
   })
 
   test('un tramo del ramal dice su vía única y su bloqueo', async ({ page }) => {
-    await page.goto('/#/tramo/espeluy-jaen:mengibar-artichuela:jaen')
+    await page.goto('/tramo/espeluy-jaen:mengibar-artichuela:jaen')
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
@@ -47,7 +47,7 @@ test.describe('El ramal de Espelúy a Jaén', () => {
   })
 
   test('el comparador encuentra el recorrido de Madrid a Jaén', async ({ page }) => {
-    await page.goto('/#/recorridos/madrid-puerta-de-atocha/jaen')
+    await page.goto('/recorridos/madrid-puerta-de-atocha/jaen')
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos.first()).toBeVisible()
     await expect(recorridos.first()).toContainText('373,0 km')

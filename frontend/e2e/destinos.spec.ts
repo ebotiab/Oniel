@@ -8,7 +8,7 @@ async function abrirHoja(page: Page) {
 
 test.describe('Destinos directos de una estación', () => {
   test('Ciudad Real: a dónde se llega sin cambiar de tren, del destino con más trenes al que menos', async ({ page }) => {
-    await page.goto('/#/nodo/ciudad-real')
+    await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     const destinos = page.getByTestId('destinos-directos')
     await expect(destinos.getByRole('heading')).toHaveText('Destinos directos · 49 el viernes, 13 de noviembre de 2026')
@@ -35,13 +35,13 @@ test.describe('Destinos directos de una estación', () => {
     await expect(page.getByTestId('destinos-ver-todos')).toHaveText('Ver solo los más frecuentes')
     // un destino de la red lleva a su ficha
     await page.getByTestId('destino-puertollano').click()
-    await expect(page).toHaveURL(/#\/nodo\/puertollano$/)
+    await expect(page).toHaveURL(/\/nodo\/puertollano$/)
     await expect(page.getByTestId('detalle-nodo').getByRole('heading', { level: 2 })).toHaveText('Puertollano')
     await expect(page.getByTestId('destinos-directos').getByRole('heading')).toContainText('Destinos directos · 32 el')
   })
 
   test('Madrid: con dos operadores, cada destino dice de quién son sus trenes', async ({ page }) => {
-    await page.goto('/#/nodo/madrid-puerta-de-atocha')
+    await page.goto('/nodo/madrid-puerta-de-atocha')
     await abrirHoja(page)
     const filas = page.getByTestId('lista-destinos').getByRole('listitem')
     await expect(filas.nth(0)).toContainText('Córdoba')
@@ -51,19 +51,19 @@ test.describe('Destinos directos de una estación', () => {
   })
 
   test('el comparador de recorridos cuenta los mismos trenes directos que la ficha', async ({ page }) => {
-    await page.goto('/#/recorridos/ciudad-real/madrid-puerta-de-atocha')
+    await page.goto('/recorridos/ciudad-real/madrid-puerta-de-atocha')
     await abrirHoja(page)
     await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 12 trenes directos en este sentido')
-    await page.goto('/#/recorridos/madrid-puerta-de-atocha/cordoba')
+    await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
     await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 55 trenes directos en este sentido')
   })
 
   test('un nodo que no es estación no tiene destinos; el detalle de una estación dice cómo se cuentan', async ({ page }) => {
-    await page.goto('/#/nodo/urda')
+    await page.goto('/nodo/urda')
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByTestId('destinos-directos')).toHaveCount(0)
-    await page.goto('/#/nodo/daimiel')
+    await page.goto('/nodo/daimiel')
     await expect(page.getByTestId('destinos-directos')).toBeVisible()
     // en una línea solo de Renfe no falta ningún operador
     await expect(page.getByTestId('destinos-sin-horarios')).toHaveCount(0)

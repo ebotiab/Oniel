@@ -22,7 +22,7 @@ import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
-import { networkCount, parseHash, toHash, todayIso, type Comparador, type Route, type Selection } from './state'
+import { legacyHashPath, networkCount, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
 import './app.css'
 
 // MapLibre pesa tres cuartas partes del JavaScript del visor: va en un fichero aparte para que el panel
@@ -52,13 +52,13 @@ export default function App() {
   // Trazo que la leyenda pide encuadrar en el mapa al fijarlo.
   const [frame, setFrame] = useState<{ trazo: Trazo; n: number } | null>(null)
   const pinTrazo = useCallback((trazo: Trazo) => setFrame((f) => ({ trazo, n: (f?.n ?? 0) + 1 })), [])
-  const [route, setRoute] = useState(() => parseHash(window.location.hash))
+  const [route, setRoute] = useState(() => parseRoute(window.location.pathname))
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
-  const [showCoverage, setShowCoverage] = useState(() => Boolean(parseHash(window.location.hash).cobertura))
-  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseHash(window.location.hash).recorridos ?? parseHash(window.location.hash).glosario))
+  const [showCoverage, setShowCoverage] = useState(() => Boolean(parseRoute(window.location.pathname).cobertura))
+  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario))
   const [elegidoKey, setElegidoKey] = useState<string | null>(null)
-  const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
+  const [activeLineId, setActiveLineId] = useState<string | null>(() => parseRoute(window.location.pathname).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
   const status = useApiStatus()
 
@@ -110,23 +110,35 @@ export default function App() {
 
   const network = useMemo(() => (loaded ? composeNetwork(loaded.index, details) : null), [loaded, details])
 
-  // Sincronizar el hash con la selección
+  // Sincronizar la dirección con la selección: atrás y adelante del navegador, y los enlaces del propio visor
+  // (`navegar`), llegan como `popstate`.
   useEffect(() => {
-    const onHash = () => {
-      const r = parseHash(window.location.hash)
+    const onRoute = () => {
+      const r = parseRoute(window.location.pathname)
       setRoute(r)
       setShowCoverage(Boolean(r.cobertura))
       if (r.recorridos || r.glosario) setSheetOpen(true)
-      // Sin selección manda la URL: #/ es la vista de la red. Con selección, la línea sale de lo seleccionado.
+      // Sin selección manda la URL: / es la vista de la red. Con selección, la línea sale de lo seleccionado.
       if (!r.selection && !r.cobertura && !r.glosario) setActiveLineId(r.linea ?? null)
     }
+    // Un enlace antiguo, con almohadilla, pegado en la barra con el visor ya abierto: no recarga la página.
+    const onHash = () => {
+      const limpia = legacyHashPath(window.location.hash)
+      if (limpia === null) return
+      window.history.replaceState(null, '', limpia)
+      onRoute()
+    }
+    window.addEventListener('popstate', onRoute)
     window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
+    return () => {
+      window.removeEventListener('popstate', onRoute)
+      window.removeEventListener('hashchange', onHash)
+    }
   }, [])
   // La línea a la vista y el panel de cobertura también van en la URL: toda vista se puede enlazar.
   useEffect(() => {
-    const h = toHash({ ...route, linea: activeLineId, cobertura: showCoverage })
-    if (window.location.hash !== h) window.history.replaceState(null, '', h)
+    const path = routePath({ ...route, linea: activeLineId, cobertura: showCoverage })
+    if (window.location.pathname !== path) window.history.replaceState(null, '', path + window.location.search)
   }, [route, activeLineId, showCoverage])
 
   const select = useCallback(

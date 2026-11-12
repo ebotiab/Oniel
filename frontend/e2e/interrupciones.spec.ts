@@ -29,7 +29,7 @@ test.describe('Interrupciones del servicio', () => {
   })
 
   test('un tramo interrumpido dice el motivo, las fechas y la fuente', async ({ page }) => {
-    await page.goto(`/#/tramo/${TRAMO_CORTADO}`)
+    await page.goto(`/tramo/${TRAMO_CORTADO}`)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     const bloque = page.getByTestId('interrupcion')
     await expect(bloque).toHaveCount(1)
@@ -47,14 +47,14 @@ test.describe('Interrupciones del servicio', () => {
   })
 
   test('un tramo sin interrupción no lleva bloque ni nota', async ({ page }) => {
-    await page.goto(`/#/tramo/${TRAMO_ABIERTO}`)
+    await page.goto(`/tramo/${TRAMO_ABIERTO}`)
     await expect(page.getByTestId('lista-servicios').locator('li').first()).toBeVisible()
     await expect(page.getByTestId('interrupcion')).toHaveCount(0)
     await expect(page.getByTestId('nota-horario')).toHaveCount(0)
   })
 
   test('una interrupción ya terminada queda en el detalle del tramo, sin señal roja', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:adamuz:cordoba')
+    await page.goto('/tramo/lav-madrid-sevilla:adamuz:cordoba')
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     // la vigente sigue fuera del detalle, y es la única con la señal de «sin circulación»
     await expect(page.getByTestId('interrupcion')).toHaveCount(1)
@@ -72,7 +72,7 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('interrupcion-anterior-fuentes').getByRole('link').first()).toHaveAttribute('href', /^https:\/\/www\.adif\.es\//)
 
     // un tramo al que no afectó no lleva el apartado
-    await page.goto(`/#/tramo/${TRAMO_ABIERTO}`)
+    await page.goto(`/tramo/${TRAMO_ABIERTO}`)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('interrupciones-anteriores')).toHaveCount(0)
   })
@@ -88,7 +88,7 @@ test.describe('Interrupciones del servicio', () => {
     await expect(cortes).toContainText('Sin circulación entre Almuradiel-Viso del Marqués y Alcolea de Córdoba desde el 6 de septiembre de 2026 (Adif)')
     await cortes.getByRole('button').click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
-    await expect(page).toHaveURL(new RegExp(`#/tramo/${LINEA}:almuradiel-viso-del-marques:venta-de-cardenas$`))
+    await expect(page).toHaveURL(new RegExp(`/tramo/${LINEA}:almuradiel-viso-del-marques:venta-de-cardenas$`))
     await expect(page.getByTestId('interrupcion')).toBeVisible()
   })
 
@@ -124,24 +124,24 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('esquema-tramo-16')).not.toHaveAttribute('data-interrumpido')
     await expect(page.getByTestId('cortes-linea')).toHaveCount(0)
     await expect(page.getByTestId('leyenda-interrupcion')).toHaveCount(0)
-    await page.goto(`/#/tramo/${TRAMO_CORTADO}`)
+    await page.goto(`/tramo/${TRAMO_CORTADO}`)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('interrupcion')).toHaveCount(0)
   })
 
   test('simular un cierre en un tramo ya interrumpido lo indica', async ({ page }) => {
-    await page.goto(`/#/tramo/${TRAMO_CORTADO}/cierre`)
+    await page.goto(`/tramo/${TRAMO_CORTADO}/cierre`)
     await expect(page.getByTestId('panel-simulacion')).toBeVisible()
     await expect(page.getByTestId('sim-interrumpido')).toHaveText(/^Este tramo ya está sin circulación desde el 6 de septiembre de 2026 \(Adif\)\. La simulación se calcula sobre el horario publicado\.$/)
     // en un tramo abierto, el formulario no lleva ninguna nota
-    await page.goto(`/#/tramo/${TRAMO_ABIERTO}/cierre`)
+    await page.goto(`/tramo/${TRAMO_ABIERTO}/cierre`)
     await expect(page.getByTestId('panel-simulacion')).toBeVisible()
     await expect(page.getByTestId('sim-interrumpido')).toHaveCount(0)
   })
 
   test('el resultado de la simulación señala el tramo y la alternativa interrumpidos ese día', async ({ page }) => {
     test.skip(estatico, 'la simulación necesita la API')
-    await page.goto('/#/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre')
+    await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre')
     // un día que cubren los horarios cargados (el de las demás pruebas de la simulación), con las dos interrupciones vigentes
     await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('08:00')
@@ -156,13 +156,13 @@ test.describe('Interrupciones del servicio', () => {
   })
 
   test('un nodo del corte y el panel de cobertura enumeran la interrupción', async ({ page }) => {
-    await page.goto('/#/nodo/venta-de-cardenas')
+    await page.goto('/nodo/venta-de-cardenas')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByTestId('interrupcion')).toHaveCount(1)
     await expect(page.getByTestId('interrupcion')).toContainText(/autopista ferroviaria/)
     // los dos tramos que confluyen en Venta de Cárdenas están sin circulación
     await expect(page.getByTestId('detalle-nodo').locator('.lista-simple .senal.roja')).toHaveCount(2)
-    await page.goto('/#/cobertura')
+    await page.goto('/cobertura')
     const cobertura = page.getByTestId('cobertura-interrupciones')
     await expect(cobertura.getByTestId('interrupcion')).toHaveCount(3)
     await expect(cobertura).toContainText('Bifurcación La Sagra – Córdoba')

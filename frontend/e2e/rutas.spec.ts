@@ -78,18 +78,18 @@ test.describe('Grafo de rutas en el cliente', () => {
 
 test.describe('Escenario en la URL', () => {
   test('un escenario que cierra un tramo abre su simulación y la URL lo conserva', async ({ page }) => {
-    await page.goto(`/#/escenario/c~${URDA_CIUDAD_REAL}`)
+    await page.goto(`/escenario/c~${URDA_CIUDAD_REAL}`)
     const panel = page.getByTestId('panel-simulacion')
     await expect(panel).toBeVisible()
     await expect(panel.getByRole('heading', { name: 'Urda – Ciudad Real' })).toBeVisible()
-    await expect(page).toHaveURL(new RegExp(`#/escenario/c~${URDA_CIUDAD_REAL}$`))
+    await expect(page).toHaveURL(new RegExp(`/escenario/c~${URDA_CIUDAD_REAL}$`))
     // al volver al tramo, la URL deja de ser la del escenario
     await panel.getByRole('button', { name: /Volver al tramo/ }).click()
-    await expect(page).toHaveURL(new RegExp(`#/tramo/${URDA_CIUDAD_REAL}$`))
+    await expect(page).toHaveURL(new RegExp(`/tramo/${URDA_CIUDAD_REAL}$`))
   })
 
   test('un escenario ilegible no rompe el visor', async ({ page }) => {
-    await page.goto('/#/escenario/esto-no-es-un-escenario')
+    await page.goto('/escenario/esto-no-es-un-escenario')
     await expect(page.getByTestId('panel-simulacion')).toHaveCount(0)
     await expect(page.locator('#panel')).toContainText(/Madrid/)
   })

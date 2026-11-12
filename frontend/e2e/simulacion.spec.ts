@@ -6,7 +6,7 @@ test.describe('Simular un cierre', () => {
   test.skip(estatico, 'la simulación necesita la API')
 
   test('el caso calculado a mano: AVE 02070, Villanueva–Adamuz, 13/11/2026 de 8:00 a 9:00', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz')
+    await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz')
     await page.getByTestId('boton-simular').click()
     await expect(page.getByTestId('panel-simulacion')).toBeVisible()
     await page.getByTestId('sim-fecha').fill('2026-11-13')
@@ -38,7 +38,7 @@ test.describe('Simular un cierre', () => {
   })
 
   test('un cierre en Despeñaperros señala la alta velocidad como alternativa', async ({ page }) => {
-    await page.goto('/#/tramo/convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches/cierre')
+    await page.goto('/tramo/convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches/cierre')
     await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('07:00')
     await page.getByTestId('sim-fin').fill('10:00')
@@ -50,7 +50,7 @@ test.describe('Simular un cierre', () => {
   })
 
   test('un cierre entre Almagro y Ciudad Real afecta a los Intercity desviados por Manzanares', async ({ page }) => {
-    await page.goto('/#/tramo/manzanares-ciudad-real:almagro:ciudad-real/cierre')
+    await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real/cierre')
     await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('08:00')
     await page.getByTestId('sim-fin').fill('09:00')
@@ -76,7 +76,7 @@ test.describe('Simular un cierre', () => {
   })
 
   test('un cierre entre Urda y Ciudad Real señala el desvío por Manzanares, que usa dos líneas', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:urda:ciudad-real/cierre')
+    await page.goto('/tramo/lav-madrid-sevilla:urda:ciudad-real/cierre')
     await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('08:00')
     await page.getByTestId('sim-fin').fill('09:00')
@@ -93,7 +93,7 @@ test.describe('Simular un cierre', () => {
   })
 
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {
-    await page.goto('/#/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre')
+    await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre')
     await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('02:00')
     await page.getByTestId('sim-fin').fill('04:00')
