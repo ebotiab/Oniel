@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-from conftest import CONV_SPEC, DATA_DIR, FEED, JAEN_SPEC, MZCR_SPEC, SPEC, SPECS
+from conftest import ALBACETE_SPEC, CONV_SPEC, DATA_DIR, FEED, JAEN_SPEC, MZCR_SPEC, SPEC, SPECS
 from pydantic import ValidationError
 
 from oniel.geo import haversine_km
@@ -509,6 +509,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         CONV_SPEC.name: RULES | JAEN_RULES,
         MZCR_SPEC.name: RULES,
         JAEN_SPEC.name: {},
+        ALBACETE_SPEC.name: {},
     }
     for name, r in reports.items():
         assert r["problems"] == []
@@ -530,7 +531,7 @@ def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:
     ]
     broken = tmp_path / CONV_SPEC.name
     broken.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
-    report = validate_all(broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC])
+    report = validate_all(broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC, ALBACETE_SPEC])
     assert report["problems"] == [
         f"la regla {rule['id']}: el «via» de la parada 50500 no se sostiene: cordoba no es un"
         f" nodo de la línea {MZCR}"

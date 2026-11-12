@@ -26,7 +26,7 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
     await page.goto('/cobertura')
     await abrirPanel(page)
-    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(5)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(12)
     await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
     await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 108 trenes no tendrían otro camino')
@@ -106,7 +106,7 @@ test.describe('Tramos sin alternativa', () => {
     )
     // del que más trenes lleva al que menos
     const filas = page.getByTestId('lista-sin-alternativa').locator('li')
-    await expect(filas).toHaveCount(5)
+    await expect(filas).toHaveCount(12)
     await expect(filas.nth(0)).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
     await expect(filas.nth(0)).toContainText('108 trenes')
     await expect(filas.nth(1)).toContainText('55 trenes')
@@ -117,6 +117,11 @@ test.describe('Tramos sin alternativa', () => {
     await expect(filas.nth(3)).toContainText('50 trenes')
     await expect(filas.nth(4)).toContainText('Mengíbar-Artichuela – Jaén')
     await expect(filas.nth(4)).toContainText('44 trenes')
+    // y los siete de Alcázar de San Juan a Albacete: hasta que se cargue otra línea que llegue a
+    // Albacete, sus 17 trenes no tienen otro camino
+    await expect(filas.nth(5)).toContainText('Alcázar de San Juan – Campo de Criptana')
+    await expect(filas.nth(5)).toContainText('17 trenes')
+    await expect(filas.nth(11)).toContainText('17 trenes')
     await expect(apartado).toContainText('Trenes del viernes, 13 de noviembre de 2026')
     await expect(apartado).not.toContainText(/criticidad/i)
     // los demás, plegados: 36 tramos con lo que añade su otro camino

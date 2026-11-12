@@ -15,8 +15,9 @@ SPEC = DATA_DIR / "curated" / "lav-madrid-sevilla.json"
 CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
 MZCR_SPEC = DATA_DIR / "curated" / "manzanares-ciudad-real.json"
 JAEN_SPEC = DATA_DIR / "curated" / "espeluy-jaen.json"
+ALBACETE_SPEC = DATA_DIR / "curated" / "alcazar-albacete.json"
 #: Las líneas cargadas, en el orden de importación.
-SPECS = [SPEC, CONV_SPEC, MZCR_SPEC, JAEN_SPEC]
+SPECS = [SPEC, CONV_SPEC, MZCR_SPEC, JAEN_SPEC, ALBACETE_SPEC]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los
 #: recuentos que se comprueban son los suyos y no cambian aunque `sources.json` declare otros

@@ -28,11 +28,12 @@ from conftest import (
     requires_db,
 )
 
-LAV, CONV, MZCR, JAEN = (
+LAV, CONV, MZCR, JAEN, ALBACETE = (
     "lav-madrid-sevilla",
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
     "espeluy-jaen",
+    "alcazar-albacete",
 )
 RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
@@ -145,7 +146,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # cada viaje se guarda una sola vez. De los 565 de la convencional, 62 entran por las reglas
     # de los trenes de Jaén que solo paran una vez en ella (42 Córdoba – Jaén sin paradas y 20
     # Linares-Baeza – Mengíbar-Artichuela).
-    assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == 335 + 565 - 24
+    assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == 335 + 565 - 24 + 16
     assert gtfs1["lines"][LAV]["trips"] == 335
     assert gtfs1["lines"][CONV]["trips"] == 503 + 42 + 20
     assert gtfs1["lines"][MZCR]["trips"] == 130 + 24
@@ -173,9 +174,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert ouigo1["dataset"]["id"] == ouigo2["dataset"]["id"] == OUIGO_DATASET_ID
     assert (ouigo1["feed_start"], ouigo1["feed_end"]) == ("2026-06-26", "2026-12-12")
     c = imported["counts"]
-    assert c["lines"] == 4 and c["segments"] == 11 + 25 + 3 + 2 and c["services"] == 876 + 25
+    assert c["lines"] == 5 and c["segments"] == 11 + 25 + 3 + 2 + 7 and c["services"] == 892 + 25
     assert (
-        c["service_segment_passes"] == (3126 + 115) + (2741 + 683) + (72 + 390) + (402 + 20) + 245
+        c["service_segment_passes"]
+        == (3126 + 115) + (2741 + 683) + (72 + 390) + (402 + 20) + (506 + 537) + 245
     )
     assert c["import_runs"] == 4
     # el mismo fichero dos veces es un solo conjunto de datos, reconocido por su SHA-256
@@ -261,7 +263,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "bif-torrejon-de-velasco",
         "bif-la-sagra",
     ]
-    assert len(data["segment_features"]["features"]) == 11 + 25 + 3 + 2
+    assert len(data["segment_features"]["features"]) == 11 + 25 + 3 + 2 + 7
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
     # Ciudad Real sale a trazos la convencional hacia Badajoz
@@ -279,7 +281,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     assert {s["line_id"] for s in single} == {CONV, MZCR, JAEN}
     assert sum(1 for s in data["segments"] if s["line_id"] == JAEN and s["tracks"] == 1) == 2
     assert sum(1 for s in data["segments"] if s["line_id"] == MZCR and s["tracks"] == 1) == 3
-    assert [line["id"] for line in data["lines"]] == [LAV, CONV, MZCR, JAEN]
+    assert [line["id"] for line in data["lines"]] == [LAV, CONV, MZCR, JAEN, ALBACETE]
     # la tercera línea une las otras dos: Manzanares es de la convencional y Ciudad Real, de la LAV
     memberships = {
         node_id: sorted(n["line_id"] for n in data["nodes"] if n["id"] == node_id)
@@ -311,8 +313,8 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     async with connect(dsn) as conn:
         rows = await conn.fetch("SELECT segment_id, attribute, value FROM segment_attributes")
         columns = await conn.fetch("SELECT id, tracks FROM segments")
-    # el número de vías y los tres de señalización, en los 41 tramos
-    assert len(rows) == 4 * (11 + 25 + 3 + 2)
+    # el número de vías y los tres de señalización, en los 48 tramos
+    assert len(rows) == 4 * (11 + 25 + 3 + 2 + 7)
     assert {r["attribute"] for r in rows} == {"tracks", "proteccion_tren", "bloqueo", "mando"}
     # `segments.tracks` sigue escrito, con el mismo valor que el atributo
     tracks = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "tracks"}
@@ -664,8 +666,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     cov = r.json()
     # Daimiel y Almagro son las dos estaciones de la tercera línea, y Mengíbar-Artichuela y Jaén,
     # las de la cuarta; con esta hay 9 servicios más el día de referencia, los trenes de Jaén
-    # que no entraban en la convencional
-    assert cov["station_count"] == 6 + 22 + 2 + 2 and cov["service_count"] == 99 + 99 + 20 + 9
+    # que no entraban en la convencional. La quinta trae 7 estaciones, de Campo de Criptana a
+    # Albacete, y un servicio más: de sus 17 trenes de ese día, 16 ya estaban en la convencional
+    # y el otro, un Regional Exprés de Alcázar de San Juan a Valencia, solo para en ella una vez
+    assert cov["station_count"] == 6 + 22 + 2 + 2 + 7
+    assert cov["service_count"] == 99 + 99 + 20 + 9 + 1
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -676,14 +681,16 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "fcmaf-linea-522",
         "osm-relation-11351146",
         "wikipedia-linea-402",
+        "wikipedia-linea-300-alcazar-albacete",
         "adif-mapa-red",
         "adif-estado-de-la-red",
         "adif-aviso-obras-autopista-ferroviaria",
     }
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
-    assert "y la línea convencional Espelúy – Jaén" in cov["notice"]
-    assert [line["id"] for line in cov["lines"]] == [LAV, CONV, MZCR, JAEN]
+    assert "la línea convencional Espelúy – Jaén" in cov["notice"]
+    assert "y la línea convencional Alcázar de San Juan – Albacete" in cov["notice"]
+    assert [line["id"] for line in cov["lines"]] == [LAV, CONV, MZCR, JAEN, ALBACETE]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
     ouigo, dataset = cov["datasets"]
@@ -711,6 +718,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         CONV: ["renfe"],
         MZCR: ["renfe"],
         JAEN: ["renfe"],
+        ALBACETE: ["renfe"],
     }
     assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
     assert "No están los trenes de Iryo, que no publica sus horarios" in cov["notice"]
@@ -809,7 +817,7 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     # fuera de la red cargada, el destino lleva el nombre de la parada del fichero
     outside = {d["name"]: d["trains"] for d in dest if d["node_id"] is None}
     assert outside["Málaga María Zambrano"] == 8 and outside["Badajoz"] == 1
-    assert len(dest) == 49 and len(by_node) == 14
+    assert len(dest) == 49 and len(by_node) == 19
 
 
 async def test_direct_destinations_carry_each_operator(client: httpx.AsyncClient) -> None:
@@ -1279,11 +1287,11 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     out = (await client.get("/api/alternatives")).json()
     counts = (await client.get("/api/segment-counts")).json()
     assert out["date"] == counts["date"] == "2026-11-13"
-    assert out["line_ids"] == [LAV, CONV, MZCR, JAEN]
+    assert out["line_ids"] == [LAV, CONV, MZCR, JAEN, ALBACETE]
     assert out["missing_operator_ids"] == ["iryo"]
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
-    assert len(by_id) == 41
+    assert len(by_id) == 48
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # al sur de Córdoba no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:cordoba:bif-malaga"]
@@ -1337,7 +1345,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
     # la red entera ya no se exporta en un solo fichero: el visor no lo descargaba
     assert not (tmp_path / "network.json").exists()
     assert not (tmp_path / "segment-counts.json").exists()
-    assert result["lines"] == [LAV, CONV, MZCR, JAEN]
+    assert result["lines"] == [LAV, CONV, MZCR, JAEN, ALBACETE]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]
     )
