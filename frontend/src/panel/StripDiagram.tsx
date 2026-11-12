@@ -147,7 +147,16 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             onMouseLeave={() => onHover(null)}
             style={{ cursor: 'pointer', pointerEvents: 'all' }}
           >
-            <rect x={X - 14} y={y1 + inset} width={28} height={Math.max(4, y2 - y1 - 2 * inset)} fill="transparent" pointerEvents="all" />
+            {/* zona sensible: la vía y, si el tramo lleva su barra de trenes, hasta la cifra. Sin ello queda
+                un hueco muerto entre una barra corta y su número, que crece cuando otra línea sube el máximo */}
+            <rect
+              x={X - 14}
+              y={y1 + inset}
+              width={!compact && n !== undefined && maxCount > 0 && y2 - y1 > 14 ? 72 : 28}
+              height={Math.max(4, y2 - y1 - 2 * inset)}
+              fill="transparent"
+              pointerEvents="all"
+            />
             {(sel || closed || hov) && (
               <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={color} strokeWidth={sel || closed ? 7 : 5} opacity={sel || closed ? 1 : 0.35} strokeLinecap="round" />
             )}
