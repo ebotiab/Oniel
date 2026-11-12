@@ -57,6 +57,8 @@ export interface RecorridosEnMapa {
  * la geometría simplificada del índice: su tolerancia (200 m) queda por debajo de un píxel.
  */
 const ZOOM_DETALLE = 8
+/** El mismo ancho con el que `App` pasa a la composición de móvil. */
+const MOVIL = '(max-width: 760px)'
 
 type Caja = [number, number, number, number]
 
@@ -169,7 +171,17 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     mapRef.current = map
     if (import.meta.env.DEV) (window as unknown as { __onielMap?: MapLibreMap }).__onielMap = map
     map.on('error', (e) => console.error('[oniel mapa]', e.error?.message ?? e))
+    // En el móvil la atribución desplegada ocupa un renglón entero de un mapa muy bajo. MapLibre la pliega al
+    // arrastrar el mapa; aquí se pliega con cualquier toque fuera de ella, también en el panel. Queda tras el
+    // botón «i» y en «Cobertura y fuentes».
+    const fold = (event: PointerEvent) => {
+      if (!window.matchMedia(MOVIL).matches) return
+      const attrib = map.getContainer().querySelector('.maplibregl-ctrl-attrib')
+      if (attrib && !(event.target instanceof Node && attrib.contains(event.target))) attrib.classList.remove('maplibregl-compact-show')
+    }
+    window.addEventListener('pointerdown', fold)
     return () => {
+      window.removeEventListener('pointerdown', fold)
       map.remove()
       mapRef.current = null
       readyRef.current = false
