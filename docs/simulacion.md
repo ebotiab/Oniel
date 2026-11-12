@@ -115,6 +115,50 @@ El detalle dice cuántos quedan fuera por ser el cuarto o posteriores; los desca
 
 Está automatizado en `frontend/e2e/recorridos.spec.ts` (el criterio, los cortes, la URL, los tiempos y la vista con Madrid – Córdoba y Madrid – Ciudad Real, también en modo estático) y, para el cálculo, en `backend/tests/test_routing.py`.
 
+## Tramos sin alternativa
+
+Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tramo cortado, esos trenes tendrían otro camino. Lo calcula el servidor (`backend/src/oniel/analysis/criticality.py`) con dos cosas que ya existían: los pasos de cada tren por cada tramo y el grafo de rutas. No añade ningún dato externo.
+
+**«Sin alternativa» significa siempre «en las líneas que Oniel tiene cargadas».** Al sur de Córdoba Oniel tiene una sola línea, así que sus tres tramos salen sin alternativa aunque en la red real haya otras vías. El resultado lleva ese aviso como texto (`scope_note`), la lista de líneas en las que se ha buscado (`line_ids`) y los operadores cuyos trenes no están contados (`missing_operator_ids`; hoy, Iryo), y el visor lo dice junto a cada cifra.
+
+**Cómo se calcula.**
+
+1. De cada tren del día se toman los tramos cargados que recorre (`services_repo.service_paths`; son los mismos pasos que cuentan los recuentos por tramo y por operador).
+2. Para un tramo, el **recorrido** de cada tren es el trozo seguido de esos tramos que contiene al que se mira, del nodo por el que el tren entra en las líneas cargadas al nodo por el que sale (`corridor`). Un AVE de Madrid a Málaga entra por Madrid-Puerta de Atocha y sale por la Bifurcación Málaga-Alta Velocidad; un tren de Madrid a Jaén, por Espelúy. Si los tramos de un tren no forman un camino sin bifurcaciones, su recorrido se queda en el propio tramo.
+3. Los trenes con el mismo recorrido forman un **grupo**: comparten extremos y camino, así que comparten respuesta.
+4. Con el tramo cerrado (un escenario de un cierre), `find_routes` busca los caminos entre los dos extremos del grupo, sin descartar ninguno por largo. Si hay alguno, el más corto es **el otro camino**, y se compara con el recorrido del tren medido con la misma vara (`route_along`): kilómetros por cada línea y minutos a la velocidad habitual de cada tramo, sin paradas. Si no hay ninguno, el grupo no tiene alternativa.
+
+Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
+
+**Lo que sale** con los trenes del 13 de noviembre de 2026 (229 trenes, 39 tramos):
+
+| Tramos | Trenes al día | Otro camino en las líneas cargadas |
+|---|---|---|
+| Córdoba – Bifurcación Málaga (LAV) | 108 | Ninguno |
+| Bifurcación Málaga – Majarabique (LAV) | 55 | Ninguno |
+| Majarabique – Sevilla-Santa Justa (LAV) | 53 | Ninguno |
+| Ciudad Real – Córdoba (LAV, cuatro tramos) | 108 | Para los 43 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 24 desviados por Manzanares, 7 km y 38 min más |
+| Madrid – Ciudad Real (LAV, cuatro tramos) | 84 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
+| Manzanares – Ciudad Real (tres tramos) | 38 | Para los 24 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
+| Manzanares – Linares-Baeza (convencional) | 18 a 26 | Para los 16 de Madrid a Espelúy, por la alta velocidad hasta Córdoba y de vuelta: 105 km más y 29 min menos |
+
+Los 36 tramos al norte de Córdoba tienen otro camino para todos sus trenes. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
+
+**La API y la instantánea.** `GET /api/alternatives` (con `?date=` para otro día) devuelve un elemento por tramo: trenes, reparto por operador, cuántos tienen otro camino y cuántos no, y los grupos, del más numeroso al menos, cada uno con sus extremos, lo que mide y tarda su recorrido y, si existe, el otro camino (kilómetros, minutos, diferencia con el recorrido, vía única, líneas y estaciones principales). La instantánea lo lleva en `alternatives.json`, que el visor no pide al arrancar (`docs/datos.md`, «Instantánea estática»). El cliente no repite el cálculo: necesitaría los tramos de todos los trenes del día.
+
+**En el visor.** La ficha del tramo lo dice en una frase bajo «Trenes que lo recorren» y desglosa los grupos en «Más detalle»; el panel «Cobertura y fuentes» lista los tramos sin alternativa, del que más trenes lleva al que menos, y pliega los demás (`docs/diseno.md`, «Tramos sin alternativa»). Las frases están en `frontend/src/app/alternativas.ts`.
+
+**Qué no mide.**
+
+1. Nada fuera de las líneas cargadas. Un tramo «sin alternativa» puede tenerla en la red real, y uno «con alternativa» puede tener otra mejor que Oniel no conoce.
+2. Si el tren puede tomar el otro camino. El grafo no distingue anchos de vía ni electrificación, y no mira las paradas que el tren dejaría de hacer.
+3. La capacidad de la vía. No se modela cuántos trenes caben por el otro camino, ni los cruces en vía única; que 84 trenes «tengan otro camino» por una línea de vía única no quiere decir que quepan.
+4. Los trenes que faltan: los de Iryo, Cercanías y mercancías. La carga real de cada tramo es mayor.
+5. Los viajeros. Cuenta trenes, no plazas ni personas, y un tren que recorre varios tramos cuenta en cada uno.
+6. El viaje fuera de las líneas cargadas. Los extremos de un grupo son por donde el tren entra y sale de ellas, no su origen y su destino.
+
+Está automatizado en `backend/tests/test_criticality.py` (la convencional como alternativa de la alta velocidad entre Madrid y Córdoba, los tramos al sur de Córdoba, los grupos de trenes desviados y los recuentos de la instantánea), en `backend/tests/test_integration_db.py` (la API contra los recuentos por tramo) y en `frontend/e2e/alternativas.spec.ts` (la ficha y el panel, también en modo estático).
+
 ## Interrupciones reales
 
 Un cierre simulado puede caer sobre un tramo que ya está interrumpido de verdad. La simulación no lo oculta ni lo corrige: lo dice.

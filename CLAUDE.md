@@ -11,7 +11,7 @@ Interfaz, documentación, comentarios del código, nombres y mensajes de las pru
 ## Dónde está cada cosa
 
 - `README.md`: arrancar desde cero, comandos de datos, pruebas y comprobaciones.
-- `backend/`: API FastAPI, CLI `oniel-data` (Typer), reglas de simulación en `oniel.sim`, importadores y pruebas pytest. Los módulos se describen en `backend/README.md`.
+- `backend/`: API FastAPI, CLI `oniel-data` (Typer), reglas de simulación en `oniel.sim`, grafo de rutas en `oniel.routing`, análisis en `oniel.analysis`, importadores y pruebas pytest. Los módulos se describen en `backend/README.md`.
 - `backend/data/raw/`: ficheros originales, con la fecha en el nombre; no se editan. `backend/data/curated/`: una especificación JSON por línea, `sources.json` (el registro de todas las fuentes) y `anotaciones.json` (las anotaciones de red; hoy, las interrupciones del servicio, que se revisan a mano como dice `docs/datos.md`).
 - `frontend/`: visor React + TypeScript + Vite + MapLibre, con las pruebas Playwright en `frontend/e2e/`. `frontend/public/data/` es la instantánea estática que exporta el importador; el visor arranca siempre con ella.
 - [docs/diseno.md](docs/diseno.md): las decisiones de diseño (tokens, tipografía, composición, encuadre, principios).

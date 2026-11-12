@@ -12,6 +12,7 @@ from oniel.routing.graph import (
     build_graph,
     closure_detours,
     find_routes,
+    route_along,
 )
 from oniel.routing.scenario import Scenario, ScenarioError, SketchLink, SpeedChange
 
@@ -31,4 +32,5 @@ __all__ = [
     "build_graph",
     "closure_detours",
     "find_routes",
+    "route_along",
 ]

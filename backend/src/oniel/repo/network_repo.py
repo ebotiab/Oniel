@@ -9,9 +9,11 @@ from typing import Any
 
 import asyncpg
 
+from oniel.analysis import criticality
 from oniel.db.pool import fetch_int
 from oniel.domain.annotations import ANNOTATION_KINDS, INTERRUPTION, schedule_note
 from oniel.domain.schemas import (
+    AlternativesOut,
     AnnotationOut,
     ConnectionOut,
     CoverageOut,
@@ -466,6 +468,30 @@ async def fetch_graph(conn: asyncpg.Connection) -> Graph:
         await fetch_lines(conn),
         await fetch_nodes(conn),
         [s for s, _ in await fetch_segments(conn)],
+    )
+
+
+async def fetch_segment_alternatives(
+    conn: asyncpg.Connection, day: dt.date | None = None
+) -> AlternativesOut:
+    """Trenes por tramo de ``day`` (por defecto, el de referencia) y su alternativa en la red cargada."""
+    if day is None:
+        _, _, day = await feed_bounds(conn)
+    lines = await fetch_lines(conn)
+    running = {operator_id for line in lines for operator_id in line.operator_ids}
+    graph = build_graph(lines, await fetch_nodes(conn), [s for s, _ in await fetch_segments(conn)])
+    paths = await services_repo.service_paths(conn, day) if day else []
+    return AlternativesOut(
+        date=day,
+        line_ids=[line.id for line in lines],
+        missing_operator_ids=[
+            o.id
+            for o in await fetch_operators(conn)
+            if o.timetable == "no_publicado" and o.id in running
+        ],
+        scope_note=criticality.SCOPE_NOTE,
+        method=criticality.METHOD,
+        segments=criticality.segment_alternatives(graph, paths),
     )
 
 

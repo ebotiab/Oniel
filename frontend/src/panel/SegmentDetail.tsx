@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { ApiError, fetchSegmentServices } from '../data/api'
-import type { AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
+import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
+import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
+import { coste, fraseTramo, porLineas, trenes } from '../app/alternativas'
 import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop, tracksLabel } from '../app/state'
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
@@ -28,6 +29,7 @@ interface Props {
 export function SegmentDetail({ segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [alternativas, setAlternativas] = useState<AlternativesOut | null>(null)
   const line = network.lines.find((l) => l.id === segment.line_id)
 
   // App monta este componente con key={segment.id}, así que el estado se reinicia al cambiar de tramo.
@@ -40,6 +42,18 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
       alive = false
     }
   }, [segment.id, referenceDate])
+
+  // Si el tramo se cortara: va aparte de la lista de trenes y, si no llega, la ficha sigue entera.
+  useEffect(() => {
+    let alive = true
+    fetchAlternatives(referenceDate ?? undefined)
+      .then((a) => alive && setAlternativas(a))
+      .catch(() => undefined)
+    return () => {
+      alive = false
+    }
+  }, [referenceDate])
+  const alternativa = alternativas?.segments.find((s) => s.segment_id === segment.id)
 
   const byProduct = new Map<string, number>()
   for (const p of services?.passes ?? []) byProduct.set(productLabel(p.service.product), (byProduct.get(productLabel(p.service.product)) ?? 0) + 1)
@@ -122,6 +136,34 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
+        {alternativa && alternativa.trains > 0 && (
+          <section data-testid="tramo-alternativa-detalle">
+            <p className="sobre">Si este tramo se cortara</p>
+            <ul className="lista-grupos">
+              {alternativa.groups.map((g) => (
+                <li key={`${g.from_node_id}>${g.to_node_id}>${g.length_km}`}>
+                  {trenes(g.trains)} entre {g.from_name} y {g.to_name}:{' '}
+                  {g.alternative ? (
+                    <>
+                      otro camino por {porLineas(g.alternative.line_ids, network.lines)}, {coste(g.alternative)}{' '}
+                      <span className="datos">
+                        ({formatKm(g.alternative.length_km)} km en vez de {formatKm(g.length_km)})
+                      </span>
+                      .
+                    </>
+                  ) : (
+                    'sin otro camino en las líneas cargadas.'
+                  )}
+                </li>
+              ))}
+            </ul>
+            <p className="suave">
+              Cada grupo son los trenes del {alternativas?.date ? formatDate(alternativas.date) : 'día'} que entran y salen de las líneas cargadas por los
+              mismos sitios; su viaje puede seguir más allá. {alternativas?.scope_note} El tiempo es el de recorrer cada tramo a su velocidad habitual, sin
+              paradas: sirve para comparar, no es un horario.
+            </p>
+          </section>
+        )}
         {past.length > 0 && (
           <section className="anteriores" data-testid="interrupciones-anteriores">
             <p className="sobre">Interrupciones anteriores en este tramo</p>
@@ -171,6 +213,11 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
             <p className="suave" data-testid="tramo-operadores-sin-horarios">
               No están los trenes de {listaEs(missing.map((o) => o.name))}, que también opera{missing.length > 1 ? 'n' : ''} en esta línea: no publica
               {missing.length > 1 ? 'n' : ''} sus horarios en un formato abierto.
+            </p>
+          )}
+          {alternativa && alternativa.trains > 0 && (
+            <p className="texto" data-testid="tramo-alternativa">
+              {fraseTramo(alternativa)}
             </p>
           )}
           <p className="suave">
