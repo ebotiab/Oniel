@@ -65,7 +65,7 @@ El orden es orientativo. La tarea de arquitectura que queda (#19) desbloquea las
 
 ## Pendientes menores
 
-Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: hoy, las interrupciones anteriores a las registradas.
+Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](https://github.com/ebotiab/Oniel/issues/31), como lista con casillas: hoy, las interrupciones anteriores a las registradas y la clave de los símbolos del esquema de línea.
 
 ## Proteger `main` exigiendo el CI
 
