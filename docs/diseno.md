@@ -117,6 +117,14 @@ Comparar recorridos (decidido el 12 de noviembre de 2026, con una maqueta delant
 - Los dos límites del cálculo van a la vista, bajo la lista, en una nota gris: el tiempo sirve para comparar y no es un horario; Oniel une las líneas sin mirar el ancho de vía. El método, los trechos de cada recorrido y las fuentes van en «Más detalle», como en cualquier ficha.
 - Se enseñan tres recorridos como mucho. El criterio (qué recorridos y por qué tres) está en `docs/simulacion.md`, «Comparar recorridos».
 
+Destinos directos (decidido el 12 de noviembre de 2026)
+- La ficha de una estación lleva una sección «Destinos directos», tras el contexto y las interrupciones y antes de «Tramos que salen de aquí»: a dónde se llega sin cambiar de tren es lo que un visitante quiere saber antes que los tramos. El rótulo lleva el recuento y el día, como «Trenes que paran aquí».
+- Una frase dice qué es la lista, sin jerga: «Estaciones a las que se llega desde aquí sin cambiar de tren, de la que tiene más trenes a la que menos».
+- Cada destino son dos renglones: el nombre y, a la derecha, cuántos trenes («20 trenes»); debajo, en gris, los tipos de servicio y entre qué horas salen («Intercity, AVLO, AVE y ALVIA · de 07:55 a 22:01»; «a las 16:48» si solo hay uno). El operador se nombra solo cuando de la estación salen trenes de más de uno, con su cifra si el destino los tiene de varios («Renfe Viajeros 49, Ouigo España 6»).
+- Un destino que está en la red cargada es un enlace a su ficha, en el azul de los enlaces; uno de fuera se nombra en tinta, sin enlace y sin etiqueta: la ausencia de enlace basta.
+- A la vista van los seis más frecuentes; el resto, tras «Ver los 43 destinos restantes», un enlace que despliega la lista en el sitio y después dice «Ver solo los más frecuentes». No es un segundo plegable: no esconde detalle técnico, alarga una lista, y no se recuerda entre fichas.
+- Lo que la lista no puede saber se dice con frases, sin color nuevo: si hay una interrupción vigente, una línea con el filete rojo de las interrupciones («Son los trenes del horario publicado…»); si en sus líneas opera alguien sin horarios publicados, una frase en gris bajo la lista («No están los trenes de Iryo…»). Cómo se cuenta, que solo están los trenes de las líneas cargadas y la fuente de los horarios van en «Más detalle».
+
 Movimiento
 - Solo en respuesta a una acción: enfocar el mapa al seleccionar, abrir el panel de simulación, resaltar en el esquema lo que se resalta en el mapa. Se respeta `prefers-reduced-motion`.
 

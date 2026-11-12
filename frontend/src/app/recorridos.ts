@@ -210,12 +210,17 @@ export interface TrenDirecto {
   minutes: number
 }
 
-/** Trenes que paran en el origen y después en el destino, por hora de salida. */
+/**
+ * Trenes que paran en el origen y después en el destino, por hora de salida. No cuentan los que en
+ * el origen solo dejan viajeros ni los que en el destino solo los recogen: es el mismo criterio de
+ * los destinos directos de la ficha de una estación (`destinations_from_node` en el backend).
+ */
 export function trenesDirectos(enOrigen: NodeCall[], enDestino: NodeCall[]): TrenDirecto[] {
   const destino = new Map(enDestino.map((c) => [c.service_id, c]))
   const trenes: TrenDirecto[] = []
   for (const c of enOrigen) {
     const llegada = destino.get(c.service_id)
+    if (c.boards === false || llegada?.alights === false) continue
     const departure = c.departure ?? c.arrival
     const arrival = llegada?.arrival ?? llegada?.departure
     if (!departure || !arrival) continue
