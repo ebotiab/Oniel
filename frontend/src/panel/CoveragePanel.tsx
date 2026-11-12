@@ -2,6 +2,7 @@ import type { CoverageOut, InterruptionOut } from '../data/types'
 import type { ApiStatus } from '../data/api'
 import { formatDate, formatKm } from '../app/state'
 import { InterruptionNotice } from './InterruptionNotice'
+import { Termino } from './Termino'
 
 interface Props {
   coverage: CoverageOut
@@ -45,7 +46,9 @@ export function CoveragePanel({ coverage, interruptions, status, onClose }: Prop
         {status === 'ausente' ? ' Esta vista previa muestra una instantánea estática; la simulación necesita el servidor.' : ''}
         {status === 'buscando' ? ' El servidor se está despertando; hasta que responda se muestra la instantánea estática.' : ''}
       </p>
-      <h3 className="subtitulo">Operadores de trenes</h3>
+      <h3 className="subtitulo">
+        <Termino id="operador">Operadores</Termino> de trenes
+      </h3>
       <ul className="fuentes" data-testid="cobertura-operadores">
         {coverage.operators
           .filter((o) => o.role === 'operador')

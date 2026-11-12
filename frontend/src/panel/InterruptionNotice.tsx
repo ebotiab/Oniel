@@ -1,5 +1,6 @@
 import type { InterruptionOut, SourceRef } from '../data/types'
 import { endLabel, formatDateLong } from '../app/interruptions'
+import { Termino } from './Termino'
 
 interface Props {
   interruption: InterruptionOut
@@ -22,7 +23,10 @@ export function InterruptionNotice({ interruption: i }: Props) {
   return (
     <aside className="interrupcion" aria-label="Interrupción del servicio" data-testid="interrupcion">
       <p className="sobre">
-        <span className="senal roja">sin circulación</span> {i.from_name} – {i.to_name}
+        <span className="senal roja">
+          <Termino id="sin-circulacion">sin circulación</Termino>
+        </span>{' '}
+        {i.from_name} – {i.to_name}
       </p>
       <p className="texto">{i.reason}</p>
       <p className="texto" data-testid="interrupcion-fechas">

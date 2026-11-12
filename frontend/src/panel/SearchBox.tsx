@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 
-import { buildIndex, search, type SearchHit, type SearchScope, type SearchTarget } from '../app/search'
+import { buildIndex, GLOSSARY_ENTRY, search, type SearchHit, type SearchScope, type SearchTarget } from '../app/search'
 import type { NetworkOut } from '../data/types'
 
 interface Props {
@@ -47,9 +47,9 @@ export function SearchBox({ network, scope = 'todo', label, placeholder, onPick,
 
   const index = useMemo(() => (network ? buildIndex(network, scope) : []), [network, scope])
   const typed = query.trim() !== ''
-  // Sin texto, el buscador ofrece las líneas: se llega a cualquiera sin escribir.
+  // Sin texto, el buscador ofrece las líneas y, tras ellas, el glosario: se llega a cualquiera sin escribir.
   const hits: SearchHit[] = useMemo(
-    () => (typed ? search(index, query) : index.filter((e) => e.target.type === 'linea').map((entry) => ({ entry, byCode: false }))),
+    () => (typed ? search(index, query) : index.filter((e) => e.target.type === 'linea' || e === GLOSSARY_ENTRY).map((entry) => ({ entry, byCode: false }))),
     [index, query, typed],
   )
   const current = Math.min(active, Math.max(0, hits.length - 1))
@@ -171,8 +171,8 @@ export function SearchBox({ network, scope = 'todo', label, placeholder, onPick,
         )}
       </div>
       <div className="buscador-lista" hidden={!showList}>
-        {!typed && hits.length > 0 && <p className="buscador-rotulo">Líneas</p>}
-        <ul id={listId} role="listbox" aria-label={typed ? 'Resultados' : 'Líneas'}>
+        {!typed && hits.length > 0 && <p className="buscador-rotulo">Líneas y glosario</p>}
+        <ul id={listId} role="listbox" aria-label={typed ? 'Resultados' : 'Líneas y glosario'}>
           {hits.map((hit, i) => (
             <li
               key={hit.entry.key}
@@ -195,7 +195,7 @@ export function SearchBox({ network, scope = 'todo', label, placeholder, onPick,
         </ul>
         {typed && hits.length === 0 && (
           <p className="buscador-vacio" role="status">
-            {scope === 'todo' ? 'Ninguna estación ni línea coincide con ese nombre.' : 'Ninguna estación coincide con ese nombre.'}
+            {scope === 'todo' ? 'Ninguna estación, línea ni término coincide con ese nombre.' : 'Ninguna estación coincide con ese nombre.'}
           </p>
         )}
       </div>

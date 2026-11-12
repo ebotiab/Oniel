@@ -53,7 +53,7 @@ test.describe('Explorar la red', () => {
     const movil = await asa.isVisible()
     if (movil) await asa.click()
     // la lista tiene las tres líneas, también en la hoja del móvil, y ya no hay pestañas
-    await expect(page.getByTestId('lista-lineas').getByRole('button')).toHaveCount(3)
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(3)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)

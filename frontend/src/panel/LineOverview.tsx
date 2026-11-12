@@ -6,6 +6,7 @@ import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, listaEs } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
 import { StripDiagram } from './StripDiagram'
+import { Termino } from './Termino'
 
 interface Props {
   network: NetworkOut
@@ -79,7 +80,9 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
           <dl className="datos-tramo datos" data-testid="linea-detalle">
             {gestor && (
               <div>
-                <dt>Quién la gestiona</dt>
+                <dt>
+                  <Termino id="administrador-de-infraestructura">Quién la gestiona</Termino>
+                </dt>
                 <dd>{gestor}</dd>
               </div>
             )}
@@ -90,12 +93,16 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
               </div>
             )}
             <div>
-              <dt>Ancho de vía</dt>
+              <dt>
+                <Termino id="ancho-de-via">Ancho de vía</Termino>
+              </dt>
               <dd>{ancho}</dd>
             </div>
             {line.electrification && (
               <div>
-                <dt>Electrificación</dt>
+                <dt>
+                  <Termino id="electrificacion">Electrificación</Termino>
+                </dt>
                 <dd>{line.electrification}</dd>
               </div>
             )}
@@ -135,7 +142,7 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
       {!compact && (
         <p className="nota-esquema" data-testid="nota-esquema">
           {conBarras && dia ? `Las barras cuentan los trenes de cada tramo el ${formatDate(dia)}, según los horarios de ${conHorarios.length ? listaEs(conHorarios) : 'los operadores cargados'}${sinHorarios.length ? `; no incluyen los de ${listaEs(sinHorarios)}` : ''}. ` : ''}
-          Toca una estación o un tramo para ver sus trenes.
+          Toca una estación o un tramo para ver sus trenes. La cifra a la derecha de cada nombre es su <Termino id="punto-kilometrico">punto kilométrico</Termino>.
         </p>
       )}
     </section>

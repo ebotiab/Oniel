@@ -4,6 +4,7 @@ import { normalize } from '../app/search'
 import { formatKm, lineKind, lineShortLabel } from '../app/state'
 import type { LineSummary } from '../data/types'
 import { Muestra } from './Legend'
+import { Termino } from './Termino'
 
 interface Props {
   lines: LineSummary[]
@@ -16,8 +17,8 @@ interface Props {
 export const FILTER_FROM = 8
 
 const GROUPS = [
-  { kind: 'alta velocidad', label: 'Alta velocidad', trazo: 'alta-velocidad' },
-  { kind: 'convencional', label: 'Línea convencional', trazo: 'convencional' },
+  { kind: 'alta velocidad', label: 'Alta velocidad', trazo: 'alta-velocidad', termino: 'alta-velocidad' },
+  { kind: 'convencional', label: 'Línea convencional', trazo: 'convencional', termino: 'linea-convencional' },
 ] as const
 
 /**
@@ -57,7 +58,7 @@ export function LineList({ lines, interruptedLineIds, onPick }: Props) {
           <section key={g.kind} aria-label={g.label}>
             <h4 className="grupo-lineas">
               <Muestra trazo={g.trazo} />
-              <span>{g.label}</span>
+              <Termino id={g.termino}>{g.label}</Termino>
               <span className="datos suave">{group.length}</span>
             </h4>
             <ul>

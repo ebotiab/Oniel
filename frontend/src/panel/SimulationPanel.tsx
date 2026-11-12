@@ -7,6 +7,7 @@ import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
 import { STATUS } from './labels'
+import { Termino } from './Termino'
 
 interface Props {
   segment: SegmentOut
@@ -61,13 +62,16 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
       <button type="button" className="enlace volver" onClick={onBack}>
         ← Volver al tramo
       </button>
-      <p className="sobre">Cierre hipotético · {formatKm(segment.length_km)} km</p>
+      <p className="sobre">
+        <Termino id="cierre-hipotetico">Cierre hipotético</Termino> · {formatKm(segment.length_km)} km
+      </p>
       <h2 id="sim-titulo" className="titulo">
         {segment.from_name} – {segment.to_name}
       </h2>
       <p className="texto suave">
-        Elige un día y una franja. Oniel compara la ventana con la hora en que cada tren recorre el tramo y distingue
-        horarios publicados, pasos estimados y casos indeterminados.
+        Elige un día y una franja. Oniel compara la ventana con la hora en que cada tren recorre el tramo y distingue{' '}
+        <Termino id="paso-publicado">horarios publicados</Termino>, <Termino id="paso-estimado">pasos estimados</Termino> y{' '}
+        <Termino id="paso-indeterminado">casos indeterminados</Termino>.
       </p>
       {/* antes de calcular: el tramo ya está interrumpido hoy; con resultado, lo dice el propio resultado */}
       {!result &&
@@ -132,7 +136,12 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
                       ? 'el escenario añade un enlace esbozado'
                       : `existe otra línea: ${lowerFirst(a.line_name)}${a.via.length ? `, por ${a.via.join(', ')}` : ''}`}
                   . Son {formatKm(a.length_km)} km frente a {formatKm(a.closed_line_length_km)} km por la línea cerrada
-                  {a.single_track_km > 0 ? `, con ${formatKm(a.single_track_km)} km de vía única` : ''}. Oniel no reasigna los trenes afectados; solo señala que la alternativa existe.
+                  {a.single_track_km > 0 && (
+                    <>
+                      , con {formatKm(a.single_track_km)} km de <Termino id="via-unica">vía única</Termino>
+                    </>
+                  )}
+                  . Oniel no reasigna los trenes afectados; solo señala que la alternativa existe.
                   {a.interruptions?.map((i) => (
                     <span key={i.id} data-testid="sim-alternativa-interrumpida">
                       {' '}

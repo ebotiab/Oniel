@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { LineSummary } from '../data/types'
 import { lineKind } from '../app/state'
 import type { Trazo } from '../map/layers'
+import { Termino } from './Termino'
 
 interface Props {
   closed: boolean
@@ -78,7 +79,9 @@ export function Legend({ closed, interrupted, lines, singleTrack, highlight, onH
       {interrupted && (
         <>
           <span className="muestra sin-circulacion" aria-hidden="true" data-testid="leyenda-interrupcion" />
-          <span>Sin circulación hoy</span>
+          <span>
+            <Termino id="sin-circulacion">Sin circulación</Termino> hoy
+          </span>
         </>
       )}
       <span className="muestra seleccion" aria-hidden="true" />
@@ -86,7 +89,9 @@ export function Legend({ closed, interrupted, lines, singleTrack, highlight, onH
       {closed && (
         <>
           <span className="muestra cierre" aria-hidden="true" />
-          <span>Cierre simulado</span>
+          <span>
+            <Termino id="cierre-hipotetico">Cierre simulado</Termino>
+          </span>
         </>
       )}
     </div>

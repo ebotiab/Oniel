@@ -10,10 +10,11 @@ interface Props {
   onPickLine: (id: string) => void
   onShowCoverage: () => void
   onCompare: () => void
+  onGlossary: () => void
 }
 
 /** Vista de la red: lo que se ve cuando no hay ninguna línea elegida. Dice qué hay cargado y por dónde empezar. */
-export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage, onCompare }: Props) {
+export function NetworkOverview({ network, coverage, interruptions, onPickLine, onShowCoverage, onCompare, onGlossary }: Props) {
   const cortadas = new Set(interruptions.filter((i) => i.segment_ids.length > 0).map((i) => i.line_id))
   const ficha = [networkCount(network.lines), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
   return (
@@ -38,6 +39,12 @@ export function NetworkOverview({ network, coverage, interruptions, onPickLine, 
           Comparar recorridos
         </button>
         : por dónde se va de una estación a otra y qué diferencia hay entre un camino y otro.
+      </p>
+      <p className="nota-esquema">
+        <button type="button" className="enlace" onClick={onGlossary} data-testid="boton-glosario-red">
+          Glosario
+        </button>
+        : qué significa cada término y cómo circulan los trenes.
       </p>
       <p className="nota-esquema">
         <button type="button" className="enlace" onClick={onShowCoverage} data-testid="boton-cobertura">

@@ -34,6 +34,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR 46 (11 de noviembre de 2026): grafo de rutas y escenarios (#23). `oniel.routing` une todas las líneas en un grafo y calcula los recorridos entre dos nodos (kilómetros, tiempo estimado, vía única, líneas) sobre un escenario serializable: cerrar tramos, añadir un enlace esbozado, cambiar una velocidad. La alternativa de la simulación de cierre sale de ahí, igual que antes para una línea y ahora también por varias encadenadas (Madrid – Ciudad Real por Manzanares). `GET /api/routes`, el mismo cálculo en `frontend/src/routing/` y la ruta `#/escenario/…`; `docs/simulacion.md`, «Grafo y escenarios».
 - PR del comparador de recorridos (12 de noviembre de 2026, #24): vista «Comparar recorridos» (`#/recorridos/<desde>/<hasta>`), que se abre desde la vista de la red o desde la ficha de una estación. Enseña hasta tres caminos entre dos estaciones, del más corto al más largo, con kilómetros, tiempo estimado, vía única, estaciones y trenes directos; señala los cortados por una interrupción o por un cierre hipotético y cuál queda como alternativa, y funciona sin API. Los recorridos ya no se limitan por número de líneas: se descartan los que miden más del doble que el más corto. `docs/simulacion.md`, «Comparar recorridos», y `docs/diseno.md`.
 - PR de los trenes por operador (12 de noviembre de 2026, #22): los pasos por tramo se reparten por operador en `GET /api/segment-counts` y en la instantánea, y Ouigo entra como segundo operador de la alta velocidad con su GTFS del Punto de Acceso Nacional (12 trenes al día por el tronco Madrid – Córdoba y 6 hasta Sevilla el día de referencia). Iryo no publica sus horarios en un formato abierto: queda registrado como operador de la línea sin horarios y el visor dice en cada tramo que sus trenes faltan. El panel del tramo abre con el reparto y agrupa los trenes por operador; la barra del esquema es el total (`docs/diseno.md`, «Trenes por operador»). El día de referencia sale de los días que cubren todos los ficheros a la vez; `docs/datos.md`, «Operadores y sus horarios».
+- PR del glosario (12 de noviembre de 2026, #16): cada término técnico de las fichas lleva un subrayado de puntos y, a un toque, una nota con su definición; el glosario completo (`#/glosario` y `#/glosario/<entrada>`) abre con cinco conceptos de circulación (bloqueo y cantón, vía única, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS), con el Reglamento de Circulación Ferroviaria como referencia registrada en `sources.json`, y sigue con los términos por orden alfabético. Se entra por el botón de la cabecera en escritorio, por el buscador, que también encuentra términos, y por la vista de la red. Los textos están en `frontend/src/panel/glosario.ts`; `docs/diseno.md`, «Glosario».
 
 ## Principios de arquitectura
 
@@ -51,7 +52,6 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-2. [#16](https://github.com/ebotiab/Oniel/issues/16) Visor: glosario didáctico y conceptos. Cada término a un toque y un glosario con los conceptos que hacen falta para entender la red. Depende de #15.
 3. [#17](https://github.com/ebotiab/Oniel/issues/17) Datos: anotaciones de red con fecha y fuente. El modelo común; las interrupciones pasan a ser su primer tipo sin cambio visible.
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. Depende de #17.
 5. [#19](https://github.com/ebotiab/Oniel/issues/19) Datos: atributos de tramo por secciones. Un mecanismo para todos; `tracks` lo estrena.
@@ -61,7 +61,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 11. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Depende de #26; los conjuntos de datos fechados ya están (#21).
 12. [#29](https://github.com/ebotiab/Oniel/issues/29) Infraestructura: refresco automático del GTFS. Se apoya en los conjuntos de datos fechados, ya hechos (#21).
 
-El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. Las dos tareas de arquitectura que quedan (#17 y #19) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
+El orden es orientativo. Las dos tareas de arquitectura que quedan (#17 y #19) son independientes entre sí y cada una desbloquea las que la siguen; conviene hacerlas antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 
