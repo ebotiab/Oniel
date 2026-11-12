@@ -53,6 +53,30 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('nota-horario')).toHaveCount(0)
   })
 
+  test('una interrupción ya terminada queda en el detalle del tramo, sin señal roja', async ({ page }) => {
+    await page.goto('/#/tramo/lav-madrid-sevilla:adamuz:cordoba')
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+    // la vigente sigue fuera del detalle, y es la única con la señal de «sin circulación»
+    await expect(page.getByTestId('interrupcion')).toHaveCount(1)
+    const anteriores = page.getByTestId('interrupciones-anteriores')
+    await expect(anteriores).toBeHidden()
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    const anterior = anteriores.getByTestId('interrupcion-anterior')
+    await expect(anterior).toHaveCount(1)
+    await expect(anterior).toContainText('interrupción terminada')
+    await expect(anterior).toContainText('Villanueva de Córdoba-Los Pedroches – Córdoba')
+    await expect(anterior.locator('.senal.roja')).toHaveCount(0)
+    await expect(page.getByTestId('interrupcion-anterior-fechas')).toHaveText(
+      /^Desde el 19 de enero de 2026\. La circulación se reanudó el 17 de febrero de 2026\.$/,
+    )
+    await expect(page.getByTestId('interrupcion-anterior-fuentes').getByRole('link').first()).toHaveAttribute('href', /^https:\/\/www\.adif\.es\//)
+
+    // un tramo al que no afectó no lleva el apartado
+    await page.goto(`/#/tramo/${TRAMO_ABIERTO}`)
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+    await expect(page.getByTestId('interrupciones-anteriores')).toHaveCount(0)
+  })
+
   test('el esquema de la línea marca los tramos sin circulación y lleva al primero', async ({ page }) => {
     await abrirLineaConvencional(page)
     await expect(page.getByTestId('esquema-tramo-16')).toHaveAttribute('data-interrumpido', 'true')

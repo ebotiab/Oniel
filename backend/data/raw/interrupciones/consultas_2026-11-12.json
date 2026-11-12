@@ -1,0 +1,33 @@
+{
+  "descripcion": "Registro de las consultas hechas el 12 de noviembre de 2026 para registrar en backend/data/curated/anotaciones.json la interrupción, ya terminada, de la alta velocidad entre Villanueva de Córdoba y Córdoba a principios de 2026. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "consultado_el": "2026-11-12",
+  "consultas": [
+    {
+      "source_id": "adif-comunicado-adamuz-2026-01-19",
+      "titulo": "Comunicado de prensa sobre el accidente ferroviario ocurrido en Adamuz",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/comunicado-de-prensa-sobre-el-accidente-ferroviario-ocurrido-en-adamuz",
+      "fecha_de_la_pagina": "2026-01-19",
+      "resumen": "Nota de prensa del 19 de enero de 2026: el día anterior, a las 19.45 h, un tren Málaga-Madrid descarriló en Adamuz (Córdoba) e invadió la vía contigua, por la que circulaba un tren Madrid-Huelva, que también descarriló. La circulación de alta velocidad entre Madrid, Córdoba, Sevilla, Málaga, Huelva, Cádiz, Algeciras y Granada queda suspendida, al menos, durante todo el 19 de enero. No da fecha de reanudación.",
+      "que_aporta": "El día y la hora del accidente y que el 19 de enero de 2026 estuvo suspendida toda la alta velocidad entre Madrid y Andalucía."
+    },
+    {
+      "source_id": "renfe-nota-servicios-malaga-2026-04",
+      "titulo": "Renfe restablece los servicios directos de alta velocidad con origen y destino Málaga desde el 30 de abril",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/04/renfe-restablece-servicios-av-malaga",
+      "fecha_de_la_pagina": "2026-04-23",
+      "resumen": "Nota de prensa sobre la vuelta de los trenes directos a Málaga. Al hacer balance de sus planes alternativos por carretera, dice que el del tramo Villanueva de Córdoba-Córdoba permitió mantener los servicios de alta velocidad entre Madrid y Málaga desde el 20 de enero hasta la reapertura del servicio en Adamuz, el 17 de febrero, y que el de Antequera-Málaga empezó el 18 de febrero por un desprendimiento en Álora.",
+      "que_aporta": "Los extremos del trayecto por carretera (Villanueva de Córdoba y Córdoba), su inicio el 20 de enero de 2026 y la reapertura del 17 de febrero de 2026."
+    },
+    {
+      "source_id": null,
+      "titulo": "Renfe ajusta los horarios del plan alternativo de transporte para trenes MD Jaén-Córdoba desde el 20 de marzo",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/03/renfe-ajusta-horarios-pat-trenes-md-jaen-cordoba",
+      "fecha_de_la_pagina": "Sin fecha visible; la dirección la sitúa en marzo de 2026",
+      "resumen": "Nota de prensa: desde el 20 de marzo cambian los horarios del servicio por carretera entre Jaén y Córdoba, que se presta por los daños de un temporal en la infraestructura y se mantiene hasta que acaben los trabajos en la vía. No dice qué día empezó el corte ni entre qué estaciones está cortada la vía.",
+      "que_aporta": "Nada que se pueda registrar: sigue sin haber una fecha de inicio en una fuente oficial para el corte entre Jaén y Córdoba, que por eso no tiene entrada propia."
+    }
+  ]
+}

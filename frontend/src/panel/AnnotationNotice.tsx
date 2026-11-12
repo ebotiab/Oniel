@@ -5,6 +5,8 @@ import { Termino } from './Termino'
 
 interface Props {
   annotation: AnnotationOut
+  /** La anotación ya terminó: se enseña como registro, sin el color de señal de las vigentes. */
+  pasada?: boolean
 }
 
 /** Rótulo breve de cada fuente: quien la publica, numerado cuando aporta más de una («Adif (2)»). */
@@ -29,10 +31,11 @@ function lugar(a: AnnotationOut): string | null {
  * y la fecha de comprobación al pie. La etiqueta, el renglón de fechas y el aspecto salen de la capa
  * de su tipo (annotationLayers.ts); un tipo sin capa no se enseña.
  */
-export function AnnotationNotice({ annotation: a }: Props) {
+export function AnnotationNotice({ annotation: a, pasada = false }: Props) {
   const capa = annotationLayer(a.kind)
   if (!capa) return null
-  const { ficha } = capa
+  if (pasada && !capa.ficha.pasada) return null
+  const ficha = pasada && capa.ficha.pasada ? { ...capa.ficha, ...capa.ficha.pasada, clase: `${capa.ficha.clase} pasada` } : capa.ficha
   const labels = sourceLabels(a.sources)
   const donde = lugar(a)
   return (
