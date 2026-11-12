@@ -72,9 +72,12 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay una tarea abierta:
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay cuatro tareas abiertas. Las tres últimas salieron al cargar la alta velocidad a Granada (#103):
 
 1. [#131](https://github.com/ebotiab/Oniel/issues/131) Visor: enviar a Logfire los errores del navegador, solo errores. Depende de #124, ya cerrada. Solo toca el visor y la documentación.
+2. [#135](https://github.com/ebotiab/Oniel/issues/135) Datos: contar en la línea Madrid – Sevilla los trenes que no paran en Madrid. Los Avant de Sevilla y los AVE de Barcelona a Málaga y a Granada ya se importan, pero no cuentan en los tramos de esa línea por los que pasan. Cambia la instantánea y los recuentos: mejor sin otra PR de datos abierta.
+3. [#134](https://github.com/ebotiab/Oniel/issues/134) Simulación de cierre: no listar rodeos desproporcionados. Con el lazo de Granada, un cierre en la alta velocidad enseña un rodeo de 698 km frente a 358. El criterio se propone al usuario antes de implementarlo.
+4. [#136](https://github.com/ebotiab/Oniel/issues/136) Visor: decir en la ficha del tramo que la vía es de ancho mixto. El dato ya está cargado en el paso por Loja y en la entrada a Granada; falta la decisión de diseño.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
