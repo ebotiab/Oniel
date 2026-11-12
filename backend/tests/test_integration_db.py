@@ -286,6 +286,44 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     )
 
 
+async def test_segments_carry_their_attributes_with_source_and_date(
+    client: httpx.AsyncClient, dsn: str
+) -> None:
+    from oniel.db.pool import connect
+
+    # una fila por tramo y atributo, también tras importar la red dos veces
+    async with connect(dsn) as conn:
+        rows = await conn.fetch("SELECT segment_id, attribute, value FROM segment_attributes")
+        columns = await conn.fetch("SELECT id, tracks FROM segments")
+    assert len(rows) == 11 + 25 + 3 and {r["attribute"] for r in rows} == {"tracks"}
+    # `segments.tracks` sigue escrito, con el mismo valor que el atributo
+    assert {r["segment_id"]: r["value"] for r in rows} == {r["id"]: r["tracks"] for r in columns}
+
+    index = (await client.get("/api/lines")).json()
+    by_id = {f["id"]: f["properties"] for f in index["segment_features"]["features"]}
+    assert all(p["attributes"]["tracks"]["value"] == p["tracks"] for p in by_id.values())
+    # la vía única de Despeñaperros viene de una sección, con su fuente y su fecha
+    single = by_id[f"{CONV}:santa-cruz-de-mudela:almuradiel-viso-del-marques"]
+    assert single["attributes"] == {
+        "tracks": {
+            "value": 1,
+            "source_id": "wikipedia-lineas-300-400",
+            "checked_on": "2026-11-08",
+        }
+    }
+    # la vía doble de la alta velocidad es el valor de la línea, sin fuente propia
+    double = by_id[f"{LAV}:ciudad-real:puertollano"]
+    assert double["attributes"] == {"tracks": {"value": 2, "source_id": None, "checked_on": None}}
+    # lo mismo en el detalle de la línea y en la ficha del tramo
+    detail = (await client.get(f"/api/lines/{MZCR}")).json()
+    assert [s["attributes"]["tracks"]["value"] for s in detail["segments"]] == [1, 1, 1]
+    assert {s["attributes"]["tracks"]["source_id"] for s in detail["segments"]} == {
+        "wikipedia-linea-522"
+    }
+    services = (await client.get(f"/api/segments/{MZCR}:manzanares:daimiel/services")).json()
+    assert services["segment"]["attributes"]["tracks"]["checked_on"] == "2026-11-10"
+
+
 async def test_interruptions_endpoint(client: httpx.AsyncClient) -> None:
     r = await client.get("/api/interruptions")
     assert r.status_code == 200

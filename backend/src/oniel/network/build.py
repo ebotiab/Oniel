@@ -3,8 +3,8 @@
 Pasos: obtener una sola polilínea de la geometría OSM (encadenando las vías de una relación en
 el orden de sus miembros, o trazando el camino más corto entre dos puntos cuando la relación
 trae las dos vías sin orden), situar cada nodo sobre ella (por proyección o por kilómetro),
-cortar la línea en tramos entre nodos consecutivos y resumir la velocidad máxima y el número de
-vías de cada tramo.
+cortar la línea en tramos entre nodos consecutivos, resumir la velocidad máxima de cada tramo y
+repartirle los atributos declarados por secciones (el número de vías entre ellos).
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from oniel.domain.attributes import ATTRIBUTE_RULES, TRACKS, AttributeValue
 from oniel.geo import Coord, Polyline, haversine_km
 from oniel.network.spec import NetworkSpec, NodeSpec
 
@@ -71,9 +72,17 @@ class BuiltSegment:
     length_km: float
     max_speed_kmh: int | None
     typical_speed_kmh: int | None
-    tracks: int | None
+    #: Atributos del tramo, repartidos desde las secciones de la especificación.
+    attributes: dict[str, AttributeValue]
     source_id: str
     coords: list[Coord]
+
+    @property
+    def tracks(self) -> int:
+        """Número de vías: el atributo ``tracks``, que toda línea ha de cubrir entera."""
+        value = self.attributes[TRACKS].value
+        assert isinstance(value, int)
+        return value
 
 
 @dataclass
@@ -291,15 +300,46 @@ def speed_summary(line: ChainedLine, km_from: float, km_to: float) -> tuple[int 
     return max(weights), max(weights, key=lambda k: weights[k])
 
 
-def tracks_between(spec: NetworkSpec, nodes: list[BuiltNode], km_from: float, km_to: float) -> int:
-    """Número de vías de un tramo: la sección declarada que lo contiene, o el valor de la línea."""
-    km_of = {n.spec.id: n.km for n in nodes}
-    mid = (km_from + km_to) / 2
-    for section in spec.track_sections:
-        lo, hi = sorted((km_of[section.from_node], km_of[section.to_node]))
-        if lo <= mid <= hi:
-            return section.tracks
-    return spec.line.tracks
+def distribute_attributes(
+    spec: NetworkSpec, nodes: list[BuiltNode]
+) -> list[dict[str, AttributeValue]]:
+    """Reparte las secciones de atributo a los tramos: un diccionario por tramo, en su orden.
+
+    ``nodes`` son los nodos ya situados y ordenados por kilómetro; el tramo ``i`` va del nodo
+    ``i`` al ``i + 1``. Cada sección da su valor a los tramos que quedan entre sus dos nodos. Donde
+    ninguna sección declara un atributo vale el campo de la línea que diga su regla
+    (``ATTRIBUTE_RULES``), sin fuente propia. Falla si dos secciones del mismo atributo se pisan o
+    si un atributo obligatorio no llega a todos los tramos.
+    """
+    index = {n.spec.id: i for i, n in enumerate(nodes)}
+    per_segment: list[dict[str, AttributeValue]] = [{} for _ in nodes[1:]]
+    problems: list[str] = []
+    for section in spec.attribute_sections:
+        lo, hi = sorted((index[section.from_node], index[section.to_node]))
+        value = AttributeValue(section.value, section.source_id, section.checked_on)
+        for i in range(lo, hi):
+            if section.attribute in per_segment[i]:
+                problems.append(
+                    f"dos secciones de «{section.attribute}» se pisan entre"
+                    f" {nodes[i].spec.id} y {nodes[i + 1].spec.id}"
+                )
+            else:
+                per_segment[i][section.attribute] = value
+    for attribute, rule in ATTRIBUTE_RULES.items():
+        default = getattr(spec.line, rule.line_field) if rule.line_field else None
+        for i, attributes in enumerate(per_segment):
+            if attribute in attributes:
+                continue
+            if default is not None:
+                attributes[attribute] = AttributeValue(default)
+            elif rule.required:
+                problems.append(
+                    f"el atributo obligatorio «{attribute}» no cubre el tramo"
+                    f" {nodes[i].spec.id}–{nodes[i + 1].spec.id}"
+                )
+    if problems:
+        raise ValueError(f"atributos de tramo de {spec.line.id}: " + "; ".join(problems))
+    return per_segment
 
 
 def source_at(line: ChainedLine, spec: NetworkSpec, km: float) -> str:
@@ -313,6 +353,7 @@ def cut_segments(
     spec: NetworkSpec, line: ChainedLine, nodes: list[BuiltNode]
 ) -> list[BuiltSegment]:
     segments: list[BuiltSegment] = []
+    attributes = distribute_attributes(spec, nodes)
     for seq, (a, b) in enumerate(zip(nodes, nodes[1:], strict=False), start=1):
         if b.km - a.km < 0.05:
             raise ValueError(f"los nodos {a.spec.id} y {b.spec.id} están en el mismo punto")
@@ -328,7 +369,7 @@ def cut_segments(
                 length_km=b.km - a.km,
                 max_speed_kmh=max_speed,
                 typical_speed_kmh=typical,
-                tracks=tracks_between(spec, nodes, a.km, b.km),
+                attributes=attributes[seq - 1],
                 source_id=source_at(line, spec, (a.km + b.km) / 2),
                 coords=line.polyline.slice(a.km, b.km),
             )

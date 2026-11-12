@@ -170,7 +170,7 @@ def test_shared_nodes_reuse_the_high_speed_ids(conv: BuiltNetwork) -> None:
     assert conv.nodes[-1].spec.id == "cordoba"
 
 
-def test_track_sections_mark_single_track_segments(conv: BuiltNetwork) -> None:
+def test_attribute_sections_mark_single_track_segments(conv: BuiltNetwork) -> None:
     by_id = {s.id.split(":", 1)[1]: s for s in conv.segments}
     assert by_id["manzanares:valdepenas"].tracks == 2
     assert by_id["santa-cruz-de-mudela:almuradiel-viso-del-marques"].tracks == 1
