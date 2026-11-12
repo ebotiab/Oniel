@@ -145,15 +145,17 @@ No se usa `base='full'`: añade cientos de puntos por minuto (procesador por nú
 
 Logfire agrupa las excepciones repetidas en incidencias y avisa cuando aparece una nueva o se reabre una resuelta (la función se llama «Error tracking»; antes, «Issues»). Necesita que el fallo llegue como excepción, no como un aviso de nivel error, y así llegan los de Oniel: una excepción no controlada en la API queda en el tramo de la petición con su traza (`is_exception`, nivel 17) y una importación que falla, en el tramo `import all` con `outcome = failed`. Lo comprueban `tests/test_observability.py` y `tests/test_importing.py`. Los `HTTPException` (404, 422) quedan como excepciones de nivel aviso: son respuestas correctas, no errores del servidor.
 
-Se activa por proyecto, a mano, en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Enable Issues → elegir los canales de aviso (o ninguno, para verlos solo en Logfire) → Enable Issue Tracking. Las incidencias tardan unos minutos en aparecer. Desactivarla borra las incidencias acumuladas.
+Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo» y solo para producción: el filtro `deployment_environment = 'production'` (Advanced options) deja fuera las excepciones que alguien envíe desde `local`. Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
 
 ### Alertas
 
-Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso son Slack o un webhook genérico (la documentación trae también PagerDuty y Opsgenie); no hay correo. Se crean una vez en la organización y se eligen en cada alerta. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
+Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso se crean una vez en la organización y se eligen en cada alerta: correo a miembros de la organización, Slack, webhook genérico, PagerDuty u Opsgenie. Oniel tiene uno, «Correo», que escribe al correo de la cuenta `ebotiab`; la documentación de Logfire no menciona todavía el canal de correo, pero el formulario lo ofrece. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
 
-Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres consultas están probadas con `oniel-data obs consulta` el 12 de noviembre de 2026; las tres van con «Fire when: the query starts having results».
+El plan personal no deja comprobar más a menudo que cada 10 minutos, y la ventana no puede pasar de cuatro veces ese intervalo: un fallo tarda hasta 10 minutos en avisar.
 
-**1. La API no arranca.** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: última hora. Cadencia: cada 5 minutos.
+Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres alertas están creadas en el proyecto desde el 12 de noviembre de 2026, con el canal «Correo», comprobación cada 10 minutos y aviso en «First match after no matches» (avisa cuando la consulta empieza a dar filas, no en cada comprobación). Sus consultas, probadas antes con `oniel-data obs consulta`, son las de abajo; si se cambian en Logfire, se cambian aquí.
+
+**1. «Oniel: la API no arranca».** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: últimos 30 minutos.
 
 ```sql
 SELECT service_version AS version,
@@ -169,7 +171,7 @@ HAVING max(start_timestamp) FILTER (WHERE span_name = 'import all started') < no
            < max(start_timestamp) FILTER (WHERE span_name = 'import all started'))
 ```
 
-**2. Respuestas 5xx.** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos. Cadencia: cada 5 minutos.
+**2. «Oniel: respuestas 5xx».** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos.
 
 ```sql
 SELECT span_name AS peticion, http_response_status_code AS estado,
@@ -183,7 +185,7 @@ GROUP BY 1, 2, 3
 ORDER BY veces DESC
 ```
 
-**3. Importación fallida o sin terminar.** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: última hora. Cadencia: cada 10 minutos.
+**3. «Oniel: importación fallida o sin terminar».** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: últimos 30 minutos.
 
 ```sql
 SELECT 'fallida' AS problema, start_timestamp AS inicio, service_version AS version,
@@ -205,7 +207,7 @@ WHERE s.deployment_environment = 'production' AND s.service_name = 'oniel-data'
   AND f.span_id IS NULL
 ```
 
-La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Crear las alertas y el canal es configuración de la cuenta y lo decide quien la administra.
+La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Las alertas y el canal son configuración de la cuenta: los cambia quien la administra, en la web de Logfire.
 
 ### Qué dicen las trazas de un despliegue
 
@@ -224,7 +226,7 @@ uv run oniel-data obs consulta "select span_name, count(*) n from records group 
 uv run oniel-data obs consulta "select count(*) n from records" --entorno local   # o --entorno todos
 ```
 
-`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Como `/healthz` no se traza, la «última traza» de la API es la última petición de un visitante o el último arranque, no la última comprobación de Render. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación falló o no ha terminado, y `--esperar` repite la consulta cada 30 segundos hasta que entre: sustituye a sondear producción con `curl`. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` (trazas) o `metrics` y lo imprime en CSV. Las dos órdenes miran `production` salvo que `--entorno` diga `local`; `obs consulta` admite además `--entorno todos`, que no filtra. Usan la API de consultas de Logfire (`POST /v2/query`), que limita las consultas diarias con token de lectura: si responde 429, la orden lo dice. Las columnas útiles de `records` son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
+`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Como `/healthz` no se traza, la «última traza» de la API es la última petición de un visitante o el último arranque, no la última comprobación de Render. «Última importación» es la de la versión desplegada (con `--commit`, la de ese commit), no la que empezó más tarde: durante un despliegue el contenedor de la versión anterior puede arrancar después que el nuevo y saltarse su importación, y esa omitida no dice nada de la versión nueva (#120). Si la más reciente es de otra versión, la orden la enseña aparte, debajo. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación no ha terminado completada u omitida, y `--esperar` repite la consulta cada 30 segundos hasta que el commit sea el de la API y su importación haya terminado, o hasta que esa importación falle: sustituye a sondear producción con `curl`. El aviso `import all started` y el tramo `import all` van en trazas distintas; una importación en curso es un aviso sin tramo de la misma versión que empiece justo después. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` (trazas) o `metrics` y lo imprime en CSV. Las dos órdenes miran `production` salvo que `--entorno` diga `local`; `obs consulta` admite además `--entorno todos`, que no filtra. Usan la API de consultas de Logfire (`POST /v2/query`), que limita las consultas con token de lectura. El token es del proyecto y lo comparten las sesiones que consultan a la vez, así que tras un despliegue es fácil llegar al límite: si Logfire responde 429, la orden lo dice y termina con código 2, salvo con `--esperar`, que espera lo que pide la cabecera `Retry-After` y vuelve a probar dentro del mismo plazo. Las columnas útiles de `records` son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
 
 Una sesión de Claude tiene que ejecutarlo fuera del sandbox del shell, que corta la conexión TLS con Logfire. Cada traza del informe lleva su `trace_id`; se abre en https://logfire-us.pydantic.dev/ebotiab/oniel buscando `trace_id = '…'`.
 
