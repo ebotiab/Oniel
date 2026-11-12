@@ -76,7 +76,7 @@ La importación es repetible: crea el esquema si falta, sustituye los servicios 
 - **Ajuste del repositorio.** Para que un flujo pueda abrir una PR hace falta marcar Settings → Actions → General → Workflow permissions → «Allow GitHub Actions to create and approve pull requests». Sin él, el paso «Abrir la PR» falla con «GitHub Actions is not permitted to create or approve pull requests». El flujo no aprueba ninguna PR.
 - **El CI de esa PR.** GitHub retiene los flujos de `pull_request` cuando la PR la abre otro flujo con su token: hay que pulsar «Approve workflows to run» en la PR para que `Backend` y `Frontend` se ejecuten como comprobaciones suyas. Además, `ci.yml` admite `workflow_dispatch` y el refresco lo lanza sobre la rama; ese resultado queda en el commit y en la pestaña Actions, no en la lista de comprobaciones de la PR.
 - **Base de datos.** El flujo importa en un PostgreSQL de servicio que desaparece al terminar, igual que el CI. No toca la base de Render.
-- **Lo que crece.** Cada fichero de Renfe declarado alarga `import all` (unos 6 s en local; bastante más en el plan gratuito de Render, donde solo se ejecuta cuando cambia el commit desplegado). Con una PR por semana conviene retirar de vez en cuando los ficheros antiguos que no se quieran comparar.
+- **Lo que crece.** Cada fichero de Renfe declarado alarga `import all` (unos 6 s en local; bastante más en el plan gratuito de Render, donde solo se ejecuta cuando cambia el commit desplegado). El flujo abre una PR cuando cambian los trenes o, como tarde, cada cuatro semanas; conviene retirar de vez en cuando los ficheros antiguos que no se quieran comparar.
 
 ## Logfire
 

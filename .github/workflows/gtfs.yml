@@ -1,8 +1,9 @@
 # Refresco semanal de los horarios de Renfe (docs/datos.md, «Refresco de los horarios»).
 #
 # Descarga el GTFS que Renfe publica en data.renfe.com (la URL registrada en sources.json) y lo
-# compara por SHA-256 con los ficheros ya declarados. Si no ha cambiado, termina sin abrir nada. Si
-# ha cambiado, lo guarda en backend/data/raw/ con la fecha en el nombre, lo declara en sources.json,
+# compara con el cargado. Si es el mismo fichero, o si los trenes de las líneas cargadas son los
+# mismos en las próximas cuatro semanas y el cargado tiene menos de 28 días, termina sin abrir nada.
+# Si no, lo guarda en backend/data/raw/ con la fecha en el nombre, lo declara en sources.json,
 # pasa las comprobaciones (validate, import all, pytest y Playwright sobre la instantánea
 # regenerada) y abre una PR para que la revise una persona. Si alguna comprobación falla no abre la
 # PR: abre una incidencia. Mientras haya una PR de refresco abierta no abre otra.
@@ -134,7 +135,7 @@ jobs:
             echo "conjunto=$(jq -r '.dataset_id // empty' "$RUNNER_TEMP/refresco.json")"
           } >> "$GITHUB_OUTPUT"
           if [ "$(jq -r .changed "$RUNNER_TEMP/refresco.json")" = "false" ]; then
-            echo "El fichero publicado es uno de los ya declarados (SHA-256 $(jq -r '.sha256[:12]' "$RUNNER_TEMP/refresco.json")…; vigente: $(jq -r .previous_dataset_id "$RUNNER_TEMP/refresco.json")). No se abre nada." | tee -a "$GITHUB_STEP_SUMMARY"
+            jq -r 'if .reason == "mismos_trenes" then "El fichero publicado es otro, pero los trenes de las líneas cargadas son los mismos en los próximos \(.window_days) días y el cargado (\(.previous_dataset_id)) tiene \(.previous_age_days) días. No se abre nada." else "El fichero publicado es uno de los ya declarados (vigente: \(.previous_dataset_id)). No se abre nada." end' "$RUNNER_TEMP/refresco.json" | tee -a "$GITHUB_STEP_SUMMARY"
           fi
 
       # Desde aquí, solo si hay un fichero nuevo. Son las comprobaciones del CI que dependen de los
