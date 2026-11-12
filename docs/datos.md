@@ -96,7 +96,7 @@ Verificación:
 1. **Longitud**: 440,7 km medidos frente al PK 442,0 de Córdoba en la numeración de Adif.
 2. **Puntos kilométricos**: los PK de Adif recogidos en Wikipedia (Aranjuez 48,7; Alcázar 148,1; Manzanares 197,3; Santa Cruz de Mudela 239,0; Linares-Baeza 314,7; Espeluy 340,9; Andújar 362,8; Córdoba 442,0) quedan entre 0,5 y 1,6 km por encima del kilometraje medido. El desfase es sistemático: Adif conserva la numeración histórica desde Madrid-Atocha y las variantes de trazado posteriores (Aranjuez–Castillejo, Despeñaperros) acortaron la línea sin renumerarla. Por eso esta línea declara `pk_tolerance_km: 2.0`; el PK de Adif se guarda como referencia en cada nodo y el visor muestra el kilómetro medido.
 3. **Códigos de estación**: las paradas del GTFS (60200 Aranjuez, 60400 Alcázar, 50100 Manzanares, 50300 Linares-Baeza, 50400 Espelúy, 50403 Andújar…) coinciden con los nodos, situados con las coordenadas de las estaciones de Adif en OSM (`raw/osm/adif_facility_nodes_mancha_andalucia_2026-11-08.json`).
-4. **Número de vías**: las etiquetas de OSM no lo cubren en este tramo. Los tramos de vía única se declaran en `track_sections` a partir de Wikipedia y del rutómetro de la línea 400 de la FCMAF: Santa Cruz de Mudela–Vadollano (paso de Despeñaperros, 67 km) y Linares-Baeza–Córdoba (127 km, parte del tramo de vía única que llega hasta Lora del Río). El resto, incluida toda la línea 300, es de vía doble. Vadollano, antigua estación hoy sin servicio, se añadió como punto de referencia para que el límite de la vía única caiga en un nodo.
+4. **Número de vías**: las etiquetas de OSM no lo cubren en este tramo. Los tramos de vía única se declaran en `attribute_sections` (atributo `tracks`; véase «Atributos de tramo») a partir de Wikipedia y del rutómetro de la línea 400 de la FCMAF: Santa Cruz de Mudela–Vadollano (paso de Despeñaperros, 67 km) y Linares-Baeza–Córdoba (127 km, parte del tramo de vía única que llega hasta Lora del Río). El resto, incluida toda la línea 300, es de vía doble. Vadollano, antigua estación hoy sin servicio, se añadió como punto de referencia para que el límite de la vía única caiga en un nodo.
 
 ## Cómo se construyó la línea Manzanares–Ciudad Real
 
@@ -440,6 +440,42 @@ La vía tampoco espera a las tipografías del mapa base, aunque aparezca casi a 
 
 Las anotaciones de red viajan enteras en el índice, con sus textos, sus hitos y sus fuentes, porque las de geometría propia no cuelgan de ninguna línea. Medido el 12 de noviembre de 2026, con tres interrupciones y cinco proyectos: `index.json` pesa 79,0 KB (15,9 KB comprimido), de los que unos 30 KB sin comprimir son anotaciones (24 KB, más 7 KB del alias `interruptions`); cada proyecto añade unos 3,5 KB sin comprimir. Las pruebas miden por separado que la red del índice siga siendo menos de una quinta parte de la red entera y que las anotaciones no pasen de 40 KB. Cuando no quepan, lo siguiente es dejar en el índice lo que el mapa necesita de cada anotación y pedir su detalle aparte, como el de las líneas; retirar el alias ya ahorra 7 KB.
 
+## Atributos de tramo
+
+Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Hoy lo usa el número de vías (`tracks`); la señalización, el bloqueo, el mando o una electrificación parcial entrarán igual, sin columna, migración ni reparto propios.
+
+**Cómo se declara.** En la especificación de la línea, en la lista `attribute_sections`:
+
+| Campo | Qué es |
+|---|---|
+| `attribute` | La clave del atributo, en minúsculas y sin espacios (`tracks`). |
+| `from_node`, `to_node` | Los dos nodos de la línea entre los que vale, en cualquier orden. Todos los tramos que quedan entre ambos reciben el valor. |
+| `value` | Un número o un texto corto. Si es un texto, es una clave que el visor traduce, no una frase. |
+| `source_id` | Fuente registrada en `sources.json` que da el valor. |
+| `checked_on` | Día en que el valor se contrastó con esa fuente. |
+| `note` | Aclaración para quien mantiene el fichero. No se publica. |
+
+Dos secciones del mismo atributo no pueden pisarse; sí pueden tocarse en un nodo, y dos atributos distintos pueden cubrir los mismos tramos.
+
+**Qué exige cada atributo.** Un atributo es opcional y de tipo libre salvo que tenga una regla en `ATTRIBUTE_RULES` (`oniel.domain.attributes`). La regla dice el tipo de su valor, si es obligatorio (todo tramo de la línea ha de tenerlo) y qué campo de la línea da el valor donde ninguna sección lo declara. `tracks` es un entero, obligatorio, y toma el valor de `line.tracks`: una línea de vía doble con dos tramos de vía única declara `"tracks": 2` en la línea y dos secciones con valor 1. El valor que viene de la línea no lleva fuente propia. Si una línea no declara `tracks` ni lo cubren sus secciones, no se construye.
+
+**`track_sections` se retiró.** La forma anterior, propia del número de vías, se convirtió a `attribute_sections` en las tres líneas en vez de conservarse como abreviatura: así hay una sola manera de declarar un atributo y un solo reparto que probar. Una especificación que todavía la traiga no se carga, con un mensaje que dice cómo escribirla; aceptarla en silencio habría dejado la línea sin sus tramos de vía única. Al convertirlas, las secciones de vía única recibieron la fuente que ya citaban sus notas (los artículos de Wikipedia registrados) y, como fecha de comprobación, el día en que se consultó.
+
+**Qué pasa después.** `distribute_attributes` (`oniel.network.build`) hace el reparto al construir la línea. La importación guarda una fila por tramo y atributo en `segment_attributes`, y la API y la instantánea los sirven en `attributes` de cada tramo: por clave, el valor, el id de la fuente y la fecha de comprobación. `oniel-data validate` empieza por los atributos: dice por línea cuántos tramos cubre cada uno y falla si dos secciones se pisan, si un atributo obligatorio no cubre toda la línea o si una sección cita una fuente que no está registrada.
+
+Cada atributo añade unos 100 bytes por tramo al índice: con el número de vías en los 39 tramos, `index.json` pasó de 82,0 a 85,5 KB (16,9 KB comprimido) el 12 de noviembre de 2026.
+
+`tracks` sigue además como columna de `segments` y como campo de cada tramo, con el mismo valor: lo leen el mapa, el esquema y el cálculo de recorridos, que no necesitan saber de atributos.
+
+**En el visor.** La ficha del tramo recorre una lista declarativa, `SEGMENT_ATTRIBUTES` (`frontend/src/app/segmentAttributes.ts`): por atributo, su clave, su etiqueta, cómo se dice cada valor, el término del glosario si lo hay y si va con lo esencial o bajo «Más detalle». Una entrada puede decir además qué valor de la línea se enseña cuando el tramo no trae el suyo, para los atributos que hoy son de la línea entera (electrificación, ancho) el día que varíen. Un atributo sin entrada en la lista viaja en los datos y no se enseña.
+
+**Añadir un atributo.**
+
+1. Registrar su fuente en `sources.json`, con el fichero crudo en `backend/data/raw/`.
+2. Declarar sus secciones en `attribute_sections` de cada línea. Si ha de cubrir la línea entera, tiene un tipo fijo o un valor por línea, añadir su regla a `ATTRIBUTE_RULES`.
+3. Añadir su entrada a `SEGMENT_ATTRIBUTES`. Cómo se llama, cómo se dice cada valor y dónde va en la ficha son decisiones de diseño: se proponen y se anotan en `docs/diseno.md`.
+4. `uv run oniel-data validate`, `import all` y subir la instantánea regenerada.
+
 ## Modelo de datos
 
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
@@ -449,7 +485,8 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 - `line_operators`: qué operadores de trenes circulan por cada línea, tengan o no horarios cargados.
 - `lines`: una línea por fila, con `mode` (`ferrocarril` hoy; mañana `metro`, `autobús`…), administrador, ancho, electrificación, orden de presentación (`sort_order`) y geometría completa.
 - `nodes` + `line_nodes`: los nodos son independientes de la línea; `line_nodes` da su kilómetro y orden en cada línea, así un nodo puede pertenecer a varias líneas (Madrid-Puerta de Atocha y Córdoba lo hacen). `rank` distingue los nodos principales de los secundarios, que el visor atenúa y oculta en el esquema compacto.
-- `segments`: tramos entre nodos consecutivos con geometría, velocidad máxima y habitual, número de vías (`tracks`) y la fuente de su geometría.
+- `segments`: tramos entre nodos consecutivos con geometría, velocidad máxima y habitual, número de vías (`tracks`, el mismo valor que su atributo) y la fuente de su geometría.
+- `segment_attributes`: una fila por tramo y atributo, con el valor (JSON: un número o un texto corto), la fuente y el día de comprobación. Las escribe la importación de la red al repartir las secciones de cada línea y se van con sus tramos al reimportar (véase «Atributos de tramo»).
 - `connections`: hacia dónde continúa la red donde Oniel todavía no tiene datos (se dibujan a trazos).
 - `stop_mappings`: cómo se resuelve cada parada de un horario contra la red. La tabla es común a todas las líneas; una parada asignada a un nodo por una línea no la degrada otra que la declare como salida. Las reglas de recorrido (`route_overrides` de cada especificación) no se guardan en la base: solo actúan al importar.
 - `datasets`: un conjunto de datos por fichero de horarios importado, con su fuente, su operador, el fichero, su SHA-256, el día de descarga (`retrieved_on`), los días que cubre (`valid_from`, `valid_to`) y cuándo se importó. El id es legible: la fuente y el día de descarga (`renfe-gtfs-av-ld-md-2026-11-08`).
@@ -461,7 +498,7 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 ## Añadir otra línea
 
 1. Descargar la geometría cruda a `backend/data/raw/` con fecha en el nombre y registrar la fuente en `sources.json`. Si la relación OSM trae las dos vías o miembros desordenados, usar `geometry_source.parts` (relación + punto inicial y final de cada parte); si es una relación limpia, basta `file` + `relation_id`.
-2. Escribir `backend/data/curated/<línea>.json` con la línea (`sort_order` para el orden en el visor, `tracks` por defecto; `description` en párrafos separados por una línea en blanco, el primero breve porque el visor lo muestra de entrada y pliega el resto, sin repetir longitud, velocidad, ancho ni electrificación, que ya salen en la ficha), sus nodos (coordenadas o kilómetro; `rank: "secundario"` para los menores; `shared: true` para una estación que ya define otra línea), `track_sections` donde cambie el número de vías, las conexiones y la asignación de paradas. Si los puntos kilométricos de la línea no empiezan en cero, `pk_origin_km` lleva el PK de su origen y los `reference_pk_km` de los nodos se escriben tal como los da Adif. En `corridor_filter`, `min_node_stops` y `any_of_stop_ids` evitan que entren trenes de líneas paralelas. Una parada que es nodo de otra línea cargada se asigna como salida con `via` (la línea y el nodo por el que se entra en ella; una lista si el camino cruza más de una). Si un tren recorre esta línea solo en parte y sigue por otra cargada, o la cruza sin parar en ella, declararlo en `route_overrides` (paradas seguidas que lo identifican, tramo de paradas que va por esta línea y, si hace falta, asignaciones propias de esos viajes). Si la línea nueva sustituye a una conexión a trazos de otra especificación, retirarla de allí.
+2. Escribir `backend/data/curated/<línea>.json` con la línea (`sort_order` para el orden en el visor, `tracks` con el número de vías de la línea entera; `description` en párrafos separados por una línea en blanco, el primero breve porque el visor lo muestra de entrada y pliega el resto, sin repetir longitud, velocidad, ancho ni electrificación, que ya salen en la ficha), sus nodos (coordenadas o kilómetro; `rank: "secundario"` para los menores; `shared: true` para una estación que ya define otra línea), `attribute_sections` donde cambie el número de vías u otro atributo de tramo (véase «Atributos de tramo»), las conexiones y la asignación de paradas. Si los puntos kilométricos de la línea no empiezan en cero, `pk_origin_km` lleva el PK de su origen y los `reference_pk_km` de los nodos se escriben tal como los da Adif. En `corridor_filter`, `min_node_stops` y `any_of_stop_ids` evitan que entren trenes de líneas paralelas. Una parada que es nodo de otra línea cargada se asigna como salida con `via` (la línea y el nodo por el que se entra en ella; una lista si el camino cruza más de una). Si un tren recorre esta línea solo en parte y sigue por otra cargada, o la cruza sin parar en ella, declararlo en `route_overrides` (paradas seguidas que lo identifican, tramo de paradas que va por esta línea y, si hace falta, asignaciones propias de esos viajes). Si la línea nueva sustituye a una conexión a trazos de otra especificación, retirarla de allí.
 3. Añadir el id de la línea a `line_ids` en `backend/src/oniel/settings.py` (la primera línea de la lista define los nodos compartidos).
 4. `uv run oniel-data validate --spec data/curated/<línea>.json` hasta que no haya problemas.
 5. `uv run oniel-data import network` e `import gtfs` (sin `--spec` cargan todas las líneas; `import all` hace todo y exporta la instantánea).

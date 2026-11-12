@@ -75,6 +75,16 @@ export interface NodeOut {
   seq: number
 }
 
+/** Valor de un atributo de tramo: un número o un texto corto que el visor traduce. */
+export type AttributeScalar = number | string | boolean
+
+/** El valor de un atributo en un tramo, con el id de su fuente registrada y el día en que se comprobó. */
+export interface AttributeValue {
+  value: AttributeScalar
+  source_id: string | null
+  checked_on: string | null
+}
+
 export interface SegmentOut {
   id: string
   line_id: string
@@ -88,7 +98,10 @@ export interface SegmentOut {
   length_km: number
   max_speed_kmh: number | null
   typical_speed_kmh: number | null
+  /** Número de vías: el mismo valor que `attributes.tracks`, a mano para el mapa, el esquema y los recorridos. */
   tracks: number | null
+  /** Atributos declarados por secciones, por clave. Una API anterior a ellos no trae el campo. */
+  attributes?: Record<string, AttributeValue>
   status: 'disponible' | 'prevista'
   source_id: string | null
 }

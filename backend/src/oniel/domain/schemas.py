@@ -72,6 +72,14 @@ class NodeOut(BaseModel):
     seq: int
 
 
+class AttributeValue(BaseModel):
+    """El valor de un atributo en un tramo, con el id de su fuente y el día en que se comprobó."""
+
+    value: int | float | str | bool
+    source_id: str | None = None
+    checked_on: dt.date | None = None
+
+
 class SegmentOut(BaseModel):
     id: str
     line_id: str
@@ -85,7 +93,11 @@ class SegmentOut(BaseModel):
     length_km: float
     max_speed_kmh: int | None = None
     typical_speed_kmh: int | None = None
+    #: Número de vías: el mismo valor que ``attributes["tracks"]``, a mano para el mapa, el
+    #: esquema y el cálculo de recorridos.
     tracks: int | None = None
+    #: Atributos del tramo declarados por secciones en la especificación de la línea, por clave.
+    attributes: dict[str, AttributeValue] = Field(default_factory=dict)
     status: Literal["disponible", "prevista"]
     source_id: str | None = None
 
