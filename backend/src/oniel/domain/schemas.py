@@ -385,6 +385,20 @@ class HistoryProductOut(BaseModel):
     trains: int
 
 
+class HistoryChangeOut(BaseModel):
+    """Un conjunto frente al anterior de su fuente, contados los dos en los mismos días."""
+
+    #: El conjunto anterior de la misma fuente y el día en que se descargó.
+    previous_dataset_id: str
+    previous_retrieved_on: dt.date
+    #: Los días que se cuentan: las primeras semanas del conjunto nuevo que cubren los dos.
+    date_from: dt.date
+    date_to: dt.date
+    #: Trenes en esos días según el conjunto anterior y según este; uno por tren y día.
+    trains_before: int
+    trains_after: int
+
+
 class HistoryPointOut(BaseModel):
     """Los trenes de un conjunto de datos en una estación o un tramo, en su día de referencia."""
 
@@ -398,6 +412,8 @@ class HistoryPointOut(BaseModel):
     trains: int
     #: Por tipo de servicio, del que más trenes tiene al que menos.
     products: list[HistoryProductOut] = Field(default_factory=list)
+    #: Qué cambia respecto al conjunto anterior de su fuente; falta en el primero de cada una.
+    change: HistoryChangeOut | None = None
 
 
 class ServiceHistoryOut(BaseModel):

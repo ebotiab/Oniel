@@ -7,7 +7,7 @@ import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop } from
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
-import { FilasAtributos } from './SegmentAttributes'
+import { FilasAtributos, FuentesAtributos } from './SegmentAttributes'
 import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
@@ -134,6 +134,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
+        <FuentesAtributos segment={segment} line={line} lugar="detalle" sources={sources} />
         {alternativa && alternativa.trains > 0 && (
           <section data-testid="tramo-alternativa-detalle">
             <p className="sobre">Si este tramo se cortara</p>
@@ -219,16 +220,23 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
               {fraseTramo(alternativa)}
             </p>
           )}
-          <p className="suave">
-            {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
-            {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
-            {services.counts.indeterminado > 0 && (
-              <>
-                , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
-              </>
-            )}
-            .
-          </p>
+          {/* un tramo puede no llevar ningún tren de los horarios: se dice, en vez de un recuento a cero */}
+          {services.passes.length === 0 ? (
+            <p className="suave" data-testid="tramo-sin-trenes">
+              Ningún tren de los horarios cargados recorre este tramo ese día.
+            </p>
+          ) : (
+            <p className="suave">
+              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
+              {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
+              {services.counts.indeterminado > 0 && (
+                <>
+                  , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
+                </>
+              )}
+              .
+            </p>
+          )}
           <div data-testid="lista-servicios">
             {groups.map((g) => (
               <div key={g.id} data-testid={`trenes-${g.id}`}>

@@ -131,8 +131,17 @@ def test_sources_of_the_line_are_registered(lbmg_spec: NetworkSpec) -> None:
     assert wikipedia.license == "CC BY-SA 4.0" and wikipedia.retrieved_on == "2026-11-12"
     coverage = wikipedia.coverage or ""
     assert "410" in coverage and "416" in coverage
-    (tracks,) = lbmg_spec.attribute_sections
-    assert (tracks.attribute, tracks.value, tracks.source_id) == ("tracks", 1, wikipedia.id)
+    # el número de vías, de Wikipedia; la señalización, del mapa 4 de la Declaración sobre la Red
+    sections = {t.attribute: t for t in lbmg_spec.attribute_sections}
+    assert (sections["tracks"].value, sections["tracks"].source_id) == (1, wikipedia.id)
+    signalling = {a: (t.value, t.source_id) for a, t in sections.items() if a != "tracks"}
+    declaration = "adif-declaracion-red-2026-mapas"
+    assert signalling == {
+        "proteccion_tren": ("asfa", declaration),
+        "bloqueo": ("bau", declaration),
+        "mando": ("ctc", declaration),
+    }
+    assert all((t.from_node, t.to_node) == ("linares-baeza", "granada") for t in sections.values())
 
 
 def test_no_train_runs_the_whole_line(

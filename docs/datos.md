@@ -17,6 +17,7 @@
 | `osm-relation-6641023` | Geometría de la línea 410 Linares-Baeza–Almería; Oniel usa Linares-Baeza–Moreda (vías de la relación del servicio de larga distancia Almería–Madrid) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
 | `osm-relation-11350675` | Geometría de la línea 416 Moreda–Granada | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
 | `wikipedia-lineas-410-416` | Números de línea de Adif, PK, longitudes, vía única, falta de electrificación y fechas de apertura de las líneas 410 y 416 (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
+| `adif-declaracion-red-2026-mapas` | Sistema de protección del tren, bloqueo y control de tráfico centralizado de cada tramo (mapa 4 de la Declaración sobre la Red 2026) | Adif Alta Velocidad; Adif | Consulta pública; © Adif Alta Velocidad y Adif | 2026-11-12 |
 | `adif-mapa-red` | Verificación del trazado, códigos de estación y puntos kilométricos de la línea 010 | Adif / Adif Alta Velocidad | Consulta pública | 2026-11-08 |
 | `adif-obras-autopista-ferroviaria` | Corte de la línea convencional al sur de Venta de Cárdenas por obras (información de Adif en prensa) | Adif; Europa Press / Demócrata | Consulta pública | 2026-11-08 |
 | `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio | Adif | Consulta pública | 2026-11-12 |
@@ -135,7 +136,7 @@ La 416 no arranca en la estación de Moreda sino en una aguja 293 m al sur. Las 
 
 **El triángulo de Moreda.** Al sur de la estación, las dos líneas y un enlace entre ellas forman un triángulo de vías. Los trenes de Granada a Almería lo usan para pasar de la 416 a la 410 sin entrar en la estación. Oniel carga como nodo el vértice que queda sobre la línea de Granada, la Bifurcación Almería (PK 1,100 de la 416 según Wikipedia; 1,07 km medidos desde la estación): es donde esos trenes dejan la línea cargada. El enlace y el resto de la 410 hacia Guadix y Almería no están cargados y salen a trazos de Moreda.
 
-Las fuentes no nombran igual los vértices. Wikipedia, que cita el listado del Ministerio, llama «Bif. Almería» al de la línea de Granada y «Bif. Granada» al de la línea de Almería (cada uno, por el destino hacia el que se desvía el enlace); OpenStreetMap los rotula al revés. Oniel sigue a Wikipedia. Queda por contrastar con la Declaración sobre la Red de Adif cuando se cargue (#20).
+Las fuentes no nombran igual los vértices. Wikipedia, que cita el listado del Ministerio, llama «Bif. Almería» al de la línea de Granada y «Bif. Granada» al de la línea de Almería (cada uno, por el destino hacia el que se desvía el enlace); OpenStreetMap los rotula al revés. Oniel sigue a Wikipedia. El mapa 4 de la Declaración sobre la Red 2026 dibuja el triángulo pero no rotula sus vértices, así que no lo resuelve.
 
 **Verificación.**
 
@@ -143,7 +144,7 @@ Las fuentes no nombran igual los vértices. Wikipedia, que cita el listado del M
 2. **Longitud.** 173,7 km medidos (117,5 km hasta la aguja de Moreda y 56,1 km de la 416) frente a los 174,2 km que suman los PK (117,5 km entre Linares-Baeza y Moreda y 56,7 km de Moreda a Granada).
 3. **Puntos kilométricos.** Son dos numeraciones. La de la 410 se cuenta desde la antigua estación de Linares-San José, de modo que Linares-Baeza es el PK 8,634 (`pk_origin_km`), Jódar-Úbeda el 47,247, Cabra del Santo Cristo el 94,377 y Moreda el 126,124. La de la 416 empieza en cero en Moreda (`pk_restarts`): Bifurcación Almería 1,100, Iznalloz 23,977 y Granada 56,746. `oniel-data validate` compara cada PK con el kilómetro medido en su numeración: las diferencias no pasan de 0,31 km, con el trazado de OSM algo más corto que los PK.
 4. **Códigos de estación.** Las paradas del GTFS (56004 Jódar-Úbeda, 56009 Cabra del Santo Cristo y Alicún, 56100 Moreda, 57003 Iznalloz, 05000 Granada) coinciden con los códigos de los artículos de cada estación. Los nodos se sitúan con las estaciones de Adif en OSM (`raw/osm/adif_facility_nodes_jaen_granada_almeria_2026-11-12.json`) y quedan a menos de 15 m del trazado.
-5. **Número de vías, electrificación y velocidad.** Vía única y sin electrificar en las dos líneas, según Wikipedia; las vías de OSM dicen `electrified=no`. La velocidad máxima de las vías en OSM es 140 km/h, la que da el texto de los dos artículos (la ficha del de la 410 dice 160 km/h; no se usa). Las seis últimas vías de la 416, a la entrada de Granada, figuran en OSM con ancho «1435;1668»: es vía de ancho mixto, compartida con la alta velocidad.
+5. **Número de vías, electrificación y velocidad.** Vía única y sin electrificar en las dos líneas, según Wikipedia; las vías de OSM dicen `electrified=no`, y el mapa 4 de la Declaración sobre la Red 2026 de Adif las dibuja como vía única sin electrificar de 1668 mm. La velocidad máxima de las vías en OSM es 140 km/h, la que da el texto de los dos artículos (la ficha del de la 410 dice 160 km/h; no se usa). Las seis últimas vías de la 416, a la entrada de Granada, figuran en OSM con ancho «1435;1668»: es vía de ancho mixto, compartida con la alta velocidad.
 
 Las estaciones y apartaderos sin parada en los horarios cargados (entre otros, Begíjar, Los Propios y Cazorla, Larva, Huesa, Alamedilla-Guadahortuna y Pedro Martínez en la 410, y Píñar, Deifontes y Albolote en la 416) no se han cargado como nodos.
 
@@ -416,18 +417,21 @@ La ficha de una estación y la de un tramo dicen, dentro de «Más detalle», cu
 
 **Cómo se cuenta** (`services_repo.node_history` y `segment_history`). Un punto por conjunto de datos, del descargado antes al más reciente. Cada conjunto se cuenta en su propio día de referencia (`datasets_repo.reference_dates`: el laborable con más servicios de sus primeros treinta días) y sin mirar cuál está activo: es lo que decía ese fichero. En una estación son los trenes que paran, las mismas filas que «Trenes que paran aquí»; en un tramo, los trenes que lo recorren, contando como la ficha del tramo los del día anterior que lo terminan pasada la medianoche. Cada punto lleva el conjunto, su fuente, su operador, el día de descarga, el día de referencia, el total y el reparto por tipo de servicio. Como cada fichero es de un operador, el reparto por operador son los puntos mismos. Un conjunto sin trenes da un punto con cero.
 
+**Qué cambia de un fichero al siguiente** (`change` en cada punto, `services_repo._changes`). El día de referencia de dos ficheros seguidos suele ser el mismo, o cae en semanas distintas, así que por sí solo no dice qué cambió de uno a otro. Para eso cada conjunto se compara con el anterior de su fuente contando los dos en los mismos días: las primeras cuatro semanas del fichero nuevo, desde el primer día que cubren los dos y hasta donde lleguen ambos (`CHANGE_WINDOW_DAYS`, los mismos 28 días con los que el refresco decide si un fichero trae cambios). Se cuenta un tren por cada día que circula: en una estación, los que paran; en un tramo, los que lo recorren, por su día de servicio. El punto lleva el conjunto anterior, los dos días que acotan la cuenta y los trenes de uno y otro; el primer conjunto de cada fuente no lleva nada. Se probó antes comparar una semana tipo de cada fichero y se descartó: dos semanas distintas difieren por el calendario aunque el horario sea el mismo.
+
 **Qué se compara.** Los ficheros de una misma fuente, que son los que se relevan entre sí. El visor enseña una línea por fuente con dos o más conjuntos y algún tren; con un solo fichero por operador no enseña nada. El fichero de Ouigo es uno solo, así que hoy solo se compara Renfe.
 
-**Dónde viaja.** `GET /api/nodes/{id}/history` y `GET /api/segments/{id}/history` devuelven `{ id, points }`. La instantánea lleva lo mismo en `historico/nodes/<id>.json` e `historico/segments/<id>.json`, que el visor pide al abrir la ficha; si la API no lo sirve, lee la instantánea. Medido el 12 de noviembre de 2026 con tres conjuntos: 38 ficheros de nodos (27,0 KB en total) y 39 de tramos (34,4 KB); el de Córdoba pesa 1,1 KB y se descarga en 0,3 KB con gzip. Cada conjunto nuevo añade unos 0,3 KB por fichero. `historico/<conjunto>/segment-counts.json` (los pasos por tramo de cada conjunto en su día de referencia, 2,8 KB por conjunto) sigue exportándose: lo lee el resumen de la PR del refresco de horarios.
+**Dónde viaja.** `GET /api/nodes/{id}/history` y `GET /api/segments/{id}/history` devuelven `{ id, points }`. La instantánea lleva lo mismo en `historico/nodes/<id>.json` e `historico/segments/<id>.json`, que el visor pide al abrir la ficha; si la API no lo sirve, lee la instantánea. Medido el 12 de noviembre de 2026 con tres conjuntos: 38 ficheros de nodos (35,9 KB en total) y 39 de tramos (43,6 KB); el de Córdoba pesa 1,3 KB y se descarga en 0,4 KB con gzip. Cada conjunto nuevo añade unos 0,4 KB por fichero. `historico/<conjunto>/segment-counts.json` (los pasos por tramo de cada conjunto en su día de referencia, 2,8 KB por conjunto) sigue exportándose: lo lee el resumen de la PR del refresco de horarios.
 
 **Límites.**
 
-- Con los dos ficheros de Renfe de hoy, la comparación sale igual en todas las estaciones y en todos los tramos: el día de referencia de los dos es el viernes 13 de noviembre de 2026 y ese día tienen los mismos trenes. Lo que cambia entre ellos son cuatro Intercity entre el 16 y el 22 de noviembre (véase «Refresco de los horarios»), que un solo día de referencia no recoge.
+- Con los dos ficheros de Renfe de hoy, el día de referencia es el mismo (viernes 13 de noviembre de 2026) y ese día tienen los mismos trenes en todas las estaciones y tramos. La diferencia la enseña la cuenta en los mismos días: del 11 de noviembre al 8 de diciembre, en Ciudad Real paran 1.068 trenes según el fichero del 8 de noviembre y 1.083 según el del 12, y por el tramo Ciudad Real – Puertollano de la alta velocidad pasan 2.091 y 2.098. De los 39 tramos, 38 cambian; de las 28 estaciones con trenes, 22.
+- La cuenta en los mismos días solo mira las primeras cuatro semanas del fichero nuevo: un cambio que empiece después no aparece hasta el fichero siguiente.
 - Si los días de referencia de dos ficheros son distintos, parte de la diferencia puede venir del día de la semana y no del horario; la ficha lo dice.
 - Solo están los trenes que recorren las líneas cargadas, y no los de Iryo, como en el resto de Oniel.
 - Horarios anteriores al 8 de noviembre de 2026 solo entrarían como una fuente registrada con su fichero; no se reconstruye nada de memoria.
 
-Las pruebas usan dos ficheros: el fijo del 8 de noviembre y una copia sin un tren del día de referencia (`feed_without_trip`, en `backend/tests/test_datasets.py`), con la que el tramo y la estación de ese tren dan uno menos. Recuentos que comprueban, con los ficheros fijos: por el tramo Ciudad Real – Puertollano de la alta velocidad, 96 trenes de Renfe el 13 de noviembre de 2026 (50 AVE, 22 Intercity, 14 Alvia y 10 AVLO) y 14 de Ouigo el 17 de julio, el día de referencia de su fichero; en Ciudad Real paran 56 de Renfe.
+Las pruebas usan dos ficheros: el fijo del 8 de noviembre y una copia sin un tren del día de referencia (`feed_without_trip`, en `backend/tests/test_datasets.py`), con la que el tramo y la estación de ese tren dan uno menos. En la cuenta de las cuatro semanas, a la copia le falta ese tren una vez por cada día que circulaba. Recuentos que comprueban, con los ficheros fijos: por el tramo Ciudad Real – Puertollano de la alta velocidad, 96 trenes de Renfe el 13 de noviembre de 2026 (50 AVE, 22 Intercity, 14 Alvia y 10 AVLO) y 14 de Ouigo el 17 de julio, el día de referencia de su fichero; en Ciudad Real paran 56 de Renfe.
 
 ## Instantánea estática
 
@@ -489,7 +493,7 @@ Proyección, suponiendo líneas como la media de hoy (325 km y 13 tramos; cien l
 | 20 | 0,7 MB | 73 KB |
 | 100 | 3,6 MB | 365 KB |
 
-Con la cuarta línea (Linares-Baeza – Moreda – Granada, 173,7 km y 6 tramos), el 12 de noviembre de 2026 `index.json` pesa 95,3 KB (18,9 KB comprimido; desde la tabla de arriba ha ganado además los atributos de tramo y las anotaciones) y `lines/linares-baeza-moreda-granada.json`, 56,5 KB (16,0 KB comprimido).
+Con la cuarta línea (Linares-Baeza – Moreda – Granada, 173,7 km y 6 tramos), el 12 de noviembre de 2026 `index.json` pasó de 98,3 a 110,0 KB (de 17,4 a 19,6 KB comprimido; desde la tabla de arriba había ganado además los atributos de tramo y las anotaciones) y `lines/linares-baeza-moreda-granada.json` pesa 60,4 KB (16,3 KB comprimido). La parte de red del índice (sin las anotaciones) pasó de 61,1 a 71,9 KB sin comprimir, por encima de los 70 KB que la prueba de carga le ponía de tope con tres líneas: el tope es ahora de 20 KB por línea cargada (`frontend/e2e/carga.spec.ts`). Lo que más pesa son los atributos de cada tramo, que repiten la fuente y la fecha en los cuatro: si el índice llega a pesar, es lo primero que se puede sacar a una tabla común.
 
 El índice crece unos 3,7 KB comprimidos por línea, diez veces menos que antes. Si llega a pesar, lo siguiente es quitar de sus tramos los nombres de los extremos, que ya están en los nodos, y servir las conexiones con cada línea. Un límite conocido: `GET /api/lines` simplifica la geometría en cada petición (unos 30 ms con tres líneas); con muchas líneas convendrá guardarla ya simplificada al importar.
 
@@ -503,7 +507,7 @@ Las anotaciones de red viajan enteras en el índice, con sus textos, sus hitos y
 
 ## Atributos de tramo
 
-Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Hoy lo usa el número de vías (`tracks`); la señalización, el bloqueo, el mando o una electrificación parcial entrarán igual, sin columna, migración ni reparto propios.
+Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Lo usan el número de vías (`tracks`) y, desde #20, la protección del tren, el bloqueo y el mando (véase «Señalización y protección del tren»); una electrificación parcial entrará igual, sin columna, migración ni reparto propios.
 
 **Cómo se declara.** En la especificación de la línea, en la lista `attribute_sections`:
 
@@ -518,13 +522,13 @@ Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones,
 
 Dos secciones del mismo atributo no pueden pisarse; sí pueden tocarse en un nodo, y dos atributos distintos pueden cubrir los mismos tramos.
 
-**Qué exige cada atributo.** Un atributo es opcional y de tipo libre salvo que tenga una regla en `ATTRIBUTE_RULES` (`oniel.domain.attributes`). La regla dice el tipo de su valor, si es obligatorio (todo tramo de la línea ha de tenerlo) y qué campo de la línea da el valor donde ninguna sección lo declara. `tracks` es un entero, obligatorio, y toma el valor de `line.tracks`: una línea de vía doble con dos tramos de vía única declara `"tracks": 2` en la línea y dos secciones con valor 1. El valor que viene de la línea no lleva fuente propia. Si una línea no declara `tracks` ni lo cubren sus secciones, no se construye.
+**Qué exige cada atributo.** Un atributo es opcional y de tipo libre salvo que tenga una regla en `ATTRIBUTE_RULES` (`oniel.domain.attributes`). La regla dice el tipo de su valor, si es obligatorio (todo tramo de la línea ha de tenerlo) y qué campo de la línea da el valor donde ninguna sección lo declara. Puede decir además la lista cerrada de valores que admite (`values`) y que cada sección ha de citar su fuente y su fecha (`sourced`); una sección que no lo cumple no se carga. `tracks` es un entero, obligatorio, y toma el valor de `line.tracks`: una línea de vía doble con dos tramos de vía única declara `"tracks": 2` en la línea y dos secciones con valor 1. El valor que viene de la línea no lleva fuente propia. Si una línea no declara `tracks` ni lo cubren sus secciones, no se construye.
 
 **`track_sections` se retiró.** La forma anterior, propia del número de vías, se convirtió a `attribute_sections` en las tres líneas en vez de conservarse como abreviatura: así hay una sola manera de declarar un atributo y un solo reparto que probar. Una especificación que todavía la traiga no se carga, con un mensaje que dice cómo escribirla; aceptarla en silencio habría dejado la línea sin sus tramos de vía única. Al convertirlas, las secciones de vía única recibieron la fuente que ya citaban sus notas (los artículos de Wikipedia registrados) y, como fecha de comprobación, el día en que se consultó.
 
 **Qué pasa después.** `distribute_attributes` (`oniel.network.build`) hace el reparto al construir la línea. La importación guarda una fila por tramo y atributo en `segment_attributes`, y la API y la instantánea los sirven en `attributes` de cada tramo: por clave, el valor, el id de la fuente y la fecha de comprobación. `oniel-data validate` empieza por los atributos: dice por línea cuántos tramos cubre cada uno y falla si dos secciones se pisan, si un atributo obligatorio no cubre toda la línea o si una sección cita una fuente que no está registrada.
 
-Cada atributo añade unos 100 bytes por tramo al índice: con el número de vías en los 39 tramos, `index.json` pasó de 82,0 a 85,5 KB (16,9 KB comprimido) el 12 de noviembre de 2026.
+Cada atributo añade unos 100 bytes por tramo al índice: con el número de vías en los 39 tramos, `index.json` pasó de 82,0 a 85,5 KB (16,9 KB comprimido) el 12 de noviembre de 2026. Con los tres de señalización pasó de 85,5 a 98,3 KB (de 16,8 a 17,4 KB comprimido): se repiten mucho y comprimen bien.
 
 `tracks` sigue además como columna de `segments` y como campo de cada tramo, con el mismo valor: lo leen el mapa, el esquema y el cálculo de recorridos, que no necesitan saber de atributos.
 
@@ -536,6 +540,56 @@ Cada atributo añade unos 100 bytes por tramo al índice: con el número de vía
 2. Declarar sus secciones en `attribute_sections` de cada línea. Si ha de cubrir la línea entera, tiene un tipo fijo o un valor por línea, añadir su regla a `ATTRIBUTE_RULES`.
 3. Añadir su entrada a `SEGMENT_ATTRIBUTES`. Cómo se llama, cómo se dice cada valor y dónde va en la ficha son decisiones de diseño: se proponen y se anotan en `docs/diseno.md`.
 4. `uv run oniel-data validate`, `import all` y subir la instantánea regenerada.
+
+## Señalización y protección del tren
+
+Cada tramo dice qué sistema de protección del tren tiene, qué bloqueo y si su mando es centralizado. Son tres atributos de tramo (`proteccion_tren`, `bloqueo` y `mando`), obligatorios en toda línea cargada, de valores cerrados y con fuente y fecha en cada sección.
+
+**La fuente.** La Declaración sobre la Red 2026 de Adif y de Adif Alta Velocidad, vigente el 12 de noviembre de 2026 (`adif-declaracion-red-2026-mapas`). El apartado 2.3.10 de los dos libros remite a los mapas para los bloqueos y los sistemas de protección de cada línea y no los da en tabla: el dato por tramo solo está en el mapa 4, «Sistemas de seguridad, bloqueos» (página 8 del PDF de mapas, edición de 27 de febrero de 2026). El mapa es el mismo en los documentos de las dos entidades; el fichero guardado es el de Adif Alta Velocidad (`raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf`, 10,8 MB). adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas: se baja con un navegador desde la página de la Declaración.
+
+**Cómo se lee el mapa.** Es un esquema de toda la red. El bloqueo va en un trazo de puntos paralelo a cada línea, con un color por tipo y un rótulo («BAB ctc», «BAU ctc», «BCA»); los sistemas de seguridad van en símbolos sueltos junto a la línea. Se leyó ampliado a 900 ppp, tramo a tramo, y el valor se declaró de nodo a nodo donde el rótulo o el color cambian.
+
+| En el mapa | Atributo | Valor en Oniel | En la ficha |
+|---|---|---|---|
+| Símbolo «Tren tierra y ASFA conv.» | `proteccion_tren` | `asfa` | ASFA |
+| Símbolos «LZB» y «ASFA - AV» | `proteccion_tren` | `lzb_asfa` | LZB y ASFA |
+| Rótulo «BCA» | `bloqueo` | `bca` | De control automático |
+| Rótulo «BAB» | `bloqueo` | `bab` | Automático banalizado |
+| Rótulo «BAD» | `bloqueo` | `bad` | Automático de vía doble |
+| Rótulo «BAU» | `bloqueo` | `bau` | Automático de vía única |
+| «ctc» tras el rótulo del bloqueo | `mando` | `ctc` | Control de tráfico centralizado |
+| Nada sobre el mando | `mando` | `sin_dato_publicado` | Sin dato publicado |
+
+Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan; ninguna de las cargadas los usa. El tren tierra y el GSM-R, que el mapa dibuja con los sistemas de seguridad, son radiotelefonía y no se recogen.
+
+**Lo que quedó declarado** (comprobado el 12 de noviembre de 2026):
+
+| Línea | De nodo a nodo | Protección del tren | Bloqueo | Mando |
+|---|---|---|---|---|
+| Alta velocidad Madrid – Sevilla | Madrid-Puerta de Atocha – Sevilla-Santa Justa | LZB y ASFA | BCA | sin dato publicado |
+| Convencional Madrid – Alcázar – Córdoba | Madrid-Puerta de Atocha – Cinco Casas | ASFA | BAB | CTC |
+| | Cinco Casas – Manzanares | ASFA | BAB y BAD (`bab_bad`) | CTC |
+| | Manzanares – Santa Cruz de Mudela | ASFA | BAB | CTC |
+| | Santa Cruz de Mudela – Vadollano | ASFA | BAU | CTC |
+| | Vadollano – Linares-Baeza | ASFA | BAB | CTC |
+| | Linares-Baeza – Córdoba | ASFA | BAU | CTC |
+| Manzanares – Ciudad Real | Manzanares – Ciudad Real | ASFA | BAU | CTC |
+| Linares-Baeza – Moreda – Granada | Linares-Baeza – Granada | ASFA | BAU | CTC |
+
+El bloqueo de vía única cae justo en los tramos que Oniel ya tenía como vía única por otras fuentes; una prueba lo comprueba.
+
+**Límites de la fuente, y cómo se dejaron** (acordado con el usuario el 12 de noviembre de 2026):
+
+- **El mando de la alta velocidad no está publicado.** El mapa solo dice «ctc» junto a los bloqueos automáticos; junto al BCA de la línea Madrid – Sevilla no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos. Sus once tramos llevan `sin_dato_publicado`: un valor declarado, con la fuente en la que se buscó y la fecha, que la ficha dice tal cual. No se dedujo de otras líneas ni de otras publicaciones.
+- **Ningún tramo dice qué puesto de mando lo gobierna.** `mando` recoge solo si hay control de tráfico centralizado, que es lo que da el mapa.
+- **Cinco Casas – Manzanares cambia de bloqueo donde no hay nodo.** El mapa pasa de «BAB ctc» a «BAD ctc» en Herrera de la Mancha (PK 183,7 según `wikipedia-lineas-300-400`), que Oniel no tiene como nodo. El tramo lleva un valor mixto, `bab_bad`, que la ficha dice como «Automático: banalizado en una parte y de vía doble en otra». Si Herrera de la Mancha entra algún día como nodo, el tramo se parte y el valor mixto sobra.
+- **Manzanares – Ciudad Real se leyó por el color.** El único rótulo cercano, «BAD ctc», está junto a Manzanares, sobre el trazo de vía doble Herrera – Manzanares de la línea 400. La línea 522 es de vía única y lleva el trazo naranja, que en la leyenda de vía única es «BAU ctc».
+- **Los símbolos de los sistemas van por línea, no por tramo.** El mapa no dice dónde empieza o acaba un sistema dentro de una línea. En el tronco que la alta velocidad Madrid – Sevilla comparte a la salida de Madrid con la de Levante hay también símbolos de ERTMS, que el mapa enlaza con la otra línea; Oniel declara para la Madrid – Sevilla lo que el mapa pone a lo largo de ella.
+- El capítulo 2 de la Declaración avisa de que su contenido es informativo y de que, si discrepa de la normativa de seguridad, prevalece esta.
+
+**Tono.** Estos datos se enseñan como lo que son: qué sistema hay en cada tramo, según quién y comprobado cuándo. Oniel no los relaciona con los accidentes de 2026 ni con sus causas.
+
+**Cómo se revisa.** La Declaración se actualiza varias veces al año y la del ejercicio siguiente se publica con meses de antelación. Al revisar: descargar los mapas de la edición vigente a `raw/adif/` con la fecha, registrar la fuente nueva, releer el mapa 4 sobre las líneas cargadas y poner al día `value`, `source_id` y `checked_on` de las secciones. `oniel-data validate` falla si algún tramo de una línea cargada se queda sin alguno de los tres, si un valor no es de los admitidos o si una sección no cita su fuente y su fecha.
 
 ## Modelo de datos
 
@@ -562,7 +616,7 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 2. **Comprobar que la relación es de una pieza** antes de dar nada por bueno: si le faltan vías, el trazado no encuentra camino («no hay camino en la relación…»). Entonces sirve una relación de servicio que recorra las mismas vías (así se hicieron Manzanares – Ciudad Real y Linares-Baeza – Moreda), y la fuente dice por qué no se usó la de infraestructura.
 3. Guardar el fichero crudo en `backend/data/raw/osm/` con la fecha en el nombre y registrar la fuente en `sources.json`. Si la relación trae las dos vías o miembros desordenados, usar `geometry_source.parts` (relación + punto inicial y final de cada parte); si es una relación limpia, basta `file` + `relation_id`. Cuando la línea junta varias relaciones, el final de una parte y el principio de la siguiente tienen que ser el mismo punto, a ser posible un nodo de OSM que esté en las dos: si una relación no llega hasta la estación de enlace, se corta donde empieza (`joins_m` de `validate` dice cuánto salta cada empalme).
 4. **Buscar los puntos kilométricos y las características** (número de línea de Adif, vía única o doble, electrificación, velocidad, fechas) en una fuente pública y registrarla. Hasta ahora, el artículo de la línea en Wikipedia, que se consulta por su API y se cita con el número de revisión. Las coordenadas de las estaciones salen de los nodos de Adif en OSM (`node(<bbox>)[railway~"station|halt|junction|service_station|yard"][operator~"Adif"]`), que también se guardan en `raw/osm/`. Lo que no esté en una fuente no se estima: se deja sin poner y se dice.
-5. Escribir `backend/data/curated/<línea>.json` con la línea (`sort_order` para el orden en el visor, `tracks` con el número de vías de la línea entera; `electrification` con el texto que se enseña, «Sin electrificar» si no tiene catenaria; `description` en párrafos separados por una línea en blanco, el primero breve porque el visor lo muestra de entrada y pliega el resto, sin repetir longitud, velocidad, ancho ni electrificación, que ya salen en la ficha), sus nodos (coordenadas o kilómetro; `rank: "secundario"` para los menores; `shared: true` para una estación que ya define otra línea, con sus mismas coordenadas), `attribute_sections` donde cambie el número de vías u otro atributo de tramo (véase «Atributos de tramo») y las conexiones a trazos hacia lo que no está cargado. Si la línea nueva sustituye a una conexión a trazos de otra especificación, retirarla de allí.
+5. Escribir `backend/data/curated/<línea>.json` con la línea (`sort_order` para el orden en el visor, `tracks` con el número de vías de la línea entera; `electrification` con el texto que se enseña, «Sin electrificar» si no tiene catenaria; `description` en párrafos separados por una línea en blanco, el primero breve porque el visor lo muestra de entrada y pliega el resto, sin repetir longitud, velocidad, ancho ni electrificación, que ya salen en la ficha), sus nodos (coordenadas o kilómetro; `rank: "secundario"` para los menores; `shared: true` para una estación que ya define otra línea, con sus mismas coordenadas), `attribute_sections` con el número de vías donde cambie y con los tres atributos de señalización, que son obligatorios y se leen en el mapa 4 de la Declaración sobre la Red, ya guardado en `raw/adif/` (véanse «Atributos de tramo» y «Señalización y protección del tren»: `pdftoppm -r 600 -f 8 -l 8 -x … -y … -W … -H …` recorta la zona de la línea), y las conexiones a trazos hacia lo que no está cargado. Si la línea nueva sustituye a una conexión a trazos de otra especificación, retirarla de allí.
 6. **Puntos kilométricos.** Los `reference_pk_km` de los nodos se escriben tal como los da Adif. Si no empiezan en cero, `pk_origin_km` lleva el PK del origen. Si la línea junta varias de Adif y la numeración vuelve a empezar a mitad de camino, `pk_restarts` dice en qué nodo y con qué PK (`[{"node": "moreda", "pk_km": 0.0}]`): los nodos que le siguen se comparan con esa numeración, y el nodo del cambio conserva el PK de la anterior. Si la numeración histórica se aparta del trazado actual, `pk_tolerance_km`.
 7. **Asignación de paradas.** Cada estación de la línea, a su nodo; cada parada de fuera a la que llegan sus trenes, a la salida por la que dejan la línea. Una parada que es nodo de otra línea cargada se asigna como salida con `via` (la línea y el nodo por el que se entra en ella; una lista si el camino cruza más de una), y conviene añadir el `via` recíproco en la otra especificación. Los patrones de parada de los trenes de la línea se sacan del GTFS antes de escribir nada: dicen qué paradas de fuera hay que asignar.
 8. **Filtro de corredor.** `min_node_stops` y `any_of_stop_ids` evitan que entren trenes de líneas paralelas. Si hay trenes que recorren parte de la línea parando en una sola de sus estaciones, `min_node_stops: 1` con `any_of_stop_ids` que incluya la parada de fuera que los delata (Guadix, para los trenes de Granada a Almería).

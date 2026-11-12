@@ -12,8 +12,10 @@ import asyncpg
 
 from oniel.analysis.criticality import ServicePath
 from oniel.domain.schemas import (
+    DatasetOut,
     DestinationOperatorOut,
     DestinationOut,
+    HistoryChangeOut,
     HistoryPointOut,
     HistoryProductOut,
     ServiceOut,
@@ -371,8 +373,91 @@ SEGMENT_HISTORY_SQL = f"""
 """
 
 
+#: Días que se comparan entre un conjunto y el anterior: las cuatro semanas con las que el refresco
+#: de horarios decide si un fichero trae cambios (``oniel.gtfs.refresh``).
+CHANGE_WINDOW_DAYS = 28
+
+#: Ventanas ($2 conjunto, $3 primer día, $4 último día, $5 número de la ventana).
+_WINDOWS_SQL = """
+    SELECT * FROM unnest($2::text[], $3::date[], $4::date[], $5::int[])
+        AS w(dataset_id, d_from, d_to, k)
+"""
+
+#: Trenes que paran en un nodo ($1) en cada ventana de días, uno por tren y día.
+NODE_WINDOW_SQL = f"""
+    WITH windows AS ({_WINDOWS_SQL})
+    SELECT w.k, count(*) AS n
+    FROM windows w
+    JOIN service_stops ss ON ss.dataset_id = w.dataset_id
+    JOIN stop_mappings m ON m.stop_id = ss.stop_id AND m.node_id = $1
+    JOIN service_dates d ON d.dataset_id = ss.dataset_id AND d.service_id = ss.service_id
+     AND d.service_date BETWEEN w.d_from AND w.d_to
+    GROUP BY w.k
+"""
+
+#: Trenes que recorren un tramo ($1) en cada ventana de días, por su día de servicio.
+SEGMENT_WINDOW_SQL = f"""
+    WITH windows AS ({_WINDOWS_SQL})
+    SELECT w.k, count(*) AS n
+    FROM windows w
+    JOIN service_segment_passes p ON p.dataset_id = w.dataset_id AND p.segment_id = $1
+    JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
+     AND d.service_date BETWEEN w.d_from AND w.d_to
+    GROUP BY w.k
+"""
+
+
+async def _changes(
+    conn: asyncpg.Connection, sql: str, entity_id: str, datasets: list[DatasetOut]
+) -> dict[str, HistoryChangeOut]:
+    """Cada conjunto frente al anterior de su fuente, contados los dos en los mismos días.
+
+    El día de referencia de dos ficheros seguidos suele ser el mismo o caer en semanas distintas,
+    así que no dice qué cambió de uno a otro. Lo dice contar los dos en los mismos días: las
+    primeras cuatro semanas del fichero nuevo, hasta donde lleguen los dos.
+    """
+    pairs: list[tuple[DatasetOut, DatasetOut, dt.date, dt.date]] = []
+    last: dict[str, DatasetOut] = {}
+    for d in datasets:
+        previous = last.get(d.source_id)
+        last[d.source_id] = d
+        if previous is None:
+            continue
+        start = max(previous.valid_from, d.valid_from)
+        end = min(start + dt.timedelta(days=CHANGE_WINDOW_DAYS - 1), previous.valid_to, d.valid_to)
+        if start <= end:
+            pairs.append((previous, d, start, end))
+    if not pairs:
+        return {}
+    # dos ventanas por pareja: la del conjunto anterior (par) y la del nuevo (impar)
+    rows = await conn.fetch(
+        sql,
+        entity_id,
+        [d.id for previous, new, _, _ in pairs for d in (previous, new)],
+        [start for _, _, start, _ in pairs for _ in range(2)],
+        [end for _, _, _, end in pairs for _ in range(2)],
+        list(range(2 * len(pairs))),
+    )
+    counts = {r["k"]: r["n"] for r in rows}
+    return {
+        new.id: HistoryChangeOut(
+            previous_dataset_id=previous.id,
+            previous_retrieved_on=previous.retrieved_on,
+            date_from=start,
+            date_to=end,
+            trains_before=counts.get(2 * i, 0),
+            trains_after=counts.get(2 * i + 1, 0),
+        )
+        for i, (previous, new, start, end) in enumerate(pairs)
+    }
+
+
 async def _history(
-    conn: asyncpg.Connection, sql: str, entity_id: str, refs: dict[str, dt.date] | None
+    conn: asyncpg.Connection,
+    sql: str,
+    window_sql: str,
+    entity_id: str,
+    refs: dict[str, dt.date] | None,
 ) -> list[HistoryPointOut]:
     """Un punto por conjunto de datos, del descargado antes al más reciente.
 
@@ -389,6 +474,7 @@ async def _history(
     by_dataset: dict[str, Counter[str]] = {}
     for r in rows:
         by_dataset.setdefault(r["dataset_id"], Counter())[r["product"]] = r["n"]
+    changes = await _changes(conn, window_sql, entity_id, datasets)
     points = []
     for d in datasets:
         products = by_dataset.get(d.id, Counter())
@@ -404,6 +490,7 @@ async def _history(
                     HistoryProductOut(product=p, trains=n)
                     for p, n in sorted(products.items(), key=lambda kv: (-kv[1], kv[0]))
                 ],
+                change=changes.get(d.id),
             )
         )
     return points
@@ -417,14 +504,14 @@ async def node_history(
     ``refs`` son los días de referencia ya calculados (:func:`datasets_repo.reference_dates`), para
     no repetirlos al exportar todos los nodos.
     """
-    return await _history(conn, NODE_HISTORY_SQL, node_id, refs)
+    return await _history(conn, NODE_HISTORY_SQL, NODE_WINDOW_SQL, node_id, refs)
 
 
 async def segment_history(
     conn: asyncpg.Connection, segment_id: str, refs: dict[str, dt.date] | None = None
 ) -> list[HistoryPointOut]:
     """Trenes que recorren un tramo según cada conjunto de datos, en su día de referencia."""
-    return await _history(conn, SEGMENT_HISTORY_SQL, segment_id, refs)
+    return await _history(conn, SEGMENT_HISTORY_SQL, SEGMENT_WINDOW_SQL, segment_id, refs)
 
 
 def fmt_time(seconds: float) -> str:

@@ -57,7 +57,10 @@
      "description": "Estación de la ciudad de Granada y final de la línea de Moreda. A ella llega también la línea de alta velocidad de Antequera, por donde van hoy los trenes a Madrid, Sevilla y Málaga."}
   ],
   "attribute_sections": [
-    {"attribute": "tracks", "from_node": "linares-baeza", "to_node": "granada", "value": 1, "source_id": "wikipedia-lineas-410-416", "checked_on": "2026-11-12", "note": "Vía única en las dos líneas (410 y 416), según sus artículos de Wikipedia, que citan la Declaración sobre la Red de Adif."}
+    {"attribute": "tracks", "from_node": "linares-baeza", "to_node": "granada", "value": 1, "source_id": "wikipedia-lineas-410-416", "checked_on": "2026-11-12", "note": "Vía única en las dos líneas (410 y 416), según sus artículos de Wikipedia, que citan la Declaración sobre la Red de Adif. El mapa 4 de la Declaración sobre la Red 2026 dibuja las dos como vía única sin electrificar de 1668 mm."},
+    {"attribute": "proteccion_tren", "from_node": "linares-baeza", "to_node": "granada", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolo «Tren tierra y ASFA conv.» a lo largo de las dos líneas (410 hasta Moreda y 416 hasta Granada)."},
+    {"attribute": "bloqueo", "from_node": "linares-baeza", "to_node": "granada", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulos «BAU ctc» entre Linares-Baeza y Moreda y entre Moreda y Granada; el mismo trazo naranja recorre los tres lados del triángulo de Moreda."},
+    {"attribute": "mando", "from_node": "linares-baeza", "to_node": "granada", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: los dos rótulos de bloqueo de la línea llevan «ctc»."}
   ],
   "connections": [
     {"id": "conv-moreda-almeria", "node_id": "moreda", "name": "Línea Linares-Baeza–Almería", "towards": "Guadix y Almería", "status": "no_cargada", "sketch": [[-3.3107459, 37.4311254], [-3.3069, 37.4240], [-3.2585, 37.4037], [-3.185, 37.3627], [-3.1270, 37.3169], [-3.02, 37.26]]},

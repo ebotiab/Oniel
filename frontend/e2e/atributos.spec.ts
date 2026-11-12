@@ -26,8 +26,9 @@ test.describe('Atributos de tramo: de las secciones de la línea a la ficha', ()
   test('la ficha saca las vías de la lista de atributos', () => {
     const filas = attributeRows(tramo(UNICA), linea(tramo(UNICA)), 'esencial')
     expect(filas.map((f) => [f.atributo.etiqueta, f.atributo.formato(f.valor!.value), f.atributo.termino?.(f.valor!.value)])).toEqual([['Vías', 'Vía única', 'via-unica']])
-    expect(attributeRows(tramo(UNICA), linea(tramo(UNICA)), 'detalle')).toEqual([])
-    expect(SEGMENT_ATTRIBUTES.map((a) => a.clave)).toEqual(['tracks'])
+    // la señalización va plegada, bajo «Más detalle»
+    expect(attributeRows(tramo(UNICA), linea(tramo(UNICA)), 'detalle').map((f) => f.atributo.clave)).toEqual(['proteccion_tren', 'bloqueo', 'mando'])
+    expect(SEGMENT_ATTRIBUTES.map((a) => a.clave)).toEqual(['tracks', 'proteccion_tren', 'bloqueo', 'mando'])
   })
 
   test('una API anterior a los atributos solo trae `tracks` y se lee igual', () => {
@@ -45,11 +46,12 @@ test.describe('Atributos de tramo: de las secciones de la línea a la ficha', ()
     const lista: SegmentAttribute[] = [
       ...SEGMENT_ATTRIBUTES,
       { clave: 'electrificacion', etiqueta: 'Electrificación', formato: String, lugar: 'detalle', deLinea: (l) => l.electrification },
-      { clave: 'bloqueo', etiqueta: 'Bloqueo', formato: (v) => (v === 'bca' ? 'Automático' : String(v)), lugar: 'detalle' },
+      { clave: 'radio', etiqueta: 'Radio', formato: (v) => (v === 'gsmr' ? 'GSM-R' : String(v)), lugar: 'detalle' },
     ]
     const base = tramo(DOBLE)
-    // sin secciones, la electrificación es la de la línea y el bloqueo, que no tiene valor, no sale
-    const sinSecciones = attributeRows(base, linea(base), 'detalle', lista)
+    // sin secciones, la electrificación es la de la línea y la radio, que no tiene valor, no sale
+    const nuevas = (filas: ReturnType<typeof attributeRows>) => filas.filter((f) => ['electrificacion', 'radio'].includes(f.atributo.clave))
+    const sinSecciones = nuevas(attributeRows(base, linea(base), 'detalle', lista))
     expect(sinSecciones.map((f) => [f.atributo.clave, f.valor?.value])).toEqual([['electrificacion', '25 kV 50 Hz']])
     // con una sección en el tramo, manda su valor
     const conSecciones: SegmentOut = {
@@ -57,13 +59,13 @@ test.describe('Atributos de tramo: de las secciones de la línea a la ficha', ()
       attributes: {
         ...base.attributes,
         electrificacion: { value: 'sin electrificar', source_id: null, checked_on: null },
-        bloqueo: { value: 'bca', source_id: 'una-fuente', checked_on: '2026-11-12' },
+        radio: { value: 'gsmr', source_id: 'una-fuente', checked_on: '2026-11-12' },
       },
     }
-    const filas = attributeRows(conSecciones, linea(base), 'detalle', lista)
+    const filas = nuevas(attributeRows(conSecciones, linea(base), 'detalle', lista))
     expect(filas.map((f) => [f.atributo.etiqueta, f.atributo.formato(f.valor!.value)])).toEqual([
       ['Electrificación', 'sin electrificar'],
-      ['Bloqueo', 'Automático'],
+      ['Radio', 'GSM-R'],
     ])
     // y la lista de lo esencial no cambia
     expect(attributeRows(conSecciones, linea(base), 'esencial', lista).map((f) => f.atributo.clave)).toEqual(['tracks'])
