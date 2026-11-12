@@ -53,9 +53,9 @@
       "url": "https://iryo.eu/es/destinos",
       "license": "Consulta pública; © Iryo",
       "license_url": null,
-      "retrieved_on": "2026-11-11",
-      "coverage": "Que Iryo opera trenes de alta velocidad por la línea Madrid–Sevilla y que no publica sus horarios en GTFS ni en otro formato reutilizable: no figura entre los conjuntos ferroviarios del Punto de Acceso Nacional (nap.transportes.gob.es) ni en su propia web.",
-      "notes": "Oniel no carga los trenes de Iryo ni reconstruye sus horarios por otros medios: los recuentos de la línea de alta velocidad no los incluyen y el visor lo dice. Lo consultado el 11 de noviembre de 2026 está resumido en el registro de consultas de ese día.",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Que Iryo opera trenes de alta velocidad por la línea Madrid–Sevilla y, por la de Córdoba a Málaga, hasta Málaga, y que no publica sus horarios en GTFS ni en otro formato reutilizable: no figura entre los conjuntos ferroviarios del Punto de Acceso Nacional (nap.transportes.gob.es) ni en su propia web.",
+      "notes": "Oniel no carga los trenes de Iryo ni reconstruye sus horarios por otros medios: los recuentos de las líneas por las que circula no los incluyen y el visor lo dice. Lo consultado el 11 de noviembre de 2026 está resumido en el registro de consultas de ese día; el 12 de noviembre se volvió a leer la página de destinos (raw/operadores/consultas_2026-11-12.json): Málaga y Córdoba figuran entre ellos, y Antequera y Granada no.",
       "file": "raw/operadores/consultas_2026-11-11.json"
     },
     {
@@ -138,6 +138,64 @@
       "retrieved_on": "2026-11-10",
       "coverage": "Tipo de vía (vía única electrificada en toda la línea, electrificación en servicio desde el 28 de noviembre de 1975), puntos kilométricos y códigos de las estaciones, longitud hasta el final de línea (64,6 km) y velocidades máximas por tramo (140 km/h en la mayor parte del recorrido).",
       "notes": "Fuente de verificación, no de geometría. Sus puntos kilométricos coinciden con los de Wikipedia. Da la tensión como 3.300 V en continua; Oniel la anota como 3 kV CC, el valor nominal que usa en las demás líneas convencionales."
+    },
+    {
+      "id": "osm-relation-11143233",
+      "name": "Trazado de la línea de alta velocidad Córdoba–Málaga (relación OSM 11143233, línea 030 de Adif, vía doble de ancho estándar a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11143233",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "De la relación completa (bifurcación Málaga-Alta Velocidad – Málaga-María Zambrano, 154,6 km medidos) Oniel usa los 96,9 km entre la bifurcación y la estación de Antequera-Santa Ana, recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación trae las dos vías de la línea (309 km de vías), todas con ref=030, operator=Adif, ancho de 1435 mm, 25 kV y passenger_lines=2. El número de línea de Adif (030) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
+      "file": "raw/osm/relation_11143233_lav_cordoba_malaga_2026-11-12.json"
+    },
+    {
+      "id": "osm-relation-2869549",
+      "name": "Trazado de la línea de alta velocidad Antequera–Granada (relación OSM 2869549, línea 036 de Adif, ancho estándar a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/2869549",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Los 108,2 km entre la estación de Antequera-Santa Ana y la entrada de Granada (longitud -3,6697), recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo; dónde las dos vías se juntan en una (bifurcación Archidona) y dónde la vía es de ancho mixto (entre las bifurcaciones de Riofrío y de Tocón).",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación arranca en un desvío de la línea 030 situado 0,85 km al norte de la estación de Antequera-Santa Ana y pasa por la estación. Trae dos vías paralelas hasta el desvío de 37,1188 N, 4,4231 O, que Oniel toma como la bifurcación Archidona de los anuncios de Adif, y una sola desde allí. Entre los desvíos de las bifurcaciones Riofrío y Tocón (26,3 km) las vías llevan gauge=1435;1668 y velocidades de 50 a 95 km/h en la bajada a Loja. A la entrada de Granada le faltan tres trozos de vía (1,2 km, 0,6 km y 0,15 km): por eso los últimos 5,9 km se toman de la relación 16228313. El número de línea de Adif (036) es el de las etiquetas ref de sus vías; no se ha contrastado con la Declaración sobre la Red. También se descargaron las estaciones y bifurcaciones de Adif de la zona (raw/osm/adif_facility_nodes_antequera_granada_2026-11-12.json) para situar los nodos.",
+      "file": "raw/osm/relation_2869549_lav_antequera_granada_2026-11-12.json"
+    },
+    {
+      "id": "osm-relation-16228313",
+      "name": "Vías de la entrada a Granada de la línea de alta velocidad Antequera–Granada (relación OSM 16228313, servicio Avant Málaga → Granada)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/16228313",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "De la relación completa (Málaga-María Zambrano – Granada, 165,0 km medidos) Oniel usa los últimos 5,9 km, entre la longitud -3,6697 y la estación de Granada, pasando por la bifurcación La Chana; velocidad máxima por tramo, una sola vía de la línea 036 y ancho mixto desde La Chana.",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. Es la relación de un servicio de Renfe, no de la infraestructura: se usa porque la relación 2869549 no llega entera a Granada. Sus vías en ese trecho llevan ref=036 y, desde la bifurcación La Chana, gauge=1435;1668. Sirvió además para situar dónde se une a la línea de Granada el enlace que viene de Málaga (a 9,6 km del arranque de la relación 2869549, frente al PK 105,753 de Wikipedia) y para esbozar ese enlace.",
+      "file": "raw/osm/relation_16228313_avant_malaga_granada_2026-11-12.json"
+    },
+    {
+      "id": "wikipedia-lav-cordoba-malaga",
+      "name": "Artículo «Línea de alta velocidad Córdoba-Málaga» de Wikipedia en español (puntos kilométricos, longitud, fechas de apertura)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_C%C3%B3rdoba-M%C3%A1laga",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Origen de la línea en el km 357,997 de la línea Madrid–Sevilla; longitud (154,5 km) y vía doble; puntos kilométricos del PB La Marota (7,701), el PAET Santaella (34,640), Puente Genil-Herrera (61,434), la bifurcación hacia Granada (95,946) y Antequera-Santa Ana (96,772); velocidades máximas autorizadas (300 km/h desde el km 2,1); apertura hasta Antequera (16 de diciembre de 2006) y hasta Málaga (23 de diciembre de 2007); enlace directo Málaga–Granada en servicio desde abril de 2022.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 24 de octubre de 2026 (oldid 175979048), consultada por la API de Wikipedia. Los códigos de estación (02002 Puente Genil-Herrera, 02003 Antequera-Santa Ana) y la fecha de apertura de Antequera-Santa Ana se tomaron de los artículos de cada estación (oldid 167283412 y 174167580) y coinciden con las paradas del GTFS de Renfe. El artículo no da el número de línea de Adif."
+    },
+    {
+      "id": "wikipedia-lav-antequera-granada",
+      "name": "Artículo «Línea de alta velocidad Antequera-Granada» de Wikipedia en español (puntos kilométricos, apertura, paso por Loja)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Antequera-Granada",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Puntos kilométricos, que continúan los de la línea Córdoba–Málaga: Antequera-Santa Ana (96,772), bifurcación Bobadilla (105,753), Antequera AV (113,417), Loja (159,450), Íllora (177,029) y Granada (211,021); apertura el 26 de junio de 2019; aprovechamiento del trazado de la línea convencional en el paso por Loja y origen de la Variante de Loja; triple carril.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 3 de septiembre de 2025 (oldid 169316239), consultada por la API de Wikipedia. La ficha da 125,7 km de longitud, que no coincide con sus propios puntos kilométricos (114,2 km entre Antequera-Santa Ana y Granada): Oniel usa los puntos kilométricos. Dice que la línea es de doble vía, lo que no vale para el tramo en servicio: el artículo de Antequera AV dice que el trazado es de vía única y Adif licita la duplicación (BOE-B-2025-42383). Los códigos de estación (02030 Antequera AV, 05012 Loja, 05000 Granada) y las fechas de apertura de Antequera AV (25 de enero de 2023), de reapertura de Loja (26 de junio de 2019) y de las estaciones de Loja (1866) y Granada (1874) se tomaron de los artículos de cada estación (oldid 170126507, 169248777 y 175973047). El artículo de Loja da otro punto kilométrico (61,7), contado desde otro origen. El PB de Íllora no se ha cargado como nodo: queda a 1,6 km de la bifurcación Tocón."
     },
     {
       "id": "adif-mapa-red",

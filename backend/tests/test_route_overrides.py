@@ -502,9 +502,12 @@ def test_via_legs_say_why_a_chain_cannot_be_followed(lines: Lines) -> None:
 
 def test_validate_reports_the_rules_and_no_problems() -> None:
     reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
-    for r in reports.values():
+    for path, r in reports.items():
         assert r["problems"] == []
-        assert r["gtfs"]["route_overrides"] == RULES
+        # las dos líneas de alta velocidad de Córdoba a Granada no tienen reglas de recorrido
+        assert r["gtfs"]["route_overrides"] == (
+            {} if path.startswith("lav-") and path != SPEC.name else RULES
+        )
         assert "indeterminado" not in r["gtfs"]["passes"]
     assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 503
     assert reports[SPEC.name]["gtfs"]["trips"] == 335

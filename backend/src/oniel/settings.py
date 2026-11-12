@@ -30,6 +30,8 @@ class Settings(BaseSettings):
         "lav-madrid-sevilla",
         "convencional-madrid-alcazar-cordoba",
         "manzanares-ciudad-real",
+        "lav-cordoba-malaga",
+        "lav-antequera-granada",
     ]
 
 

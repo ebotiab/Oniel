@@ -190,7 +190,15 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     assert report["problems"] == []
     by_line = {line["line"]: line for line in report["attributes"]}
     for line in by_line.values():
-        assert line["covered_segments"] == {"tracks": line["segments"]}
+        assert line["covered_segments"]["tracks"] == line["segments"]
+    # el ancho mixto solo se declara donde lo hay: el paso por Loja y la entrada a Granada
+    granada = by_line["lav-antequera-granada"]
+    assert granada["covered_segments"] == {"gauge": 3, "tracks": 8} and granada["sections"] == 4
+    assert all(
+        set(line["covered_segments"]) == {"tracks"}
+        for line in by_line.values()
+        if line is not granada
+    )
     assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 2
 
     # sin el valor de la línea, las dos secciones de vía única no cubren la convencional

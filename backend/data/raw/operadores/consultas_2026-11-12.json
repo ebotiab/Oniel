@@ -1,0 +1,14 @@
+{
+  "descripcion": "Registro de la consulta hecha el 12 de noviembre de 2026 para saber por qué líneas cargadas circula Iryo además de la de Madrid a Sevilla. La página consultada cambia, así que aquí queda qué decía ese día, resumido con palabras propias (no se reproduce el texto original).",
+  "consultado_el": "2026-11-12",
+  "consultas": [
+    {
+      "source_id": "iryo-web",
+      "titulo": "Destinos iryo",
+      "editor": "Iryo",
+      "url": "https://iryo.eu/es/destinos",
+      "resumen": "La página enumera trece destinos: Madrid, Barcelona, Zaragoza, Valencia, Sevilla, Málaga, Cuenca, Córdoba, Alicante, Albacete, Tarragona, Puertollano y Ciudad Real. No figuran Antequera, Loja ni Granada.",
+      "que_aporta": "Que los trenes de Iryo a Málaga recorren la línea de alta velocidad Córdoba–Málaga sin parar entre Córdoba y Málaga, y que Iryo no circula por la de Antequera a Granada."
+    }
+  ]
+}

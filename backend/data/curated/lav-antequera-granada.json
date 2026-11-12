@@ -1,0 +1,102 @@
+{
+  "line": {
+    "id": "lav-antequera-granada",
+    "name": "Línea de alta velocidad Antequera – Granada",
+    "short_name": "036",
+    "sort_order": 5,
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 2,
+    "opened_on": "2019-06-26",
+    "reference_length_km": 114.249,
+    "pk_origin_km": 96.772,
+    "status": "disponible",
+    "description": "El último trecho del camino por el que hoy va el tren de Madrid a Granada: sale de la línea de Córdoba a Málaga en Antequera-Santa Ana y llega a Granada pasando por Antequera y por Loja.\n\nSe abrió el 26 de junio de 2019. Hasta la bifurcación de Archidona tiene dos vías; desde allí hasta Granada, una sola. Entre las bifurcaciones de Riofrío y de Tocón los trenes pasan por Loja por la vía de la línea antigua, adaptada con un tercer carril, a mucha menos velocidad.\n\nAl sur de Loja se construye una variante que evitará ese paso, y Adif ha licitado las obras para poner la segunda vía en el resto. Sus puntos kilométricos continúan los de la línea de Córdoba a Málaga: Antequera-Santa Ana es el 96,8 y Granada, el 211.",
+    "geometry_source": {
+      "source_id": "osm-relation-2869549",
+      "parts": [
+        {
+          "source_id": "osm-relation-2869549",
+          "file": "raw/osm/relation_2869549_lav_antequera_granada_2026-11-12.json",
+          "relation_id": 2869549,
+          "from": [-4.7197084, 37.0701682],
+          "to": [-3.6697, 37.2055]
+        },
+        {
+          "source_id": "osm-relation-16228313",
+          "file": "raw/osm/relation_16228313_avant_malaga_granada_2026-11-12.json",
+          "relation_id": 16228313,
+          "from": [-3.6697, 37.2055],
+          "to": [-3.6086283, 37.1836936]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-antequera-granada"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "antequera-santa-ana", "name": "Antequera-Santa Ana", "kind": "estacion", "adif_code": "02003", "shared": true, "position": {"lon": -4.7197084, "lat": 37.0701682}, "reference_pk_km": 96.772},
+    {"id": "bif-bobadilla", "name": "Bifurcación Bobadilla", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 8.981}, "reference_pk_km": 105.753,
+     "description": "Punto donde se une a la línea de Granada el enlace que viene de Málaga. Por él los trenes entre Málaga y Granada van directos, sin pasar por Antequera-Santa Ana, desde abril de 2022."},
+    {"id": "antequera-av", "name": "Antequera AV", "kind": "estacion", "adif_code": "02030", "position": {"lon": -4.5613719, "lat": 37.029483}, "reference_pk_km": 113.417,
+     "description": "Estación junto al casco urbano de Antequera, abierta el 25 de enero de 2023. Es la segunda estación de alta velocidad del municipio, con Antequera-Santa Ana."},
+    {"id": "bif-archidona", "name": "Bifurcación Archidona", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -4.4231253, "lat": 37.118794},
+     "description": "Aquí las dos vías que vienen de Antequera se juntan en una. Desde este punto hasta Granada la línea es de vía única; Adif ha licitado las obras para poner la segunda vía."},
+    {"id": "bif-riofrio", "name": "Bifurcación Riofrío", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -4.2155763, "lat": 37.1370894},
+     "description": "Final del trazado nuevo que viene de Antequera. Desde aquí hasta la bifurcación de Tocón los trenes de alta velocidad siguen por la vía de la línea antigua de Bobadilla a Granada, adaptada con un tercer carril, y bajan a Loja a poca velocidad."},
+    {"id": "loja", "name": "Loja", "kind": "estacion", "adif_code": "05012", "position": {"lon": -4.1356667, "lat": 37.1751061}, "reference_pk_km": 159.45,
+     "description": "Estación de la línea antigua de Bobadilla a Granada, reabierta el 26 de junio de 2019 con la llegada de la alta velocidad. El ferrocarril llegó a Loja desde Granada el 10 de diciembre de 1866."},
+    {"id": "bif-tocon", "name": "Bifurcación Tocón", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -3.9845733, "lat": 37.2322026},
+     "description": "Final del paso por Loja: aquí termina la vía con tercer carril de la línea antigua y los trenes vuelven a un trazado propio hacia Granada."},
+    {"id": "bif-la-chana", "name": "Bifurcación La Chana", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -3.6539576, "lat": 37.1989235},
+     "description": "A la entrada de Granada. Desde aquí la línea de alta velocidad y la convencional que viene de Moreda entran en la ciudad una al lado de la otra."},
+    {"id": "granada", "name": "Granada", "kind": "estacion", "adif_code": "05000", "position": {"lon": -3.6086283, "lat": 37.1836936}, "reference_pk_km": 211.021,
+     "description": "Final de la línea. La estación es de 1874 y recibe la alta velocidad desde el 26 de junio de 2019. De aquí sale también la línea convencional hacia Moreda, Guadix y Almería."}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "bif-archidona", "to_node": "bif-la-chana", "value": 1, "source_id": "boe-b-2025-42383", "checked_on": "2026-11-12", "note": "Adif licita la electrificación de la duplicación de la vía entre la bifurcación Archidona y la bifurcación La Chana: hoy hay una sola. La relación 2869549 de OSM coincide: sus dos vías paralelas se juntan en una en el desvío que Oniel toma como bifurcación Archidona."},
+    {"attribute": "tracks", "from_node": "bif-la-chana", "to_node": "granada", "value": 1, "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM la línea 036 entra en Granada por una sola vía de ancho mixto, al lado de la vía de la línea 416 de Moreda."},
+    {"attribute": "gauge", "from_node": "bif-riofrio", "to_node": "bif-tocon", "value": "mixto", "source_id": "osm-relation-2869549", "checked_on": "2026-11-12", "note": "Paso por Loja por la vía de la línea antigua con tercer carril: en OSM, gauge=1435;1668 entre los desvíos de las dos bifurcaciones (26,3 km), con velocidades de 50 a 95 km/h en la bajada a Loja. El visor todavía no enseña este atributo."},
+    {"attribute": "gauge", "from_node": "bif-la-chana", "to_node": "granada", "value": "mixto", "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM, gauge=1435;1668 desde la bifurcación La Chana hasta la estación de Granada."}
+  ],
+  "connections": [
+    {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga–Granada", "towards": "Málaga, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7197, 37.0177]]},
+    {"id": "conv-granada-moreda", "node_id": "granada", "name": "Línea convencional Granada–Moreda", "towards": "Moreda, Guadix, Almería y Linares-Baeza", "status": "no_cargada", "sketch": [[-3.6086283, 37.1836936], [-3.6539576, 37.1989235], [-3.6458, 37.2332], [-3.5964, 37.3324], [-3.5278, 37.3958]]}
+  ],
+  "stop_mappings": {
+    "02003": {"node": "antequera-santa-ana"},
+    "02030": {"node": "antequera-av"},
+    "05012": {"node": "loja"},
+    "05000": {"node": "granada"},
+    "02002": {"exits": ["antequera-santa-ana"], "via": {"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}},
+    "50500": {"exits": ["antequera-santa-ana"], "via": [{"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "37704": {"exits": ["antequera-santa-ana"], "via": [{"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "37300": {"exits": ["antequera-santa-ana"], "via": [{"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "37200": {"exits": ["antequera-santa-ana"], "via": [{"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "60000": {"exits": ["antequera-santa-ana"], "via": [{"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "51003": {"exits": ["antequera-santa-ana"], "via": [{"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "18000": {"exits": ["antequera-santa-ana"]},
+    "17000": {"exits": ["antequera-santa-ana"]},
+    "04040": {"exits": ["antequera-santa-ana"]},
+    "78400": {"exits": ["antequera-santa-ana"]},
+    "04104": {"exits": ["antequera-santa-ana"]},
+    "71801": {"exits": ["antequera-santa-ana"]},
+    "54413": {"exits": ["bif-bobadilla"]},
+    "56200": {"exits": ["granada"]},
+    "56310": {"exits": ["granada"]},
+    "56312": {"exits": ["granada"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea y en alguna de las tres que solo tiene ella (Antequera AV, Loja y Granada): los AVE, Alvia y Avant de Madrid, Barcelona y Sevilla a Granada y Almería, y los Avant de Málaga a Granada, que entran por la bifurcación Bobadilla. Quedan fuera los trenes de Media Distancia entre Antequera AV y Algeciras, que paran en Antequera AV y en Antequera-Santa Ana pero van por las vías convencionales (todos paran en Ronda), y los de Granada a Almería, que solo tocan la línea en Granada.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": ["02030", "05012", "05000"],
+    "min_node_stops": 2,
+    "exclude_stop_ids": ["55007"]
+  }
+}
