@@ -5,12 +5,9 @@ import { composeNetwork } from '../data/network'
 import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
-<<<<<<< HEAD
-=======
-import { MapView, type RecorridosEnMapa } from '../map/MapView'
+import type { RecorridosEnMapa } from '../map/MapView'
 import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
->>>>>>> origin/main
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
@@ -347,7 +344,6 @@ export default function App() {
       <a className="visually-hidden" href="#panel">
         Ir al panel de la línea
       </a>
-<<<<<<< HEAD
       <Suspense fallback={<div className="mapa" aria-hidden="true" />}>
         <MapView
           network={network}
@@ -357,30 +353,14 @@ export default function App() {
           interrupted={interrupted}
           highlight={highlight}
           frame={frame}
-          onSelect={select}
+          onSelect={comparador ? pickOnMap : select}
           onHover={setHoverId}
           onNearLines={wantNear}
           padding={padding}
           lineId={selection ? null : lineId}
+          recorridos={recorridosEnMapa}
         />
       </Suspense>
-=======
-      <MapView
-        network={network}
-        selection={selection}
-        hoverId={hoverId}
-        closedSegmentId={closedSegmentId}
-        interrupted={interrupted}
-        highlight={highlight}
-        frame={frame}
-        onSelect={comparador ? pickOnMap : select}
-        onHover={setHoverId}
-        onNearLines={wantNear}
-        padding={padding}
-        lineId={selection ? null : lineId}
-        recorridos={recorridosEnMapa}
-      />
->>>>>>> origin/main
       <header className="cabecera">
         <div className="cabecera-inicio">
           <div className="marca-bloque">
