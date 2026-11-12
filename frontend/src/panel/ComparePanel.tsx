@@ -140,7 +140,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
         <>
           <p className="texto" data-testid="recorridos-resumen">
             {recorridos.length === 1 ? 'Un solo recorrido con las líneas cargadas.' : `${recorridos.length === 2 ? 'Dos' : recorridos.length === 3 ? 'Tres' : 'Cuatro'} recorridos, del más corto al más largo.`}
-            {trenes && ` ${trenes.directos.length === 1 ? 'Hay 1 tren directo' : `Hay ${trenes.directos.length} trenes directos`} en este sentido en el horario del ${dia}.`}
+            {trenes && ` ${trenes.directos.length === 0 ? 'No hay trenes directos' : trenes.directos.length === 1 ? 'Hay 1 tren directo' : `Hay ${trenes.directos.length} trenes directos`} en este sentido en el horario del ${dia}.`}
           </p>
           <ol className="recorridos">
             {recorridos.map((r) => {
@@ -207,7 +207,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
               </div>
             ))}
             <p className="suave">
-              Oniel une todas las líneas cargadas en una sola red y busca los caminos que no pasan dos veces por el mismo punto. Enseña los {recorridos.length > 1 ? 'más cortos' : 'que hay'}, hasta tres, y descarta los que miden más del doble que el más corto
+              Oniel une todas las líneas cargadas en una sola red y busca los caminos que no pasan dos veces por el mismo punto. Enseña los {recorridos.length > 1 ? 'más cortos' : 'que hay'}, hasta tres, y descarta los que dan un rodeo de más del doble respecto a otro más corto
               {comparacion.ocultos > 0 ? ` (aquí hay ${comparacion.ocultos === 1 ? 'uno más, más largo, que no se enseña' : `${comparacion.ocultos} más, más largos, que no se enseñan`})` : ''}. Los kilómetros se miden por cada línea.
             </p>
             <p className="suave">

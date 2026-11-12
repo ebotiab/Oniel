@@ -21,8 +21,8 @@ router = APIRouter(tags=["rutas"])
 METHOD = (
     "Oniel une todas las líneas cargadas en un solo grafo, aplica las modificaciones del"
     " escenario (tramos cerrados, enlaces esbozados, velocidades cambiadas) y busca los recorridos"
-    " que no pasan dos veces por el mismo nodo ni miden más de las veces pedidas lo que mide el"
-    " más corto. No distingue anchos de vía: une la alta velocidad y la red convencional en los"
+    " que no pasan dos veces por el mismo nodo. Descarta los que, donde se apartan de otro más"
+    " corto, dan un rodeo de más de las veces pedidas lo que recorre el otro. No distingue anchos de vía: une la alta velocidad y la red convencional en los"
     " nodos comunes, aunque no todos los trenes puedan pasar de una a otra. Los kilómetros se"
     " miden por cada línea. El tiempo es el de recorrer cada tramo a su velocidad"
     " habitual, sin paradas, sin acelerar ni frenar y sin esperar cruces en vía única: sirve para"
@@ -59,7 +59,8 @@ async def get_routes(
         Query(
             ge=1,
             le=100,
-            description="Se descartan los recorridos que miden más de estas veces el más corto",
+            description="Se descartan los recorridos que, donde se apartan de otro más corto, dan un"
+            " rodeo de más de estas veces lo que recorre el otro",
         ),
     ] = DEFAULT_MAX_RATIO,
 ) -> RoutesOut:

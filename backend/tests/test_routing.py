@@ -126,7 +126,7 @@ def test_more_line_changes_find_the_route_of_the_diverted_alvia(graph: Graph) ->
 
 
 def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -> None:
-    """El criterio del comparador: sin tope útil de líneas y nada que pase del doble del más corto."""
+    """El criterio del comparador: sin tope útil de líneas y sin rodeos de más del doble."""
     # Madrid – Córdoba: entra el recorrido de los Alvia desviados, por tres líneas
     to_cordoba = find_routes(graph, MADRID, CORDOBA)
     assert [r.length_km for r in to_cordoba] == [343.6, 433.3, 440.7, 479.8]
@@ -290,6 +290,33 @@ def test_alternatives_of_a_closure_keep_the_single_line_wording(graph: Graph) ->
     ) in two_lines.note
 
 
+def test_a_route_that_strays_far_from_a_shorter_one_is_dropped(graph: Graph) -> None:
+    """Sevilla – Manzanares: el camino que llega a Ciudad Real y sube hasta Madrid para volver.
+
+    Mide 666,4 km frente a 363,9 km, menos del doble, pero desde Ciudad Real, donde se aparta del
+    más corto, recorre 366,9 km para lo que el otro hace en 64,4 km.
+    """
+    sevilla = "sevilla-santa-justa"
+    assert [r.length_km for r in find_routes(graph, sevilla, MANZANARES)] == [363.9, 371.2]
+    unfiltered = find_routes(graph, sevilla, MANZANARES, max_ratio=None)
+    assert [r.length_km for r in unfiltered][:3] == [363.9, 371.2, 666.4]
+    assert MADRID in unfiltered[2].node_ids and CIUDAD_REAL in unfiltered[2].node_ids
+    # los dos caminos que se apartan en Córdoba se conservan: 244,6 km frente a 237,2 km
+    assert [r.length_km for r in find_routes(graph, MADRID, CORDOBA)] == [
+        343.6,
+        433.3,
+        440.7,
+        479.8,
+    ]
+
+
+def test_inverting_the_direction_gives_the_same_routes(graph: Graph) -> None:
+    for a, b in [(MADRID, CORDOBA), ("sevilla-santa-justa", MANZANARES), (MADRID, "andujar")]:
+        there = [r.segment_ids for r in find_routes(graph, a, b)]
+        back = [list(reversed(r.segment_ids)) for r in find_routes(graph, b, a)]
+        assert sorted(there) == sorted(back)
+
+
 def _parity_cases(graph: Graph) -> dict[str, Any]:
     routes: list[dict[str, Any]] = [
         {"from": MADRID, "to": CORDOBA, "scenario": "", **ONE_CHANGE},
@@ -313,6 +340,8 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"from": MADRID, "to": CORDOBA, "scenario": "", **DEFAULTS},
         {"from": MADRID, "to": CIUDAD_REAL, "scenario": "", **DEFAULTS},
         {"from": MADRID, "to": "andujar", "scenario": "", **DEFAULTS},
+        # un rodeo que no llega al doble del total, pero sí donde se aparta del más corto
+        {"from": "sevilla-santa-justa", "to": MANZANARES, "scenario": "", **DEFAULTS},
     ]
     detours: list[dict[str, Any]] = [
         {"segment_id": URDA_CIUDAD_REAL, "scenario": ""},

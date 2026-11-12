@@ -1796,6 +1796,169 @@
           ]
         }
       ]
+    },
+    {
+      "from": "sevilla-santa-justa",
+      "to": "manzanares",
+      "scenario": "",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "sevilla-santa-justa",
+          "from_name": "Sevilla-Santa Justa",
+          "to_node_id": "manzanares",
+          "to_name": "Manzanares",
+          "length_km": 363.9,
+          "time_min": 102,
+          "single_track_km": 64.4,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "manzanares-ciudad-real"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "sevilla-santa-justa",
+              "from_name": "Sevilla-Santa Justa",
+              "to_node_id": "ciudad-real",
+              "to_name": "Ciudad Real",
+              "length_km": 299.5,
+              "time_min": 74,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "manzanares-ciudad-real",
+              "line_name": "Línea convencional Manzanares – Ciudad Real",
+              "from_node_id": "ciudad-real",
+              "from_name": "Ciudad Real",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 64.4,
+              "time_min": 28,
+              "single_track_km": 64.4
+            }
+          ],
+          "via": [
+            "Córdoba",
+            "Villanueva de Córdoba-Los Pedroches",
+            "Puertollano",
+            "Ciudad Real",
+            "Almagro",
+            "Daimiel"
+          ],
+          "node_ids": [
+            "sevilla-santa-justa",
+            "majarabique",
+            "bif-malaga",
+            "cordoba",
+            "adamuz",
+            "villanueva-de-cordoba",
+            "puertollano",
+            "ciudad-real",
+            "almagro",
+            "daimiel",
+            "manzanares"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:adamuz:cordoba",
+            "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
+            "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
+            "lav-madrid-sevilla:ciudad-real:puertollano",
+            "manzanares-ciudad-real:almagro:ciudad-real",
+            "manzanares-ciudad-real:daimiel:almagro",
+            "manzanares-ciudad-real:manzanares:daimiel"
+          ]
+        },
+        {
+          "from_node_id": "sevilla-santa-justa",
+          "from_name": "Sevilla-Santa Justa",
+          "to_node_id": "manzanares",
+          "to_name": "Manzanares",
+          "length_km": 371.2,
+          "time_min": 140,
+          "single_track_km": 194.1,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "sevilla-santa-justa",
+              "from_name": "Sevilla-Santa Justa",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "manzanares",
+              "to_name": "Manzanares",
+              "length_km": 244.6,
+              "time_min": 107,
+              "single_track_km": 194.1
+            }
+          ],
+          "via": [
+            "Córdoba",
+            "Andújar",
+            "Linares-Baeza",
+            "Vilches",
+            "Santa Cruz de Mudela",
+            "Valdepeñas"
+          ],
+          "node_ids": [
+            "sevilla-santa-justa",
+            "majarabique",
+            "bif-malaga",
+            "cordoba",
+            "rabanales",
+            "alcolea-de-cordoba",
+            "montoro",
+            "villa-del-rio",
+            "andujar",
+            "espeluy",
+            "linares-baeza",
+            "vadollano",
+            "vilches",
+            "venta-de-cardenas",
+            "almuradiel-viso-del-marques",
+            "santa-cruz-de-mudela",
+            "valdepenas",
+            "manzanares"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
+            "convencional-madrid-alcazar-cordoba:vilches:vadollano",
+            "convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches",
+            "convencional-madrid-alcazar-cordoba:almuradiel-viso-del-marques:venta-de-cardenas",
+            "convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques",
+            "convencional-madrid-alcazar-cordoba:valdepenas:santa-cruz-de-mudela",
+            "convencional-madrid-alcazar-cordoba:manzanares:valdepenas"
+          ]
+        }
+      ]
     }
   ],
   "detours": [

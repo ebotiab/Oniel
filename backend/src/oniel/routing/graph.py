@@ -26,7 +26,8 @@ from oniel.routing.scenario import Scenario, ScenarioError
 #: Veces que un recorrido pasa de una línea a otra si no se pide otra cosa. Es un freno técnico
 #: (hasta seis líneas encadenadas), no un criterio: lo que descarta recorridos es ``max_ratio``.
 DEFAULT_MAX_CHANGES = 5
-#: Un recorrido se descarta si mide más de estas veces lo que mide el más corto.
+#: Un recorrido se descarta si, donde se aparta de otro más corto, su rodeo mide más de estas
+#: veces lo que el otro recorre entre los mismos dos puntos (``_strays``).
 DEFAULT_MAX_RATIO = 2.0
 #: Tope de recorridos devueltos, para que una red más grande no dispare la lista.
 MAX_ROUTES = 12
@@ -364,6 +365,31 @@ def _sorted(found: list[tuple[str, list[_Step]]]) -> list[tuple[str, list[_Step]
     return sorted(found, key=lambda f: (_raw_length(f[1]), [e.id for e, _ in f[1]]))
 
 
+def _strays(steps: list[_Step], shorter: list[_Step], max_ratio: float) -> bool:
+    """Si un camino se aparta de otro más corto y da un rodeo desproporcionado hasta reencontrarlo.
+
+    Se quitan los tramos que los dos comparten al principio y al final y se compara lo que queda
+    de cada uno: el camino se descarta si su parte propia mide más de ``max_ratio`` veces la del
+    corto. Sin tramos comunes es la comparación de las dos longitudes enteras. Vale igual en los
+    dos sentidos, así que invertir origen y destino da los mismos recorridos.
+    """
+    a, b = [e for e, _ in steps], [e for e, _ in shorter]
+    shared = min(len(a), len(b))
+    head = 0
+    while head < shared and a[head].id == b[head].id:
+        head += 1
+    tail = 0
+    while tail < shared - head and a[len(a) - 1 - tail].id == b[len(b) - 1 - tail].id:
+        tail += 1
+    own = 0.0
+    for edge in a[head : len(a) - tail]:
+        own += edge.length_km
+    other = 0.0
+    for edge in b[head : len(b) - tail]:
+        other += edge.length_km
+    return own > other * max_ratio
+
+
 def find_routes(
     graph: Graph,
     from_node_id: str,
@@ -376,8 +402,9 @@ def find_routes(
     """Recorridos distintos entre dos nodos con la red del escenario, del más corto al más largo.
 
     Son los caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho
-    ``max_changes`` veces (``None``, sin tope) y no miden más de ``max_ratio`` veces lo que mide
-    el más corto (``None``, sin descartar ninguno por largo).
+    ``max_changes`` veces (``None``, sin tope) y no dan un rodeo de más de ``max_ratio`` veces
+    respecto a otro más corto, medido donde se apartan de él (``_strays``; ``None``, sin descartar
+    ninguno por largo).
     """
     for node_id in (from_node_id, to_node_id):
         if node_id not in graph.nodes:
@@ -392,9 +419,12 @@ def find_routes(
         )
     ]
     ordered = _sorted(found)
-    if max_ratio is not None and ordered:
-        limit = _raw_length(ordered[0][1]) * max_ratio
-        ordered = [f for f in ordered if _raw_length(f[1]) <= limit]
+    if max_ratio is not None:
+        kept: list[tuple[str, list[_Step]]] = []
+        for candidate in ordered:
+            if not any(_strays(candidate[1], shorter[1], max_ratio) for shorter in kept):
+                kept.append(candidate)
+        ordered = kept
     return [_route(g, start, steps) for start, steps in ordered[:MAX_ROUTES]]
 
 

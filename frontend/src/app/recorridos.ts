@@ -25,7 +25,7 @@ export interface Recorrido {
   /** Clave estable del recorrido: los tramos que recorre. */
   key: string
   route: Route
-  /** «Por la alta velocidad», «Por Manzanares y Ciudad Real». */
+  /** «Por la alta velocidad», «Por Manzanares y Ciudad Real», «Por Córdoba y la línea convencional». */
   titulo: string
   /** «Recorre tres líneas», cuando encadena más de una. */
   lineas: string | null
@@ -169,6 +169,16 @@ export function compararRecorridos(
       } else sinPaso = true
     }
     if (libre) libre.alternativa = true
+  }
+  // Un recorrido que cambia de línea en estaciones por las que otro también pasa se confunde con él
+  // («Por Córdoba», cuando los dos pasan por Córdoba): se le añade la línea que solo recorre él.
+  for (const r of recorridos) {
+    if (r.route.legs.length < 2) continue
+    const cambios = r.route.legs.slice(0, -1).map((leg) => leg.to_node_id)
+    const otro = recorridos.find((o) => o !== r && cambios.every((id) => o.route.node_ids.includes(id)))
+    const propia = otro && r.route.line_ids.find((id) => !otro.route.line_ids.includes(id))
+    const line = propia ? lines.get(propia) : undefined
+    if (line) r.titulo += lineKind(line) === 'alta velocidad' ? ' y la alta velocidad' : ' y la línea convencional'
   }
   // Dos recorridos con el mismo nombre (dos líneas convencionales) se distinguen por su línea.
   for (const r of recorridos) {

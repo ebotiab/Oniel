@@ -15,7 +15,10 @@ import { ScenarioError, emptyScenario, linkId, withClosures, type Scenario } fro
  * (hasta seis líneas encadenadas), no un criterio: lo que descarta recorridos es `maxRatio`.
  */
 export const DEFAULT_MAX_CHANGES = 5
-/** Un recorrido se descarta si mide más de estas veces lo que mide el más corto. */
+/**
+ * Un recorrido se descarta si, donde se aparta de otro más corto, su rodeo mide más de estas veces
+ * lo que el otro recorre entre los mismos dos puntos (`strays`).
+ */
 export const DEFAULT_MAX_RATIO = 2
 /** Tope de recorridos devueltos. */
 export const MAX_ROUTES = 12
@@ -246,10 +249,29 @@ function sorted(found: { start: string; steps: Step[] }[]): { start: string; ste
 }
 
 /**
+ * Si un camino se aparta de otro más corto y da un rodeo desproporcionado hasta reencontrarlo. Se
+ * quitan los tramos que los dos comparten al principio y al final y se compara lo que queda: el
+ * camino se descarta si su parte propia mide más de `maxRatio` veces la del corto. Sin tramos
+ * comunes es la comparación de las dos longitudes enteras, y vale igual en los dos sentidos.
+ */
+function strays(steps: Step[], shorter: Step[], maxRatio: number): boolean {
+  const shared = Math.min(steps.length, shorter.length)
+  let head = 0
+  while (head < shared && steps[head]![0].id === shorter[head]![0].id) head++
+  let tail = 0
+  while (tail < shared - head && steps[steps.length - 1 - tail]![0].id === shorter[shorter.length - 1 - tail]![0].id) tail++
+  let own = 0
+  for (const [edge] of steps.slice(head, steps.length - tail)) own += edge.length_km
+  let other = 0
+  for (const [edge] of shorter.slice(head, shorter.length - tail)) other += edge.length_km
+  return own > other * maxRatio
+}
+
+/**
  * Recorridos distintos entre dos nodos con la red del escenario, del más corto al más largo: los
  * caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho `maxChanges`
- * veces (`null`, sin tope) y no miden más de `maxRatio` veces lo que mide el más corto (`null`,
- * sin descartar ninguno por largo).
+ * veces (`null`, sin tope) y no dan un rodeo de más de `maxRatio` veces respecto a otro más corto,
+ * medido donde se apartan de él (`strays`; `null`, sin descartar ninguno por largo).
  */
 export function findRoutes(
   graph: Graph,
@@ -273,9 +295,12 @@ export function findRoutes(
     maxChanges,
   ).map((steps) => ({ start: fromNodeId, steps }))
   let ordered = sorted(found)
-  if (maxRatio !== null && ordered.length) {
-    const limit = rawLength(ordered[0]!.steps) * maxRatio
-    ordered = ordered.filter((f) => rawLength(f.steps) <= limit)
+  if (maxRatio !== null) {
+    const kept: typeof ordered = []
+    for (const candidate of ordered) {
+      if (!kept.some((shorter) => strays(candidate.steps, shorter.steps, maxRatio))) kept.push(candidate)
+    }
+    ordered = kept
   }
   return ordered.slice(0, MAX_ROUTES).map((f) => toRoute(g, f.start, f.steps))
 }
