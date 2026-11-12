@@ -270,6 +270,8 @@ La vía no espera al mapa base: se añade al mapa en cuanto el estilo está list
 
 El JavaScript va en dos ficheros. MapLibre es tres cuartas partes del total (295 de 380 KB comprimidos; React son 68 y el visor, 20) y no se puede adelgazar, así que se carga aparte con un `import()` (`MapView` en `frontend/src/app/App.tsx`) y `index.html` lo precarga con `modulepreload` (el complemento `precargarMapa` de `frontend/vite.config.ts`), para que se descargue a la vez que el resto. El panel ya no lo espera: medido el 12 de noviembre de 2026 con el mismo móvil emulado, la lista de líneas pasa de verse a los 4,7 – 6,5 s a los 1,8 – 2,1 s con 4G lenta, y de 13,8 – 14,0 s a 6,0 – 6,2 s con 3G; la vía se dibuja cuando antes (unos 16 s con 3G). La hoja de estilos de MapLibre se queda en la principal (`frontend/src/main.tsx`): si se cargara con el mapa llegaría después que la del visor y anularía sus reglas (el mapa quedaba con altura cero).
 
+La vía tampoco espera a las tipografías del mapa base, aunque aparezca casi a la vez que los rótulos. Comprobado en producción el 12 de noviembre de 2026 con el mismo móvil emulado y 4G lenta, dos pasadas por caso: con las tipografías de OpenFreeMap sin tocar la vía se dibuja a los 4,9 – 6,4 s; retrasándolas 5 s, a los 4,9 – 5,2 s; retrasándolas 10 s, a los 5,0 – 5,1 s, y bloqueándolas del todo, a los 5,3 – 5,6 s. El mapa las pide hacia los 4,2 s, cuando el estilo termina de cargar, que es también cuando se añade la vía: de ahí la coincidencia. Lo que marca esos 5 s es lo que va antes, la descarga de MapLibre y del estilo.
+
 ## Modelo de datos
 
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
