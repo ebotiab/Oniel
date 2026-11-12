@@ -30,7 +30,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('recuento-red')).toHaveText(/^5 líneas · 1\.140 km/)
+    await expect(page.getByTestId('recuento-red')).toHaveText(/^6 líneas · 1\.313 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -43,7 +43,7 @@ test.describe('Carga de la red por partes', () => {
     // geometría: la red mantiene su tope y ellas tienen el suyo. Cuando no quepan, su detalle se pedirá aparte.
     const { annotations, interruptions, ...red } = JSON.parse(indice.toString('utf-8')) as Record<string, unknown>
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
-    // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 15 KB de media).
+    // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 18 KB de media).
     expect(bytes(red)).toBeLessThan(20_000 * (red.lines as unknown[]).length)
     expect(bytes({ annotations, interruptions })).toBeLessThan(40_000)
     expect(indice.byteLength).toBeLessThan(linea.byteLength)

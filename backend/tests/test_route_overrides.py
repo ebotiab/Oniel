@@ -10,7 +10,17 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-from conftest import ALBACETE_SPEC, CONV_SPEC, DATA_DIR, FEED, JAEN_SPEC, MZCR_SPEC, SPEC, SPECS
+from conftest import (
+    ALBACETE_SPEC,
+    CONV_SPEC,
+    DATA_DIR,
+    FEED,
+    JAEN_SPEC,
+    LBMG_SPEC,
+    MZCR_SPEC,
+    SPEC,
+    SPECS,
+)
 from pydantic import ValidationError
 
 from oniel.geo import haversine_km
@@ -509,12 +519,17 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         CONV_SPEC.name: RULES | JAEN_RULES,
         MZCR_SPEC.name: RULES,
         JAEN_SPEC.name: {},
+        # la línea de Linares-Baeza a Granada tiene su propia regla: los trenes a Almería que
+        # paran en Moreda salen por la estación y no por la bifurcación
+        LBMG_SPEC.name: {"linares-baeza-almeria-por-moreda": 4},
         ALBACETE_SPEC.name: {},
     }
     for name, r in reports.items():
         assert r["problems"] == []
         assert r["gtfs"]["route_overrides"] == expected[name]
         assert "indeterminado" not in r["gtfs"]["passes"]
+    granada = reports[LBMG_SPEC.name]["gtfs"]
+    assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
     assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 565
     assert reports[SPEC.name]["gtfs"]["trips"] == 335
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 154
@@ -531,7 +546,9 @@ def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:
     ]
     broken = tmp_path / CONV_SPEC.name
     broken.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
-    report = validate_all(broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC, ALBACETE_SPEC])
+    report = validate_all(
+        broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC, LBMG_SPEC, ALBACETE_SPEC]
+    )
     assert report["problems"] == [
         f"la regla {rule['id']}: el «via» de la parada 50500 no se sostiene: cordoba no es un"
         f" nodo de la línea {MZCR}"

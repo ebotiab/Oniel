@@ -90,7 +90,7 @@ Límites: el grafo no distingue anchos de vía ni sentidos, no sabe por qué ví
 
 El comparador del visor (`/recorridos/<desde>/<hasta>`) responde a «¿cómo se va de una estación a otra y qué diferencia hay entre un camino y otro?». Calcula en el cliente, con el grafo de `frontend/src/routing/`, así que funciona igual sin API; lo que decide cómo se presentan los recorridos está en `frontend/src/app/recorridos.ts`.
 
-**Qué recorridos enseña.** Los tres primeros de `find_routes` con su criterio por defecto: sin tope útil de líneas, descartados los que dan un rodeo de más del doble respecto a otro más corto, del más corto al más largo. Tres bastan para los casos que hoy tienen sentido y dejan fuera los zigzags. La lista real con las tres líneas cargadas:
+**Qué recorridos enseña.** Los tres primeros de `find_routes` con su criterio por defecto: sin tope útil de líneas, descartados los que dan un rodeo de más del doble respecto a otro más corto, del más corto al más largo. Tres bastan para los casos que hoy tienen sentido y dejan fuera los zigzags. La lista real con las líneas cargadas (el último par, desde que está la de Linares-Baeza a Granada; cuando se cargue la alta velocidad de Antequera tendrá además el camino por Córdoba):
 
 | Par | Se enseñan | Quedan fuera |
 |---|---|---|
@@ -99,6 +99,7 @@ El comparador del visor (`/recorridos/<desde>/<hasta>`) responde a «¿cómo se 
 | Madrid – Andújar | 361,9 km (convencional), 401,0 km (por Ciudad Real y Manzanares), 422,4 km (por Córdoba) | 512,1 km (el cuarto, por cuatro trechos) |
 | Manzanares – Ciudad Real | 64,4 km | 366,9 km y 417,4 km (más del doble) |
 | Sevilla – Manzanares | 363,9 km (por Ciudad Real), 371,2 km (por Córdoba y la línea convencional) | 666,4 km (sube de Ciudad Real a Madrid y vuelve) |
+| Madrid – Granada | 487,3 km (convencional hasta Linares-Baeza y línea de Moreda, 240,8 km de vía única), 526,5 km (alta velocidad hasta Ciudad Real, Manzanares y Linares-Baeza), 644,3 km (alta velocidad hasta Córdoba y vuelta a Linares-Baeza) | Ninguno |
 
 El detalle dice cuántos quedan fuera por ser el cuarto o posteriores; los descartados por largos no se cuentan.
 
@@ -130,7 +131,7 @@ Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tra
 
 Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
 
-**Lo que sale** con los trenes del 13 de noviembre de 2026 (243 trenes, 41 tramos):
+**Lo que sale** con los trenes del 13 de noviembre de 2026 (256 trenes, 54 tramos):
 
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
@@ -139,12 +140,15 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Majarabique – Sevilla-Santa Justa (LAV) | 53 | Ninguno |
 | Espelúy – Mengíbar-Artichuela (línea de Jaén) | 50 | Ninguno |
 | Mengíbar-Artichuela – Jaén (línea de Jaén) | 44 | Ninguno |
+| Alcázar de San Juan – Albacete (siete tramos) | 17 | Ninguno |
+| Bifurcación Almería – Iznalloz – Granada (dos tramos) | 12 | Ninguno |
+| Linares-Baeza – Moreda (tres tramos) | 2 | Ninguno |
 | Ciudad Real – Córdoba (LAV, cuatro tramos) | 108 | Para los 43 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 24 desviados por Manzanares, 7 km y 38 min más |
 | Madrid – Ciudad Real (LAV, cuatro tramos) | 84 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
 | Manzanares – Ciudad Real (tres tramos) | 38 | Para los 24 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
 | Manzanares – Linares-Baeza (convencional) | 18 a 26 | Para los 16 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 28 min menos |
 
-Los otros 36 tramos tienen otro camino para todos sus trenes. Los cinco que no lo tienen son los tres al sur de Córdoba, donde Oniel solo tiene cargada una línea, y los dos del ramal de Jaén, que acaba en una estación término: ahí la respuesta no depende de qué líneas estén cargadas. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
+Los otros 36 tramos tienen otro camino para todos sus trenes. Los diecisiete que no lo tienen son los tres al sur de Córdoba, donde Oniel solo tiene cargada una línea; los dos del ramal de Jaén, que acaba en una estación término (ahí la respuesta no depende de qué líneas estén cargadas); los cinco con trenes de la línea de Linares-Baeza a Granada, que mientras no se cargue la alta velocidad de Antequera es una rama unida al resto por un solo extremo, y los siete de la línea de Alcázar de San Juan a Albacete, que está en el mismo caso hasta que se cargue la alta velocidad a Albacete por Cuenca. El tramo entre la estación de Moreda y la Bifurcación Almería no lleva ningún tren de los horarios. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
 
 **La API y la instantánea.** `GET /api/alternatives` (con `?date=` para otro día) devuelve un elemento por tramo: trenes, reparto por operador, cuántos tienen otro camino y cuántos no, y los grupos, del más numeroso al menos, cada uno con sus extremos, lo que mide y tarda su recorrido y, si existe, el otro camino (kilómetros, minutos, diferencia con el recorrido, vía única, líneas y estaciones principales). La instantánea lo lleva en `alternatives.json`, que el visor no pide al arrancar (`docs/datos.md`, «Instantánea estática»). Si la API no tiene la ruta o falla, el visor lee ese fichero: Vercel publica el visor unos minutos antes de que Render despliegue la API, y en ese rato una ruta nueva da 404. El cliente no repite el cálculo: necesitaría los tramos de todos los trenes del día.
 
