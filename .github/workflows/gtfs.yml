@@ -22,8 +22,8 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
-  # Para lanzar el CI sobre la rama de la PR: GitHub no ejecuta los flujos de `pull_request` en una
-  # PR abierta con el token de otro flujo.
+  # Para lanzar el CI sobre la rama de la PR: GitHub retiene los flujos de `pull_request` de una PR
+  # abierta con el token de otro flujo hasta que alguien los aprueba.
   actions: write
 
 concurrency:

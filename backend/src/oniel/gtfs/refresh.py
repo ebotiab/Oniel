@@ -433,10 +433,12 @@ def pr_body(result: dict[str, Any], import_report: dict[str, Any], snapshot_dir:
         " 2026 y Ouigo del 12 de noviembre de 2026). Las de Playwright sí leen la instantánea, y"
         " por eso se pasan antes de abrir la PR.",
         "",
-        "El CI de esta rama lo lanza el propio flujo: GitHub no ejecuta los flujos de"
-        " `pull_request` en una PR que abre otro flujo. Sus resultados aparecen abajo como en"
-        " cualquier PR; si se sube otro commit a la rama, hay que lanzar «CI» a mano desde la"
-        " pestaña Actions.",
+        "GitHub retiene el CI de una PR que abre otro flujo: para que `Backend` y `Frontend`"
+        " aparezcan abajo hay que pulsar «Approve workflows to run». El flujo lanza además el CI"
+        " sobre esta rama; ese resultado está en la pestaña Actions y en la marca del commit.",
+        "",
+        "Si la PR entra en conflicto con `main` porque otra PR regeneró la instantánea, lo más"
+        " sencillo es cerrarla sin fusionar, borrar su rama y lanzar «Refresco del GTFS» a mano.",
         "",
         "Fusionar esta PR publica los horarios nuevos. El flujo no fusiona nada.",
     ]
