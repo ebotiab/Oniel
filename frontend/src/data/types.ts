@@ -252,12 +252,31 @@ export interface NodeCall {
   destination_name: string | null
   arrival: string | null
   departure: string | null
+  /** Si aquí se puede subir al tren y bajar de él: algunos solo dejan o solo recogen viajeros. */
+  boards?: boolean
+  alights?: boolean
+}
+
+/** Una estación a la que se llega sin cambiar de tren desde un nodo, el día de la consulta. */
+export interface Destination {
+  /** Nodo de la red cargada, si el destino está en ella. */
+  node_id: string | null
+  stop_id: string
+  name: string
+  trains: number
+  /** Tipos de servicio, del que más trenes tiene al que menos. */
+  products: string[]
+  operators: { operator_id: string; trains: number }[]
+  first_departure: string
+  last_departure: string
 }
 
 export interface NodeServicesOut {
   node: NodeOut
   date: string
   calls: NodeCall[]
+  /** Falta si responde una API anterior a los destinos directos. */
+  destinations?: Destination[]
 }
 
 export interface ClosureRequest {

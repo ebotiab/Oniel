@@ -336,6 +336,7 @@ export default function App() {
         referenceDate={referenceDate}
         interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
+        onSelectNode={(id) => select({ type: 'nodo', id })}
         onGoLine={showLine}
         onCompare={() => compare({ from: node.id, to: null })}
         onBack={backToLine}

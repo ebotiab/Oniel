@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { ApiError, fetchNodeServices } from '../data/api'
 import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, productLabel, shortStop } from '../app/state'
+import { DirectDestinations } from './DirectDestinations'
 import { InterruptionNotice } from './InterruptionNotice'
 import { TERMINO_DE_NODO } from './glosario'
 import { PieFuente, Plegable } from './Plegable'
@@ -19,6 +20,8 @@ interface Props {
   /** Interrupciones vigentes hoy, por id de tramo. */
   interrupted: Map<string, InterruptionOut[]>
   onSelectSegment: (id: string) => void
+  /** Abre la ficha de otra estación de la red: un destino directo. */
+  onSelectNode: (id: string) => void
   /** Salta a una de las líneas que pasan por el nodo. */
   onGoLine: (lineId: string) => void
   /** Abre el comparador de recorridos con este nodo como salida. */
@@ -26,7 +29,7 @@ interface Props {
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, operators, referenceDate, interrupted, onSelectSegment, onGoLine, onCompare, onBack }: Props) {
+export function NodeDetail({ node, network, sources, operators, referenceDate, interrupted, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -54,6 +57,12 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, i
 
   // El operador de cada tren solo se nombra si aquí paran los de más de uno.
   const severalOperators = new Set(calls?.calls.map((c) => c.operator_id)).size > 1
+  // Operadores de sus líneas que no publican sus horarios: sus trenes faltan en los destinos.
+  const lineOperators = new Set(memberships.flatMap((m) => m.line?.operator_ids ?? []))
+  const missing = operators.filter((o) => o.timetable === 'no_publicado' && lineOperators.has(o.id))
+  // Fuentes de los horarios de los trenes que paran aquí, para citarlas al pie del detalle.
+  const callOperators = new Set(calls?.calls.map((c) => c.operator_id))
+  const timetables = operators.filter((o) => callOperators.has(o.id)).map((o) => sources.find((s) => s.id === o.source_id))
   const operatorName = (id: string | undefined) => operators.find((o) => o.id === id)?.name ?? id ?? ''
 
   return (
@@ -117,6 +126,15 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, i
           {node.adif_code ? ' El código es el número con el que Adif identifica esta dependencia.' : ''}
         </p>
         <PieFuente de="del trazado" sources={memberships.map((m) => sources.find((s) => s.id === m.line?.source_id))} />
+        {station && (
+          <>
+            <p className="suave">
+              Un destino directo es una estación en la que para, después de esta, un tren al que se puede subir aquí. No cuentan las paradas en las
+              que el tren solo recoge viajeros. Solo están los trenes que recorren alguna de las líneas cargadas en Oniel.
+            </p>
+            <PieFuente de="de los horarios" sources={timetables} />
+          </>
+        )}
       </Plegable>
 
       {node.details.contexto_2026 && (
@@ -141,6 +159,18 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, i
       {cuts.map((i) => (
         <InterruptionNotice key={i.id} interruption={i} />
       ))}
+
+      {station && calls?.destinations && (
+        <DirectDestinations
+          destinations={calls.destinations}
+          date={calls.date}
+          network={network}
+          operators={operators}
+          missing={missing}
+          interrupted={interrupted.size > 0}
+          onSelectNode={onSelectNode}
+        />
+      )}
 
       <h3 className="subtitulo">Tramos que salen de aquí</h3>
       <ul className="lista-simple">
