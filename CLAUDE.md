@@ -19,14 +19,24 @@ Interfaz, documentación, comentarios del código, nombres y mensajes de las pru
 - [docs/simulacion.md](docs/simulacion.md): método de la simulación, recorrido alternativo, caso comprobado a mano y límites conocidos.
 - [docs/despliegue.md](docs/despliegue.md): Vercel (visor), Render (API y PostgreSQL), Logfire y base de datos local.
 - [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): el orden de las tareas pendientes y los principios de arquitectura; el brief de cada tarea está en su incidencia de GitHub (`gh issue view <número>`). Cada sesión nueva coge la siguiente cuyas dependencias estén cerradas.
-- `.github/workflows/ci.yml`: lo que comprueba el CI en cada PR y en `main`. `.github/workflows/recordatorio-interrupciones.yml`: comprueba cada día si toca revisar las interrupciones y abre una incidencia. `.github/workflows/gtfs.yml`: descarga cada lunes el GTFS de Renfe y, si el horario cambió, abre una PR con el fichero nuevo y la instantánea (`docs/datos.md`, «Refresco de los horarios»); no fusiona nada. `.vscode/`: intérprete `backend/.venv`, Ruff como formateador y pytest desde `backend/`.
+- `.github/workflows/ci.yml`: lo que comprueba el CI en cada PR y en `main`; `.github/scripts/que-cambia.sh` decide qué mitad se salta según las rutas que cambia la PR. `.github/workflows/recordatorio-interrupciones.yml`: comprueba cada día si toca revisar las interrupciones y abre una incidencia. `.github/workflows/gtfs.yml`: descarga cada lunes el GTFS de Renfe y, si el horario cambió, abre una PR con el fichero nuevo y la instantánea (`docs/datos.md`, «Refresco de los horarios»); no fusiona nada. `.vscode/`: intérprete `backend/.venv`, Ruff como formateador y pytest desde `backend/`.
 
 ## Arrancar y comprobar
 
-Los comandos están en el README y no se repiten aquí: «Arrancar desde cero» (Docker para PostgreSQL, uv y Node 20), «Pruebas» y «Comprobaciones». Antes de abrir una PR tiene que estar todo en verde, que es exactamente lo que ejecuta el CI:
+Los comandos están en el README y no se repiten aquí: «Arrancar desde cero» (Docker para PostgreSQL, uv y Node 20), «Pruebas» y «Comprobaciones». Para fusionar una PR tiene que estar todo esto en verde, y quien lo pasa entero es el CI:
 
 - Backend: `ruff format --check`, `ruff check`, `mypy` (estricto), `pyright` (modo `standard`, el mismo que Pylance), `pytest` con `ONIEL_TEST_DATABASE_URL` apuntando a una base `oniel_test`, y `oniel-data validate`.
-- Frontend: `npm run typecheck`, `npm run lint`, `npm run build` (que al final comprueba las hojas de estilo compiladas) y Playwright con `ONIEL_E2E_STATIC=1` (la instantánea estática, sin servidor). Con la API local arrancada, `npx playwright test` sin esa variable prueba también la simulación; hay que pasarlo cuando se toca la simulación o la API.
+- Frontend: `npm run typecheck`, `npm run lint`, `npm run build` (que al final comprueba las hojas de estilo compiladas) y Playwright con `ONIEL_E2E_STATIC=1` (la instantánea estática, sin servidor), que en el CI va repartida en cuatro fragmentos a la vez.
+
+En local, antes de abrir la PR, la sesión pasa lo rápido y lo que ha tocado, no todo otra vez:
+
+- Las comprobaciones rápidas de la mitad tocada, siempre: formato, lint y tipos en el backend; tipos, lint y compilación en el visor. Son segundos.
+- Las pruebas de lo tocado. En el backend, `pytest` (un minuto) y `oniel-data validate` si cambian datos. En el visor, los ficheros de Playwright del comportamiento tocado y los nuevos, con `ONIEL_E2E_STATIC=1` (por ejemplo `npx playwright test e2e/fichas.spec.ts`). La batería completa de Playwright se deja al CI, que la pasa en menos tiempo que una sesión en local.
+- Lo que el CI no cubre: con la API local arrancada, `npx playwright test` sin esa variable prueba también la simulación. Hay que pasarlo cuando se toca la simulación o la API.
+
+Tras fusionar `main` en la rama no se repite en local lo que el CI va a volver a pasar: se resuelven los conflictos, se pasan las comprobaciones rápidas, se regenera la instantánea si toca y se sube.
+
+El CI mira qué rutas cambia cada PR y salta la mitad a la que el cambio no puede afectar: una PR de solo documentación no lanza pruebas, una que solo toca el visor no lanza el backend, y una que solo toca código del backend no lanza Playwright. `Backend` y `Frontend` quedan en verde igualmente. Las reglas están en `.github/scripts/que-cambia.sh`; quien añada una prueba que lea un fichero de la otra mitad o de `docs/` tiene que añadirlo allí. En `main` corre siempre todo.
 
 El editor no debe mostrar avisos que esas órdenes no den: `.vscode/settings.json` fija el intérprete y Ruff, y `backend/pyproject.toml` deja pyright al mismo nivel que Pylance. El frontend no tiene formateador configurado: no se reformatean ficheros enteros.
 
@@ -42,7 +52,7 @@ Para previsualizar el visor desde una sesión, `.claude/launch.json` arranca Vit
 
 **Diseño.** Las decisiones están en `docs/diseno.md` y se siguen: el color solo como señal, una sola familia tipográfica (Archivo), textos cortos y en párrafos, alineación a la izquierda, movimiento solo como respuesta a una acción. Un cambio de diseño es una decisión del usuario, no un efecto secundario de una tarea; si una tarea lo necesita, se propone y, una vez decidido, se anota allí.
 
-**Datos.** Cuando cambian las especificaciones, el GTFS, las fuentes o el exportador, se regenera la instantánea de `frontend/public/data` (`uv run oniel-data import all` la exporta al final; `export snapshot` solo exporta) y se sube en la misma PR, con las tablas de `docs/datos.md` al día. Los recuentos que comprueban las pruebas (viajes por línea, pasos por tramo) se actualizan a la vez y se explican en la PR. Una línea nueva sigue «Añadir otra línea» de `docs/datos.md` paso a paso.
+**Datos.** Cuando cambian las especificaciones, el GTFS, las fuentes o el exportador, se regenera la instantánea de `frontend/public/data` (`uv run oniel-data import all` la exporta al final; `export snapshot` solo exporta) y se sube en la misma PR, con las tablas de `docs/datos.md` al día. Los recuentos que comprueban las pruebas (viajes por línea, pasos por tramo) se actualizan a la vez y se explican en la PR. Una línea nueva sigue «Añadir otra línea» de `docs/datos.md` paso a paso. Las PR que regeneran la instantánea se pisan entre sí: cuando una se fusiona, las demás tienen que fusionar `main`, regenerarla y esperar otra vuelta de CI. Conviene no tener abiertas a la vez más de una o dos sesiones que cambien datos; las que solo tocan el visor, el código del backend o la documentación pueden ir en paralelo sin ese coste.
 
 **Pruebas.** Cada regla nueva de simulación o de datos lleva su prueba en `backend/tests/`; cada comportamiento visible nuevo, una prueba Playwright en `frontend/e2e/` que funcione también en modo estático cuando no necesite la API (y `test.skip(estatico, …)` cuando sí la necesite).
 

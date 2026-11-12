@@ -71,7 +71,7 @@ Lo que apareció al hacer otras tareas y cabe en una PR pequeña está en [#31](
 
 Activado el 12 de noviembre de 2026 con la protección clásica de rama, por `gh api`. El repositorio es público, así que está disponible en el plan gratuito. Lo que exige:
 
-- **Comprobaciones obligatorias** `Backend` y `Frontend`, los `name:` de los trabajos de `.github/workflows/ci.yml` (con `app_id` 15368, el de GitHub Actions). Si se renombra un trabajo hay que cambiarlo también en la regla, o ninguna PR podrá fusionarse.
+- **Comprobaciones obligatorias** `Backend` y `Frontend`, los `name:` de los dos trabajos finales de `.github/workflows/ci.yml` (con `app_id` 15368, el de GitHub Actions). Desde #96 esos dos trabajos no prueban nada: resumen a los que sí prueban (el backend, la compilación del visor y los cuatro fragmentos de Playwright) y fallan si alguno falla, de modo que repartir el trabajo de otra forma no obliga a tocar la regla. Si se renombra uno de los dos hay que cambiarlo también en la regla, o ninguna PR podrá fusionarse.
 - **Pull request obligatoria**, sin aprobaciones (`required_approving_review_count: 0`): no se puede hacer push directo a `main`.
 - **Se aplica también a los administradores** (`enforce_admins: true`). Es lo que hace que la regla valga para las sesiones, que actúan con el usuario del propietario: sin esto, `gh pr merge` fusionaría igual con el CI en rojo.
 - **Sin exigir la rama al día** (`strict: false`): una PR con el CI en verde se fusiona aunque `main` haya avanzado desde que se abrió. Con varias sesiones en paralelo, `true` añadiría una vuelta de CI por PR.

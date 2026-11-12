@@ -1,7 +1,16 @@
 # Comprobaciones de Oniel en cada pull request y en cada push a main.
 #
 # Son los mismos comandos que documenta el README en «Pruebas» y «Comprobaciones»: si cambian allí,
-# cambian aquí. Los dos trabajos corren en paralelo y el conjunto debe quedar por debajo de diez minutos.
+# cambian aquí. El conjunto debe quedar por debajo de tres minutos.
+#
+# La protección de `main` exige dos comprobaciones, `Backend` y `Frontend`. Son los dos trabajos
+# finales de este fichero, que no prueban nada: miran el resultado de los trabajos que sí prueban
+# y fallan si alguno falla. Así los nombres obligatorios no dependen de cómo se reparta el trabajo
+# (la batería de Playwright va en fragmentos) y un trabajo saltado no deja la PR esperando.
+#
+# En una pull request, `Qué cambia` mira las rutas tocadas y salta la mitad a la que el cambio no
+# puede afectar (.github/scripts/que-cambia.sh dice cuál y por qué). En un push a `main` y en una
+# ejecución a mano corre siempre todo.
 name: CI
 
 on:
@@ -21,8 +30,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  backend:
-    name: Backend
+  cambios:
+    name: Qué cambia
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      backend: ${{ steps.rutas.outputs.backend }}
+      frontend: ${{ steps.rutas.outputs.frontend }}
+    steps:
+      # Dos commits: en una pull request, HEAD es la fusión de la rama con su base, y la diferencia
+      # con su primer padre es exactamente lo que la PR cambia.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Rutas que cambia la pull request
+        id: rutas
+        shell: bash
+        env:
+          EVENTO: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENTO" != "pull_request" ] || ! git rev-parse --verify --quiet HEAD^2 >/dev/null; then
+            printf 'backend=true\nfrontend=true\n' | tee -a "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git diff --name-only --no-renames HEAD^1 HEAD > "$RUNNER_TEMP/rutas.txt"
+          cat "$RUNNER_TEMP/rutas.txt"
+          .github/scripts/que-cambia.sh < "$RUNNER_TEMP/rutas.txt" | tee -a "$GITHUB_OUTPUT"
+
+  backend-pruebas:
+    name: Backend · formato, tipos y pruebas
+    needs: cambios
+    if: needs.cambios.outputs.backend == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -80,8 +120,10 @@ jobs:
       - name: Validar la red y la resolución de horarios (oniel-data validate)
         run: uv run oniel-data validate
 
-  frontend:
-    name: Frontend
+  frontend-compilar:
+    name: Frontend · tipos, lint y compilación
+    needs: cambios
+    if: needs.cambios.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -110,6 +152,36 @@ jobs:
       - name: Compilar el visor (vite build) y comprobar sus hojas de estilo
         run: npm run build
 
+  # La batería completa de Playwright, repartida en fragmentos que corren a la vez: entre todos
+  # pasan las mismas pruebas que `npx playwright test`, cada una en un solo fragmento. Si se cambia
+  # el número de fragmentos hay que cambiarlo en la matriz y en `--shard`.
+  frontend-e2e:
+    name: Frontend · Playwright ${{ matrix.fragmento }}/4
+    needs: cambios
+    if: needs.cambios.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      # Un fragmento que falla no cancela los demás: interesa ver todo lo que falla de una vez.
+      fail-fast: false
+      matrix:
+        fragmento: [1, 2, 3, 4]
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Node 20 (con caché de npm)
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Dependencias (npm ci)
+        run: npm ci
+
       - name: Versión de Playwright instalada
         id: playwright
         run: echo "version=$(node -p "require('./node_modules/@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
@@ -127,8 +199,8 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install chromium
 
-      - name: Pruebas Playwright sobre la instantánea estática (sin servidor)
-        run: npx playwright test
+      - name: Pruebas Playwright sobre la instantánea estática (sin servidor), fragmento ${{ matrix.fragmento }} de 4
+        run: npx playwright test --shard=${{ matrix.fragmento }}/4
         env:
           ONIEL_E2E_STATIC: "1"
 
@@ -136,7 +208,52 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-test-results
+          name: playwright-test-results-${{ matrix.fragmento }}
           path: frontend/test-results
           retention-days: 7
           if-no-files-found: ignore
+
+  # Las dos comprobaciones obligatorias de `main`. Corren siempre (`always()`), también cuando lo
+  # anterior falla o se salta: sin eso GitHub las daría por saltadas, y una comprobación saltada
+  # cuenta como pasada. Cada trabajo del que dependen tiene que haber terminado bien, o haberse
+  # saltado porque `Qué cambia` dijo que la PR no toca esa mitad; cualquier otra cosa es un fallo.
+  backend:
+    name: Backend
+    needs: [cambios, backend-pruebas]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Resultado de las comprobaciones del backend
+        shell: bash
+        env:
+          CAMBIOS: ${{ needs.cambios.result }}
+          APLICA: ${{ needs.cambios.outputs.backend }}
+          RESULTADOS: ${{ needs.backend-pruebas.result }}
+        run: &resultado |
+          echo "Qué cambia: $CAMBIOS · aplica: ${APLICA:-sin dato} · resultados: $RESULTADOS"
+          [ "$CAMBIOS" = "success" ] || { echo "::error::No se pudo saber qué cambia la PR."; exit 1; }
+          case "$APLICA" in
+            true) esperado=success ;;
+            false) esperado=skipped ;;
+            *) echo "::error::«Qué cambia» no dijo si esta mitad aplica."; exit 1 ;;
+          esac
+          for resultado in $RESULTADOS; do
+            [ "$resultado" = "$esperado" ] || { echo "::error::Se esperaba $esperado y hay un trabajo con $resultado."; exit 1; }
+          done
+          [ "$esperado" = "success" ] && echo "Todo pasado." || echo "La PR no toca esta mitad: nada que comprobar."
+
+  frontend:
+    name: Frontend
+    needs: [cambios, frontend-compilar, frontend-e2e]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Resultado de las comprobaciones del visor
+        shell: bash
+        env:
+          CAMBIOS: ${{ needs.cambios.result }}
+          APLICA: ${{ needs.cambios.outputs.frontend }}
+          RESULTADOS: ${{ needs.frontend-compilar.result }} ${{ needs.frontend-e2e.result }}
+        run: *resultado
