@@ -290,7 +290,7 @@ export default function App() {
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
   else if (showCoverage && coverage)
-    panel = <CoveragePanel coverage={coverage} annotations={annotations} status={status} onClose={() => setShowCoverage(false)} />
+    panel = <CoveragePanel coverage={coverage} network={network} referenceDate={referenceDate} annotations={annotations} status={status} onSelectSegment={(id) => select({ type: 'tramo', id })} onClose={() => setShowCoverage(false)} />
   else if (comparador)
     panel = (
       <ComparePanel

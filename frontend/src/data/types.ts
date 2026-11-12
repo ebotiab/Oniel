@@ -427,3 +427,52 @@ export interface ClosureResult {
   method: string
   caveats: string[]
 }
+
+/** El camino más corto que queda entre dos nodos con un tramo cerrado, y lo que añade. */
+export interface AlternativeRoute {
+  length_km: number
+  time_min: number | null
+  /** Diferencia con el recorrido del tren; negativa si el otro camino es más corto. */
+  extra_km: number
+  extra_min: number | null
+  single_track_km: number
+  line_ids: string[]
+  via: string[]
+}
+
+/** Trenes de un tramo que siguen el mismo recorrido por las líneas cargadas. */
+export interface SegmentTrainGroup {
+  from_node_id: string
+  from_name: string
+  to_node_id: string
+  to_name: string
+  trains: number
+  by_operator: Record<string, number>
+  length_km: number
+  time_min: number | null
+  line_ids: string[]
+  /** Nulo si con el tramo cerrado no queda ningún camino en las líneas cargadas. */
+  alternative: AlternativeRoute | null
+}
+
+/** Los trenes de un tramo un día y cuántos tienen otro camino si el tramo se corta. */
+export interface SegmentAlternatives {
+  segment_id: string
+  trains: number
+  by_operator: Record<string, number>
+  with_alternative: number
+  without_alternative: number
+  /** Del grupo con más trenes al que menos. */
+  groups: SegmentTrainGroup[]
+}
+
+/** Trenes por tramo y alternativa en las líneas cargadas, para toda la red. */
+export interface AlternativesOut {
+  date: string | null
+  line_ids: string[]
+  /** Operadores que circulan por esas líneas y cuyos trenes no están contados. */
+  missing_operator_ids: string[]
+  scope_note: string
+  method: string
+  segments: SegmentAlternatives[]
+}

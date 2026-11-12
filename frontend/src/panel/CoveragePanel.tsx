@@ -1,21 +1,112 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
-import type { AnnotationOut, CoverageOut } from '../data/types'
-import type { ApiStatus } from '../data/api'
-import { formatDate, formatKm } from '../app/state'
+import type { AlternativesOut, AnnotationOut, CoverageOut, NetworkOut, SegmentAlternatives } from '../data/types'
+import { fetchAlternatives, type ApiStatus } from '../data/api'
+import { conAlternativa, costeCorto, grupoPrincipal, sinAlternativa, trenes } from '../app/alternativas'
+import { formatDate, formatKm, lineLabel, lineKind, listaEs } from '../app/state'
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { AnnotationNotice } from './AnnotationNotice'
+import { Plegable } from './Plegable'
 import { Termino } from './Termino'
 
 interface Props {
   coverage: CoverageOut
+  network: NetworkOut
+  /** Día de los trenes que se cuentan por tramo. */
+  referenceDate: string | null
+  onSelectSegment: (id: string) => void
   /** Anotaciones de red vigentes hoy; cada tipo tiene su apartado. */
   annotations: AnnotationOut[]
   status: ApiStatus
   onClose: () => void
 }
 
-export function CoveragePanel({ coverage, annotations, status, onClose }: Props) {
+/**
+ * Tramos cuyos trenes no tendrían otro camino en las líneas cargadas si el tramo se cortara, del
+ * que más trenes lleva al que menos; los demás, plegados, con lo que añade su otro camino.
+ */
+function TramosSinAlternativa({ coverage, network, referenceDate, onSelectSegment }: Pick<Props, 'coverage' | 'network' | 'referenceDate' | 'onSelectSegment'>) {
+  const [datos, setDatos] = useState<AlternativesOut | null>(null)
+  const [fallo, setFallo] = useState(false)
+  useEffect(() => {
+    let vivo = true
+    fetchAlternatives(referenceDate ?? undefined)
+      .then((d) => vivo && setDatos(d))
+      .catch(() => vivo && setFallo(true))
+    return () => {
+      vivo = false
+    }
+  }, [referenceDate])
+
+  const fila = (s: SegmentAlternatives, derecha: string, debajo: string) => {
+    const segment = network.segments.find((x) => x.id === s.segment_id)
+    if (!segment) return null
+    return (
+      <li key={s.segment_id}>
+        <span className="destino">
+          <button type="button" className="enlace" onClick={() => onSelectSegment(s.segment_id)} data-testid={`tramo-${s.segment_id}`}>
+            {segment.from_name} – {segment.to_name}
+          </button>
+          <span className="suave">{debajo}</span>
+        </span>
+        <span className="cuantos datos">{derecha}</span>
+      </li>
+    )
+  }
+  const linea = (s: SegmentAlternatives) => {
+    const line = network.lines.find((l) => l.id === network.segments.find((x) => x.id === s.segment_id)?.line_id)
+    return line ? `${lineKind(line) === 'alta velocidad' ? 'Alta velocidad' : 'Línea convencional'} ${lineLabel(line)}` : ''
+  }
+  const sin = datos ? sinAlternativa(datos.segments) : []
+  const con = datos ? conAlternativa(datos.segments) : []
+  const faltan = datos ? coverage.operators.filter((o) => datos.missing_operator_ids.includes(o.id)).map((o) => o.name) : []
+
+  return (
+    <>
+      <h3 className="subtitulo">Tramos con más trenes y sin alternativa</h3>
+      {fallo && <p className="texto suave">No se ha podido cargar este apartado.</p>}
+      {!datos && !fallo && <p className="texto suave">Cargando…</p>}
+      {datos && (
+        <div data-testid="tramos-sin-alternativa">
+          <p className="texto suave" data-testid="alternativa-alcance">
+            {sin.length > 0
+              ? 'Si uno de estos tramos se cortara, sus trenes no tendrían otro camino en las líneas que Oniel tiene cargadas.'
+              : 'Si se cortara un tramo cualquiera, sus trenes tendrían otro camino en las líneas que Oniel tiene cargadas.'}{' '}
+            No quiere decir que {sin.length > 0 ? 'no exista' : 'sea el único'} en la red real.
+            {faltan.length > 0 && ` Faltan los trenes de ${listaEs(faltan)}, que no publica${faltan.length > 1 ? 'n' : ''} sus horarios en un formato abierto.`}
+          </p>
+          {sin.length > 0 && (
+            <ol className="lista-destinos" data-testid="lista-sin-alternativa">
+              {sin.map((s) => fila(s, s.without_alternative === s.trains ? trenes(s.trains) : `${s.without_alternative} de ${trenes(s.trains)}`, linea(s)))}
+            </ol>
+          )}
+          {con.length > 0 && (
+            <Plegable
+              rotulo={sin.length > 0 ? `${con.length === 1 ? 'El otro tramo tiene' : `Los otros ${con.length} tramos tienen`} otro camino` : `Los ${con.length} tramos y lo que añade su otro camino`}
+              memoria="tramos-con-alternativa"
+              testId="tramos-con-alternativa"
+            >
+              <p className="suave">
+                Del que más trenes lleva al que menos. Lo que añade el otro camino es lo de los trenes más numerosos de cada tramo: kilómetros por cada línea y
+                tiempo a la velocidad habitual, sin paradas. Oniel solo comprueba que el camino existe y cuánto mide: no mira si el tren cabe por él (ancho
+                de vía, paradas, sitio en la vía).
+              </p>
+              <ol className="lista-destinos" data-testid="lista-con-alternativa">
+                {con.map((s) => {
+                  const principal = grupoPrincipal(s)
+                  return fila(s, trenes(s.trains), principal?.alternative ? costeCorto(principal.alternative) : '')
+                })}
+              </ol>
+            </Plegable>
+          )}
+          {datos.date && <p className="suave destinos-nota">Trenes del {formatDate(datos.date)}, un tramo cortado cada vez y sin contar las interrupciones vigentes.</p>}
+        </div>
+      )}
+    </>
+  )
+}
+
+export function CoveragePanel({ coverage, network, referenceDate, annotations, status, onSelectSegment, onClose }: Props) {
   return (
     <section className="detalle cobertura" aria-labelledby="cob-titulo" data-testid="panel-cobertura">
       <button type="button" className="enlace volver" onClick={onClose}>
@@ -106,6 +197,7 @@ export function CoveragePanel({ coverage, annotations, status, onClose }: Props)
           </Fragment>
         )
       })}
+      <TramosSinAlternativa coverage={coverage} network={network} referenceDate={referenceDate} onSelectSegment={onSelectSegment} />
       <h3 className="subtitulo">Pendiente de cargar</h3>
       <p className="texto suave">
         El resto de la red ferroviaria española, los trenes de Cercanías y de mercancías y otros medios de transporte. El modelo
