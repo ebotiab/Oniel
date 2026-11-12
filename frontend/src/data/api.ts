@@ -8,6 +8,7 @@
 // guarda en memoria para no pedirlo dos veces.
 
 import type {
+  AlternativesOut,
   ClosureRequest,
   ClosureResult,
   CoverageOut,
@@ -159,6 +160,24 @@ export async function fetchNodeServices(nodeId: string, date?: string): Promise<
     return getJson(`${API_BASE}/api/nodes/${encodeURIComponent(nodeId)}/services${q}`)
   }
   return getJson(`/data/nodes/${encodeURIComponent(nodeId)}.json`)
+}
+
+const alternativesCache = new Map<string, Promise<AlternativesOut>>()
+
+/**
+ * Trenes por tramo y si las líneas cargadas les ofrecen otro camino. No se pide al arrancar: solo
+ * al abrir la ficha de un tramo o el panel de cobertura, y una vez por origen y día.
+ */
+export function fetchAlternatives(date?: string): Promise<AlternativesOut> {
+  const api = currentMode() === 'api'
+  const key = api ? `api:${date ?? ''}` : 'estatico'
+  let pending = alternativesCache.get(key)
+  if (!pending) {
+    pending = getJson<AlternativesOut>(api ? `${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}` : '/data/alternatives.json')
+    alternativesCache.set(key, pending)
+    pending.catch(() => alternativesCache.delete(key))
+  }
+  return pending
 }
 
 export async function simulateClosure(req: ClosureRequest): Promise<ClosureResult> {

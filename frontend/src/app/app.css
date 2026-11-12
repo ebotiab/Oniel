@@ -1345,6 +1345,18 @@
   margin-top: 8px;
 }
 
+/* Grupos de trenes de un tramo y su otro camino: una lista corta dentro de «Más detalle» */
+.lista-grupos {
+  margin: 6px 0 0;
+  padding-left: 16px;
+}
+
+.lista-grupos li {
+  margin-top: 6px;
+  line-height: 1.45;
+  max-width: 58ch;
+}
+
 /* Glosario. Un término técnico dentro de una ficha: el texto de siempre con un subrayado de puntos en tinta
    (sin color: no es un estado), y un botón, para que se abra al tacto y con el teclado. */
 .termino {

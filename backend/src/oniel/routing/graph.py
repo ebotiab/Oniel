@@ -5,6 +5,7 @@ los tramos. Sobre el grafo se aplica un escenario (``oniel.routing.scenario``) y
 
 * ``find_routes``: los recorridos distintos entre dos nodos, del más corto al más largo.
 * ``closure_detours``: los rodeos que salvan un tramo cerrado saliendo de su línea.
+* ``route_along``: lo que cuesta un camino ya conocido, tramo a tramo.
 
 Cada recorrido lleva kilómetros, tiempo estimado, kilómetros de vía única, líneas usadas y
 estaciones principales intermedias. El método está en ``docs/simulacion.md``, «Grafo y
@@ -358,6 +359,29 @@ def _route(graph: Graph, start: str, steps: list[_Step]) -> Route:
         node_ids=[start, *(n for _, n in steps)],
         segment_ids=[e.id for e in all_edges],
     )
+
+
+def route_along(graph: Graph, start: str, segment_ids: Iterable[str]) -> Route:
+    """El recorrido que sale de ``start`` y sigue esos tramos en ese orden, con lo que cuesta.
+
+    Sirve para medir un camino ya conocido (el de un tren, por ejemplo) con la misma vara que
+    los que encuentra ``find_routes``.
+    """
+    if start not in graph.nodes:
+        raise ScenarioError(f"No hay ningún nodo con id {start}")
+    steps: list[_Step] = []
+    at = start
+    for segment_id in segment_ids:
+        edge = graph.edge(segment_id)
+        if edge is None:
+            raise ScenarioError(f"No hay ningún tramo con id {segment_id}")
+        if at not in (edge.a, edge.b):
+            raise ScenarioError(f"El tramo {segment_id} no sale de {at}")
+        at = edge.other(at)
+        steps.append((edge, at))
+    if not steps:
+        raise ScenarioError("Un recorrido necesita al menos un tramo")
+    return _route(graph, start, steps)
 
 
 def _sorted(found: list[tuple[str, list[_Step]]]) -> list[tuple[str, list[_Step]]]:

@@ -10,6 +10,7 @@ from typing import Any
 
 import asyncpg
 
+from oniel.analysis.criticality import ServicePath
 from oniel.domain.schemas import DestinationOperatorOut, DestinationOut, ServiceOut, StopOut
 from oniel.repo.datasets_repo import active_ids_sql
 from oniel.sim.passes import SegmentPass
@@ -124,6 +125,25 @@ async def daily_counts_by_operator(
     for r in rows:
         out.setdefault(r["segment_id"], {})[r["operator_id"]] = r["n"]
     return out
+
+
+async def service_paths(conn: asyncpg.Connection, date: dt.date) -> list[ServicePath]:
+    """Los trenes de un día con los tramos que recorre cada uno; de los conjuntos activos ese día.
+
+    Cuenta los mismos pasos que :func:`daily_counts`: un tren por cada tramo que recorre.
+    """
+    rows = await conn.fetch(
+        f"""
+        SELECT p.service_id, s.operator_id, array_agg(p.segment_id ORDER BY p.segment_id) AS ids
+        FROM service_segment_passes p
+        JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
+        JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
+        WHERE d.service_date = $1 AND p.dataset_id IN {active_ids_sql("$1")}
+        GROUP BY p.dataset_id, p.service_id, s.operator_id ORDER BY p.service_id
+        """,
+        date,
+    )
+    return [ServicePath(r["service_id"], r["operator_id"], frozenset(r["ids"])) for r in rows]
 
 
 async def fetch_service(
