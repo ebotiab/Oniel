@@ -8,19 +8,38 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from conftest import CONV_SPEC, DATA_DIR, MZCR_SPEC, SOURCES, SPEC, SPECS
+from conftest import CONV_SPEC, DATA_DIR, JAEN_SPEC, MZCR_SPEC, SOURCES, SPEC, SPECS
 from pydantic import ValidationError
 
-from oniel.domain.attributes import AttributeValue
+from oniel.domain.attributes import (
+    ATTRIBUTE_RULES,
+    BLOQUEO,
+    MANDO,
+    PROTECCION_TREN,
+    SIN_DATO_PUBLICADO,
+    AttributeValue,
+)
 from oniel.network.build import BuiltNetwork, build_network, distribute_attributes
 from oniel.network.spec import AttributeSection, NetworkSpec, load_network_spec
 from oniel.validate import validate_attributes
 
+SIGNALLING = (PROTECCION_TREN, BLOQUEO, MANDO)
+DR = "adif-declaracion-red-2026-mapas"
+
 
 def _with(spec: NetworkSpec, sections: list[AttributeSection], **line: Any) -> NetworkSpec:
-    """La misma línea con otras secciones de atributo y, si se dan, otros campos de línea."""
+    """La misma línea con otras secciones de atributo y, si se dan, otros campos de línea.
+
+    La señalización de la línea se conserva: es obligatoria y estas pruebas no tratan de ella.
+    """
+    declared = {s.attribute for s in sections}
+    kept = [
+        s
+        for s in spec.attribute_sections
+        if s.attribute in SIGNALLING and s.attribute not in declared
+    ]
     return spec.model_copy(
-        update={"attribute_sections": sections, "line": spec.line.model_copy(update=line)}
+        update={"attribute_sections": [*sections, *kept], "line": spec.line.model_copy(update=line)}
     )
 
 
@@ -68,10 +87,10 @@ def test_a_section_reads_the_same_in_either_direction(
     spec: NetworkSpec, built: BuiltNetwork
 ) -> None:
     forwards = distribute_attributes(
-        _with(spec, [_section("bloqueo", "ciudad-real", "cordoba", "bca")]), built.nodes
+        _with(spec, [_section("catenaria", "ciudad-real", "cordoba", "bca")]), built.nodes
     )
     backwards = distribute_attributes(
-        _with(spec, [_section("bloqueo", "cordoba", "ciudad-real", "bca")]), built.nodes
+        _with(spec, [_section("catenaria", "cordoba", "ciudad-real", "bca")]), built.nodes
     )
     assert forwards == backwards
 
@@ -108,9 +127,9 @@ def test_an_optional_attribute_may_cover_only_part_of_the_line(
     spec: NetworkSpec, built: BuiltNetwork
 ) -> None:
     attributes = distribute_attributes(
-        _with(spec, [_section("mando", "ciudad-real", "cordoba", "ctc")]), built.nodes
+        _with(spec, [_section("radio", "ciudad-real", "cordoba", "ctc")]), built.nodes
     )
-    assert 0 < sum(1 for a in attributes if "mando" in a) < len(attributes)
+    assert 0 < sum(1 for a in attributes if "radio" in a) < len(attributes)
 
 
 def test_two_sections_of_the_same_attribute_cannot_overlap(
@@ -119,23 +138,23 @@ def test_two_sections_of_the_same_attribute_cannot_overlap(
     overlapping = _with(
         spec,
         [
-            _section("mando", "ciudad-real", "cordoba", "ctc"),
-            _section("mando", "puertollano", "sevilla-santa-justa", "local"),
+            _section("radio", "ciudad-real", "cordoba", "ctc"),
+            _section("radio", "puertollano", "sevilla-santa-justa", "local"),
         ],
     )
-    with pytest.raises(ValueError, match="dos secciones de «mando» se pisan"):
+    with pytest.raises(ValueError, match="dos secciones de «radio» se pisan"):
         distribute_attributes(overlapping, built.nodes)
     # dos atributos distintos sí pueden cubrir los mismos tramos, y dos secciones, tocarse
     touching = _with(
         spec,
         [
-            _section("mando", "ciudad-real", "cordoba", "ctc"),
-            _section("mando", "cordoba", "sevilla-santa-justa", "local"),
-            _section("bloqueo", "puertollano", "sevilla-santa-justa", "bca"),
+            _section("radio", "ciudad-real", "cordoba", "ctc"),
+            _section("radio", "cordoba", "sevilla-santa-justa", "local"),
+            _section("catenaria", "puertollano", "sevilla-santa-justa", "bca"),
         ],
     )
     attributes = distribute_attributes(touching, built.nodes)
-    assert {a["mando"].value for a in attributes if "mando" in a} == {"ctc", "local"}
+    assert {a["radio"].value for a in attributes if "radio" in a} == {"ctc", "local"}
 
 
 def _raw(path: Path = CONV_SPEC) -> dict[str, Any]:
@@ -190,8 +209,11 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     assert report["problems"] == []
     by_line = {line["line"]: line for line in report["attributes"]}
     for line in by_line.values():
-        assert line["covered_segments"] == {"tracks": line["segments"]}
-    assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 2
+        assert line["covered_segments"] == dict.fromkeys(
+            ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
+        )
+    # dos de vía única, seis de bloqueo, una de protección del tren y una de mando
+    assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 10
 
     # sin el valor de la línea, las dos secciones de vía única no cubren la convencional
     raw = _raw()
@@ -202,3 +224,73 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     problems = validate_attributes([broken], SOURCES, DATA_DIR)["problems"]
     assert any("fuente no registrada (fuente-que-no-existe)" in p for p in problems)
     assert any("«tracks» no cubre el tramo" in p for p in problems)
+
+
+def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_date() -> None:
+    for path in SPECS:
+        net = build_network(load_network_spec(path), DATA_DIR)
+        for segment in net.segments:
+            for attribute in SIGNALLING:
+                value = segment.attributes[attribute]
+                assert value.value in (ATTRIBUTE_RULES[attribute].values or ())
+                assert value.source_id == DR and value.checked_on == dt.date(2026, 11, 12)
+
+
+def test_the_signalling_is_what_the_network_statement_map_says() -> None:
+    def values(path: Path, attribute: str) -> dict[str, Any]:
+        net = build_network(load_network_spec(path), DATA_DIR)
+        return {s.id.split(":", 1)[1]: s.attributes[attribute].value for s in net.segments}
+
+    # la alta velocidad: LZB y ASFA con bloqueo de control automático; el mapa no dice su mando
+    assert set(values(SPEC, PROTECCION_TREN).values()) == {"lzb_asfa"}
+    assert set(values(SPEC, BLOQUEO).values()) == {"bca"}
+    assert set(values(SPEC, MANDO).values()) == {SIN_DATO_PUBLICADO}
+    # la convencional: ASFA y CTC enteras; el bloqueo cambia con la vía
+    assert set(values(CONV_SPEC, PROTECCION_TREN).values()) == {"asfa"}
+    assert set(values(CONV_SPEC, MANDO).values()) == {"ctc"}
+    bloqueo = values(CONV_SPEC, BLOQUEO)
+    assert bloqueo["alcazar-de-san-juan:cinco-casas"] == "bab"
+    # entre Cinco Casas y Manzanares cambia en Herrera de la Mancha, que no es un nodo
+    assert bloqueo["cinco-casas:manzanares"] == "bab_bad"
+    assert bloqueo["manzanares:valdepenas"] == "bab"
+    assert bloqueo["santa-cruz-de-mudela:almuradiel-viso-del-marques"] == "bau"
+    assert bloqueo["vadollano:linares-baeza"] == "bab"
+    assert bloqueo["linares-baeza:espeluy"] == "bau"
+    # el bloqueo de vía única solo está donde la vía es única
+    tracks = values(CONV_SPEC, "tracks")
+    assert {k for k, v in bloqueo.items() if v == "bau"} == {k for k, v in tracks.items() if v == 1}
+    assert set(values(MZCR_SPEC, BLOQUEO).values()) == {"bau"}
+    assert set(values(MZCR_SPEC, MANDO).values()) == {"ctc"}
+    # el ramal de Jaén: ASFA y CTC, con bloqueo de liberación automática en vía única
+    assert set(values(JAEN_SPEC, PROTECCION_TREN).values()) == {"asfa"}
+    assert set(values(JAEN_SPEC, BLOQUEO).values()) == {"blau"}
+    assert set(values(JAEN_SPEC, MANDO).values()) == {"ctc"}
+
+
+def test_a_signalling_section_needs_a_known_value_a_source_and_a_date() -> None:
+    ok = {"source_id": DR, "checked_on": dt.date(2026, 11, 12)}
+    _section(BLOQUEO, "a", "b", "bau", **ok)
+    # el hueco se declara: es un valor más, con la fuente en la que se buscó
+    _section(MANDO, "a", "b", SIN_DATO_PUBLICADO, **ok)
+    with pytest.raises(ValidationError, match="solo admite"):
+        _section(BLOQUEO, "a", "b", "automatico", **ok)
+    with pytest.raises(ValidationError, match="no dice su fuente"):
+        _section(PROTECCION_TREN, "a", "b", "asfa", source_id=DR)
+    with pytest.raises(ValidationError, match="no dice su fuente"):
+        _section(MANDO, "a", "b", "ctc", checked_on=dt.date(2026, 11, 12))
+
+
+def test_validate_fails_when_a_segment_lacks_its_signalling(tmp_path: Path) -> None:
+    for attribute in SIGNALLING:
+        raw = _raw()
+        sections = raw["attribute_sections"]
+        # sin la sección de Linares-Baeza a Córdoba (o sin la única que tiene) el atributo no llega
+        last = [s for s in sections if s["attribute"] == attribute][-1]
+        if last["from_node"] == "madrid-puerta-de-atocha":
+            last["to_node"] = "linares-baeza"
+        else:
+            sections.remove(last)
+        broken = tmp_path / f"sin-{attribute}.json"
+        broken.write_text(json.dumps(raw), encoding="utf-8")
+        problems = validate_attributes([broken], SOURCES, DATA_DIR)["problems"]
+        assert any(f"«{attribute}» no cubre el tramo linares-baeza–espeluy" in p for p in problems)

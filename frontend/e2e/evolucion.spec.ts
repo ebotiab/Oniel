@@ -14,6 +14,8 @@ interface Punto {
   descargado: string
   dia: string
   trenes: number
+  /** Frente al horario anterior del operador, en los mismos días: [antes, ahora]. */
+  cambio?: { anterior: string; desde: string; hasta: string; antes: number; ahora: number }
 }
 
 const punto = (p: Punto) => ({
@@ -24,6 +26,16 @@ const punto = (p: Punto) => ({
   date: p.dia,
   trains: p.trenes,
   products: p.trenes ? [{ product: 'AVE', trains: p.trenes }] : [],
+  change: p.cambio
+    ? {
+        previous_dataset_id: `${p.fuente}-${p.cambio.anterior}`,
+        previous_retrieved_on: p.cambio.anterior,
+        date_from: p.cambio.desde,
+        date_to: p.cambio.hasta,
+        trains_before: p.cambio.antes,
+        trains_after: p.cambio.ahora,
+      }
+    : null,
 })
 
 const RENFE = { fuente: 'renfe-gtfs-av-ld-md', operador: 'renfe' }
@@ -105,6 +117,40 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
     ])
     // con dos, el operador de al lado sigue en un renglón
     await expect(page.getByTestId('evolucion-ouigo')).toHaveText('Ouigo España. Horario del 2 jul 2026: 6 trenes el 17 jul · horario del 1 dic 2026: 8 trenes el 11 dic')
+  })
+
+  test('lo que cambia de un horario al anterior se cuenta en los mismos días', async ({ page }) => {
+    const dias = { anterior: '2026-11-08', desde: '2026-11-11', hasta: '2026-12-08' }
+    await conHistorico(page, [
+      { ...RENFE, descargado: '2026-11-08', dia: '2026-11-13', trenes: 56 },
+      { ...OUIGO, descargado: '2026-07-02', dia: '2026-07-17', trenes: 6 },
+      // el día de referencia es el mismo y tiene los mismos trenes: lo que cambia está en otros días
+      { ...RENFE, descargado: '2026-11-12', dia: '2026-11-13', trenes: 56, cambio: { ...dias, antes: 1068, ahora: 1083 } },
+      { ...OUIGO, descargado: '2026-12-01', dia: '2026-12-11', trenes: 6, cambio: { anterior: '2026-07-02', desde: '2026-11-27', hasta: '2026-12-12', antes: 96, ahora: 96 } },
+    ])
+    await page.goto('/#/nodo/ciudad-real')
+    await abrirHoja(page)
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    await expect(page.getByTestId('evolucion-renfe')).toHaveText('Renfe Viajeros. Horario del 8 nov 2026: 56 trenes el 13 nov · horario del 12 nov 2026: 56 trenes el 13 nov')
+    await expect(page.getByTestId('evolucion-renfe-cambio')).toHaveText(
+      'Del 11 nov al 8 dic, 1.083 trenes: 15 más que en el horario del 8 nov 2026 esos mismos días (1.068).',
+    )
+    await expect(page.getByTestId('evolucion-ouigo-cambio')).toHaveText('Del 27 nov al 12 dic, 96 trenes: los mismos que en el horario del 2 jul 2026 esos mismos días.')
+    await expect(page.getByTestId('evolucion')).toContainText('se cuentan los dos en los mismos días, las cuatro primeras semanas del más reciente')
+
+    // con tres horarios, cada renglón de la lista lleva su comparación con el anterior
+    await page.unrouteAll()
+    await conHistorico(page, [
+      { ...RENFE, descargado: '2026-11-08', dia: '2026-11-13', trenes: 56 },
+      { ...RENFE, descargado: '2026-11-12', dia: '2026-11-13', trenes: 56, cambio: { ...dias, antes: 1068, ahora: 1083 } },
+      { ...RENFE, descargado: '2026-12-07', dia: '2026-12-11', trenes: 54, cambio: { anterior: '2026-11-12', desde: '2026-12-06', hasta: '2027-01-02', antes: 1100, ahora: 1040 } },
+    ])
+    await page.goto(`/#/tramo/${TRAMO}`)
+    await expect(page.getByTestId('evolucion-renfe').getByRole('listitem')).toHaveText([
+      'Horario del 8 nov 2026: 56 trenes el 13 nov',
+      'Horario del 12 nov 2026: 56 trenes el 13 nov Del 11 nov al 8 dic, 1.083 trenes: 15 más que en el horario anterior esos mismos días (1.068).',
+      'Horario del 7 dic 2026: 54 trenes el 11 dic Del 6 dic al 2 ene, 1.040 trenes: 60 menos que en el horario anterior esos mismos días (1.100).',
+    ])
   })
 
   test('con un solo horario por operador, o sin trenes, no se muestra nada', async ({ page }) => {

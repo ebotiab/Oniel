@@ -311,25 +311,38 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     async with connect(dsn) as conn:
         rows = await conn.fetch("SELECT segment_id, attribute, value FROM segment_attributes")
         columns = await conn.fetch("SELECT id, tracks FROM segments")
-    assert len(rows) == 11 + 25 + 3 + 2 and {r["attribute"] for r in rows} == {"tracks"}
+    # el número de vías y los tres de señalización, en los 41 tramos
+    assert len(rows) == 4 * (11 + 25 + 3 + 2)
+    assert {r["attribute"] for r in rows} == {"tracks", "proteccion_tren", "bloqueo", "mando"}
     # `segments.tracks` sigue escrito, con el mismo valor que el atributo
-    assert {r["segment_id"]: r["value"] for r in rows} == {r["id"]: r["tracks"] for r in columns}
+    tracks = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "tracks"}
+    assert tracks == {r["id"]: r["tracks"] for r in columns}
 
     index = (await client.get("/api/lines")).json()
     by_id = {f["id"]: f["properties"] for f in index["segment_features"]["features"]}
     assert all(p["attributes"]["tracks"]["value"] == p["tracks"] for p in by_id.values())
     # la vía única de Despeñaperros viene de una sección, con su fuente y su fecha
     single = by_id[f"{CONV}:santa-cruz-de-mudela:almuradiel-viso-del-marques"]
+    dr = {"source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12"}
     assert single["attributes"] == {
         "tracks": {
             "value": 1,
             "source_id": "wikipedia-lineas-300-400",
             "checked_on": "2026-11-08",
-        }
+        },
+        "proteccion_tren": {"value": "asfa", **dr},
+        "bloqueo": {"value": "bau", **dr},
+        "mando": {"value": "ctc", **dr},
     }
     # la vía doble de la alta velocidad es el valor de la línea, sin fuente propia
     double = by_id[f"{LAV}:ciudad-real:puertollano"]
-    assert double["attributes"] == {"tracks": {"value": 2, "source_id": None, "checked_on": None}}
+    assert double["attributes"] == {
+        "tracks": {"value": 2, "source_id": None, "checked_on": None},
+        "proteccion_tren": {"value": "lzb_asfa", **dr},
+        "bloqueo": {"value": "bca", **dr},
+        # la fuente no dice el mando de la alta velocidad: el hueco viaja como valor
+        "mando": {"value": "sin_dato_publicado", **dr},
+    }
     # lo mismo en el detalle de la línea y en la ficha del tramo
     detail = (await client.get(f"/api/lines/{MZCR}")).json()
     assert [s["attributes"]["tracks"]["value"] for s in detail["segments"]] == [1, 1, 1]
@@ -1124,11 +1137,14 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
             {"product": "ALVIA", "trains": 14},
             {"product": "AVLO", "trains": 10},
         ],
+        # con un solo fichero de la fuente no hay anterior con el que comparar
+        "change": None,
     }
     # el fichero de Ouigo empieza en junio: su día de referencia es otro, y se cuenta en él
     assert (ouigo["dataset_id"], ouigo["operator_id"]) == (OUIGO_DATASET_ID, "ouigo")
     assert (ouigo["retrieved_on"], ouigo["date"]) == ("2026-11-12", "2026-07-17")
     assert ouigo["trains"] == 14 and ouigo["products"] == [{"product": "Ouigo", "trains": 14}]
+    assert ouigo["change"] is None
     # cada punto cuenta los mismos trenes que la ficha del tramo ese día
     for point in body["points"]:
         services = (

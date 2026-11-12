@@ -81,7 +81,15 @@
   ],
   "attribute_sections": [
     {"attribute": "tracks", "from_node": "santa-cruz-de-mudela", "to_node": "vadollano", "value": 1, "source_id": "wikipedia-lineas-300-400", "checked_on": "2026-11-08", "note": "Vía única por el paso de Despeñaperros."},
-    {"attribute": "tracks", "from_node": "linares-baeza", "to_node": "cordoba", "value": 1, "source_id": "wikipedia-lineas-300-400", "checked_on": "2026-11-08", "note": "Vía única entre Linares-Baeza y Lora del Río, según Wikipedia y el rutómetro de la FCMAF."}
+    {"attribute": "tracks", "from_node": "linares-baeza", "to_node": "cordoba", "value": 1, "source_id": "wikipedia-lineas-300-400", "checked_on": "2026-11-08", "note": "Vía única entre Linares-Baeza y Lora del Río, según Wikipedia y el rutómetro de la FCMAF."},
+    {"attribute": "proteccion_tren", "from_node": "madrid-puerta-de-atocha", "to_node": "cordoba", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolo «Tren tierra y ASFA conv.» a lo largo de toda la línea. El tren tierra es radiotelefonía, no protección del tren."},
+    {"attribute": "bloqueo", "from_node": "madrid-puerta-de-atocha", "to_node": "cinco-casas", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulos «BAB ctc» de Madrid Atocha Cercanías a Aranjuez, a Alcázar de San Juan y hasta Herrera de la Mancha."},
+    {"attribute": "bloqueo", "from_node": "cinco-casas", "to_node": "manzanares", "value": "bab_bad", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: «BAB ctc» hasta Herrera de la Mancha (PK 183,7, sin nodo en Oniel) y «BAD ctc» de Herrera a Manzanares. Valor mixto acordado con el usuario el 12 de noviembre de 2026."},
+    {"attribute": "bloqueo", "from_node": "manzanares", "to_node": "santa-cruz-de-mudela", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAB ctc»."},
+    {"attribute": "bloqueo", "from_node": "santa-cruz-de-mudela", "to_node": "vadollano", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAU ctc», en la vía única de Despeñaperros."},
+    {"attribute": "bloqueo", "from_node": "vadollano", "to_node": "linares-baeza", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAB ctc»."},
+    {"attribute": "bloqueo", "from_node": "linares-baeza", "to_node": "cordoba", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulos «BAU ctc» a los dos lados de Espelúy."},
+    {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "cordoba", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»."}
   ],
   "connections": [
     {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},

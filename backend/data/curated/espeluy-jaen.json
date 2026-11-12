@@ -47,7 +47,10 @@
      "description": "Estación término: las vías acaban aquí desde que en 1984 se cerró la línea que seguía hacia Puente Genil. En los horarios de Renfe solo tiene trenes de Media Distancia."}
   ],
   "attribute_sections": [
-    {"attribute": "tracks", "from_node": "espeluy", "to_node": "jaen", "value": 1, "source_id": "wikipedia-linea-402", "checked_on": "2026-11-12", "note": "Vía única en toda la línea, según Wikipedia; las vías de OSM dicen passenger_lines=1. El primer kilómetro, hasta la aguja del km 340,1, es de la línea 400, también de vía única ahí."}
+    {"attribute": "tracks", "from_node": "espeluy", "to_node": "jaen", "value": 1, "source_id": "wikipedia-linea-402", "checked_on": "2026-11-12", "note": "Vía única en toda la línea, según Wikipedia; las vías de OSM dicen passenger_lines=1. El primer kilómetro, hasta la aguja del km 340,1, es de la línea 400, también de vía única ahí."},
+    {"attribute": "proteccion_tren", "from_node": "espeluy", "to_node": "jaen", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolo «Tren tierra y ASFA conv.» junto a la línea. Las vías de OSM dicen railway:asfa=yes."},
+    {"attribute": "bloqueo", "from_node": "espeluy", "to_node": "jaen", "value": "blau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BLAU ctc» y trazo azul claro de Espelúy a Jaén. Los dos brazos con los que el ramal se une a la línea 400 llevan el trazo naranja de «BAU ctc», como esa línea; el mapa es un esquema y no dice en qué punto cambia."},
+    {"attribute": "mando", "from_node": "espeluy", "to_node": "jaen", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
   ],
   "connections": [],
   "stop_mappings": {

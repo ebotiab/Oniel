@@ -37,6 +37,15 @@ test.describe('El ramal de Espelúy a Jaén', () => {
     await expect(esquema).toContainText('Jaén')
   })
 
+  test('un tramo del ramal dice su vía única y su bloqueo', async ({ page }) => {
+    await page.goto('/#/tramo/espeluy-jaen:mengibar-artichuela:jaen')
+    const ficha = page.getByTestId('detalle-tramo')
+    await expect(ficha).toBeVisible()
+    await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
+    // la señalización va bajo «Más detalle»: está en la ficha aunque plegada
+    await expect(ficha.getByText('De liberación automática en vía única')).toHaveCount(1)
+  })
+
   test('el comparador encuentra el recorrido de Madrid a Jaén', async ({ page }) => {
     await page.goto('/#/recorridos/madrid-puerta-de-atocha/jaen')
     const recorridos = page.getByTestId('recorrido')
