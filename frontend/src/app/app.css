@@ -959,6 +959,11 @@
   bottom: calc(66vh + 4px);
 }
 
+/* Con la hoja abierta el mapa visible mide unos 200 px de alto: la escala tapaba estaciones y se quita. */
+.movil.hoja-abierta .maplibregl-ctrl-scale {
+  display: none;
+}
+
 /* Recorrido alternativo en la simulación */
 .alternativa {
   margin-top: 12px;
