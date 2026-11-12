@@ -294,7 +294,7 @@ async def test_history_compares_the_two_datasets_each_on_its_reference_day(
         change.date_from,
         change.date_to,
     )
-    assert days >= 1
+    assert isinstance(days, int) and days >= 1
     assert change.trains_after == change.trains_before - days
     assert change.trains_before > 28 * new.trains / 2
     # el punto del conjunto activo cuenta lo mismo que la ficha del tramo
