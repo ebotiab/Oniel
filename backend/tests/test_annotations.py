@@ -25,7 +25,8 @@ from oniel.validate import validate_annotations
 
 ANNOTATIONS = DATA_DIR / "curated" / "anotaciones.json"
 CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
-SPECS = [SPEC, CONV_SPEC]
+JAEN_SPEC = DATA_DIR / "curated" / "espeluy-jaen.json"
+SPECS = [SPEC, CONV_SPEC, JAEN_SPEC]
 
 #: Una línea de juguete, con sus nodos en el orden del kilometraje.
 LINE_NODES = {"linea": ["a", "b", "c", "d"]}

@@ -1,0 +1,101 @@
+{
+  "line": {
+    "id": "espeluy-jaen",
+    "name": "Línea convencional Espelúy – Jaén",
+    "short_name": "402",
+    "sort_order": 4,
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 1,
+    "opened_on": "1881-07-06",
+    "reference_length_km": 32.8,
+    "status": "disponible",
+    "description": "Un ramal de vía única que sale de la línea de Madrid a Córdoba junto a Espelúy y termina en Jaén.\n\nUn ramal es una línea corta que se separa de otra principal y acaba en una estación de la que no sigue ninguna vía: para ir en tren de Jaén a cualquier otro sitio hay que volver primero a la línea principal. Jaén no siempre fue final de línea: el ferrocarril llegó en 1881 como parte de una línea de Linares a Puente Genil, y en 1984 se cerró la continuación desde Jaén. Lo que queda en servicio es, para Adif, la línea 402.\n\nLas vías se separan de la línea principal unos 800 metros al este de la estación de Espelúy, del lado de Linares-Baeza. Desde los años setenta los trenes de Madrid entran así al ramal sin pasar por esa estación ni cambiar de sentido en ella. Oniel dibuja la línea desde la estación de Espelúy, que es donde enlaza con la red cargada.\n\nEn los horarios de Renfe solo llegan a Jaén trenes de Media Distancia: los de Madrid, por Alcázar de San Juan y Linares-Baeza, y los de Córdoba, Sevilla y Cádiz. No tiene trenes de larga distancia ni de alta velocidad. El Ministerio de Transportes estudia un enlace entre la alta velocidad Madrid – Sevilla y la línea de Córdoba a Jaén, que figura entre los proyectos.",
+    "geometry_source": {
+      "source_id": "osm-relation-11351146",
+      "parts": [
+        {
+          "source_id": "osm-relation-11351144",
+          "file": "raw/osm/relation_11351144_linea_400_alcazar_cadiz_2026-11-08.json",
+          "relation_id": 11351144,
+          "from": [-3.83216, 38.010259],
+          "to": [-3.8225432, 38.0064314]
+        },
+        {
+          "source_id": "osm-relation-11351146",
+          "file": "raw/osm/relation_11351146_linea_402_espeluy_jaen_2026-11-12.json",
+          "relation_id": 11351146,
+          "from": [-3.8225432, 38.0064314],
+          "to": [-3.790798, 37.779827]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-402"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "espeluy", "name": "Espelúy", "kind": "estacion", "adif_code": "50400", "shared": true, "position": {"lon": -3.83216, "lat": 38.010259}},
+    {"id": "mengibar-artichuela", "name": "Mengíbar-Artichuela", "kind": "estacion", "adif_code": "03001", "position": {"lon": -3.8015495, "lat": 37.9778822},
+     "description": "Apeadero con trenes de Media Distancia, en un polígono industrial de Mengíbar. Sus vías sirven también para cargar mercancías."},
+    {"id": "jaen", "name": "Jaén", "kind": "estacion", "adif_code": "03100", "position": {"lon": -3.790798, "lat": 37.779827},
+     "description": "Estación término: las vías acaban aquí desde que en 1984 se cerró la línea que seguía hacia Puente Genil. En los horarios de Renfe solo tiene trenes de Media Distancia."}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "espeluy", "to_node": "jaen", "value": 1, "source_id": "wikipedia-linea-402", "checked_on": "2026-11-12", "note": "Vía única en toda la línea, según Wikipedia; las vías de OSM dicen passenger_lines=1. El primer kilómetro, hasta la aguja del km 340,1, es de la línea 400, también de vía única ahí."}
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "50400": {"node": "espeluy"},
+    "03001": {"node": "mengibar-artichuela"},
+    "03100": {"node": "jaen"},
+    "18000": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "60200": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "60203": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "60300": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "60301": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "60400": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50002": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50100": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50102": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50200": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50202": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50207": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50300": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50403": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50407": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50417": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "50500": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
+    "17000": {"exits": ["espeluy"]},
+    "50504": {"exits": ["espeluy"]},
+    "50506": {"exits": ["espeluy"]},
+    "50507": {"exits": ["espeluy"]},
+    "50600": {"exits": ["espeluy"]},
+    "51003": {"exits": ["espeluy"]},
+    "51100": {"exits": ["espeluy"]},
+    "51103": {"exits": ["espeluy"]},
+    "51110": {"exits": ["espeluy"]},
+    "51200": {"exits": ["espeluy"]},
+    "51202": {"exits": ["espeluy"]},
+    "51203": {"exits": ["espeluy"]},
+    "51205": {"exits": ["espeluy"]},
+    "51300": {"exits": ["espeluy"]},
+    "51400": {"exits": ["espeluy"]},
+    "51401": {"exits": ["espeluy"]},
+    "51404": {"exits": ["espeluy"]},
+    "51405": {"exits": ["espeluy"]},
+    "51406": {"exits": ["espeluy"]},
+    "51409": {"exits": ["espeluy"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Mengíbar-Artichuela o en Jaén: a esas dos estaciones solo se llega por esta línea. Son Media Distancia de Madrid, Córdoba, Sevilla y Cádiz a Jaén y los que van de Linares-Baeza a Mengíbar-Artichuela.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": ["03001", "03100"],
+    "min_node_stops": 1
+  }
+}
