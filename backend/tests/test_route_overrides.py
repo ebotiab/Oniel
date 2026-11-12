@@ -18,6 +18,7 @@ from conftest import (
     JAEN_SPEC,
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
+    LAV_VALENCIA_SPEC,
     LBMG_SPEC,
     MZCR_SPEC,
     SPEC,
@@ -541,6 +542,12 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         ALBACETE_SPEC.name: {},
         LAV_MALAGA_SPEC.name: {},
         LAV_GRANADA_SPEC.name: {},
+        # los trenes que recorren la línea de Valencia sin parar en Cuenca ni en Requena-Utiel
+        LAV_VALENCIA_SPEC.name: {
+            "madrid-valencia-sin-parada": 73,
+            "madrid-albacete-sin-parada": 31,
+            "madrid-alicante-sin-parada": 27,
+        },
     }
     for name, r in reports.items():
         assert r["problems"] == []
