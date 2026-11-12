@@ -1,5 +1,6 @@
 // Glosario del visor: los términos técnicos que aparecen en las fichas, con una definición de una o dos
-// frases, y los conceptos que hacen falta para entender la red, en unos párrafos y con su referencia.
+// frases, y los conceptos que hacen falta para entender la red, cada uno con su dibujo por pasos, uno o dos párrafos
+// cortos y su referencia.
 // Las definiciones son propias, en español llano y tono neutro: explican, no reproducen el texto citado.
 // Un término nuevo en una ficha entra aquí y se muestra con el componente `Termino`.
 
@@ -15,7 +16,11 @@ interface DefTermino {
 }
 
 interface DefConcepto {
+  /** «Título: subtítulo». La página del glosario los separa; el buscador y los enlaces lo usan entero. */
   titulo: string
+  /** La frase de cada viñeta del dibujo (`glosarioDibujos.tsx`), en orden: el dibujo explica y esta frase lo acompaña. */
+  pasos: readonly string[]
+  /** Lo que el dibujo no dice, en uno o dos párrafos cortos. */
   parrafos: readonly string[]
   /** De dónde sale: una fuente de `sources.json` y los artículos consultados. */
   referencia: { sourceId: string; titulo: string; cita: string }
@@ -166,47 +171,62 @@ const TERMINOS = {
 const CONCEPTOS = {
   'como-se-separan-los-trenes': {
     titulo: 'Cómo se separan los trenes: bloqueo y cantón',
+    pasos: [
+      'Un tren entra en un cantón y la señal que lo protege se cierra tras él.',
+      'El que viene detrás se detiene ante la señal cerrada y espera.',
+      'Cuando el primero deja libre el cantón, la señal se abre y el segundo recibe permiso para entrar.',
+    ],
     parrafos: [
-      'Un tren no puede frenar en poco espacio: según su velocidad, necesita cientos de metros o varios kilómetros para detenerse. Por eso no basta con que el maquinista vea al tren de delante, como en una carretera.',
-      'La vía se divide en trozos llamados cantones. En condiciones normales, en un cantón no puede haber más de un tren a la vez: hasta que el primero no lo ha dejado libre, el siguiente no recibe permiso para entrar.',
-      'El bloqueo es el sistema que lo garantiza y que impide, además, que dos trenes circulen por la misma vía en sentidos contrarios. En las líneas principales es automático: la propia vía detecta el tren y las señales que protegen el cantón se cierran solas. Donde no lo hay, las estaciones de los dos extremos se ponen de acuerdo por teléfono antes de dar paso a cada tren.',
+      'Un tren necesita cientos de metros, o varios kilómetros, para detenerse: no basta con que el maquinista vea al de delante. Por eso la vía se divide en trozos, los cantones, y en condiciones normales en cada uno solo puede haber un tren a la vez.',
+      'El bloqueo es el sistema que lo garantiza, y el que impide que dos trenes circulen de frente por la misma vía. En las líneas principales es automático: la vía detecta el tren y las señales se cierran solas. Donde no lo hay, las estaciones de los dos extremos se ponen de acuerdo por teléfono antes de dar paso a cada tren.',
     ],
     referencia: { ...RCF, cita: 'artículo 1.1.1.3, definiciones de bloqueo y de cantón de bloqueo, y artículo 1.1.1.4, tipos de bloqueo' },
     ver: ['cruces-en-via-unica', 'marcha-a-la-vista'],
   },
   'cruces-en-via-unica': {
     titulo: 'Vía única: cómo se cruzan los trenes',
+    pasos: [
+      'Dos trenes se acercan en sentidos contrarios por la misma vía.',
+      'Uno entra en la estación, donde hay una segunda vía, se detiene y espera.',
+      'El otro pasa. Con el trecho libre, el primero recibe permiso y sigue su camino.',
+    ],
     parrafos: [
-      'En un tramo de vía única, los trenes de los dos sentidos comparten una sola vía. Dos trenes que van en sentidos contrarios solo pueden cruzarse donde hay más de una vía: en una estación o en un apartadero. Uno entra, se detiene y espera a que el otro pase.',
-      'Entre dos de esos puntos, el bloqueo solo deja entrar un tren: mientras el trecho está ocupado, el que viene de frente no recibe permiso para salir.',
-      'Una vía única admite menos trenes que una doble, y el retraso de uno se traslada al que lo espera. En el mapa de Oniel es el trazo más fino, y el comparador de recorridos dice cuántos kilómetros de vía única tiene cada camino.',
+      'En una vía única, los trenes de los dos sentidos comparten una sola vía. Solo pueden cruzarse donde hay más de una: en una estación o en un apartadero. Entre dos de esos puntos, el bloqueo solo deja entrar un tren.',
+      'Por eso admite menos trenes que una vía doble, y el retraso de uno se traslada al que lo espera. En el mapa de Oniel es el trazo más fino, y el comparador de recorridos dice cuántos kilómetros de vía única tiene cada camino.',
     ],
     referencia: { ...RCF, cita: 'artículo 1.1.1.3, definiciones de bloqueo y de línea' },
     ver: ['via-unica', 'como-se-separan-los-trenes'],
   },
   'marcha-a-la-vista': {
     titulo: 'Marcha a la vista',
+    pasos: [
+      'Las señales no pueden asegurar que la vía está libre, por ejemplo tras una avería.',
+      'El tren avanza despacio: tiene que poder detenerse dentro del trecho de vía que el maquinista ve por delante.',
+    ],
     parrafos: [
-      'Es una forma de circular que se ordena al maquinista cuando el sistema habitual no puede asegurar que la vía está libre, por ejemplo tras una avería en las señales.',
-      'El tren avanza con precaución y a una velocidad que le permita detenerse dentro del trecho de vía que el maquinista ve por delante. La seguridad pasa a depender de lo que se ve, así que se circula despacio.',
+      'Es una forma de circular que se ordena al maquinista cuando el sistema habitual no puede asegurar que la vía está libre. La seguridad pasa a depender de lo que se ve, así que se circula con precaución y despacio.',
     ],
     referencia: { ...RCF, cita: 'artículo 1.5.1.4, condiciones de marcha especiales' },
     ver: ['como-se-separan-los-trenes'],
   },
   'quien-dirige-la-circulacion': {
     titulo: 'Quién dirige la circulación: puesto de mando y control centralizado',
+    pasos: ['Desde un puesto central se manejan a distancia las señales y los desvíos de muchas estaciones y de los trayectos entre ellas.'],
     parrafos: [
       'Los trenes de todos los operadores circulan con el permiso del administrador de la infraestructura. Lo da desde los puestos de mando: centros desde los que se sigue y se regula el tráfico en tiempo real.',
-      'Las líneas principales tienen control de tráfico centralizado (CTC): desde un puesto central se manejan a distancia las señales y los desvíos de muchas estaciones y de los trayectos entre ellas, sin que tenga que haber una persona en cada una.',
+      'Las líneas principales tienen control de tráfico centralizado (CTC): no hace falta una persona en cada estación.',
     ],
     referencia: { ...RCF, cita: 'artículo 1.1.1.3, definiciones de puesto de mando y de control de tráfico centralizado' },
     ver: ['administrador-de-infraestructura'],
   },
   'sistemas-que-vigilan-al-tren': {
     titulo: 'Sistemas que vigilan al tren: ASFA, LZB y ERTMS',
+    pasos: [
+      'ASFA: la cabina repite lo que indica la señal de la vía. En algunos casos frena el tren, como al rebasar una señal que ordena parar.',
+      'LZB y ERTMS: supervisan el tren de forma continua. Saben en cada momento a qué velocidad puede ir y lo frenan si la supera.',
+    ],
     parrafos: [
-      'Además de las señales que ve el maquinista, el tren lleva sistemas que repiten o sustituyen esas señales en la cabina y que actúan si no se atienden.',
-      'El ASFA repite en la cabina lo que indican las señales de la vía y frena el tren en algunos casos, como al rebasar una señal que ordena parar. El LZB y el ERTMS supervisan el tren de forma continua: saben en cada momento a qué velocidad puede ir y lo frenan si la supera. El ERTMS es el sistema europeo común.',
+      'Además de las señales que ve el maquinista, el tren lleva sistemas que las repiten o las sustituyen en la cabina y que actúan si no se atienden. El ERTMS es el sistema europeo común.',
       'La velocidad máxima a la que se permite circular por una línea depende también del sistema con el que esté equipada.',
     ],
     referencia: { ...RCF, cita: 'artículo 1.1.1.4, abreviaturas ASFA, ERTMS y LZB, y artículo 1.1.1.7' },
