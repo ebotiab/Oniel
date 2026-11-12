@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { apiStatus, fetchCoverage, fetchIndex, fetchLine, onApiStatus, wakeApi, type ApiStatus, type DataMode } from '../data/api'
 import { composeNetwork } from '../data/network'
 import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
-import { MapView } from '../map/MapView'
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
@@ -18,6 +17,10 @@ import { activeInterruptions, bySegment } from './interruptions'
 import type { SearchTarget } from './search'
 import { networkCount, parseHash, toHash, todayIso, type Selection } from './state'
 import './app.css'
+
+// MapLibre pesa tres cuartas partes del JavaScript del visor: va en un fichero aparte para que el panel
+// no lo espere. index.html lo precarga (vite.config.ts), así que se descarga a la vez que el resto.
+const MapView = lazy(() => import('../map/MapView').then((m) => ({ default: m.MapView })))
 
 function useMedia(query: string): boolean {
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
@@ -282,20 +285,22 @@ export default function App() {
       <a className="visually-hidden" href="#panel">
         Ir al panel de la línea
       </a>
-      <MapView
-        network={network}
-        selection={selection}
-        hoverId={hoverId}
-        closedSegmentId={closedSegmentId}
-        interrupted={interrupted}
-        highlight={highlight}
-        frame={frame}
-        onSelect={select}
-        onHover={setHoverId}
-        onNearLines={wantNear}
-        padding={padding}
-        lineId={selection ? null : lineId}
-      />
+      <Suspense fallback={<div className="mapa" aria-hidden="true" />}>
+        <MapView
+          network={network}
+          selection={selection}
+          hoverId={hoverId}
+          closedSegmentId={closedSegmentId}
+          interrupted={interrupted}
+          highlight={highlight}
+          frame={frame}
+          onSelect={select}
+          onHover={setHoverId}
+          onNearLines={wantNear}
+          padding={padding}
+          lineId={selection ? null : lineId}
+        />
+      </Suspense>
       <header className="cabecera">
         <div className="cabecera-inicio">
           <div className="marca-bloque">
