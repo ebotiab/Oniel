@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import asyncpg
+import logfire
 
 if TYPE_CHECKING:
     from oniel.network.spec import FeedSpec
@@ -88,7 +89,62 @@ async def run_import_all(
     Con ``if_changed`` devuelve ``{"skipped": True}`` sin tocar los datos cuando la huella coincide
     con la de la última importación. Las migraciones se aplican siempre: son baratas y la tabla de
     estado sale de ellas.
+
+    Todo va dentro de un tramo «import all» que lleva el resultado en ``outcome`` (``skipped``,
+    ``completed`` o ``failed``) y los recuentos: es lo que lee `oniel-data obs estado`.
     """
+    # El tramo solo se envía al terminar; este aviso deja ver una importación en curso.
+    logfire.info("import all started", if_changed=if_changed)
+    with logfire.span("import all", if_changed=if_changed) as span:
+        try:
+            result = await _import_all(
+                conn,
+                specs=specs,
+                sources=sources,
+                feeds=feeds,
+                data_dir=data_dir,
+                snapshot_dir=snapshot_dir,
+                annotations=annotations,
+                if_changed=if_changed,
+                src_dir=src_dir,
+            )
+        except BaseException:
+            span.set_attribute("outcome", "failed")
+            raise
+        span.set_attributes(import_summary(result))
+        return result
+
+
+def import_summary(result: Mapping[str, Any]) -> dict[str, Any]:
+    """Lo que el tramo de la importación dice de su resultado: cómo acabó y cuánto cargó."""
+    summary: dict[str, Any] = {
+        "outcome": "skipped" if result["skipped"] else "completed",
+        "fingerprint": result["fingerprint"],
+        "migrations": len(result["migrations"]),
+    }
+    if not result["skipped"]:
+        summary |= {
+            "lines": len(result["network"]),
+            "feeds": len(result["gtfs"]),
+            "trips_imported": sum(int(g.get("trips_imported", 0)) for g in result["gtfs"]),
+            "datasets_removed": len(result["datasets_removed"]),
+            "snapshot_exported": result["snapshot"] is not None,
+        }
+    return summary
+
+
+async def _import_all(
+    conn: asyncpg.Connection,
+    *,
+    specs: list[Path],
+    sources: Path,
+    feeds: Sequence[FeedSpec],
+    data_dir: Path,
+    snapshot_dir: Path | None,
+    annotations: Path | None,
+    if_changed: bool,
+    src_dir: Path,
+) -> dict[str, Any]:
     # Importaciones perezosas, como en la CLI: la red y el GTFS cargan dependencias pesadas.
     from oniel.db.migrate import migrate
     from oniel.export.snapshot import export_snapshot

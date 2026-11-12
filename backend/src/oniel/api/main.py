@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from oniel import __version__
 from oniel.api.routers import analysis, network, nodes, routes, segments, services, simulations
 from oniel.db.pool import create_pool
-from oniel.observability import configure_logfire
+from oniel.observability import configure_logfire, deployed_commit
 from oniel.settings import get_settings
 
 
@@ -20,6 +20,8 @@ from oniel.settings import get_settings
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings = get_settings()
     app.state.pool = await create_pool(settings.database_url)
+    # Una traza por arranque: dice desde cuándo sirve esta versión aunque nadie la haya llamado.
+    logfire.info("api started")
     try:
         yield
     finally:
@@ -45,8 +47,8 @@ def create_app() -> FastAPI:
     logfire.instrument_fastapi(app, capture_headers=False)
 
     @app.get("/healthz", tags=["sistema"])
-    async def healthz() -> dict[str, str]:
-        return {"status": "ok", "version": __version__}
+    async def healthz() -> dict[str, str | None]:
+        return {"status": "ok", "version": __version__, "commit": deployed_commit()}
 
     for router in (
         network.router,

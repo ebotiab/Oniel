@@ -86,6 +86,50 @@ Proyecto `oniel` en la organización personal `ebotiab` (región US): https://lo
 - En local, el SDK lee `backend/.logfire/logfire_credentials.json` (no se versiona). Sin ese fichero ni `LOGFIRE_TOKEN` no se envía nada.
 - En Render, definir `LOGFIRE_TOKEN` con un token de escritura del proyecto (Logfire → proyecto `oniel` → Settings → Write tokens).
 - Comprobación: `uv run oniel-data logfire-test` envía una traza; las trazas de la API aparecen al usar cualquier endpoint.
+- Las trazas no llevan cabeceras (`capture_headers=False`) ni datos de quien visita la web más allá de lo que la instrumentación de FastAPI anota por petición: ruta, estado, duración, agente de usuario y dirección de origen.
+
+### Qué dicen las trazas de un despliegue
+
+- **Versión.** En Render la versión del servicio (`service_version`) es el commit desplegado, que Render da en `RENDER_GIT_COMMIT`; en local es la del paquete (`0.1.0`). Las trazas anteriores al 12 de noviembre de 2026 llevan todas `0.1.0`. `/healthz` devuelve también el commit.
+- **Arranque.** La API deja una traza `api started` cada vez que arranca: tras un despliegue y cada vez que Render la despierta.
+- **Importación.** Cada `oniel-data import all` es un tramo `import all` del que cuelgan sus consultas, con `outcome` (`completed`, `skipped` cuando `--if-changed` no encuentra cambios, o `failed` con su excepción), la huella y los recuentos (líneas, ficheros de horarios, viajes). Como un tramo solo se envía al terminar, al empezar deja además un aviso `import all started`: uno sin tramo posterior es una importación en curso o interrumpida. La exportación de la instantánea es un tramo `export snapshot`.
+
+### Consultar el estado: `oniel-data obs`
+
+Desde `backend/`, solo lectura:
+
+```bash
+uv run oniel-data obs estado                              # qué corre en producción y cómo va
+uv run oniel-data obs estado --commit <hash> --esperar 15 # espera hasta 15 min a que entre ese commit
+uv run oniel-data obs consulta "select span_name, count(*) n from records group by 1 order by 2 desc" --horas 6
+```
+
+`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación falló o no ha terminado, y `--esperar` repite la consulta cada 30 segundos hasta que entre: sustituye a sondear producción con `curl`. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` y lo imprime en CSV; las columnas útiles son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
+
+Una sesión de Claude tiene que ejecutarlo fuera del sandbox del shell, que corta la conexión TLS con Logfire. Cada traza del informe lleva su `trace_id`; se abre en https://logfire-us.pydantic.dev/ebotiab/oniel buscando `trace_id = '…'`.
+
+### El token de lectura
+
+`oniel-data obs` usa un token de **solo lectura** del proyecto, distinto del de escritura de Render. No está en el repositorio ni debe estarlo: se lee de la variable `LOGFIRE_READ_TOKEN` o, si no existe, del fichero `~/.config/oniel/logfire-read-token` (permisos 600) de la máquina de quien desarrolla. Sin token, las órdenes lo dicen y terminan sin fallar; el CI no lo tiene ni lo necesita, porque las pruebas simulan las respuestas.
+
+Para renovarlo o darlo de alta en otra máquina: Logfire → proyecto `oniel` → Settings → Read tokens → crear uno, y guardarlo:
+
+```bash
+mkdir -p ~/.config/oniel && install -m 600 /dev/null ~/.config/oniel/logfire-read-token
+pbpaste > ~/.config/oniel/logfire-read-token   # con el token en el portapapeles
+```
+
+El anterior se revoca en esa misma pantalla. Si Logfire responde 401, `obs estado` dice que el token fue rechazado: es la señal de que toca renovarlo.
+
+### Acceso por MCP: no va en el repositorio
+
+Logfire tiene un servidor MCP (`https://logfire-us.pydantic.dev/mcp`) que acepta el mismo token de lectura. Se estudió declararlo en un `.mcp.json` de proyecto el 12 de noviembre de 2026 y se descartó:
+
+- Para no versionar el token, la cabecera tendría que salir de una variable (`${LOGFIRE_READ_TOKEN}`) o de una orden (`headersHelper`). La documentación de Claude Code no dice qué entorno ve la aplicación de escritorio al expandir variables (arrancada desde el Dock no hereda lo exportado en `~/.zshrc`), y con la variable sin definir el servidor se carga con el texto literal y falla.
+- `headersHelper` sí podría leer el fichero, pero el repositorio es público: quien lo clone sin el token tendría en cada sesión un servidor que falla y una petición de aprobación de un servidor que no puede usar.
+- En las sesiones en worktree de la aplicación de escritorio, `.mcp.json` se lee del checkout principal y no de la rama, y la aprobación de servidores de proyecto no está documentada allí; no se puede comprobar desde una PR.
+
+La orden `oniel-data obs` cubre lo mismo con el token local y sin configuración. Quien quiera el MCP en su máquina puede declararlo a nivel de usuario, fuera del repositorio, con `claude mcp add --scope user --transport http` y un `headersHelper` que lea el fichero del token.
 
 ## Base de datos local
 
