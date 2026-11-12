@@ -1,4 +1,4 @@
-"""Especificaciones curadas (data/curated/*.json): líneas, fuentes e interrupciones."""
+"""Especificaciones curadas (data/curated/*.json): líneas, fuentes y anotaciones de red."""
 
 from __future__ import annotations
 
@@ -8,6 +8,8 @@ from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from oniel.domain.annotations import ANNOTATION_KINDS, Scope
 
 NodeKind = Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
 NodeRank = Literal["principal", "secundario"]
@@ -300,28 +302,42 @@ class FeedSpec(BaseModel):
     stop_id_prefix: str | None = None
 
 
-class InterruptionSpec(BaseModel):
-    """Interrupción del servicio en parte de una línea cargada (data/curated/interrupciones.json).
+#: Tipos de geometría GeoJSON que admite una anotación con geometría propia.
+GEOMETRY_TYPES = ("Point", "LineString", "MultiLineString", "Polygon", "MultiPolygon")
 
-    Va de ``from_node`` a ``to_node``, dos nodos de la misma línea en el orden de su kilometraje, y
-    afecta a todos los tramos que quedan entre ambos. Las fechas son días completos: no hay
-    circulación desde ``start_date`` y, si ya terminó, vuelve a haberla desde ``ended_on``.
+
+class AnnotationSpec(BaseModel):
+    """Algo que pasa sobre la red entre dos fechas según una fuente (data/curated/anotaciones.json).
+
+    El tipo (``kind``) es uno de los declarados en ``oniel.domain.annotations.ANNOTATION_KINDS``,
+    que fija sus estados válidos, los alcances que admite y qué campos exige. El alcance es uno de
+    tres: de ``from_node`` a ``to_node``, dos nodos de ``line_id`` en el orden de su kilometraje,
+    con todos los tramos que quedan entre ambos; un nodo (``node_id``); o una ``geometry`` propia,
+    para lo que no cuelga de la red cargada. Las fechas son días completos: la anotación está
+    vigente desde ``start_date`` y deja de estarlo el día ``ended_on``.
     """
 
     model_config = ConfigDict(extra="forbid")
 
     id: str
-    line_id: str
-    from_node: str
-    to_node: str
-    start_date: dt.date
+    kind: str
+    status: str
+    line_id: str | None = None
+    from_node: str | None = None
+    to_node: str | None = None
+    node_id: str | None = None
+    #: Geometría GeoJSON en WGS 84 (longitud, latitud).
+    geometry: dict[str, Any] | None = None
+    start_date: dt.date | None = None
     #: Previsión de fin publicada por la fuente, como fecha o como texto («otoño de 2027»).
     expected_end_date: dt.date | None = None
     expected_end_text: str | None = None
-    #: Día en que se reanudó la circulación; sin él, la interrupción sigue vigente.
+    #: Día en que terminó (en una interrupción, el día en que se reanudó la circulación).
     ended_on: dt.date | None = None
-    #: Motivo en una frase neutra.
-    reason: str = Field(min_length=1)
+    #: Nombre propio de lo anotado, cuando lo tiene («Variante de Loja»).
+    title: str | None = Field(default=None, min_length=1)
+    #: Motivo o descripción en una frase neutra.
+    reason: str | None = Field(default=None, min_length=1)
     #: Precisión opcional: hasta dónde llegan los trenes, qué sigue en servicio.
     note: str | None = None
     #: Ids de ``sources.json``; la primera es la fuente principal, la que se cita junto a la fecha.
@@ -329,37 +345,101 @@ class InterruptionSpec(BaseModel):
     #: Día de la última comprobación en las fuentes.
     checked_on: dt.date
 
+    @property
+    def scope(self) -> Scope:
+        if self.geometry is not None:
+            return "geometria"
+        return "nodo" if self.node_id is not None else "tramo"
+
+    @property
+    def label(self) -> str:
+        """Cómo se nombra la entrada en los mensajes: «la interrupción <id>»."""
+        kind = ANNOTATION_KINDS.get(self.kind)
+        return f"{kind.label if kind else 'la anotación'} {self.id}"
+
     @model_validator(mode="after")
-    def _consistent(self) -> InterruptionSpec:
-        if self.from_node == self.to_node:
-            raise ValueError(f"la interrupción {self.id} empieza y termina en el mismo nodo")
+    def _consistent(self) -> AnnotationSpec:
+        label = self.label
+        kind = ANNOTATION_KINDS.get(self.kind)
+        if kind is None:
+            raise ValueError(
+                f"{label} es de un tipo sin declarar, {self.kind};"
+                f" los declarados son: {', '.join(ANNOTATION_KINDS)}"
+            )
+        if self.status not in kind.statuses:
+            raise ValueError(
+                f"{label} tiene un estado que su tipo no admite, {self.status};"
+                f" los válidos son: {', '.join(kind.statuses)}"
+            )
+        stretch = (self.line_id, self.from_node, self.to_node)
+        given = [
+            name
+            for name, present in (
+                ("tramo", any(v is not None for v in stretch)),
+                ("nodo", self.node_id is not None),
+                ("geometria", self.geometry is not None),
+            )
+            if present
+        ]
+        if len(given) != 1:
+            raise ValueError(
+                f"{label} necesita un único alcance: line_id con from_node y to_node, node_id"
+                " o geometry"
+            )
+        if given[0] == "tramo" and any(v is None for v in stretch):
+            raise ValueError(f"{label} necesita line_id, from_node y to_node")
+        if self.scope not in kind.scopes:
+            raise ValueError(
+                f"{label} tiene un alcance que su tipo no admite, {self.scope};"
+                f" los válidos son: {', '.join(kind.scopes)}"
+            )
+        if self.geometry is not None and (
+            self.geometry.get("type") not in GEOMETRY_TYPES or not self.geometry.get("coordinates")
+        ):
+            raise ValueError(
+                f"{label}: geometry tiene que ser una geometría GeoJSON con coordenadas"
+                f" ({', '.join(GEOMETRY_TYPES)})"
+            )
+        for name in kind.required:
+            if getattr(self, name) is None:
+                raise ValueError(f"{label} no tiene {name}, que su tipo exige")
+        if self.title is None and self.reason is None:
+            raise ValueError(f"{label} necesita title o reason")
+        if self.from_node is not None and self.from_node == self.to_node:
+            raise ValueError(f"{label} empieza y termina en el mismo nodo")
         if len(set(self.source_ids)) != len(self.source_ids):
-            raise ValueError(f"la interrupción {self.id} repite fuentes")
-        if self.expected_end_date is not None and self.expected_end_date < self.start_date:
-            raise ValueError(f"la interrupción {self.id} prevé terminar antes de empezar")
+            raise ValueError(f"{label} repite fuentes")
+        start = self.start_date
+        expected = self.expected_end_date
+        if start is not None and expected is not None and expected < start:
+            raise ValueError(f"{label} prevé terminar antes de empezar")
+        if (self.status in kind.ended_statuses) != (self.ended_on is not None):
+            raise ValueError(
+                f"{label}: el estado {self.status} no encaja con ended_on;"
+                f" lo llevan los estados {', '.join(sorted(kind.ended_statuses))} y solo ellos"
+            )
         if self.ended_on is not None:
-            if self.ended_on < self.start_date:
-                raise ValueError(f"la interrupción {self.id} termina antes de empezar")
+            if start is not None and self.ended_on < start:
+                raise ValueError(f"{label} termina antes de empezar")
             if self.ended_on > self.checked_on:
-                raise ValueError(
-                    f"la interrupción {self.id} termina después de la fecha de consulta"
-                )
+                raise ValueError(f"{label} termina después de la fecha de consulta")
         return self
 
     def active_on(self, day: dt.date) -> bool:
-        return self.start_date <= day and (self.ended_on is None or day < self.ended_on)
+        started = self.start_date is None or self.start_date <= day
+        return started and (self.ended_on is None or day < self.ended_on)
 
 
-class InterruptionsFile(BaseModel):
+class AnnotationsFile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    interruptions: list[InterruptionSpec]
+    annotations: list[AnnotationSpec]
 
     @model_validator(mode="after")
-    def _unique_ids(self) -> InterruptionsFile:
-        ids = [i.id for i in self.interruptions]
+    def _unique_ids(self) -> AnnotationsFile:
+        ids = [a.id for a in self.annotations]
         if len(set(ids)) != len(ids):
-            raise ValueError("ids de interrupción repetidos")
+            raise ValueError("ids de anotación repetidos")
         return self
 
 
@@ -367,9 +447,9 @@ def load_network_spec(path: Path) -> NetworkSpec:
     return NetworkSpec.model_validate(json.loads(path.read_text(encoding="utf-8")))
 
 
-def load_interruptions(path: Path) -> list[InterruptionSpec]:
+def load_annotations(path: Path) -> list[AnnotationSpec]:
     raw = json.loads(path.read_text(encoding="utf-8"))
-    return InterruptionsFile.model_validate(raw).interruptions
+    return AnnotationsFile.model_validate(raw).annotations
 
 
 def load_sources(path: Path) -> list[SourceSpec]:

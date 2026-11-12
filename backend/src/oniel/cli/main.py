@@ -35,7 +35,7 @@ CURATED = settings.data_dir / "curated"
 #: Líneas cargadas, en el orden en que se importan (la primera define los nodos compartidos).
 SPECS_DEFAULT = [CURATED / f"{line_id}.json" for line_id in settings.line_ids]
 SOURCES_DEFAULT = CURATED / "sources.json"
-INTERRUPTIONS_DEFAULT = CURATED / "interrupciones.json"
+ANNOTATIONS_DEFAULT = CURATED / "anotaciones.json"
 SNAPSHOT_DEFAULT = settings.data_dir.parent.parent / "frontend" / "public" / "data"
 
 SpecsOption = Annotated[
@@ -117,19 +117,19 @@ def import_network_cmd(
     _echo_json(_run(go))
 
 
-@import_app.command("interruptions")
-def import_interruptions_cmd(
+@import_app.command("annotations")
+def import_annotations_cmd(
     file: Annotated[
-        Path, typer.Option(help="Fichero curado de interrupciones")
-    ] = INTERRUPTIONS_DEFAULT,
+        Path, typer.Option(help="Fichero curado de anotaciones de red")
+    ] = ANNOTATIONS_DEFAULT,
     sources: Annotated[Path, typer.Option(help="Registro de fuentes")] = SOURCES_DEFAULT,
 ) -> None:
-    """Importa (o reimporta) las interrupciones del servicio; la red tiene que estar cargada."""
-    from oniel.network.interruptions import import_interruptions
+    """Importa (o reimporta) las anotaciones de red (interrupciones del servicio); la red tiene que estar cargada."""
+    from oniel.network.annotations import import_annotations
 
     async def go() -> dict[str, Any]:
         async with connect(settings.database_url) as conn:
-            return await import_interruptions(conn, file, sources, settings.data_dir)
+            return await import_annotations(conn, file, sources, settings.data_dir)
 
     _echo_json(_run(go))
 
@@ -201,7 +201,7 @@ def import_all_cmd(
         ),
     ] = False,
 ) -> None:
-    """Migra, importa la red, las interrupciones y cada fichero de horarios declarado y exporta la instantánea."""
+    """Migra, importa la red, las anotaciones y cada fichero de horarios declarado y exporta la instantánea."""
     from oniel.importing import run_import_all
 
     async def go() -> dict[str, Any]:
@@ -213,7 +213,7 @@ def import_all_cmd(
                 feeds=_declared_feeds(),
                 data_dir=settings.data_dir,
                 snapshot_dir=SNAPSHOT_DEFAULT,
-                interruptions=INTERRUPTIONS_DEFAULT,
+                annotations=ANNOTATIONS_DEFAULT,
                 if_changed=if_changed,
             )
 
@@ -227,16 +227,16 @@ def validate_cmd(
         Path | None,
         typer.Option(help="Fichero GTFS (zip); por defecto, todos los declarados en sources.json"),
     ] = None,
-    interruptions: Annotated[
-        Path, typer.Option(help="Fichero curado de interrupciones")
-    ] = INTERRUPTIONS_DEFAULT,
+    annotations: Annotated[
+        Path, typer.Option(help="Fichero curado de anotaciones de red")
+    ] = ANNOTATIONS_DEFAULT,
     sources: Annotated[Path, typer.Option(help="Registro de fuentes")] = SOURCES_DEFAULT,
 ) -> None:
-    """Comprueba la red, la resolución de los horarios y las interrupciones sin tocar la base de datos."""
+    """Comprueba la red, la resolución de los horarios y las anotaciones sin tocar la base de datos."""
     from oniel.validate import (
         unused_route_overrides,
         validate_all,
-        validate_interruptions,
+        validate_annotations,
         validate_operators,
     )
 
@@ -264,8 +264,8 @@ def validate_cmd(
     reports.append(
         {"route_overrides": "todos los ficheros", "problems": unused_route_overrides(reports)}
     )
-    # Las interrupciones se contrastan con todas las líneas configuradas, se valide una o todas.
-    reports.append(validate_interruptions(interruptions, sources, context, settings.data_dir))
+    # Las anotaciones se contrastan con todas las líneas configuradas, se valide una o todas.
+    reports.append(validate_annotations(annotations, sources, context, settings.data_dir))
     # Los operadores y sus ficheros de horarios también se contrastan con todas las líneas.
     reports.append(validate_operators(context, sources, settings.data_dir))
     _echo_json(reports)

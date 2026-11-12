@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
-import type { InterruptionOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
+import type { AnnotationOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, productLabel, shortStop } from '../app/state'
-import { InterruptionNotice } from './InterruptionNotice'
+import { capasDe } from '../app/annotationLayers'
+import { AnnotationNotice } from './AnnotationNotice'
 import { PieFuente, Plegable } from './Plegable'
 
 interface Props {
@@ -14,8 +15,8 @@ interface Props {
   /** Operadores registrados, para nombrar al de cada tren cuando paran los de varios. */
   operators: Operator[]
   referenceDate: string | null
-  /** Interrupciones vigentes hoy, por id de tramo. */
-  interrupted: Map<string, InterruptionOut[]>
+  /** Anotaciones vigentes hoy, por id de tramo. */
+  annotated: Map<string, AnnotationOut[]>
   onSelectSegment: (id: string) => void
   /** Salta a una de las líneas que pasan por el nodo. */
   onGoLine: (lineId: string) => void
@@ -24,7 +25,7 @@ interface Props {
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, operators, referenceDate, interrupted, onSelectSegment, onGoLine, onCompare, onBack }: Props) {
+export function NodeDetail({ node, network, sources, operators, referenceDate, annotated, onSelectSegment, onGoLine, onCompare, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -35,8 +36,8 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, i
     .filter((n) => n.id === node.id)
     .map((n) => ({ km: n.km, line: network.lines.find((l) => l.id === n.line_id) }))
   const lineOf = (lineId: string) => network.lines.find((l) => l.id === lineId)
-  // Interrupciones de los tramos que confluyen aquí, cada una una sola vez.
-  const cuts = [...new Map(adjacent.flatMap((s) => interrupted.get(s.id) ?? []).map((i) => [i.id, i])).values()]
+  // Anotaciones de los tramos que confluyen aquí, cada una una sola vez.
+  const cuts = [...new Map(adjacent.flatMap((s) => annotated.get(s.id) ?? []).map((a) => [a.id, a])).values()]
 
   // App monta este componente con key={node.id}, así que el estado se reinicia al cambiar de nodo.
   useEffect(() => {
@@ -131,8 +132,8 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, i
         </aside>
       )}
 
-      {cuts.map((i) => (
-        <InterruptionNotice key={i.id} interruption={i} />
+      {cuts.map((a) => (
+        <AnnotationNotice key={a.id} annotation={a} />
       ))}
 
       <h3 className="subtitulo">Tramos que salen de aquí</h3>
@@ -146,12 +147,12 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, i
               {formatKm(s.length_km)} km{memberships.length > 1 && lineOf(s.line_id) ? ` · ${lineShortLabel(lineOf(s.line_id)!)}` : ''}
               {s.tracks === 1 ? ' · vía única' : ''}
             </span>
-            {interrupted.has(s.id) && (
-              <>
+            {capasDe(annotated.get(s.id)).map(({ kind, ficha }) => (
+              <Fragment key={kind}>
                 {' '}
-                <span className="senal roja">sin circulación</span>
-              </>
-            )}
+                <span className={`senal ${ficha.senal.clase}`}>{ficha.senal.texto}</span>
+              </Fragment>
+            ))}
           </li>
         ))}
         {connections.map((c) => (

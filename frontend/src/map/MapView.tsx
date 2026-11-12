@@ -12,7 +12,8 @@ import {
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { useEffect, useRef } from 'react'
 
-import type { InterruptionOut, NetworkOut } from '../data/types'
+import { CAPAS_CON_TRAZO } from '../app/annotationLayers'
+import type { AnnotationOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
 import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
@@ -24,8 +25,8 @@ interface Props {
   selection: Selection
   hoverId: string | null
   closedSegmentId: string | null
-  /** Interrupciones vigentes hoy, por id de tramo: esos tramos se dibujan en rojo. */
-  interrupted: Map<string, InterruptionOut[]>
+  /** Anotaciones vigentes hoy, por id de tramo: sus tramos se dibujan como diga la capa de su tipo. */
+  annotated: Map<string, AnnotationOut[]>
   /** Trazo que resalta la leyenda: los demás se atenúan. */
   highlight?: Trazo | null
   /** Trazo que la leyenda pide encuadrar al fijarlo; `n` cambia en cada petición para repetir el encuadre. */
@@ -114,7 +115,7 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, annotated, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
@@ -127,8 +128,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
   const networkRef = useRef<NetworkOut | null>(network)
   networkRef.current = network
   // Se deduce de la red, así que cambia a la vez que ella: addNetwork lo lee de aquí.
-  const interruptedRef = useRef(interrupted)
-  interruptedRef.current = interrupted
+  const annotatedRef = useRef(annotated)
+  annotatedRef.current = annotated
   const highlightRef = useRef(highlight)
   highlightRef.current = highlight
   const stateRef = useRef({ selection, hoverId, closedSegmentId, recorridos })
@@ -196,6 +197,11 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
 
   function addNetwork(map: MapLibreMap, net: NetworkOut) {
     boxesRef.current = segmentBoxes(net)
+    // Cada capa con trazo marca sus tramos con su propiedad (`interrumpido`, la de las interrupciones).
+    const marcas = (id: string) => {
+      const kinds = new Set(annotatedRef.current.get(id)?.map((a) => a.kind))
+      return Object.fromEntries(CAPAS_CON_TRAZO.map((capa) => [capa.propiedad, kinds.has(capa.kind)]))
+    }
     const segs = withNumericIds({
       features: net.segment_features.features.map((f) => ({
         ...f,
@@ -203,7 +209,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
           ...f.properties,
           tipo: segmentKind(net, f.properties.line_id),
           vias: f.properties.tracks === 1 ? 1 : 2,
-          interrumpido: interruptedRef.current.has(f.id),
+          ...marcas(f.id),
         },
       })),
     })

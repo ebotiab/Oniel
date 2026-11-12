@@ -8,6 +8,7 @@ from collections.abc import AsyncIterator, Iterator
 from pathlib import Path
 from typing import Any
 
+import asyncpg
 import httpx
 import pytest
 import pytest_asyncio
@@ -36,7 +37,7 @@ RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
     "atocha-cercanias-cordoba-por-manzanares": 4,
 }
-INTERRUPTIONS = DATA_DIR / "curated" / "interrupciones.json"
+ANNOTATIONS = DATA_DIR / "curated" / "anotaciones.json"
 LAV_CUT = "lav-madrid-andalucia-2026-10-28"
 WORKS_CUT = "convencional-obras-autopista-ferroviaria-2026-09-06"
 #: Día en que se comprobaron las dos interrupciones iniciales: ambas estaban vigentes. Las pruebas
@@ -58,14 +59,14 @@ async def imported(dsn: str) -> dict[str, Any]:
     from oniel.db.migrate import drop_everything, migrate
     from oniel.db.pool import connect
     from oniel.gtfs.importer import import_gtfs
+    from oniel.network.annotations import import_annotations
     from oniel.network.importer import import_network
-    from oniel.network.interruptions import import_interruptions
 
     async with connect(dsn) as conn:
         await drop_everything(conn)
         await migrate(conn)
         net1 = [await import_network(conn, s, SOURCES, DATA_DIR) for s in SPECS]
-        cuts1 = await import_interruptions(conn, INTERRUPTIONS, SOURCES, DATA_DIR)
+        cuts1 = await import_annotations(conn, ANNOTATIONS, SOURCES, DATA_DIR)
         gtfs1 = await import_gtfs(
             conn,
             FEED,
@@ -86,7 +87,7 @@ async def imported(dsn: str) -> dict[str, Any]:
         )
         # repetir la importación debe dejar exactamente el mismo estado
         net2 = [await import_network(conn, s, SOURCES, DATA_DIR) for s in SPECS]
-        cuts2 = await import_interruptions(conn, INTERRUPTIONS, SOURCES, DATA_DIR)
+        cuts2 = await import_annotations(conn, ANNOTATIONS, SOURCES, DATA_DIR)
         gtfs2 = await import_gtfs(
             conn,
             FEED,
@@ -116,7 +117,7 @@ async def imported(dsn: str) -> dict[str, Any]:
                 "service_stops",
                 "service_segment_passes",
                 "import_runs",
-                "interruptions",
+                "annotations",
                 "datasets",
             )
         }
@@ -170,12 +171,12 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
 async def test_interruptions_import_is_repeatable_and_survives_a_network_reimport(
     imported: dict[str, Any],
 ) -> None:
-    from oniel.network.spec import load_interruptions
+    from oniel.network.spec import load_annotations
 
     cuts1, cuts2 = imported["interruptions"]
     assert cuts1 == cuts2
     # la segunda importación de la red (que borra y recrea nodos de línea y tramos) no las pierde
-    assert imported["counts"]["interruptions"] == len(load_interruptions(INTERRUPTIONS))
+    assert imported["counts"]["annotations"] == len(load_annotations(ANNOTATIONS))
     assert {LAV_CUT, WORKS_CUT} <= set(cuts1["ids"])
 
 
@@ -183,11 +184,13 @@ async def test_interruptions_that_do_not_fit_the_network_are_not_imported(
     dsn: str, imported: dict[str, Any], tmp_path: Path
 ) -> None:
     from oniel.db.pool import connect
-    from oniel.network.interruptions import import_interruptions
+    from oniel.network.annotations import import_annotations
 
-    bad = tmp_path / "interrupciones.json"
+    bad = tmp_path / "anotaciones.json"
     entry = {
         "id": "corte-imposible",
+        "kind": "interrupcion",
+        "status": "vigente",
         "line_id": "lav-madrid-sevilla",
         "from_node": "cordoba",
         "to_node": "ciudad-real",
@@ -196,14 +199,14 @@ async def test_interruptions_that_do_not_fit_the_network_are_not_imported(
         "source_ids": ["adif-estado-de-la-red"],
         "checked_on": "2026-03-10",
     }
-    bad.write_text(json.dumps({"interruptions": [entry]}), encoding="utf-8")
+    bad.write_text(json.dumps({"annotations": [entry]}), encoding="utf-8")
     async with connect(dsn) as conn:
         with pytest.raises(ValueError, match="cordoba está después de ciudad-real"):
-            await import_interruptions(conn, bad, SOURCES, DATA_DIR)
+            await import_annotations(conn, bad, SOURCES, DATA_DIR)
         # la importación fallida no toca lo que había
         assert (
-            await conn.fetchval("SELECT count(*) FROM interruptions")
-            == (imported["counts"]["interruptions"])
+            await conn.fetchval("SELECT count(*) FROM annotations")
+            == (imported["counts"]["annotations"])
         )
 
 
@@ -315,6 +318,125 @@ async def test_interruptions_endpoint(client: httpx.AsyncClient) -> None:
     assert lav["segment_ids"][0] == "lav-madrid-sevilla:bif-la-sagra:urda"
     assert lav["segment_ids"][-1] == "lav-madrid-sevilla:adamuz:cordoba"
     assert len(lav["segment_ids"]) == 6 and lav["km_from"] < lav["km_to"]
+
+
+async def test_annotations_endpoint_filters_by_kind_and_day(client: httpx.AsyncClient) -> None:
+    r = await client.get("/api/annotations")
+    assert r.status_code == 200
+    everything = r.json()
+    by_id = {a["id"]: a for a in everything}
+    works = by_id[WORKS_CUT]
+    assert (works["kind"], works["status"]) == ("interrupcion", "vigente")
+    # el alcance es de nodo a nodo: ni nodo suelto ni geometría propia
+    assert works["line_id"] == CONV and works["node_id"] is None and works["geometry"] is None
+    assert len(works["segment_ids"]) == 9
+    # las interrupciones son el alias filtrado por tipo: las mismas entradas, campo por campo
+    cuts = (await client.get("/api/annotations", params={"kind": "interrupcion"})).json()
+    assert cuts == (await client.get("/api/interruptions")).json()
+    assert cuts == [a for a in everything if a["kind"] == "interrupcion"]
+    on = (await client.get("/api/annotations", params={"on": "2026-09-06"})).json()
+    assert {a["id"] for a in on} & {LAV_CUT, WORKS_CUT} == {WORKS_CUT}
+    assert on == (await client.get("/api/interruptions", params={"date": "2026-09-06"})).json()
+    unknown = await client.get("/api/annotations", params={"kind": "no-declarado"})
+    assert unknown.status_code == 422 and "interrupcion" in unknown.json()["detail"]
+
+
+async def test_index_and_lines_carry_annotations_with_interruptions_as_an_alias(
+    client: httpx.AsyncClient,
+) -> None:
+    index = (await client.get("/api/lines")).json()
+    assert {LAV_CUT, WORKS_CUT} <= {a["id"] for a in index["annotations"]}
+    assert index["interruptions"] == [
+        a for a in index["annotations"] if a["kind"] == "interrupcion"
+    ]
+    line = (await client.get(f"/api/lines/{CONV}")).json()
+    assert [a["id"] for a in line["annotations"]] == [WORKS_CUT]
+    assert line["interruptions"] == line["annotations"]
+    assert (await client.get(f"/api/lines/{MZCR}")).json()["annotations"] == []
+
+
+async def test_annotations_of_every_scope_are_stored_and_read_back(
+    dsn: str, imported: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Un tipo recién declarado se guarda y se lee por el mismo camino, con sus tres alcances."""
+    from oniel.db.pool import connect
+    from oniel.domain.annotations import ANNOTATION_KINDS, AnnotationKind
+    from oniel.repo.network_repo import fetch_annotations, fetch_interruptions
+
+    monkeypatch.setitem(
+        ANNOTATION_KINDS,
+        "juguete",
+        AnnotationKind(
+            id="juguete",
+            label="el juguete",
+            statuses=("en estudio",),
+            ended_statuses=frozenset(),
+            scopes=("tramo", "nodo", "geometria"),
+        ),
+    )
+    line = {"type": "LineString", "coordinates": [[-3.7, 40.4], [-4.0, 39.9]]}
+    common: dict[str, Any] = {
+        "kind": "juguete",
+        "status": "en estudio",
+        "source_ids": ["adif-estado-de-la-red"],
+        "checked_on": "2026-03-10",
+    }
+    entries: list[dict[str, Any]] = [
+        {**common, "id": "j-geometria", "title": "Variante de prueba", "geometry": line},
+        {**common, "id": "j-nodo", "title": "Estación de prueba", "node_id": "manzanares"},
+        {
+            **common,
+            "id": "j-tramo",
+            "reason": "Tramo de prueba.",
+            "line_id": MZCR,
+            "from_node": "manzanares",
+            "to_node": "daimiel",
+            "start_date": "2026-03-01",
+        },
+    ]
+    async with connect(dsn) as conn:
+        tr = conn.transaction()
+        await tr.start()
+        try:
+            for e in entries:
+                await conn.execute(
+                    """
+                    INSERT INTO annotations (id, kind, status, line_id, from_node_id, to_node_id,
+                        node_id, geometry, start_date, title, reason, source_ids, checked_on)
+                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+                    """,
+                    e["id"],
+                    e["kind"],
+                    e["status"],
+                    e.get("line_id"),
+                    e.get("from_node"),
+                    e.get("to_node"),
+                    e.get("node_id"),
+                    e.get("geometry"),
+                    dt.date.fromisoformat(e["start_date"]) if "start_date" in e else None,
+                    e.get("title"),
+                    e.get("reason"),
+                    e["source_ids"],
+                    dt.date.fromisoformat(e["checked_on"]),
+                )
+            toys = {a.id: a for a in await fetch_annotations(conn, kind="juguete")}
+            assert toys["j-geometria"].geometry == line and toys["j-geometria"].segment_ids == []
+            assert toys["j-nodo"].node_name == "Manzanares"
+            assert toys["j-tramo"].segment_ids and toys["j-tramo"].from_name == "Manzanares"
+            # un tipo que no corta la circulación no lleva nota de horario ni cuenta como interrupción
+            assert all(a.schedule_note is None for a in toys.values())
+            assert not {a.id for a in await fetch_interruptions(conn)} & set(toys)
+            # por línea salen las de sus tramos y las de sus nodos; las de geometría propia, no
+            in_line = {a.id for a in await fetch_annotations(conn, line_id=MZCR)}
+            assert in_line == {"j-nodo", "j-tramo"}
+            # el alcance es uno solo: la base rechaza una entrada con dos
+            with pytest.raises(asyncpg.CheckViolationError):
+                async with conn.transaction():
+                    await conn.execute(
+                        "UPDATE annotations SET node_id = 'daimiel' WHERE id = 'j-geometria'"
+                    )
+        finally:
+            await tr.rollback()
 
 
 async def test_interruptions_endpoint_filters_by_date(client: httpx.AsyncClient) -> None:

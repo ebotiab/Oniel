@@ -79,11 +79,11 @@ async def run_import_all(
     feeds: Sequence[FeedSpec],
     data_dir: Path,
     snapshot_dir: Path | None,
-    interruptions: Path | None = None,
+    annotations: Path | None = None,
     if_changed: bool = False,
     src_dir: Path = SRC_DIR,
 ) -> dict[str, Any]:
-    """Migra, importa la red, las interrupciones y cada fichero de horarios, exporta la instantánea y registra la huella.
+    """Migra, importa la red, las anotaciones y cada fichero de horarios, exporta la instantánea y registra la huella.
 
     Con ``if_changed`` devuelve ``{"skipped": True}`` sin tocar los datos cuando la huella coincide
     con la de la última importación. Las migraciones se aplican siempre: son baratas y la tabla de
@@ -93,8 +93,8 @@ async def run_import_all(
     from oniel.db.migrate import migrate
     from oniel.export.snapshot import export_snapshot
     from oniel.gtfs.importer import import_gtfs
+    from oniel.network.annotations import import_annotations
     from oniel.network.importer import import_network
-    from oniel.network.interruptions import import_interruptions
 
     migrations = await migrate(conn)
     fingerprint = import_fingerprint(data_dir, src_dir)
@@ -102,12 +102,8 @@ async def run_import_all(
         return {"skipped": True, "fingerprint": fingerprint, "migrations": migrations}
 
     nets = [await import_network(conn, path, sources, data_dir) for path in specs]
-    # Las interrupciones se refieren a nodos de las líneas: van después de la red.
-    cuts = (
-        await import_interruptions(conn, interruptions, sources, data_dir)
-        if interruptions
-        else None
-    )
+    # Las anotaciones se refieren a nodos de las líneas: van después de la red.
+    notes = await import_annotations(conn, annotations, sources, data_dir) if annotations else None
     # Un conjunto de datos por fichero declarado, del más antiguo al más reciente. La lista es la
     # referencia: reimportar la red borra los pasos por tramo de todos los conjuntos, así que uno
     # que ya no esté declarado se quedaría sin ellos y se retira.
@@ -136,7 +132,7 @@ async def run_import_all(
         "fingerprint": fingerprint,
         "migrations": migrations,
         "network": nets,
-        "interruptions": cuts,
+        "annotations": notes,
         "gtfs": gtfs,
         "datasets_removed": sorted(r["id"] for r in removed),
         "snapshot": snap,

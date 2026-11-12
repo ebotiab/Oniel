@@ -1,7 +1,9 @@
 {
-  "interruptions": [
+  "annotations": [
     {
       "id": "lav-madrid-andalucia-2026-10-28",
+      "kind": "interrupcion",
+      "status": "vigente",
       "line_id": "lav-madrid-sevilla",
       "from_node": "bif-la-sagra",
       "to_node": "cordoba",
@@ -20,6 +22,8 @@
     },
     {
       "id": "convencional-obras-autopista-ferroviaria-2026-09-06",
+      "kind": "interrupcion",
+      "status": "vigente",
       "line_id": "convencional-madrid-alcazar-cordoba",
       "from_node": "almuradiel-viso-del-marques",
       "to_node": "alcolea-de-cordoba",

@@ -10,8 +10,9 @@ from typing import Any
 import asyncpg
 
 from oniel.db.pool import fetch_int
-from oniel.domain.interruptions import schedule_note
+from oniel.domain.annotations import ANNOTATION_KINDS, INTERRUPTION, schedule_note
 from oniel.domain.schemas import (
+    AnnotationOut,
     ConnectionOut,
     CoverageOut,
     Feature,
@@ -235,6 +236,90 @@ async def fetch_connections(
     ]
 
 
+async def fetch_annotations(
+    conn: asyncpg.Connection,
+    *,
+    kind: str | None = None,
+    day: dt.date | None = None,
+    segment_id: str | None = None,
+    line_id: str | None = None,
+) -> list[AnnotationOut]:
+    """Anotaciones registradas, con sus tramos y sus fuentes.
+
+    ``kind`` deja solo las de ese tipo; ``day``, las vigentes ese día; ``segment_id``, las que
+    afectan a ese tramo; ``line_id``, las de esa línea o de alguno de sus nodos. Los tramos
+    afectados son los que quedan entre los dos nodos de la anotación según su orden en la línea.
+    """
+    rows = await conn.fetch(
+        """
+        SELECT a.*, fa.name AS from_name, tb.name AS to_name, n.name AS node_name,
+               lf.km AS km_from, lt.km AS km_to,
+               ARRAY(SELECT s.id FROM segments s
+                     WHERE s.line_id = a.line_id AND s.seq >= lf.seq AND s.seq < lt.seq
+                     ORDER BY s.seq) AS segment_ids
+        FROM annotations a
+        LEFT JOIN lines l ON l.id = a.line_id
+        LEFT JOIN line_nodes lf ON lf.line_id = a.line_id AND lf.node_id = a.from_node_id
+        LEFT JOIN line_nodes lt ON lt.line_id = a.line_id AND lt.node_id = a.to_node_id
+        LEFT JOIN nodes fa ON fa.id = a.from_node_id
+        LEFT JOIN nodes tb ON tb.id = a.to_node_id
+        LEFT JOIN nodes n ON n.id = a.node_id
+        WHERE ($1::date IS NULL OR ((a.start_date IS NULL OR a.start_date <= $1)
+                                    AND (a.ended_on IS NULL OR $1 < a.ended_on)))
+          AND ($2::text IS NULL OR a.line_id = $2 OR EXISTS (
+                SELECT 1 FROM line_nodes x WHERE x.line_id = $2 AND x.node_id = a.node_id))
+          AND ($3::text IS NULL OR a.kind = $3)
+        ORDER BY l.sort_order NULLS LAST, a.line_id NULLS LAST, lf.seq NULLS LAST,
+                 a.start_date NULLS LAST, a.id
+        """,
+        day,
+        line_id,
+        kind,
+    )
+    source_rows = await conn.fetch("SELECT id, name, publisher, url FROM sources")
+    sources = {r["id"]: SourceRef(**dict(r)) for r in source_rows}
+    out: list[AnnotationOut] = []
+    for r in rows:
+        segment_ids = list(r["segment_ids"])
+        if segment_id is not None and segment_id not in segment_ids:
+            continue
+        refs = [sources[s] for s in r["source_ids"] if s in sources]
+        publisher = refs[0].publisher if refs else "fuente sin registrar"
+        declared = ANNOTATION_KINDS.get(r["kind"])
+        cuts = declared is not None and declared.cuts_service and r["start_date"] is not None
+        out.append(
+            AnnotationOut(
+                id=r["id"],
+                kind=r["kind"],
+                status=r["status"],
+                line_id=r["line_id"],
+                from_node_id=r["from_node_id"],
+                to_node_id=r["to_node_id"],
+                from_name=r["from_name"],
+                to_name=r["to_name"],
+                km_from=float(r["km_from"]) if r["km_from"] is not None else None,
+                km_to=float(r["km_to"]) if r["km_to"] is not None else None,
+                segment_ids=segment_ids,
+                node_id=r["node_id"],
+                node_name=r["node_name"],
+                geometry=_geom(r["geometry"]) if r["geometry"] else None,
+                start_date=r["start_date"],
+                expected_end_date=r["expected_end_date"],
+                expected_end_text=r["expected_end_text"],
+                ended_on=r["ended_on"],
+                title=r["title"],
+                reason=r["reason"],
+                note=r["note"],
+                sources=refs,
+                checked_on=r["checked_on"],
+                schedule_note=(
+                    schedule_note(r["start_date"], r["ended_on"], publisher) if cuts else None
+                ),
+            )
+        )
+    return out
+
+
 async def fetch_interruptions(
     conn: asyncpg.Connection,
     *,
@@ -242,63 +327,10 @@ async def fetch_interruptions(
     segment_id: str | None = None,
     line_id: str | None = None,
 ) -> list[InterruptionOut]:
-    """Interrupciones registradas, con sus tramos y sus fuentes.
-
-    ``day`` deja solo las vigentes ese día; ``segment_id``, las que afectan a ese tramo;
-    ``line_id``, las de esa línea. Los tramos afectados son los que quedan entre los dos nodos
-    de la interrupción según su orden en la línea.
-    """
-    rows = await conn.fetch(
-        """
-        SELECT i.*, a.name AS from_name, b.name AS to_name, lf.km AS km_from, lt.km AS km_to,
-               ARRAY(SELECT s.id FROM segments s
-                     WHERE s.line_id = i.line_id AND s.seq >= lf.seq AND s.seq < lt.seq
-                     ORDER BY s.seq) AS segment_ids
-        FROM interruptions i
-        JOIN lines l ON l.id = i.line_id
-        JOIN line_nodes lf ON lf.line_id = i.line_id AND lf.node_id = i.from_node_id
-        JOIN line_nodes lt ON lt.line_id = i.line_id AND lt.node_id = i.to_node_id
-        JOIN nodes a ON a.id = i.from_node_id
-        JOIN nodes b ON b.id = i.to_node_id
-        WHERE ($1::date IS NULL OR (i.start_date <= $1 AND (i.ended_on IS NULL OR $1 < i.ended_on)))
-          AND ($2::text IS NULL OR i.line_id = $2)
-        ORDER BY l.sort_order, i.line_id, lf.seq, i.start_date, i.id
-        """,
-        day,
-        line_id,
+    """Las anotaciones de tipo ``interrupcion``: lo que corta la circulación en sus tramos."""
+    return await fetch_annotations(
+        conn, kind=INTERRUPTION, day=day, segment_id=segment_id, line_id=line_id
     )
-    source_rows = await conn.fetch("SELECT id, name, publisher, url FROM sources")
-    sources = {r["id"]: SourceRef(**dict(r)) for r in source_rows}
-    out: list[InterruptionOut] = []
-    for r in rows:
-        segment_ids = list(r["segment_ids"])
-        if segment_id is not None and segment_id not in segment_ids:
-            continue
-        refs = [sources[s] for s in r["source_ids"] if s in sources]
-        publisher = refs[0].publisher if refs else "fuente sin registrar"
-        out.append(
-            InterruptionOut(
-                id=r["id"],
-                line_id=r["line_id"],
-                from_node_id=r["from_node_id"],
-                to_node_id=r["to_node_id"],
-                from_name=r["from_name"],
-                to_name=r["to_name"],
-                km_from=float(r["km_from"]),
-                km_to=float(r["km_to"]),
-                segment_ids=segment_ids,
-                start_date=r["start_date"],
-                expected_end_date=r["expected_end_date"],
-                expected_end_text=r["expected_end_text"],
-                ended_on=r["ended_on"],
-                reason=r["reason"],
-                note=r["note"],
-                sources=refs,
-                checked_on=r["checked_on"],
-                schedule_note=schedule_note(r["start_date"], r["ended_on"], publisher),
-            )
-        )
-    return out
 
 
 async def fetch_network(conn: asyncpg.Connection) -> NetworkOut:
@@ -344,7 +376,7 @@ async def fetch_network(conn: asyncpg.Connection) -> NetworkOut:
         ),
         node_features=FeatureCollection(features=node_features),
         connection_features=_connection_features(connections),
-        interruptions=await fetch_interruptions(conn),
+        annotations=await fetch_annotations(conn),
     )
 
 
@@ -382,7 +414,7 @@ async def fetch_index(
         ),
         connections=[c for c, _ in connections],
         connection_features=_connection_features(connections),
-        interruptions=await fetch_interruptions(conn),
+        annotations=await fetch_annotations(conn),
         simplify_tolerance_m=tolerance_m,
     )
 
@@ -413,7 +445,7 @@ async def fetch_line_detail(
             ]
         ),
         connections=[c for c, _ in await fetch_connections(conn) if c.node_id in node_ids],
-        interruptions=await fetch_interruptions(conn, line_id=line_id),
+        annotations=await fetch_annotations(conn, line_id=line_id),
         date=day,
         counts={k: v for k, v in counts.items() if k in segment_ids},
         counts_by_operator={k: v for k, v in by_operator.items() if k in segment_ids},

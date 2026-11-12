@@ -8,7 +8,7 @@ La simulación responde a una pregunta sencilla: **si este tramo se cerrase tal 
 - Los horarios publicados por Renfe en su GTFS (`backend/data/raw/renfe/`): para cada tren, sus paradas con hora de llegada y salida.
 - Una asignación curada de cada parada GTFS a la red, por línea (`stop_mappings` en `backend/data/curated/<línea>.json`): o la parada es un nodo de la línea, o está fuera y el tren entra o sale de la línea por un nodo concreto (por ejemplo, Málaga sale de la LAV por la bifurcación de Málaga; Jaén sale de la línea convencional por Espelúy).
 - Las reglas de recorrido (`route_overrides`) para los trenes que cambian de línea a mitad de camino: dicen entre qué paradas el viaje va por cada línea y por qué nodo sale hacia las otras.
-- Las interrupciones del servicio registradas a mano (`backend/data/curated/interrupciones.json`, descritas en `docs/datos.md`): no cambian el cálculo, pero el resultado dice cuándo el tramo o su alternativa ya están interrumpidos en la fecha simulada.
+- Las interrupciones del servicio registradas a mano (`backend/data/curated/anotaciones.json`, descritas en `docs/datos.md`): no cambian el cálculo, pero el resultado dice cuándo el tramo o su alternativa ya están interrumpidos en la fecha simulada.
 
 ## Cómo se calcula el paso de un tren por un tramo
 
@@ -172,7 +172,7 @@ Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes r
 
 ## Limitaciones conocidas
 
-- Los horarios son los planificados por Renfe y por Ouigo. Las interrupciones registradas en `interrupciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
+- Los horarios son los planificados por Renfe y por Ouigo. Las interrupciones registradas en `anotaciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
 - Hay servicios de Renfe y de Ouigo. Faltan los de Iryo, que no publica sus horarios en un formato abierto, además de Cercanías y mercancías: un cierre en la alta velocidad afecta a más trenes de los que la simulación enumera. Los trenes de Ouigo no paran entre Madrid y Córdoba, de modo que su paso por cada tramo es siempre estimado.
 - El fichero de Ouigo vale hasta el 12 de diciembre de 2026: para un día posterior, la simulación solo cuenta los trenes de Renfe.
 - El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; las alternativas solo se señalan.
