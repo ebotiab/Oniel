@@ -1,6 +1,6 @@
 // Escenario: una lista de modificaciones sobre la red cargada (cerrar tramos, añadir un enlace
 // esbozado entre dos nodos, cambiar la velocidad de un tramo). Es el mismo modelo y la misma cadena
-// corta que `backend/src/oniel/routing/scenario.py`; la cadena va en la URL (`#/escenario/<cadena>`)
+// corta que `backend/src/oniel/routing/scenario.py`; la cadena va en la URL (`/escenario/<cadena>`)
 // y en `GET /api/routes?scenario=`. Une las modificaciones con `;` y sus campos con `~`:
 //
 //   c~<tramo>                       cerrar un tramo

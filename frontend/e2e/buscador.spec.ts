@@ -20,7 +20,7 @@ test.describe('Buscar una estación o una línea', () => {
     await expect(primero).toContainText('Estación')
     await expect(primero).toHaveAttribute('aria-selected', 'true')
     await campo.press('Enter')
-    await expect(page).toHaveURL(/#\/nodo\/alcazar-de-san-juan$/)
+    await expect(page).toHaveURL(/\/nodo\/alcazar-de-san-juan$/)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Alcázar de San Juan' })).toBeVisible()
     // el buscador queda recogido y vacío
@@ -35,7 +35,7 @@ test.describe('Buscar una estación o una línea', () => {
     const resultado = page.getByRole('option', { name: /Urda/ })
     await expect(resultado).toContainText('Puesto de adelantamiento (PAET) · Madrid – Sevilla')
     await resultado.click()
-    await expect(page).toHaveURL(/#\/nodo\/urda$/)
+    await expect(page).toHaveURL(/\/nodo\/urda$/)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Urda' })).toBeVisible()
   })
@@ -51,7 +51,7 @@ test.describe('Buscar una estación o una línea', () => {
     await campo.press('ArrowDown')
     await expect(page.getByRole('option').nth(2)).toHaveAttribute('aria-selected', 'true')
     await campo.press('Enter')
-    await expect(page).toHaveURL(/#\/linea\/manzanares-ciudad-real$/)
+    await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
     // la dirección sirve para volver: al recargar sigue en esa línea
     await page.reload()

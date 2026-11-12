@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
 
 import { activeInterruptions, bySegment } from '../src/app/interruptions.ts'
 import { compararRecorridos, formatDuracion, minutosEntre, trenesDelRecorrido, trenesDirectos } from '../src/app/recorridos.ts'
-import { parseHash, toHash } from '../src/app/state.ts'
+import { parseRoute, routePath } from '../src/app/state.ts'
 import { composeNetwork } from '../src/data/network.ts'
 import type { NetworkIndexOut, NodeCall } from '../src/data/types.ts'
 import { buildGraph } from '../src/routing/graph.ts'
@@ -26,13 +26,13 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
   })
 
   test('la ruta del comparador va y vuelve de la URL', () => {
-    expect(parseHash('#/recorridos').recorridos).toEqual({ from: null, to: null })
-    expect(parseHash('#/recorridos/manzanares').recorridos).toEqual({ from: 'manzanares', to: null })
-    expect(parseHash('#/recorridos/-/cordoba').recorridos).toEqual({ from: null, to: 'cordoba' })
-    const conSupuesto = `#/recorridos/${MADRID}/ciudad-real/c~${URDA_CIUDAD_REAL}`
-    expect(parseHash(conSupuesto).recorridos).toEqual({ from: MADRID, to: 'ciudad-real', escenario: `c~${URDA_CIUDAD_REAL}` })
-    for (const hash of ['#/recorridos', '#/recorridos/manzanares', '#/recorridos/-/cordoba', `#/recorridos/${MADRID}/cordoba`, conSupuesto]) {
-      expect(toHash(parseHash(hash))).toBe(hash)
+    expect(parseRoute('/recorridos').recorridos).toEqual({ from: null, to: null })
+    expect(parseRoute('/recorridos/manzanares').recorridos).toEqual({ from: 'manzanares', to: null })
+    expect(parseRoute('/recorridos/-/cordoba').recorridos).toEqual({ from: null, to: 'cordoba' })
+    const conSupuesto = `/recorridos/${MADRID}/ciudad-real/c~${URDA_CIUDAD_REAL}`
+    expect(parseRoute(conSupuesto).recorridos).toEqual({ from: MADRID, to: 'ciudad-real', escenario: `c~${URDA_CIUDAD_REAL}` })
+    for (const ruta of ['/recorridos', '/recorridos/manzanares', '/recorridos/-/cordoba', `/recorridos/${MADRID}/cordoba`, conSupuesto]) {
+      expect(routePath(parseRoute(ruta))).toBe(ruta)
     }
   })
 
@@ -118,7 +118,7 @@ test.describe('Comparador de recorridos: la vista', () => {
   test('desde la vista de la red se eligen dos estaciones y se comparan Madrid y Córdoba', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('boton-recorridos').click()
-    await expect(page).toHaveURL(/#\/recorridos$/)
+    await expect(page).toHaveURL(/\/recorridos$/)
     const panel = page.getByTestId('comparador')
     await expect(panel.getByRole('heading', { name: 'Comparar recorridos' })).toBeVisible()
     await expect(page.getByTestId('recorridos-ayuda')).toBeVisible()
@@ -126,11 +126,11 @@ test.describe('Comparador de recorridos: la vista', () => {
     const desde = page.getByRole('combobox', { name: 'Desde: buscar una estación' })
     await desde.fill('atocha')
     await desde.press('Enter')
-    await expect(page).toHaveURL(/#\/recorridos\/madrid-puerta-de-atocha$/)
+    await expect(page).toHaveURL(/\/recorridos\/madrid-puerta-de-atocha$/)
     const hasta = page.getByRole('combobox', { name: 'Hasta: buscar una estación' })
     await hasta.fill('cordoba')
     await page.getByRole('option', { name: /^Córdoba/ }).click()
-    await expect(page).toHaveURL(/#\/recorridos\/madrid-puerta-de-atocha\/cordoba$/)
+    await expect(page).toHaveURL(/\/recorridos\/madrid-puerta-de-atocha\/cordoba$/)
 
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos).toHaveCount(3)
@@ -166,13 +166,13 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(page.getByTestId('mas-detalle')).toContainText('uno más, más largo, que no se enseña')
 
     await page.getByTestId('recorridos-invertir').click()
-    await expect(page).toHaveURL(/#\/recorridos\/cordoba\/madrid-puerta-de-atocha$/)
+    await expect(page).toHaveURL(/\/recorridos\/cordoba\/madrid-puerta-de-atocha$/)
     await page.getByTestId('volver-red').click()
     await expect(page.getByTestId('vista-red')).toBeVisible()
   })
 
   test('Madrid – Ciudad Real con la alta velocidad cerrada señala el recorrido por Manzanares', async ({ page }) => {
-    await page.goto(`/#/recorridos/${MADRID}/ciudad-real/c~${URDA_CIUDAD_REAL}`)
+    await page.goto(`/recorridos/${MADRID}/ciudad-real/c~${URDA_CIUDAD_REAL}`)
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos).toHaveCount(2)
     await expect(page.getByTestId('recorridos-escenario')).toContainText('cierre de Urda – Ciudad Real')
@@ -184,12 +184,12 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(recorridos.nth(1)).toContainText('260,5 km · 1 h 47 min sin paradas · 64,4 km de vía única')
     // sin el supuesto, la URL vuelve a ser la de las dos estaciones
     await page.getByRole('button', { name: 'Quitar el supuesto' }).click()
-    await expect(page).toHaveURL(/#\/recorridos\/madrid-puerta-de-atocha\/ciudad-real$/)
+    await expect(page).toHaveURL(/\/recorridos\/madrid-puerta-de-atocha\/ciudad-real$/)
     await expect(recorridos).toHaveCount(2)
   })
 
   test('Sevilla – Manzanares: dos recorridos con nombres distintos y ningún tren directo', async ({ page }) => {
-    await page.goto('/#/recorridos/sevilla-santa-justa/manzanares')
+    await page.goto('/recorridos/sevilla-santa-justa/manzanares')
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos).toHaveCount(2)
     await expect(recorridos.nth(0)).toContainText('Por Ciudad Real')
@@ -202,16 +202,16 @@ test.describe('Comparador de recorridos: la vista', () => {
   })
 
   test('la ficha de una estación abre el comparador con ella como salida', async ({ page }) => {
-    await page.goto('/#/nodo/manzanares')
+    await page.goto('/nodo/manzanares')
     await page.getByTestId('recorridos-desde-aqui').click()
-    await expect(page).toHaveURL(/#\/recorridos\/manzanares$/)
+    await expect(page).toHaveURL(/\/recorridos\/manzanares$/)
     await expect(page.getByTestId('recorridos-desde')).toContainText('Manzanares')
     await page.getByTestId('recorridos-desde').getByRole('button', { name: /Cambiar/ }).click()
-    await expect(page).toHaveURL(/#\/recorridos$/)
+    await expect(page).toHaveURL(/\/recorridos$/)
   })
 
   test('una estación que no existe en la URL queda sin elegir', async ({ page }) => {
-    await page.goto('/#/recorridos/atlantida/cordoba')
+    await page.goto('/recorridos/atlantida/cordoba')
     await expect(page.getByRole('combobox', { name: 'Desde: buscar una estación' })).toBeVisible()
     await expect(page.getByTestId('recorridos-hasta')).toContainText('Córdoba')
     await expect(page.getByTestId('recorrido')).toHaveCount(0)

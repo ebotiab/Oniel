@@ -2,7 +2,8 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 
 import { termino, type TerminoId } from './glosario'
-import { hashGlosario, useAbrirGlosario } from './glosarioContexto'
+import { abreAparte } from '../app/navegacion'
+import { rutaGlosario, useAbrirGlosario } from './glosarioContexto'
 
 interface Props {
   id: TerminoId
@@ -102,10 +103,10 @@ export function Termino({ id, children }: Props) {
           <span className="termino-nota-texto">{t.breve}</span>
           <a
             className="termino-nota-enlace"
-            href={hashGlosario(id)}
+            href={rutaGlosario(id)}
             onClick={(e) => {
               // con Ctrl, ⌘ o el botón central el enlace se abre aparte, como cualquier otro
-              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+              if (abreAparte(e)) return
               e.preventDefault()
               nota.current?.hidePopover()
               abrirGlosario(id)
