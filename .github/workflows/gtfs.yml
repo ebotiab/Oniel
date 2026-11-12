@@ -1,0 +1,239 @@
+# Refresco semanal de los horarios de Renfe (docs/datos.md, «Refresco de los horarios»).
+#
+# Descarga el GTFS que Renfe publica en data.renfe.com (la URL registrada en sources.json) y lo
+# compara por SHA-256 con los ficheros ya declarados. Si no ha cambiado, termina sin abrir nada. Si
+# ha cambiado, lo guarda en backend/data/raw/ con la fecha en el nombre, lo declara en sources.json,
+# pasa las comprobaciones (validate, import all, pytest y Playwright sobre la instantánea
+# regenerada) y abre una PR para que la revise una persona. Si alguna comprobación falla no abre la
+# PR: abre una incidencia. Mientras haya una PR de refresco abierta no abre otra.
+#
+# No fusiona nada: fusionar en main publica, y eso lo decide una persona. El GTFS de Ouigo no se
+# descarga aquí (el Punto de Acceso Nacional exige una cuenta): el flujo solo recuerda, con una
+# incidencia, que su validez está a punto de terminar.
+name: Refresco del GTFS
+
+on:
+  schedule:
+    # Los lunes a las 06:30 UTC. Renfe vuelve a generar su fichero cada noche, hacia la 01:00.
+    - cron: "30 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  # Para lanzar el CI sobre la rama de la PR: GitHub no ejecuta los flujos de `pull_request` en una
+  # PR abierta con el token de otro flujo.
+  actions: write
+
+concurrency:
+  group: refresco-gtfs
+  cancel-in-progress: false
+
+env:
+  FUENTE: renfe-gtfs-av-ld-md
+  ETIQUETA: refresco-gtfs
+  # Días de margen para recordar un fichero que se descarga a mano antes de que deje de valer.
+  DIAS_AVISO: "21"
+  ONIEL_DATABASE_URL: postgresql://oniel:oniel@localhost:5432/oniel
+  GH_TOKEN: ${{ github.token }}
+  GH_REPO: ${{ github.repository }}
+
+jobs:
+  refresco:
+    name: Descargar, comparar y abrir la PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: oniel
+          POSTGRES_PASSWORD: oniel
+          POSTGRES_DB: oniel
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U oniel"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Instalar uv y Python 3.13 (con caché de paquetes)
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: "3.13"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - name: Dependencias (uv sync, con el lockfile tal cual)
+        working-directory: backend
+        run: uv sync --locked
+
+      - name: Etiqueta del refresco
+        run: |
+          gh label create "$ETIQUETA" --force --color 1D76DB \
+            --description "Refresco automático de los ficheros de horarios"
+
+      # Los ficheros que no se descargan solos (hoy, el de Ouigo) dejan de valer un día concreto.
+      - name: Recordar los ficheros que se descargan a mano y están a punto de caducar
+        working-directory: backend
+        run: |
+          uv run oniel-data refresh expiring --days "$DIAS_AVISO" --exclude "$FUENTE" > "$RUNNER_TEMP/caducan.json"
+          if [ "$(jq length "$RUNNER_TEMP/caducan.json")" = "0" ]; then
+            echo "Ningún fichero de descarga manual termina su validez en ${DIAS_AVISO} días o menos."
+            exit 0
+          fi
+          jq -r '.[] | "- `\(.source_id)` (`backend/data/\(.file)`): vale hasta el \(.valid_to_text)."' \
+            "$RUNNER_TEMP/caducan.json" | tee "$RUNNER_TEMP/caducan.md"
+          abierta="$(gh issue list --state open --label "$ETIQUETA" --search "in:title Descargar a mano" --json number --jq '.[0].number // empty')"
+          if [ -n "$abierta" ]; then
+            echo "Ya está abierta la incidencia #${abierta}: no se abre otra."
+            exit 0
+          fi
+          {
+            echo "Estos ficheros de horarios no se refrescan solos y su validez termina en ${DIAS_AVISO} días o menos:"
+            echo
+            cat "$RUNNER_TEMP/caducan.md"
+            echo
+            echo "Qué hacer: seguir «Refresco de los horarios» de [docs/datos.md](https://github.com/${GH_REPO}/blob/main/docs/datos.md#refresco-de-los-horarios). Se descarga el fichero vigente con una cuenta del Punto de Acceso Nacional, se guarda en \`backend/data/raw/\` con la fecha en el nombre, se declara en \`feeds\` de \`sources.json\` y se ejecutan \`validate\` e \`import all\`. La PR que lo haga cierra esta incidencia."
+            echo
+            echo "Cuando la validez de un fichero termina sin otro que lo releve, los ficheros vigentes dejan de coincidir en algún día y \`oniel-data validate\` falla."
+            echo
+            echo "La abre el flujo «${GITHUB_WORKFLOW}» (\`.github/workflows/gtfs.yml\`), que no descarga estos ficheros: su fuente exige una cuenta de usuario."
+          } > "$RUNNER_TEMP/caducan-cuerpo.md"
+          gh issue create \
+            --title "Descargar a mano los horarios que están a punto de caducar" \
+            --label "$ETIQUETA" --label datos \
+            --body-file "$RUNNER_TEMP/caducan-cuerpo.md"
+
+      - name: PR de refresco ya abierta
+        id: abierta
+        run: |
+          numero="$(gh pr list --state open --label "$ETIQUETA" --json number --jq '.[0].number // empty')"
+          echo "numero=${numero}" >> "$GITHUB_OUTPUT"
+          if [ -n "$numero" ]; then
+            echo "La PR #${numero} de un refresco anterior sigue abierta: no se descarga nada ni se abre otra." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Descargar el fichero publicado y compararlo con los declarados
+        id: refresco
+        if: steps.abierta.outputs.numero == ''
+        working-directory: backend
+        run: |
+          uv run oniel-data refresh gtfs --source "$FUENTE" > "$RUNNER_TEMP/refresco.json"
+          jq 'del(.pending)' "$RUNNER_TEMP/refresco.json"
+          {
+            echo "cambio=$(jq -r .changed "$RUNNER_TEMP/refresco.json")"
+            echo "fecha=$(jq -r '.retrieved_on // empty' "$RUNNER_TEMP/refresco.json")"
+            echo "fecha_texto=$(jq -r '.retrieved_on_text // empty' "$RUNNER_TEMP/refresco.json")"
+            echo "conjunto=$(jq -r '.dataset_id // empty' "$RUNNER_TEMP/refresco.json")"
+          } >> "$GITHUB_OUTPUT"
+          if [ "$(jq -r .changed "$RUNNER_TEMP/refresco.json")" = "false" ]; then
+            echo "El fichero publicado es uno de los ya declarados (SHA-256 $(jq -r '.sha256[:12]' "$RUNNER_TEMP/refresco.json")…; vigente: $(jq -r .previous_dataset_id "$RUNNER_TEMP/refresco.json")). No se abre nada." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # Desde aquí, solo si hay un fichero nuevo. Son las comprobaciones del CI que dependen de los
+      # datos: si alguna falla, el flujo termina en rojo, no abre la PR y abre una incidencia.
+      - name: Validar la red y la resolución de horarios (oniel-data validate)
+        if: steps.refresco.outputs.cambio == 'true'
+        working-directory: backend
+        run: uv run oniel-data validate > "$RUNNER_TEMP/validate.json" || { jq '[.[] | select(.problems != [])]' "$RUNNER_TEMP/validate.json"; exit 1; }
+
+      - name: Importar todo y regenerar la instantánea (oniel-data import all)
+        if: steps.refresco.outputs.cambio == 'true'
+        working-directory: backend
+        run: uv run oniel-data import all > "$RUNNER_TEMP/importacion.json"
+
+      - name: Crear la base de pruebas oniel_test
+        if: steps.refresco.outputs.cambio == 'true'
+        run: docker exec ${{ job.services.postgres.id }} createdb -U oniel oniel_test
+
+      - name: Pruebas (pytest, con sus ficheros fijos)
+        if: steps.refresco.outputs.cambio == 'true'
+        working-directory: backend
+        run: uv run pytest
+        env:
+          ONIEL_TEST_DATABASE_URL: postgresql://oniel:oniel@localhost:5432/oniel_test
+
+      - name: Node 20 (con caché de npm)
+        if: steps.refresco.outputs.cambio == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Dependencias del visor y Chromium
+        if: steps.refresco.outputs.cambio == 'true'
+        working-directory: frontend
+        run: |
+          npm ci
+          npx playwright install chromium
+
+      - name: Pruebas Playwright sobre la instantánea regenerada (sin servidor)
+        if: steps.refresco.outputs.cambio == 'true'
+        working-directory: frontend
+        run: npx playwright test
+        env:
+          ONIEL_E2E_STATIC: "1"
+
+      - name: Abrir la PR
+        if: steps.refresco.outputs.cambio == 'true'
+        env:
+          FECHA: ${{ steps.refresco.outputs.fecha }}
+          FECHA_TEXTO: ${{ steps.refresco.outputs.fecha_texto }}
+          CONJUNTO: ${{ steps.refresco.outputs.conjunto }}
+        run: |
+          rama="datos/gtfs-${FECHA}"
+          titulo="Horarios de Renfe del ${FECHA_TEXTO}: conjunto ${CONJUNTO} e instantánea regenerada"
+          (cd backend && uv run oniel-data refresh summary \
+            --result "$RUNNER_TEMP/refresco.json" --report "$RUNNER_TEMP/importacion.json") > "$RUNNER_TEMP/cuerpo.md"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$rama"
+          git add backend/data frontend/public/data docs/datos.md
+          git commit -m "$titulo"
+          # Si quedó la rama de una PR de ese mismo día cerrada sin fusionar, se sustituye.
+          git push --force origin "$rama"
+          url="$(gh pr create --base main --head "$rama" --title "$titulo" \
+            --label "$ETIQUETA" --label datos --body-file "$RUNNER_TEMP/cuerpo.md")"
+          gh workflow run ci.yml --ref "$rama"
+          echo "Fichero nuevo (${CONJUNTO}). PR abierta: ${url}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Guardar las trazas de Playwright si fallan
+        if: failure() && steps.refresco.outputs.cambio == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-test-results
+          path: frontend/test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Abrir una incidencia si el fichero nuevo no pasa las comprobaciones
+        if: failure() && steps.refresco.outputs.cambio == 'true'
+        env:
+          CONJUNTO: ${{ steps.refresco.outputs.conjunto }}
+        run: |
+          abierta="$(gh issue list --state open --label "$ETIQUETA" --search "in:title no pasa las comprobaciones" --json number --jq '.[0].number // empty')"
+          if [ -n "$abierta" ]; then
+            echo "Ya está abierta la incidencia #${abierta}: no se abre otra."
+            exit 0
+          fi
+          {
+            echo "Renfe ha publicado un fichero de horarios distinto de los declarados (\`${CONJUNTO}\`), pero el refresco automático no ha abierto la PR porque alguna comprobación ha fallado con él."
+            echo
+            echo "Qué paso falló y por qué: [ejecución del flujo](${GITHUB_SERVER_URL}/${GH_REPO}/actions/runs/${GITHUB_RUN_ID})."
+            echo
+            echo "Qué hacer: reproducirlo en local con \`uv run oniel-data refresh gtfs\`, \`validate\`, \`import all\` y las pruebas, como dice «Refresco de los horarios» de [docs/datos.md](https://github.com/${GH_REPO}/blob/main/docs/datos.md#refresco-de-los-horarios). Lo habitual es una parada sin asignar, una regla de recorrido que ya no encaja con ningún viaje o una prueba del visor que da por fijo un recuento de la instantánea. La PR que lo arregle cierra esta incidencia."
+            echo
+            echo "Mientras esta incidencia siga abierta, el flujo lo intenta cada semana pero no abre otra."
+          } > "$RUNNER_TEMP/fallo.md"
+          gh issue create \
+            --title "El fichero nuevo de horarios de Renfe no pasa las comprobaciones" \
+            --label "$ETIQUETA" --label datos \
+            --body-file "$RUNNER_TEMP/fallo.md"

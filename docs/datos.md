@@ -24,7 +24,7 @@
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
 
-El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto. Lo mismo vale para la consulta sobre los horarios de Iryo (`raw/operadores/consultas_2026-11-11.json`).
+El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»); el de Renfe lo descarga cada semana un flujo de GitHub Actions, que abre una PR cuando el horario publicado ha cambiado (véase «Refresco de los horarios»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto. Lo mismo vale para la consulta sobre los horarios de Iryo (`raw/operadores/consultas_2026-11-11.json`).
 
 ### Operadores y sus horarios
 
@@ -36,7 +36,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Ouigo España (`ouigo`) | LAV Madrid – Sevilla | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
 | Iryo (`iryo`) | LAV Madrid – Sevilla | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
 
-- **Ouigo** publica su GTFS en el Punto de Acceso Nacional de Transporte Multimodal (nap.transportes.gob.es, conjunto 1515). La descarga exige una cuenta de usuario, gratuita. La licencia permite reutilizar los datos con fines comerciales o no, citando la fuente con la indicación «Powered by MITRAMS» y un enlace a https://www.transportes.gob.es/, sin alterar los metadatos de actualización y manteniendo al día lo que se muestra; el panel de cobertura la cita con su enlace. El fichero es del 2 de julio de 2026 y vale del 26 de junio al 12 de diciembre de 2026: habrá que descargar el siguiente antes de esa fecha (#29).
+- **Ouigo** publica su GTFS en el Punto de Acceso Nacional de Transporte Multimodal (nap.transportes.gob.es, conjunto 1515). La descarga exige una cuenta de usuario, gratuita. La licencia permite reutilizar los datos con fines comerciales o no, citando la fuente con la indicación «Powered by MITRAMS» y un enlace a https://www.transportes.gob.es/, sin alterar los metadatos de actualización y manteniendo al día lo que se muestra; el panel de cobertura la cita con su enlace. El fichero es del 2 de julio de 2026 y vale del 26 de junio al 12 de diciembre de 2026: hay que descargar el siguiente a mano antes de esa fecha, y el flujo de refresco lo recuerda con una incidencia tres semanas antes (véase «Refresco de los horarios»).
 - **Iryo** no publica sus horarios en GTFS ni en otro formato reutilizable. El 11 de noviembre de 2026 no figuraba entre los 27 conjuntos ferroviarios del Punto de Acceso Nacional (el buscador no devuelve nada para «iryo» ni para «ILSA»), su web solo ofrece el buscador de billetes y Transitland no lo tiene. Existe un fichero elaborado por un particular, sin licencia declarada, que no se usa. Oniel no reconstruye sus horarios por otros medios: Iryo queda registrado como operador de la LAV sin horarios, sus trenes no están en los recuentos y el visor lo dice en cada tramo de la línea, en la nota del esquema y en la cobertura. Si Iryo publica un GTFS, basta declararlo en `feeds` y quitar `timetable` de su entrada en la especificación.
 - **Particularidades del fichero de Ouigo.** Es una conversión de los horarios que el operador comunica a la base europea MERITS de la UIC, y la entrada de `feeds` declara cómo leerlo. Sus `stop_id` son el código UIC, «0071» seguido del código de estación de Adif: `stop_id_prefix` quita el prefijo al leer, así que sus paradas son las mismas que las del fichero de Renfe y valen las asignaciones de `stop_mappings` sin duplicarlas (solo hubo que añadir Zaragoza-Delicias y Barcelona-Sants como salidas por Madrid). Rotula todos los trenes como «TGV» y escribe «TGV 6477» como número: `product` los rotula «Ouigo» y el lector deja el número solo. Los nombres de parada vienen en mayúsculas y sin tildes; el lector los pasa a mayúscula inicial («Madrid-Puerta de Atocha») y el visor abrevia los que conoce.
 - `oniel-data validate` comprueba que cada operador con horarios cargados tiene un fichero declarado, que cada fichero es de un operador declarado en alguna línea, que un operador sin horarios publicados no tiene ninguno y que los ficheros vigentes coinciden en algún día (`common_validity`).
@@ -202,9 +202,48 @@ Cómo se importa:
 - `import all` importa todos los ficheros de `feeds` y trata la lista como la referencia: reimportar la red borra los pasos por tramo de todos los conjuntos, así que retira de la base el conjunto que ya no esté declarado. El histórico se conserva mientras el fichero siga en `backend/data/raw/` y en `feeds`.
 - Cada fichero añade a `import all` el tiempo de leerlo y resolverlo (en local, unos 6 s por fichero de Renfe, medido el 11 de noviembre de 2026; en el plan gratuito de Render, bastante más). Conviene tenerlo en cuenta al acumular histórico.
 
-Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<operador>/` con el día de descarga en el nombre, añadirlo a `feeds` (y poner al día `retrieved_on`, cobertura y notas de su fuente), ejecutar `validate` e `import all` y subir la instantánea. Los recuentos de las pruebas no cambian: usan siempre el fichero de Renfe del 8 de noviembre de 2026 y el de Ouigo del 12 de noviembre de 2026 por su nombre (`backend/tests/conftest.py`).
+Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<operador>/` con el día de descarga en el nombre, añadirlo a `feeds` (y poner al día `retrieved_on`, cobertura y notas de su fuente), ejecutar `validate` e `import all` y subir la instantánea. Con el de Renfe, los tres primeros pasos los hace `oniel-data refresh gtfs` (véase «Refresco de los horarios»). Los recuentos de las pruebas no cambian: usan siempre el fichero de Renfe del 8 de noviembre de 2026 y el de Ouigo del 12 de noviembre de 2026 por su nombre (`backend/tests/conftest.py`).
 
 La instantánea estática lleva solo el estado actual. Para la evolución futura guarda además `frontend/public/data/historico/<conjunto>/segment-counts.json`: los pasos por tramo de cada conjunto en su propio día de referencia. Pesa 2,8 KB por conjunto con los 39 tramos de hoy (medido el 11 de noviembre de 2026), y el visor todavía no lo lee.
+
+### Refresco de los horarios
+
+El fichero de Renfe se refresca solo; el de Ouigo, a mano.
+
+**Renfe.** El flujo `.github/workflows/gtfs.yml` se ejecuta los lunes a las 06:30 UTC, y a mano desde la pestaña Actions («Refresco del GTFS» → Run workflow). Hace esto:
+
+1. Descarga el fichero publicado. Parte de la URL registrada en `sources.json`, la página del conjunto en data.renfe.com, que es un portal CKAN: su ficha (`/api/3/action/package_show`) da la dirección del zip.
+2. Lo compara con los ficheros de Renfe ya declarados. Si el horario es el mismo, termina sin abrir nada.
+3. Si es nuevo, `oniel-data refresh gtfs` lo guarda en `backend/data/raw/renfe/google_transit_av_ld_md_<fecha>.zip`, lo añade al final de `feeds` y pone al día la fuente (`file`, `retrieved_on` y las frases de validez y de publicación) y las dos tablas de este documento que lo nombran. El fichero anterior sigue declarado.
+4. Ejecuta `validate`, `import all` (que regenera la instantánea), `pytest` y las pruebas Playwright sobre la instantánea nueva.
+5. Abre una PR en la rama `datos/gtfs-<fecha>`, con la etiqueta `refresco-gtfs`, que resume la validez, los viajes por línea y los pasos por tramo que cambian, y lanza el CI sobre esa rama.
+
+El flujo no fusiona nada. Fusionar publica los horarios, y eso lo decide quien revisa la PR.
+
+Para no llenar el correo, abre como mucho una PR por horario nuevo. Si no hay cambios no abre nada. Mientras haya una PR con la etiqueta `refresco-gtfs` abierta, no descarga ni abre otra: la siguiente ejecución tras fusionarla o cerrarla recoge lo que haya publicado entonces.
+
+Se compara el contenido, no el zip. Renfe sirve su fichero desde varios servidores y cada uno tiene su propio zip, con los mismos ficheros dentro y otros bytes: el 12 de noviembre de 2026, cuatro descargas seguidas dieron tres SHA-256 distintos y un contenido idéntico. Por eso `refresh gtfs` calcula el SHA-256 de los nombres y los bytes de los ficheros ya descomprimidos (`content_sha256`) y lo compara con el de cada fichero declarado. La tabla `datasets` sigue guardando el SHA-256 del zip tal como se descargó.
+
+Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que casi cada lunes el horario es distinto del cargado aunque no cambie ningún tren: lo normal es una PR por semana. Si resulta demasiado, basta cambiar el `cron` del flujo. Cada fichero pesa unos 0,7 MB en el repositorio y alarga `import all`; para retirar uno antiguo se borra de `feeds` y de `backend/data/raw/` y se vuelve a ejecutar `import all`, que retira su conjunto de la base.
+
+Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
+
+El CI de la PR lo lanza el propio flujo (`gh workflow run ci.yml --ref datos/gtfs-<fecha>`), porque GitHub no ejecuta los flujos de `pull_request` en una PR que abre otro flujo con su token. Los resultados aparecen en la PR como en cualquier otra. Si alguien sube otro commit a esa rama, el CI se lanza a mano desde la pestaña Actions.
+
+A mano, lo mismo en local:
+
+```bash
+cd backend
+uv run oniel-data refresh gtfs      # descarga, compara y, si cambió, declara el fichero
+uv run oniel-data validate
+uv run oniel-data import all        # regenera la instantánea
+```
+
+`refresh gtfs --file <zip>` usa un fichero ya descargado y `--date` fija el día de descarga.
+
+**Ouigo.** Su fichero queda manual. El Punto de Acceso Nacional exige iniciar sesión con una cuenta de usuario para descargar, y Oniel no guarda credenciales de nadie, tampoco como secreto de GitHub: no hay una cuenta del proyecto, solo personales. Se descarga con la sesión iniciada en el navegador (conjunto 1515), se guarda en `backend/data/raw/ouigo/gtfs_ouigo_<fecha>.zip` y se sigue «Para añadir un horario más reciente», copiando `product` y `stop_id_prefix` de la entrada anterior de `feeds`.
+
+Para que no se pase la fecha, el mismo flujo ejecuta cada semana `oniel-data refresh expiring`: si a un fichero vigente que no se refresca solo le quedan 21 días o menos de validez, abre la incidencia «Descargar a mano los horarios que están a punto de caducar», una sola mientras siga abierta. Si la validez termina sin relevo, los ficheros vigentes dejan de coincidir en algún día, `validate` falla y el refresco de Renfe tampoco abre su PR.
 
 ## Instantánea estática
 
