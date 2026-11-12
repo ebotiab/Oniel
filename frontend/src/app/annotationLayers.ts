@@ -5,6 +5,7 @@
 
 import type { AnnotationOut } from '../data/types.ts'
 import { ROJA } from '../map/colors.ts'
+import type { TerminoId } from '../panel/glosario.ts'
 import { formatDateLong, mainSourceLabel } from './annotations.ts'
 
 /** Una etiqueta de color junto a un texto («sin circulación»). */
@@ -12,6 +13,8 @@ export interface Senal {
   /** Clases de la etiqueta, además de `senal`. */
   clase: string
   texto: string
+  /** Si la etiqueta es un término del glosario, cuál: se explica a un toque donde no vaya dentro de un botón. */
+  termino?: TerminoId
 }
 
 /** Dibujo de una anotación con geometría propia en el mapa: línea de puntos o de trazos, en tinta. */
@@ -41,7 +44,7 @@ export interface AnnotationLayer {
    */
   geometria: { dibujo: (a: AnnotationOut) => Dibujo; aviso: string } | null
   /** Entradas de la leyenda del mapa; cada una aparece mientras haya alguna anotación vigente que la cumpla. */
-  leyenda: { clase: string; texto: string; testId: string; cuando?: (a: AnnotationOut) => boolean }[]
+  leyenda: { clase: string; texto: string; testId: string; termino?: TerminoId; cuando?: (a: AnnotationOut) => boolean }[]
   /** Segmento de la URL de la ficha propia de cada anotación (`#/<ruta>/<id>`); nulo si el tipo no la tiene. */
   ruta: string | null
   /** Ficha: el bloque que explica una anotación en el panel, y su ficha propia si tiene ruta. */
@@ -54,6 +57,8 @@ export interface AnnotationLayer {
     fechas: (a: AnnotationOut) => string
     /** Texto del enlace del bloque a la ficha propia. */
     enlace?: string
+    /** Cómo se enseña una que ya terminó, en el detalle del tramo: sin color de señal. Sin esto, no se enseña. */
+    pasada?: { rotulo: string; senal: Senal; testId: string }
   }
   /** Notas en las listas: junto a una línea de la red y en la cabecera de la línea. */
   lista: {
@@ -79,14 +84,14 @@ export function endLabel(a: AnnotationOut): string {
 
 const desde = (a: AnnotationOut) => (a.start_date ? `desde el ${formatDateLong(a.start_date)}` : '')
 
-const SIN_CIRCULACION: Senal = { clase: 'roja', texto: 'sin circulación' }
+const SIN_CIRCULACION: Senal = { clase: 'roja', texto: 'sin circulación', termino: 'sin-circulacion' }
 
 /** Interrupciones del servicio: el rojo de «sin circulación» (docs/diseno.md). */
 const interrupcion: AnnotationLayer = {
   kind: 'interrupcion',
   trazo: { propiedad: 'interrumpido', color: ROJA, colorCss: 'var(--senal-roja)', haloSeleccionado: 0.3, descripcion: 'sin circulación hoy' },
   geometria: null,
-  leyenda: [{ clase: 'sin-circulacion', texto: 'Sin circulación hoy', testId: 'leyenda-interrupcion' }],
+  leyenda: [{ clase: 'sin-circulacion', texto: 'Sin circulación hoy', testId: 'leyenda-interrupcion', termino: 'sin-circulacion' }],
   ruta: null,
   ficha: {
     clase: 'interrupcion',
@@ -94,6 +99,7 @@ const interrupcion: AnnotationLayer = {
     senal: () => SIN_CIRCULACION,
     testId: 'interrupcion',
     fechas: (a) => `${a.start_date ? `Desde el ${formatDateLong(a.start_date)}. ` : ''}${endLabel(a)}`,
+    pasada: { rotulo: 'Interrupción anterior', senal: { clase: 'gris', texto: 'interrupción terminada' }, testId: 'interrupcion-anterior' },
   },
   lista: {
     senal: { clase: 'roja', texto: 'un tramo sin circulación' },

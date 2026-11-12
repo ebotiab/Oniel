@@ -16,6 +16,8 @@ export interface Route {
   escenario?: string
   /** El comparador de recorridos está abierto, con las estaciones que ya se han elegido. */
   recorridos?: Comparador
+  /** El glosario está abierto; con `entrada`, en ese término o concepto. */
+  glosario?: { entrada: string | null }
 }
 
 /** Lo que va en la URL del comparador: las dos estaciones y, si lo hay, el escenario con el que se compara. */
@@ -28,8 +30,9 @@ export interface Comparador {
 /**
  * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
  * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/escenario/<cadena>,
- * #/recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), #/cobertura y, por cada
- * tipo de anotación con ficha propia, la ruta que declara su capa (#/proyecto/<id>).
+ * #/recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), #/glosario,
+ * #/glosario/<entrada>, #/cobertura y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
+ * (#/proyecto/<id>).
  */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
@@ -41,6 +44,7 @@ export function parseHash(hash: string): Route {
   if (capa && id) return { selection: { type: 'anotacion', kind: capa.kind, id }, simulacion: false }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
+  if (kind === 'glosario') return { selection: null, simulacion: false, glosario: { entrada: id ?? null } }
   if (kind === 'recorridos') {
     const end = (value: string | undefined) => (value && value !== '-' ? value : null)
     const escenario = parts[3]
@@ -65,6 +69,7 @@ function code(value: string): string {
 
 export function toHash(route: Route): string {
   if (route.cobertura) return '#/cobertura'
+  if (route.glosario) return route.glosario.entrada ? `#/glosario/${encodeURIComponent(route.glosario.entrada)}` : '#/glosario'
   if (route.recorridos) {
     const { from, to, escenario } = route.recorridos
     const parts = escenario ? [from ?? '-', to ?? '-', escenario] : to ? [from ?? '-', to] : from ? [from] : []

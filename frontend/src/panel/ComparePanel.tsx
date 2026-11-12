@@ -7,6 +7,7 @@ import { enumerar, formatDuracion, trenesDelRecorrido, trenesDirectos, type Comp
 import { formatDayShort, formatKm, shortStop, type Comparador } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
 import { SearchBox } from './SearchBox'
+import { Termino } from './Termino'
 
 interface Props {
   network: NetworkOut
@@ -49,7 +50,7 @@ function Extremo({ rotulo, nombre, network, testId, onPick, onClear }: { rotulo:
           scope="nodos"
           label={`${rotulo}: buscar una estación`}
           placeholder="Buscar una estación"
-          onPick={(target) => onPick(target.id)}
+          onPick={(target) => target.type === 'nodo' && onPick(target.id)}
           testId={`${testId}-buscador`}
         />
       )}
@@ -157,7 +158,8 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
                   )}
                   <p className="recorrido-cifras datos">
                     {formatKm(route.length_km)} km · {route.time_min === null ? 'tiempo sin estimar' : `${formatDuracion(route.time_min)} sin paradas`} ·{' '}
-                    {route.single_track_km > 0 ? `${formatKm(route.single_track_km)} km de vía única` : 'sin vía única'}
+                    {route.single_track_km > 0 ? `${formatKm(route.single_track_km)} km de ` : 'sin '}
+                    <Termino id="via-unica">vía única</Termino>
                   </p>
                   <span className="recorrido-barra" style={{ width: `${(route.length_km / masLargo) * 100}%` }} aria-hidden="true">
                     {route.legs.map((leg, i) => (
@@ -187,7 +189,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             </p>
           )}
           <p className="nota-esquema" data-testid="recorridos-limites">
-            El tiempo sirve para comparar un recorrido con otro; no es un horario, porque no cuenta paradas ni esperas. Oniel une las líneas donde comparten estación sin mirar el ancho de vía: no todos los trenes pueden pasar de una a otra. El recorrido elegido se ve en azul en el mapa.
+            El tiempo sirve para comparar un recorrido con otro; no es un horario, porque no cuenta paradas ni esperas. Oniel une las líneas donde comparten estación sin mirar el <Termino id="ancho-de-via">ancho de vía</Termino>: no todos los trenes pueden pasar de una a otra. El recorrido elegido se ve en azul en el mapa.
           </p>
           <Plegable>
             {recorridos.map((r) => (
@@ -218,7 +220,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             </p>
             {trenes && (
               <p className="suave">
-                Un tren directo es el que para en las dos estaciones, en este sentido, el {formatDateLong(trenes.date)}. Se asigna a un recorrido cuando pasa por el primer y el último tramo de cada una de sus líneas.
+                Un <Termino id="tren-directo">tren directo</Termino> es el que para en las dos estaciones, en este sentido, el {formatDateLong(trenes.date)}. Se asigna a un recorrido cuando pasa por el primer y el último tramo de cada una de sus líneas.
               </p>
             )}
             <PieFuente de="del trazado" sources={fuentes} />

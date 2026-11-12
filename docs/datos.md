@@ -20,9 +20,12 @@
 | `adif-aviso-obras-autopista-ferroviaria` | Aviso de la interrupción por obras entre Córdoba y Santa Cruz de Mudela | Adif | Consulta pública | 2026-11-10 |
 | `adif-salidas-y-llegadas` | Paneles de salidas y llegadas de cuatro estaciones: hasta dónde llegan los trenes a cada lado de una interrupción | Adif | Consulta pública | 2026-11-10 |
 | `renfe-nota-md-jaen-madrid-2026-09` | Inicio de las obras el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel | Renfe | Consulta pública | 2026-11-10 |
+| `adif-comunicado-adamuz-2026-01-19` | Accidente del 18 de enero de 2026 en Adamuz y suspensión de la alta velocidad Madrid–Andalucía el día 19 | Adif | Consulta pública | 2026-11-12 |
+| `renfe-nota-servicios-malaga-2026-04` | Trayecto por carretera entre Villanueva de Córdoba y Córdoba desde el 20 de enero de 2026 y reapertura del 17 de febrero de 2026 | Renfe | Consulta pública | 2026-11-12 |
 | `el-estrecho-digital-corte-algeciras` | Previsión de fin de las obras (otoño de 2027) y límite del corte de la vía en Venta de Cárdenas | El Estrecho Digital | © del medio; se cita el dato | 2026-11-10 |
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
-| `boe-…` (19 fuentes) | Un anuncio del Boletín Oficial del Estado por fuente: estudios informativos, declaraciones de impacto ambiental, licitaciones y adjudicaciones de los proyectos (véase «Proyectos») | Boletín Oficial del Estado | Reutilización citando la fuente | 2026-11-12 |
+| `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
+| `boe-a-…` y `boe-b-…` (19 fuentes) | Un anuncio del Boletín Oficial del Estado por fuente: estudios informativos, declaraciones de impacto ambiental, licitaciones y adjudicaciones de los proyectos (véase «Proyectos») | Boletín Oficial del Estado | Reutilización citando la fuente | 2026-11-12 |
 | `mitma-nota-baipas-cordoba-jaen-2025-03`, `mitma-nota-baipas-cordoba-jaen-2026-01` | Anuncio del baipás entre la alta velocidad y la línea de Córdoba a Jaén y comienzo de su estudio informativo | Ministerio de Transportes y Movilidad Sostenible | Consulta pública | 2026-11-12 |
 | `moncloa-nota-variante-de-loja-2025-02` | Estado de los tramos de la Variante de Loja en febrero de 2025 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-12 |
 | `europa-press-baipas-montoro-2025-03` | Municipios por los que pasaría el baipás, según la prensa del día del anuncio | Europa Press; Forbes España | © de la agencia; se cita el dato | 2026-11-12 |
@@ -162,7 +165,7 @@ La API las sirve en `GET /api/annotations`, con `?kind=` (solo las de ese tipo; 
 
 ## Interrupciones del servicio
 
-Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/anotaciones.json`, una entrada de tipo `interrupcion` por interrupción (véase «Anotaciones de red»). El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo.
+Los horarios GTFS son los planificados. Las interrupciones que Oniel conoce se registran a mano en `backend/data/curated/anotaciones.json`, una entrada de tipo `interrupcion` por interrupción (véase «Anotaciones de red»). El visor dibuja en rojo los tramos interrumpidos hoy, en el mapa y en el esquema; explica cada interrupción al seleccionar un tramo o un nodo, y añade una nota a los trenes que el horario sigue trayendo. Las que ya terminaron no se dibujan: quedan en el detalle de cada tramo al que afectaron, como «Interrupciones anteriores en este tramo».
 
 | Campo | Qué es |
 |---|---|
@@ -191,14 +194,22 @@ Comprobadas el 10 de noviembre de 2026. Lo que decía cada fuente ese día está
 | Alta velocidad Madrid – Sevilla | Bifurcación La Sagra – Córdoba (6 tramos, 290,9 km) | 28 de octubre de 2026 | Sin fecha | Suspensión de la circulación tras el accidente del 28 de octubre de 2026 en el entorno de Urda | `adif-estado-de-la-red` |
 | Convencional Madrid – Alcázar – Córdoba | Almuradiel-Viso del Marqués – Alcolea de Córdoba (9 tramos, 174,3 km) | 6 de septiembre de 2026 | Otoño de 2027 | Obras de adaptación a la autopista ferroviaria Algeciras–Madrid–Zaragoza | `adif-aviso-obras-autopista-ferroviaria` |
 
+Terminadas, registradas el 12 de noviembre de 2026 (lo consultado ese día está en `backend/data/raw/interrupciones/consultas_2026-11-12.json`):
+
+| Línea | De – a | Desde | Reanudación | Motivo | Fuente principal |
+|---|---|---|---|---|---|
+| Alta velocidad Madrid – Sevilla | Villanueva de Córdoba – Córdoba (2 tramos, 58,4 km) | 19 de enero de 2026 | 17 de febrero de 2026 | Suspensión de la circulación tras el accidente del 18 de enero de 2026 en Adamuz | `adif-comunicado-adamuz-2026-01-19` |
+
 Cómo se fijaron los extremos:
+
+- **Alta velocidad, enero y febrero de 2026.** La nota de Adif del 19 de enero de 2026 sitúa el accidente a las 19.45 h del día 18 y da por suspendida, al menos durante todo el día 19, la alta velocidad entre Madrid y Andalucía. Una nota de Renfe del 23 de abril de 2026 dice que el trayecto entre Villanueva de Córdoba y Córdoba se hizo por carretera desde el 20 de enero hasta la reapertura del servicio en Adamuz, el 17 de febrero. Se registra el trozo que estuvo sin trenes todo el periodo, entre esas dos estaciones, desde el 19 de enero, el primer día completo sin circulación; que ese día la suspensión alcanzó a toda la línea lo dice la nota de la entrada. La reapertura no se ha encontrado en una nota de Adif: la fecha es la de Renfe.
 
 - **Alta velocidad.** La página de estado de la red de Adif mantiene el aviso de que la circulación en la línea Madrid–Andalucía sigue interrumpida desde el accidente y da por abiertos los tramos Madrid–Toledo y Málaga–Sevilla. Los paneles de salidas de Ciudad Real dan por suspendidos todos los trenes de alta velocidad, también los que van a Puertollano, y en los de Córdoba no sale ninguno hacia Madrid, pero sí a Sevilla, Málaga y Granada. En Oniel eso deja abiertos Madrid – Bifurcación La Sagra y Córdoba – Sevilla, y sin circulación los seis tramos entre La Sagra y Córdoba. No hay fecha de reanudación: la nota de la entrada recoge la estimación del Ministerio de Transportes del 3 de noviembre de 2026, condicionada a una autorización judicial.
 - **Línea convencional.** Las fuentes dan tres límites distintos por el norte. El aviso de Adif habla de servicio interrumpido entre Córdoba y Santa Cruz de Mudela; la información de Adif en prensa sitúa el corte de la vía entre Venta de Cárdenas y Algeciras; la nota de Renfe y los paneles de Santa Cruz de Mudela y Jaén dicen que los Media Distancia Madrid–Jaén hacen por carretera el trayecto entre Almuradiel y Jaén. Se registra lo que ve el viajero: los trenes llegan a Almuradiel-Viso del Marqués y no pasan de ahí. Por el sur, los paneles de Córdoba muestran trenes de Proximidad hasta Alcolea de Córdoba y el recorrido Córdoba–Jaén por carretera, así que el extremo es Alcolea. La fecha de inicio es la de la nota de Renfe; la previsión de fin es de Adif, recogida por la prensa, y no es un compromiso.
 
 Límites de lo registrado:
 
-- Entre Jaén y Córdoba ya se viajaba por carretera antes de las obras, por los daños de un temporal de enero de 2026, según la nota de Renfe. La prensa da fechas distintas para ese corte y un restablecimiento intermedio, y no se encontró una fecha en una fuente oficial: no tiene entrada propia, y los tramos entre Espelúy y Alcolea figuran sin circulación desde el 6 de septiembre de 2026 aunque no la tenían desde antes.
+- Entre Jaén y Córdoba ya se viajaba por carretera antes de las obras, por los daños de un temporal de enero de 2026, según la nota de Renfe. La prensa da fechas distintas para ese corte y un restablecimiento intermedio, y no se encontró una fecha en una fuente oficial (una nota de Renfe de marzo de 2026 sobre los horarios de ese servicio por carretera tampoco la da): no tiene entrada propia, y los tramos entre Espelúy y Alcolea figuran sin circulación desde el 6 de septiembre de 2026 aunque no la tenían desde antes.
 - Los 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía del GTFS (válidos del 8 al 15 de noviembre de 2026) no figuran en los paneles de Ciudad Real del 10 de noviembre. Sus pasos por la alta velocidad entre Ciudad Real y Córdoba llevan la nota de la interrupción; los de la convencional entre Madrid y Manzanares y los de la línea de Manzanares a Ciudad Real no, porque esos tramos no están interrumpidos. Oniel no sabe si circulan.
 - Una interrupción es de todo el servicio entre dos nodos y por días completos. No se registran reducciones de frecuencia, limitaciones de velocidad ni cortes de unas horas.
 
@@ -216,7 +227,7 @@ Lo recuerda un flujo de GitHub Actions, `.github/workflows/recordatorio-interrup
 4. `uv run oniel-data validate`, `uv run oniel-data import all` (regenera la instantánea) y las pruebas. La tabla de arriba se pone al día en la misma PR.
 5. Al fusionar, Render reimporta la base. La instantánea va dentro del visor, así que hay que publicarlo (`docs/despliegue.md`): hasta entonces, quien entre con la API dormida ve la interrupción anterior.
 
-Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
+Las pruebas fijan como «hoy» el 10 de noviembre de 2026, el día en que las dos entradas iniciales estaban vigentes y la de enero y febrero ya había terminado. Ponerles `ended_on` o cambiar su previsión no las rompe; cambiar sus extremos o su fecha de inicio, sí, y entonces se corrigen en la misma PR.
 
 ## Proyectos
 
@@ -302,18 +313,22 @@ El fichero de Renfe se refresca solo; el de Ouigo, a mano.
 **Renfe.** El flujo `.github/workflows/gtfs.yml` se ejecuta los lunes a las 06:30 UTC, y a mano desde la pestaña Actions («Refresco del GTFS» → Run workflow). Hace esto:
 
 1. Descarga el fichero publicado. Parte de la URL registrada en `sources.json`, la página del conjunto en data.renfe.com, que es un portal CKAN: su ficha (`/api/3/action/package_show`) da la dirección del zip.
-2. Lo compara con los ficheros de Renfe ya declarados. Si el horario es el mismo, termina sin abrir nada.
+2. Lo compara con el cargado. Si es el mismo fichero, o si los trenes de las líneas cargadas son los mismos en las próximas cuatro semanas y el cargado tiene menos de 28 días, termina sin abrir nada.
 3. Si es nuevo, `oniel-data refresh gtfs` lo guarda en `backend/data/raw/renfe/google_transit_av_ld_md_<fecha>.zip`, lo añade al final de `feeds` y pone al día la fuente (`file`, `retrieved_on` y las frases de validez y de publicación) y las dos tablas de este documento que lo nombran. El fichero anterior sigue declarado.
 4. Ejecuta `validate`, `import all` (que regenera la instantánea), `pytest` y las pruebas Playwright sobre la instantánea nueva.
 5. Abre una PR en la rama `datos/gtfs-<fecha>`, con la etiqueta `refresco-gtfs`, que resume la validez, los viajes por línea y los pasos por tramo que cambian, y lanza el CI sobre esa rama.
 
 El flujo no fusiona nada. Fusionar publica los horarios, y eso lo decide quien revisa la PR.
 
-Para no llenar el correo, abre como mucho una PR por horario nuevo. Si no hay cambios no abre nada. Mientras haya una PR con la etiqueta `refresco-gtfs` abierta, no descarga ni abre otra: la siguiente ejecución tras fusionarla o cerrarla recoge lo que haya publicado entonces.
+Para no llenar el correo, abre una PR solo cuando hay algo que revisar: trenes que cambian, o un fichero cargado que ya es viejo. Mientras haya una PR con la etiqueta `refresco-gtfs` abierta, no descarga ni abre otra: la siguiente ejecución tras fusionarla o cerrarla recoge lo que haya publicado entonces.
 
 Se compara el contenido, no el zip. Renfe sirve su fichero desde varios servidores y cada uno tiene su propio zip, con los mismos ficheros dentro y otros bytes: el 12 de noviembre de 2026, cuatro descargas seguidas dieron tres SHA-256 distintos y un contenido idéntico. Por eso `refresh gtfs` calcula el SHA-256 de los nombres y los bytes de los ficheros ya descomprimidos (`content_sha256`) y lo compara con el de cada fichero declarado. La tabla `datasets` sigue guardando el SHA-256 del zip tal como se descargó.
 
-Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que casi cada lunes el horario es distinto del cargado aunque no cambie ningún tren: lo normal es una PR por semana. Si resulta demasiado, basta cambiar el `cron` del flujo. Cada fichero pesa unos 0,7 MB en el repositorio y alarga `import all`; para retirar uno antiguo se borra de `feeds` y de `backend/data/raw/` y se vuelve a ejecutar `import all`, que retira su conjunto de la base.
+Qué cuenta como cambio. Renfe vuelve a generar el fichero cada noche y quita los días pasados, así que el contenido es casi siempre distinto del cargado aunque no cambie ningún tren. Abrir una PR por eso sería una por semana sin nada que ver. `refresh gtfs` compara lo que Oniel enseña: los trenes que recorren las líneas cargadas en los 28 días siguientes, uno por tren y día, con su número, su producto, sus paradas y sus horas (`oniel.gtfs.refresh.train_days`). No cuenta el `trip_id` ni el `service_id`, que cambian de un fichero a otro con el mismo tren. Si alguno está en un fichero y no en el otro, declara el nuevo. Entre el fichero del 8 y el del 12 de noviembre de 2026 cambiaban 54 de unos 5.000: cuatro Intercity con el horario posterior a Urda prolongado hasta el 22 de noviembre.
+
+Si los trenes son los mismos, el fichero se releva de todos modos cuando el cargado tiene 28 días o más: así el día de referencia no se queda atrás y entra lo que haya cambiado más allá de las cuatro semanas. Los dos plazos son opciones de la orden (`--window-days`, `--max-age-days`), y `--any-change` vuelve a declarar cualquier fichero de contenido distinto. La PR dice por cuál de los dos motivos se abre.
+
+Cada fichero pesa unos 0,7 MB en el repositorio y alarga `import all`; para retirar uno antiguo se borra de `feeds` y de `backend/data/raw/` y se vuelve a ejecutar `import all`, que retira su conjunto de la base.
 
 Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
 
@@ -420,7 +435,7 @@ El JavaScript va en dos ficheros. MapLibre es tres cuartas partes del total (295
 
 La vía tampoco espera a las tipografías del mapa base, aunque aparezca casi a la vez que los rótulos. Comprobado en producción el 12 de noviembre de 2026 con el mismo móvil emulado y 4G lenta, dos pasadas por caso: con las tipografías de OpenFreeMap sin tocar la vía se dibuja a los 4,9 – 6,4 s; retrasándolas 5 s, a los 4,9 – 5,2 s; retrasándolas 10 s, a los 5,0 – 5,1 s, y bloqueándolas del todo, a los 5,3 – 5,6 s. El mapa las pide hacia los 4,2 s, cuando el estilo termina de cargar, que es también cuando se añade la vía: de ahí la coincidencia. Lo que marca esos 5 s es lo que va antes, la descarga de MapLibre y del estilo.
 
-Las anotaciones de red viajan enteras en el índice, con sus textos, sus hitos y sus fuentes, porque las de geometría propia no cuelgan de ninguna línea. Medido el 12 de noviembre de 2026, con dos interrupciones y cinco proyectos: `index.json` pesa 75,5 KB (15,3 KB comprimido), de los que unos 27 KB sin comprimir son anotaciones (22 KB, más 5 KB del alias `interruptions`); cada proyecto añade unos 3,5 KB sin comprimir. Las pruebas miden por separado que la red del índice siga siendo menos de una quinta parte de la red entera y que las anotaciones no pasen de 40 KB. Cuando no quepan, lo siguiente es dejar en el índice lo que el mapa necesita de cada anotación y pedir su detalle aparte, como el de las líneas; retirar el alias ya ahorra 5 KB.
+Las anotaciones de red viajan enteras en el índice, con sus textos, sus hitos y sus fuentes, porque las de geometría propia no cuelgan de ninguna línea. Medido el 12 de noviembre de 2026, con tres interrupciones y cinco proyectos: `index.json` pesa 79,0 KB (15,9 KB comprimido), de los que unos 30 KB sin comprimir son anotaciones (24 KB, más 7 KB del alias `interruptions`); cada proyecto añade unos 3,5 KB sin comprimir. Las pruebas miden por separado que la red del índice siga siendo menos de una quinta parte de la red entera y que las anotaciones no pasen de 40 KB. Cuando no quepan, lo siguiente es dejar en el índice lo que el mapa necesita de cada anotación y pedir su detalle aparte, como el de las líneas; retirar el alias ya ahorra 7 KB.
 
 ## Modelo de datos
 

@@ -234,6 +234,42 @@
       "file": "raw/interrupciones/consultas_2026-11-10.json"
     },
     {
+      "id": "adif-comunicado-adamuz-2026-01-19",
+      "name": "Nota de prensa «Comunicado de prensa sobre el accidente ferroviario ocurrido en Adamuz»",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/comunicado-de-prensa-sobre-el-accidente-ferroviario-ocurrido-en-adamuz",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Accidente del 18 de enero de 2026 en Adamuz (Córdoba) y suspensión de la alta velocidad entre Madrid y Andalucía el 19 de enero de 2026.",
+      "notes": "Publicada el 19 de enero de 2026. No da fecha de reanudación.",
+      "file": "raw/interrupciones/consultas_2026-11-12.json"
+    },
+    {
+      "id": "renfe-nota-servicios-malaga-2026-04",
+      "name": "Nota de prensa «Renfe restablece los servicios directos de alta velocidad con origen y destino Málaga desde el 30 de abril»",
+      "publisher": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/04/renfe-restablece-servicios-av-malaga",
+      "license": "Consulta pública; © Renfe",
+      "license_url": null,
+      "retrieved_on": "2026-11-12",
+      "coverage": "Trayecto por carretera entre Villanueva de Córdoba y Córdoba desde el 20 de enero de 2026 y reapertura de la alta velocidad en Adamuz el 17 de febrero de 2026.",
+      "notes": "Publicada el 23 de abril de 2026. Da esas fechas al hacer balance de los planes alternativos por carretera.",
+      "file": "raw/interrupciones/consultas_2026-11-12.json"
+    },
+    {
+      "id": "boe-reglamento-circulacion-ferroviaria",
+      "name": "Reglamento de Circulación Ferroviaria (Real Decreto 664/2015, de 17 de julio), texto consolidado",
+      "publisher": "Agencia Estatal Boletín Oficial del Estado",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-8042",
+      "license": "Texto legal; reutilización según el aviso legal del BOE, citando la fuente",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Referencia de los conceptos de circulación del glosario del visor: bloqueo y cantón, marcha a la vista, puesto de mando y control de tráfico centralizado, sistemas ASFA, LZB y ERTMS, y las definiciones de estación, bifurcación, PAET, puesto de banalización y cambiador de ancho.",
+      "notes": "Texto consolidado con la última actualización publicada el 12 de julio de 2023. El glosario explica cada concepto con palabras propias y cita el artículo; no reproduce el texto.",
+      "file": "raw/glosario/consultas_2026-11-12.json"
+    },
+    {
       "id": "boe-b-2006-173112",
       "name": "BOE-B-2006-173112: Información pública del estudio informativo Mora – Alcázar de San Juan",
       "publisher": "Boletín Oficial del Estado",

@@ -22,6 +22,11 @@ export function activeInterruptions(network: NetworkOut | null, day: string): In
   return activeAnnotations(network, day).filter(isInterruption)
 }
 
+/** Interrupciones que ya terminaron: la circulación se reanudó ese día o antes. Quedan como registro. */
+export function pastInterruptions(network: NetworkOut | null, day: string): InterruptionOut[] {
+  return (network?.annotations ?? []).filter(isInterruption).filter((a) => a.ended_on !== null && a.ended_on <= day)
+}
+
 /** Anotaciones que afectan a cada tramo, por id de tramo. */
 export function bySegment<A extends AnnotationOut>(annotations: A[]): Map<string, A[]> {
   const out = new Map<string, A[]>()

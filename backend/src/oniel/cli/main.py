@@ -305,8 +305,25 @@ def refresh_gtfs_cmd(
     date: Annotated[
         str | None, typer.Option(help="Día de descarga (AAAA-MM-DD); por defecto, hoy")
     ] = None,
+    window_days: Annotated[
+        int, typer.Option(help="Días, desde hoy, en los que se comparan los trenes")
+    ] = 28,
+    max_age_days: Annotated[
+        int,
+        typer.Option(
+            help="Días a partir de los cuales el fichero cargado se releva aunque no cambie"
+        ),
+    ] = 28,
+    any_change: Annotated[
+        bool,
+        typer.Option(
+            "--any-change", help="Declararlo con que el contenido sea otro, sin comparar trenes"
+        ),
+    ] = False,
 ) -> None:
-    """Descarga el fichero publicado de una fuente y, si no está ya declarado, lo guarda y lo declara.
+    """Descarga el fichero publicado de una fuente y, si cambian los trenes de las líneas cargadas, lo declara.
+
+    También lo declara si los trenes son los mismos pero el fichero cargado ya es viejo.
 
     No toca la base de datos. Imprime qué ha hecho; si `changed` es verdadero, faltan `validate`
     e `import all`.
@@ -334,6 +351,9 @@ def refresh_gtfs_cmd(
             today=today,
             published_on=published,
             docs_path=DOCS_DEFAULT if DOCS_DEFAULT.exists() else None,
+            spec_paths=[] if any_change else SPECS_DEFAULT,
+            window_days=window_days,
+            max_age_days=max_age_days,
         )
     _echo_json(result.as_json())
 
