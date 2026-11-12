@@ -12,6 +12,8 @@ import pytest
 
 from oniel.domain.schemas import LineSummary, NetworkIndexOut, NodeIndexOut, SegmentOut
 from oniel.routing import (
+    DEFAULT_MAX_CHANGES,
+    DEFAULT_MAX_RATIO,
     Graph,
     Scenario,
     ScenarioError,
@@ -73,8 +75,13 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     assert graph.line_km[MZCR][MANZANARES] == 0 and graph.line_km[CONV][MANZANARES] > 196
 
 
+DEFAULTS: dict[str, Any] = {"max_changes": DEFAULT_MAX_CHANGES, "max_ratio": DEFAULT_MAX_RATIO}
+#: El criterio anterior al comparador: un solo paso de una línea a otra y ningún descarte por largo.
+ONE_CHANGE: dict[str, Any] = {"max_changes": 1, "max_ratio": None}
+
+
 def test_madrid_cordoba_has_two_routes(graph: Graph) -> None:
-    fast, slow = find_routes(graph, MADRID, CORDOBA)
+    fast, slow = find_routes(graph, MADRID, CORDOBA, **ONE_CHANGE)
     assert (fast.line_ids, fast.length_km, fast.single_track_km) == ([LAV], 343.6, 0)
     assert (slow.line_ids, slow.length_km, slow.single_track_km) == ([CONV], 440.7, 194.1)
     assert "Alcázar de San Juan" in slow.via and "Ciudad Real" in fast.via
@@ -87,7 +94,7 @@ def test_madrid_cordoba_has_two_routes(graph: Graph) -> None:
 def test_madrid_ciudad_real_has_three_routes_one_of_them_through_manzanares(
     graph: Graph,
 ) -> None:
-    direct, detour, long_way = find_routes(graph, MADRID, CIUDAD_REAL)
+    direct, detour, long_way = find_routes(graph, MADRID, CIUDAD_REAL, **ONE_CHANGE)
     assert (direct.line_ids, direct.length_km) == ([LAV], 170.8)
     # el desvío de los Intercity y Alvia tras Urda: convencional hasta Manzanares y línea 522
     assert detour.line_ids == [CONV, MZCR]
@@ -116,6 +123,29 @@ def test_more_line_changes_find_the_route_of_the_diverted_alvia(graph: Graph) ->
         [LAV],
         [CONV],
     ]
+
+
+def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -> None:
+    """El criterio del comparador: sin tope útil de líneas y nada que pase del doble del más corto."""
+    # Madrid – Córdoba: entra el recorrido de los Alvia desviados, por tres líneas
+    to_cordoba = find_routes(graph, MADRID, CORDOBA)
+    assert [r.length_km for r in to_cordoba] == [343.6, 433.3, 440.7, 479.8]
+    assert [len(r.legs) for r in to_cordoba] == [1, 3, 1, 3]
+    # Madrid – Ciudad Real: la vuelta por Córdoba (613,5 km frente a 170,8 km) se descarta
+    assert [r.length_km for r in find_routes(graph, MADRID, CIUDAD_REAL)] == [170.8, 260.5]
+    assert [r.length_km for r in find_routes(graph, MADRID, CIUDAD_REAL, max_ratio=None)] == [
+        170.8,
+        260.5,
+        613.5,
+    ]
+    # Madrid – Andújar: hay un recorrido que pasa tres veces de una línea a otra
+    to_andujar = find_routes(graph, MADRID, "andujar")
+    assert [r.length_km for r in to_andujar] == [361.9, 401.0, 422.4, 512.1]
+    assert [leg.line_id for leg in to_andujar[3].legs] == [CONV, MZCR, LAV, CONV]
+    # la proporción se mide contra el más corto de los que quedan en el escenario
+    closed = Scenario(closures=[URDA_CIUDAD_REAL])
+    assert [r.length_km for r in find_routes(graph, MADRID, CIUDAD_REAL, closed)] == [260.5]
+    assert [r.length_km for r in find_routes(graph, MANZANARES, CIUDAD_REAL)] == [64.4]
 
 
 def test_time_is_length_over_typical_speed(graph: Graph, network: Red) -> None:
@@ -163,11 +193,13 @@ def test_scenario_that_does_not_fit_the_network_is_rejected(graph: Graph) -> Non
 
 
 def test_closing_a_segment_removes_the_routes_that_use_it(graph: Graph) -> None:
-    routes = find_routes(graph, MADRID, CIUDAD_REAL, Scenario(closures=[URDA_CIUDAD_REAL]))
+    routes = find_routes(
+        graph, MADRID, CIUDAD_REAL, Scenario(closures=[URDA_CIUDAD_REAL]), **ONE_CHANGE
+    )
     assert [r.line_ids for r in routes] == [[CONV, MZCR], [CONV, LAV]]
     assert all(URDA_CIUDAD_REAL not in r.segment_ids for r in routes)
     # el grafo original no cambia
-    assert len(find_routes(graph, MADRID, CIUDAD_REAL)) == 3
+    assert len(find_routes(graph, MADRID, CIUDAD_REAL, **ONE_CHANGE)) == 3
 
 
 def test_changing_a_speed_changes_the_time_and_not_the_length(graph: Graph) -> None:
@@ -183,7 +215,7 @@ def test_a_sketched_link_opens_a_new_route(graph: Graph) -> None:
     link = SketchLink(
         from_node_id="alcazar-de-san-juan", to_node_id=CIUDAD_REAL, length_km=110, speed_kmh=200
     )
-    routes = find_routes(graph, MADRID, CIUDAD_REAL, Scenario(links=[link]))
+    routes = find_routes(graph, MADRID, CIUDAD_REAL, Scenario(links=[link]), **ONE_CHANGE)
     sketched = next(r for r in routes if link.id in r.segment_ids)
     assert [leg.line_id for leg in sketched.legs] == [CONV, None]
     assert sketched.legs[1].line_name == "Enlace esbozado"
@@ -260,16 +292,27 @@ def test_alternatives_of_a_closure_keep_the_single_line_wording(graph: Graph) ->
 
 def _parity_cases(graph: Graph) -> dict[str, Any]:
     routes: list[dict[str, Any]] = [
-        {"from": MADRID, "to": CORDOBA, "scenario": "", "max_changes": 1},
-        {"from": MADRID, "to": CIUDAD_REAL, "scenario": "", "max_changes": 1},
-        {"from": MADRID, "to": "sevilla-santa-justa", "scenario": "", "max_changes": 2},
+        {"from": MADRID, "to": CORDOBA, "scenario": "", **ONE_CHANGE},
+        {"from": MADRID, "to": CIUDAD_REAL, "scenario": "", **ONE_CHANGE},
+        {
+            "from": MADRID,
+            "to": "sevilla-santa-justa",
+            "scenario": "",
+            "max_changes": 2,
+            "max_ratio": None,
+        },
         {
             "from": MADRID,
             "to": CIUDAD_REAL,
             "scenario": f"c~{URDA_CIUDAD_REAL};e~alcazar-de-san-juan~ciudad-real~110.5~200"
             f";v~{MZCR}:almagro:ciudad-real~95",
             "max_changes": 2,
+            "max_ratio": None,
         },
+        # el criterio por defecto, el del comparador: sin tope útil de líneas y hasta el doble
+        {"from": MADRID, "to": CORDOBA, "scenario": "", **DEFAULTS},
+        {"from": MADRID, "to": CIUDAD_REAL, "scenario": "", **DEFAULTS},
+        {"from": MADRID, "to": "andujar", "scenario": "", **DEFAULTS},
     ]
     detours: list[dict[str, Any]] = [
         {"segment_id": URDA_CIUDAD_REAL, "scenario": ""},
@@ -283,6 +326,7 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
             case["to"],
             Scenario.from_code(case["scenario"]),
             max_changes=case["max_changes"],
+            max_ratio=case["max_ratio"],
         )
         case["expected"] = [r.model_dump() for r in found]
     for case in detours:

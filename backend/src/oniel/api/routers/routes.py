@@ -8,15 +8,23 @@ from fastapi import APIRouter, HTTPException, Query
 from oniel.api.deps import ConnectionDep
 from oniel.domain.schemas import RouteOut, RoutesOut
 from oniel.repo import network_repo
-from oniel.routing import DEFAULT_MAX_CHANGES, Scenario, ScenarioError, find_routes
+from oniel.routing import (
+    DEFAULT_MAX_CHANGES,
+    DEFAULT_MAX_RATIO,
+    Scenario,
+    ScenarioError,
+    find_routes,
+)
 
 router = APIRouter(tags=["rutas"])
 
 METHOD = (
     "Oniel une todas las líneas cargadas en un solo grafo, aplica las modificaciones del"
     " escenario (tramos cerrados, enlaces esbozados, velocidades cambiadas) y busca los recorridos"
-    " que no pasan dos veces por el mismo nodo ni cambian de línea más veces de las pedidas. Los"
-    " kilómetros se miden por cada línea. El tiempo es el de recorrer cada tramo a su velocidad"
+    " que no pasan dos veces por el mismo nodo ni miden más de las veces pedidas lo que mide el"
+    " más corto. No distingue anchos de vía: une la alta velocidad y la red convencional en los"
+    " nodos comunes, aunque no todos los trenes puedan pasar de una a otra. Los kilómetros se"
+    " miden por cada línea. El tiempo es el de recorrer cada tramo a su velocidad"
     " habitual, sin paradas, sin acelerar ni frenar y sin esperar cruces en vía única: sirve para"
     " comparar recorridos, no es un horario."
 )
@@ -43,8 +51,17 @@ async def get_routes(
         Query(description="Con fecha: cierra además los tramos interrumpidos ese día"),
     ] = False,
     max_changes: Annotated[
-        int, Query(ge=0, le=6, description="Cambios de línea admitidos en un recorrido")
+        int,
+        Query(ge=0, le=6, description="Veces que un recorrido puede pasar de una línea a otra"),
     ] = DEFAULT_MAX_CHANGES,
+    max_ratio: Annotated[
+        float,
+        Query(
+            ge=1,
+            le=100,
+            description="Se descartan los recorridos que miden más de estas veces el más corto",
+        ),
+    ] = DEFAULT_MAX_RATIO,
 ) -> RoutesOut:
     """Recorridos entre dos nodos con la red de un escenario, del más corto al más largo."""
     graph = await network_repo.fetch_graph(conn)
@@ -63,7 +80,7 @@ async def get_routes(
     if avoid_interruptions:
         parsed = parsed.with_closures(s for i in active for s in i.segment_ids)
     try:
-        routes = find_routes(graph, from_, to, parsed, max_changes=max_changes)
+        routes = find_routes(graph, from_, to, parsed, max_changes=max_changes, max_ratio=max_ratio)
     except ScenarioError as exc:
         raise HTTPException(422, f"Escenario no válido: {exc}") from exc
     return RoutesOut(
@@ -73,6 +90,7 @@ async def get_routes(
         scenario_code=parsed.to_code(),
         date=date,
         max_changes=max_changes,
+        max_ratio=max_ratio,
         routes=[
             RouteOut(
                 **r.model_dump(),

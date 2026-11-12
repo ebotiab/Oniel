@@ -1,4 +1,4 @@
-import type { LineSummary } from '../data/types'
+import type { LineSummary } from '../data/types.ts'
 import { scenarioFromCode } from '../routing/scenario.ts'
 
 export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: string } | null
@@ -12,12 +12,21 @@ export interface Route {
   cobertura?: boolean
   /** Escenario abierto desde la URL, como cadena corta (`frontend/src/routing/scenario.ts`). */
   escenario?: string
+  /** El comparador de recorridos está abierto, con las estaciones que ya se han elegido. */
+  recorridos?: Comparador
+}
+
+/** Lo que va en la URL del comparador: las dos estaciones y, si lo hay, el escenario con el que se compara. */
+export interface Comparador {
+  from: string | null
+  to: string | null
+  escenario?: string
 }
 
 /**
  * Ruta en el hash. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
- * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/escenario/<cadena> y
- * #/cobertura.
+ * #/ (la vista de la red), #/linea/<id>, #/tramo/<id>, #/nodo/<id>, #/tramo/<id>/cierre, #/escenario/<cadena>,
+ * #/recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir) y #/cobertura.
  */
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent)
@@ -27,6 +36,11 @@ export function parseHash(hash: string): Route {
   }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
+  if (kind === 'recorridos') {
+    const end = (value: string | undefined) => (value && value !== '-' ? value : null)
+    const escenario = parts[3]
+    return { selection: null, simulacion: false, recorridos: { from: end(id), to: end(action), ...(escenario ? { escenario } : {}) } }
+  }
   if (kind === 'escenario' && id) {
     // Un escenario que cierra un tramo abre la simulación de ese cierre; la URL lo conserva entero.
     try {
@@ -39,10 +53,20 @@ export function parseHash(hash: string): Route {
   return { selection: null, simulacion: false }
 }
 
+/** Un identificador o un escenario en la URL, con los dos puntos y el punto y coma a la vista. */
+function code(value: string): string {
+  return encodeURIComponent(value).replace(/%3A/gi, ':').replace(/%3B/gi, ';')
+}
+
 export function toHash(route: Route): string {
   if (route.cobertura) return '#/cobertura'
+  if (route.recorridos) {
+    const { from, to, escenario } = route.recorridos
+    const parts = escenario ? [from ?? '-', to ?? '-', escenario] : to ? [from ?? '-', to] : from ? [from] : []
+    return ['#/recorridos', ...parts.map(code)].join('/')
+  }
   if (!route.selection) return route.linea ? `#/linea/${encodeURIComponent(route.linea)}` : '#/'
-  if (route.escenario && route.simulacion) return `#/escenario/${encodeURIComponent(route.escenario).replace(/%3A/gi, ':').replace(/%3B/gi, ';')}`
+  if (route.escenario && route.simulacion) return `#/escenario/${code(route.escenario)}`
   const base = `#/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
   return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base
 }

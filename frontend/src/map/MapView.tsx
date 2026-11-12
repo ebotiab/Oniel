@@ -16,7 +16,7 @@ import type { InterruptionOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
 import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
-import { CAPAS_DE_VIA, LAYER, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeVia, type Trazo } from './layers'
+import { CAPAS_DE_VIA, LAYER, OPACIDAD_RECORRIDOS, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeVia, type Trazo } from './layers'
 import baseStyle from './style/oniel-base.json'
 
 interface Props {
@@ -38,6 +38,18 @@ interface Props {
   padding: { left: number; bottom: number }
   /** Línea a la vista sin nada seleccionado: el mapa la encuadra. Sin ella, encuadra la red. */
   lineId?: string | null
+  /** Comparador de recorridos abierto: qué se resalta. Nulo fuera del comparador. */
+  recorridos?: RecorridosEnMapa | null
+}
+
+/** Lo que el comparador de recorridos pinta en el mapa, por ids de tramo y de nodo. */
+export interface RecorridosEnMapa {
+  /** Tramos de todos los recorridos a la vista: el resto de la red se atenúa. */
+  todos: string[]
+  /** Tramos del recorrido elegido: van en el azul de la selección. */
+  elegido: string[]
+  /** Las estaciones elegidas. */
+  extremos: string[]
 }
 
 /**
@@ -102,7 +114,7 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, interrupted, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number> }>({ segments: new Map(), nodes: new Map() })
@@ -119,8 +131,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
   interruptedRef.current = interrupted
   const highlightRef = useRef(highlight)
   highlightRef.current = highlight
-  const stateRef = useRef({ selection, hoverId, closedSegmentId })
-  stateRef.current = { selection, hoverId, closedSegmentId }
+  const stateRef = useRef({ selection, hoverId, closedSegmentId, recorridos })
+  stateRef.current = { selection, hoverId, closedSegmentId, recorridos }
 
   // Crear el mapa una sola vez
   useEffect(() => {
@@ -252,7 +264,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
   }
 
   function applyHighlight(map: MapLibreMap) {
-    const opacity = opacidadDeVia(highlightRef.current)
+    // Comparando recorridos manda el comparador: la leyenda no atenúa otra vez lo que ya está atenuado.
+    const opacity = stateRef.current.recorridos?.todos.length ? OPACIDAD_RECORRIDOS : opacidadDeVia(highlightRef.current)
     for (const id of CAPAS_DE_VIA) if (map.getLayer(id)) map.setPaintProperty(id, 'line-opacity', opacity)
   }
 
@@ -262,11 +275,14 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     if (!map || !map.getSource(SRC.segments)) return
     applyHighlight(map)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [highlight])
+  }, [highlight, recorridos])
 
   function applyStates(map: MapLibreMap) {
-    const { selection, hoverId, closedSegmentId } = stateRef.current
+    const { selection, hoverId, closedSegmentId, recorridos } = stateRef.current
     const { segments, nodes } = idsRef.current
+    const enRecorrido = new Set(recorridos?.todos)
+    const elegido = new Set(recorridos?.elegido)
+    const extremos = new Set(recorridos?.extremos)
     for (const [id, fid] of segments) {
       map.setFeatureState(
         { source: SRC.segments, id: fid },
@@ -274,11 +290,13 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
           seleccionado: selection?.type === 'tramo' && selection.id === id,
           hover: hoverId === id,
           cerrado: closedSegmentId === id,
+          recorrido: enRecorrido.has(id),
+          elegido: elegido.has(id),
         },
       )
     }
     for (const [id, fid] of nodes) {
-      map.setFeatureState({ source: SRC.nodes, id: fid }, { seleccionado: selection?.type === 'nodo' && selection.id === id })
+      map.setFeatureState({ source: SRC.nodes, id: fid }, { seleccionado: (selection?.type === 'nodo' && selection.id === id) || extremos.has(id) })
     }
   }
 
@@ -288,11 +306,12 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     if (!map || !map.getSource(SRC.segments)) return
     applyStates(map)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selection, hoverId, closedSegmentId])
+  }, [selection, hoverId, closedSegmentId, recorridos])
 
   // Encuadrar la selección. La red se lee de la referencia: que llegue el detalle de una línea cambia
   // la red, pero no debe volver a mover el mapa.
   const hasNetwork = network !== null
+  const recorridosKey = recorridos ? recorridos.todos.join('|') : null
   useEffect(() => {
     const map = mapRef.current
     const network = networkRef.current
@@ -304,6 +323,17 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     const caja = map.getContainer()
     const lienzo = map.getCanvas()
     if (caja.clientWidth !== lienzo.clientWidth || caja.clientHeight !== lienzo.clientHeight) map.resize()
+    if (!selection && recorridosKey !== null) {
+      // Comparando recorridos, el mapa encuadra los que se enseñan; mientras se eligen estaciones, no se mueve.
+      const ids = new Set(stateRef.current.recorridos?.todos)
+      if (!ids.size || framedRef.current === `recorridos:${recorridosKey}`) return
+      framedRef.current = `recorridos:${recorridosKey}`
+      const b = new LngLatBounds()
+      for (const f of network.segment_features.features)
+        if (ids.has(f.id) && f.geometry.type === 'LineString') for (const c of f.geometry.coordinates) b.extend([c[0]!, c[1]!])
+      if (!b.isEmpty()) map.fitBounds(b, { padding: pad, maxZoom: 10, duration: reduced ? 0 : 700 })
+      return
+    }
     if (!selection) {
       const key = lineId ? `linea:${lineId}` : 'red'
       if (framedRef.current === key) return
@@ -333,7 +363,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
         duration: reduced ? 0 : 700,
       })
     }
-  }, [selection, lineId, hasNetwork, padding.left, padding.bottom])
+  }, [selection, lineId, recorridosKey, hasNetwork, padding.left, padding.bottom])
 
   // Encuadrar el trazo que se fija en la leyenda: todos los tramos de ese tipo, en toda la red.
   useEffect(() => {
@@ -355,5 +385,5 @@ export function MapView({ network, selection, hoverId, closedSegmentId, interrup
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frame])
 
-  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} />
+  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} data-recorrido-elegido={recorridos?.elegido.length || undefined} />
 }
