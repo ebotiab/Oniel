@@ -84,18 +84,27 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
     await expect(evolucion.getByTestId('evolucion-fuente').first()).toContainText(/Fuente de los horarios: Renfe.*renfe-gtfs-av-ld-md/)
   })
 
-  test('con tres horarios, la línea sigue con el tercero', async ({ page }) => {
+  test('con tres o más horarios, una lista por fechas en vez de un renglón', async ({ page }) => {
     await conHistorico(page, [
       { ...RENFE, descargado: '2026-11-08', dia: '2026-11-13', trenes: 21 },
+      { ...OUIGO, descargado: '2026-07-02', dia: '2026-07-17', trenes: 6 },
       { ...RENFE, descargado: '2026-12-07', dia: '2026-12-11', trenes: 24 },
+      { ...OUIGO, descargado: '2026-12-01', dia: '2026-12-11', trenes: 8 },
       { ...RENFE, descargado: '2027-01-04', dia: '2027-01-08', trenes: 22 },
     ])
     await page.goto('/#/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
-    await expect(page.getByTestId('evolucion-renfe')).toHaveText(
-      'Renfe Viajeros. Horario del 8 nov 2026: 21 trenes el 13 nov · horario del 7 dic 2026: 24 trenes el 11 dic · horario del 4 ene 2027: 22 trenes el 8 ene',
-    )
+    const renfe = page.getByTestId('evolucion-renfe')
+    await expect(renfe.locator('p')).toHaveText('Renfe Viajeros')
+    // del más antiguo al más reciente, un horario por renglón
+    await expect(renfe.getByRole('listitem')).toHaveText([
+      'Horario del 8 nov 2026: 21 trenes el 13 nov',
+      'Horario del 7 dic 2026: 24 trenes el 11 dic',
+      'Horario del 4 ene 2027: 22 trenes el 8 ene',
+    ])
+    // con dos, el operador de al lado sigue en un renglón
+    await expect(page.getByTestId('evolucion-ouigo')).toHaveText('Ouigo España. Horario del 2 jul 2026: 6 trenes el 17 jul · horario del 1 dic 2026: 8 trenes el 11 dic')
   })
 
   test('con un solo horario por operador, o sin trenes, no se muestra nada', async ({ page }) => {
@@ -122,9 +131,11 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
     await page.goto('/#/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
-    const linea = /^Renfe Viajeros\. Horario del \d+ \w+ \d{4}: \d+ trenes el \d+ \w+( · horario del \d+ \w+ \d{4}: \d+ trenes el \d+ \w+)+$/
-    await expect(page.getByTestId('evolucion-renfe')).toHaveText(linea)
+    // dos horarios van en un renglón; con tres o más, en una lista
+    const horario = String.raw`[Hh]orario del \d+ \w+ \d{4}: \d+ trenes el \d+ \w+`
+    const texto = new RegExp(`^Renfe Viajeros(\\. ${horario} · ${horario}|(\\s*${horario}){3,})$`)
+    await expect(page.getByTestId('evolucion-renfe')).toHaveText(texto)
     await page.goto(`/#/tramo/${TRAMO}`)
-    await expect(page.getByTestId('evolucion-renfe')).toHaveText(linea)
+    await expect(page.getByTestId('evolucion-renfe')).toHaveText(texto)
   })
 })

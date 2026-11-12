@@ -148,12 +148,12 @@ Tramos sin alternativa (decidido el 12 de noviembre de 2026, entre tres formas d
 - Al pie, el día de los trenes y que cada tramo se corta por separado, sin contar las interrupciones vigentes.
 - Nada de esto se dibuja en el mapa ni en el esquema: no hay color ni trazo nuevo.
 
-Evolución del servicio (12 de noviembre de 2026; la forma con tres o más horarios está por decidir)
+Evolución del servicio (12 de noviembre de 2026; la lista con tres o más horarios, decidida ese día entre lista y gráfico)
 - Va dentro de «Más detalle» de la ficha de una estación y de la de un tramo, no a la vista: es un dato para quien quiere más. Sin plegable ni rótulo nuevos; lleva el sobre «De un horario al siguiente».
 - Una línea por operador con más de un horario descargado, en cifras tabulares: «Renfe Viajeros. Horario del 8 nov 2026: 56 trenes el 13 nov · horario del 12 nov 2026: 56 trenes el 13 nov». La fecha del horario es el día en que se descargó; la del final, el día que se cuenta. Sin color, sin flechas y sin signo: no se califica el cambio ni se dice por qué ocurre.
 - Debajo, una frase en gris dice qué es cada cifra y avisa de que, si los días son distintos, parte de la diferencia puede venir del día de la semana. La fuente de los horarios va al pie, como en el resto del detalle.
 - Si no hay dos horarios del mismo operador, o no tienen trenes ahí, no aparece nada: ni el sobre ni una frase de ausencia.
-- Con tres o más horarios la línea sigue, un horario tras otro. Cuando haya histórico para que eso pese, una lista o un gráfico sencillo es una decisión de diseño pendiente: se propone al usuario y se anota aquí antes de hacerla.
+- Con tres o más horarios de un operador, el renglón pasa a ser una lista por fechas: el nombre del operador y, debajo, un horario por renglón, del más antiguo al más reciente («Horario del 8 nov 2026: 21 trenes el 13 nov»), con la lista sencilla de las fichas y cifras tabulares. Con dos sigue siendo un renglón. Se prefirió la lista al gráfico: cada cifra lleva sus dos fechas, que un gráfico obliga a buscar en los ejes, y no añade un elemento nuevo al panel.
 
 Glosario (decidido el 12 de noviembre de 2026, entre tres formas de enseñar la definición y tres entradas)
 - Los textos están en `frontend/src/panel/glosario.ts`: términos, con una definición de una o dos frases, y conceptos, con la frase de cada viñeta de su dibujo, uno o dos párrafos cortos y la referencia que se cita (una fuente de `sources.json` y el artículo). Las definiciones son propias, en lenguaje llano y tono neutro; no reproducen el texto de la referencia. Un término técnico nuevo en una ficha entra en ese fichero y se muestra con el componente `Termino`.

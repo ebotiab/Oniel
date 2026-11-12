@@ -54,10 +54,25 @@ export function ServiceHistory({ kind, id, operators, sources, conFuente = false
       <p className="sobre">De un horario al siguiente</p>
       {grupos.map((g) => {
         const operador = operators.find((o) => o.id === g[0]!.operator_id)
+        const testId = `evolucion-${g[0]!.operator_id ?? g[0]!.source_id}`
+        const punto = (p: HistoryPoint) => `del ${formatDayShortYear(p.retrieved_on)}: ${trenes(p.trains)} el ${formatDayShort(p.date)}`
+        // Con tres o más horarios un renglón ya no se lee: una lista por fechas, del más antiguo al más reciente.
+        if (g.length > 2) {
+          return (
+            <div key={g[0]!.source_id} data-testid={testId}>
+              {operador && <p className="texto">{operador.name}</p>}
+              <ul className="lista-simple datos">
+                {g.map((p) => (
+                  <li key={p.dataset_id}>Horario {punto(p)}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
         return (
-          <p key={g[0]!.source_id} className="texto datos" data-testid={`evolucion-${g[0]!.operator_id ?? g[0]!.source_id}`}>
+          <p key={g[0]!.source_id} className="texto datos" data-testid={testId}>
             {operador ? `${operador.name}. ` : ''}
-            {g.map((p, i) => `${i ? 'horario' : 'Horario'} del ${formatDayShortYear(p.retrieved_on)}: ${trenes(p.trains)} el ${formatDayShort(p.date)}`).join(' · ')}
+            {g.map((p, i) => `${i ? 'horario' : 'Horario'} ${punto(p)}`).join(' · ')}
           </p>
         )
       })}
