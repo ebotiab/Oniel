@@ -85,7 +85,7 @@ Patrón de ficha (aplicado el 11 de noviembre de 2026 a tramo, nodo y línea)
 - Los bloques de contexto y de interrupción no son detalle técnico: van fuera del plegable, a la vista, con sus propias fuentes.
 
 Rutas
-- Toda vista tiene su ruta en el hash de la URL, para poder compartir un enlace exacto: `#/` (la vista de la red, sin línea elegida), `#/linea/<id>` (la línea a la vista en el panel), `#/tramo/<id>`, `#/nodo/<id>`, `#/tramo/<id>/cierre` (la simulación) y `#/cobertura`. Se leen y se escriben en `parseHash` y `toHash` (`frontend/src/app/state.ts`).
+- Toda vista tiene su ruta en el hash de la URL, para poder compartir un enlace exacto: `#/` (la vista de la red, sin línea elegida), `#/linea/<id>` (la línea a la vista en el panel), `#/tramo/<id>`, `#/nodo/<id>`, `#/tramo/<id>/cierre` (la simulación), `#/recorridos/<desde>/<hasta>` (el comparador de recorridos; detrás puede ir un escenario, y «-» es una estación sin elegir) y `#/cobertura`. Se leen y se escriben en `parseHash` y `toHash` (`frontend/src/app/state.ts`).
 - Una vista nueva lleva la suya desde el primer día y se añade a esas dos funciones. No tienen ruta los estados que no son una vista: si el detalle está plegado, el punto por el que se pasa el ratón, la hoja del móvil ampliada o no. El resultado de una simulación todavía no la tiene (la ventana horaria no va en la URL); le corresponde al escenario serializable de la hoja de ruta.
 
 Buscador (decidido el 11 de noviembre de 2026)
@@ -96,6 +96,17 @@ Buscador (decidido el 11 de noviembre de 2026)
 - Teclado: «/» o Ctrl/⌘ + K enfocan el campo (la tecla «/» se muestra dentro del campo en escritorio), las flechas recorren los resultados, Intro abre el primero o el elegido y Escape cierra. Es un «combobox» de WAI-ARIA con su lista de opciones.
 - Elegir una estación la selecciona como al tocarla en el mapa; elegir una línea la pone en el panel. Las dos cosas quedan en la URL (`#/nodo/<id>`, `#/linea/<id>`), como dice «Rutas».
 - El mismo componente (`SearchBox` con `scope="nodos"`) es el selector de estación para otros paneles, como el comparador de recorridos.
+
+Comparar recorridos (decidido el 12 de noviembre de 2026, con una maqueta delante)
+- Es una vista del panel, con su ruta (`#/recorridos/<desde>/<hasta>`). Se entra por dos sitios: un renglón al pie de la vista de la red y «Comparar recorridos desde aquí» en la ficha de cada estación. No añade nada a la cabecera, que en el móvil va justa.
+- Las dos estaciones se eligen en dos renglones, «Desde» y «Hasta», con el buscador (`SearchBox` con `scope="nodos"`); elegida una, el renglón dice su nombre y «Cambiar». Mientras falte alguna, tocar una estación en el mapa la pone en el renglón vacío. «Invertir el sentido» las intercambia.
+- Los recorridos van apilados, del más corto al más largo, y no en columnas: en 420 px no caben, y en el móvil menos. La comparación la da una barra de tinta bajo las cifras, proporcional a los kilómetros y a la misma escala en todos, partida en un trozo por cada línea que recorre.
+- Cada recorrido se nombra por dónde pasa: «Por la alta velocidad», «Por la línea convencional» o, si encadena varias líneas, por las estaciones donde pasa de una a otra («Por Manzanares y Ciudad Real»), con «Recorre tres líneas» debajo. No se dice «cambio de línea», que suena a transbordo: el tren pasa de una línea a otra sin que nadie se baje.
+- De cada uno se ven los kilómetros, el tiempo estimado («1 h 21 min sin paradas»), los kilómetros de vía única, las estaciones principales por las que pasa y los trenes directos del día de referencia con el más rápido.
+- Un recorrido cortado lo dice con la línea de filete rojo de las interrupciones («Sin circulación hoy entre … y …, desde el … (Adif)»). Si el más corto está cortado, el primero que no lo está lleva «el más corto que no está cortado»; si ninguno queda libre, lo dice una frase bajo la lista.
+- En el mapa no hay colores nuevos. El recorrido elegido (el primero, o el que se toque) va en el azul de la selección, con su halo; los demás recorridos siguen en tinta y el resto de la red se atenúa, como cuando la leyenda resalta un trazo. El rojo de «sin circulación» manda sobre el azul. El mapa encuadra los recorridos a la vista. En el panel, el elegido lleva el fondo hundido y el filete azul de los resultados del buscador.
+- Los dos límites del cálculo van a la vista, bajo la lista, en una nota gris: el tiempo sirve para comparar y no es un horario; Oniel une las líneas sin mirar el ancho de vía. El método, los trechos de cada recorrido y las fuentes van en «Más detalle», como en cualquier ficha.
+- Se enseñan tres recorridos como mucho. El criterio (qué recorridos y por qué tres) está en `docs/simulacion.md`, «Comparar recorridos».
 
 Movimiento
 - Solo en respuesta a una acción: enfocar el mapa al seleccionar, abrir el panel de simulación, resaltar en el esquema lo que se resalta en el mapa. Se respeta `prefers-reduced-motion`.

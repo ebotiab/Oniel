@@ -17,10 +17,12 @@ interface Props {
   onSelectSegment: (id: string) => void
   /** Salta a una de las líneas que pasan por el nodo. */
   onGoLine: (lineId: string) => void
+  /** Abre el comparador de recorridos con este nodo como salida. */
+  onCompare: () => void
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, referenceDate, interrupted, onSelectSegment, onGoLine, onBack }: Props) {
+export function NodeDetail({ node, network, sources, referenceDate, interrupted, onSelectSegment, onGoLine, onCompare, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -74,6 +76,13 @@ export function NodeDetail({ node, network, sources, referenceDate, interrupted,
         </div>
       )}
       {node.description && <p className="texto">{node.description}</p>}
+      {station && (
+        <p className="texto">
+          <button type="button" className="enlace" onClick={onCompare} data-testid="recorridos-desde-aqui">
+            Comparar recorridos desde aquí
+          </button>
+        </p>
+      )}
 
       <Plegable>
         <dl className="datos-tramo datos">

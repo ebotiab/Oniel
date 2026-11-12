@@ -5,7 +5,9 @@ import { composeNetwork } from '../data/network'
 import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
-import { MapView } from '../map/MapView'
+import { MapView, type RecorridosEnMapa } from '../map/MapView'
+import { buildGraph } from '../routing/graph'
+import { ComparePanel } from '../panel/ComparePanel'
 import { CoveragePanel } from '../panel/CoveragePanel'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
@@ -15,8 +17,9 @@ import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeInterruptions, bySegment } from './interruptions'
+import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
-import { networkCount, parseHash, toHash, todayIso, type Selection } from './state'
+import { networkCount, parseHash, toHash, todayIso, type Comparador, type Selection } from './state'
 import './app.css'
 
 function useMedia(query: string): boolean {
@@ -43,7 +46,8 @@ export default function App() {
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseHash(window.location.hash).cobertura))
-  const [sheetOpen, setSheetOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseHash(window.location.hash).recorridos))
+  const [elegidoKey, setElegidoKey] = useState<string | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
   const status = useApiStatus()
@@ -102,6 +106,7 @@ export default function App() {
       const r = parseHash(window.location.hash)
       setRoute(r)
       setShowCoverage(Boolean(r.cobertura))
+      if (r.recorridos) setSheetOpen(true)
       // Sin selección manda la URL: #/ es la vista de la red. Con selección, la línea sale de lo seleccionado.
       if (!r.selection && !r.cobertura) setActiveLineId(r.linea ?? null)
     }
@@ -138,6 +143,14 @@ export default function App() {
     setSheetOpen(true)
   }, [])
   const pick = useCallback((target: SearchTarget) => (target.type === 'nodo' ? select(target) : showLine(target.id)), [select, showLine])
+
+  // El comparador de recorridos: abrirlo y cambiar sus estaciones son cambios de ruta.
+  const compare = useCallback((next: Comparador) => {
+    setRoute({ selection: null, simulacion: false, recorridos: next })
+    setResult(null)
+    setShowCoverage(false)
+    setSheetOpen(true)
+  }, [])
 
   const selection = route.selection
   const segment = useMemo(
@@ -189,6 +202,36 @@ export default function App() {
   const interruptions = useMemo(() => activeInterruptions(network, today), [network, today])
   const interrupted = useMemo(() => bySegment(interruptions), [interruptions])
   const referenceDate = coverage?.reference_date ?? null
+
+  // Comparador de recorridos. Una estación de la URL que no existe cuenta como sin elegir.
+  const graph = useMemo(() => (network ? buildGraph(network) : null), [network])
+  const comparador = useMemo<Comparador | null>(() => {
+    if (!route.recorridos) return null
+    const known = (id: string | null) => (id && (!graph || graph.nodes.has(id)) ? id : null)
+    return { ...route.recorridos, from: known(route.recorridos.from), to: known(route.recorridos.to) }
+  }, [route.recorridos, graph])
+  const comparacion = useMemo(() => {
+    if (!comparador?.from || !comparador.to || comparador.from === comparador.to || !graph || !network) return null
+    return compararRecorridos(graph, network, comparador.from, comparador.to, interrupted, comparador.escenario)
+  }, [comparador, graph, network, interrupted])
+  const elegido = comparacion ? (comparacion.recorridos.find((r) => r.key === elegidoKey) ?? comparacion.recorridos[0] ?? null) : null
+  const recorridosEnMapa = useMemo<RecorridosEnMapa | null>(() => {
+    if (!comparador) return null
+    return {
+      todos: [...new Set(comparacion?.recorridos.flatMap((r) => r.route.segment_ids))],
+      elegido: elegido?.route.segment_ids ?? [],
+      extremos: [comparador.from, comparador.to].filter((id): id is string => Boolean(id)),
+    }
+  }, [comparador, comparacion, elegido])
+  // En el comparador, tocar una estación en el mapa la pone en el extremo que falte; lo demás no hace nada.
+  const pickOnMap = useCallback(
+    (sel: Selection) => {
+      if (!comparador || sel?.type !== 'nodo') return
+      if (!comparador.from) compare({ ...comparador, from: sel.id })
+      else if (!comparador.to) compare({ ...comparador, to: sel.id })
+    },
+    [comparador, compare],
+  )
   const padding = useMemo(() => (mobile ? { left: 0, bottom: sheetOpen ? Math.round(window.innerHeight * 0.48) : 120 } : { left: 440, bottom: 0 }), [mobile, sheetOpen])
 
   // «Toda la línea» vuelve a la línea que se estaba viendo, también si se llegó por un enlace directo.
@@ -207,6 +250,20 @@ export default function App() {
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
   else if (showCoverage && coverage)
     panel = <CoveragePanel coverage={coverage} interruptions={interruptions} status={status} onClose={() => setShowCoverage(false)} />
+  else if (comparador)
+    panel = (
+      <ComparePanel
+        network={network}
+        comparador={comparador}
+        comparacion={comparacion}
+        elegido={elegido}
+        sources={coverage?.sources ?? []}
+        referenceDate={referenceDate}
+        onChange={compare}
+        onElegir={setElegidoKey}
+        onBack={() => showLine(null)}
+      />
+    )
   else if (segment && route.simulacion)
     panel = (
       <SimulationPanel
@@ -246,11 +303,12 @@ export default function App() {
         interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}
         onGoLine={showLine}
+        onCompare={() => compare({ from: node.id, to: null })}
         onBack={backToLine}
       />
     )
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} />
+    panel = <NetworkOverview network={network} coverage={coverage} interruptions={interruptions} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} />
   else
     panel = (
       <LineOverview
@@ -285,11 +343,12 @@ export default function App() {
         closedSegmentId={closedSegmentId}
         interrupted={interrupted}
         highlight={highlight}
-        onSelect={select}
+        onSelect={comparador ? pickOnMap : select}
         onHover={setHoverId}
         onNearLines={wantNear}
         padding={padding}
         lineId={selection ? null : lineId}
+        recorridos={recorridosEnMapa}
       />
       <header className="cabecera">
         <div className="cabecera-inicio">

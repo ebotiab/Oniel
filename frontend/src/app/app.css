@@ -1061,3 +1061,116 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Comparador de recorridos */
+.extremos {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.extremo {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.extremo-rotulo {
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+.extremo-elegido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  min-height: 34px;
+  padding-top: 7px;
+  font-size: var(--t-14);
+}
+
+.extremo .buscador-campo {
+  box-shadow: none;
+}
+
+.extremos .invertir {
+  justify-self: start;
+  margin-left: 56px;
+}
+
+.recorridos {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+/* Cada recorrido es un renglón con filete; el elegido, el fondo hundido y el filete azul de la selección. */
+.recorrido {
+  padding: 10px 10px 10px 12px;
+  border-left: 3px solid transparent;
+  border-top: 1px solid var(--regla);
+}
+
+.recorrido.activo {
+  background: var(--papel-2);
+  border-left-color: var(--senal-azul);
+}
+
+.recorrido-titulo {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  font-size: var(--t-14);
+  font-weight: 600;
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.recorrido-titulo:focus-visible {
+  outline: 2px solid var(--senal-azul);
+  outline-offset: 2px;
+}
+
+.recorrido-cifras {
+  margin-top: 3px;
+  font-size: 13px;
+}
+
+/* Barra de tinta proporcional a los kilómetros, a la misma escala en todos; un trozo por cada línea. */
+.recorrido-barra {
+  display: flex;
+  gap: 2px;
+  height: 5px;
+  margin: 7px 0 6px;
+  min-width: 12px;
+}
+
+.recorrido-barra span {
+  background: var(--tinta);
+  min-width: 2px;
+}
+
+.recorrido .suave {
+  margin-top: 3px;
+  max-width: 58ch;
+}
+
+.recorrido .nota-horario {
+  margin: 4px 0;
+}
+
+/* En el móvil el buscador de la cabecera va recogido y a la derecha; el de cada extremo, en su sitio. */
+.movil .extremo .buscador {
+  order: 0;
+}
+
+.movil .extremo .buscador-lista {
+  left: 0;
+  right: 0;
+}
