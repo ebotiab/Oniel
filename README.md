@@ -83,6 +83,14 @@ cd frontend && npm run typecheck && npx playwright install chromium && npx playw
 
 Playwright arranca Vite por su cuenta y espera la API en `ONIEL_API_PROXY` (por defecto http://127.0.0.1:8000). Con `ONIEL_E2E_STATIC=1` prueba la instantánea estática sin servidor (sin simulación). Si otra sesión ocupa el puerto 5199, `ONIEL_E2E_PORT` lo cambia.
 
+La batería completa son más de 200 pruebas en dos tamaños de pantalla. Mientras se trabaja basta con los ficheros de lo que se toca, sobre la instantánea:
+
+```bash
+cd frontend && ONIEL_E2E_STATIC=1 npx playwright test e2e/fichas.spec.ts
+```
+
+La batería entera sobre la instantánea la pasa el CI en cada pull request. La que va contra la API local (sin `ONIEL_E2E_STATIC`) no la pasa el CI: hay que pasarla a mano cuando se toca la simulación o la API.
+
 ## Comprobaciones
 
 ```bash
@@ -96,6 +104,8 @@ cd frontend && npm run typecheck && npm run lint && npm run build
 Ruff formatea y ordena importaciones; mypy (estricto) y pyright (modo `standard`, el mismo que Pylance) tipan el backend; `tsc` y oxlint cubren el visor, incluidas las pruebas Playwright. `npm run build` compila el visor y termina con `frontend/scripts/comprobar-css.mjs`, que falla si a una hoja de estilos le falta una llave o si las reglas de base (`:root`, `body`) no quedan en el primer nivel de la hoja compilada: las pruebas Playwright corren contra el servidor de desarrollo y no ven un fallo que solo aparece al compilar. Vercel ejecuta la misma orden, así que una hoja rota no se publica. El directorio `.vscode/` fija el intérprete de `backend/.venv` y Ruff como formateador, de modo que el editor no muestre avisos que estas órdenes no muestren.
 
 El CI de GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) ejecuta estas mismas órdenes y las pruebas en cada pull request y en cada push a `main`: el backend con PostgreSQL 17 (incluidas las pruebas de integración y `oniel-data validate`) y el visor con Node 20 y Playwright sobre la instantánea estática.
+
+Para que tarde poco, la batería de Playwright va repartida en cuatro fragmentos que corren a la vez (`--shard`), y las trazas de las pruebas que fallen se guardan por fragmento. En una pull request, el CI mira además qué rutas cambian y salta la mitad a la que el cambio no puede afectar ([.github/scripts/que-cambia.sh](.github/scripts/que-cambia.sh)): una de solo documentación no lanza pruebas. `main` exige las comprobaciones `Backend` y `Frontend`, que son dos trabajos finales que resumen a los demás y quedan en verde también cuando su mitad se salta. En un push a `main` corre siempre todo.
 
 ## Variables de entorno
 
