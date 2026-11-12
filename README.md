@@ -66,6 +66,8 @@ cd backend && uv run oniel-data --help
 | `refresh expiring` | Lista los ficheros de horarios de descarga manual a los que les quedan pocos días de validez |
 | `sources` | Lista las fuentes con licencia y fecha |
 | `logfire-test` | Envía una traza de prueba a Logfire |
+| `obs estado` | Dice qué commit corre en producción, la última importación y los errores, según las trazas de Logfire (`docs/despliegue.md`) |
+| `obs consulta "SQL"` | Ejecuta una consulta de solo lectura sobre las trazas |
 
 ## Pruebas
 
