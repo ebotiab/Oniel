@@ -36,6 +36,13 @@ LAV, CONV, MZCR = (
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
 )
+#: El lazo que cierran la convencional de Moreda y las dos de alta velocidad de Córdoba a Granada.
+LBMG, LAV_GRANADA, LAV_MALAGA = (
+    "linares-baeza-moreda-granada",
+    "lav-antequera-granada",
+    "lav-cordoba-malaga",
+)
+BY_GRANADA = [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
 MADRID, CIUDAD_REAL, MANZANARES, CORDOBA = (
     "madrid-puerta-de-atocha",
     "ciudad-real",
@@ -67,7 +74,7 @@ def graph(network: Red) -> Graph:
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
-    assert len(graph.edges) == len(network.segments) == 54
+    assert len(graph.edges) == len(network.segments) == 54 + 4 + 8
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -137,6 +144,7 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         170.8,
         260.5,
         613.5,
+        885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
     ]
     # Madrid – Andújar: hay un recorrido que pasa tres veces de una línea a otra
     to_andujar = find_routes(graph, MADRID, "andujar")
@@ -227,13 +235,18 @@ def test_a_sketched_link_opens_a_new_route(graph: Graph) -> None:
 
 def test_detours_of_a_closure_between_madrid_and_ciudad_real(graph: Graph) -> None:
     """Cierre de Urda – Ciudad Real: el rodeo por Manzanares (dos líneas) y la convencional entera."""
-    short, long = closure_detours(graph, URDA_CIUDAD_REAL)
+    short, long, by_granada = closure_detours(graph, URDA_CIUDAD_REAL)
     assert short.route.line_ids == [CONV, MZCR]
     assert (short.route.from_node_id, short.route.to_node_id) == (MADRID, CIUDAD_REAL)
     assert (short.route.length_km, short.closed_line_length_km) == (260.5, 170.8)
     assert long.route.line_ids == [CONV]
     assert (long.route.from_node_id, long.route.to_node_id) == (MADRID, CORDOBA)
     assert (long.route.length_km, long.closed_line_length_km) == (440.7, 343.6)
+    # y, desde que Granada está unida por los dos lados, la vuelta por Linares-Baeza, Moreda,
+    # Granada y Antequera hasta la bifurcación de Málaga
+    assert by_granada.route.line_ids == BY_GRANADA
+    assert (by_granada.route.from_node_id, by_granada.route.to_node_id) == (MADRID, "bif-malaga")
+    assert (by_granada.route.length_km, by_granada.closed_line_length_km) == (698.3, 358.0)
 
 
 def test_detours_leave_the_closed_line_and_only_come_back_past_the_closure(graph: Graph) -> None:
@@ -251,27 +264,38 @@ def test_detours_leave_the_closed_line_and_only_come_back_past_the_closure(graph
             )
 
 
-def test_closure_south_of_cordoba_has_no_detour(graph: Graph) -> None:
+def test_closure_towards_sevilla_has_no_detour_and_the_first_stretch_goes_round_by_granada(
+    graph: Graph,
+) -> None:
+    """A Sevilla solo se llega por la alta velocidad; hasta la bifurcación de Málaga hay otro
+    camino desde que Granada está unida por los dos lados, mucho más largo."""
     assert closure_detours(graph, f"{LAV}:bif-malaga:majarabique") == []
+    first, *_ = closure_detours(graph, f"{LAV}:cordoba:bif-malaga")
+    assert first.route.line_ids == BY_GRANADA
+    assert (first.route.from_node_id, first.route.to_node_id) == (CORDOBA, "bif-malaga")
+    assert (first.route.length_km, first.closed_line_length_km) == (511.7, 14.4)
 
 
 def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph: Graph) -> None:
-    by_madrid, by_cordoba = closure_detours(graph, f"{MZCR}:almagro:ciudad-real")
+    by_madrid, by_cordoba, by_granada = closure_detours(graph, f"{MZCR}:almagro:ciudad-real")
     assert by_madrid.route.line_ids == by_cordoba.route.line_ids == [CONV, LAV]
     assert (by_madrid.route.length_km, by_madrid.closed_line_length_km) == (366.9, 64.4)
     assert "Madrid-Puerta de Atocha" in by_madrid.route.via
     assert by_cordoba.route.length_km == 417.4 and "Córdoba" in by_cordoba.route.via
+    assert by_granada.route.length_km == 689.5 and "Granada" in by_granada.route.via
 
 
 def test_other_closures_of_the_scenario_also_cut_the_detours(graph: Graph) -> None:
     scenario = Scenario(closures=[f"{MZCR}:daimiel:almagro"])
-    (only,) = closure_detours(graph, URDA_CIUDAD_REAL, scenario)
-    assert only.route.line_ids == [CONV]
+    conventional, by_granada = closure_detours(graph, URDA_CIUDAD_REAL, scenario)
+    assert conventional.route.line_ids == [CONV]
+    assert by_granada.route.line_ids == BY_GRANADA
 
 
 def test_alternatives_of_a_closure_keep_the_single_line_wording(graph: Graph) -> None:
     """La alternativa de una sola línea se describe como antes de pasar por el grafo."""
-    two_lines, one_line = alternatives(graph, f"{LAV}:villanueva-de-cordoba:adamuz")
+    two_lines, one_line, *by_granada = alternatives(graph, f"{LAV}:villanueva-de-cordoba:adamuz")
+    assert [a.to_node_id for a in by_granada] == ["bif-malaga", "bif-malaga"]
     assert (one_line.line_id, one_line.line_ids) == (CONV, [CONV])
     assert (one_line.from_node_id, one_line.to_node_id) == (MADRID, CORDOBA)
     assert (one_line.length_km, one_line.closed_line_length_km) == (440.7, 343.6)
@@ -294,13 +318,15 @@ def test_a_route_that_strays_far_from_a_shorter_one_is_dropped(graph: Graph) -> 
     """Sevilla – Manzanares: el camino que llega a Ciudad Real y sube hasta Madrid para volver.
 
     Mide 666,4 km frente a 363,9 km, menos del doble, pero desde Ciudad Real, donde se aparta del
-    más corto, recorre 366,9 km para lo que el otro hace en 64,4 km.
+    más corto, recorre 366,9 km para lo que el otro hace en 64,4 km. Lo mismo el que baja de la
+    bifurcación de Málaga a Granada y vuelve por Moreda (614,4 km).
     """
     sevilla = "sevilla-santa-justa"
     assert [r.length_km for r in find_routes(graph, sevilla, MANZANARES)] == [363.9, 371.2]
     unfiltered = find_routes(graph, sevilla, MANZANARES, max_ratio=None)
-    assert [r.length_km for r in unfiltered][:3] == [363.9, 371.2, 666.4]
-    assert MADRID in unfiltered[2].node_ids and CIUDAD_REAL in unfiltered[2].node_ids
+    assert [r.length_km for r in unfiltered][:4] == [363.9, 371.2, 614.4, 666.4]
+    assert "granada" in unfiltered[2].node_ids
+    assert MADRID in unfiltered[3].node_ids and CIUDAD_REAL in unfiltered[3].node_ids
     # los dos caminos que se apartan en Córdoba se conservan: 244,6 km frente a 237,2 km
     assert [r.length_km for r in find_routes(graph, MADRID, CORDOBA)] == [
         343.6,

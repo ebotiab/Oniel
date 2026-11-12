@@ -16,6 +16,8 @@ from conftest import (
     DATA_DIR,
     FEED,
     JAEN_SPEC,
+    LAV_GRANADA_SPEC,
+    LAV_MALAGA_SPEC,
     LBMG_SPEC,
     MZCR_SPEC,
     SPEC,
@@ -523,6 +525,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # paran en Moreda salen por la estación y no por la bifurcación
         LBMG_SPEC.name: {"linares-baeza-almeria-por-moreda": 4},
         ALBACETE_SPEC.name: {},
+        LAV_MALAGA_SPEC.name: {},
+        LAV_GRANADA_SPEC.name: {},
     }
     for name, r in reports.items():
         assert r["problems"] == []

@@ -33,6 +33,8 @@ class Settings(BaseSettings):
         "espeluy-jaen",
         "linares-baeza-moreda-granada",
         "alcazar-albacete",
+        "lav-cordoba-malaga",
+        "lav-antequera-granada",
     ]
 
 

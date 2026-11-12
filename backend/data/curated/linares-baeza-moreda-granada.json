@@ -63,8 +63,7 @@
     {"attribute": "mando", "from_node": "linares-baeza", "to_node": "granada", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: los dos rótulos de bloqueo de la línea llevan «ctc»."}
   ],
   "connections": [
-    {"id": "conv-moreda-almeria", "node_id": "moreda", "name": "Línea Linares-Baeza–Almería", "towards": "Guadix y Almería", "status": "no_cargada", "sketch": [[-3.3107459, 37.4311254], [-3.3069, 37.4240], [-3.2585, 37.4037], [-3.185, 37.3627], [-3.1270, 37.3169], [-3.02, 37.26]]},
-    {"id": "av-antequera-granada", "node_id": "granada", "name": "Línea de alta velocidad Antequera–Granada", "towards": "Loja, Antequera, Córdoba y Málaga", "status": "no_cargada", "sketch": [[-3.6086283, 37.1836936], [-3.654, 37.199], [-3.75, 37.19], [-3.95, 37.17], [-4.13, 37.175]]}
+    {"id": "conv-moreda-almeria", "node_id": "moreda", "name": "Línea Linares-Baeza–Almería", "towards": "Guadix y Almería", "status": "no_cargada", "sketch": [[-3.3107459, 37.4311254], [-3.3069, 37.4240], [-3.2585, 37.4037], [-3.185, 37.3627], [-3.1270, 37.3169], [-3.02, 37.26]]}
   ],
   "stop_mappings": {
     "50300": {"node": "linares-baeza"},
@@ -80,11 +79,11 @@
     "56308": {"exits": ["bif-almeria"]},
     "56310": {"exits": ["bif-almeria"]},
     "56312": {"exits": ["bif-almeria"]},
-    "05012": {"exits": ["granada"]},
-    "02030": {"exits": ["granada"]},
-    "02003": {"exits": ["granada"]},
-    "50500": {"exits": ["granada"]},
-    "60000": {"exits": ["granada"]}
+    "05012": {"exits": ["granada"], "via": {"line": "lav-antequera-granada", "node": "granada"}},
+    "02030": {"exits": ["granada"], "via": {"line": "lav-antequera-granada", "node": "granada"}},
+    "02003": {"exits": ["granada"], "via": {"line": "lav-antequera-granada", "node": "granada"}},
+    "50500": {"exits": ["granada"], "via": [{"line": "lav-antequera-granada", "node": "granada"}, {"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]},
+    "60000": {"exits": ["granada"], "via": [{"line": "lav-antequera-granada", "node": "granada"}, {"line": "lav-cordoba-malaga", "node": "antequera-santa-ana"}, {"line": "lav-madrid-sevilla", "node": "bif-malaga"}]}
   },
   "corridor_filter": {
     "description": "Se importan los viajes del GTFS que paran en alguna estación de la línea y, además, en Jódar-Úbeda, Cabra del Santo Cristo, Moreda, Iznalloz o Guadix: son los que recorren algún trecho de la línea. Así entran los Media Distancia de Granada a Almería, que la recorren entre Granada y la bifurcación de Moreda, también los que no paran en Iznalloz, y el tren de Linares-Baeza a Almería; quedan fuera los trenes que solo paran en Granada o en Linares-Baeza y siguen por otras líneas.",

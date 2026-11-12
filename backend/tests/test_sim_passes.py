@@ -4,6 +4,7 @@ from collections.abc import Iterable, Sequence
 
 import pytest
 
+from oniel.geo import haversine_km
 from oniel.sim.passes import (
     ExitDistance,
     LineNode,
@@ -291,8 +292,69 @@ def test_a_train_that_crosses_the_line_between_two_other_loaded_lines_is_estimat
     assert "entra por cordoba y sale por ciudad-real" in q["ad-co"].basis
 
 
+def test_a_train_that_crosses_towards_a_stop_outside_the_network_is_estimated() -> None:
+    """Parada A 8:00 → parada B 10:00 (120 min): a A se llega por otra línea cargada y B está
+    fuera de la red cargada, pero tiene coordenadas.
+
+    Es el tren de Córdoba a Málaga que recorre sin parar la línea hasta Antequera-Santa Ana. Entra
+    por Ciudad Real, a 100 km de A, recorre 172,8 km hasta Córdoba y sale hacia B, que queda a
+    111,2 km en línea recta (un grado de latitud al norte del nodo). Son 384,0 km: entra a los
+    120 × 100 / 384 = 31,25 min y sale a los 120 × 272,8 / 384 = 85,25 min. Pasa fuera 31,25 min
+    antes y 34,75 después: el margen es el 30 % del mayor, 10,4 min.
+    """
+    cordoba = NODES["cordoba"]
+    far = StopCall(
+        2,
+        "B",
+        "Parada B",
+        hm(10, 0),
+        hm(10, 0),
+        lon=cordoba.lon,
+        lat=cordoba.lat + 1.0,
+        exit_node_ids=("cordoba",),
+    )
+    calls = [_through(1, "Parada A", hm(8, 0), "ciudad-real", 100.0, "está en la línea A"), far]
+    passes, resolution = resolve_passes(calls, NODES, SEGMENTS)
+    p = by_id(passes)
+    straight = haversine_km((cordoba.lon, cordoba.lat), (cordoba.lon, cordoba.lat + 1.0))
+    total = 100 + 172.8 + straight
+    assert resolution == "completa"
+    assert set(p) == {"cr-pu", "pu-vi", "vi-ad", "ad-co"}
+    assert all(x.kind == "estimado" and x.km_increasing for x in p.values())
+    assert p["cr-pu"].enter_s == pytest.approx(hm(8, 0) + 120 * 60 * 100 / total, abs=1)
+    leave = hm(8, 0) + 120 * 60 * 272.8 / total
+    assert p["ad-co"].exit_s == pytest.approx(leave, abs=1)
+    assert p["ad-co"].exit_margin_s == pytest.approx(0.3 * (hm(10, 0) - leave), abs=1)
+    basis = p["vi-ad"].basis
+    assert "entra por ciudad-real y sale por cordoba" in basis
+    assert "Parada A está en la línea A. Parada B está fuera de la red cargada." in basis
+    assert "usa 100 km antes de ciudad-real, 173 km por la línea y 111 km en línea recta" in basis
+
+    # en sentido contrario entra por donde antes salía
+    back = [
+        StopCall(
+            1,
+            "B",
+            "Parada B",
+            hm(8, 0),
+            hm(8, 0),
+            lon=far.lon,
+            lat=far.lat,
+            exit_node_ids=("cordoba",),
+        ),
+        _through(2, "Parada A", hm(10, 0), "ciudad-real", 100.0, "está en la línea A"),
+    ]
+    q = by_id(resolve_passes(back, NODES, SEGMENTS)[0])
+    assert set(q) == set(p) and all(x.kind == "estimado" for x in q.values())
+    assert "usa 111 km en línea recta antes de cordoba" in q["ad-co"].basis
+
+
 def test_two_stops_outside_the_network_stay_indeterminate() -> None:
-    """Sin una distancia conocida a cada lado no se puede fijar el recorrido: sigue indeterminado."""
+    """Sin una distancia a cada lado no se puede fijar el recorrido: sigue indeterminado.
+
+    Ninguna de estas paradas tiene coordenadas, así que de la que no está en una línea cargada no
+    se sabe ni la línea recta.
+    """
     for km_a, km_b in ((None, None), (100.0, None), (None, 50.0)):
         calls = [
             _through(1, "Parada A", hm(8, 0), "ciudad-real", km_a, None),
@@ -301,3 +363,20 @@ def test_two_stops_outside_the_network_stay_indeterminate() -> None:
         passes, _ = resolve_passes(calls, NODES, SEGMENTS)
         assert {x.kind for x in passes} == {"indeterminado"}
         assert {x.segment_id for x in passes} == {"cr-pu", "pu-vi", "vi-ad", "ad-co"}
+    # con coordenadas las dos, pero ninguna en una línea cargada: nada ancla el recorrido
+    loose = [
+        StopCall(
+            1,
+            "A",
+            "Parada A",
+            hm(8, 0),
+            hm(8, 0),
+            lon=-3.0,
+            lat=39.5,
+            exit_node_ids=("ciudad-real",),
+        ),
+        StopCall(
+            2, "B", "Parada B", hm(10, 0), hm(10, 0), lon=-4.5, lat=37.0, exit_node_ids=("cordoba",)
+        ),
+    ]
+    assert {x.kind for x in resolve_passes(loose, NODES, SEGMENTS)[0]} == {"indeterminado"}

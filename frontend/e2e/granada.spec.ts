@@ -50,7 +50,11 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-operadores')).toHaveText('Solo Renfe Viajeros')
     await expect(page.getByTestId('lista-servicios')).toContainText(/MD \d+ Granada → Almería/)
-    await expect(page.getByTestId('tramo-alternativa')).toContainText('no tendrían otro camino')
+    // con la alta velocidad de Antequera cargada, Granada está unida por los dos lados: el otro
+    // camino existe, dando la vuelta por Linares-Baeza, Córdoba y Antequera
+    await expect(page.getByTestId('tramo-alternativa')).toContainText(
+      'sus 12 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (10, entre Bifurcación Almería y Granada), 415 km y 2 h 11 min más.',
+    )
   })
 
   test('el comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza', async ({ page }) => {
@@ -65,5 +69,13 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await expect(recorridos.nth(0)).toContainText(/Pasa por Aranjuez, Alcázar de San Juan, .*Linares-Baeza, .*Moreda/)
     // ningún tren directo va por ahí: los que hay entre Madrid y Granada usan la alta velocidad
     await expect(recorridos.nth(0).getByTestId('recorrido-trenes')).toContainText('Ningún tren directo')
+    // el otro camino, por la alta velocidad: más largo y, sin paradas, mucho más rápido
+    const alta = recorridos.filter({ hasText: '569,0 km' })
+    await expect(alta).toContainText('Por Bifurcación Málaga-Alta Velocidad y Antequera-Santa Ana')
+    await expect(alta).toContainText('Recorre tres líneas')
+    await expect(alta).toContainText('2 h 18 min sin paradas')
+    await expect(alta).toContainText('81,0 km de vía única')
+    await expect(alta).toContainText(/Pasa por Ciudad Real, .*Córdoba, .*Antequera-Santa Ana, Antequera AV y Loja/)
+    await expect(alta.getByTestId('recorrido-trenes')).toContainText('5 trenes directos')
   })
 })
