@@ -452,7 +452,9 @@ def obs_estado_cmd(
         typer.Option(help="Errores y respuestas desde esta fecha ISO; por defecto, el despliegue"),
     ] = None,
     dias: Annotated[int, typer.Option(help="Ventana en la que se buscan versiones")] = 7,
-    entorno: Annotated[str, typer.Option(help="Entorno de las trazas")] = "production",
+    entorno: Annotated[
+        str, typer.Option(help="Entorno de las trazas: production (Render) o local")
+    ] = "production",
     como_json: Annotated[bool, typer.Option("--json", help="Salida en JSON")] = False,
 ) -> None:
     """Qué commit corre en producción y desde cuándo, la última importación, los errores y las rutas lentas."""
@@ -490,12 +492,19 @@ def obs_estado_cmd(
 
 @obs_app.command("consulta")
 def obs_consulta_cmd(
-    sql: Annotated[str, typer.Argument(help="Consulta SQL sobre la tabla `records` de Logfire")],
+    sql: Annotated[
+        str,
+        typer.Argument(help="Consulta SQL sobre `records` (trazas) o `metrics` de Logfire"),
+    ],
     horas: Annotated[float, typer.Option(help="Cuántas horas atrás mirar")] = 24.0,
     limite: Annotated[int, typer.Option(help="Máximo de filas")] = 200,
+    entorno: Annotated[
+        str,
+        typer.Option(help="Entorno: production (Render), local o «todos» para no filtrar"),
+    ] = "production",
     como_json: Annotated[bool, typer.Option("--json", help="Salida en JSON, no en CSV")] = False,
 ) -> None:
-    """Ejecuta una consulta SQL de solo lectura sobre las trazas y la imprime en CSV."""
+    """Ejecuta una consulta SQL de solo lectura sobre las trazas o las métricas y la imprime en CSV."""
     from oniel import obs
 
     token = obs.read_token()
@@ -505,7 +514,10 @@ def obs_consulta_cmd(
     reader = obs.LogfireReader(token)
     try:
         rows = reader.query(
-            sql, since=dt.datetime.now(dt.UTC) - dt.timedelta(hours=horas), limit=limite
+            sql,
+            since=dt.datetime.now(dt.UTC) - dt.timedelta(hours=horas),
+            limit=limite,
+            environment=None if entorno == obs.ALL_ENVIRONMENTS else entorno,
         )
     except obs.LogfireError as exc:
         typer.echo(str(exc), err=True)

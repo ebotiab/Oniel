@@ -89,12 +89,131 @@ Proyecto `oniel` en la organización personal `ebotiab` (región US): https://lo
 - En Render, definir `LOGFIRE_TOKEN` con un token de escritura del proyecto (Logfire → proyecto `oniel` → Settings → Write tokens).
 - Comprobación: `uv run oniel-data logfire-test` envía una traza; las trazas de la API aparecen al usar cualquier endpoint.
 - Las trazas no llevan cabeceras (`capture_headers=False`) ni datos de quien visita la web más allá de lo que la instrumentación de FastAPI anota por petición: ruta, estado, duración, agente de usuario y dirección de origen.
+- La API no continúa la traza de quien la llama aunque la petición traiga una cabecera `traceparent` (`distributed_tracing=False`): es lo que Logfire recomienda para un servicio abierto a internet.
+- Toda la configuración está en `backend/src/oniel/observability.py`.
+
+### Entornos
+
+Cada registro lleva su entorno en `deployment_environment`, que sale de `ONIEL_ENVIRONMENT`. Hay dos y no se crean más sin motivo:
+
+| Entorno | Quién lo envía | Cuándo |
+|---|---|---|
+| `production` | La API y el importador en Render (`render.yaml` fija `ONIEL_ENVIRONMENT=production`) | Siempre |
+| `local` | Quien desarrolla, desde su máquina | Solo si tiene credenciales de escritura (`backend/.logfire/` o `LOGFIRE_TOKEN`). Las sesiones en worktree no las tienen y no envían nada: desde el 9 de noviembre de 2026 no llega nada de `local` |
+
+- **Las pruebas no envían nunca.** Bajo pytest la configuración fuerza `send_to_logfire=False`, haya o no un token en el entorno (`observability.send_to_logfire`); las pruebas que miran tramos usan `capfire`, que los guarda en memoria. El plugin de pytest de Logfire, que se activa solo cuando hay `CI=true` y `LOGFIRE_TOKEN`, está desactivado con `--no-logfire` en `backend/pyproject.toml`. No hay entorno `ci` ni `test`: el CI no tiene token ni lo necesita.
+- **No hay entorno `preview`.** Las vistas previas de Vercel son solo el visor y hablan con la API de producción: sus peticiones son tráfico de `production`.
+- Una importación lanzada a mano desde una máquina contra la base de Render sale como `local` salvo que se le ponga `ONIEL_ENVIRONMENT=production`.
+- En la web de Logfire el entorno se elige en el selector que hay bajo el del proyecto; en `oniel-data obs`, con `--entorno`.
+
+### Volumen y cuota
+
+El plan personal incluye 10 millones de registros al mes, contando juntos tramos, avisos y puntos de métricas, y conserva los datos 30 días. No cobra por pasarse: al superar lo incluido dejan de abrirse la vista en vivo y el detalle de las trazas (las consultas siguen funcionando), y algo más allá lo nuevo deja de guardarse hasta que el mes se reinicia. El consumo se ve en Logfire → ajustes de la organización → Billing & usage.
+
+Medido el 12 de noviembre de 2026, en 24 horas producción envió unos 140.000 registros (a ese ritmo, 4,2 millones al mes): 129.000 eran sentencias `INSERT` sueltas del importador y 7.700 comprobaciones de salud de Render; las peticiones de visitantes eran unos cientos. Desde la PR de #124 se envía solo lo que dice algo:
+
+| Qué | Antes | Ahora |
+|---|---|---|
+| Una importación completa (seis líneas, tres ficheros de horarios) | 9.610 registros, 9.588 de ellos sentencias SQL | 23 registros: `import all started`, `import all`, un tramo y un aviso por línea y por fichero de horarios, las anotaciones y `export snapshot` |
+| `GET /healthz` de Render | Unos 7.700 tramos al día, más sus métricas HTTP | Nada: la ruta está excluida de la instrumentación (`EXCLUDED_URLS`) |
+| Métricas del sistema | No había | 4 puntos por minuto y proceso: 5.760 al día como mucho, si la API no llega a suspenderse |
+
+- **El importador no traza SQL.** `instrument_asyncpg` solo se activa en la API (`configure_logfire(..., sql=True)`), donde una petición hace pocas consultas y verlas explica una ruta lenta. Lo que interesa de una importación lo llevan sus tramos, con recuentos y resultado. Quien añada una fase a la importación le pone su tramo; no hay que volver a instrumentar la base.
+- **Las cifras se sacaron sin enviar nada**, contando en memoria los tramos de un `oniel-data import all` en local antes y después del cambio.
+- Si el volumen vuelve a crecer, el panel estándar «Usage Overview» de Logfire (Dashboards → + Dashboard → Logfire) lo desglosa por servicio y por nombre de tramo, y esta consulta da lo mismo: `uv run oniel-data obs consulta "select service_name, span_name, count(*) n from records group by 1, 2 order by 3 desc" --horas 24`.
+
+### Métricas del sistema
+
+`logfire.instrument_system_metrics` (extra `system-metrics`, que trae `psutil`) envía cuatro métricas, una lectura por minuto de cada una (`SYSTEM_METRICS` en `observability.py`):
+
+| Métrica | Qué dice |
+|---|---|
+| `process.memory.usage` | Memoria residente del proceso, en bytes. Es la que cuenta contra los 512 MB de la instancia gratuita de Render |
+| `process.cpu.utilization` | Fracción de un núcleo que usa el proceso (1 = un núcleo entero) |
+| `system.memory.utilization` (`state = available`) | Fracción de memoria disponible en la máquina. En Render es la de la máquina anfitriona, no la del contenedor: sirve de contexto, no de límite |
+| `system.cpu.simple_utilization` | Fracción de procesador ocupada en la máquina entera |
+
+Las envían los dos servicios. La importación dura un par de minutos, así que `docker-entrypoint.sh` la lanza con `OTEL_METRIC_EXPORT_INTERVAL=10000` (una lectura cada 10 segundos) para que se vea cómo crece su memoria; la API usa el minuto por defecto. Se miran en Logfire → Metrics explorer o Hosts, o con SQL sobre la tabla `metrics`:
+
+```bash
+uv run oniel-data obs consulta "select service_name, metric_name, count(*) n, round(max(scalar_value)) maximo from metrics where metric_name like 'process.%' group by 1, 2" --horas 24
+```
+
+No se usa `base='full'`: añade cientos de puntos por minuto (procesador por núcleo y modo, discos, red) que aquí no dicen nada.
+
+### Errores agrupados
+
+Logfire agrupa las excepciones repetidas en incidencias y avisa cuando aparece una nueva o se reabre una resuelta (la función se llama «Error tracking»; antes, «Issues»). Necesita que el fallo llegue como excepción, no como un aviso de nivel error, y así llegan los de Oniel: una excepción no controlada en la API queda en el tramo de la petición con su traza (`is_exception`, nivel 17) y una importación que falla, en el tramo `import all` con `outcome = failed`. Lo comprueban `tests/test_observability.py` y `tests/test_importing.py`. Los `HTTPException` (404, 422) quedan como excepciones de nivel aviso: son respuestas correctas, no errores del servidor.
+
+Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo» y solo para producción: el filtro `deployment_environment = 'production'` (Advanced options) deja fuera las excepciones que alguien envíe desde `local`. Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
+
+### Alertas
+
+Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso se crean una vez en la organización y se eligen en cada alerta: correo a miembros de la organización, Slack, webhook genérico, PagerDuty u Opsgenie. Oniel tiene uno, «Correo», que escribe al correo de la cuenta `ebotiab`; la documentación de Logfire no menciona todavía el canal de correo, pero el formulario lo ofrece. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
+
+El plan personal no deja comprobar más a menudo que cada 10 minutos, y la ventana no puede pasar de cuatro veces ese intervalo: un fallo tarda hasta 10 minutos en avisar.
+
+Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres alertas están creadas en el proyecto desde el 12 de noviembre de 2026, con el canal «Correo», comprobación cada 10 minutos y aviso en «First match after no matches» (avisa cuando la consulta empieza a dar filas, no en cada comprobación). Sus consultas, probadas antes con `oniel-data obs consulta`, son las de abajo; si se cambian en Logfire, se cambian aquí.
+
+**1. «Oniel: la API no arranca».** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: últimos 30 minutos.
+
+```sql
+SELECT service_version AS version,
+       max(start_timestamp) FILTER (WHERE span_name = 'import all started') AS arranque,
+       max(start_timestamp) FILTER (WHERE span_name = 'api started') AS api_lista
+FROM records
+WHERE deployment_environment = 'production'
+  AND span_name IN ('import all started', 'api started')
+GROUP BY service_version
+HAVING max(start_timestamp) FILTER (WHERE span_name = 'import all started') < now() - interval '10 minutes'
+   AND (max(start_timestamp) FILTER (WHERE span_name = 'api started') IS NULL
+        OR max(start_timestamp) FILTER (WHERE span_name = 'api started')
+           < max(start_timestamp) FILTER (WHERE span_name = 'import all started'))
+```
+
+**2. «Oniel: respuestas 5xx».** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos.
+
+```sql
+SELECT span_name AS peticion, http_response_status_code AS estado,
+       coalesce(exception_type, '') AS excepcion, count(*) AS veces,
+       max(start_timestamp) AS ultima, max(trace_id) AS trace_id
+FROM records
+WHERE deployment_environment = 'production' AND service_name = 'oniel-api'
+  AND http_route IS NOT NULL AND parent_span_id IS NULL
+  AND (http_response_status_code >= 500 OR level >= 17)
+GROUP BY 1, 2, 3
+ORDER BY veces DESC
+```
+
+**3. «Oniel: importación fallida o sin terminar».** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: últimos 30 minutos.
+
+```sql
+SELECT 'fallida' AS problema, start_timestamp AS inicio, service_version AS version,
+       coalesce(exception_type, '') || ': ' || left(coalesce(exception_message, message), 200) AS detalle,
+       trace_id
+FROM records
+WHERE deployment_environment = 'production' AND service_name = 'oniel-data'
+  AND span_name = 'import all' AND (is_exception OR level >= 17)
+UNION ALL
+SELECT 'sin terminar' AS problema, s.start_timestamp AS inicio, s.service_version AS version,
+       'empezó hace más de 10 minutos y no ha dejado su tramo' AS detalle, s.trace_id
+FROM records s
+LEFT JOIN records f
+  ON f.span_name = 'import all' AND f.service_name = 'oniel-data'
+ AND f.service_version = s.service_version AND f.start_timestamp >= s.start_timestamp
+WHERE s.deployment_environment = 'production' AND s.service_name = 'oniel-data'
+  AND s.span_name = 'import all started'
+  AND s.start_timestamp < now() - interval '10 minutes'
+  AND f.span_id IS NULL
+```
+
+La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Las alertas y el canal son configuración de la cuenta: los cambia quien la administra, en la web de Logfire.
 
 ### Qué dicen las trazas de un despliegue
 
 - **Versión.** En Render la versión del servicio (`service_version`) es el commit desplegado, que Render da en `RENDER_GIT_COMMIT`; en local es la del paquete (`0.1.0`). Las trazas anteriores al 12 de noviembre de 2026 llevan todas `0.1.0`. `/healthz` devuelve también el commit.
 - **Arranque.** La API deja una traza `api started` cada vez que arranca: tras un despliegue y cada vez que Render la despierta.
-- **Importación.** Cada `oniel-data import all` es un tramo `import all` del que cuelgan sus consultas, con `outcome` (`completed`, `skipped` cuando `--if-changed` no encuentra cambios, o `failed` con su excepción), la huella y los recuentos (líneas, ficheros de horarios, viajes). Como un tramo solo se envía al terminar, al empezar deja además un aviso `import all started`: uno sin tramo posterior es una importación en curso o interrumpida. La exportación de la instantánea es un tramo `export snapshot`.
+- **Importación.** Cada `oniel-data import all` es un tramo `import all` del que cuelgan los de cada línea, las anotaciones, cada fichero de horarios y la exportación, con `outcome` (`completed`, `skipped` cuando `--if-changed` no encuentra cambios, o `failed` con su excepción), la huella y los recuentos (líneas, ficheros de horarios, viajes). Como un tramo solo se envía al terminar, al empezar deja además un aviso `import all started`: uno sin tramo posterior es una importación en curso o interrumpida. La exportación de la instantánea es un tramo `export snapshot`.
 
 ### Consultar el estado: `oniel-data obs`
 
@@ -104,9 +223,10 @@ Desde `backend/`, solo lectura:
 uv run oniel-data obs estado                              # qué corre en producción y cómo va
 uv run oniel-data obs estado --commit <hash> --esperar 15 # espera hasta 15 min a que entre ese commit
 uv run oniel-data obs consulta "select span_name, count(*) n from records group by 1 order by 2 desc" --horas 6
+uv run oniel-data obs consulta "select count(*) n from records" --entorno local   # o --entorno todos
 ```
 
-`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación falló o no ha terminado, y `--esperar` repite la consulta cada 30 segundos hasta que entre: sustituye a sondear producción con `curl`. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` y lo imprime en CSV; las columnas útiles son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
+`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Como `/healthz` no se traza, la «última traza» de la API es la última petición de un visitante o el último arranque, no la última comprobación de Render. «Última importación» es la de la versión desplegada (con `--commit`, la de ese commit), no la que empezó más tarde: durante un despliegue el contenedor de la versión anterior puede arrancar después que el nuevo y saltarse su importación, y esa omitida no dice nada de la versión nueva (#120). Si la más reciente es de otra versión, la orden la enseña aparte, debajo. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación no ha terminado completada u omitida, y `--esperar` repite la consulta cada 30 segundos hasta que el commit sea el de la API y su importación haya terminado, o hasta que esa importación falle: sustituye a sondear producción con `curl`. El aviso `import all started` y el tramo `import all` van en trazas distintas; una importación en curso es un aviso sin tramo de la misma versión que empiece justo después. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` (trazas) o `metrics` y lo imprime en CSV. Las dos órdenes miran `production` salvo que `--entorno` diga `local`; `obs consulta` admite además `--entorno todos`, que no filtra. Usan la API de consultas de Logfire (`POST /v2/query`), que limita las consultas con token de lectura. El token es del proyecto y lo comparten las sesiones que consultan a la vez, así que tras un despliegue es fácil llegar al límite: si Logfire responde 429, la orden lo dice y termina con código 2, salvo con `--esperar`, que espera lo que pide la cabecera `Retry-After` y vuelve a probar dentro del mismo plazo. Las columnas útiles de `records` son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
 
 Una sesión de Claude tiene que ejecutarlo fuera del sandbox del shell, que corta la conexión TLS con Logfire. Cada traza del informe lleva su `trace_id`; se abre en https://logfire-us.pydantic.dev/ebotiab/oniel buscando `trace_id = '…'`.
 

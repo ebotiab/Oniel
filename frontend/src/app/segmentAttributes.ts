@@ -61,6 +61,8 @@ const BLOQUEO: Record<string, ValorDicho> = {
 
 const MANDO: Record<string, ValorDicho> = {
   ctc: { texto: 'Control de tráfico centralizado', termino: 'control-de-trafico-centralizado' },
+  // el mapa rotula el bloqueo sin «ctc» y su leyenda distingue los dos casos: la fuente dice que no lo hay
+  sin_ctc: { texto: 'Sin control centralizado', termino: 'control-de-trafico-centralizado' },
   sin_dato_publicado: SIN_DATO_PUBLICADO,
 }
 

@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from oniel import __version__
 from oniel.api.routers import analysis, network, nodes, routes, segments, services, simulations
 from oniel.db.pool import create_pool
-from oniel.observability import configure_logfire, deployed_commit
+from oniel.observability import configure_logfire, deployed_commit, instrument_api
 from oniel.settings import get_settings
 
 
@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     settings = get_settings()
-    configure_logfire("oniel-api", settings)
+    configure_logfire("oniel-api", settings, sql=True)
     app = FastAPI(
         title="Oniel API",
         version=__version__,
@@ -44,7 +44,7 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    logfire.instrument_fastapi(app, capture_headers=False)
+    instrument_api(app)
 
     @app.get("/healthz", tags=["sistema"])
     async def healthz() -> dict[str, str | None]:

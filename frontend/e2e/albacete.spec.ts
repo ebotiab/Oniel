@@ -48,14 +48,15 @@ test.describe('La línea de Alcázar de San Juan a Albacete', () => {
     await expect(esquema).toContainText('Albacete-Los Llanos')
   })
 
-  test('un tramo dice su vía doble y su bloqueo, y que el mando no está publicado', async ({ page }) => {
+  test('un tramo dice su vía doble y su bloqueo, y que no tiene control centralizado', async ({ page }) => {
     await page.goto('/tramo/alcazar-albacete:villarrobledo:minaya')
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
     // la señalización va bajo «Más detalle»: está en la ficha aunque plegada
     await expect(ficha.getByText('Automático de vía doble')).toHaveCount(1)
-    await expect(ficha.getByText('Sin dato publicado')).toHaveCount(1)
+    await expect(page.getByTestId('tramo-atributo-mando')).toHaveText('Sin control centralizado')
+    await expect(ficha.getByText('Sin dato publicado')).toHaveCount(0)
   })
 
   test('el comparador encuentra el recorrido de Madrid a Albacete por Alcázar', async ({ page }) => {
