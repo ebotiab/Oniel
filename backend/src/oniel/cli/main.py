@@ -30,7 +30,11 @@ refresh_app = typer.Typer(help="Refresco de los ficheros de horarios.", no_args_
 app.add_typer(db_app, name="db")
 app.add_typer(import_app, name="import")
 app.add_typer(export_app, name="export")
+obs_app = typer.Typer(
+    help="Estado de producción según las trazas de Logfire (solo lectura).", no_args_is_help=True
+)
 app.add_typer(refresh_app, name="refresh")
+app.add_typer(obs_app, name="obs")
 
 settings = get_settings()
 CURATED = settings.data_dir / "curated"
@@ -418,6 +422,100 @@ def sources_cmd() -> None:
         typer.echo(
             f"- {s.id}: {s.name}\n    {s.publisher} · {s.license} · {s.retrieved_on}\n    {s.url}"
         )
+
+
+def _obs_since(desde: str | None) -> dt.datetime | None:
+    if desde is None:
+        return None
+    try:
+        moment = dt.datetime.fromisoformat(desde)
+    except ValueError as exc:
+        raise typer.BadParameter(
+            f"{desde!r} no es una fecha ISO (por ejemplo 2026-11-12T15:00:00Z)",
+            param_hint="--desde",
+        ) from exc
+    return moment if moment.tzinfo else moment.replace(tzinfo=dt.UTC)
+
+
+@obs_app.command("estado")
+def obs_estado_cmd(
+    commit: Annotated[
+        str | None,
+        typer.Option(help="Commit que se espera desplegado; si no lo está, termina con código 1"),
+    ] = None,
+    esperar: Annotated[
+        int,
+        typer.Option(help="Con --commit: minutos que esperar, consultando cada 30 s, a que entre"),
+    ] = 0,
+    desde: Annotated[
+        str | None,
+        typer.Option(help="Errores y respuestas desde esta fecha ISO; por defecto, el despliegue"),
+    ] = None,
+    dias: Annotated[int, typer.Option(help="Ventana en la que se buscan versiones")] = 7,
+    entorno: Annotated[str, typer.Option(help="Entorno de las trazas")] = "production",
+    como_json: Annotated[bool, typer.Option("--json", help="Salida en JSON")] = False,
+) -> None:
+    """Qué commit corre en producción y desde cuándo, la última importación, los errores y las rutas lentas."""
+    from oniel import obs
+
+    token = obs.read_token()
+    if token is None:
+        typer.echo(obs.NO_TOKEN_MESSAGE)
+        return
+    reader = obs.LogfireReader(token)
+    since = _obs_since(desde)
+
+    def fetch() -> obs.Status:
+        return obs.production_status(reader, window_days=dias, since=since, environment=entorno)
+
+    try:
+        if commit and esperar > 0:
+            status = obs.wait_for_commit(fetch, commit, timeout_s=esperar * 60)
+        else:
+            status = fetch()
+    except obs.LogfireError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    finally:
+        reader.close()
+    typer.echo(
+        status.to_json()
+        if como_json
+        else obs.format_status(status, commit=commit, window_days=dias),
+        nl=como_json,
+    )
+    if commit and not obs.commit_deployed(status, commit):
+        raise typer.Exit(1)
+
+
+@obs_app.command("consulta")
+def obs_consulta_cmd(
+    sql: Annotated[str, typer.Argument(help="Consulta SQL sobre la tabla `records` de Logfire")],
+    horas: Annotated[float, typer.Option(help="Cuántas horas atrás mirar")] = 24.0,
+    limite: Annotated[int, typer.Option(help="Máximo de filas")] = 200,
+    como_json: Annotated[bool, typer.Option("--json", help="Salida en JSON, no en CSV")] = False,
+) -> None:
+    """Ejecuta una consulta SQL de solo lectura sobre las trazas y la imprime en CSV."""
+    from oniel import obs
+
+    token = obs.read_token()
+    if token is None:
+        typer.echo(obs.NO_TOKEN_MESSAGE)
+        return
+    reader = obs.LogfireReader(token)
+    try:
+        rows = reader.query(
+            sql, since=dt.datetime.now(dt.UTC) - dt.timedelta(hours=horas), limit=limite
+        )
+    except obs.LogfireError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    finally:
+        reader.close()
+    if como_json:
+        _echo_json(rows)
+    else:
+        typer.echo(obs.rows_to_csv(rows), nl=False)
 
 
 @app.command("logfire-test")

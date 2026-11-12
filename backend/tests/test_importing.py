@@ -17,8 +17,9 @@ from conftest import (
     database_url_for_tests,
     requires_db,
 )
+from logfire.testing import CaptureLogfire
 
-from oniel.importing import import_fingerprint
+from oniel.importing import import_fingerprint, import_summary, run_import_all
 
 
 def _tree(root: Path) -> tuple[Path, Path]:
@@ -61,10 +62,9 @@ def test_file_fingerprint_ignores_bytecode(tmp_path: Path) -> None:
 
 @requires_db
 @pytest.mark.asyncio
-async def test_import_all_skips_when_nothing_changed() -> None:
+async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) -> None:
     from oniel.db.migrate import drop_everything
     from oniel.db.pool import connect
-    from oniel.importing import run_import_all
     from oniel.network.spec import FeedSpec
 
     dsn = database_url_for_tests()
@@ -103,3 +103,58 @@ async def test_import_all_skips_when_nothing_changed() -> None:
         third = await run(if_changed=False)
         assert third["skipped"] is False
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 2
+
+    # un tramo por importación, con su resultado y sus recuentos; las consultas cuelgan de él
+    runs = [
+        s["attributes"]
+        for s in capfire.exporter.exported_spans_as_dict()
+        if s["name"] == "import all"
+    ]
+    assert [r["outcome"] for r in runs] == ["completed", "skipped", "completed"]
+    assert runs[0]["trips_imported"] == 335 + 503 - 24
+    assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False
+    assert "trips_imported" not in runs[1]
+
+
+def test_import_summary_counts_what_was_loaded() -> None:
+    skipped = import_summary({"skipped": True, "fingerprint": "git:abc", "migrations": []})
+    assert skipped == {"outcome": "skipped", "fingerprint": "git:abc", "migrations": 0}
+    done = import_summary(
+        {
+            "skipped": False,
+            "fingerprint": "git:abc",
+            "migrations": ["0008"],
+            "network": [{}, {}, {}],
+            "gtfs": [{"trips_imported": 814}, {"trips_imported": 12}],
+            "datasets_removed": ["viejo"],
+            "snapshot": {"segments": 60},
+        }
+    )
+    assert done["outcome"] == "completed"
+    assert (done["lines"], done["feeds"], done["trips_imported"]) == (3, 2, 826)
+    assert done["datasets_removed"] == 1 and done["snapshot_exported"] is True
+
+
+@pytest.mark.asyncio
+async def test_failed_import_leaves_a_failed_span(
+    capfire: CaptureLogfire, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    async def boom(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        raise RuntimeError("fichero de horarios ilegible")
+
+    monkeypatch.setattr("oniel.importing._import_all", boom)
+    no_connection: Any = None  # la importación simulada no usa la conexión
+    with pytest.raises(RuntimeError):
+        await run_import_all(
+            no_connection,
+            specs=[],
+            sources=tmp_path / "sources.json",
+            feeds=[],
+            data_dir=tmp_path,
+            snapshot_dir=None,
+        )
+    spans = capfire.exporter.exported_spans_as_dict()
+    assert [s["name"] for s in spans] == ["import all started", "import all"]
+    failed = spans[1]
+    assert failed["attributes"]["outcome"] == "failed"
+    assert failed["events"][0]["attributes"]["exception.type"] == "RuntimeError"

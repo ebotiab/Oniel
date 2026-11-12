@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import asyncpg
+import logfire
 
 from oniel.domain.schemas import SegmentPassOut, SegmentServicesOut, ServiceHistoryOut
 from oniel.repo import datasets_repo, network_repo, services_repo
@@ -32,6 +33,25 @@ def _write(path: Path, payload: Any) -> None:
 
 
 async def export_snapshot(
+    conn: asyncpg.Connection, out_dir: Path, date: dt.date | None = None
+) -> dict[str, Any]:
+    """Exporta la instantánea estática dentro de un tramo propio, con sus recuentos."""
+    with logfire.span("export snapshot") as span:
+        result = await _export_snapshot(conn, out_dir, date)
+        span.set_attributes(
+            {
+                "date": result["date"],
+                "lines": len(result["lines"]),
+                "segments": result["segments"],
+                "nodes": result["nodes"],
+                "annotations": result["annotations"],
+                "datasets": len(result["datasets"]),
+            }
+        )
+        return result
+
+
+async def _export_snapshot(
     conn: asyncpg.Connection, out_dir: Path, date: dt.date | None = None
 ) -> dict[str, Any]:
     network = await network_repo.fetch_network(conn)
