@@ -20,11 +20,12 @@ from oniel.routing import Graph, ScenarioError, build_graph, find_routes, route_
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
-LAV, CONV, MZCR, JAEN = (
+LAV, CONV, MZCR, JAEN, BCN = (
     "lav-madrid-sevilla",
     "convencional-madrid-alcazar-cordoba",
     "manzanares-ciudad-real",
     "espeluy-jaen",
+    "lav-madrid-barcelona",
 )
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
@@ -152,10 +153,10 @@ def test_route_along_measures_a_known_way_like_find_routes(graph: Graph) -> None
 def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     lines: list[LineSummary],
 ) -> None:
-    """La instantánea, con los trenes del día de referencia (13 de noviembre de 2026)."""
+    """La instantánea, con los trenes del día de referencia (12 de noviembre de 2026)."""
     exported = AlternativesOut.model_validate(_read("alternatives.json"))
     assert exported.scope_note == SCOPE_NOTE and "líneas que Oniel tiene cargadas" in SCOPE_NOTE
-    assert exported.line_ids == [LAV, CONV, MZCR, JAEN]
+    assert exported.line_ids == [LAV, CONV, MZCR, JAEN, BCN]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
     counts: dict[str, int] = {}
@@ -165,7 +166,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 41
+    assert len(exported.segments) == 61
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -175,15 +176,23 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
-    assert without == {
-        CORDOBA_BIF_MALAGA: 108,
-        f"{LAV}:bif-malaga:majarabique": 55,
-        f"{LAV}:majarabique:sevilla-santa-justa": 53,
+    assert {k: v for k, v in without.items() if not k.startswith(f"{BCN}:")} == {
+        CORDOBA_BIF_MALAGA: 107,
+        f"{LAV}:bif-malaga:majarabique": 56,
+        f"{LAV}:majarabique:sevilla-santa-justa": 54,
         f"{JAEN}:espeluy:mengibar-artichuela": 50,
         f"{JAEN}:mengibar-artichuela:jaen": 44,
     }
-    # el grupo más numeroso de Adamuz – Córdoba: los 43 trenes entre Madrid y Sevilla
+    # tampoco en la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
+    # Madrid: ninguno de sus veinte tramos tiene otro camino cargado, ni siquiera los que pasan
+    # por Zaragoza-Delicias y Lleida-Pirineus, porque los baipases no están cargados
+    barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]
+    assert len(barcelona) == 20
+    assert all(s.trains == s.without_alternative > 0 for s in barcelona)
+    assert _of(exported.segments, f"{BCN}:madrid-puerta-de-atocha:bif-vallecas-av").trains == 102
+    assert _of(exported.segments, f"{BCN}:vilafranca-del-penedes:barcelona-sants").trains == 140
+    # el grupo más numeroso de Adamuz – Córdoba: los 44 trenes entre Madrid y Sevilla
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
-    assert (top.trains, top.from_node_id, top.to_node_id) == (43, MADRID, SEVILLA)
+    assert (top.trains, top.from_node_id, top.to_node_id) == (44, MADRID, SEVILLA)
     assert top.alternative is not None
     assert (top.alternative.extra_km, top.alternative.extra_min) == (97.0, 104)

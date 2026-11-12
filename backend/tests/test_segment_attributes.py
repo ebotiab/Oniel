@@ -209,9 +209,16 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     assert report["problems"] == []
     by_line = {line["line"]: line for line in report["attributes"]}
     for line in by_line.values():
-        assert line["covered_segments"] == dict.fromkeys(
-            ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
+        required = ["bloqueo", "mando", "proteccion_tren", "tracks"]
+        assert {k: line["covered_segments"][k] for k in required} == dict.fromkeys(
+            required, line["segments"]
         )
+    # la velocidad declarada es opcional: solo la llevan tres tramos de la línea de Barcelona
+    assert {
+        name: line["covered_segments"].get("max_speed_kmh")
+        for name, line in by_line.items()
+        if "max_speed_kmh" in line["covered_segments"]
+    } == {"lav-madrid-barcelona": 3}
     # dos de vía única, seis de bloqueo, una de protección del tren y una de mando
     assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 10
 

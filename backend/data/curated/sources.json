@@ -53,10 +53,10 @@
       "url": "https://iryo.eu/es/destinos",
       "license": "Consulta pública; © Iryo",
       "license_url": null,
-      "retrieved_on": "2026-11-11",
-      "coverage": "Que Iryo opera trenes de alta velocidad por la línea Madrid–Sevilla y que no publica sus horarios en GTFS ni en otro formato reutilizable: no figura entre los conjuntos ferroviarios del Punto de Acceso Nacional (nap.transportes.gob.es) ni en su propia web.",
-      "notes": "Oniel no carga los trenes de Iryo ni reconstruye sus horarios por otros medios: los recuentos de la línea de alta velocidad no los incluyen y el visor lo dice. Lo consultado el 11 de noviembre de 2026 está resumido en el registro de consultas de ese día.",
-      "file": "raw/operadores/consultas_2026-11-11.json"
+      "retrieved_on": "2026-11-12",
+      "coverage": "Que Iryo opera trenes de alta velocidad por las líneas Madrid–Sevilla y Madrid–Zaragoza–Barcelona (su página de destinos enumera, entre otros, Madrid, Zaragoza, Tarragona, Barcelona, Córdoba y Sevilla) y que no publica sus horarios en GTFS ni en otro formato reutilizable: no figura entre los conjuntos ferroviarios del Punto de Acceso Nacional (nap.transportes.gob.es) ni en su propia web.",
+      "notes": "Oniel no carga los trenes de Iryo ni reconstruye sus horarios por otros medios: los recuentos de las líneas de alta velocidad no los incluyen y el visor lo dice. Lo consultado el 11 de noviembre de 2026 está resumido en raw/operadores/consultas_2026-11-11.json; la página de destinos se volvió a consultar el 12 de noviembre de 2026 para la línea de Barcelona (raw/operadores/consultas_2026-11-12.json).",
+      "file": "raw/operadores/consultas_2026-11-12.json"
     },
     {
       "id": "osm-relation-1254828",
@@ -161,6 +161,52 @@
       "retrieved_on": "2026-11-12",
       "coverage": "Catalogación de Adif como línea 402, longitud (32,8 km), ancho ibérico, vía única electrificada, inicio en «Espeluy-aguja km 340,1», puntos kilométricos de esa aguja (152,1), de Mengíbar-Artichuela (148,0) y de Jaén (119,2), apertura en julio de 1881, enlace directo para los trenes de Madrid construido a mediados de los años setenta y cierre del trazado entre Jaén y Campo Real en octubre de 1984.",
       "notes": "Fuente de verificación, no de geometría; revisión del 30 de diciembre de 2025 (oldid 171249150), consultada por la API de Wikipedia, junto con los artículos «Estación de Jaén» (oldid 174008767) y «Estación de Mengíbar-Artichuela» (oldid 165497983), de donde salen los códigos de estación (03100 y 03001, los mismos que las paradas del GTFS de Renfe) y la descripción de cada una. Los puntos kilométricos son los de la antigua línea Linares–Puente Genil y decrecen hacia Jaén; Oniel no los guarda en los nodos porque la estación de Espeluy, de donde dibuja la línea, no tiene punto kilométrico en ella."
+    },
+    {
+      "id": "osm-relation-11082425",
+      "name": "Trazado de la línea de alta velocidad Madrid–Zaragoza–Barcelona–frontera francesa (relación OSM 11082425, línea 050 de Adif Alta Velocidad, ancho estándar, vía doble electrificada a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11082425",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Geometría de la línea de Madrid-Puerta de Atocha a la frontera francesa, con las dos vías, la velocidad máxima de cada trozo y el número de línea de cada vía: 050 la línea principal, que rodea Zaragoza y Lleida por sus baipases; 054 el paso por Zaragoza-Delicias (bifurcación Moncasi–bifurcación Canal Imperial) y 056 el paso por Lleida-Pirineus. Oniel usa de Madrid-Puerta de Atocha a Barcelona-Sants, por las dos estaciones: 627,1 km.",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026 (1.708 vías). La relación trae las dos vías de la línea y los tres números de línea juntos, así que se traza el camino más corto por el grafo de vías en tres partes: Atocha–Zaragoza-Delicias, Zaragoza-Delicias–Lleida-Pirineus y Lleida-Pirineus–Barcelona-Sants. Un solo camino de Atocha a Sants iría por los baipases (620,2 km). Los números 054 y 056 salen de las etiquetas de OSM; no se han contrastado con la Declaración sobre la Red. De Barcelona-Sants a la frontera no se carga nada. Los croquis de los dos baipases se sacaron de las vías 050 de este mismo fichero.",
+      "file": "raw/osm/relation_11082425_lav_madrid_barcelona_frontera_2026-11-12.json"
+    },
+    {
+      "id": "osm-instalaciones-lav-madrid-barcelona",
+      "name": "Estaciones, apartaderos y bifurcaciones de OpenStreetMap a lo largo de la línea de alta velocidad Madrid–Barcelona",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11082425",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Coordenadas y códigos de Adif de las estaciones de Guadalajara-Yebes (04007), Calatayud (70600), Zaragoza-Delicias (04040), Lleida-Pirineus (78400), Camp de Tarragona y Barcelona-Sants (71801); de los PAET de Ariza AV (04018), Ballobar (04052) y L'Espluga de Francolí, y de las bifurcaciones de Vallecas («Vallecas-Alta Velocidad-aguja km 12,300») y Huesca (86144).",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026: los nodos railway=station, halt, junction, crossover, site y service_station a menos de 1.200 m de las vías de la relación 11082425. El fichero trae también estaciones de metro y de otras líneas, que no se usan. Las bifurcaciones Moncasi, Canal Imperial, Les Torres de Sanui y Artesa de Lleida no figuran como nodos con nombre: se sitúan en el desvío de la relación donde se separan las vías 050 y 054 o 056. Los PAET que no están en OSM (Las Inviernas, Bujaraloz, L'Arboç y Vilafranca del Penedès) y el cambiador de Plasencia de Jalón se sitúan por su punto kilométrico.",
+      "file": "raw/osm/adif_facility_nodes_lav_madrid_barcelona_2026-11-12.json"
+    },
+    {
+      "id": "wikipedia-lav-madrid-barcelona",
+      "name": "Artículo «Línea de alta velocidad Madrid-Zaragoza-Barcelona-Frontera francesa» de Wikipedia en español (instalaciones y puntos kilométricos, fechas de apertura, velocidades, servicios)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Madrid-Zaragoza-Barcelona-Frontera_francesa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Tabla de instalaciones con su punto kilométrico de Madrid-Puerta de Atocha (0,0) a Barcelona-Sants (621,0): estaciones, PAET, puestos de banalización, bifurcaciones y cambiadores; que Zaragoza-Delicias y Lleida-Pirineus quedan fuera de la línea principal; fechas de puesta en servicio (11 de octubre de 2003 hasta Lleida, 19 de diciembre de 2006 hasta Camp de Tarragona, 20 de febrero de 2008 hasta Barcelona-Sants, 9 de enero de 2013 hasta la frontera); cuadro de velocidades máximas (300 km/h en la mayor parte), y que los Alvia de Madrid a Pamplona y Logroño cambian de ancho en Plasencia de Jalón.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 16 de julio de 2026 (oldid 174394239), consultada por la API de Wikipedia. Los puntos kilométricos siguen la línea principal, por los baipases; los de las dos estaciones se cuentan por su ramal desde la bifurcación anterior. Medidos sobre la geometría de OpenStreetMap coinciden hasta Zaragoza (diferencias de menos de 0,6 km); a partir de la bifurcación Canal Imperial el kilometraje de Oniel, que va por las estaciones, se adelanta entre 4,1 y 6,4 km, y por eso los nodos posteriores no guardan PK de referencia (docs/datos.md)."
+    },
+    {
+      "id": "commons-velocidades-lav-zaragoza-lleida",
+      "name": "Gráfico «Velocidades máximas Madrid-Frontera Francesa entrando en Zaragoza y Lleida» de Wikimedia Commons",
+      "publisher": "Colaboradores de Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Velocidades_m%C3%A1ximas_de_la_l%C3%ADnea_entrando_en_Zaragoza_y_Lleida.jpg",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Velocidad máxima de la línea por las estaciones de Zaragoza-Delicias y Lleida-Pirineus, en un gráfico de velocidad frente a kilómetro: los escalones de entrada y de salida de cada estación. Oniel lo usa para los tres tramos en los que las vías de OpenStreetMap no traen velocidad: de la bifurcación Huesca a la bifurcación Canal Imperial (unos 220 km/h), de la bifurcación Les Torres de Sanui a Lleida-Pirineus (unos 140 km/h) y de Lleida-Pirineus a la bifurcación Artesa de Lleida (unos 220 km/h).",
+      "notes": "Es un gráfico de 2015 que ilustra el artículo de Wikipedia de la línea; se consultó la imagen el 12 de noviembre de 2026 y no se guarda copia. Los valores se leen sobre la rejilla del gráfico, que va de 50 en 50 km/h: son aproximados, con un margen de unos 10 km/h. Solo sirven para el tiempo estimado de los recorridos del comparador y para la ficha de esos tres tramos."
     },
     {
       "id": "adif-mapa-red",
