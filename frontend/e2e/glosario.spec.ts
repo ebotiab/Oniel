@@ -14,10 +14,13 @@ test.describe('Glosario: cada término a un toque y el glosario completo por URL
     await abrirHoja(page)
     const termino = ficha.getByRole('button', { name: 'Puesto de adelantamiento y estacionamiento' })
     await expect(termino).toHaveAttribute('aria-expanded', 'false')
+    // el término se distingue por su subrayado de puntos: si la hoja de estilos se rompe, deja de verse
+    await expect(termino).toHaveCSS('text-decoration-style', 'dotted')
     await termino.click()
     const nota = page.getByTestId('termino-nota')
     await expect(nota).toBeVisible()
     await expect(nota).toContainText('PAET')
+    await expect(nota).toHaveCSS('position', 'fixed')
     await expect(nota).toContainText('donde un tren puede detenerse para que otro lo adelante')
     await expect(termino).toHaveAttribute('aria-expanded', 'true')
     // la nota cabe entera en la pantalla, también en el móvil
