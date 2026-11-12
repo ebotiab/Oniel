@@ -90,3 +90,5 @@ Proyecto `oniel` en la organización personal `ebotiab` (región US): https://lo
 ## Base de datos local
 
 `docker-compose.yml` levanta PostgreSQL 17 en el puerto 5433 con usuario, contraseña y base `oniel`. El esquema se crea con `oniel-data db migrate`; las migraciones viven en `backend/src/oniel/db/migrations/`.
+
+<!-- Prueba de #96: una PR de solo documentación no lanza pruebas. No se fusiona. -->
