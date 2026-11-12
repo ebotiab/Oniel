@@ -945,8 +945,14 @@
   grid-template-columns: 1fr 1fr;
 }
 
+/* La franja de mapa que deja la hoja es baja: la escala y el botón de la atribución van en un solo renglón.
+   Con la atribución desplegada no caben juntas y la escala sube al renglón de encima. */
 .movil .maplibregl-ctrl-bottom-right {
   bottom: 152px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .movil.hoja-abierta .maplibregl-ctrl-bottom-right {

@@ -46,7 +46,7 @@ Al enlazar, la CLI deja `.vercel/` y un `.env.local` con un token temporal; git 
 - `oniel-api`: servicio web Docker (`backend/Dockerfile`, `rootDir: backend`), plan free, `healthCheckPath: /healthz`, `DATABASE_URL` enlazada a la base y `LOGFIRE_TOKEN` marcado `sync: false` (se aporta al aprobar el primer sync).
 - `oniel-importer` (cron job, comentado): Render no ofrece cron jobs gratuitos y pide un método de pago en el workspace para crearlos. Para activarlo, añade un método de pago, descomenta el bloque y haz push.
 
-Estado (8 de noviembre de 2026): Blueprint `oniel` (`exs-dbo9l3gu01pc73ekfu2g`) en el workspace "My Workspace" de la cuenta personal, creado desde el conector MCP de Render con `existingResources: create_new`, por lo que Render añadió el sufijo `-5e63` a los recursos: base `oniel-postgres-5e63` y API `oniel-api-5e63`, publicada en https://oniel-api-5e63.onrender.com. Con `autoSync` activo, cada push a `main` vuelve a desplegar la API y aplica los cambios del Blueprint.
+Estado (8 de noviembre de 2026): Blueprint `oniel` (`exs-dbo9l3gu01pc73ekfu2g`) en el workspace "My Workspace" de la cuenta personal, creado desde el conector MCP de Render con `existingResources: create_new`, por lo que Render añadió el sufijo `-5e63` a los recursos: base `oniel-postgres-5e63` y API `oniel-api-5e63`, publicada en https://oniel-api-5e63.onrender.com. Con `autoSync` activo, cada push a `main` que cambie algo en `backend/` vuelve a desplegar la API; los que solo tocan `frontend/` o `docs/` no la despliegan, porque el servicio tiene `rootDir: backend` (comprobado el 12 de noviembre de 2026 en la lista de despliegues de Render). Los cambios del Blueprint se aplican con cada push.
 
 Límites del plan gratuito, que conviene conocer:
 
@@ -66,6 +66,17 @@ cd backend && ONIEL_DATABASE_URL='<External Database URL>' uv run oniel-data imp
 La importación es repetible: crea el esquema si falta, sustituye los servicios de la fuente dentro de una transacción y registra la ejecución en `import_runs`. También regenera la instantánea estática de `frontend/public/data`, que conviene subir junto con los cambios.
 
 `ONIEL_CORS_ORIGINS` debe incluir el dominio del visor (`["https://oniel.vercel.app"]` por defecto); los dominios de vista previa `*.vercel.app` se aceptan por expresión regular.
+
+## Refresco automático del GTFS
+
+`.github/workflows/gtfs.yml` descarga cada lunes el GTFS de Renfe y, si el horario ha cambiado, abre una PR con el fichero nuevo, `sources.json` y la instantánea regenerada. Qué hace paso a paso, cómo compara y qué queda manual (Ouigo) está en `docs/datos.md`, «Refresco de los horarios». Aquí va lo que toca al despliegue.
+
+- **No publica nada.** El flujo abre la PR y lanza el CI sobre su rama; no fusiona. Al fusionarla una persona, Render reimporta la base (el commit toca `backend/`) y Vercel publica el visor con la instantánea nueva, como con cualquier PR de datos.
+- **Permisos.** Usa solo el `GITHUB_TOKEN` de la ejecución, con `contents: write` (subir la rama), `pull-requests: write` (abrir la PR), `issues: write` (las etiquetas y las incidencias de aviso) y `actions: write` (lanzar el CI). No necesita ningún secreto.
+- **Ajuste del repositorio.** Para que un flujo pueda abrir una PR hace falta marcar Settings → Actions → General → Workflow permissions → «Allow GitHub Actions to create and approve pull requests». Sin él, el paso «Abrir la PR» falla con «GitHub Actions is not permitted to create or approve pull requests». El flujo no aprueba ninguna PR.
+- **El CI de esa PR.** GitHub no ejecuta los flujos de `pull_request` cuando la PR la abre otro flujo con su token. Por eso `ci.yml` admite `workflow_dispatch` y el refresco lo lanza sobre la rama; las comprobaciones `Backend` y `Frontend` aparecen en la PR porque van asociadas al commit.
+- **Base de datos.** El flujo importa en un PostgreSQL de servicio que desaparece al terminar, igual que el CI. No toca la base de Render.
+- **Lo que crece.** Cada fichero de Renfe declarado alarga `import all` (unos 6 s en local; bastante más en el plan gratuito de Render, donde solo se ejecuta cuando cambia el commit desplegado). Con una PR por semana conviene retirar de vez en cuando los ficheros antiguos que no se quieran comparar.
 
 ## Logfire
 

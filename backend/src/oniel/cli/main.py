@@ -26,9 +26,11 @@ app = typer.Typer(
 db_app = typer.Typer(help="Esquema de la base de datos.", no_args_is_help=True)
 import_app = typer.Typer(help="Importaciones repetibles.", no_args_is_help=True)
 export_app = typer.Typer(help="Exportaciones.", no_args_is_help=True)
+refresh_app = typer.Typer(help="Refresco de los ficheros de horarios.", no_args_is_help=True)
 app.add_typer(db_app, name="db")
 app.add_typer(import_app, name="import")
 app.add_typer(export_app, name="export")
+app.add_typer(refresh_app, name="refresh")
 
 settings = get_settings()
 CURATED = settings.data_dir / "curated"
@@ -37,6 +39,9 @@ SPECS_DEFAULT = [CURATED / f"{line_id}.json" for line_id in settings.line_ids]
 SOURCES_DEFAULT = CURATED / "sources.json"
 INTERRUPTIONS_DEFAULT = CURATED / "interrupciones.json"
 SNAPSHOT_DEFAULT = settings.data_dir.parent.parent / "frontend" / "public" / "data"
+DOCS_DEFAULT = settings.data_dir.parent.parent / "docs" / "datos.md"
+#: Fuente de horarios que `refresh gtfs` sabe descargar sin sesión iniciada.
+REFRESH_SOURCE_DEFAULT = "renfe-gtfs-av-ld-md"
 
 SpecsOption = Annotated[
     list[Path] | None,
@@ -286,6 +291,94 @@ def export_snapshot_cmd(
             return await export_snapshot(conn, out, dt.date.fromisoformat(date) if date else None)
 
     _echo_json(_run(go))
+
+
+@refresh_app.command("gtfs")
+def refresh_gtfs_cmd(
+    source: Annotated[
+        str, typer.Option(help="Fuente de sources.json que se refresca")
+    ] = REFRESH_SOURCE_DEFAULT,
+    file: Annotated[
+        Path | None,
+        typer.Option(help="Fichero ya descargado (zip); por defecto se descarga el publicado"),
+    ] = None,
+    date: Annotated[
+        str | None, typer.Option(help="Día de descarga (AAAA-MM-DD); por defecto, hoy")
+    ] = None,
+) -> None:
+    """Descarga el fichero publicado de una fuente y, si no está ya declarado, lo guarda y lo declara.
+
+    No toca la base de datos. Imprime qué ha hecho; si `changed` es verdadero, faltan `validate`
+    e `import all`.
+    """
+    import tempfile
+
+    from oniel.gtfs.refresh import download_feed, refresh_source
+    from oniel.network.spec import load_sources
+
+    today = dt.date.fromisoformat(date) if date else dt.datetime.now(dt.UTC).date()
+    with tempfile.TemporaryDirectory() as tmp:
+        published: dt.date | None = None
+        downloaded = file
+        if downloaded is None:
+            url = next((s.url for s in load_sources(SOURCES_DEFAULT) if s.id == source), None)
+            if url is None:
+                raise typer.BadParameter(f"la fuente {source} no está registrada o no tiene URL")
+            downloaded = Path(tmp) / "descarga.zip"
+            published = download_feed(url, downloaded)
+        result = refresh_source(
+            downloaded,
+            source_id=source,
+            sources_path=SOURCES_DEFAULT,
+            data_dir=settings.data_dir,
+            today=today,
+            published_on=published,
+            docs_path=DOCS_DEFAULT if DOCS_DEFAULT.exists() else None,
+        )
+    _echo_json(result.as_json())
+
+
+@refresh_app.command("expiring")
+def refresh_expiring_cmd(
+    days: Annotated[int, typer.Option(help="Días de margen antes del fin de la validez")] = 21,
+    exclude: Annotated[
+        list[str] | None,
+        typer.Option(help="Fuente que se refresca sola y no hay que recordar (repetible)"),
+    ] = None,
+    date: Annotated[str | None, typer.Option(help="Día de referencia; por defecto, hoy")] = None,
+) -> None:
+    """Lista los ficheros vigentes cuya validez termina pronto: los que hay que descargar a mano."""
+    from oniel.gtfs.refresh import expiring_feeds
+
+    today = dt.date.fromisoformat(date) if date else dt.datetime.now(dt.UTC).date()
+    _echo_json(
+        expiring_feeds(
+            SOURCES_DEFAULT,
+            settings.data_dir,
+            today=today,
+            days=days,
+            exclude=frozenset(exclude or [REFRESH_SOURCE_DEFAULT]),
+        )
+    )
+
+
+@refresh_app.command("summary")
+def refresh_summary_cmd(
+    result: Annotated[Path, typer.Option(help="Salida de `refresh gtfs` (JSON)")],
+    report: Annotated[Path, typer.Option(help="Salida de `import all` (JSON)")],
+    snapshot: Annotated[Path, typer.Option(help="Instantánea exportada")] = SNAPSHOT_DEFAULT,
+) -> None:
+    """Escribe la descripción de la PR de un refresco: validez, viajes por línea y pasos por tramo."""
+    from oniel.gtfs.refresh import pr_body
+
+    typer.echo(
+        pr_body(
+            json.loads(result.read_text(encoding="utf-8")),
+            json.loads(report.read_text(encoding="utf-8")),
+            snapshot,
+        ),
+        nl=False,
+    )
 
 
 @app.command("sources")
