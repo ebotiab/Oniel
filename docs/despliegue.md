@@ -36,6 +36,10 @@ Al enlazar, la CLI deja `.vercel/` y un `.env.local` con un token temporal; git 
 
 - `VITE_API_URL`: URL pública de la API en Render. Está fijada a `https://oniel-api-5e63.onrender.com` en los entornos Production y Preview de Vercel (8 de noviembre de 2026). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor. Con ella, el visor arranca igualmente desde la instantánea y pasa a la API en cuanto `/healthz` responde (ver `frontend/src/data/api.ts`).
 
+- `VITE_LOGFIRE_TOKEN`: token público de la aplicación web `oniel-visor` de Logfire, solo en el entorno Production. Con él, el visor publicado envía sus errores a Logfire; sin él no envía nada ni descarga el SDK. Pendiente de crear: los pasos están en «Logfire», «Errores del visor».
+
+El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_ENV` (`production` o `preview`) y `VERCEL_GIT_COMMIT_SHA`; `frontend/vite.config.ts` las pasa al código. Necesitan que el proyecto tenga marcado Settings → Environment Variables → «Automatically expose System Environment Variables», que es el valor por defecto.
+
 `frontend/vercel.json` fija la caché: un año e inmutable para `/assets/` (ficheros con hash en el nombre) y una hora con revalidación para `/data/`.
 
 Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
@@ -84,7 +88,7 @@ La importación es repetible: crea el esquema si falta, sustituye los servicios 
 
 Proyecto `oniel` en la organización personal `ebotiab` (región US): https://logfire-us.pydantic.dev/ebotiab/oniel
 
-- Servicios: `oniel-api` (FastAPI + asyncpg) y `oniel-data` (importador y CLI).
+- Servicios: `oniel-api` (FastAPI + asyncpg), `oniel-data` (importador y CLI) y `oniel-visor` (los errores del navegador; «Errores del visor», más abajo).
 - En local, el SDK lee `backend/.logfire/logfire_credentials.json` (no se versiona). Sin ese fichero ni `LOGFIRE_TOKEN` no se envía nada.
 - En Render, definir `LOGFIRE_TOKEN` con un token de escritura del proyecto (Logfire → proyecto `oniel` → Settings → Write tokens).
 - Comprobación: `uv run oniel-data logfire-test` envía una traza; las trazas de la API aparecen al usar cualquier endpoint.
@@ -94,15 +98,17 @@ Proyecto `oniel` en la organización personal `ebotiab` (región US): https://lo
 
 ### Entornos
 
-Cada registro lleva su entorno en `deployment_environment`, que sale de `ONIEL_ENVIRONMENT`. Hay dos y no se crean más sin motivo:
+Cada registro lleva su entorno en `deployment_environment`, que en el backend sale de `ONIEL_ENVIRONMENT` y en el visor, de `VERCEL_ENV`. Hay dos y no se crean más sin motivo:
 
 | Entorno | Quién lo envía | Cuándo |
 |---|---|---|
 | `production` | La API y el importador en Render (`render.yaml` fija `ONIEL_ENVIRONMENT=production`) | Siempre |
+| `production` | El visor publicado en https://oniel.vercel.app (`VERCEL_ENV=production`) | Solo cuando hay un error, y solo si Vercel tiene `VITE_LOGFIRE_TOKEN` |
 | `local` | Quien desarrolla, desde su máquina | Solo si tiene credenciales de escritura (`backend/.logfire/` o `LOGFIRE_TOKEN`). Las sesiones en worktree no las tienen y no envían nada: desde el 9 de noviembre de 2026 no llega nada de `local` |
 
 - **Las pruebas no envían nunca.** Bajo pytest la configuración fuerza `send_to_logfire=False`, haya o no un token en el entorno (`observability.send_to_logfire`); las pruebas que miran tramos usan `capfire`, que los guarda en memoria. El plugin de pytest de Logfire, que se activa solo cuando hay `CI=true` y `LOGFIRE_TOKEN`, está desactivado con `--no-logfire` en `backend/pyproject.toml`. No hay entorno `ci` ni `test`: el CI no tiene token ni lo necesita.
-- **No hay entorno `preview`.** Las vistas previas de Vercel son solo el visor y hablan con la API de producción: sus peticiones son tráfico de `production`.
+- **No hay entorno `preview`.** Las vistas previas de Vercel son solo el visor y hablan con la API de producción: sus peticiones son tráfico de `production`. Sus errores de navegador no se envían: el visor solo inicializa Logfire cuando `VERCEL_ENV` es `production`, y el token está definido solo en ese entorno de Vercel. Una vista previa la abre quien revisa la PR, con la consola delante; enviarla gastaría cuota y, de ir como producción, abriría incidencias y correos por código sin fusionar.
+- **El visor en local y en las pruebas no envía nunca.** El servidor de desarrollo no es una compilación de producción y no tiene token. Playwright compila aparte un visor con un token de mentira y responde él mismo a lo que envía (`frontend/e2e/telemetria.spec.ts`).
 - Una importación lanzada a mano desde una máquina contra la base de Render sale como `local` salvo que se le ponga `ONIEL_ENVIRONMENT=production`.
 - En la web de Logfire el entorno se elige en el selector que hay bajo el del proyecto; en `oniel-data obs`, con `--entorno`.
 
@@ -145,15 +151,49 @@ No se usa `base='full'`: añade cientos de puntos por minuto (procesador por nú
 
 Logfire agrupa las excepciones repetidas en incidencias y avisa cuando aparece una nueva o se reabre una resuelta (la función se llama «Error tracking»; antes, «Issues»). Necesita que el fallo llegue como excepción, no como un aviso de nivel error, y así llegan los de Oniel: una excepción no controlada en la API queda en el tramo de la petición con su traza (`is_exception`, nivel 17) y una importación que falla, en el tramo `import all` con `outcome = failed`. Lo comprueban `tests/test_observability.py` y `tests/test_importing.py`. Los `HTTPException` (404, 422) quedan como excepciones de nivel aviso: son respuestas correctas, no errores del servidor.
 
-Se activa por proyecto, a mano, en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Enable Issues → elegir los canales de aviso (o ninguno, para verlos solo en Logfire) → Enable Issue Tracking. Las incidencias tardan unos minutos en aparecer. Desactivarla borra las incidencias acumuladas.
+Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo» y solo para producción: el filtro `deployment_environment = 'production'` (Advanced options) deja fuera las excepciones que alguien envíe desde `local`. Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
+
+### Errores del visor
+
+Desde #131 el visor publicado envía a Logfire sus errores, y solo sus errores, con `@pydantic/logfire-browser` (0.35.1, en beta: antes de subir de versión hay que releer su documentación, https://pydantic.dev/docs/logfire/instrument/typescript/packages/browser/). El código está en `frontend/src/telemetria/`.
+
+**Qué se envía.** Un registro por cada excepción no controlada (`Uncaught error`) y por cada promesa rechazada que nadie atiende (`Unhandled promise rejection`), de nivel error y con forma de excepción, que es lo que «Errores agrupados» necesita. React pasa por ahí los fallos al pintar un componente. Cada registro lleva:
+
+| Atributo | Qué es |
+|---|---|
+| `exception.message`, `exception.stacktrace` | El mensaje del error y su traza, con los nombres del código compilado (no se publican mapas de código) |
+| `logfire.page.url.path` | La ruta del visor en la que ocurrió (`/tramo/<id>`), sin parámetros ni fragmento. Lo añade Oniel |
+| `service.version` | El commit que compiló Vercel |
+| `deployment.environment.name` | `production` |
+| `browser.language`, `browser.brands`, `browser.mobile`, `browser.platform` | Idioma, navegador con su versión mayor, si es móvil y sistema operativo. En los navegadores que no dan esos datos (Firefox, Safari), el agente de usuario entero en `user_agent.original`. Los anota el SDK |
+| `telemetry.sdk.*` | Nombre y versión del SDK |
+
+**Qué no se envía.** Nada en una visita sin errores: ni carga de página, ni rendimiento, ni peticiones, ni clics. No hay repetición de sesión (el paquete que la hace no está instalado), ni identificador de sesión o de visitante, ni se guarda nada en el navegador (`rum.session: false`). No va el contenido de ningún campo: lo que se escribe en el buscador o en el filtro del glosario no está en la dirección ni en los mensajes de error. Tampoco se instrumentan `fetch` ni los clics (`autoInstrumentations: false`): de hacerlo, cada sondeo de `/healthz` sin respuesta mientras Render despierta la API llegaría como un error, y los fallos de la API ya los envía la propia API. Un recurso que no carga (una tesela, una imagen) no es un error de JavaScript y no llega. Como en cualquier petición, Logfire ve la dirección IP de quien la hace y el origen `https://oniel.vercel.app`; el visor no las anota.
+
+**Cuándo.** Solo si las tres condiciones se cumplen al compilar: compilación de producción, `VERCEL_ENV=production` y `VITE_LOGFIRE_TOKEN` definido (`frontend/src/telemetria/arranque.ts`). Si falta alguna, el SDK no forma parte de lo publicado y el visor no hace ninguna petición a Logfire.
+
+**Token.** El visor envía directamente a `https://logfire-us.pydantic.dev/v1/traces` con el token de una «aplicación web» (frontend application) de Logfire. Ese token es público por diseño, queda a la vista en el JavaScript publicado y solo permite enviar datos de esa aplicación: no lee nada del proyecto ni puede hacerse pasar por otro servicio. El token de escritura de Render no sale nunca al navegador. El nombre del servicio lo pone la aplicación de Logfire, no el código (`configureFrontend` no admite `serviceName` ni `environment`; el entorno va como atributo del recurso).
+
+**Alta, pendiente a 12 de noviembre de 2026.** Es configuración de las cuentas y la hace quien las administra:
+
+1. Logfire → proyecto `oniel` → Frontend → Set up → crear la aplicación `oniel-visor` y copiar su token (no la URL ni el código de ejemplo: ya están en el repositorio).
+2. Vercel → proyecto `oniel` → Settings → Environment Variables → `VITE_LOGFIRE_TOKEN` con ese token, solo en Production.
+3. Volver a desplegar producción (la variable se lee al compilar): una fusión que toque `frontend/`, o Deployments → Redeploy.
+4. Comprobarlo: abrir https://oniel.vercel.app, ejecutar en la consola `setTimeout(() => { throw new Error('prueba de Logfire') })` y, a los pocos segundos, buscar en Logfire el registro `Uncaught error` de `oniel-visor`. Hay que confirmar entonces dos cosas que no se pueden probar sin token: que `deployment_environment` llega como `production`, porque de eso depende el filtro de «Errores agrupados», y que la incidencia aparece allí con su correo.
+
+**Volumen y peso**, medidos el 12 de noviembre de 2026 con el visor compilado y un token de mentira. Una visita sin errores: 0 peticiones a Logfire y 0 registros. Un error: 1 registro; dos errores seguidos salieron en una sola petición de 3,8 kB. El arranque del visor crece 0,9 kB (0,5 kB comprimido). El SDK va en ficheros aparte, 180 kB (55 kB comprimidos), que se piden al arrancar sin esperar a ellos para pintar; los errores que ocurran mientras llegan se guardan (hasta diez) y se envían después. Sin token, lo publicado es idéntico byte a byte a lo de antes.
+
+Un bloqueador de contenido puede cortar las peticiones a Logfire: de esas visitas no llega nada, y el visor funciona igual.
 
 ### Alertas
 
-Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso son Slack o un webhook genérico (la documentación trae también PagerDuty y Opsgenie); no hay correo. Se crean una vez en la organización y se eligen en cada alerta. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
+Una alerta de Logfire es una consulta SQL que se ejecuta cada cierto tiempo sobre una ventana y avisa según el resultado (Alerts → New alert → Custom query). Los canales de aviso se crean una vez en la organización y se eligen en cada alerta: correo a miembros de la organización, Slack, webhook genérico, PagerDuty u Opsgenie. Oniel tiene uno, «Correo», que escribe al correo de la cuenta `ebotiab`; la documentación de Logfire no menciona todavía el canal de correo, pero el formulario lo ofrece. Sin canal, la alerta se evalúa igual y se ve en la página de alertas.
 
-Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres consultas están probadas con `oniel-data obs consulta` el 12 de noviembre de 2026; las tres van con «Fire when: the query starts having results».
+El plan personal no deja comprobar más a menudo que cada 10 minutos, y la ventana no puede pasar de cuatro veces ese intervalo: un fallo tarda hasta 10 minutos en avisar.
 
-**1. La API no arranca.** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: última hora. Cadencia: cada 5 minutos.
+Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres alertas están creadas en el proyecto desde el 12 de noviembre de 2026, con el canal «Correo», comprobación cada 10 minutos y aviso en «First match after no matches» (avisa cuando la consulta empieza a dar filas, no en cada comprobación). Sus consultas, probadas antes con `oniel-data obs consulta`, son las de abajo; si se cambian en Logfire, se cambian aquí.
+
+**1. «Oniel: la API no arranca».** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: últimos 30 minutos.
 
 ```sql
 SELECT service_version AS version,
@@ -169,7 +209,7 @@ HAVING max(start_timestamp) FILTER (WHERE span_name = 'import all started') < no
            < max(start_timestamp) FILTER (WHERE span_name = 'import all started'))
 ```
 
-**2. Respuestas 5xx.** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos. Cadencia: cada 5 minutos.
+**2. «Oniel: respuestas 5xx».** Peticiones que terminan en error del servidor o con una excepción no controlada. Ventana: últimos 10 minutos.
 
 ```sql
 SELECT span_name AS peticion, http_response_status_code AS estado,
@@ -183,7 +223,7 @@ GROUP BY 1, 2, 3
 ORDER BY veces DESC
 ```
 
-**3. Importación fallida o sin terminar.** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: última hora. Cadencia: cada 10 minutos.
+**3. «Oniel: importación fallida o sin terminar».** Un tramo `import all` con excepción, o un `import all started` de hace más de diez minutos sin su tramo. Ventana: últimos 30 minutos.
 
 ```sql
 SELECT 'fallida' AS problema, start_timestamp AS inicio, service_version AS version,
@@ -205,7 +245,7 @@ WHERE s.deployment_environment = 'production' AND s.service_name = 'oniel-data'
   AND f.span_id IS NULL
 ```
 
-La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Crear las alertas y el canal es configuración de la cuenta y lo decide quien la administra.
+La primera y la tercera se disparan a la vez cuando una importación se cuelga; la primera cubre además una API que no levanta con los datos ya cargados. Las alertas y el canal son configuración de la cuenta: los cambia quien la administra, en la web de Logfire.
 
 ### Qué dicen las trazas de un despliegue
 
@@ -224,7 +264,7 @@ uv run oniel-data obs consulta "select span_name, count(*) n from records group 
 uv run oniel-data obs consulta "select count(*) n from records" --entorno local   # o --entorno todos
 ```
 
-`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Como `/healthz` no se traza, la «última traza» de la API es la última petición de un visitante o el último arranque, no la última comprobación de Render. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación falló o no ha terminado, y `--esperar` repite la consulta cada 30 segundos hasta que entre: sustituye a sondear producción con `curl`. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` (trazas) o `metrics` y lo imprime en CSV. Las dos órdenes miran `production` salvo que `--entorno` diga `local`; `obs consulta` admite además `--entorno todos`, que no filtra. Usan la API de consultas de Logfire (`POST /v2/query`), que limita las consultas diarias con token de lectura: si responde 429, la orden lo dice. Las columnas útiles de `records` son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
+`obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Como `/healthz` no se traza, la «última traza» de la API es la última petición de un visitante o el último arranque, no la última comprobación de Render. «Última importación» es la de la versión desplegada (con `--commit`, la de ese commit), no la que empezó más tarde: durante un despliegue el contenedor de la versión anterior puede arrancar después que el nuevo y saltarse su importación, y esa omitida no dice nada de la versión nueva (#120). Si la más reciente es de otra versión, la orden la enseña aparte, debajo. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación no ha terminado completada u omitida, y `--esperar` repite la consulta cada 30 segundos hasta que el commit sea el de la API y su importación haya terminado, o hasta que esa importación falle: sustituye a sondear producción con `curl`. El aviso `import all started` y el tramo `import all` van en trazas distintas; una importación en curso es un aviso sin tramo de la misma versión que empiece justo después. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` (trazas) o `metrics` y lo imprime en CSV. Las dos órdenes miran `production` salvo que `--entorno` diga `local`; `obs consulta` admite además `--entorno todos`, que no filtra. Usan la API de consultas de Logfire (`POST /v2/query`), que limita las consultas con token de lectura. El token es del proyecto y lo comparten las sesiones que consultan a la vez, así que tras un despliegue es fácil llegar al límite: si Logfire responde 429, la orden lo dice y termina con código 2, salvo con `--esperar`, que espera lo que pide la cabecera `Retry-After` y vuelve a probar dentro del mismo plazo. Las columnas útiles de `records` son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
 
 Una sesión de Claude tiene que ejecutarlo fuera del sandbox del shell, que corta la conexión TLS con Logfire. Cada traza del informe lleva su `trace_id`; se abre en https://logfire-us.pydantic.dev/ebotiab/oniel buscando `trace_id = '…'`.
 

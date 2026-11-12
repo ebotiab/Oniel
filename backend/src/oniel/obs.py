@@ -41,6 +41,12 @@ NO_TOKEN_MESSAGE = (
     f"Se busca en la variable {TOKEN_ENV} y en {TOKEN_FILE} (docs/despliegue.md, «Logfire»)."
 )
 
+#: Cuántos registros de importación se leen: de sobra para los despliegues de una semana.
+IMPORT_ROWS = 60
+#: El aviso `import all started` y el tramo `import all` de una misma importación empiezan con
+#: milisegundos de diferencia, pero en trazas distintas: se emparejan por versión y por hora.
+IMPORT_PAIRING = dt.timedelta(minutes=1)
+
 _COMMIT = re.compile(r"[0-9a-f]{7,40}")
 _ENVIRONMENT = re.compile(r"[A-Za-z0-9_.-]+")
 
@@ -49,6 +55,25 @@ Row = dict[str, Any]
 
 class LogfireError(Exception):
     """La API de consultas no respondió o rechazó la consulta."""
+
+
+class LogfireRateLimited(LogfireError):
+    """Logfire limita las consultas con token de lectura (429): se puede reintentar más tarde.
+
+    El token es del proyecto y lo comparten todas las sesiones que consultan a la vez, así que
+    tras un despliegue es fácil llegar al límite.
+    """
+
+    def __init__(self, message: str, retry_after_s: float | None = None) -> None:
+        super().__init__(message)
+        self.retry_after_s = retry_after_s
+
+
+def _retry_after(value: str | None) -> float | None:
+    try:
+        return max(float(value), 0.0) if value else None
+    except ValueError:
+        return None
 
 
 def read_token(env: Mapping[str, str] | None = None, token_file: Path = TOKEN_FILE) -> str | None:
@@ -126,9 +151,11 @@ class LogfireReader:
                 "docs/despliegue.md, «Logfire», dice cómo se renueva."
             )
         if response.status_code == 429:
-            raise LogfireError(
+            retry_after = response.headers.get("Retry-After")
+            raise LogfireRateLimited(
                 "Logfire ha limitado las consultas con token de lectura (429); "
-                f"reintentar en {response.headers.get('Retry-After', '?')} s."
+                f"reintentar en {retry_after or '?'} s.",
+                _retry_after(retry_after),
             )
         if response.status_code >= 400:
             raise LogfireError(
@@ -166,6 +193,11 @@ def is_commit(version: str | None, commit: str) -> bool:
     return bool(version) and bool(_COMMIT.fullmatch(wanted)) and str(version).startswith(wanted)
 
 
+def same_version(version: str | None, target: str) -> bool:
+    """¿Es ``version`` la pedida? Un commit vale abreviado; otra versión (``0.1.0``), entera."""
+    return is_commit(version, target) or version == target
+
+
 @dataclass
 class VersionSeen:
     service: str
@@ -193,7 +225,12 @@ class Status:
     #: Versiones vistas en la ventana, de la más reciente a la más antigua, por servicio.
     versions: list[VersionSeen]
     api_started: dt.datetime | None
+    #: La última importación de la versión desplegada (la de la API); sin API, la más reciente.
     last_import: ImportRun | None
+    #: Las importaciones de la ventana, de la más reciente a la más antigua y de todas las versiones.
+    #: En un despliegue el contenedor de la versión anterior puede arrancar después que el nuevo y
+    #: dejar la suya, omitida, por encima de la buena: por eso se elige por versión, no por hora.
+    imports: list[ImportRun]
     since: dt.datetime
     errors: list[Row]
     handled: list[Row]
@@ -203,31 +240,25 @@ class Status:
     def current(self, service: str = "oniel-api") -> VersionSeen | None:
         return next((v for v in self.versions if v.service == service), None)
 
+    def import_for(self, version: str | None) -> ImportRun | None:
+        """La última importación de esa versión (o commit, aunque sea abreviado); sin versión, la más reciente."""
+        if version is None:
+            return self.imports[0] if self.imports else None
+        return next((run for run in self.imports if same_version(run.version, version)), None)
+
     def to_json(self) -> str:
         return json.dumps(asdict(self), ensure_ascii=False, indent=2, default=str)
 
 
-def _import_run(rows: list[Row]) -> ImportRun | None:
-    """La importación más reciente: su tramo si terminó, o el aviso de inicio si sigue en curso."""
-    if not rows:
-        return None
-    latest = rows[0]
-    if latest.get("kind") == "log":
-        return ImportRun(
-            started=_parse(latest.get("start_timestamp")),
-            duration_s=None,
-            version=latest.get("service_version"),
-            outcome="running",
-        )
-    raw = latest.get("attributes") or {}
+def _finished_run(row: Row) -> ImportRun:
+    """Una importación terminada, leída de su tramo `import all`."""
+    raw = row.get("attributes") or {}
     attributes: dict[str, Any] = json.loads(raw) if isinstance(raw, str) else dict(raw)
-    failed = bool(latest.get("is_exception")) or int(latest.get("level") or 0) >= ERROR_LEVEL
+    failed = bool(row.get("is_exception")) or int(row.get("level") or 0) >= ERROR_LEVEL
     error = None
     if failed:
         error = ": ".join(
-            str(part)
-            for part in (latest.get("exception_type"), latest.get("exception_message"))
-            if part
+            str(part) for part in (row.get("exception_type"), row.get("exception_message")) if part
         )
     detail = {
         key: value
@@ -235,13 +266,41 @@ def _import_run(rows: list[Row]) -> ImportRun | None:
         if not key.startswith(("code.", "logfire.")) and key != "outcome"
     }
     return ImportRun(
-        started=_parse(latest.get("start_timestamp")),
-        duration_s=latest.get("duration"),
-        version=latest.get("service_version"),
+        started=_parse(row.get("start_timestamp")),
+        duration_s=row.get("duration"),
+        version=row.get("service_version"),
         outcome="failed" if failed else str(attributes.get("outcome") or "completed"),
         detail=detail,
         error=error or None,
     )
+
+
+def import_runs(rows: list[Row]) -> list[ImportRun]:
+    """Las importaciones de las filas, de la más reciente a la más antigua.
+
+    Un tramo `import all` solo llega cuando la importación termina; mientras dura, solo está su aviso
+    `import all started`. Un aviso sin tramo de la misma versión que empiece justo después es una
+    importación en curso.
+    """
+    runs = [_finished_run(row) for row in rows if row.get("kind") != "log"]
+    for row in rows:
+        if row.get("kind") != "log":
+            continue
+        started = _parse(row.get("start_timestamp"))
+        version = row.get("service_version")
+        finished = any(
+            run.version == version
+            and run.started is not None
+            and started is not None
+            and dt.timedelta(0) <= run.started - started <= IMPORT_PAIRING
+            for run in runs
+        )
+        if not finished:
+            runs.append(
+                ImportRun(started=started, duration_s=None, version=version, outcome="running")
+            )
+    oldest = dt.datetime.min.replace(tzinfo=dt.UTC)
+    return sorted(runs, key=lambda run: run.started or oldest, reverse=True)
 
 
 def production_status(
@@ -299,10 +358,15 @@ def production_status(
         FROM records
         WHERE {env} AND service_name = 'oniel-data'
           AND span_name IN ('import all', 'import all started')
-        ORDER BY start_timestamp DESC, kind DESC
-        LIMIT 1
+        ORDER BY start_timestamp DESC
+        LIMIT {IMPORT_ROWS}
         """,
         since=window_start,
+    )
+    runs = import_runs(imports)
+    last_import = next(
+        (run for run in runs if api is None or run.version == api.version),
+        None,
     )
     problems = reader.query(
         f"""
@@ -349,7 +413,8 @@ def production_status(
         window_start=window_start,
         versions=versions,
         api_started=_parse(started[0].get("started")) if started else None,
-        last_import=_import_run(imports),
+        last_import=last_import,
+        imports=runs,
         since=since,
         errors=[row for row in problems if int(row.get("level") or 0) >= ERROR_LEVEL],
         handled=[row for row in problems if int(row.get("level") or 0) < ERROR_LEVEL],
@@ -359,12 +424,22 @@ def production_status(
 
 
 def commit_deployed(status: Status, commit: str) -> bool:
-    """El commit está desplegado cuando es la versión de la API y su importación no falló ni sigue en curso."""
+    """El commit está desplegado cuando es la versión de la API y su importación ha terminado bien.
+
+    La de ese commit, no la más reciente: en un despliegue, la versión anterior puede dejar después
+    una importación omitida. Terminar bien es completarse u omitirse (`--if-changed`).
+    """
     api = status.current()
     if api is None or not is_commit(api.version, commit):
         return False
-    run = status.last_import
-    return not (run and is_commit(run.version, commit) and run.outcome in ("running", "failed"))
+    run = status.import_for(commit)
+    return run is not None and run.outcome in ("completed", "skipped")
+
+
+def import_failed(status: Status, commit: str) -> bool:
+    """La última importación de ese commit falló: esperar más no la arregla."""
+    run = status.import_for(commit)
+    return run is not None and run.outcome == "failed"
 
 
 def wait_for_commit(
@@ -376,11 +451,27 @@ def wait_for_commit(
     sleep: Callable[[float], None] = time.sleep,
     clock: Callable[[], float] = time.monotonic,
 ) -> Status:
-    """Repite la consulta hasta que el commit sea el desplegado o se agote el tiempo."""
+    """Repite la consulta hasta que el commit sea el desplegado con su importación terminada, hasta
+    que esa importación falle o hasta que se agote el tiempo.
+
+    Si Logfire limita las consultas (429), espera lo que pide y vuelve a probar dentro del mismo
+    plazo. Agotado el plazo, devuelve lo último que vio o, si no llegó a ver nada, el límite.
+    """
     deadline = clock() + timeout_s
+    status: Status | None = None
     while True:
-        status = fetch()
-        if commit_deployed(status, commit) or clock() + interval_s > deadline:
+        try:
+            status = fetch()
+        except LogfireRateLimited as exc:
+            pause = (exc.retry_after_s if exc.retry_after_s is not None else interval_s) + 1.0
+            if clock() + pause > deadline:
+                if status is None:
+                    raise
+                return status
+            sleep(pause)
+            continue
+        done = commit_deployed(status, commit) or import_failed(status, commit)
+        if done or clock() + interval_s > deadline:
             return status
         sleep(interval_s)
 
@@ -404,9 +495,12 @@ def _ago(moment: dt.datetime | None, now: dt.datetime) -> str:
     return f"hace {minutes // (60 * 24)} días"
 
 
-def _import_lines(run: ImportRun | None, window_days: int) -> list[str]:
+def _import_lines(
+    run: ImportRun | None, window_days: int, *, version_wanted: str | None = None
+) -> list[str]:
     if run is None:
-        return [f"  ninguna registrada en los últimos {window_days} días"]
+        which = f" de la versión {short_version(version_wanted)}" if version_wanted else ""
+        return [f"  ninguna{which} registrada en los últimos {window_days} días"]
     version = short_version(run.version)
     if run.outcome == "running":
         return [f"  en curso desde {_when(run.started)} (versión {version}); aún no ha terminado"]
@@ -476,7 +570,15 @@ def format_status(status: Status, *, commit: str | None = None, window_days: int
             )
         else:
             out.append(f"  El commit {commit} NO es el desplegado todavía.")
-    out += ["", "Última importación", *_import_lines(status.last_import, window_days)]
+    # Con --commit, la importación de ese commit; sin él, la de la versión desplegada.
+    wanted = commit or (api.version if api else None)
+    run = status.import_for(wanted) if commit else status.last_import
+    out += ["", "Última importación"]
+    out += _import_lines(run, window_days, version_wanted=wanted)
+    latest = status.import_for(None)
+    if latest is not None and latest is not run:
+        out.append("  La más reciente es de otra versión; no cuenta para la desplegada:")
+        out += ["  " + line for line in _import_lines(latest, window_days)]
     out += ["", f"Errores desde el {_when(status.since)}"]
     out += _problem_lines(status.errors) or ["  ninguno"]
     if status.handled:
