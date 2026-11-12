@@ -15,6 +15,7 @@ import json
 import re
 import shutil
 import zipfile
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass, field
 from email.utils import parsedate_to_datetime
 from pathlib import Path
@@ -24,8 +25,9 @@ from urllib.parse import urlparse
 import httpx
 
 from oniel.gtfs.importer import file_sha256
-from oniel.gtfs.reader import read_feed
-from oniel.network.spec import FeedSpec, load_feeds
+from oniel.gtfs.reader import GtfsFeed, read_feed
+from oniel.gtfs.trips import select_trips_for_spec
+from oniel.network.spec import FeedSpec, NetworkSpec, load_feeds, load_network_spec
 
 MONTHS = [
     "enero",
@@ -124,6 +126,30 @@ def download_feed(dataset_url: str, target: Path, *, timeout_s: float = 120.0) -
     return parsedate_to_datetime(modified).date() if modified else None
 
 
+#: Un tren de un día: número, producto, día y todas sus paradas con sus horas.
+TrainDay = tuple[str, str, dt.date, tuple[tuple[str, int, int], ...]]
+
+
+def train_days(
+    feed: GtfsFeed, specs: Sequence[NetworkSpec], start: dt.date, days: int
+) -> frozenset[TrainDay]:
+    """Los trenes de las líneas cargadas en ``days`` días desde ``start``, uno por tren y día.
+
+    Es lo que Oniel enseña de un fichero de horarios. No lleva el ``trip_id`` ni el ``service_id``,
+    que Renfe cambia de un fichero al siguiente aunque el tren sea el mismo: dos ficheros con los
+    mismos trenes, a las mismas horas y los mismos días dan el mismo conjunto.
+    """
+    end = start + dt.timedelta(days=days)
+    out: set[TrainDay] = set()
+    for spec in specs:
+        for trip in select_trips_for_spec(feed, spec):
+            stops = tuple((s.stop_id, s.arrival_s, s.departure_s) for s in trip.stop_times)
+            for day in feed.service_dates.get(trip.service_id, ()):
+                if start <= day < end:
+                    out.add((trip.train_number, trip.product, day, stops))
+    return frozenset(out)
+
+
 @dataclass
 class RefreshResult:
     """Qué hizo el refresco de una fuente; se imprime como JSON para el flujo."""
@@ -137,6 +163,14 @@ class RefreshResult:
     #: Fichero vigente antes del refresco, relativo a ``data/``, y su conjunto de datos.
     previous_file: str
     previous_dataset_id: str
+    #: Por qué se declara o no: «mismo_fichero», «mismos_trenes», «trenes» (cambian los trenes de
+    #: las líneas cargadas en las próximas semanas), «antiguedad» (los trenes son los mismos pero
+    #: el fichero cargado es viejo) o «contenido» (sin líneas con las que comparar).
+    reason: str = "mismo_fichero"
+    #: Trenes y días que están en uno de los dos ficheros y no en el otro, en la ventana comparada.
+    train_days_changed: int | None = None
+    window_days: int | None = None
+    previous_age_days: int | None = None
     #: Solo si cambió: el fichero guardado, su conjunto, su día de descarga y los días que cubre.
     file: str | None = None
     dataset_id: str | None = None
@@ -166,8 +200,18 @@ def refresh_source(
     today: dt.date,
     published_on: dt.date | None = None,
     docs_path: Path | None = None,
+    spec_paths: Sequence[Path] = (),
+    window_days: int = 28,
+    max_age_days: int = 28,
 ) -> RefreshResult:
-    """Compara un fichero descargado con los declarados de su fuente y, si es nuevo, lo declara.
+    """Compara un fichero descargado con los declarados de su fuente y, si hace falta, lo declara.
+
+    Renfe vuelve a generar su fichero cada noche y quita los días pasados, así que casi siempre es
+    distinto del cargado aunque no cambie ningún tren. Por eso, con ``spec_paths``, un fichero
+    distinto solo se declara si cambian los trenes de las líneas cargadas en los próximos
+    ``window_days`` días respecto al vigente, o si el vigente se descargó hace ``max_age_days``
+    días o más (para que el día de referencia no se quede atrás y entre lo que cambie más allá de
+    la ventana). Sin ``spec_paths`` basta con que el contenido sea otro.
 
     Se compara el SHA-256 del contenido (`content_sha256`) con el de todos los ficheros de la
     fuente, no solo con el vigente: un horario que ya está no se vuelve a añadir. Si es nuevo, se copia a ``data/raw/`` con el día
@@ -190,14 +234,31 @@ def refresh_source(
     )
     if any(content_sha256(data_dir / f.file) == content for f in declared):
         return result
+    # Leerlo entero antes de declararlo: si no es un GTFS legible, falla aquí y no se guarda nada.
+    feed = read_feed(downloaded, stop_id_prefix=current.stop_id_prefix)
+    result.reason = "contenido"
+    if spec_paths:
+        specs = [load_network_spec(p) for p in spec_paths]
+        loaded = read_feed(data_dir / current.file, stop_id_prefix=current.stop_id_prefix)
+        differ = train_days(feed, specs, today, window_days) ^ train_days(
+            loaded, specs, today, window_days
+        )
+        result.train_days_changed = len(differ)
+        result.window_days = window_days
+        result.previous_age_days = (today - current.retrieved_on).days
+        if differ:
+            result.reason = "trenes"
+        elif result.previous_age_days >= max_age_days:
+            result.reason = "antiguedad"
+        else:
+            result.reason = "mismos_trenes"
+            return result
     if current.retrieved_on >= today:
         raise ValueError(
             f"{current.file} ya es del {current.retrieved_on.isoformat()}: un fichero por fuente y día"
         )
     if not DATE_IN_NAME.search(current.file):
         raise ValueError(f"{current.file} no lleva la fecha en el nombre")
-    # Leerlo entero antes de declararlo: si no es un GTFS legible, falla aquí y no se guarda nada.
-    feed = read_feed(downloaded, stop_id_prefix=current.stop_id_prefix)
     new_file = DATE_IN_NAME.sub(today.isoformat(), current.file)
     shutil.copyfile(downloaded, data_dir / new_file)
 
@@ -345,6 +406,25 @@ def _count_changes(previous: dict[str, Any], new: dict[str, Any]) -> list[str]:
     ]
 
 
+def _why(result: dict[str, Any]) -> str:
+    """Por qué se abre la PR, en una frase."""
+    window, changed = result.get("window_days"), result.get("train_days_changed")
+    if result.get("reason") == "trenes":
+        return (
+            f"Se abre esta PR porque cambian los trenes de las líneas cargadas: en los próximos"
+            f" {window} días hay {changed} trenes-día (un tren en un día, con sus paradas y sus"
+            " horas) que están en uno de los dos ficheros y no en el otro."
+        )
+    if result.get("reason") == "antiguedad":
+        return (
+            f"Los trenes de las líneas cargadas son los mismos en los próximos {window} días. Se"
+            f" abre esta PR porque el fichero cargado se descargó hace"
+            f" {result.get('previous_age_days')} días: así el día de referencia no se queda atrás"
+            " y entra lo que haya cambiado más adelante."
+        )
+    return "Se abre esta PR porque el contenido del fichero es otro."
+
+
 def pr_body(result: dict[str, Any], import_report: dict[str, Any], snapshot_dir: Path) -> str:
     """Descripción de la PR del refresco: validez, viajes por línea y cambios en los pasos por tramo.
 
@@ -372,6 +452,8 @@ def pr_body(result: dict[str, Any], import_report: dict[str, Any], snapshot_dir:
         f"Un fichero de horarios nuevo de la fuente `{result['source_id']}`, descargado el"
         f" {retrieved}{published}. Su contenido no coincide con el de ninguno de los ya declarados"
         f" (SHA-256 del contenido `{result['content_sha256'][:12]}…`).",
+        "",
+        _why(result),
         "",
         f"- Fichero: `backend/data/{result['file']}`, conjunto de datos `{new_id}`.",
         f"- Validez: {valid}.",
