@@ -680,6 +680,7 @@ Cada tramo dice qué sistema de protección del tren tiene, qué bloqueo y si su
 | Rótulo «BAU» | `bloqueo` | `bau` | Automático de vía única |
 | Rótulo «BLAU» | `bloqueo` | `blau` | De liberación automática en vía única |
 | «ctc» tras el rótulo del bloqueo | `mando` | `ctc` | Control de tráfico centralizado |
+| Rótulo del bloqueo sin «ctc», cuando la leyenda trae ese mismo bloqueo con y sin él («BAB», «BAD») | `mando` | `sin_ctc` | Sin control centralizado |
 | Nada sobre el mando | `mando` | `sin_dato_publicado` | Sin dato publicado |
 
 Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan; ninguna de las cargadas los usa. Las dos líneas de alta velocidad de Córdoba a Granada trajeron dos valores nuevos, porque el mapa dibuja junto a ellas el símbolo de ERTMS y el de «ASFA - AV»: `ertms_n1_n2_asfa` (símbolo «ERTMS N1 y 2», entre Córdoba y Antequera-Santa Ana) y `ertms_n2_asfa` (símbolo «ERTMS N2», entre Antequera-Santa Ana y Granada). Los dos símbolos de ERTMS se distinguen solo por el color, que se comprobó con el de la leyenda. En la ficha se dicen «ERTMS de niveles 1 y 2 y ASFA» y «ERTMS de nivel 2 y ASFA», como «LZB y ASFA». El tren tierra y el GSM-R, que el mapa dibuja con los sistemas de seguridad, son radiotelefonía y no se recogen.
@@ -698,8 +699,8 @@ Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan
 | Manzanares – Ciudad Real | Manzanares – Ciudad Real | ASFA | BAU | CTC |
 | Espelúy – Jaén | Espelúy – Jaén | ASFA | BLAU | CTC |
 | Linares-Baeza – Moreda – Granada | Linares-Baeza – Granada | ASFA | BAU | CTC |
-| Alcázar de San Juan – Albacete | Alcázar de San Juan – Villarrobledo | ASFA | BAB | sin dato publicado |
-| | Villarrobledo – La Roda de Albacete | ASFA | BAD | sin dato publicado |
+| Alcázar de San Juan – Albacete | Alcázar de San Juan – Villarrobledo | ASFA | BAB | sin CTC |
+| | Villarrobledo – La Roda de Albacete | ASFA | BAD | sin CTC |
 | | La Roda de Albacete – Albacete-Los Llanos | ASFA | BAB | CTC |
 | Alta velocidad Córdoba – Málaga | Bifurcación Málaga-Alta Velocidad – Antequera-Santa Ana | ERTMS de niveles 1 y 2 y ASFA (`ertms_n1_n2_asfa`) | BCA | sin dato publicado |
 | Alta velocidad Antequera – Granada | Antequera-Santa Ana – Granada | ERTMS de nivel 2 y ASFA (`ertms_n2_asfa`) | BCA | sin dato publicado |
@@ -711,7 +712,7 @@ La línea de Jaén trajo un valor nuevo, `blau`: el mapa rotula «BLAU ctc», co
 **Límites de la fuente, y cómo se dejaron** (acordado con el usuario el 12 de noviembre de 2026):
 
 - **El mando de la alta velocidad no está publicado.** El mapa solo dice «ctc» junto a los bloqueos automáticos; junto al BCA de la línea Madrid – Sevilla no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos. Sus once tramos llevan `sin_dato_publicado`: un valor declarado, con la fuente en la que se buscó y la fecha, que la ficha dice tal cual. No se dedujo de otras líneas ni de otras publicaciones.
-- **De Alcázar de San Juan a La Roda de Albacete el mapa no pone «ctc».** Rotula «BAB» hasta Villarrobledo y «BAD» hasta La Roda, y solo desde allí hasta Albacete «BAB ctc». La leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD», así que el mapa da a entender que esos dos trechos no tienen control de tráfico centralizado, pero no dice desde dónde se gobiernan. `mando` solo admite hoy `ctc` y `sin_dato_publicado`: llevan `sin_dato_publicado`, con la nota de lo que dice el mapa en cada sección. Un valor propio («sin control de tráfico centralizado») necesitaría su texto en la ficha, que es una decisión de diseño pendiente de proponer.
+- **De Alcázar de San Juan a La Roda de Albacete el mapa no pone «ctc».** Rotula «BAB» hasta Villarrobledo y «BAD» hasta La Roda, y solo desde allí hasta Albacete «BAB ctc». La leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD», así que el mapa dice que esos dos trechos no tienen control de tráfico centralizado. Llevan `sin_ctc`, que la ficha dice como «Sin control centralizado» (decidido con el usuario el 12 de noviembre de 2026; al principio fueron como `sin_dato_publicado`). El mapa no dice desde dónde se gobiernan: el valor recoge solo lo que afirma, la ausencia de CTC. `sin_dato_publicado` queda para donde el mapa calla, como en la alta velocidad.
 - **Ningún tramo dice qué puesto de mando lo gobierna.** `mando` recoge solo si hay control de tráfico centralizado, que es lo que da el mapa.
 - **Cinco Casas – Manzanares cambia de bloqueo donde no hay nodo.** El mapa pasa de «BAB ctc» a «BAD ctc» en Herrera de la Mancha (PK 183,7 según `wikipedia-lineas-300-400`), que Oniel no tiene como nodo. El tramo lleva un valor mixto, `bab_bad`, que la ficha dice como «Automático: banalizado en una parte y de vía doble en otra». Si Herrera de la Mancha entra algún día como nodo, el tramo se parte y el valor mixto sobra.
 - **Manzanares – Ciudad Real se leyó por el color.** El único rótulo cercano, «BAD ctc», está junto a Manzanares, sobre el trazo de vía doble Herrera – Manzanares de la línea 400. La línea 522 es de vía única y lleva el trazo naranja, que en la leyenda de vía única es «BAU ctc».
