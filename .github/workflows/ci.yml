@@ -31,10 +31,12 @@ jobs:
     services:
       postgres:
         image: postgres:17
+        # Sin contraseña: la base vive solo durante el trabajo y no se ve desde fuera del runner,
+        # así que basta con la autenticación `trust` (y no hay ninguna clave en el fichero).
         env:
           POSTGRES_USER: oniel
-          POSTGRES_PASSWORD: oniel
           POSTGRES_DB: oniel
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
@@ -73,7 +75,7 @@ jobs:
       - name: Pruebas (pytest, incluidas las de integración con PostgreSQL)
         run: uv run pytest
         env:
-          ONIEL_TEST_DATABASE_URL: postgresql://oniel:oniel@localhost:5432/oniel_test
+          ONIEL_TEST_DATABASE_URL: postgresql://oniel@localhost:5432/oniel_test
 
       - name: Validar la red y la resolución de horarios (oniel-data validate)
         run: uv run oniel-data validate
