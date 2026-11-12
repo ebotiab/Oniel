@@ -145,7 +145,7 @@ No se usa `base='full'`: añade cientos de puntos por minuto (procesador por nú
 
 Logfire agrupa las excepciones repetidas en incidencias y avisa cuando aparece una nueva o se reabre una resuelta (la función se llama «Error tracking»; antes, «Issues»). Necesita que el fallo llegue como excepción, no como un aviso de nivel error, y así llegan los de Oniel: una excepción no controlada en la API queda en el tramo de la petición con su traza (`is_exception`, nivel 17) y una importación que falla, en el tramo `import all` con `outcome = failed`. Lo comprueban `tests/test_observability.py` y `tests/test_importing.py`. Los `HTTPException` (404, 422) quedan como excepciones de nivel aviso: son respuestas correctas, no errores del servidor.
 
-Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo». Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
+Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo» y solo para producción: el filtro `deployment_environment = 'production'` (Advanced options) deja fuera las excepciones que alguien envíe desde `local`. Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
 
 ### Alertas
 
