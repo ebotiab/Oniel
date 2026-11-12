@@ -1,0 +1,974 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-12T17:10:49Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 891022798,
+  "lat": 37.5246069,
+  "lon": -4.6608535,
+  "tags": {
+    "railway": "service_station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2043185471,
+  "lat": 37.9126014,
+  "lon": -4.7206348,
+  "tags": {
+    "name": "Rabanales",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q57986245"
+  }
+},
+{
+  "type": "node",
+  "id": 2624608403,
+  "lat": 37.0320313,
+  "lon": -4.8635041,
+  "tags": {
+    "name": "Campillos",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845936"
+  }
+},
+{
+  "type": "node",
+  "id": 5254650053,
+  "lat": 37.8670309,
+  "lon": -4.8504733,
+  "tags": {
+    "name": "El Higuerón",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q57986271"
+  }
+},
+{
+  "type": "node",
+  "id": 5820025328,
+  "lat": 37.1229359,
+  "lon": -4.2973643,
+  "tags": {
+    "name": "Salinas",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 6572847597,
+  "lat": 37.0283320,
+  "lon": -4.5609704,
+  "tags": {
+    "name": "Antequera Ciudad",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7201979115,
+  "lat": 37.1836936,
+  "lon": -3.6086283,
+  "tags": {
+    "addr:street": "Avenida de Andaluces",
+    "name": "Granada",
+    "nohousenumber": "yes",
+    "opening_hours": "Mo-Su 05:25-00:00",
+    "operator": "Adif",
+    "owner": "Adif AV",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "05000",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7557283526,
+  "lat": 37.8398963,
+  "lon": -4.9416509,
+  "tags": {
+    "name": "Bifurcación Málaga-Alta Velocidad",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7557413126,
+  "lat": 37.0701682,
+  "lon": -4.7197084,
+  "tags": {
+    "name": "Antequera-Santa Ana",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q3325592"
+  }
+},
+{
+  "type": "node",
+  "id": 7564281361,
+  "lat": 37.5789991,
+  "lon": -4.6336985,
+  "tags": {
+    "name": "Montilla",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846754"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287729,
+  "lat": 37.7798915,
+  "lon": -4.6881674,
+  "tags": {
+    "name": "Torres Cabrera",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287730,
+  "lat": 37.7991857,
+  "lon": -4.7592661,
+  "tags": {
+    "name": "El Chaparral",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287752,
+  "lat": 37.8365680,
+  "lon": -4.8327097,
+  "tags": {
+    "name": "Valchillón",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q74220558"
+  }
+},
+{
+  "type": "node",
+  "id": 7564287755,
+  "lat": 37.2945847,
+  "lon": -4.7642121,
+  "tags": {
+    "name": "Casariche",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 7567516121,
+  "lat": 37.8885103,
+  "lon": -4.7895160,
+  "tags": {
+    "name": "Córdoba Julio Anguita",
+    "old_name": "Córdoba Central",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "https://github.com/trainline-eu/stations",
+    "uic_ref": "7150500",
+    "url": "https://www.adif.es/w/50500-c%C3%B3rdoba-j.-anguita",
+    "wheelchair": "yes",
+    "wikidata": "Q97624967"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538143,
+  "lat": 37.0376401,
+  "lon": -4.7279832,
+  "tags": {
+    "name": "Bobadilla",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845842"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538144,
+  "lat": 37.1352604,
+  "lon": -4.7381444,
+  "tags": {
+    "name": "Fuente de Piedra",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846265"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538146,
+  "lat": 37.2078504,
+  "lon": -4.7749124,
+  "tags": {
+    "name": "La Roda de Andalucía",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846527"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538147,
+  "lat": 37.3959248,
+  "lon": -4.7527784,
+  "tags": {
+    "name": "Puente Genil",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846982"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538149,
+  "lat": 37.5247207,
+  "lon": -4.6608026,
+  "tags": {
+    "name": "Aguilar de la Frontera",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5556412"
+  }
+},
+{
+  "type": "node",
+  "id": 7571619026,
+  "lat": 37.3589237,
+  "lon": -4.8222285,
+  "tags": {
+    "name": "Puente Genil-Herrera",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q4886621"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980467,
+  "lat": 37.3323784,
+  "lon": -3.5964364,
+  "tags": {
+    "name": "Deifontes",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5846108"
+  }
+},
+{
+  "type": "node",
+  "id": 7751980479,
+  "lat": 37.2332223,
+  "lon": -3.6457966,
+  "tags": {
+    "name": "Albolote",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q5845616"
+  }
+},
+{
+  "type": "node",
+  "id": 7752561504,
+  "lat": 37.7799776,
+  "lon": -3.7907894,
+  "tags": {
+    "name": "Jaén",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/w/03100-ja%C3%A9n",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653216,
+  "lat": 37.9419286,
+  "lon": -4.4887572,
+  "tags": {
+    "name": "El Carpio de Córdoba",
+    "operator": "Adif",
+    "railway": "service_station",
+    "wikidata": "Q96655920"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653217,
+  "lat": 37.9496151,
+  "lon": -4.5362733,
+  "tags": {
+    "name": "Villafranca de Córdoba",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653218,
+  "lat": 37.9111084,
+  "lon": -4.6021035,
+  "tags": {
+    "name": "Los Cansinos",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7752653219,
+  "lat": 37.9329792,
+  "lon": -4.6748063,
+  "tags": {
+    "name": "Alcolea de Córdoba",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q57986238"
+  }
+},
+{
+  "type": "node",
+  "id": 7758175192,
+  "lat": 37.8479706,
+  "lon": -4.9137717,
+  "tags": {
+    "name": "Villarrubia de Córdoba",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q57985482",
+    "wikimedia_commons": "File:Estación de Villarrubia de Córdoba.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 8019139591,
+  "lat": 37.0437020,
+  "lon": -4.6950117,
+  "tags": {
+    "name": "Bifurcación Las Maravillas",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 8048215376,
+  "lat": 37.2222655,
+  "lon": -4.8936375,
+  "tags": {
+    "name": "Pedrera",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846904"
+  }
+},
+{
+  "type": "node",
+  "id": 10919559446,
+  "lat": 37.2322026,
+  "lon": -3.9845733,
+  "tags": {
+    "name": "Bifurcación Tocón",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 10919559447,
+  "lat": 37.1370894,
+  "lon": -4.2155763,
+  "tags": {
+    "name": "Bifurcación Ríofrio",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 10958058855,
+  "lat": 37.1989235,
+  "lon": -3.6539576,
+  "tags": {
+    "name": "Bifurcación La Chana",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 11135074555,
+  "lat": 37.0294830,
+  "lon": -4.5613719,
+  "tags": {
+    "name": "Antequera Alta Velocidad",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "02030",
+    "ref:EU:PLC": "ES02030",
+    "short_name": "Antequera AV",
+    "train": "yes",
+    "uic_ref": "7102030",
+    "wheelchair": "yes",
+    "wikidata": "Q2918304",
+    "wikipedia": "es:Estación de Antequera AV"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119977,
+  "lat": 37.1437237,
+  "lon": -3.6271450,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Armilla",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119978,
+  "lat": 37.1475035,
+  "lon": -3.6208496,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Fernando de los Ríos",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119979,
+  "lat": 37.1439913,
+  "lon": -3.6140432,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Sierra Nevada",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119980,
+  "lat": 37.1490139,
+  "lon": -3.6068967,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Parque Tecnológico",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119981,
+  "lat": 37.1492186,
+  "lon": -3.6009345,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Dílar",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119982,
+  "lat": 37.1511441,
+  "lon": -3.5961628,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Nuevo Los Cármenes",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119983,
+  "lat": 37.1541985,
+  "lon": -3.5928031,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Palacio Deportes",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119984,
+  "lat": 37.1581693,
+  "lon": -3.5954377,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Andrés Segovia",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119986,
+  "lat": 37.1607280,
+  "lon": -3.5965429,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Hípica",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119991,
+  "lat": 37.1644942,
+  "lon": -3.6024393,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Alcázar Genil",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119992,
+  "lat": 37.1701453,
+  "lon": -3.6058663,
+  "tags": {
+    "layer": "-2",
+    "light_rail": "yes",
+    "name": "Recogidas",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119993,
+  "lat": 37.1765925,
+  "lon": -3.6097845,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Méndez Núñez",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119994,
+  "lat": 37.1808537,
+  "lon": -3.6085801,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Universidad",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119995,
+  "lat": 37.1832490,
+  "lon": -3.6083200,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Estación Ferrocarril",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119996,
+  "lat": 37.1864090,
+  "lon": -3.6090293,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Caleta",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:email": "info@metropolitanogranada.es",
+    "operator:phone": "+34 958 98 81 23",
+    "operator:type": "public",
+    "operator:website": "https://www.metropolitanogranada.es/",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119997,
+  "lat": 37.1887808,
+  "lon": -3.6146889,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Villarejo",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119998,
+  "lat": 37.1920068,
+  "lon": -3.6150375,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Luis Amador",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847119999,
+  "lat": 37.1958566,
+  "lon": -3.6154920,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Argentinita",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847120000,
+  "lat": 37.1999862,
+  "lon": -3.6132216,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Estación Autobuses",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847159901,
+  "lat": 37.2041202,
+  "lon": -3.6172491,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Jaén",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847159902,
+  "lat": 37.2015207,
+  "lon": -3.6244134,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Cerrillo Maracena",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847160074,
+  "lat": 37.2110126,
+  "lon": -3.6341608,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Anfiteatro",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847160079,
+  "lat": 37.2071349,
+  "lon": -3.6303937,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Maracena",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847160080,
+  "lat": 37.2142763,
+  "lon": -3.6371355,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Vicuña",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847160081,
+  "lat": 37.2224044,
+  "lon": -3.6457297,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Juncaril",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847160082,
+  "lat": 37.2281139,
+  "lon": -3.6533794,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Albolote",
+    "network": "Metro de Granada",
+    "network:wikidata": "Q867797",
+    "operator": "Metro de Granada",
+    "operator:wikidata": "Q867797",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13651827338,
+  "lat": 37.1751061,
+  "lon": -4.1356667,
+  "tags": {
+    "name": "Loja",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "05012",
+    "ref:EU:PLC": "ES05012",
+    "train": "yes",
+    "uic_ref": "7105012",
+    "wheelchair": "yes",
+    "wikidata": "Q64784320",
+    "wikipedia": "es:Estación de Loja"
+  }
+},
+{
+  "type": "node",
+  "id": 13658542817,
+  "lat": 37.2166532,
+  "lon": -3.6957025,
+  "tags": {
+    "name": "Atarfe - Santa Fe",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "05002",
+    "ref:EU:PLC": "ES05002",
+    "train": "yes",
+    "uic_ref": "7105002",
+    "wikidata": "Q98633130",
+    "wikipedia": "es:Estación de Atarfe-Santa Fe"
+  }
+}
+
+  ]
+}

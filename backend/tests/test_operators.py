@@ -33,7 +33,8 @@ def test_declared_operators_and_feeds_hold_together() -> None:
     assert all(f["valid"][0] <= start <= end <= f["valid"][1] for f in report["feeds"])
 
 
-def test_only_the_high_speed_line_declares_iryo() -> None:
+def test_only_the_lines_iryo_runs_on_declare_it() -> None:
+    """Iryo va de Madrid a Sevilla y a Málaga: no circula por las convencionales ni llega a Granada."""
     by_line = {
         load_network_spec(path).line.id: {
             op.id for op in load_network_spec(path).operators if op.role == "operador"
@@ -41,7 +42,10 @@ def test_only_the_high_speed_line_declares_iryo() -> None:
         for path in SPECS
     }
     assert by_line[load_network_spec(SPEC).line.id] >= {"renfe", "iryo"}
-    assert all("iryo" not in ops for line, ops in by_line.items() if line != "lav-madrid-sevilla")
+    with_iryo = {"lav-madrid-sevilla", "lav-cordoba-malaga"}
+    assert {line for line, ops in by_line.items() if "iryo" in ops} == with_iryo
+    assert by_line["lav-cordoba-malaga"] == {"renfe", "ouigo", "iryo"}
+    assert by_line["lav-antequera-granada"] == {"renfe"}
 
 
 def test_an_operator_with_loaded_timetables_needs_a_feed(tmp_path: Path) -> None:

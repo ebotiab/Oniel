@@ -44,11 +44,19 @@ test.describe('Proyectos: datos y registro de capas', () => {
 
   test('el dibujo sale del estado: puntos sobre el papel, trazos en obras, nada sobre una vía que ya existe', () => {
     expect(dibujoDe(proyecto(MORA_ALCAZAR))).toBe('puntos')
-    expect(dibujoDe(proyecto(LOJA))).toBe('trazos')
+    // hoy ningún proyecto en obras tiene esbozo: el trazo se comprueba con uno que lo estuviera
+    const enObras = { ...proyecto(MORA_ALCAZAR), status: 'en_obras' as const }
+    expect(dibujoDe(enObras)).toBe('trazos')
+    expect(leyendaDe([enObras]).map((e) => e.texto)).toEqual(['Proyecto en obras'])
     // las obras de los túneles van de nodo a nodo: no tienen geometría propia ni cambian la vía
     expect(dibujoDe(proyecto(TUNELES))).toBeNull()
     expect(proyecto(TUNELES).segment_ids).toHaveLength(8)
-    expect(leyendaDe(proyectos).map((e) => e.texto)).toEqual(['Proyecto', 'Proyecto en obras'])
+    // lo mismo la Variante de Loja y la duplicación de vía, desde que su línea está cargada: cuelgan
+    // del paso por Loja y de los tramos de vía única de Antequera – Granada
+    expect(dibujoDe(proyecto(LOJA))).toBeNull()
+    expect(proyecto(LOJA).segment_ids).toEqual(['lav-antequera-granada:bif-riofrio:loja', 'lav-antequera-granada:loja:bif-tocon'])
+    expect(proyecto('proyecto-duplicacion-antequera-granada').segment_ids).toHaveLength(4)
+    expect(leyendaDe(proyectos).map((e) => e.texto)).toEqual(['Proyecto'])
     expect(leyendaDe([proyecto(TUNELES)])).toEqual([])
   })
 
@@ -129,16 +137,14 @@ test.describe('Proyectos: la vista', () => {
       const data = (await (map.getSource('oniel-annotations') as unknown as { getData: () => Promise<GeoJSON.FeatureCollection> }).getData()).features
       return Object.fromEntries(data.map((f) => [String(f.properties!.oniel_id), String(f.properties!.dibujo)]))
     })
+    // solo los dos que no cuelgan de una vía cargada; ninguno está en obras
     expect(dibujos).toEqual({
       'proyecto-conexion-lav-cordoba-jaen': 'puntos',
-      'proyecto-duplicacion-antequera-granada': 'puntos',
       [MORA_ALCAZAR]: 'puntos',
-      [LOJA]: 'trazos',
     })
     if (!isMobile) {
       await expect(page.getByTestId('leyenda-proyecto')).toBeVisible()
-      await expect(page.getByTestId('leyenda-proyecto-en-obras')).toBeVisible()
-      await expect(page.locator('.leyenda')).toContainText('Proyecto en obras')
+      await expect(page.getByTestId('leyenda-proyecto-en-obras')).toHaveCount(0)
     }
     // un toque en mitad del esbozo, lejos de cualquier vía cargada
     await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.loaded() === true)

@@ -13,10 +13,13 @@ Reglas, en lenguaje llano:
 * Si esa parada está en otra línea cargada (un tren que cambia de línea a mitad de recorrido),
   la asignación puede traer la distancia real desde la salida hasta la parada por la otra línea;
   entonces el reparto la usa en vez de la línea recta, con el mismo margen del 30 %.
-* Si las dos paradas están en otras líneas cargadas y se conoce esa distancia a cada lado, el
-  tren cruza la línea entera sin parar: entra por un nodo y sale por otro. El paso es estimado y
-  el margen es el 30 % del mayor de los dos tiempos que pasa fuera de la línea.
-* Si no podemos saber por dónde circula el tren, el paso queda **indeterminado**.
+* Si las dos paradas están fuera de la línea y a una de ellas, al menos, se llega por otra línea
+  cargada con distancia conocida, el tren cruza la línea sin parar: entra por un nodo y sale por
+  otro. Si la otra parada está fuera de la red cargada, su distancia es la línea recta, como
+  arriba (hacen falta sus coordenadas). El paso es estimado y el margen es el 30 % del mayor de los dos tiempos que pasa
+  fuera de la línea.
+* Si no podemos saber por dónde circula el tren (dos paradas fuera de la red cargada, o una
+  parada que no se sabe situar), el paso queda **indeterminado**.
 """
 
 from __future__ import annotations
@@ -121,6 +124,13 @@ class _Anchor:
     extra_how: str | None = None
 
     @property
+    def measured(self) -> bool:
+        """Se sabe cuánto hay hasta la parada: está en la línea, se llega por líneas cargadas o
+        tiene coordenadas con las que medir la línea recta."""
+        located = self.call.lon is not None and self.call.lat is not None
+        return self.on_line or self.extra_how is not None or located
+
+    @property
     def along_loaded_lines(self) -> bool:
         """La parada es exterior, pero se llega a ella por otras líneas cargadas y se sabe cuánto hay."""
         return not self.on_line and self.exit_node is not None and self.extra_how is not None
@@ -220,10 +230,13 @@ def _leg_passes(
     inside = [
         s for s in segments if s.km_from >= lo - KM_TOLERANCE and s.km_to <= hi + KM_TOLERANCE
     ]
-    # Las dos paradas fuera de la línea: solo se puede fijar el recorrido si a las dos se llega
-    # por otras líneas cargadas (el tren cruza esta de un nodo a otro sin parar en ella).
+    # Las dos paradas fuera de la línea: el recorrido se puede fijar si al menos a una se llega
+    # por otra línea cargada (el tren cruza esta de un nodo a otro sin parar en ella) y de la otra
+    # se sabe a qué distancia queda. Con las dos fuera de la red cargada no hay nada que ancle
+    # por dónde va.
     crossing = not a.on_line and not b.on_line
-    if unknown_between or (crossing and not (a.along_loaded_lines and b.along_loaded_lines)):
+    anchored = (a.along_loaded_lines or b.along_loaded_lines) and a.measured and b.measured
+    if unknown_between or (crossing and not anchored):
         why = (
             "El horario incluye una parada que Oniel no sabe situar en la red, así que no se puede"
             " fijar el recorrido entre "
@@ -330,11 +343,19 @@ def _crossing_basis(a: _Anchor, b: _Anchor, on_line_km: float, margin: float) ->
     where = " y ".join(
         f"{x.call.stop_name} {x.call.exit_note}" for x in (a, b) if x.call.exit_note is not None
     )
+    outside = " y ".join(
+        f"{x.call.stop_name} está fuera de la red cargada"
+        for x in (a, b)
+        if not x.along_loaded_lines
+    )
+    before = "" if a.along_loaded_lines else " en línea recta"
+    after = "" if b.along_loaded_lines else " en línea recta"
     return (
         f"Estimado: este tren recorre la línea sin parar en ella; entra por {a.exit_node.label}"
-        f" y sale por {b.exit_node.label}.{f' {where}.' if where else ''} El reparto entre"
+        f" y sale por {b.exit_node.label}.{f' {where}.' if where else ''}"
+        f"{f' {outside}.' if outside else ''} El reparto entre"
         f" {a.call.stop_name} ({t0}) y"
-        f" {b.call.stop_name} ({t1}) usa {a.extra_km:.0f} km antes de {a.exit_node.label},"
-        f" {on_line_km:.0f} km por la línea y {b.extra_km:.0f} km después de"
-        f" {b.exit_node.label}; margen de ±{int(margin // 60)} min."
+        f" {b.call.stop_name} ({t1}) usa {a.extra_km:.0f} km{before} antes de"
+        f" {a.exit_node.label}, {on_line_km:.0f} km por la línea y {b.extra_km:.0f} km{after}"
+        f" después de {b.exit_node.label}; margen de ±{int(margin // 60)} min."
     )

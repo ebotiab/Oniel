@@ -224,30 +224,12 @@
       "id": "proyecto-variante-de-loja",
       "kind": "proyecto",
       "status": "en_obras",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            -4.2074,
-            37.154
-          ],
-          [
-            -4.15,
-            37.148
-          ],
-          [
-            -4.075,
-            37.158
-          ],
-          [
-            -4.061,
-            37.2034
-          ]
-        ]
-      },
+      "line_id": "lav-antequera-granada",
+      "from_node": "bif-riofrio",
+      "to_node": "bif-tocon",
       "title": "Variante de Loja",
       "reason": "Trazado nuevo de unos 19 km en la línea de alta velocidad Antequera – Granada, al sur de Loja (Granada), entre Riofrío y Huétor-Tájar.",
-      "note": "Se construye por tramos. En febrero de 2025, según el Ministerio de Transportes, el de Riofrío estaba en obras, el de la A-92 tenía las obras adjudicadas, el del Valle del Genil estaba pendiente de licitar y el viaducto sobre la línea convencional estaba terminado. La línea Antequera – Granada no está cargada en Oniel.",
+      "note": "Se construye por tramos. En febrero de 2025, según el Ministerio de Transportes, el de Riofrío estaba en obras, el de la A-92 tenía las obras adjudicadas, el del Valle del Genil estaba pendiente de licitar y el viaducto sobre la línea convencional estaba terminado. Hoy los trenes pasan por Loja por la vía de la línea antigua, entre las bifurcaciones de Riofrío y de Tocón: son los tramos que la variante evitará. El mapa no dibuja su trazado.",
       "milestones": [
         {
           "date": "2010-04-20",
@@ -292,8 +274,7 @@
         "boe-b-2010-13908",
         "boe-b-2023-30155",
         "boe-b-2024-27845",
-        "boe-b-2025-14442",
-        "osm-nominatim-lugares"
+        "boe-b-2025-14442"
       ],
       "checked_on": "2026-11-12"
     },
@@ -301,50 +282,12 @@
       "id": "proyecto-duplicacion-antequera-granada",
       "kind": "proyecto",
       "status": "licitado",
-      "geometry": {
-        "type": "MultiLineString",
-        "coordinates": [
-          [
-            [
-              -4.424,
-              37.1345
-            ],
-            [
-              -4.2074,
-              37.154
-            ]
-          ],
-          [
-            [
-              -4.061,
-              37.2034
-            ],
-            [
-              -3.9666,
-              37.2373
-            ],
-            [
-              -3.8628,
-              37.2541
-            ],
-            [
-              -3.7589,
-              37.2326
-            ],
-            [
-              -3.6866,
-              37.2227
-            ],
-            [
-              -3.6285,
-              37.1909
-            ]
-          ]
-        ]
-      },
+      "line_id": "lav-antequera-granada",
+      "from_node": "bif-archidona",
+      "to_node": "bif-la-chana",
       "title": "Duplicación de vía de la alta velocidad Antequera – Granada",
       "reason": "Duplicación de la vía de la línea de alta velocidad Antequera – Granada entre la bifurcación de Archidona y la bifurcación de La Chana, a la entrada de Granada.",
-      "note": "Oniel solo ha comprobado en una fuente oficial la licitación de las obras de electrificación. La Variante de Loja, en el centro del tramo, es un proyecto aparte. La línea Antequera – Granada no está cargada en Oniel.",
+      "note": "Oniel solo ha comprobado en una fuente oficial la licitación de las obras de electrificación. La Variante de Loja, que evitará el paso por Loja en el centro del tramo, es un proyecto aparte.",
       "milestones": [
         {
           "date": "2025-11-18",
@@ -353,8 +296,7 @@
         }
       ],
       "source_ids": [
-        "boe-b-2025-42383",
-        "osm-nominatim-lugares"
+        "boe-b-2025-42383"
       ],
       "checked_on": "2026-11-12"
     },
