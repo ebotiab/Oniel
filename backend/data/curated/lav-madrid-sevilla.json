@@ -22,7 +22,9 @@
   },
   "operators": [
     {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
-    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"},
+    {"id": "ouigo", "name": "Ouigo España", "role": "operador", "source_id": "ouigo-gtfs-nap"},
+    {"id": "iryo", "name": "Iryo", "role": "operador", "source_id": "iryo-web", "timetable": "no_publicado"}
   ],
   "nodes": [
     {"id": "madrid-puerta-de-atocha", "name": "Madrid-Puerta de Atocha", "kind": "estacion", "adif_code": "60000", "position": {"lon": -3.690886, "lat": 40.406442}, "reference_pk_km": 0.0,
@@ -81,6 +83,8 @@
     "51003": {"node": "sevilla-santa-justa"},
     "17000": {"exits": ["madrid-puerta-de-atocha"]},
     "18000": {"exits": ["madrid-puerta-de-atocha"]},
+    "04040": {"exits": ["madrid-puerta-de-atocha"]},
+    "71801": {"exits": ["madrid-puerta-de-atocha"]},
     "54413": {"exits": ["bif-malaga"]},
     "02003": {"exits": ["bif-malaga"]},
     "02030": {"exits": ["bif-malaga"]},

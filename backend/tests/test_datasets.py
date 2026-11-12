@@ -248,6 +248,82 @@ async def test_counts_and_coverage_come_from_the_active_dataset(
 
 @requires_db
 @in_db
+async def test_counts_are_split_by_operator_and_the_reference_day_is_common_to_all(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    """Un segundo operador, con su propia fuente y una validez distinta, suma sus pasos aparte."""
+    from oniel.repo import datasets_repo, services_repo
+
+    segment_id = two_datasets["segment_id"]
+    renfe = await services_repo.daily_counts(conn, REFERENCE)
+    assert await services_repo.daily_counts_by_operator(conn, REFERENCE) == {
+        segment: {FEED_OPERATOR_ID: n} for segment, n in renfe.items()
+    }
+    other, dataset_id = "otro-operador", "otra-fuente-2026-07-02"
+    transaction = conn.transaction()
+    await transaction.start()
+    try:
+        await conn.execute(
+            "INSERT INTO operators (id, name, role) VALUES ($1, 'Otro operador', 'operador')", other
+        )
+        # su fichero empieza a valer en junio y termina en diciembre, antes que el de Renfe
+        await conn.execute(
+            """
+            INSERT INTO datasets (id, source_id, operator_id, file, sha256, retrieved_on, valid_from, valid_to)
+            VALUES ($1, 'adif-mapa-red', $2, 'raw/otro/horarios_2026-07-02.zip', 'sha-de-prueba',
+                    '2026-07-02', '2026-06-26', '2026-12-12')
+            """,
+            dataset_id,
+            other,
+        )
+        await conn.execute(
+            """
+            INSERT INTO services (dataset_id, id, operator_id, train_number, product, valid_from, valid_to, resolution)
+            VALUES ($1, 'viaje-1', $2, '06510', 'Otro', '2026-06-26', '2026-12-12', 'completa')
+            """,
+            dataset_id,
+            other,
+        )
+        days = [dt.date(2026, 6, 26), dt.date(2026, 6, 29), REFERENCE, dt.date(2026, 12, 12)]
+        await conn.executemany(
+            "INSERT INTO service_dates (dataset_id, service_id, service_date) VALUES ($1, 'viaje-1', $2)",
+            [(dataset_id, day) for day in days],
+        )
+        await conn.execute(
+            """
+            INSERT INTO service_segment_passes (dataset_id, service_id, segment_id, kind, enter_s, exit_s,
+                                                enter_margin_s, exit_margin_s, km_increasing, basis)
+            VALUES ($1, 'viaje-1', $2, 'estimado', 36000, 36600, 60, 60, true, 'de prueba')
+            """,
+            dataset_id,
+            segment_id,
+        )
+        # el día de referencia sale de los días que cubren los dos ficheros a la vez
+        assert await datasets_repo.feed_bounds(conn) == (
+            dt.date(2026, 11, 7),
+            dt.date(2026, 12, 12),
+            REFERENCE,
+        )
+        split = await services_repo.daily_counts_by_operator(conn, REFERENCE)
+        assert split[segment_id] == {FEED_OPERATOR_ID: renfe[segment_id], other: 1}
+        totals = await services_repo.daily_counts(conn, REFERENCE)
+        assert totals[segment_id] == renfe[segment_id] + 1
+        assert {s: sum(by.values()) for s, by in split.items()} == totals
+        on_segment = await services_repo.passes_on_segment(conn, segment_id, REFERENCE)
+        assert [d.service.train_number for d in on_segment if d.service.operator_id == other] == [
+            "06510"
+        ]
+        # un día que solo cubre el segundo fichero cuenta solo a su operador
+        assert await services_repo.daily_counts_by_operator(conn, dt.date(2026, 6, 29)) == {
+            segment_id: {other: 1}
+        }
+    finally:
+        await transaction.rollback()
+    assert (await datasets_repo.feed_bounds(conn))[2] == REFERENCE
+
+
+@requires_db
+@in_db
 async def test_the_active_dataset_is_the_newest_one_valid_that_day(
     conn: asyncpg.Connection, two_datasets: dict[str, Any]
 ) -> None:

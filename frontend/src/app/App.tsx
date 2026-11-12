@@ -293,6 +293,7 @@ export default function App() {
         segment={segment}
         network={network}
         sources={coverage?.sources ?? []}
+        operators={coverage?.operators ?? []}
         referenceDate={referenceDate}
         interruptions={interrupted.get(segment.id) ?? []}
         onSimulate={() => setRoute({ selection, simulacion: true })}
@@ -307,6 +308,7 @@ export default function App() {
         node={node}
         network={network}
         sources={coverage?.sources ?? []}
+        operators={coverage?.operators ?? []}
         referenceDate={referenceDate}
         interrupted={interrupted}
         onSelectSegment={(id) => select({ type: 'tramo', id })}

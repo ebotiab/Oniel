@@ -75,8 +75,13 @@ async def get_segment_counts(
         dt.date | None, Query(description="Día de servicio; por defecto el de referencia")
     ] = None,
 ) -> dict[str, object]:
+    """Pasos por tramo un día: el total (``counts``) y su reparto por operador (``by_operator``)."""
     day = date
     if day is None:
         _, _, day = await network_repo.feed_bounds(conn)
     day = day or dt.date.today()
-    return {"date": day.isoformat(), "counts": await services_repo.daily_counts(conn, day)}
+    return {
+        "date": day.isoformat(),
+        "counts": await services_repo.daily_counts(conn, day),
+        "by_operator": await services_repo.daily_counts_by_operator(conn, day),
+    }

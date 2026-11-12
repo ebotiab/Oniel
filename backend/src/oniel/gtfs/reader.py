@@ -1,4 +1,4 @@
-"""Lectura de un fichero GTFS (zip) de Renfe.
+"""Lectura de un fichero GTFS (zip): el de Renfe y el de Ouigo.
 
 El fichero de Renfe rellena los campos con espacios hasta una anchura fija y usa un trip_id por
 ventana de validez; aquí se normaliza todo y se expande el calendario a fechas concretas.
@@ -9,6 +9,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import io
+import re
 import zipfile
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -99,12 +100,43 @@ def expand_calendar(
     return dict(dates)
 
 
-def read_feed(path: Path) -> GtfsFeed:
+def train_number(short_name: str, product: str) -> str:
+    """Número de tren sin el producto delante: el fichero de Ouigo escribe «TGV 6477»."""
+    prefix = f"{product} "
+    return short_name[len(prefix) :] if product and short_name.startswith(prefix) else short_name
+
+
+#: Palabras que van en minúscula dentro del nombre de una estación.
+_LOWERCASE_WORDS = {"de", "del", "la", "las", "el", "los", "y"}
+
+
+def stop_name(name: str) -> str:
+    """Nombre de parada legible: uno escrito todo en mayúsculas pasa a mayúscula inicial.
+
+    «MADRID-PUERTA DE ATOCHA» → «Madrid-Puerta de Atocha». Los demás se dejan como están.
+    """
+    if not name.isupper():
+        return name
+    words = re.split(r"([ /-])", name.lower())
+    return "".join(
+        w if i and w in _LOWERCASE_WORDS else w[:1].upper() + w[1:] for i, w in enumerate(words)
+    )
+
+
+def read_feed(path: Path, *, stop_id_prefix: str | None = None) -> GtfsFeed:
+    """Lee un GTFS. Con ``stop_id_prefix`` se quita ese prefijo de los ``stop_id`` que lo llevan."""
+
+    def stop_id(value: str) -> str:
+        return value.removeprefix(stop_id_prefix) if stop_id_prefix else value
+
     with zipfile.ZipFile(path) as zf:
         agency = _rows(zf, "agency.txt")
         stops = {
-            r["stop_id"]: GtfsStop(
-                r["stop_id"], r["stop_name"], float(r["stop_lon"]), float(r["stop_lat"])
+            stop_id(r["stop_id"]): GtfsStop(
+                stop_id(r["stop_id"]),
+                stop_name(r["stop_name"]),
+                float(r["stop_lon"]),
+                float(r["stop_lat"]),
             )
             for r in _rows(zf, "stops.txt")
         }
@@ -112,12 +144,13 @@ def read_feed(path: Path) -> GtfsFeed:
         trips: dict[str, GtfsTrip] = {}
         for r in _rows(zf, "trips.txt"):
             route = routes.get(r["route_id"], {})
+            product = route.get("route_short_name") or route.get("route_long_name") or ""
             trips[r["trip_id"]] = GtfsTrip(
                 trip_id=r["trip_id"],
                 route_id=r["route_id"],
                 service_id=r["service_id"],
-                train_number=r.get("trip_short_name") or r["trip_id"],
-                product=route.get("route_short_name") or route.get("route_long_name") or "",
+                train_number=train_number(r.get("trip_short_name") or r["trip_id"], product),
+                product=product,
             )
         for r in _rows(zf, "stop_times.txt"):
             trip = trips.get(r["trip_id"])
@@ -126,7 +159,7 @@ def read_feed(path: Path) -> GtfsFeed:
             trip.stop_times.append(
                 GtfsStopTime(
                     seq=int(r["stop_sequence"]),
-                    stop_id=r["stop_id"],
+                    stop_id=stop_id(r["stop_id"]),
                     arrival_s=parse_gtfs_time(r["arrival_time"]),
                     departure_s=parse_gtfs_time(r["departure_time"]),
                     pickup_type=int(r["pickup_type"]) if r.get("pickup_type") else None,

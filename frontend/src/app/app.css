@@ -466,6 +466,13 @@
   font-size: 13px;
 }
 
+/* Cabecera de los trenes de un operador, cuando por el tramo pasan los de varios */
+.operador {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 16px 0 0;
+}
+
 .lista-servicios .hora {
   color: var(--tinta);
   white-space: nowrap;

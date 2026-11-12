@@ -120,6 +120,8 @@ async def run_import_all(
             operator_id=feed.operator_id,
             retrieved_on=feed.retrieved_on,
             data_dir=data_dir,
+            product=feed.product,
+            stop_id_prefix=feed.stop_id_prefix,
         )
         for feed in feeds
     ]

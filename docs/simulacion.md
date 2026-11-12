@@ -171,7 +171,8 @@ Resultado completo de la API para ese caso (8 de noviembre de 2026): 96 trenes r
 
 ## Limitaciones conocidas
 
-- Los horarios son los planificados por Renfe. Las interrupciones registradas en `interrupciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
-- Solo hay servicios de Renfe; faltan Iryo, Ouigo, Cercanías y mercancías.
+- Los horarios son los planificados por Renfe y por Ouigo. Las interrupciones registradas en `interrupciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
+- Hay servicios de Renfe y de Ouigo. Faltan los de Iryo, que no publica sus horarios en un formato abierto, además de Cercanías y mercancías: un cierre en la alta velocidad afecta a más trenes de los que la simulación enumera. Los trenes de Ouigo no paran entre Madrid y Córdoba, de modo que su paso por cada tramo es siempre estimado.
+- El fichero de Ouigo vale hasta el 12 de diciembre de 2026: para un día posterior, la simulación solo cuenta los trenes de Renfe.
 - El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; las alternativas solo se señalan.
 - La estimación proporcional ignora paradas técnicas y limitaciones temporales de velocidad.

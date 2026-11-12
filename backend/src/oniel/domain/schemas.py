@@ -27,6 +27,10 @@ class Operator(BaseModel):
     id: str
     name: str
     role: Literal["operador", "administrador_infraestructura"]
+    #: Fuente registrada de la que salen sus datos (sus horarios, si es un operador).
+    source_id: str | None = None
+    #: De un operador de trenes: si sus horarios están cargados o no los publica en abierto.
+    timetable: Literal["cargado", "no_publicado"] | None = None
 
 
 class LineSummary(BaseModel):
@@ -36,6 +40,8 @@ class LineSummary(BaseModel):
     sort_order: int = 1
     mode: str
     infrastructure_manager: Operator | None = None
+    #: Operadores de trenes que circulan por la línea, tengan o no sus horarios cargados.
+    operator_ids: list[str] = Field(default_factory=list)
     gauge_mm: int | None = None
     electrification: str | None = None
     max_speed_kmh: int | None = None
@@ -207,6 +213,8 @@ class LineDetailOut(BaseModel):
     date: dt.date | None = None
     #: Pasos por tramo ese día, por id de tramo; los tramos sin pasos no aparecen.
     counts: dict[str, int] = Field(default_factory=dict)
+    #: Los mismos pasos separados por operador: por id de tramo, cuántos son de cada uno.
+    counts_by_operator: dict[str, dict[str, int]] = Field(default_factory=dict)
     #: El mayor recuento de toda la red ese día: las barras de todas las líneas van a su escala.
     network_max_count: int = 0
 

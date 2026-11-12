@@ -63,15 +63,23 @@ async def import_network(
             for op in spec.operators:
                 await conn.execute(
                     """
-                    INSERT INTO operators (id, name, role, source_id) VALUES ($1,$2,$3,$4)
-                    ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, role=EXCLUDED.role, source_id=EXCLUDED.source_id
+                    INSERT INTO operators (id, name, role, source_id, timetable) VALUES ($1,$2,$3,$4,$5)
+                    ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, role=EXCLUDED.role,
+                      source_id=EXCLUDED.source_id, timetable=EXCLUDED.timetable
                     """,
                     op.id,
                     op.name,
                     op.role,
                     op.source_id,
+                    op.timetable if op.role == "operador" else None,
                 )
             await _upsert_line(conn, net)
+            # Los operadores de trenes de la especificación son los que circulan por la línea.
+            await conn.execute("DELETE FROM line_operators WHERE line_id = $1", spec.line.id)
+            await conn.executemany(
+                "INSERT INTO line_operators (line_id, operator_id) VALUES ($1, $2)",
+                [(spec.line.id, op.id) for op in spec.operators if op.role == "operador"],
+            )
             await _replace_nodes_and_segments(conn, net)
             await _replace_connections(conn, net)
             await _upsert_stop_mappings(conn, net)

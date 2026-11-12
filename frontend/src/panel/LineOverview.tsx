@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { CoverageOut, InterruptionOut, NetworkOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/interruptions'
 import type { Selection } from '../app/state'
-import { formatDate, formatDayShort, formatKm, gaugeLabel } from '../app/state'
+import { formatDate, formatDayShort, formatKm, gaugeLabel, listaEs } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
 import { StripDiagram } from './StripDiagram'
 
@@ -46,6 +46,10 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
   const parrafos = compact ? [entrada, ...resto].filter((p): p is string => Boolean(p)) : resto
   const cuts = interruptions.filter((i) => i.line_id === line.id && i.segment_ids.length > 0)
   const dia = coverage?.reference_date ?? null
+  // De quién son los trenes que cuentan las barras, y de quién faltan porque no publica sus horarios.
+  const operadores = (coverage?.operators ?? []).filter((o) => line.operator_ids?.includes(o.id))
+  const conHorarios = operadores.filter((o) => o.timetable !== 'no_publicado').map((o) => o.name)
+  const sinHorarios = operadores.filter((o) => o.timetable === 'no_publicado').map((o) => o.name)
   const conBarras = Boolean(counts && dia && (countsMax ?? Object.keys(counts).length))
   return (
     <section className="resumen-linea" aria-labelledby="linea-titulo">
@@ -130,7 +134,7 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
       />
       {!compact && (
         <p className="nota-esquema" data-testid="nota-esquema">
-          {conBarras && dia ? `Las barras cuentan los trenes de cada tramo el ${formatDate(dia)}, según los horarios de Renfe. ` : ''}
+          {conBarras && dia ? `Las barras cuentan los trenes de cada tramo el ${formatDate(dia)}, según los horarios de ${conHorarios.length ? listaEs(conHorarios) : 'los operadores cargados'}${sinHorarios.length ? `; no incluyen los de ${listaEs(sinHorarios)}` : ''}. ` : ''}
           Toca una estación o un tramo para ver sus trenes.
         </p>
       )}

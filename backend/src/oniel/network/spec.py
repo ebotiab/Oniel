@@ -100,6 +100,9 @@ class OperatorSpec(BaseModel):
     name: str
     role: Literal["operador", "administrador_infraestructura"]
     source_id: str | None = None
+    #: Solo para operadores de trenes que circulan por la línea: ``no_publicado`` si no publican
+    #: sus horarios en un formato abierto y, por tanto, sus trenes no se cargan ni se cuentan.
+    timetable: Literal["cargado", "no_publicado"] = "cargado"
 
 
 class GeometryPart(BaseModel):
@@ -288,6 +291,13 @@ class FeedSpec(BaseModel):
     source_id: str
     operator_id: str
     retrieved_on: dt.date
+    #: Nombre con el que se rotulan todos los trenes del fichero, cuando el que trae no le dice
+    #: nada al visitante (el de Ouigo los llama «TGV», la categoría de la UIC).
+    product: str | None = None
+    #: Prefijo que el fichero antepone a los códigos de estación de Adif en sus ``stop_id`` (el de
+    #: Ouigo usa el código UIC: «0071» y el código de Adif). Se quita al leerlo, de modo que sus
+    #: paradas son las mismas que las de los demás ficheros y valen las mismas asignaciones.
+    stop_id_prefix: str | None = None
 
 
 class InterruptionSpec(BaseModel):

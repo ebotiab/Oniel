@@ -5,6 +5,8 @@
 | Id | Qué aporta | Editor | Licencia | Fecha de consulta |
 |---|---|---|---|---|
 | `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-08 |
+| `ouigo-gtfs-nap` | Horarios de alta velocidad de Ouigo España (GTFS) | OUIGO España, en el Punto de Acceso Nacional del Ministerio de Transportes y Movilidad Sostenible | Licencia de datos abiertos del Ministerio (nap.transportes.gob.es/licencia-datos) | 2026-11-12 |
+| `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-11 |
 | `osm-relation-1254828` | Geometría de la LAV Madrid–Sevilla (vías con `ref=010`, operador Adif) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
 | `osm-relation-18368327` | Geometría de la línea 300 Madrid–Valencia; Oniel usa Madrid-Atocha–Alcázar de San Juan | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
 | `osm-relation-11351144` | Geometría de la línea 400 Alcázar de San Juan–Cádiz; Oniel usa Alcázar–Córdoba | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
@@ -22,22 +24,49 @@
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
 
-El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto.
+El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto. Lo mismo vale para la consulta sobre los horarios de Iryo (`raw/operadores/consultas_2026-11-11.json`).
+
+### Operadores y sus horarios
+
+Los operadores de trenes de cada línea se declaran en `operators` de su especificación, cada uno con su fuente. Al importar se guardan en `operators` y `line_operators`, y la API los devuelve en `operators` de la cobertura y en `operator_ids` de cada línea.
+
+| Operador | Líneas | Horarios | Fuente |
+|---|---|---|---|
+| Renfe Viajeros (`renfe`) | las tres | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
+| Ouigo España (`ouigo`) | LAV Madrid – Sevilla | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
+| Iryo (`iryo`) | LAV Madrid – Sevilla | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
+
+- **Ouigo** publica su GTFS en el Punto de Acceso Nacional de Transporte Multimodal (nap.transportes.gob.es, conjunto 1515). La descarga exige una cuenta de usuario, gratuita. La licencia permite reutilizar los datos con fines comerciales o no, citando la fuente con la indicación «Powered by MITRAMS» y un enlace a https://www.transportes.gob.es/, sin alterar los metadatos de actualización y manteniendo al día lo que se muestra; el panel de cobertura la cita con su enlace. El fichero es del 2 de julio de 2026 y vale del 26 de junio al 12 de diciembre de 2026: habrá que descargar el siguiente antes de esa fecha (#29).
+- **Iryo** no publica sus horarios en GTFS ni en otro formato reutilizable. El 11 de noviembre de 2026 no figuraba entre los 27 conjuntos ferroviarios del Punto de Acceso Nacional (el buscador no devuelve nada para «iryo» ni para «ILSA»), su web solo ofrece el buscador de billetes y Transitland no lo tiene. Existe un fichero elaborado por un particular, sin licencia declarada, que no se usa. Oniel no reconstruye sus horarios por otros medios: Iryo queda registrado como operador de la LAV sin horarios, sus trenes no están en los recuentos y el visor lo dice en cada tramo de la línea, en la nota del esquema y en la cobertura. Si Iryo publica un GTFS, basta declararlo en `feeds` y quitar `timetable` de su entrada en la especificación.
+- **Particularidades del fichero de Ouigo.** Es una conversión de los horarios que el operador comunica a la base europea MERITS de la UIC, y la entrada de `feeds` declara cómo leerlo. Sus `stop_id` son el código UIC, «0071» seguido del código de estación de Adif: `stop_id_prefix` quita el prefijo al leer, así que sus paradas son las mismas que las del fichero de Renfe y valen las asignaciones de `stop_mappings` sin duplicarlas (solo hubo que añadir Zaragoza-Delicias y Barcelona-Sants como salidas por Madrid). Rotula todos los trenes como «TGV» y escribe «TGV 6477» como número: `product` los rotula «Ouigo» y el lector deja el número solo. Los nombres de parada vienen en mayúsculas y sin tildes; el lector los pasa a mayúscula inicial («Madrid-Puerta de Atocha») y el visor abrevia los que conoce.
+- `oniel-data validate` comprueba que cada operador con horarios cargados tiene un fichero declarado, que cada fichero es de un operador declarado en alguna línea, que un operador sin horarios publicados no tiene ninguno y que los ficheros vigentes coinciden en algún día (`common_validity`).
 
 ## Líneas cargadas
 
 | Línea | Id | Longitud medida | Nodos | Tramos | Viajes del GTFS |
 |---|---|---|---|---|---|
-| Alta velocidad Madrid – Sevilla (Adif 010) | `lav-madrid-sevilla` | 470,5 km | 12 | 11 | 335 (AVE, AVLO, Alvia, Intercity) |
+| Alta velocidad Madrid – Sevilla (Adif 010) | `lav-madrid-sevilla` | 470,5 km | 12 | 11 | 335 de Renfe (AVE, AVLO, Alvia, Intercity) y 25 de Ouigo |
 | Convencional Madrid – Alcázar de San Juan – Córdoba (Adif 300 y 400) | `convencional-madrid-alcazar-cordoba` | 440,7 km | 26 (2 compartidos) | 25 (11 de vía única) | 503 (MD, Regional Exprés, Proximidad, Alvia, Intercity) |
 | Convencional Manzanares – Ciudad Real (Adif 522) | `manzanares-ciudad-real` | 64,4 km | 4 (2 compartidos) | 3 (los 3 de vía única) | 154 (MD, Regional Exprés, Intercity, Alvia) |
 
-En «compartidos» se cuentan los nodos que define otra línea. Son 975,6 km de red, 30 estaciones y 814 viajes distintos, porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
+En «compartidos» se cuentan los nodos que define otra línea. Son 975,6 km de red, 30 estaciones y 839 viajes distintos (814 de Renfe y 25 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
 
 - Madrid-Puerta de Atocha y Córdoba son comunes a la alta velocidad y a la convencional: la red forma un lazo Madrid–Córdoba con dos recorridos, el de alta velocidad (343,6 km) y el convencional (440,7 km).
 - Manzanares (de la convencional) y Ciudad Real (de la alta velocidad) son los extremos de la tercera línea, que cierra un segundo lazo: de Madrid a Ciudad Real hay 170,8 km por la alta velocidad y 260,5 km por la convencional hasta Manzanares (196,1 km) y la línea de Manzanares a Ciudad Real (64,4 km).
 - Los 130 MD y Regional Exprés de la línea de Manzanares a Ciudad Real vienen de Alcázar de San Juan o siguen hacia allí, así que ya estaban en la convencional, donde cuentan solo hasta Manzanares.
 - 24 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía recorren las tres líneas (la convencional hasta Manzanares, la tercera entera y la alta velocidad desde Ciudad Real) y cuentan en las tres.
+- Los 25 viajes de Ouigo son 8 Madrid–Sevilla, 13 Madrid–Málaga y 4 que enlazan Barcelona con Sevilla o Málaga parando en Madrid-Puerta de Atocha; los de Málaga dejan la línea en la bifurcación de Málaga. Ninguno recorre las líneas convencionales.
+
+El día de referencia, el viernes 13 de noviembre de 2026, cada tramo de la LAV lleva los trenes de los dos operadores:
+
+| Tramos de la LAV | Renfe | Ouigo | Total |
+|---|---|---|---|
+| Madrid-Puerta de Atocha – Urda – Ciudad Real (4 tramos) | 72 | 12 | 84 |
+| Ciudad Real – Córdoba – bifurcación de Málaga (5 tramos) | 96 | 12 | 108 |
+| Bifurcación de Málaga – Majarabique | 49 | 6 | 55 |
+| Majarabique – Sevilla-Santa Justa | 47 | 6 | 53 |
+
+En las dos líneas convencionales todos los trenes son de Renfe. Los de Ouigo solo paran en Madrid, Córdoba y Sevilla o Málaga, así que su paso por cada tramo es siempre estimado. `GET /api/segment-counts` da el total por tramo (`counts`) y su reparto por operador (`by_operator`); el detalle de cada línea, `counts_by_operator`.
 
 ## Cómo se verificó la LAV Madrid–Sevilla con Adif
 
@@ -81,7 +110,7 @@ Con la línea cargada desaparece la conexión a trazos que salía de Manzanares,
 ## Límites y avisos
 
 - **Corte por obras.** Desde el 6 de septiembre de 2026 no circulan trenes de viajeros entre Almuradiel-Viso del Marqués y Alcolea de Córdoba, por la adaptación del gálibo de 13 túneles (entre Venta de Cárdenas y Los Cansinos) y otras estructuras para la autopista ferroviaria Algeciras–Madrid–Zaragoza. Está registrado en `interrupciones.json` con sus fechas y sus fuentes (véase «Interrupciones del servicio»). Los horarios GTFS cargados son los planificados y no lo reflejan: muestran trenes Madrid–Jaén por Despeñaperros y algunos trayectos parciales (Linares-Baeza–Vilches, Linares-Baeza–Mengíbar) que probablemente corresponden a transbordos. El visor marca esos tramos en rojo y añade una nota a sus listas de trenes; el panel de Venta de Cárdenas y el de cualquier otro nodo del corte muestran la interrupción a partir del mismo dato.
-- **Servicios incluidos.** El GTFS de Renfe trae AVE, AVLO, Avant, Alvia, Intercity, Euromed, MD, Regional Exprés, Regional y Proximidad, pero no Cercanías: los trenes de la línea C-3 Madrid–Aranjuez no aparecen, y tampoco los de otros operadores ni mercancías.
+- **Servicios incluidos.** El GTFS de Renfe trae AVE, AVLO, Avant, Alvia, Intercity, Euromed, MD, Regional Exprés, Regional y Proximidad, pero no Cercanías: los trenes de la línea C-3 Madrid–Aranjuez no aparecen. El de Ouigo trae todos sus trenes de alta velocidad. Faltan los de Iryo, que no publica sus horarios (véase «Operadores y sus horarios»), y las mercancías. En la LAV se cuentan los trenes que paran en Córdoba y en alguna estación de Madrid: quedan fuera los que la recorren sin parar en Madrid (los AVE de Renfe entre Barcelona y Andalucía por el baipás) y un Ouigo Madrid–Málaga sin parada en Córdoba que solo circuló del 26 de junio al 14 de julio de 2026.
 - **Selección de viajes.** Un viaje se asigna a la línea convencional si para en al menos dos de sus nodos y en alguna de las estaciones que no comparte con la alta velocidad (`min_node_stops` y `any_of_stop_ids` del filtro de corredor). Así entran los MD Madrid–Jaén, Madrid–Alcázar–Albacete, Alcázar–Ciudad Real–Badajoz, Córdoba–Jaén y Cádiz–Jaén, el Alvia Barcelona–Córdoba por Alcázar y los trenes de Proximidad de Córdoba. A la línea de Manzanares a Ciudad Real se asigna el que para en al menos dos de sus cuatro estaciones, porque entre ellas no hay otro recorrido: son 130 viajes, MD y Regional Exprés de Alcázar de San Juan, Madrid, Albacete, Alicante o Valencia a Ciudad Real y Badajoz, y todos paran en las cuatro. Los Intercity y Alvia Madrid-Atocha Cercanías–Córdoba–Sevilla/Málaga/Algeciras del fichero (24 viajes, válidos del 8 al 15 de noviembre de 2026) no pasan ninguno de los dos filtros, porque solo paran en Madrid, Ciudad Real y Córdoba, y entran por una regla de recorrido (véase el apartado siguiente).
 - **Trenes que cambian de línea.** Esos 24 viajes son los horarios publicados por Renfe tras la interrupción de la alta velocidad en Urda: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por la red convencional (Aranjuez, Alcázar de San Juan, Manzanares y la línea de Manzanares a Ciudad Real), y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Cada especificación los declara en `route_overrides`: una regla encaja con los viajes que llevan ciertas paradas seguidas (`consecutive_stop_ids`, en ese orden o en el inverso) y dice entre qué paradas el viaje va por esa línea (`from_stop_id`, `to_stop_id`) y qué asignaciones de parada cambian solo para ellos. La convencional los resuelve entre Madrid y Ciudad Real, saliendo por Manzanares; la de Manzanares a Ciudad Real, entre las mismas paradas, entrando por Manzanares; la LAV, desde Ciudad Real. Los 4 Alvia que no paran en Ciudad Real (Madrid–Córdoba en las mismas 3 h 45) se tratan igual: para ellos Córdoba es salida por Manzanares en la convencional y salida por Ciudad Real en la tercera línea, que cruzan sin parar, y Madrid-Atocha Cercanías es entrada por Ciudad Real en la LAV.
 - **Paradas que están en otra línea cargada.** Una asignación con `via` indica que la parada es un nodo de otra línea y por dónde se llega a ella: la línea y el nodo por el que el tren entra. Si el camino cruza más de una línea, `via` es una lista, un trecho por línea (de Manzanares a Córdoba: la línea de Manzanares a Ciudad Real y, desde Ciudad Real, la alta velocidad). El reparto de tiempos usa entonces los kilómetros por esas líneas en vez de la línea recta, y el visor explica por dónde sigue el tren. Las asignaciones generales también lo usan: Daimiel, Almagro y Ciudad Real son, para la convencional, salidas por Manzanares hacia la tercera línea, y Alcázar de San Juan o Madrid son, para la tercera, salidas por Manzanares hacia la convencional. Así los 24 trenes desviados aparecen en los tramos Madrid–Manzanares de la convencional, en los tres de la línea de Manzanares a Ciudad Real y en Ciudad Real–Córdoba de la alta velocidad, y en ningún otro. `oniel-data validate` avisa si una regla deja de encajar con algún viaje del GTFS o si un `via` no se puede seguir (una línea que no está cargada, un nodo de enlace que no es común a las dos líneas, una parada que no es nodo de la última).
@@ -157,12 +186,15 @@ Los ficheros se declaran en la lista `feeds` de `backend/data/curated/sources.js
 | Conjunto | Fuente | Operador | Descargado | Cubre |
 |---|---|---|---|---|
 | `renfe-gtfs-av-ld-md-2026-11-08` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-08 | del 7 de noviembre de 2026 al 29 de septiembre de 2027 |
+| `ouigo-gtfs-nap-2026-11-12` | `ouigo-gtfs-nap` | Ouigo | 2026-11-12 | del 26 de junio al 12 de diciembre de 2026 |
+
+Una entrada de `feeds` admite además `product` (el nombre con el que se rotulan todos los trenes del fichero) y `stop_id_prefix` (un prefijo que se quita de sus códigos de parada); las usa el fichero de Ouigo.
 
 Cómo se decide qué se muestra:
 
-- El conjunto **vigente** de una fuente es el descargado más recientemente. De los vigentes salen el día de referencia (el laborable con más servicios de sus primeros treinta días) y las cifras de la cobertura.
+- El conjunto **vigente** de una fuente es el descargado más recientemente. De los vigentes salen el día de referencia y las cifras de la cobertura. Con varios vigentes, uno por operador, se toman los días que cubren todos a la vez, del comienzo más tardío al final más temprano (hoy, del 7 de noviembre al 12 de diciembre de 2026); el día de referencia es el laborable con más servicios de los primeros treinta de esos días, y así tiene los trenes de todos los operadores. `validate` avisa si los ficheros vigentes no coinciden en ningún día.
 - El conjunto **activo** de una fuente en un día es el más reciente cuya validez incluye ese día. Los trenes de un tramo, las paradas de una estación, los recuentos y la simulación de un día leen solo los conjuntos activos ese día. `GET /api/coverage` los enumera en `datasets`.
-- Se decide por fuente, no por operador: un operador puede publicar ficheros que no se sustituyen entre sí (alta velocidad y cercanías, por ejemplo). Hoy cada operador tiene una sola fuente y da lo mismo.
+- Se decide por fuente, no por operador: un operador puede publicar ficheros que no se sustituyen entre sí (alta velocidad y cercanías, por ejemplo). Hoy cada operador con horarios tiene una sola fuente y da lo mismo.
 
 Cómo se importa:
 
@@ -170,7 +202,7 @@ Cómo se importa:
 - `import all` importa todos los ficheros de `feeds` y trata la lista como la referencia: reimportar la red borra los pasos por tramo de todos los conjuntos, así que retira de la base el conjunto que ya no esté declarado. El histórico se conserva mientras el fichero siga en `backend/data/raw/` y en `feeds`.
 - Cada fichero añade a `import all` el tiempo de leerlo y resolverlo (en local, unos 6 s por fichero de Renfe, medido el 11 de noviembre de 2026; en el plan gratuito de Render, bastante más). Conviene tenerlo en cuenta al acumular histórico.
 
-Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<operador>/` con el día de descarga en el nombre, añadirlo a `feeds` (y poner al día `retrieved_on`, cobertura y notas de su fuente), ejecutar `validate` e `import all` y subir la instantánea. Los recuentos de las pruebas no cambian: usan siempre el fichero del 8 de noviembre de 2026 por su nombre (`backend/tests/conftest.py`).
+Para añadir un horario más reciente: guardar el zip en `backend/data/raw/<operador>/` con el día de descarga en el nombre, añadirlo a `feeds` (y poner al día `retrieved_on`, cobertura y notas de su fuente), ejecutar `validate` e `import all` y subir la instantánea. Los recuentos de las pruebas no cambian: usan siempre el fichero de Renfe del 8 de noviembre de 2026 y el de Ouigo del 12 de noviembre de 2026 por su nombre (`backend/tests/conftest.py`).
 
 La instantánea estática lleva solo el estado actual. Para la evolución futura guarda además `frontend/public/data/historico/<conjunto>/segment-counts.json`: los pasos por tramo de cada conjunto en su propio día de referencia. Pesa 2,8 KB por conjunto con los 39 tramos de hoy (medido el 11 de noviembre de 2026), y el visor todavía no lo lee.
 
@@ -243,7 +275,8 @@ El JavaScript va en dos ficheros. MapLibre es tres cuartas partes del total (295
 Pensado para añadir líneas, operadores y medios de transporte sin rehacer la aplicación.
 
 - `sources`: procedencia, licencia, fecha, cobertura y checksum.
-- `operators`: operadores y administradores de infraestructura.
+- `operators`: operadores y administradores de infraestructura. De un operador de trenes, `timetable` dice si sus horarios están cargados o no los publica.
+- `line_operators`: qué operadores de trenes circulan por cada línea, tengan o no horarios cargados.
 - `lines`: una línea por fila, con `mode` (`ferrocarril` hoy; mañana `metro`, `autobús`…), administrador, ancho, electrificación, orden de presentación (`sort_order`) y geometría completa.
 - `nodes` + `line_nodes`: los nodos son independientes de la línea; `line_nodes` da su kilómetro y orden en cada línea, así un nodo puede pertenecer a varias líneas (Madrid-Puerta de Atocha y Córdoba lo hacen). `rank` distingue los nodos principales de los secundarios, que el visor atenúa y oculta en el esquema compacto.
 - `segments`: tramos entre nodos consecutivos con geometría, velocidad máxima y habitual, número de vías (`tracks`) y la fuente de su geometría.
