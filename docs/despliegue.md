@@ -36,6 +36,10 @@ Al enlazar, la CLI deja `.vercel/` y un `.env.local` con un token temporal; git 
 
 - `VITE_API_URL`: URL pública de la API en Render. Está fijada a `https://oniel-api-5e63.onrender.com` en los entornos Production y Preview de Vercel (8 de noviembre de 2026). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor. Con ella, el visor arranca igualmente desde la instantánea y pasa a la API en cuanto `/healthz` responde (ver `frontend/src/data/api.ts`).
 
+- `VITE_LOGFIRE_TOKEN`: token público de la aplicación web `oniel-visor` de Logfire, solo en el entorno Production. Con él, el visor publicado envía sus errores a Logfire; sin él no envía nada ni descarga el SDK. Pendiente de crear: los pasos están en «Logfire», «Errores del visor».
+
+El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_ENV` (`production` o `preview`) y `VERCEL_GIT_COMMIT_SHA`; `frontend/vite.config.ts` las pasa al código. Necesitan que el proyecto tenga marcado Settings → Environment Variables → «Automatically expose System Environment Variables», que es el valor por defecto.
+
 `frontend/vercel.json` fija la caché: un año e inmutable para `/assets/` (ficheros con hash en el nombre) y una hora con revalidación para `/data/`.
 
 Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
@@ -84,7 +88,7 @@ La importación es repetible: crea el esquema si falta, sustituye los servicios 
 
 Proyecto `oniel` en la organización personal `ebotiab` (región US): https://logfire-us.pydantic.dev/ebotiab/oniel
 
-- Servicios: `oniel-api` (FastAPI + asyncpg) y `oniel-data` (importador y CLI).
+- Servicios: `oniel-api` (FastAPI + asyncpg), `oniel-data` (importador y CLI) y `oniel-visor` (los errores del navegador; «Errores del visor», más abajo).
 - En local, el SDK lee `backend/.logfire/logfire_credentials.json` (no se versiona). Sin ese fichero ni `LOGFIRE_TOKEN` no se envía nada.
 - En Render, definir `LOGFIRE_TOKEN` con un token de escritura del proyecto (Logfire → proyecto `oniel` → Settings → Write tokens).
 - Comprobación: `uv run oniel-data logfire-test` envía una traza; las trazas de la API aparecen al usar cualquier endpoint.
@@ -94,15 +98,17 @@ Proyecto `oniel` en la organización personal `ebotiab` (región US): https://lo
 
 ### Entornos
 
-Cada registro lleva su entorno en `deployment_environment`, que sale de `ONIEL_ENVIRONMENT`. Hay dos y no se crean más sin motivo:
+Cada registro lleva su entorno en `deployment_environment`, que en el backend sale de `ONIEL_ENVIRONMENT` y en el visor, de `VERCEL_ENV`. Hay dos y no se crean más sin motivo:
 
 | Entorno | Quién lo envía | Cuándo |
 |---|---|---|
 | `production` | La API y el importador en Render (`render.yaml` fija `ONIEL_ENVIRONMENT=production`) | Siempre |
+| `production` | El visor publicado en https://oniel.vercel.app (`VERCEL_ENV=production`) | Solo cuando hay un error, y solo si Vercel tiene `VITE_LOGFIRE_TOKEN` |
 | `local` | Quien desarrolla, desde su máquina | Solo si tiene credenciales de escritura (`backend/.logfire/` o `LOGFIRE_TOKEN`). Las sesiones en worktree no las tienen y no envían nada: desde el 9 de noviembre de 2026 no llega nada de `local` |
 
 - **Las pruebas no envían nunca.** Bajo pytest la configuración fuerza `send_to_logfire=False`, haya o no un token en el entorno (`observability.send_to_logfire`); las pruebas que miran tramos usan `capfire`, que los guarda en memoria. El plugin de pytest de Logfire, que se activa solo cuando hay `CI=true` y `LOGFIRE_TOKEN`, está desactivado con `--no-logfire` en `backend/pyproject.toml`. No hay entorno `ci` ni `test`: el CI no tiene token ni lo necesita.
-- **No hay entorno `preview`.** Las vistas previas de Vercel son solo el visor y hablan con la API de producción: sus peticiones son tráfico de `production`.
+- **No hay entorno `preview`.** Las vistas previas de Vercel son solo el visor y hablan con la API de producción: sus peticiones son tráfico de `production`. Sus errores de navegador no se envían: el visor solo inicializa Logfire cuando `VERCEL_ENV` es `production`, y el token está definido solo en ese entorno de Vercel. Una vista previa la abre quien revisa la PR, con la consola delante; enviarla gastaría cuota y, de ir como producción, abriría incidencias y correos por código sin fusionar.
+- **El visor en local y en las pruebas no envía nunca.** El servidor de desarrollo no es una compilación de producción y no tiene token. Playwright compila aparte un visor con un token de mentira y responde él mismo a lo que envía (`frontend/e2e/telemetria.spec.ts`).
 - Una importación lanzada a mano desde una máquina contra la base de Render sale como `local` salvo que se le ponga `ONIEL_ENVIRONMENT=production`.
 - En la web de Logfire el entorno se elige en el selector que hay bajo el del proyecto; en `oniel-data obs`, con `--entorno`.
 
@@ -146,6 +152,38 @@ No se usa `base='full'`: añade cientos de puntos por minuto (procesador por nú
 Logfire agrupa las excepciones repetidas en incidencias y avisa cuando aparece una nueva o se reabre una resuelta (la función se llama «Error tracking»; antes, «Issues»). Necesita que el fallo llegue como excepción, no como un aviso de nivel error, y así llegan los de Oniel: una excepción no controlada en la API queda en el tramo de la petición con su traza (`is_exception`, nivel 17) y una importación que falla, en el tramo `import all` con `outcome = failed`. Lo comprueban `tests/test_observability.py` y `tests/test_importing.py`. Los `HTTPException` (404, 422) quedan como excepciones de nivel aviso: son respuestas correctas, no errores del servidor.
 
 Está activado en el proyecto `oniel` desde el 12 de noviembre de 2026, con aviso al canal «Correo» y solo para producción: el filtro `deployment_environment = 'production'` (Advanced options) deja fuera las excepciones que alguien envíe desde `local`. Se configura en la web de Logfire: barra lateral → Product & Behavior → Error tracking → Configure (canales y filtros). Las incidencias tardan unos minutos en aparecer. Desactivarlo borra las incidencias acumuladas.
+
+### Errores del visor
+
+Desde #131 el visor publicado envía a Logfire sus errores, y solo sus errores, con `@pydantic/logfire-browser` (0.35.1, en beta: antes de subir de versión hay que releer su documentación, https://pydantic.dev/docs/logfire/instrument/typescript/packages/browser/). El código está en `frontend/src/telemetria/`.
+
+**Qué se envía.** Un registro por cada excepción no controlada (`Uncaught error`) y por cada promesa rechazada que nadie atiende (`Unhandled promise rejection`), de nivel error y con forma de excepción, que es lo que «Errores agrupados» necesita. React pasa por ahí los fallos al pintar un componente. Cada registro lleva:
+
+| Atributo | Qué es |
+|---|---|
+| `exception.message`, `exception.stacktrace` | El mensaje del error y su traza, con los nombres del código compilado (no se publican mapas de código) |
+| `logfire.page.url.path` | La ruta del visor en la que ocurrió (`/tramo/<id>`), sin parámetros ni fragmento. Lo añade Oniel |
+| `service.version` | El commit que compiló Vercel |
+| `deployment.environment.name` | `production` |
+| `browser.language`, `browser.brands`, `browser.mobile`, `browser.platform` | Idioma, navegador con su versión mayor, si es móvil y sistema operativo. En los navegadores que no dan esos datos (Firefox, Safari), el agente de usuario entero en `user_agent.original`. Los anota el SDK |
+| `telemetry.sdk.*` | Nombre y versión del SDK |
+
+**Qué no se envía.** Nada en una visita sin errores: ni carga de página, ni rendimiento, ni peticiones, ni clics. No hay repetición de sesión (el paquete que la hace no está instalado), ni identificador de sesión o de visitante, ni se guarda nada en el navegador (`rum.session: false`). No va el contenido de ningún campo: lo que se escribe en el buscador o en el filtro del glosario no está en la dirección ni en los mensajes de error. Tampoco se instrumentan `fetch` ni los clics (`autoInstrumentations: false`): de hacerlo, cada sondeo de `/healthz` sin respuesta mientras Render despierta la API llegaría como un error, y los fallos de la API ya los envía la propia API. Un recurso que no carga (una tesela, una imagen) no es un error de JavaScript y no llega. Como en cualquier petición, Logfire ve la dirección IP de quien la hace y el origen `https://oniel.vercel.app`; el visor no las anota.
+
+**Cuándo.** Solo si las tres condiciones se cumplen al compilar: compilación de producción, `VERCEL_ENV=production` y `VITE_LOGFIRE_TOKEN` definido (`frontend/src/telemetria/arranque.ts`). Si falta alguna, el SDK no forma parte de lo publicado y el visor no hace ninguna petición a Logfire.
+
+**Token.** El visor envía directamente a `https://logfire-us.pydantic.dev/v1/traces` con el token de una «aplicación web» (frontend application) de Logfire. Ese token es público por diseño, queda a la vista en el JavaScript publicado y solo permite enviar datos de esa aplicación: no lee nada del proyecto ni puede hacerse pasar por otro servicio. El token de escritura de Render no sale nunca al navegador. El nombre del servicio lo pone la aplicación de Logfire, no el código (`configureFrontend` no admite `serviceName` ni `environment`; el entorno va como atributo del recurso).
+
+**Alta, pendiente a 12 de noviembre de 2026.** Es configuración de las cuentas y la hace quien las administra:
+
+1. Logfire → proyecto `oniel` → Frontend → Set up → crear la aplicación `oniel-visor` y copiar su token (no la URL ni el código de ejemplo: ya están en el repositorio).
+2. Vercel → proyecto `oniel` → Settings → Environment Variables → `VITE_LOGFIRE_TOKEN` con ese token, solo en Production.
+3. Volver a desplegar producción (la variable se lee al compilar): una fusión que toque `frontend/`, o Deployments → Redeploy.
+4. Comprobarlo: abrir https://oniel.vercel.app, ejecutar en la consola `setTimeout(() => { throw new Error('prueba de Logfire') })` y, a los pocos segundos, buscar en Logfire el registro `Uncaught error` de `oniel-visor`. Hay que confirmar entonces dos cosas que no se pueden probar sin token: que `deployment_environment` llega como `production`, porque de eso depende el filtro de «Errores agrupados», y que la incidencia aparece allí con su correo.
+
+**Volumen y peso**, medidos el 12 de noviembre de 2026 con el visor compilado y un token de mentira. Una visita sin errores: 0 peticiones a Logfire y 0 registros. Un error: 1 registro; dos errores seguidos salieron en una sola petición de 3,8 kB. El arranque del visor crece 0,9 kB (0,5 kB comprimido). El SDK va en ficheros aparte, 180 kB (55 kB comprimidos), que se piden al arrancar sin esperar a ellos para pintar; los errores que ocurran mientras llegan se guardan (hasta diez) y se envían después. Sin token, lo publicado es idéntico byte a byte a lo de antes.
+
+Un bloqueador de contenido puede cortar las peticiones a Logfire: de esas visitas no llega nada, y el visor funciona igual.
 
 ### Alertas
 
