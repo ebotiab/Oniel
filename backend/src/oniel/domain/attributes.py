@@ -76,12 +76,14 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
         sourced=True,
         values=frozenset({"bca", "bab", "bad", "bau", "blau", "bab_bad", SIN_DATO_PUBLICADO}),
     ),
-    # Mando: desde dónde se gobiernan las señales y los desvíos del tramo.
+    # Mando: desde dónde se gobiernan las señales y los desvíos del tramo. ``sin_ctc`` es un
+    # tramo cuyo bloqueo el mapa rotula sin «ctc», cuando la leyenda distingue los dos casos:
+    # la fuente dice que no hay control de tráfico centralizado, que no es lo mismo que callar.
     MANDO: AttributeRule(
         value_type=str,
         required=True,
         sourced=True,
-        values=frozenset({"ctc", SIN_DATO_PUBLICADO}),
+        values=frozenset({"ctc", "sin_ctc", SIN_DATO_PUBLICADO}),
     ),
 }
 
