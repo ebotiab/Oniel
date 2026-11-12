@@ -72,7 +72,9 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Ninguna tarea abierta aparte de las líneas que quedan por cargar, que van en «Ampliar la red».
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay una tarea abierta:
+
+1. [#131](https://github.com/ebotiab/Oniel/issues/131) Visor: enviar a Logfire los errores del navegador, solo errores. Depende de #124, ya cerrada. Solo toca el visor y la documentación.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
