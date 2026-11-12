@@ -4,6 +4,7 @@ import type { AnnotationOut, LineSummary } from '../data/types'
 import { capasDe } from '../app/annotationLayers'
 import { lineKind } from '../app/state'
 import type { Trazo } from '../map/layers'
+import { Termino } from './Termino'
 
 interface Props {
   closed: boolean
@@ -81,7 +82,7 @@ export function Legend({ closed, annotations, lines, singleTrack, highlight, onH
           leyenda && (
             <Fragment key={kind}>
               <span className={`muestra ${leyenda.clase}`} aria-hidden="true" data-testid={leyenda.testId} />
-              <span>{leyenda.texto}</span>
+              <span>{leyenda.termino ? <Termino id={leyenda.termino}>{leyenda.texto}</Termino> : leyenda.texto}</span>
             </Fragment>
           ),
       )}
@@ -90,7 +91,9 @@ export function Legend({ closed, annotations, lines, singleTrack, highlight, onH
       {closed && (
         <>
           <span className="muestra cierre" aria-hidden="true" />
-          <span>Cierre simulado</span>
+          <span>
+            <Termino id="cierre-hipotetico">Cierre simulado</Termino>
+          </span>
         </>
       )}
     </div>

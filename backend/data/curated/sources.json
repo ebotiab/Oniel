@@ -234,6 +234,18 @@
       "file": "raw/interrupciones/consultas_2026-11-10.json"
     },
     {
+      "id": "boe-reglamento-circulacion-ferroviaria",
+      "name": "Reglamento de Circulación Ferroviaria (Real Decreto 664/2015, de 17 de julio), texto consolidado",
+      "publisher": "Agencia Estatal Boletín Oficial del Estado",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-8042",
+      "license": "Texto legal; reutilización según el aviso legal del BOE, citando la fuente",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-12",
+      "coverage": "Referencia de los conceptos de circulación del glosario del visor: bloqueo y cantón, marcha a la vista, puesto de mando y control de tráfico centralizado, sistemas ASFA, LZB y ERTMS, y las definiciones de estación, bifurcación, PAET, puesto de banalización y cambiador de ancho.",
+      "notes": "Texto consolidado con la última actualización publicada el 12 de julio de 2023. El glosario explica cada concepto con palabras propias y cita el artículo; no reproduce el texto.",
+      "file": "raw/glosario/consultas_2026-11-12.json"
+    },
+    {
       "id": "openfreemap",
       "name": "Mapa base (teselas vectoriales)",
       "publisher": "OpenFreeMap · OpenMapTiles · colaboradores de OpenStreetMap",

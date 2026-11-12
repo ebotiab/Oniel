@@ -157,7 +157,7 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(recorridos.nth(0).getByRole('button', { name: 'Por la alta velocidad' })).toHaveAttribute('aria-pressed', 'true')
     await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '8')
     await recorridos.nth(2).getByRole('button', { name: 'Por la línea convencional' }).click()
-    await expect(recorridos.nth(2).getByRole('button')).toHaveAttribute('aria-pressed', 'true')
+    await expect(recorridos.nth(2).locator('.recorrido-titulo')).toHaveAttribute('aria-pressed', 'true')
     await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '25')
 
     // el detalle dice las líneas de cada recorrido y el método

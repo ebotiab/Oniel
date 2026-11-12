@@ -1,6 +1,7 @@
 import type { AnnotationOut, SourceRef } from '../data/types'
 import { annotationLayer } from '../app/annotationLayers'
 import { formatDateLong } from '../app/annotations'
+import { Termino } from './Termino'
 
 interface Props {
   annotation: AnnotationOut
@@ -37,7 +38,7 @@ export function AnnotationNotice({ annotation: a }: Props) {
   return (
     <aside className={ficha.clase} aria-label={ficha.rotulo} data-testid={ficha.testId}>
       <p className="sobre">
-        <span className={`senal ${ficha.senal.clase}`}>{ficha.senal.texto}</span> {donde}
+        <span className={`senal ${ficha.senal.clase}`}>{ficha.senal.termino ? <Termino id={ficha.senal.termino}>{ficha.senal.texto}</Termino> : ficha.senal.texto}</span> {donde}
       </p>
       {a.title && a.title !== donde && <p className="texto">{a.title}</p>}
       {a.reason && <p className="texto">{a.reason}</p>}

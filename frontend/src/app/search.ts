@@ -1,10 +1,12 @@
-// Índice de búsqueda del visor: estaciones, otros puntos de la red y líneas, por nombre o por código de Adif.
+// Índice de búsqueda del visor: estaciones, otros puntos de la red y líneas, por nombre o por código de Adif,
+// y las entradas del glosario.
 // Se construye en el cliente a partir del índice de la red (index.json), así que funciona igual sin API.
 
 import type { LineSummary, NetworkOut, NodeKind } from '../data/types'
+import { conceptos, terminos } from '../panel/glosario'
 import { formatKm, lineKind, lineLabel } from './state'
 
-export type SearchTarget = { type: 'nodo'; id: string } | { type: 'linea'; id: string }
+export type SearchTarget = { type: 'nodo'; id: string } | { type: 'linea'; id: string } | { type: 'glosario'; id: string | null }
 
 export interface SearchEntry {
   key: string
@@ -65,6 +67,17 @@ function lineEntry(line: LineSummary): SearchEntry {
   }
 }
 
+function glossaryEntry(id: string | null, name: string, detail: string): SearchEntry {
+  const text = normalize(name)
+  return { key: `glosario:${id ?? ''}`, target: { type: 'glosario', id }, name, detail, adifCode: null, weight: 0, words: text.split(' '), text }
+}
+
+/** El glosario entero: lo que el buscador ofrece sin escribir, tras las líneas. */
+export const GLOSSARY_ENTRY = glossaryEntry(null, 'Glosario', 'Qué significa cada término y cómo circulan los trenes')
+
+/** Estaciones y otros puntos primero, después las líneas y después el glosario. */
+const TYPE_ORDER: Record<SearchTarget['type'], number> = { nodo: 0, linea: 1, glosario: 2 }
+
 export function buildIndex(network: NetworkOut, scope: SearchScope = 'todo'): SearchEntry[] {
   const lineById = new Map(network.lines.map((l) => [l.id, l]))
   // Un nodo común a varias líneas aparece una vez por línea en la red: aquí es un solo resultado.
@@ -94,7 +107,12 @@ export function buildIndex(network: NetworkOut, scope: SearchScope = 'todo'): Se
   for (const { lines, ...entry } of nodes.values()) {
     entries.push({ ...entry, detail: lines.length ? `${entry.detail} · ${joinNames(lines)}` : entry.detail })
   }
-  if (scope === 'todo') for (const l of network.lines) entries.push(lineEntry(l))
+  if (scope === 'todo') {
+    for (const l of network.lines) entries.push(lineEntry(l))
+    entries.push(GLOSSARY_ENTRY)
+    for (const c of conceptos) entries.push(glossaryEntry(c.id, c.titulo, 'Glosario · cómo funciona'))
+    for (const t of terminos) entries.push(glossaryEntry(t.id, t.nombre, 'Glosario'))
+  }
   return entries
 }
 
@@ -126,7 +144,7 @@ export function search(index: SearchEntry[], raw: string, limit = 8): SearchHit[
     (a, b) =>
       a.score - b.score ||
       a.hit.entry.weight - b.hit.entry.weight ||
-      (a.hit.entry.target.type === b.hit.entry.target.type ? 0 : a.hit.entry.target.type === 'nodo' ? -1 : 1) ||
+      TYPE_ORDER[a.hit.entry.target.type] - TYPE_ORDER[b.hit.entry.target.type] ||
       a.hit.entry.name.localeCompare(b.hit.entry.name, 'es'),
   )
   return hits.slice(0, limit).map((h) => h.hit)

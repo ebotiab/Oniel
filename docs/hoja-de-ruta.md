@@ -37,6 +37,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR de los destinos directos (12 de noviembre de 2026, #26): la ficha de cada estación dice a dónde se llega sin cambiar de tren el día de referencia, con cuántos trenes, de qué tipo, de qué operador y entre qué horas, también sin API (`destinations` en `GET /api/nodes/{id}/services` y en `nodes/<id>.json`). Se respetan las paradas en las que un tren solo deja o solo recoge viajeros, y el comparador de recorridos cuenta igual: de Ciudad Real a Madrid pasan 23 trenes y sirven 12. `docs/datos.md`, «Destinos directos», y `docs/diseno.md`.
 - PR del refresco automático del GTFS (12 de noviembre de 2026, #29): el flujo `.github/workflows/gtfs.yml` descarga cada lunes el fichero de Renfe, lo compara con el cargado y, si cambian los trenes de las líneas cargadas en las próximas cuatro semanas o el cargado tiene 28 días o más, lo declara como un conjunto de datos más, pasa las comprobaciones y abre una PR para que la revise una persona; sin cambios, o con una PR de refresco aún abierta, no abre nada. El fichero de Ouigo sigue siendo manual (su fuente exige una cuenta) y el flujo avisa tres semanas antes de que caduque. `oniel-data refresh`; `docs/datos.md`, «Refresco de los horarios», y `docs/despliegue.md`.
 - PR de las anotaciones de red (12 de noviembre de 2026, #17): un modelo común para todo lo que pasa sobre la red entre dos fechas según una fuente. `AnnotationSpec` lleva tipo, estado, alcance (de nodo a nodo en una línea, un nodo o geometría propia), fechas, título o motivo, fuentes y fecha de comprobación; los tipos se declaran en `ANNOTATION_KINDS` con sus estados válidos. Las dos interrupciones pasan sin pérdida a `anotaciones.json` como el primer tipo, la tabla `annotations` sustituye a `interruptions` (migración `0007`) y `GET /api/annotations?kind=&on=` las sirve; `interruptions` queda como alias en la API y en la instantánea. En el visor, un registro de capas (`annotationLayers.ts`) del que leen el mapa, el esquema, la leyenda, la ficha y las listas, sin cambio visible. `docs/datos.md`, «Anotaciones de red», dice cómo se añade un tipo.
+- PR del glosario (12 de noviembre de 2026, #16): cada término técnico de las fichas lleva un subrayado de puntos y, a un toque, una nota con su definición; el glosario completo (`#/glosario` y `#/glosario/<entrada>`) abre con cinco conceptos de circulación (bloqueo y cantón, vía única, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS), con el Reglamento de Circulación Ferroviaria como referencia registrada en `sources.json`, y sigue con los términos por orden alfabético. Se entra por el botón de la cabecera en escritorio, por el buscador, que también encuentra términos, y por la vista de la red. Los textos están en `frontend/src/panel/glosario.ts`; `docs/diseno.md`, «Glosario».
 
 ## Principios de arquitectura
 
@@ -54,14 +55,13 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-2. [#16](https://github.com/ebotiab/Oniel/issues/16) Visor: glosario didáctico y conceptos. Cada término a un toque y un glosario con los conceptos que hacen falta para entender la red. Depende de #15.
 4. [#18](https://github.com/ebotiab/Oniel/issues/18) Datos: capa de proyectos e infraestructura planeada. Mora – Alcázar, baipás de Montoro, Variante de Loja, Despeñaperros, como anotaciones de tipo proyecto. El modelo común de anotaciones ya está (#17).
 5. [#19](https://github.com/ebotiab/Oniel/issues/19) Datos: atributos de tramo por secciones. Un mecanismo para todos; `tracks` lo estrena.
 6. [#20](https://github.com/ebotiab/Oniel/issues/20) Datos: señalización y protección del tren por tramo. ASFA, LZB, ERTMS, bloqueo y mando desde la Declaración sobre la Red. Depende de #19 y #15.
 9. [#25](https://github.com/ebotiab/Oniel/issues/25) Análisis: tramos sin alternativa. Carga por tramo y si la red cargada ofrece otro camino cuando se corta. Los recuentos por operador (#22) y el grafo de rutas (#23) ya están.
 11. [#27](https://github.com/ebotiab/Oniel/issues/27) Análisis: evolución del servicio en el tiempo por estación y tramo. Los destinos directos por estación (#26) y los conjuntos de datos fechados (#21) ya están.
 
-El orden es orientativo. #16 no depende de nada y puede adelantarse cuando convenga; #15 conviene el primero porque fija el patrón de las fichas que usan #16, #20 y #17. La tarea de arquitectura que queda (#19) desbloquea las que la siguen; conviene hacerla antes que sus dependientes y no en paralelo con ellas.
+El orden es orientativo. La tarea de arquitectura que queda (#19) desbloquea las que la siguen; conviene hacerla antes que sus dependientes y no en paralelo con ellas.
 
 ## Pendientes menores
 

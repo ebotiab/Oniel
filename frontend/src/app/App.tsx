@@ -9,6 +9,8 @@ import type { RecorridosEnMapa } from '../map/MapView'
 import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { CoveragePanel } from '../panel/CoveragePanel'
+import { GlossaryPanel } from '../panel/GlossaryPanel'
+import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
 import { NetworkOverview } from '../panel/NetworkOverview'
@@ -19,7 +21,7 @@ import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption } from './annotations'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
-import { networkCount, parseHash, toHash, todayIso, type Comparador, type Selection } from './state'
+import { networkCount, parseHash, toHash, todayIso, type Comparador, type Route, type Selection } from './state'
 import './app.css'
 
 // MapLibre pesa tres cuartas partes del JavaScript del visor: va en un fichero aparte para que el panel
@@ -53,7 +55,7 @@ export default function App() {
   const [hoverId, setHoverId] = useState<string | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseHash(window.location.hash).cobertura))
-  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseHash(window.location.hash).recorridos))
+  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseHash(window.location.hash).recorridos ?? parseHash(window.location.hash).glosario))
   const [elegidoKey, setElegidoKey] = useState<string | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(() => parseHash(window.location.hash).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
@@ -113,9 +115,9 @@ export default function App() {
       const r = parseHash(window.location.hash)
       setRoute(r)
       setShowCoverage(Boolean(r.cobertura))
-      if (r.recorridos) setSheetOpen(true)
+      if (r.recorridos || r.glosario) setSheetOpen(true)
       // Sin selección manda la URL: #/ es la vista de la red. Con selección, la línea sale de lo seleccionado.
-      if (!r.selection && !r.cobertura) setActiveLineId(r.linea ?? null)
+      if (!r.selection && !r.cobertura && !r.glosario) setActiveLineId(r.linea ?? null)
     }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
@@ -149,7 +151,28 @@ export default function App() {
     setShowCoverage(false)
     setSheetOpen(true)
   }, [])
-  const pick = useCallback((target: SearchTarget) => (target.type === 'nodo' ? select(target) : showLine(target.id)), [select, showLine])
+  // El glosario se abre encima de lo que se estaba viendo y «Volver» lo devuelve: la ficha de la que salió
+  // el término, la línea o la vista de la red.
+  const vuelta = useRef<{ route: Route; cobertura: boolean } | null>(null)
+  const openGlossary = useCallback(
+    (entrada: string | null) => {
+      if (!route.glosario) vuelta.current = { route, cobertura: showCoverage }
+      setRoute({ selection: null, simulacion: false, glosario: { entrada } })
+      setShowCoverage(false)
+      setSheetOpen(true)
+    },
+    [route, showCoverage],
+  )
+  const closeGlossary = () => {
+    const antes = vuelta.current
+    vuelta.current = null
+    setRoute(antes?.route ?? { selection: null, simulacion: false })
+    setShowCoverage(antes?.cobertura ?? false)
+  }
+  const pick = useCallback(
+    (target: SearchTarget) => (target.type === 'nodo' ? select(target) : target.type === 'glosario' ? openGlossary(target.id) : showLine(target.id)),
+    [select, showLine, openGlossary],
+  )
 
   // El comparador de recorridos: abrirlo y cambiar sus estaciones son cambios de ruta.
   const compare = useCallback((next: Comparador) => {
@@ -261,6 +284,7 @@ export default function App() {
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
   else if (showCoverage && coverage)
     panel = <CoveragePanel coverage={coverage} annotations={annotations} status={status} onClose={() => setShowCoverage(false)} />
+  else if (route.glosario) panel = <GlossaryPanel entrada={route.glosario.entrada} sources={coverage?.sources ?? []} onBack={closeGlossary} />
   else if (comparador)
     panel = (
       <ComparePanel
@@ -322,7 +346,7 @@ export default function App() {
       />
     )
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} />
+    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} onGlossary={() => openGlossary(null)} />
   else
     panel = (
       <LineOverview
@@ -346,6 +370,7 @@ export default function App() {
   const lines = network?.lines ?? []
 
   return (
+    <GlosarioContext value={openGlossary}>
     <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''}`}>
       <a className="visually-hidden" href="#panel">
         Ir al panel de la línea
@@ -383,6 +408,12 @@ export default function App() {
             testId="buscador"
           />
         </div>
+        {/* en el móvil la cabecera va justa: allí al glosario se llega por el buscador y por la vista de la red */}
+        {!mobile && (
+          <button type="button" className="cobertura-pill glosario-boton" onClick={() => openGlossary(null)} data-testid="boton-glosario">
+            Glosario
+          </button>
+        )}
         <button type="button" className="cobertura-pill" onClick={() => showLine(null)} data-testid="recuento-red">
           <span className="punto" aria-hidden="true" />
           <span className="pill-texto">
@@ -412,5 +443,6 @@ export default function App() {
         />
       )}
     </div>
+    </GlosarioContext>
   )
 }

@@ -5,6 +5,7 @@
 
 import type { AnnotationOut } from '../data/types.ts'
 import { ROJA } from '../map/colors.ts'
+import type { TerminoId } from '../panel/glosario.ts'
 import { formatDateLong, mainSourceLabel } from './annotations.ts'
 
 /** Una etiqueta de color junto a un texto («sin circulación»). */
@@ -12,6 +13,8 @@ export interface Senal {
   /** Clases de la etiqueta, además de `senal`. */
   clase: string
   texto: string
+  /** Si la etiqueta es un término del glosario, cuál: se explica a un toque donde no vaya dentro de un botón. */
+  termino?: TerminoId
 }
 
 export interface AnnotationLayer {
@@ -33,7 +36,7 @@ export interface AnnotationLayer {
     descripcion: string
   } | null
   /** Entrada de la leyenda del mapa; solo aparece cuando hay alguna anotación vigente del tipo. */
-  leyenda: { clase: string; texto: string; testId: string } | null
+  leyenda: { clase: string; texto: string; testId: string; termino?: TerminoId } | null
   /** Ficha: el bloque que explica una anotación en el panel. */
   ficha: {
     clase: string
@@ -67,13 +70,13 @@ export function endLabel(a: AnnotationOut): string {
 
 const desde = (a: AnnotationOut) => (a.start_date ? `desde el ${formatDateLong(a.start_date)}` : '')
 
-const SIN_CIRCULACION: Senal = { clase: 'roja', texto: 'sin circulación' }
+const SIN_CIRCULACION: Senal = { clase: 'roja', texto: 'sin circulación', termino: 'sin-circulacion' }
 
 /** Interrupciones del servicio: el rojo de «sin circulación» (docs/diseno.md). */
 const interrupcion: AnnotationLayer = {
   kind: 'interrupcion',
   trazo: { propiedad: 'interrumpido', color: ROJA, colorCss: 'var(--senal-roja)', haloSeleccionado: 0.3, descripcion: 'sin circulación hoy' },
-  leyenda: { clase: 'sin-circulacion', texto: 'Sin circulación hoy', testId: 'leyenda-interrupcion' },
+  leyenda: { clase: 'sin-circulacion', texto: 'Sin circulación hoy', testId: 'leyenda-interrupcion', termino: 'sin-circulacion' },
   ficha: {
     clase: 'interrupcion',
     rotulo: 'Interrupción del servicio',

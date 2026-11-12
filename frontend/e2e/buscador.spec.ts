@@ -40,12 +40,13 @@ test.describe('Buscar una estación o una línea', () => {
     await expect(page.getByRole('heading', { name: 'Urda' })).toBeVisible()
   })
 
-  test('sin escribir ofrece las líneas, y con las flechas se llega a una que queda en la URL', async ({ page }) => {
+  test('sin escribir ofrece las líneas y el glosario, y con las flechas se llega a una que queda en la URL', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.focus()
-    await expect(page.getByRole('option')).toHaveCount(3)
+    await expect(page.getByRole('option')).toHaveCount(4)
+    await expect(page.getByRole('option').last()).toContainText('Glosario')
     await campo.press('ArrowDown')
     await campo.press('ArrowDown')
     await expect(page.getByRole('option').nth(2)).toHaveAttribute('aria-selected', 'true')
@@ -67,9 +68,9 @@ test.describe('Buscar una estación o una línea', () => {
     await expect(page.getByRole('option').first()).toContainText('código de Adif 60400')
     await campo.fill('zzz')
     await expect(page.getByRole('option')).toHaveCount(0)
-    await expect(page.getByText('Ninguna estación ni línea coincide con ese nombre.')).toBeVisible()
+    await expect(page.getByText('Ninguna estación, línea ni término coincide con ese nombre.')).toBeVisible()
     await campo.press('Escape')
-    await expect(page.getByText('Ninguna estación ni línea coincide con ese nombre.')).toBeHidden()
+    await expect(page.getByText('Ninguna estación, línea ni término coincide con ese nombre.')).toBeHidden()
   })
 
   test('la tecla «/» enfoca el buscador', async ({ page, isMobile }) => {

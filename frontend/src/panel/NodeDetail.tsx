@@ -7,7 +7,9 @@ import { capasDe } from '../app/annotationLayers'
 import { isInterruption } from '../app/annotations'
 import { AnnotationNotice } from './AnnotationNotice'
 import { DirectDestinations } from './DirectDestinations'
+import { TERMINO_DE_NODO } from './glosario'
 import { PieFuente, Plegable } from './Plegable'
+import { Termino } from './Termino'
 
 interface Props {
   node: NodeOut
@@ -70,7 +72,9 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
       <button type="button" className="enlace volver" onClick={onBack}>
         ← Toda la línea
       </button>
-      <p className="sobre">{KIND_LABEL[node.kind]}</p>
+      <p className="sobre">
+        <Termino id={TERMINO_DE_NODO[node.kind]}>{KIND_LABEL[node.kind]}</Termino>
+      </p>
       <h2 id="detalle-titulo" className="titulo">
         {node.name}
       </h2>
@@ -105,7 +109,10 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
         <dl className="datos-tramo datos">
           {memberships.map((m) => (
             <div key={m.line?.id ?? '?'}>
-              <dt>Punto kilométrico{memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''}</dt>
+              <dt>
+                <Termino id="punto-kilometrico">Punto kilométrico</Termino>
+                {memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''}
+              </dt>
               <dd data-testid="nodo-pk">km {formatKm(m.km)}</dd>
             </div>
           ))}
@@ -176,12 +183,17 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
             </button>{' '}
             <span className="suave datos">
               {formatKm(s.length_km)} km{memberships.length > 1 && lineOf(s.line_id) ? ` · ${lineShortLabel(lineOf(s.line_id)!)}` : ''}
-              {s.tracks === 1 ? ' · vía única' : ''}
+              {s.tracks === 1 && (
+                <>
+                  {' · '}
+                  <Termino id="via-unica">vía única</Termino>
+                </>
+              )}
             </span>
             {capasDe(annotated.get(s.id)).map(({ kind, ficha }) => (
               <Fragment key={kind}>
                 {' '}
-                <span className={`senal ${ficha.senal.clase}`}>{ficha.senal.texto}</span>
+                <span className={`senal ${ficha.senal.clase}`}>{ficha.senal.termino ? <Termino id={ficha.senal.termino}>{ficha.senal.texto}</Termino> : ficha.senal.texto}</span>
               </Fragment>
             ))}
           </li>

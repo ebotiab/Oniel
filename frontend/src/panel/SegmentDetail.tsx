@@ -6,6 +6,7 @@ import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop, track
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
+import { Termino } from './Termino'
 
 interface Props {
   segment: SegmentOut
@@ -59,10 +60,16 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
       </button>
       {/* lo primero, el tipo de vía en palabras: el mismo que dicen el trazo del mapa y la leyenda */}
       <p className="sobre" data-testid="tramo-tipo">
-        {line && lineKind(line) === 'alta velocidad' ? 'Alta velocidad' : 'Línea convencional'}
-        {segment.tracks === 1 ? ', vía única' : ''}
+        {line && lineKind(line) === 'alta velocidad' ? <Termino id="alta-velocidad">Alta velocidad</Termino> : <Termino id="linea-convencional">Línea convencional</Termino>}
+        {segment.tracks === 1 && (
+          <>
+            , <Termino id="via-unica">vía única</Termino>
+          </>
+        )}
       </p>
-      <p className="sobre">Tramo {segment.seq} de {line?.segment_count ?? '–'} · {line?.name}</p>
+      <p className="sobre">
+        <Termino id="tramo">Tramo</Termino> {segment.seq} de {line?.segment_count ?? '–'} · {line?.name}
+      </p>
       <h2 id="detalle-titulo" className="titulo">
         <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.from_node_id)}>
           {segment.from_name}
@@ -78,25 +85,33 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           <dd>{formatKm(segment.length_km)} km</dd>
         </div>
         <div>
-          <dt>Velocidad máxima</dt>
+          <dt>
+            <Termino id="velocidad-maxima">Velocidad máxima</Termino>
+          </dt>
           <dd>{segment.max_speed_kmh ? `${segment.max_speed_kmh} km/h` : 'sin dato'}</dd>
         </div>
         <div>
           <dt>Vías</dt>
-          <dd data-testid="tramo-vias">{tracksLabel(segment.tracks)}</dd>
+          <dd data-testid="tramo-vias">
+            {segment.tracks === 1 || segment.tracks === 2 ? <Termino id={segment.tracks === 1 ? 'via-unica' : 'via-doble'}>{tracksLabel(segment.tracks)}</Termino> : tracksLabel(segment.tracks)}
+          </dd>
         </div>
       </dl>
 
       <Plegable>
         <dl className="datos-tramo datos">
           <div>
-            <dt>Puntos kilométricos</dt>
+            <dt>
+              <Termino id="punto-kilometrico">Puntos kilométricos</Termino>
+            </dt>
             <dd data-testid="tramo-pk">
               del {formatKm(segment.km_from)} al {formatKm(segment.km_to)}
             </dd>
           </div>
           <div>
-            <dt>Velocidad habitual</dt>
+            <dt>
+              <Termino id="velocidad-habitual">Velocidad habitual</Termino>
+            </dt>
             <dd>{segment.typical_speed_kmh ? `${segment.typical_speed_kmh} km/h` : 'sin dato'}</dd>
           </div>
         </dl>
@@ -149,9 +164,14 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
             </p>
           )}
           <p className="suave">
-            {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con horario publicado en {services.counts.publicado},
-            estimado en {services.counts.estimado}
-            {services.counts.indeterminado ? `, indeterminado en ${services.counts.indeterminado}` : ''}.
+            {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
+            {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
+            {services.counts.indeterminado > 0 && (
+              <>
+                , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
+              </>
+            )}
+            .
           </p>
           <div data-testid="lista-servicios">
             {groups.map((g) => (
