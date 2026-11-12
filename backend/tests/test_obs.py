@@ -20,9 +20,15 @@ COMMIT = "7ba26940c0ffee00000000000000000000000abc"
 NOW = dt.datetime(2026, 11, 12, 17, 0, tzinfo=dt.UTC)
 
 
-def _columns(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def _payload(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Respuesta de `POST /v2/query`: el esquema y las filas."""
     names = list(rows[0]) if rows else []
-    return {"columns": [{"name": n, "values": [r[n] for r in rows]} for n in names]}
+    return {"schema": {"fields": [{"name": n} for n in names]}, "data": rows}
+
+
+def _body(request: httpx.Request) -> dict[str, Any]:
+    body: dict[str, Any] = json.loads(request.content)
+    return body
 
 
 def _import_row(outcome: str = "completed", **extra: Any) -> dict[str, Any]:
@@ -113,10 +119,11 @@ def _reader(
     def handler(request: httpx.Request) -> httpx.Response:
         if seen is not None:
             seen.append(request)
-        sql = request.url.params["sql"]
+        assert request.method == "POST" and request.url.path == "/v2/query"
+        sql = _body(request)["sql"]
         for marker, rows in answers.items():
             if marker in sql:
-                return httpx.Response(200, json=_columns(rows))
+                return httpx.Response(200, json=_payload(rows))
         raise AssertionError(f"consulta inesperada: {sql}")
 
     return obs.LogfireReader("token-de-prueba", transport=httpx.MockTransport(handler))
@@ -139,11 +146,38 @@ def test_version_is_the_deployed_commit_on_render() -> None:
     assert service_version({"RENDER_GIT_COMMIT": COMMIT}) == COMMIT
 
 
-def test_rows_from_columns_and_csv() -> None:
-    rows = obs.rows_from_columns(_columns([{"a": 1, "b": "x"}, {"a": 2, "b": "y, z"}]))
+def test_rows_from_payload_and_csv() -> None:
+    rows = obs.rows_from_payload(_payload([{"a": 1, "b": "x"}, {"a": 2, "b": "y, z"}]))
     assert rows == [{"a": 1, "b": "x"}, {"a": 2, "b": "y, z"}]
     assert obs.rows_to_csv(rows) == 'a,b\n1,x\n2,"y, z"\n'
-    assert obs.rows_from_columns({"columns": []}) == [] and obs.rows_to_csv([]) == ""
+    assert obs.rows_from_payload({"data": []}) == [] and obs.rows_to_csv([]) == ""
+
+
+def test_query_sends_the_environment_only_when_asked() -> None:
+    seen: list[httpx.Request] = []
+    reader = _reader({"select 1": [{"n": 1}]}, seen)
+    since = NOW - dt.timedelta(hours=1)
+    assert reader.query("select 1", since=since, limit=5, environment="local") == [{"n": 1}]
+    reader.query("select 1", since=since)
+    assert _body(seen[0])["deployment_environment"] == ["local"] and _body(seen[0])["limit"] == 5
+    assert "deployment_environment" not in _body(seen[1]) and "limit" not in _body(seen[1])
+
+
+def test_cli_query_filters_production_unless_told_otherwise(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seen: list[httpx.Request] = []
+    reader = _reader({"select 1": []}, seen)
+    monkeypatch.setattr(reader, "close", lambda: None)  # se reutiliza en las tres llamadas
+    monkeypatch.setattr(obs, "read_token", lambda: "token-de-prueba")
+    monkeypatch.setattr(obs, "LogfireReader", lambda token: reader)
+    for args in ([], ["--entorno", "local"], ["--entorno", "todos"]):
+        assert CliRunner().invoke(app, ["obs", "consulta", "select 1", *args]).exit_code == 0
+    assert [_body(r).get("deployment_environment") for r in seen] == [
+        ["production"],
+        ["local"],
+        None,
+    ]
 
 
 def test_commit_matching_accepts_short_hashes_only() -> None:
@@ -160,8 +194,8 @@ def test_status_reports_version_import_errors_and_routes() -> None:
     assert api is not None and api.version == COMMIT
     # errores y respuestas se cuentan desde que entró la versión vigente
     assert status.since == dt.datetime(2026, 11, 12, 16, 4, tzinfo=dt.UTC)
-    assert seen[0].url.params["min_timestamp"] == "2026-11-05T17:00:00.000000Z"
-    assert seen[-1].url.params["min_timestamp"] == "2026-11-12T16:04:00.000000Z"
+    assert _body(seen[0])["min_timestamp"] == "2026-11-05T17:00:00.000000Z"
+    assert _body(seen[-1])["min_timestamp"] == "2026-11-12T16:04:00.000000Z"
     assert seen[0].headers["authorization"] == "Bearer token-de-prueba"
     assert [e["exception_type"] for e in status.errors] == ["KeyError"]
     assert [e["span_name"] for e in status.handled] == ["GET /api/annotations"]
@@ -242,6 +276,10 @@ def test_reader_explains_failures() -> None:
     since = NOW - dt.timedelta(hours=1)
     with pytest.raises(obs.LogfireError, match="rechazó el token"):
         obs.LogfireReader("x", transport=httpx.MockTransport(handler(401))).query(
+            "select 1", since=since
+        )
+    with pytest.raises(obs.LogfireError, match="limitado las consultas"):
+        obs.LogfireReader("x", transport=httpx.MockTransport(handler(429))).query(
             "select 1", since=since
         )
     with pytest.raises(obs.LogfireError, match="respondió 400"):

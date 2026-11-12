@@ -8,7 +8,9 @@ set -eu
 
 if [ "${ONIEL_IMPORT_ON_START:-0}" = "1" ]; then
   echo "[oniel] ONIEL_IMPORT_ON_START=1: ejecutando 'oniel-data import all --if-changed' antes de arrancar la API"
-  oniel-data import all --if-changed
+  # La importación dura alrededor de un minuto, lo mismo que el intervalo normal de las métricas:
+  # con una lectura cada 10 s se ve cuánta memoria y procesador usa mientras carga.
+  OTEL_METRIC_EXPORT_INTERVAL=10000 oniel-data import all --if-changed
 fi
 
 # uvicorn directamente: la imagen instala solo las dependencias de producción y no incluye la CLI `fastapi`.

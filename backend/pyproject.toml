@@ -9,7 +9,7 @@ dependencies = [
     "asyncpg>=0.32.0",
     "fastapi>=0.162.2",
     "httpx>=0.28.1",
-    "logfire[asyncpg,fastapi,httpx]>=5.5.0",
+    "logfire[asyncpg,fastapi,httpx,system-metrics]>=5.5.0",
     "pydantic-settings>=2.16.2",
     "typer>=0.28.0",
     "uvicorn[standard]>=0.54.0",
@@ -39,6 +39,8 @@ dev = [
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
+# El plugin de pytest de Logfire se activa solo con CI=true y LOGFIRE_TOKEN: aquí, nunca.
+addopts = "--no-logfire"
 filterwarnings = ["error::DeprecationWarning:oniel.*"]
 
 [tool.ruff]

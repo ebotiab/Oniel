@@ -31,6 +31,10 @@ TOKEN_FILE = Path.home() / ".config" / "oniel" / "logfire-read-token"
 SERVICES = ("oniel-api", "oniel-data")
 #: A partir de este nivel una traza es un error; por debajo, una excepción controlada (un 4xx).
 ERROR_LEVEL = 17
+#: Entornos que envían trazas (`deployment_environment`): Render y quien desarrolla con credenciales.
+ENVIRONMENTS = ("production", "local")
+#: Valor de `--entorno` que no filtra por entorno.
+ALL_ENVIRONMENTS = "todos"
 
 NO_TOKEN_MESSAGE = (
     "Sin token de lectura de Logfire: no se puede consultar el estado de producción.\n"
@@ -71,7 +75,7 @@ def _parse(value: Any) -> dt.datetime | None:
 
 
 class LogfireReader:
-    """Cliente mínimo de la API de consultas de Logfire (`GET /v1/query`)."""
+    """Cliente mínimo de la API de consultas de Logfire (`POST /v2/query`)."""
 
     def __init__(
         self,
@@ -91,13 +95,26 @@ class LogfireReader:
     def close(self) -> None:
         self._client.close()
 
-    def query(self, sql: str, *, since: dt.datetime, limit: int | None = None) -> list[Row]:
-        """Ejecuta una consulta y devuelve las filas como diccionarios."""
-        params: dict[str, str] = {"sql": sql, "min_timestamp": _utc(since)}
+    def query(
+        self,
+        sql: str,
+        *,
+        since: dt.datetime,
+        limit: int | None = None,
+        environment: str | None = None,
+    ) -> list[Row]:
+        """Ejecuta una consulta y devuelve las filas como diccionarios.
+
+        ``environment`` deja solo los registros de ese entorno (`deployment_environment`), sin
+        tener que escribirlo en el SQL; vale para `records` y para `metrics`.
+        """
+        body: dict[str, Any] = {"sql": sql, "min_timestamp": _utc(since)}
         if limit is not None:
-            params["limit"] = str(limit)
+            body["limit"] = limit
+        if environment is not None:
+            body["deployment_environment"] = [environment]
         try:
-            response = self._client.get("/v1/query", params=params)
+            response = self._client.post("/v2/query", json=body)
         except httpx.HTTPError as exc:
             raise LogfireError(
                 f"No se pudo conectar con Logfire ({type(exc).__name__}: {exc}). "
@@ -108,19 +125,22 @@ class LogfireReader:
                 f"Logfire rechazó el token de lectura ({response.status_code}); "
                 "docs/despliegue.md, «Logfire», dice cómo se renueva."
             )
+        if response.status_code == 429:
+            raise LogfireError(
+                "Logfire ha limitado las consultas con token de lectura (429); "
+                f"reintentar en {response.headers.get('Retry-After', '?')} s."
+            )
         if response.status_code >= 400:
             raise LogfireError(
                 f"Logfire respondió {response.status_code}: {response.text.strip()[:400]}"
             )
-        return rows_from_columns(response.json())
+        return rows_from_payload(response.json())
 
 
-def rows_from_columns(payload: Any) -> list[Row]:
-    """La API responde por columnas (`{"columns": [{"name", "values"}]}`); aquí, por filas."""
-    columns = payload.get("columns", []) if isinstance(payload, dict) else []
-    names = [str(column["name"]) for column in columns]
-    values = [column.get("values", []) for column in columns]
-    return [dict(zip(names, row, strict=True)) for row in zip(*values, strict=True)]
+def rows_from_payload(payload: Any) -> list[Row]:
+    """La API responde `{"schema": …, "data": [fila, …]}`; aquí interesan las filas."""
+    data = payload.get("data", []) if isinstance(payload, dict) else []
+    return [dict(row) for row in data]
 
 
 def rows_to_csv(rows: list[Row]) -> str:
