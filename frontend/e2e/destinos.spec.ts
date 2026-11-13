@@ -11,11 +11,11 @@ test.describe('Destinos directos de una estación', () => {
     await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     const destinos = page.getByTestId('destinos-directos')
-    await expect(destinos.getByRole('heading')).toHaveText('Destinos directos · 54 el jueves, 12 de noviembre de 2026')
+    await expect(destinos.getByRole('heading')).toHaveText('Destinos directos · 57 el viernes, 13 de noviembre de 2026')
     // a la vista, los seis más frecuentes: nombre, tipos de servicio, entre qué horas salen y cuántos trenes
     const filas = page.getByTestId('lista-destinos').getByRole('listitem')
     await expect(filas).toHaveCount(6)
-    await expect(filas.nth(0)).toHaveText('CórdobaIntercity, AVE, AVLO y ALVIA · de 07:55 a 22:0124 trenes')
+    await expect(filas.nth(0)).toHaveText('CórdobaIntercity, AVE, AVLO y ALVIA · de 07:55 a 22:0125 trenes')
     // hacia Madrid pasan 23 trenes, pero 11 solo dejan viajeros en Ciudad Real: se puede ir en 12
     await expect(filas.nth(3)).toContainText('Madrid-Puerta de Atocha')
     await expect(filas.nth(3)).toContainText('12 trenes')
@@ -30,14 +30,14 @@ test.describe('Destinos directos de una estación', () => {
     await expect(page.getByTestId('destinos-sin-horarios')).toHaveText('No están los trenes de Iryo: no publica sus horarios en un formato abierto.')
     // el resto, a un toque
     await page.getByTestId('destinos-ver-todos').click()
-    await expect(filas).toHaveCount(54)
+    await expect(filas).toHaveCount(57)
     await expect(filas.filter({ hasText: 'Badajoz' })).toContainText('MD · a las 16:48')
     await expect(page.getByTestId('destinos-ver-todos')).toHaveText('Ver solo los más frecuentes')
     // un destino de la red lleva a su ficha
     await page.getByTestId('destino-puertollano').click()
     await expect(page).toHaveURL(/\/nodo\/puertollano$/)
     await expect(page.getByTestId('detalle-nodo').getByRole('heading', { level: 2 })).toHaveText('Puertollano')
-    await expect(page.getByTestId('destinos-directos').getByRole('heading')).toContainText('Destinos directos · 36 el')
+    await expect(page.getByTestId('destinos-directos').getByRole('heading')).toContainText('Destinos directos · 38 el')
   })
 
   test('Madrid: con dos operadores, cada destino dice de quién son sus trenes', async ({ page }) => {
@@ -45,8 +45,8 @@ test.describe('Destinos directos de una estación', () => {
     await abrirHoja(page)
     const filas = page.getByTestId('lista-destinos').getByRole('listitem')
     await expect(filas.nth(0)).toContainText('Córdoba')
-    await expect(filas.nth(0)).toContainText('de 06:00 a 21:05 · Renfe Viajeros 46, Ouigo España 6')
-    await expect(filas.nth(0)).toContainText('52 trenes')
+    await expect(filas.nth(0)).toContainText('de 06:00 a 21:20 · Renfe Viajeros 47, Ouigo España 6')
+    await expect(filas.nth(0)).toContainText('53 trenes')
     await expect(filas.filter({ hasText: 'Antequera' })).toContainText('· Renfe Viajeros')
   })
 
@@ -55,7 +55,7 @@ test.describe('Destinos directos de una estación', () => {
     await abrirHoja(page)
     await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 12 trenes directos en este sentido')
     await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
-    await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 52 trenes directos en este sentido')
+    await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 53 trenes directos en este sentido')
   })
 
   test('un nodo que no es estación no tiene destinos; el detalle de una estación dice cómo se cuentan', async ({ page }) => {

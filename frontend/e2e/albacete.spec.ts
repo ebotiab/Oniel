@@ -21,8 +21,11 @@ test.describe('La línea de Alcázar de San Juan a Albacete', () => {
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Albacete-Los Llanos' })).toBeVisible()
     await expect(ficha).toContainText('vías de dos anchos')
-    // destinos directos del día de referencia, por la línea convencional
+    // destinos directos del día de referencia: delante, los de la alta velocidad por Cuenca
+    await expect(ficha).toContainText('Cuenca-Fernando Zóbel')
     await expect(ficha).toContainText('Alcázar de San Juan')
+    // y, al desplegar la lista, los de la línea convencional
+    await page.getByTestId('destinos-ver-todos').click()
     await expect(ficha).toContainText('Socuéllamos')
   })
 
