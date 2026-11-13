@@ -132,22 +132,23 @@ Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tra
 
 Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
 
-**Lo que sale** con los trenes del 13 de noviembre de 2026 (247 trenes; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
+**Lo que sale** con los trenes del 12 de noviembre de 2026, el día de referencia (86 tramos; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
 
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
-| Bifurcación Málaga – Majarabique (LAV) | 55 | Ninguno |
-| Majarabique – Sevilla-Santa Justa (LAV) | 53 | Ninguno |
+| Madrid-Puerta de Atocha – Barcelona-Sants (alta velocidad de Barcelona, veinte tramos) | 77 a 111 | Ninguno. La línea solo comparte con las demás la cabecera de Madrid, y los baipases de Zaragoza y de Lleida no están cargados: también figuran sin alternativa los tramos que entran y salen de esas dos estaciones, aunque en la red real los trenes que no paran en ellas van por el baipás |
+| Bifurcación Málaga – Majarabique (LAV) | 56 | Ninguno |
+| Majarabique – Sevilla-Santa Justa (LAV) | 54 | Ninguno |
 | Espelúy – Mengíbar-Artichuela (línea de Jaén) | 26 | Ninguno |
 | Mengíbar-Artichuela – Jaén (línea de Jaén) | 26 | Ninguno |
-| Alcázar de San Juan – Albacete (siete tramos) | 13 | Ninguno |
-| Córdoba – Bifurcación Málaga (LAV) | 104 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 43 de Madrid a Sevilla, 340 km y 3 h más; para los 6 de Madrid a Granada, 82 km menos y 1 h 14 min más |
-| Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 73 | Para los 29 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 22 min más |
+| Alcázar de San Juan – Albacete (siete tramos) | 12 | Ninguno |
+| Córdoba – Bifurcación Málaga (LAV) | 103 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 44 de Madrid a Sevilla, 340 km y 3 h más; para los 6 de Madrid a Granada, 82 km menos y 1 h 14 min más |
+| Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 71 | Para los 27 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 22 min más |
 | Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 18 a 24 | Para los 6 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 14 min más |
 | Bifurcación Almería – Iznalloz – Granada (dos tramos) | 12 | Para los 10 de Granada a Almería, la vuelta por Antequera, Córdoba y Linares-Baeza: 415 km y 2 h 11 min más |
 | Linares-Baeza – Moreda (tres tramos) | 2 | La vuelta por Córdoba, Antequera y Granada |
-| Ciudad Real – Córdoba (LAV, cuatro tramos) | 104 | Para los 43 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
-| Madrid – Ciudad Real (LAV, cuatro tramos) | 82 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
+| Ciudad Real – Córdoba (LAV, cuatro tramos) | 103 | Para los 44 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
+| Madrid – Ciudad Real (LAV, cuatro tramos) | 81 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
 | Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
 | Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 28 min menos |
 
@@ -161,7 +162,7 @@ Los otros 54 tramos tienen otro camino para todos sus trenes. Los once que no lo
 
 1. Nada fuera de las líneas cargadas. Un tramo «sin alternativa» puede tenerla en la red real, y uno «con alternativa» puede tener otra mejor que Oniel no conoce.
 2. Si el tren puede tomar el otro camino. El grafo no distingue anchos de vía ni electrificación, y no mira las paradas que el tren dejaría de hacer.
-3. La capacidad de la vía. No se modela cuántos trenes caben por el otro camino, ni los cruces en vía única; que 82 trenes «tengan otro camino» por una línea de vía única no quiere decir que quepan.
+3. La capacidad de la vía. No se modela cuántos trenes caben por el otro camino, ni los cruces en vía única; que 81 trenes «tengan otro camino» por una línea de vía única no quiere decir que quepan.
 4. Los trenes que faltan: los de Iryo, Cercanías y mercancías. La carga real de cada tramo es mayor.
 5. Los viajeros. Cuenta trenes, no plazas ni personas, y un tren que recorre varios tramos cuenta en cada uno.
 6. El viaje fuera de las líneas cargadas. Los extremos de un grupo son por donde el tren entra y sale de ellas, no su origen y su destino.

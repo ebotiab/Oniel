@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 from conftest import (
     ALBACETE_SPEC,
+    BCN_SPEC,
     CONV_SPEC,
     DATA_DIR,
     FEED,
@@ -527,9 +528,23 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         ALBACETE_SPEC.name: {},
         LAV_MALAGA_SPEC.name: {},
         LAV_GRANADA_SPEC.name: {},
+        # la alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de
+        # Huesca y el Alvia que sale por Camp de Tarragona hacia València y Córdoba
+        BCN_SPEC.name: {
+            "calatayud-tudela-por-plasencia-de-jalon": 24,
+            "calatayud-pamplona-por-plasencia-de-jalon": 3,
+            "madrid-tudela-por-plasencia-de-jalon": 53,
+            "zaragoza-huesca": 11,
+            "barcelona-andalucia-con-parada-en-madrid": 0,
+            "barcelona-cordoba-por-valencia": 14,
+        },
     }
+    # la regla de los Ouigo de Barcelona a Andalucía no encaja con ningún viaje de Renfe: lo
+    # dice el informe de este fichero, y el de todos los ficheros juntos ya no (validate de la CLI)
+    ouigo_only = "barcelona-andalucia-con-parada-en-madrid"
+    unused = [f"la regla de recorrido {ouigo_only} no encaja con ningún viaje del GTFS"]
     for name, r in reports.items():
-        assert r["problems"] == []
+        assert r["problems"] == (unused if name == BCN_SPEC.name else [])
         assert r["gtfs"]["route_overrides"] == expected[name]
         assert "indeterminado" not in r["gtfs"]["passes"]
     granada = reports[LBMG_SPEC.name]["gtfs"]
@@ -537,6 +552,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432
     assert reports[SPEC.name]["gtfs"]["trips"] == 317
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
+    assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
     assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 124 * 3, "estimado": 22 * 3}
 
 
