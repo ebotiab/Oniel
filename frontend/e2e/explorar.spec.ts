@@ -9,7 +9,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la cabecera dice cuánta red hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('recuento-red')).toHaveText(/^9 líneas · 2\.151 km/)
+    await expect(page.getByTestId('recuento-red')).toHaveText(/^9 líneas · 2\.209 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {

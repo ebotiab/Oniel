@@ -5,11 +5,11 @@ export type Caja = [[number, number], [number, number]]
 
 /**
  * Encuadre inicial y de «Toda la red»: la caja de las líneas cargadas, de Sevilla a Barcelona y de
- * Antequera a Zaragoza, con algo de margen. Hay que ensancharla cuando una línea nueva se salga de
+ * Málaga a Zaragoza, con algo de margen. Hay que ensancharla cuando una línea nueva se salga de
  * ella (`frontend/e2e/mapa.spec.ts` lo comprueba con los nodos del índice).
  */
 export const SPAIN_BOUNDS: Caja = [
-  [-6.2, 36.9],
+  [-6.2, 36.5],
   [2.4, 41.9],
 ]
 

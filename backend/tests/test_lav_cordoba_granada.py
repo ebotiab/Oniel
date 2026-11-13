@@ -93,10 +93,9 @@ def test_the_two_lines_chain_from_the_malaga_junction_to_granada(
     ours, theirs = granada.node("antequera-santa-ana").spec, malaga.node("antequera-santa-ana").spec
     assert ours.shared and not theirs.shared and ours.position == theirs.position
     at_station = malaga.node("antequera-santa-ana")
-    assert (
-        haversine_km((theirs.position.lon, theirs.position.lat), granada.line.polyline.coords[0])
-        < 0.05
-    )
+    station = (-4.7197084, 37.0701682)
+    assert (theirs.position.lon, theirs.position.lat) == station
+    assert haversine_km(station, granada.line.polyline.coords[0]) < 0.05
     assert at_station.km == pytest.approx(96.772, abs=0.2)
     assert malaga.line.polyline.length_km == pytest.approx(154.517, abs=0.2)
     assert not malaga.spec.connections

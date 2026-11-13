@@ -214,6 +214,12 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{LAV}:majarabique:sevilla-santa-justa": 54,
         f"{JAEN}:espeluy:mengibar-artichuela": 26,
         f"{JAEN}:mengibar-artichuela:jaen": 26,
+        # a Málaga solo llega la alta velocidad de Córdoba, y el enlace de la bifurcación Gobantes
+        # hacia Granada no está cargado
+        f"{LAV_MALAGA}:antequera-santa-ana:bif-gobantes": 55,
+        f"{LAV_MALAGA}:bif-gobantes:pb-alora": 61,
+        f"{LAV_MALAGA}:pb-alora:paet-los-prados": 61,
+        f"{LAV_MALAGA}:paet-los-prados:malaga-maria-zambrano": 61,
         # de Alcázar de San Juan a Albacete, mientras no esté cargada otra línea que llegue a
         # Albacete: sus 12 trenes la recorren entera
     } | dict.fromkeys(ALBACETE_SEGMENTS, 12)
@@ -229,7 +235,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
     # trenes tienen otro camino, aunque sea por una línea de otro ancho
     first = _of(exported.segments, CORDOBA_BIF_MALAGA)
-    assert (first.trains, first.without_alternative) == (103, 0)
+    assert (first.trains, first.without_alternative) == (107, 0)
     loja = _of(exported.segments, f"{LAV_GRANADA}:loja:bif-tocon")
     assert (loja.trains, loja.without_alternative) == (24, 0)
     # para los 6 trenes de Madrid a Granada (los dos Alvia que siguen a Almería cuentan con
@@ -240,7 +246,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert to_granada.trains == 6 and to_granada.alternative is not None
     assert to_granada.alternative.line_ids == [CONV, LBMG]
     assert to_granada.alternative.extra_km == -81.7
-    assert _of(exported.segments, f"{LAV_MALAGA}:bif-malaga:la-marota").trains == 71
+    assert _of(exported.segments, f"{LAV_MALAGA}:bif-malaga:la-marota").trains == 75
     # entre la estación de Moreda y la bifurcación no pasa ningún tren de los horarios
     assert _of(exported.segments, f"{LBMG}:moreda:bif-almeria").trains == 0
     # el grupo más numeroso de Adamuz – Córdoba: los 44 trenes entre Madrid y Sevilla

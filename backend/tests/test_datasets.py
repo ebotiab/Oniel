@@ -511,7 +511,10 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     both = [feed(FEED, dt.date(2026, 11, 8)), feed(two_datasets["newer"], dt.date(2026, 11, 20))]
     result = await run(both, tmp_path)
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
-    assert [g["trips_imported"] for g in result["gtfs"]] == [768 + 37 + 555 + 13, 767 + 37 + 555 + 13]
+    assert [g["trips_imported"] for g in result["gtfs"]] == [
+        768 + 37 + 555 + 13,
+        767 + 37 + 555 + 13,
+    ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
     coverage = json.loads((tmp_path / "coverage.json").read_text(encoding="utf-8"))
@@ -550,7 +553,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     # un conjunto que deja de estar declarado se retira, también de la instantánea
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
-    assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 37 + 555
+    assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 37 + 555 + 13
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]
     )
