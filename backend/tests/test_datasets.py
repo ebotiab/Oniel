@@ -231,6 +231,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # Madrid-Chamartín a Torrejón de Velasco, que añade dos tramos a los 367 viajes de Chamartín
     passes += 5048
     passes += 1979  # la de Albacete a Alicante, todos estimados
+    passes += 677 + 120  # la de Monforte del Cid a Murcia
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 

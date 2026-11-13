@@ -53,6 +53,8 @@ ALBACETE, LAV_VALENCIA, LAV_ALICANTE = (
     "lav-madrid-valencia",
     "lav-albacete-alicante",
 )
+#: La alta velocidad que sigue hasta Murcia desde la bifurcación de Murcia, antes de Alicante.
+LAV_MURCIA, MURCIA = "lav-monforte-murcia", "murcia-del-carmen"
 MADRID, CIUDAD_REAL, MANZANARES, CORDOBA = (
     "madrid-puerta-de-atocha",
     "ciudad-real",
@@ -84,8 +86,9 @@ def graph(network: Red) -> Graph:
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
-    # los dos baipases de Zaragoza y de Lleida y los nueve tramos de la línea de Albacete a Alicante
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9
+    # los dos baipases de Zaragoza y de Lleida, los nueve tramos de la línea de Albacete a Alicante
+    # y los ocho de la de Monforte del Cid a Murcia
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -197,6 +200,39 @@ def test_madrid_to_albacete_goes_two_ways_and_alicante_is_reached(graph: Graph) 
         "Albacete-Los Llanos",
         "Villena Alta Velocidad",
     ]
+
+
+def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
+    """Madrid – Murcia con sus kilómetros y su tiempo: la alta velocidad entera pasa por Cuenca y
+    deja la línea de Alicante en la bifurcación de Murcia, sin entrar en Alicante."""
+    to_murcia = find_routes(graph, MADRID, MURCIA)
+    assert [(r.length_km, r.time_min) for r in to_murcia] == [
+        (485.8, 159),
+        (521.7, 118),
+        (623.3, 183),
+    ]
+    # como a Alicante, el más corto junta la línea convencional hasta Albacete con la alta
+    # velocidad desde allí; el de alta velocidad entero es el segundo
+    assert to_murcia[0].line_ids == [CONV, ALBACETE, LAV_ALICANTE, LAV_MURCIA]
+    high_speed = to_murcia[1]
+    assert high_speed.line_ids == [LAV, LAV_VALENCIA, LAV_ALICANTE, LAV_MURCIA]
+    assert "alicante-terminal" not in high_speed.node_ids
+    assert [(leg.from_node_id, leg.to_node_id) for leg in high_speed.legs][-1] == (
+        "bif-murcia",
+        MURCIA,
+    )
+    # los últimos 21,5 km, desde Orihuela, son de vía única
+    assert high_speed.single_track_km == 21.5
+    # desde Madrid-Chamartín, de donde salen casi todos sus trenes, el de alta velocidad entero es
+    # el primero: por la línea de Valencia, la de Albacete a Alicante y esta
+    from_chamartin = find_routes(graph, "madrid-chamartin", MURCIA)[0]
+    assert from_chamartin.line_ids == [LAV_VALENCIA, LAV_ALICANTE, LAV_MURCIA]
+    assert (from_chamartin.length_km, from_chamartin.time_min) == (529.5, 123)
+    # de Alicante a Murcia el recorrido retrocede hasta la bifurcación de Murcia, porque el
+    # enlace de Monforte del Cid no está cargado: 92,2 km, unos 4 más que por el enlace
+    (from_alicante,) = find_routes(graph, "alicante-terminal", MURCIA)
+    assert from_alicante.line_ids == [LAV_ALICANTE, LAV_MURCIA]
+    assert (from_alicante.length_km, from_alicante.time_min) == (92.2, 26)
 
 
 def test_time_is_length_over_typical_speed(graph: Graph, network: Red) -> None:
