@@ -24,7 +24,7 @@ test.describe('Tramos sin otro camino', () => {
     await page.goto('/')
     await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
     await page.goto('/sin-otro-camino')
-    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(7)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(8)
     await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 83 trenes no tendrían otro camino')
@@ -112,13 +112,16 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(7)
+    await expect(lineas).toHaveCount(8)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
+    // la primera, la de Madrid a Valladolid entera: es la única cargada al norte de Madrid y la que más trenes lleva
+    await expect(lineas.nth(0)).toContainText('Madrid – Valladolid por Segovia')
+    await expect(lineas.nth(0)).toContainText('Toda la línea, 5 tramos')
+    await expect(lineas.nth(0)).toContainText('de 81 a 122 trenes')
     // quince de los veinte de la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
     // Madrid: son los que más trenes llevan. Los cinco de Zaragoza-Delicias y Lleida-Pirineus tienen el baipás
-    await expect(lineas.nth(0)).toContainText('Madrid – Barcelona por Zaragoza')
-    await expect(lineas.nth(0)).toContainText('15 de sus 20 tramos')
-    await expect(lineas.nth(0)).toContainText('de 73 a 108 trenes')
+    await expect(linea('Madrid – Barcelona por Zaragoza')).toContainText('15 de sus 20 tramos')
+    await expect(linea('Madrid – Barcelona por Zaragoza')).toContainText('de 73 a 108 trenes')
     // de la alta velocidad de Madrid a Valencia, los dos primeros, de Madrid-Chamartín a la bifurcación de Torrejón
     // de Velasco (a Chamartín solo llega esta línea), y los cuatro últimos, de la bifurcación de Albacete a
     // Valencia: entre las dos bifurcaciones el otro camino es el de Alcázar de San Juan y Albacete
@@ -127,9 +130,6 @@ test.describe('Tramos sin otro camino', () => {
     // y los siete de la de Albacete a Alicante que quedan al sur de Albacete
     await expect(linea('Albacete – Alicante')).toContainText('7 de sus 9 tramos')
     await expect(linea('Albacete – Alicante')).toContainText('de 36 a 56 trenes')
-    // la de Madrid a Valladolid entera: es la única cargada al norte de Madrid
-    await expect(linea('Madrid – Valladolid por Segovia')).toContainText('Toda la línea, 5 tramos')
-    await expect(linea('Madrid – Valladolid por Segovia')).toContainText('de 81 a 122 trenes')
     // y los ocho de la de Monforte del Cid a Murcia: a Murcia solo llega esa línea
     await expect(linea('Monforte del Cid – Murcia')).toContainText('Toda la línea, 8 tramos')
     await expect(linea('Monforte del Cid – Murcia')).toContainText('de 6 a 36 trenes')

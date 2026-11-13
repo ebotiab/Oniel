@@ -168,6 +168,7 @@ test.describe('Trazo de la vía', () => {
     await page.getByTestId('linea-lav-madrid-sevilla').click()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="alta-velocidad"]').first()).toBeAttached()
     await page.getByTestId('volver-red').click()
+    await abrirZonas(page)
     await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="convencional"]').first()).toBeAttached()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="via-unica"]').first()).toBeAttached()

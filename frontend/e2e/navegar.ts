@@ -19,7 +19,9 @@ export async function irA(page: Page, seccion: Seccion) {
  * índice de zonas y ninguna línea está a la vista: quien va a pulsar una tiene que abrir antes la suya.
  */
 export async function abrirZonas(page: Page) {
-  for (const cabecera of await page.getByTestId('lista-lineas').locator('.zona-cabecera[aria-expanded="false"]').all()) {
-    await cabecera.click()
-  }
+  const lista = page.getByTestId('lista-lineas')
+  await lista.locator('.zona-cabecera').first().waitFor()
+  const plegadas = lista.locator('.zona-cabecera[aria-expanded="false"]')
+  // cada zona abierta deja de casar con el selector: se abre siempre la primera que quede
+  while ((await plegadas.count()) > 0) await plegadas.first().click()
 }
