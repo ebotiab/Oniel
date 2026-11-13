@@ -21,6 +21,10 @@ LAV_MALAGA_SPEC = DATA_DIR / "curated" / "lav-cordoba-malaga.json"
 LAV_GRANADA_SPEC = DATA_DIR / "curated" / "lav-antequera-granada.json"
 BCN_SPEC = DATA_DIR / "curated" / "lav-madrid-barcelona.json"
 LAV_VALENCIA_SPEC = DATA_DIR / "curated" / "lav-madrid-valencia.json"
+MADRID_PLASENCIA_SPEC = DATA_DIR / "curated" / "madrid-plasencia.json"
+LAV_BADAJOZ_SPEC = DATA_DIR / "curated" / "lav-plasencia-badajoz.json"
+RAMAL_MERIDA_SPEC = DATA_DIR / "curated" / "ramal-merida.json"
+MONFRAGUE_CACERES_SPEC = DATA_DIR / "curated" / "monfrague-caceres.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -33,6 +37,10 @@ SPECS = [
     LAV_GRANADA_SPEC,
     BCN_SPEC,
     LAV_VALENCIA_SPEC,
+    MADRID_PLASENCIA_SPEC,
+    LAV_BADAJOZ_SPEC,
+    RAMAL_MERIDA_SPEC,
+    MONFRAGUE_CACERES_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

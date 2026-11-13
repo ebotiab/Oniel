@@ -1,0 +1,101 @@
+{
+  "line": {
+    "id": "monfrague-caceres",
+    "name": "Línea convencional Monfragüe – Cañaveral – Cáceres",
+    "short_name": "500",
+    "sort_order": 14,
+    "zone": "extremadura",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "Sin electrificar",
+    "max_speed_kmh": 155,
+    "tracks": 1,
+    "pk_origin_km": 251.6,
+    "status": "disponible",
+    "description": "El trazado antiguo de Madrid a Cáceres: de Monfragüe a la bifurcación Casa de la Torre, a las puertas de Cáceres, por Mirabel y Cañaveral.\n\nDesde 2022 casi todos los trenes van por la línea nueva, que corre cerca. Por aquí siguen pasando los regionales que paran en Mirabel, Casas de Millán y Cañaveral.\n\nEs de vía única y sin electrificar. Para Adif es el último trecho de su línea 500, la misma por la que se llega de Madrid a Monfragüe.",
+    "geometry_source": {
+      "source_id": "osm-relation-11717892",
+      "parts": [
+        {
+          "source_id": "osm-relation-11717892",
+          "file": "raw/osm/relation_11717892_linea_500_planetario_casa_de_la_torre_2026-11-13.json",
+          "relation_id": 11717892,
+          "from": [
+            -6.1012466,
+            39.937619
+          ],
+          "to": [
+            -6.4286166,
+            39.5140278
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-500"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "monfrague", "name": "Monfragüe", "kind": "estacion", "adif_code": "30000", "shared": true, "position": {"lon": -6.1012466, "lat": 39.937619}, "reference_pk_km": 251.6},
+    {"id": "mirabel", "name": "Mirabel", "kind": "estacion", "adif_code": "35301", "rank": "secundario", "position": {"lon": -6.2289502, "lat": 39.8662062}, "reference_pk_km": 265.4},
+    {"id": "casas-de-millan", "name": "Casas de Millán", "kind": "estacion", "adif_code": "35302", "rank": "secundario", "position": {"lon": -6.3256899, "lat": 39.812059}, "reference_pk_km": 277.3},
+    {"id": "canaveral", "name": "Cañaveral", "kind": "estacion", "adif_code": "35303", "rank": "secundario", "position": {"lon": -6.3745221, "lat": 39.7888148}, "reference_pk_km": 283.1},
+    {"id": "bif-casa-de-la-torre", "name": "Bifurcación Casa de la Torre", "kind": "bifurcacion", "shared": true, "position": {"lon": -6.4284682, "lat": 39.5140587}}
+  ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrado de «ASFA - Convencional» bajo la línea, entre Mirabel y Cáceres."},
+    {"attribute": "bloqueo", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "blau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU», sin «ctc», y trazo lila de Monfragüe a Cáceres por Mirabel."},
+    {"attribute": "mando", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU» sin «ctc»; la leyenda distingue «BLAU ctc» (azul claro) de «BLAU» (lila)."}
+  ],
+  "connections": [
+  ],
+  "stop_mappings": {
+    "30000": {"node": "monfrague"},
+    "35301": {"node": "mirabel"},
+    "35302": {"node": "casas-de-millan"},
+    "35303": {"node": "canaveral"},
+    "30002": {"exits": ["monfrague"], "via": [{"line": "madrid-plasencia", "node": "monfrague"}, {"line": "lav-plasencia-badajoz", "node": "bif-san-esteban"}]},
+    "35001": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35002": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35012": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35005": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35105": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35109": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35200": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35203": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35206": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "35207": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
+    "18000": {"exits": ["monfrague"], "via": [{"line": "madrid-plasencia", "node": "monfrague"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
+    "17000": {"exits": ["monfrague"]},
+    "35400": {"exits": ["bif-casa-de-la-torre"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-casa-de-la-torre"}},
+    "37500": {"exits": ["bif-casa-de-la-torre"], "via": [{"line": "lav-plasencia-badajoz", "node": "bif-casa-de-la-torre"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},
+    "40002": {"exits": ["bif-casa-de-la-torre"]},
+    "40004": {"exits": ["bif-casa-de-la-torre"]},
+    "40005": {"exits": ["bif-casa-de-la-torre"]},
+    "40006": {"exits": ["bif-casa-de-la-torre"]},
+    "40008": {"exits": ["bif-casa-de-la-torre"]},
+    "40100": {"exits": ["bif-casa-de-la-torre"]},
+    "40105": {"exits": ["bif-casa-de-la-torre"]},
+    "40107": {"exits": ["bif-casa-de-la-torre"]},
+    "40108": {"exits": ["bif-casa-de-la-torre"]},
+    "40113": {"exits": ["bif-casa-de-la-torre"]},
+    "40115": {"exits": ["bif-casa-de-la-torre"]},
+    "40119": {"exits": ["bif-casa-de-la-torre"]},
+    "40122": {"exits": ["bif-casa-de-la-torre"]},
+    "50700": {"exits": ["bif-casa-de-la-torre"]},
+    "51003": {"exits": ["bif-casa-de-la-torre"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea y en alguna de las tres a las que solo se llega por ella: Mirabel, Casas de Millán o Cañaveral.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [
+      "35301",
+      "35302",
+      "35303"
+    ],
+    "min_node_stops": 2
+  }
+}

@@ -43,7 +43,7 @@
   "nodes": [
     {"id": "madrid-puerta-de-atocha", "name": "Madrid-Puerta de Atocha", "kind": "estacion", "adif_code": "60000", "shared": true, "position": {"lon": -3.690886, "lat": 40.406442}, "reference_pk_km": 0.0},
     {"id": "bif-planetario", "name": "Bifurcación Planetario", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -3.677554, "lat": 40.385577}, "reference_pk_km": 3.7,
-     "description": "Punto donde la línea convencional de Extremadura (por Talavera de la Reina y Cáceres) se separa de la de Andalucía, a la salida de Madrid."},
+     "description": "Punto donde la línea convencional de Extremadura, por Talavera de la Reina y Plasencia, se separa de la de Andalucía, a la salida de Madrid."},
     {"id": "aranjuez", "name": "Aranjuez", "kind": "estacion", "adif_code": "60200", "position": {"lon": -3.6182534, "lat": 40.0350257}, "reference_pk_km": 48.7,
      "description": "Final del primer ferrocarril de Madrid (1851). Estación de Cercanías y de Media Distancia; de aquí la línea sigue por la vega del Tajo hacia Castillejo."},
     {"id": "castillejo-anover", "name": "Castillejo-Añover", "kind": "estacion", "adif_code": "60202", "rank": "secundario", "position": {"lon": -3.738593, "lat": 39.949573}, "reference_pk_km": 64.2,
@@ -93,7 +93,6 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "cordoba", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»."}
   ],
   "connections": [
-    {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},
     {"id": "conv-cordoba-sevilla", "node_id": "cordoba", "name": "Línea convencional Córdoba–Sevilla", "towards": "Posadas, Palma del Río, Lora del Río, Sevilla y Cádiz", "status": "no_cargada", "sketch": [[-4.789453, 37.888291], [-4.84, 37.87], [-4.92, 37.85], [-5.11, 37.80], [-5.29, 37.72]]}
   ],
   "stop_mappings": {

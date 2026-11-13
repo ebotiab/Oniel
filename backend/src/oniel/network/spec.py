@@ -119,13 +119,18 @@ class OperatorSpec(BaseModel):
 
 
 class GeometryPart(BaseModel):
-    """Trozo de línea tomado de una relación OSM: el camino más corto entre dos puntos."""
+    """Trozo de línea tomado de una relación OSM: el camino más corto entre dos puntos.
+
+    Sin ``relation_id``, el camino se busca por todas las vías del fichero: sirve para un trecho
+    corto que ninguna relación de OSM recoge entero y que se descarga como un extracto de vías
+    (el enlace de Aljucén a la bifurcación Granja-Las Encinas).
+    """
 
     model_config = ConfigDict(populate_by_name=True)
 
     source_id: str
     file: str
-    relation_id: int
+    relation_id: int | None = None
     from_point: tuple[float, float] = Field(alias="from")
     to_point: tuple[float, float] = Field(alias="to")
 

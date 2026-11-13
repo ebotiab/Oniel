@@ -1,0 +1,256 @@
+{
+  "line": {
+    "id": "lav-plasencia-badajoz",
+    "name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+    "short_name": "026",
+    "sort_order": 12,
+    "zone": "extremadura",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 200,
+    "tracks": 2,
+    "opened_on": "2022-07-19",
+    "status": "disponible",
+    "description": "La línea nueva de Extremadura: de Plasencia a Badajoz por Cáceres, con un enlace a Mérida. Es la parte en servicio de la línea de alta velocidad de Madrid a Extremadura y la frontera portuguesa.\n\nSe abrió el 19 de julio de 2022, todavía sin catenaria, que entró en servicio en diciembre de 2023. Su vía es de ancho ibérico, el de la red convencional, sobre traviesas preparadas para pasarla al ancho estándar.\n\nNo toda es nueva ni de vía doble: las entradas a Plasencia, Cáceres y Badajoz aprovechan la vía que ya había, de vía única, y entre Montijo y Badajoz solo hay una vía. La ficha de cada tramo lo dice.\n\nEntre La Garrovilla y la bifurcación San Nicolás la vía nueva corre junto a la de la línea convencional de Ciudad Real a Badajoz, en la que están las estaciones de Montijo y Guadiana. Oniel las enseña como una sola línea.\n\nLa recorren los Alvia de Madrid a Badajoz, los Media Distancia de Madrid a Cáceres, Mérida y Sevilla y los regionales de Extremadura. De Madrid se llega todavía por la línea convencional: la continuación de alta velocidad está en obras entre Talayuela y Plasencia y en estudio de allí a Madrid, y el mapa la enseña como proyecto.",
+    "geometry_source": {
+      "source_id": "osm-relation-8117446",
+      "parts": [
+        {
+          "source_id": "osm-relation-6759679",
+          "file": "raw/osm/relation_6759679_linea_530_monfrague_plasencia_2026-11-13.json",
+          "relation_id": 6759679,
+          "from": [
+            -6.0996298,
+            40.0222577
+          ],
+          "to": [
+            -6.1490366,
+            39.974637
+          ]
+        },
+        {
+          "source_id": "osm-relation-8117446",
+          "file": "raw/osm/relation_8117446_lav_madrid_extremadura_2026-11-13.json",
+          "relation_id": 8117446,
+          "from": [
+            -6.1490366,
+            39.974637
+          ],
+          "to": [
+            -6.4286166,
+            39.5140278
+          ]
+        },
+        {
+          "source_id": "osm-relation-6759731",
+          "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json",
+          "relation_id": 6759731,
+          "from": [
+            -6.4286166,
+            39.5140278
+          ],
+          "to": [
+            -6.3903201,
+            39.4441976
+          ]
+        },
+        {
+          "source_id": "osm-relation-8117446",
+          "file": "raw/osm/relation_8117446_lav_madrid_extremadura_2026-11-13.json",
+          "relation_id": 8117446,
+          "from": [
+            -6.3903201,
+            39.4441976
+          ],
+          "to": [
+            -6.4169446,
+            38.9441071
+          ]
+        },
+        {
+          "source_id": "osm-relation-8117446",
+          "file": "raw/osm/relation_8117446_lav_madrid_extremadura_2026-11-13.json",
+          "relation_id": 8117446,
+          "from": [
+            -6.417012,
+            38.9439081
+          ],
+          "to": [
+            -6.8219961,
+            38.9349324
+          ]
+        },
+        {
+          "source_id": "osm-relation-6759731",
+          "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json",
+          "relation_id": 6759731,
+          "from": [
+            -6.8219961,
+            38.9349324
+          ],
+          "to": [
+            -6.9816158,
+            38.8907326
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-madrid-extremadura"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "plasencia", "name": "Plasencia", "kind": "estacion", "adif_code": "30002", "position": {"lon": -6.0996298, "lat": 40.0222577}, "reference_pk_km": 0.0, "description": "Estación término: los trenes entran y salen por el mismo lado. Los de Madrid a Cáceres que paran aquí llegan por la línea convencional, cambian de sentido y siguen por la línea nueva."},
+    {"id": "bif-san-esteban", "name": "Bifurcación San Esteban", "kind": "bifurcacion", "shared": true, "position": {"lon": -6.1493221, "lat": 39.9745627}, "reference_pk_km": 7.2},
+    {"id": "arroyo-de-la-herrera", "name": "Arroyo de la Herrera", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.19109, "lat": 39.94645}, "description": "Aquí se incorporan a la línea, por un enlace que viene de la bifurcación El Chaparral, los trenes de Madrid que no entran en Plasencia. Desde este punto la línea es de vía doble."},
+    {"id": "bif-el-palmeral", "name": "Bifurcación El Palmeral", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.4420814, "lat": 39.5337436}, "description": "Final del trecho de vía doble que baja de Plasencia. La entrada a Cáceres es de vía única."},
+    {"id": "bif-casa-de-la-torre", "name": "Bifurcación Casa de la Torre", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.4284682, "lat": 39.5140587}, "description": "Aquí se une a la línea nueva el trazado antiguo de Madrid a Cáceres, que viene de Monfragüe por Mirabel y Cañaveral. Desde aquí hasta Cáceres los dos comparten la vía de siempre."},
+    {"id": "caceres", "name": "Cáceres", "kind": "estacion", "adif_code": "35400", "position": {"lon": -6.3857249, "lat": 39.4611766}, "reference_pk_km": 78.6, "description": "La estación de Cáceres. De ella sale también la línea de Valencia de Alcántara, hacia la frontera portuguesa, que no está cargada."},
+    {"id": "bif-la-aldihuela", "name": "Bifurcación La Aldihuela", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.3975224, "lat": 39.4165515}, "description": "Final de la salida de Cáceres, de vía única. Desde aquí hacia Mérida la línea vuelve a tener dos vías."},
+    {"id": "bif-penas-blancas", "name": "Bifurcación Peñas Blancas", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.3716117, "lat": 39.074371}, "description": "Final del trecho de vía doble que viene de Cáceres."},
+    {"id": "bif-granja-las-encinas", "name": "Bifurcación Granja-Las Encinas", "kind": "bifurcacion", "position": {"lon": -6.417012, "lat": 38.9439081}, "reference_pk_km": 139.3, "description": "Aquí se separan los trenes que entran en Mérida, por un enlace corto hasta Aljucén, de los que siguen hacia Badajoz sin pasar por ella."},
+    {"id": "garrovilla-las-vegas", "name": "Garrovilla-Las Vegas", "kind": "estacion", "adif_code": "37611", "rank": "secundario", "position": {"lon": -6.4772095, "lat": 38.9153684}, "description": "Apeadero de La Garrovilla. Junto a él vuelven a la línea, por la bifurcación La Isla, los trenes que vienen de Mérida."},
+    {"id": "montijo", "name": "Montijo", "kind": "estacion", "adif_code": "37603", "position": {"lon": -6.5986655, "lat": 38.9135792}},
+    {"id": "montijo-el-molino", "name": "Montijo-El Molino", "kind": "estacion", "adif_code": "37608", "rank": "secundario", "position": {"lon": -6.6182399, "lat": 38.914023}},
+    {"id": "guadiana", "name": "Guadiana", "kind": "estacion", "adif_code": "37604", "rank": "secundario", "position": {"lon": -6.6900225, "lat": 38.9217726}},
+    {"id": "bif-san-nicolas", "name": "Bifurcación San Nicolás", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.8260811, "lat": 38.9347687}, "description": "Final de la vía nueva. Desde aquí hasta Badajoz los trenes van por la vía de la línea convencional de Ciudad Real a Badajoz, electrificada."},
+    {"id": "badajoz", "name": "Badajoz", "kind": "estacion", "adif_code": "37606", "position": {"lon": -6.9816158, "lat": 38.8907326}, "description": "La estación de Badajoz, a 6 km de la frontera. La vía sigue hasta Elvas, en Portugal; ese trecho no está cargado."}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "plasencia", "to_node": "arroyo-de-la-herrera", "value": 1, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo de «Única a 25 KV 50 HZ a 1.668 mm» de Plasencia a Arroyo de la Herrera. Las vías de OSM dicen passenger_lines=1."},
+    {"attribute": "tracks", "from_node": "bif-el-palmeral", "to_node": "bif-la-aldihuela", "value": 1, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo de vía única a 25 kV entre la bifurcación El Palmeral, Cáceres y la bifurcación La Aldihuela."},
+    {"attribute": "tracks", "from_node": "bif-penas-blancas", "to_node": "bif-granja-las-encinas", "value": 1, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo de vía única a 25 kV desde Peñas Blancas hacia Aljucén."},
+    {"attribute": "tracks", "from_node": "montijo", "to_node": "badajoz", "value": 1, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo de vía única a 25 kV de Montijo a la bifurcación San Nicolás y a Badajoz. Junto a la vía nueva corre, hasta San Nicolás, la de la línea convencional, sin electrificar."},
+    {"attribute": "proteccion_tren", "from_node": "plasencia", "to_node": "badajoz", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrados de «ASFA - Convencional» y triángulos de GSM-R a lo largo de la línea; no dibuja símbolos de ERTMS ni de «ASFA - AV»."},
+    {"attribute": "bloqueo", "from_node": "plasencia", "to_node": "arroyo-de-la-herrera", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU ctc» y trazo naranja entre Plasencia y Arroyo de la Herrera."},
+    {"attribute": "bloqueo", "from_node": "arroyo-de-la-herrera", "to_node": "bif-el-palmeral", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón."},
+    {"attribute": "bloqueo", "from_node": "bif-el-palmeral", "to_node": "bif-la-aldihuela", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU ctc» y trazo naranja a la entrada y a la salida de Cáceres; el punto del cambio al sur, entre las bifurcaciones Romanos y La Aldihuela, es aproximado."},
+    {"attribute": "bloqueo", "from_node": "bif-la-aldihuela", "to_node": "bif-penas-blancas", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón."},
+    {"attribute": "bloqueo", "from_node": "bif-penas-blancas", "to_node": "bif-granja-las-encinas", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo naranja de Peñas Blancas hacia Aljucén, con el rótulo «BAU ctc» al lado."},
+    {"attribute": "bloqueo", "from_node": "bif-granja-las-encinas", "to_node": "montijo", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón en el ramal nuevo hasta Montijo."},
+    {"attribute": "bloqueo", "from_node": "montijo", "to_node": "badajoz", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo naranja de Montijo a la bifurcación San Nicolás y a Badajoz, sin rótulo propio; el naranja es el color de «BAU ctc» en vía única."},
+    {"attribute": "mando", "from_node": "plasencia", "to_node": "badajoz", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»; de Montijo a Badajoz, por el color."}
+  ],
+  "connections": [
+    {"id": "caceres-valencia-de-alcantara", "node_id": "caceres", "name": "Línea Cáceres–Valencia de Alcántara", "towards": "Arroyo de Malpartida, San Vicente de Alcántara y Valencia de Alcántara", "status": "no_cargada", "sketch": [[-6.3857249, 39.4611766], [-6.4, 39.468], [-6.5345, 39.468], [-6.8, 39.4], [-7.117, 39.3816], [-7.2307, 39.4269]]},
+    {"id": "badajoz-elvas", "node_id": "badajoz", "name": "Línea Badajoz–Elvas", "towards": "Elvas y la red portuguesa", "status": "no_cargada", "sketch": [[-6.9816158, 38.8907326], [-7.0302, 38.9203], [-7.094, 38.9013]]}
+  ],
+  "stop_mappings": {
+    "30002": {"node": "plasencia"},
+    "35400": {"node": "caceres"},
+    "37611": {"node": "garrovilla-las-vegas"},
+    "37603": {"node": "montijo"},
+    "37608": {"node": "montijo-el-molino"},
+    "37604": {"node": "guadiana"},
+    "37606": {"node": "badajoz"},
+    "35001": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35002": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35012": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35005": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35105": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35109": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35200": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35203": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35206": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "35207": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "30000": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
+    "18000": {"exits": ["arroyo-de-la-herrera"], "via": [{"line": "madrid-plasencia", "node": "bif-el-chaparral"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
+    "17000": {"exits": ["arroyo-de-la-herrera"]},
+    "37500": {"exits": ["bif-granja-las-encinas", "garrovilla-las-vegas"], "via": {"line": "ramal-merida", "node": "aljucen"}},
+    "35301": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"]},
+    "35302": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"]},
+    "35303": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"]},
+    "35402": {"exits": ["caceres"]},
+    "35405": {"exits": ["caceres"]},
+    "35406": {"exits": ["caceres"]},
+    "40002": {"exits": ["bif-granja-las-encinas"]},
+    "40004": {"exits": ["bif-granja-las-encinas"]},
+    "40005": {"exits": ["bif-granja-las-encinas"]},
+    "40006": {"exits": ["bif-granja-las-encinas"]},
+    "40008": {"exits": ["bif-granja-las-encinas"]},
+    "40100": {"exits": ["bif-granja-las-encinas"]},
+    "40105": {"exits": ["bif-granja-las-encinas"]},
+    "40107": {"exits": ["bif-granja-las-encinas"]},
+    "40108": {"exits": ["bif-granja-las-encinas"]},
+    "40113": {"exits": ["bif-granja-las-encinas"]},
+    "40115": {"exits": ["bif-granja-las-encinas"]},
+    "40119": {"exits": ["bif-granja-las-encinas"]},
+    "40122": {"exits": ["bif-granja-las-encinas"]},
+    "50700": {"exits": ["bif-granja-las-encinas"]},
+    "51003": {"exits": ["bif-granja-las-encinas"]},
+    "37410": {"exits": ["garrovilla-las-vegas"]},
+    "37409": {"exits": ["garrovilla-las-vegas"]},
+    "37407": {"exits": ["garrovilla-las-vegas"]},
+    "37406": {"exits": ["garrovilla-las-vegas"]},
+    "37404": {"exits": ["garrovilla-las-vegas"]},
+    "37402": {"exits": ["garrovilla-las-vegas"]},
+    "37400": {"exits": ["garrovilla-las-vegas"]},
+    "37311": {"exits": ["garrovilla-las-vegas"]},
+    "37308": {"exits": ["garrovilla-las-vegas"]},
+    "37305": {"exits": ["garrovilla-las-vegas"]},
+    "37302": {"exits": ["garrovilla-las-vegas"]},
+    "37300": {"exits": ["garrovilla-las-vegas"]},
+    "37200": {"exits": ["garrovilla-las-vegas"]},
+    "94004": {"exits": ["garrovilla-las-vegas"]},
+    "94002": {"exits": ["garrovilla-las-vegas"]},
+    "50100": {"exits": ["garrovilla-las-vegas"]},
+    "60400": {"exits": ["garrovilla-las-vegas"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en alguna estación de la línea y, además, en Plasencia, Mérida, Badajoz, alguna de las estaciones entre Mérida y Badajoz, Monfragüe o Navalmoral de la Mata: así entran todos los que la recorren en algún trecho y quedan fuera los regionales de Cáceres a Valencia de Alcántara, que solo tocan la línea en Cáceres.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [
+      "30000",
+      "30002",
+      "35206",
+      "37500",
+      "37603",
+      "37604",
+      "37606",
+      "37608",
+      "37611"
+    ],
+    "min_node_stops": 1
+  },
+  "route_overrides": [
+    {
+      "id": "plasencia-caceres-por-la-linea-antigua",
+      "description": "Regionales que salen de Plasencia y paran en Mirabel, Casas de Millán y Cañaveral: vuelven hacia Monfragüe y siguen a Cáceres por el trazado antiguo. De esta línea solo recorren el trecho de Plasencia a la bifurcación San Esteban; el paso de la bifurcación Casa de la Torre a Cáceres no se les cuenta.",
+      "consecutive_stop_ids": [
+        "30002",
+        "35301"
+      ],
+      "from_stop_id": "30002",
+      "to_stop_id": "35301",
+      "stop_mappings": {
+        "35301": {
+          "exits": [
+            "bif-san-esteban"
+          ]
+        }
+      }
+    },
+    {
+      "id": "desde-plasencia-tras-navalmoral",
+      "description": "Trenes de Madrid que entran en Plasencia: llegan por la línea convencional hasta la bifurcación San Esteban, no por el enlace de Arroyo de la Herrera, así que esta línea se resuelve desde Plasencia.",
+      "consecutive_stop_ids": [
+        "35206",
+        "30002"
+      ],
+      "from_stop_id": "30002"
+    },
+    {
+      "id": "desde-plasencia-tras-monfrague",
+      "description": "Lo mismo para los trenes que paran en Monfragüe antes de entrar en Plasencia.",
+      "consecutive_stop_ids": [
+        "30000",
+        "30002"
+      ],
+      "from_stop_id": "30002"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+[
+  {
+    "url": "https://www.transportes.gob.es/el-ministerio/sala-de-prensa/noticias/jue-14122023-0957",
+    "url_final": "https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/jue-14122023-0957",
+    "titulo": "Transportes pone en servicio la electrificación de la línea de alta velocidad entre Plasencia y Badajoz",
+    "editor": "Ministerio de Transportes y Movilidad Sostenible",
+    "fecha_documento": "2023-12-14",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado (curl y WebFetch dan 403). Texto íntegro de la página.",
+    "extracto": "Empiezan a circular los primeros trenes Alvia con tracción eléctrica en el tramo Monfragüe-Cáceres-Mérida-Badajoz. [...] El Ministerio de Transportes y Movilidad Sostenible ha puesto en servicio la electrificación de los 195 kilómetros de vías alta velocidad que unen Plasencia, Cáceres, Mérida y Badajoz, un hito que permitirá una mayor fiabilidad en las circulaciones, reducir algunos minutos el tiempo de viaje y promover una movilidad más sostenible por el uso de energía renovable.\n\nAsí, empiezan a circular los primeros trenes Alvia con tracción eléctrica en el tramo Monfragüe-Cáceres-Mérida-Badajoz, que transportan más de 90.000 pasajeros al año en los dos sentidos. En este sentido, que estos viajeros recorran los más de 190 km que separan Badajoz y Monfragüe en tren eléctrico [...]\n\nLa electrificación del tramo Plasencia-Badajoz, con una inversión de 90 millones de euros, se basa en un sistema en corriente alterna de 2x25 kV y 50 hercios de frecuencia. La alimentación de energía eléctrica a la línea se realiza mediante subestaciones de tracción que transforman la tensión de 400 kV a 2x25 kV, que es la que requiere la catenaria. Este sistema de alimentación es el desplegado en las nuevas líneas de alta velocidad de España.\n\nCon este sistema, además, se amplía la distancia entre subestaciones de tracción (a unos 60-65 km) [...]\n\nEn paralelo, Adif AV avanza en la implementación del sistema de control y mando de trenes ERTMS nivel 2 (Sistema Europeo de Gestión del Tráfico Ferroviario) y el montaje de vía y la electrificación del baipás de Mérida.\n\nEl tendido de la catenaria se inició en primer lugar en 125 km entre Plasencia y la Bifurcación de Peñas Blancas (a unos 18 km al norte de Mérida), tramo que incluye las estaciones de estaciones de Plasencia y Cáceres. Posteriormente, se desplegó entre la Bifurcación de Peñas Blancas y la frontera portuguesa y desde Aljucén a Mérida en 103 km, donde se ubican las estaciones de Mérida, Aljucén, Montijo y Badajoz.\n\nLa catenaria instalada es interoperable, de tipo C-350, utilizada para las nuevas líneas de alta velocidad en España. Para su instalación se izaron más de 5.000 postes a lo largo del trazado.\n\nAdemás, se han electrificado algunos tramos de la red convencional conectados al corredor, necesarios para conseguir una funcionalidad integral.\n\nEl tramo Plasencia-Badajoz cuenta con tres subestaciones de tracción, ubicadas en Cañaveral (Cáceres), Carmonita y Sagrajas (Badajoz). [...] Asimismo, dispone de 12 centros de autotransformación [...]\n\nLa conexión Plasencia-Cáceres-Mérida-Badajoz, en servicio desde 2022, cuenta con 195 km de vías electrificadas, que incluyen 150 km de vía de nueva construcción y los tramos de red convencional conectados al corredor que le dan funcionalidad integral. Diseñada en ancho estándar y para tráfico mixto (viajeros y mercancías), cuenta con doble vía en la mayor parte de su recorrido.\n\nEl tramo entre Plasencia y Badajoz es el primer tramo en servicio de los tres que configuran el corredor de alta velocidad a Extremadura. Mientras se trabaja en completar el corredor, esta línea une la región con el centro del país, conectando desde Monfragüe con la línea ferroviaria convencional, que fue optimizada con una inversión de 55 millones de euros.\n\nEn concreto, se renovaron las instalaciones de señalización y telecomunicaciones de los 230 km del trazado de ferrocarril convencional entre Monfragüe y Humanes (Madrid) [...]\n\nEsta actuación está cofinanciada por el Fondo Europeo de Desarrollo Regional (FEDER).",
+    "datos": [
+      "Fecha de puesta en servicio de la electrificación: 14 de diciembre de 2023 (fecha de la nota; «ha puesto en servicio»).",
+      "Longitud electrificada: 195 km de vías, que incluyen 150 km de vía de nueva construcción «y los tramos de red convencional conectados al corredor».",
+      "Incluye el acceso a Mérida y Mérida–Badajoz: la catenaria se tendió en 125 km entre Plasencia y la Bifurcación de Peñas Blancas, y en 103 km «entre la Bifurcación de Peñas Blancas y la frontera portuguesa y desde Aljucén a Mérida», «donde se ubican las estaciones de Mérida, Aljucén, Montijo y Badajoz».",
+      "La Bifurcación de Peñas Blancas está «a unos 18 km al norte de Mérida».",
+      "Sistema: corriente alterna 2x25 kV, 50 Hz; subestaciones que transforman de 400 kV a 2x25 kV; catenaria tipo C-350.",
+      "Tres subestaciones de tracción: Cañaveral (Cáceres), Carmonita y Sagrajas (Badajoz); 12 centros de autotransformación.",
+      "Trenes: primeros Alvia con tracción eléctrica en el tramo Monfragüe-Cáceres-Mérida-Badajoz («más de 190 km» entre Badajoz y Monfragüe).",
+      "Ancho de vía: la nota solo dice «Diseñada en ancho estándar y para tráfico mixto»; NO dice en qué ancho se explota (el ancho ibérico de explotación lo dan el dosier de 2022 y la nota de Adif AV de 14/04/2025 en La Moncloa).",
+      "Vía: «doble vía en la mayor parte de su recorrido».",
+      "Señalización: ERTMS nivel 2 en implantación («Adif AV avanza en la implementación»), no en servicio. No menciona ASFA.",
+      "Velocidad máxima: la nota NO da ninguna.",
+      "Baipás de Mérida: en diciembre de 2023 estaba en montaje de vía y electrificación (no en servicio).",
+      "Inversión en la electrificación: 90 millones de euros."
+    ]
+  },
+  {
+    "url": "https://www.adifaltavelocidad.es/-/pone-servicio-primera-fase-baipas-merida-plasencia-badajoz",
+    "url_final": "https://www.adifaltavelocidad.es/w/pone-servicio-primera-fase-baipas-merida-plasencia-badajoz",
+    "titulo": "Adif AV pone en servicio la primera fase del baipás de Mérida, en el tramo Plasencia- Badajoz",
+    "editor": "Adif Alta Velocidad",
+    "fecha_documento": "2024-12-03",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado (curl da 403; WebFetch falla por certificado). Texto íntegro de la página.",
+    "extracto": "Nuevas mejoras en las conexiones ferroviarias de Extremadura\nAdif AV pone en servicio la primera fase del baipás de Mérida, en el tramo Plasencia- Badajoz\nHasta el 21 de diciembre se desarrollarán los trabajos necesarios para abrir al servicio el resto del baipás, una vez concluidas estas operaciones y tras la preceptiva autorización de la Agencia Estatal de Seguridad Ferroviaria\nCon una longitud total de 31,2 km de vías electrificadas, el baipás evitará el paso obligado de los trenes por la capital extremeña, permitiendo la conexión directa entre Cáceres y Badajoz y aportará mayor flexibilidad y funcionalidad a la línea\n\nAdif Alta Velocidad (Adif AV) ha puesto en servicio la primera fase del baipás de Mérida, que, con una longitud de 31,2 km (14,2 km en vía única y 17 km en vía doble, todas electrificadas), permite conectar directamente Cáceres y Badajoz, agilizando la circulación al evitar el paso obligado por la capital extremeña.\n\nEn esta primera fase, que se prolongará hasta el 21 de diciembre, comienzan a operar la vía 2 al completo y parte de la vía 1. Durante estas semanas se desarrollarán los trabajos para la puesta en servicio de la totalidad de la vía 1 y del ramal directo a Mérida y, en paralelo, se ultimarán los trabajos complementarios en los sistemas de control, mando y señalización.\n\nUna vez concluidas estas operaciones y tras la preceptiva autorización de la Agencia Estatal de Seguridad Ferroviaria (AESF), se pondrá en servicio el baipás completo, que aportará mayor flexibilidad y funcionalidad a la línea, con la posibilidad de servicios directos, además de mayor confort para el viajero y una ruta alternativa antes eventuales incidencias.\n\nLa puesta en servicio del baipás se produce tras un exhaustivo proceso: en septiembre se pusieron en tensión las instalaciones de electrificación y en octubre un tren ‘laboratorio’ de Adif realizó diversas pruebas [...]. Finalmente, se realizaron los recorridos de fiabilidad.\n\nCon posterioridad el operador ferroviario ha realizado las pruebas de formación de maquinistas y, una vez obtenida la autorización de puesta en servicio de esta fase 1 por parte de la AESF, se ha iniciado el servicio comercial.\n\nAdif AV continúa desarrollando las actuaciones que completan la conexión de Extremadura en alta velocidad: en el tramo Plasencia-Badajoz, ya electrificado, se avanza en el despliegue del avanzado sistema de señalización ERTMS.\n\nEntre Talayuela y Plasencia (70 km), se encuentra en marcha la redacción del proyecto para el tendido de las vías [...]\n\nAsimismo, se encuentra en construcción el ramal de conexión con Plasencia y ha finalizado la renovación de vías, andenes y otros elementos de las estaciones de Aljucén, Badajoz, Mérida (cuyo acceso desde Aljucén se va a duplicar y renovar) y Cáceres.\n\nEl baipás de Mérida va a ser financiado por la Unión Europea-NextGenerationEU.",
+    "datos": [
+      "Fecha: 3 de diciembre de 2024, puesta en servicio de la «primera fase» del baipás de Mérida; «se ha iniciado el servicio comercial» tras la autorización de la AESF para la fase 1.",
+      "Qué es: permite «conectar directamente Cáceres y Badajoz» evitando «el paso obligado por la capital extremeña» (Mérida).",
+      "Longitud: 31,2 km de vías, «14,2 km en vía única y 17 km en vía doble, todas electrificadas» (son km de vías, no de trazado).",
+      "Fase 1: «comienzan a operar la vía 2 al completo y parte de la vía 1».",
+      "Pendiente para la fase siguiente (prevista entonces tras el 21 de diciembre de 2024 y sujeta a autorización de la AESF): «la totalidad de la vía 1 y del ramal directo a Mérida» y trabajos complementarios de control, mando y señalización.",
+      "La nota NO dice qué trenes concretos lo usan (habla de «servicio comercial» y de «la posibilidad de servicios directos») ni da extremos con nombre de bifurcación.",
+      "La nota NO indica ancho de vía ni velocidad.",
+      "Estado a esa fecha: tramo Plasencia-Badajoz «ya electrificado», ERTMS en despliegue; acceso a Mérida desde Aljucén «se va a duplicar y renovar»."
+    ]
+  },
+  {
+    "url": "https://www.adifaltavelocidad.es/-/pone-tension-34-km-adicionales-catenaria-extremadura",
+    "url_final": "https://www.adifaltavelocidad.es/w/pone-tension-34-km-adicionales-catenaria-extremadura",
+    "titulo": "Adif AV pone en tensión 34,7 km adicionales de catenaria en Extremadura",
+    "editor": "Adif Alta Velocidad",
+    "fecha_documento": "2024-08-26",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado. Texto íntegro de la página.",
+    "extracto": "El próximo 10 de septiembre\nAdif AV pone en tensión 34,7 km adicionales de catenaria en Extremadura\n• La energización del tramo Badajoz-Frontera portuguesa (4,5 km) y el baipás de Mérida (30,2 km) permitirá realizar las pruebas sobre la catenaria y sus sistemas asociados necesarias para su posterior puesta en servicio\n• Con esta operación se completan las obras de electrificación del trazado de alta velocidad Plasencia-Badajoz-Frontera portuguesa, con 230 km de vías electrificadas\n\nAdif AV alcanza un nuevo hito en el desarrollo de las conexiones ferroviarias en Extremadura, con la puesta en tensión, el próximo 10 de septiembre a las 23.59 horas, de 34,7 km adicionales de catenaria en dos tramos: entre la salida de la estación de Badajoz y la frontera portuguesa (4,5 km), y en el futuro baipás de Mérida (30,2 km), donde se está trabajando en la instalación del sistema de control de tráfico.\n\nCon la energización de los conductores de la línea aérea de contacto para tracción eléctrica -a 25.000 voltios en corriente alterna, parámetros empleados en la red de alta velocidad- se completan los trabajos de electrificación del trazado de alta velocidad en la conexión Plasencia-Cáceres-Mérida-Badajoz-Frontera portuguesa. En total, 230 km que incluyen las vías electrificadas de nueva construcción y los tramos de red convencional conectados al corredor que le dan funcionalidad integral.\n\nLa puesta en tensión de la catenaria y sus sistemas asociados permitirán iniciar la fase de pruebas de estas instalaciones, preceptivas para su puesta en servicio [...]\n\nAdif AV desarrolla las actuaciones que completan la conexión de Extremadura en alta velocidad: en el tramo Plasencia y Badajoz, ya en servicio y electrificado, se avanza en el despliegue del avanzado sistema de señalización ERTMS.\n\nAsimismo, ya se han encargado los trabajos de construcción del ramal de conexión con Plasencia y ha finalizado la renovación de vías, andenes y otros elementos de las estaciones de Aljucén, Badajoz, Mérida -cuyo acceso desde Aljucén se va a duplicar y renovar- y Cáceres.\n\nLa electrificación del tramo Plasencia-Badajoz se basa en un sistema en corriente alterna de 2x25 kV y 50 hercios de frecuencia. [...]",
+    "datos": [
+      "Dos tramos puestos en tensión el 10 de septiembre de 2024 a las 23.59 h (la nota, del 26 de agosto, lo anuncia en futuro): «entre la salida de la estación de Badajoz y la frontera portuguesa (4,5 km)» y «el futuro baipás de Mérida (30,2 km)».",
+      "Es una puesta en tensión para pruebas, NO una puesta en servicio.",
+      "Con ello «se completan los trabajos de electrificación» de Plasencia-Cáceres-Mérida-Badajoz-Frontera portuguesa: 230 km de vías electrificadas (195 km de diciembre de 2023 + 34,7 km), incluidos «los tramos de red convencional conectados al corredor».",
+      "Tensión: 25.000 voltios en corriente alterna (sistema 2x25 kV, 50 Hz).",
+      "Discrepancia menor entre notas de Adif AV: aquí el baipás son 30,2 km de catenaria; la nota del 03/12/2024 da 31,2 km de vías.",
+      "Estado a esa fecha: Plasencia-Badajoz «ya en servicio y electrificado», ERTMS en despliegue."
+    ]
+  },
+  {
+    "url": "https://www.lamoncloa.gob.es/presidente/actividades/Documents/2022/180722_Dossier-fase1-LAV-Extremadura.pdf",
+    "titulo": "Primera fase alta velocidad Extremadura. Tramo Plasencia-Cáceres-Mérida-Badajoz (dosier de prensa de la inauguración)",
+    "editor": "Gobierno de España (La Moncloa); contenido de Mitma, Adif y Renfe",
+    "fecha_documento": "2022-07-18",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "PDF descargado con curl (200, 7 páginas) y pasado a texto con pdftotext.",
+    "extracto": "La nueva Línea de Alta Velocidad (LAV), que une Plasencia, Cáceres, Mérida y Badajoz, cuenta con una longitud de casi 150 kilómetros y representa una inversión de 1.700 millones de euros en la construcción de la infraestructura que ahora se pone en servicio.\n\nEl tramo es el primero de los tres que integran el corredor de alta velocidad a Extremadura [...]\n\nLa primera fase de la LAV Madrid-Extremadura conecta Plasencia con Badajoz, con paradas intermedias en Mérida y Cáceres, y tiene una longitud de unos 150 km de plataforma para vía doble en la mayoría de sus tramos.\n\nSu trazado incluye estructuras singulares, como los túneles de Santa Marina (3,4 km) y Puerto Viejo (1 km), así como 28 viaductos; entre ellos, el de Almonte (996 m), Río Tajo (1,5 km) y Valdetravieso (1,6 km). [...]\n\nEsta primera fase se pondrá en servicio con vías en ancho ibérico con traviesa polivalente, que permite el futuro cambio a ancho estándar, junto con la señalización Asfa Digital (Anuncio de Señales y Frenado Automático). El aumento de la velocidad media por el trazado -permitirá velocidades máximas de 200 km/h-, junto con las nuevas instalaciones de señalización y control del tráfico, supondrá una mejora tanto en los tiempos de viaje como en la fiabilidad en la circulación.\n\nLa línea Plasencia-Cáceres-Mérida-Badajoz se ha diseñado en ancho estándar y para tráfico mixto, esto es, para trenes de viajeros y de mercancías, y cuenta con doble vía en la mayor parte de su recorrido.\n\nCon el fin de optimizar la funcionalidad del futuro corredor extremeño, la conexión con Mérida se materializará con una línea directa a Badajoz y un baipás pasante, actualmente en construcción.\n\nEn una primera fase, y con el objetivo de poner cuanto antes al servicio de los viajeros las instalaciones ya construidas, la línea comienza a explotarse en ancho convencional (si bien podrá próximamente convertirse al ancho estándar gracias a que el carril está montado en traviesas polivalentes) y con el sistema de señalización Asfa Digital, mientras se trabaja en completar su electrificación y en implementar el sistema de control y mando de trenes ERTMS (Sistema Europeo de Gestión del Tráfico Ferroviario).\n\nMientras se trabaja en los otros dos grandes tramos del corredor, la nueva línea unirá la región con el centro del país, conectando desde Monfragüe con la línea ferroviaria convencional, que ha sido optimizada con una inversión de 55 millones de euros.\n\nEl trazado que se pone en servicio comienza en Plasencia y gira hacia el sur, con dirección a Cáceres y Mérida, discurriendo su recorrido prácticamente en paralelo a la Autovía de la Plata A-66 o al trazado de la línea actual de ferrocarril convencional.\n\n[Servicios] El total de circulaciones semanales se incrementa un 17%, al pasar de las 145 actuales a las 170 a partir del 19 de julio.\n\nLos Alvia de la serie 730 son trenes híbridos, con tecnología de tracción tanto diésel como eléctrica.",
+    "datos": [
+      "Inauguración el 18 de julio de 2022 (fecha del dosier); servicios comerciales nuevos «a partir del 19 de julio».",
+      "Longitud: «casi 150 kilómetros»; «unos 150 km de plataforma para vía doble en la mayoría de sus tramos».",
+      "Ancho de vía: «vías en ancho ibérico con traviesa polivalente, que permite el futuro cambio a ancho estándar»; línea «diseñada en ancho estándar» pero que «comienza a explotarse en ancho convencional».",
+      "Señalización en la apertura: ASFA Digital; ERTMS pendiente de implantar.",
+      "Velocidad máxima en la apertura: «permitirá velocidades máximas de 200 km/h».",
+      "Vía: «doble vía en la mayor parte de su recorrido» (no da kilómetros de vía única).",
+      "Sin electrificar en la apertura («mientras se trabaja en completar su electrificación»); trenes Alvia S-730 híbridos.",
+      "Mérida: la conexión se hará «con una línea directa a Badajoz y un baipás pasante, actualmente en construcción».",
+      "Enlace con Madrid: «conectando desde Monfragüe con la línea ferroviaria convencional».",
+      "Estructuras: túneles de Santa Marina (3,4 km) y Puerto Viejo (1 km); 28 viaductos, entre ellos Almonte (996 m), Río Tajo (1,5 km) y Valdetravieso (1,6 km).",
+      "Inversión: 1.700 millones de euros."
+    ]
+  },
+  {
+    "url": "https://www.adifaltavelocidad.es/w/en-marcha-las-%C3%BAltimas-actuaciones-previas-a-la-puesta-en-servicio-de-la-primera-fase-de-lav-extremadura",
+    "titulo": "En marcha las últimas actuaciones previas a la puesta en servicio de la primera fase de LAV Extremadura",
+    "editor": "Adif Alta Velocidad",
+    "fecha_documento": "2022-07-11",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado. Texto íntegro de la página.",
+    "extracto": "La actuación, programada antes de la puesta en servicio de la línea para reducir la afectación a la circulación ferroviaria, permitirá la llegada de la alta velocidad a Extremadura el 19 de julio\n\nAdif ultima los preparativos para la puesta en servicio de la Línea de Alta Velocidad (LAV) el 19 de julio entre Plasencia y Badajoz. [...]\n\nComo parte de los trabajos programados previos a su puesta su servicio, Adif va a realizar la conexión del tramo de la nueva LAV Cáceres-Mérida con sus tramos contiguos, a partir de las 00:00 horas del 15 de julio.\n\nLos trabajos consistirán en el desplazamiento de las vías existentes para su adaptación a la nueva configuración, el montaje de vía para la conexión del tramo de la LAV Cáceres-Mérida con los contiguos de la Línea Aljucén-Cáceres de la Red Convencional y la adaptación de los sistemas de control de tráfico ferroviario a la nueva disposición de vías.\n\n[...] para realizar esta conexión es necesario trabajar sobre la antigua línea ferroviaria Aljucén-Cáceres -en las proximidades de la nueva infraestructura- que será dada de baja una vez finalicen estos trabajos. [...] la circulación ferroviaria entre Cáceres y Mérida estará suspendida hasta la entrada en servicio de la LAV.\n\nLa primera fase de la Línea de Alta Velocidad Madrid-Extremadura, conecta Plasencia y Badajoz a lo largo de 150 km, con paradas intermedias en Mérida y Cáceres.\n\nEl aumento de la velocidad media por el trazado -permitirá velocidades máximas de 200 km/h-, junto con las nuevas instalaciones de señalización y control del tráfico, supondrá una mejora tanto en los tiempos de viaje como en la fiabilidad en la circulación.\n\nLos trabajos que completarán la LAV de Extremadura avanzan, tanto en la electrificación de la línea entre Plasencia y Badajoz, como en la ejecución del Baipás de Mérida (18 km).\n\nLa LAV Madrid-Extremadura -un total de 437 km y una inversión de 3.700 millones de euros- se completará con el tramo Talayuela-Plasencia (68,8 km), en construcción; y el tramo Madrid-Oropesa (200 km) [...]",
+    "datos": [
+      "Fecha de puesta en servicio de la línea: 19 de julio de 2022, «entre Plasencia y Badajoz».",
+      "Longitud: «150 km», con paradas intermedias en Mérida y Cáceres.",
+      "Velocidad máxima: «permitirá velocidades máximas de 200 km/h».",
+      "La antigua línea convencional Aljucén-Cáceres «será dada de baja» al terminar la conexión: desde la apertura los trenes entre Cáceres y Mérida van por la línea nueva.",
+      "Corte previo Cáceres-Mérida del 15 al 18 de julio de 2022.",
+      "Baipás de Mérida: «18 km» de trazado (frente a los 31,2 km de vías de la nota de 2024).",
+      "La nota NO menciona ancho de vía ni vía única/doble."
+    ]
+  },
+  {
+    "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/paginas/2025/140425-ave-badajoz-madrid.aspx",
+    "titulo": "Óscar Puente prueba el moderno sistema que permitirá alcanzar los 300 km/h y conectar Badajoz y Madrid en menos de 4 horas",
+    "editor": "La Moncloa (nota del Ministerio de Transportes y Movilidad Sostenible)",
+    "fecha_documento": "2025-04-14",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "curl (200). Texto de la página.",
+    "extracto": "El ministro de Transportes y Movilidad Sostenible, Óscar Puente, ha viajado entre Badajoz y Plasencia en el tren S106 para conocer de primera mano cómo se realizan las pruebas del moderno sistema de señalización y seguridad ERTMS, que permitirá viajar a 300 km/h por Extremadura.\n\nLas primeras pruebas, que comenzaron el 27 de marzo, consisten en la auscultación de la infraestructura y la catenaria en ambas vías a una velocidad creciente y escalonada entre 200 km/h y 300 km/h.\n\n\"Estamos probando el ERTMS con intención de poder solicitar la autorización de puesta en servicio a la Agencia de Seguridad Ferroviaria a finales de año y conectar así Badajoz con Madrid en 4 horas o incluso menos\", ha asegurado el ministro tras asistir a las pruebas en el tramo de ancho estándar de 150 km/h.\n\nAsí, una vez esté desplegado, el sistema facilitará duplicar la velocidad de circulación actual por Extremadura, recortar los tiempos de viaje con la capital de España entre 20 y 45 minutos [...]\n\nEn cuanto a la mejora de las infraestructuras, el ministro ha adelantado que el baipás de Mérida cuenta desde hoy con la autorización de la Agencia de Seguridad Ferroviaria para su puesta en servicio y que ya está en obras la duplicación de vía entre Aljucén y Mérida, que mejorará la capacidad del tramo y el acceso por tanto de la alta velocidad a la ciudad.",
+    "datos": [
+      "14 de abril de 2025: «el baipás de Mérida cuenta desde hoy con la autorización de la Agencia de Seguridad Ferroviaria para su puesta en servicio» (se entiende el baipás completo, pendiente desde la fase 1 de diciembre de 2024; la nota no da fecha de inicio de circulaciones ni detalla el ramal directo a Mérida).",
+      "ERTMS: en pruebas desde el 27 de marzo de 2025, a velocidades «entre 200 km/h y 300 km/h»; intención de pedir la autorización de puesta en servicio «a finales de año» (2025). No en servicio.",
+      "Duplicación de vía Aljucén-Mérida: «ya está en obras».",
+      "La nota dice literalmente «tramo de ancho estándar de 150 km/h» (redacción confusa del original; no acredita que la vía esté en ancho estándar)."
+    ]
+  },
+  {
+    "url": "https://www.adifaltavelocidad.es/w/adif-av-impulsa-duplicacion-via-accesos-merida-nueva-inversion-8-millones-euros",
+    "titulo": "Adif AV impulsa la duplicación de vía en los accesos a Mérida con una nueva inversión de 8,3 millones de euros",
+    "editor": "Adif Alta Velocidad",
+    "fecha_documento": "2026-03-06",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado. Texto íntegro de la página.",
+    "extracto": "En un tramo de 5,5 km, entre la capital extremeña y Aljucén\n\nAdif AV ha adjudicado por 8,3 millones de euros el despliegue de nuevas instalaciones de control, mando y señalización en el tramo Mérida-Aljucén (5,5 km), donde se están ejecutando trabajos para la duplicación de la vía que ampliarán la capacidad del acceso ferroviario a la capital extremeña.\n\n[...] los trenes podrán circular indistintamente por cualquiera de las vías, incrementando la versatilidad de la infraestructura ferroviaria y optimizando la conexión de Mérida a la Línea de Alta Velocidad (LAV) Madrid-Extremadura.\n\nLa duplicación de la vía incluye, asimismo, la renovación de la vía actual (traviesas, carril y balasto), la adaptación de las instalaciones de electrificación, la renovación y ampliación de los sistemas de drenaje y la incorporación de cerramientos a lo largo del trazado.\n\nEn el tramo comprendido entre la cabecera oeste de la estación de Mérida y la cabecera este de la estación de Aljucén, Adif AV ampliará la plataforma para dar cabida a la segunda vía, que discurrirá paralela a la actual. Además, se construirá un nuevo viaducto para salvar el río Albárregas.\n\nAsimismo, se mejorarán los parámetros del trazado en cuatro curvas mediante nuevas variantes que suman 2,7 km [...]\n\nAdif impulsa el desarrollo de la LAV Madrid-Extremadura con diversas actuaciones. Así, mientras se sigue avanzando en el nuevo tramo Talayuela-Plasencia, actualmente en ejecución, se ultiman las pruebas para poner en servicio el avanzado sistema de señalización ERTMS en el tramo en servicio entre Badajoz y Plasencia.",
+    "datos": [
+      "A 6 de marzo de 2026 el acceso Mérida-Aljucén (5,5 km) sigue en vía única, con la duplicación en obras; ya está electrificado («adaptación de las instalaciones de electrificación»).",
+      "A 6 de marzo de 2026 el ERTMS de Badajoz-Plasencia NO está en servicio: «se ultiman las pruebas para poner en servicio».",
+      "Es la última nota de Adif AV que describe el estado del tramo Plasencia-Badajoz; la posterior (01/10/2026, proyectos Talavera-Talayuela) solo dice «el tramo entre Plasencia y Badajoz, operativo desde 2022»."
+    ]
+  },
+  {
+    "url": "https://www.adifaltavelocidad.es/w/navalmoral-mata-transformara-terminal-alta-velocidad-sostenible",
+    "titulo": "La estación de Navalmoral de la Mata se transformará en una terminal de alta velocidad moderna y sostenible",
+    "editor": "Adif Alta Velocidad",
+    "fecha_documento": "2025-07-01",
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado. Texto íntegro de la página.",
+    "extracto": "Adif ha comenzado los trabajos para transformar la histórica estación de Navalmoral de la Mata en una terminal para servicios de alta velocidad [...], una actuación con una inversión de 6,2 millones de euros, que se compatibilizará con el mantenimiento del servicio ferroviario.\n\nLa estación de Navalmoral se adecuará así para acoger los servicios de alta velocidad que se presten por el segundo tramo de la Línea de Alta Velocidad (LAV) a Extremadura, el Talayuela-Plasencia, que Adif actualmente impulsa [...]\n\nEstas actuaciones en andenes y el exterior de la estación se realizan dentro del contrato de construcción del subtramo de plataforma de la nueva LAV Arroyo de Santa María-Navalmoral de la Mata.\n\nPara ello, se ha habilitado una estación provisional, ya en servicio desde este pasado viernes, 27 de junio. Ubicada justo al lado de la estación, en el actual emplazamiento del aparcamiento, está formada por una edificación modular [...]",
+    "datos": [
+      "Julio de 2025: la estación de Navalmoral de la Mata está en obras; estación provisional (edificio modular) en servicio desde el 27 de junio de 2025.",
+      "El subtramo de plataforma Arroyo de Santa María-Navalmoral de la Mata está en construcción.",
+      "La nota NO dice que los trenes de la línea convencional circulen por la plataforma nueva ni anuncia ninguna variante puesta en servicio."
+    ]
+  },
+  {
+    "url": "https://www.adifaltavelocidad.es/comunicacion-y-prensa/notas-prensa?buscador-prensa-categorias=987088",
+    "titulo": "Listado de notas de prensa de Adif AV, categoría «LAV Madrid-Extremadura-Frontera Portuguesa» (búsqueda negativa)",
+    "editor": "Adif Alta Velocidad",
+    "fecha_documento": null,
+    "consultado_el": "2026-11-13",
+    "como_se_leyo": "Navegador integrado; páginas 1 a 4 del listado (de septiembre de 2023 a octubre de 2026).",
+    "extracto": "01 OCTUBRE 2026 | Adif AV licita la redacción de los proyectos del corredor de alta velocidad de Extremadura entre Talavera y Talayuela\n06 MARZO 2026 | Adif AV impulsa la duplicación de vía en los accesos a Mérida con una nueva inversión de 8,3 millones de euros\n31 OCTUBRE 2025 | Adif contrata por 157,5M€ el despliegue de la señalización y comunicaciones más avanzadas en el trazado ...\n06 OCTUBRE 2025 | Adif AV adjudica las obras de electrificación del tramo Talayuela-Plasencia por más de 41 M€\n18 JULIO 2025 | Adif licita por 6M€ el sistema que controlará en tiempo real y en remoto la electrificación del tramo ...\n07 JULIO 2025 | Adif AV adjudica por 2,54M€ el contrato de perfilado de carril de las líneas en construcción\n01 JULIO 2025 | La estación de Navalmoral de la Mata se transformará en una terminal de alta velocidad moderna y sostenible\n27 JUNIO 2025 | Adif adjudica por 16,7M€ la construcción de una subestación eléctrica para el tramo de alta velocidad ...\n11 ABRIL 2025 | Adif avanza trabajos para montar las vías del tramo Talayuela-Plasencia: destina 34M€ a la construcción de la base de ...\n04 ABRIL 2025 | Adif AV licita la instalación de las telecomunicaciones móviles GSM-R en el tramo Talayuela-Plasencia\n21 MARZO 2025 | Adif AV licita por 131M€ el contrato de señalización y comunicaciones del tramo Talayuela-Plasencia\n05 DICIEMBRE 2024 | Adif licita una nueva subestación eléctrica para el tramo de alta velocidad Talayuela-Plasencia\n03 DICIEMBRE 2024 | Adif AV pone en servicio la primera fase del baipás de Mérida, en el tramo Plasencia- Badajoz",
+    "datos": [
+      "Entre diciembre de 2024 y el 13 de noviembre de 2026, Adif AV no ha publicado en esta categoría ninguna nota de puesta en servicio: ni de la segunda fase o del baipás de Mérida completo, ni del ERTMS de Plasencia-Badajoz, ni de una variante o integración de Navalmoral de la Mata, ni de un cambio de ancho.",
+      "Todas las notas de 2025-2026 son licitaciones, adjudicaciones u obras (Talayuela-Plasencia, accesos a Mérida, Talavera-Talayuela, estación de Navalmoral).",
+      "Es una ausencia en el listado de Adif AV, no una prueba de que no haya ocurrido: la autorización del baipás (14/04/2025) solo consta en la nota del Ministerio."
+    ]
+  }
+]

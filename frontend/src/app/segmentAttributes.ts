@@ -70,6 +70,13 @@ const MANDO: Record<string, ValorDicho> = {
   sin_dato_publicado: SIN_DATO_PUBLICADO,
 }
 
+// Las mismas palabras con las que cada línea dice su electrificación (`line.electrification`).
+const ELECTRIFICACION: Record<string, ValorDicho> = {
+  sin_electrificar: { texto: 'Sin electrificar' },
+  '3kv_cc': { texto: '3 kV CC' },
+  '25kv_ca': { texto: '25 kV 50 Hz' },
+}
+
 const ANCHO: Record<string, ValorDicho> = {
   mixto: { texto: 'Mixto: caben trenes de los dos anchos', termino: 'ancho-mixto' },
 }
@@ -95,6 +102,17 @@ export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
     formato: (v) => ANCHO[String(v)]?.texto ?? String(v),
     termino: (v) => ANCHO[String(v)]?.termino,
     lugar: 'esencial',
+  },
+  // Electrificación: la de la línea, salvo en los tramos que traen la suya (de Madrid a Humanes, en la
+  // línea convencional de Extremadura, hay catenaria; el resto de esa línea no la tiene). Va bajo «Más
+  // detalle», como en la ficha de la línea (docs/diseno.md).
+  {
+    clave: 'electrification',
+    etiqueta: 'Electrificación',
+    terminoEtiqueta: 'electrificacion',
+    formato: (v) => ELECTRIFICACION[String(v)]?.texto ?? String(v),
+    lugar: 'detalle',
+    deLinea: (line) => line.electrification,
   },
   // Señalización: lo que da el mapa 4 de la Declaración sobre la Red (docs/datos.md, «Señalización y
   // protección del tren»). Las claves de cada valor son las de `ATTRIBUTE_RULES` en el backend.

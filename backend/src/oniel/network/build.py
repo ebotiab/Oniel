@@ -100,16 +100,19 @@ class BuiltNetwork:
 
 
 def _relation_ways(
-    raw: dict[str, Any], relation_id: int
+    raw: dict[str, Any], relation_id: int | None
 ) -> tuple[list[dict[str, Any]], dict[int, Coord]]:
+    """Las vías de una relación del fichero y sus nodos; sin relación, todas las del fichero."""
     elements = raw["elements"]
-    relations = [e for e in elements if e["type"] == "relation" and e["id"] == relation_id]
-    if not relations:
-        raise ValueError(f"la relación {relation_id} no está en el fichero")
     ways = {e["id"]: e for e in elements if e["type"] == "way"}
     nodes: dict[int, Coord] = {
         e["id"]: (e["lon"], e["lat"]) for e in elements if e["type"] == "node"
     }
+    if relation_id is None:
+        return list(ways.values()), nodes
+    relations = [e for e in elements if e["type"] == "relation" and e["id"] == relation_id]
+    if not relations:
+        raise ValueError(f"la relación {relation_id} no está en el fichero")
     members = [
         ways[m["ref"]] for m in relations[0]["members"] if m["type"] == "way" and m["ref"] in ways
     ]
@@ -148,9 +151,11 @@ def chain_osm_relation(raw: dict[str, Any], relation_id: int) -> ChainedLine:
 
 
 def trace_osm_relation(
-    raw: dict[str, Any], relation_id: int, start: Coord, end: Coord
+    raw: dict[str, Any], relation_id: int | None, start: Coord, end: Coord
 ) -> ChainedLine:
     """Camino más corto por las vías de una relación OSM entre dos puntos.
+
+    Sin ``relation_id`` se usan todas las vías del fichero (un extracto de vías sin relación).
 
     Sirve para relaciones que incluyen las dos vías de una línea doble, ramales o miembros sin
     orden: el grafo son los nodos de las vías ``railway=rail`` y las aristas sus tramos; se
@@ -168,8 +173,9 @@ def trace_osm_relation(
             length = haversine_km(nodes[a], nodes[b])
             adjacency[a].append((b, length, way["id"]))
             adjacency[b].append((a, length, way["id"]))
+    where = f"la relación {relation_id}" if relation_id is not None else "el extracto de vías"
     if not adjacency:
-        raise ValueError(f"la relación {relation_id} no tiene vías ferroviarias")
+        raise ValueError(f"{where} no tiene vías ferroviarias")
 
     def nearest(p: Coord) -> list[int]:
         return sorted(adjacency, key=lambda n: haversine_km(nodes[n], p))[:TRACE_CANDIDATES]
@@ -185,7 +191,7 @@ def trace_osm_relation(
             break
     if best is None:
         raise ValueError(
-            f"no hay camino en la relación {relation_id} entre {start} y {end}; "
+            f"no hay camino en {where} entre {start} y {end}; "
             "¿están los dos puntos sobre la misma vía?"
         )
     s, e, prev = best
