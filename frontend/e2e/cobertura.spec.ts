@@ -1,25 +1,25 @@
 import { expect, test } from '@playwright/test'
 
+import { irA } from './navegar.ts'
+
 // «Cobertura y fuentes» es una página propia, sin mapa: lo esencial arriba, las líneas como lista
 // enlazada, los operadores con su estado y, al final, todas las fuentes agrupadas por lo que aportan.
 
 test.describe('Cobertura y fuentes, como página', () => {
-  test('se abre desde la vista de la red, tapa el visor y «Volver al mapa» devuelve a lo que se veía', async ({ page }) => {
+  test('se abre desde la cabecera, tapa el visor y «Mapa» devuelve a lo que se veía', async ({ page }) => {
     await page.goto('/linea/manzanares-ciudad-real')
     await expect(page.getByTestId('ficha-linea')).toBeVisible()
-    await page.goto('/')
-    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
-    if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
-    await page.getByTestId('boton-cobertura').click()
+    await irA(page, 'cobertura')
     await expect(page).toHaveURL(/\/cobertura$/)
     const pagina = page.getByTestId('pagina-cobertura')
     await expect(pagina.getByRole('heading', { level: 1 })).toHaveText('Cobertura y fuentes')
-    // el visor queda debajo, fuera de la vista
-    await expect(page.getByTestId('vista-red')).toBeHidden()
-    await expect(page.getByTestId('buscador')).toBeHidden()
-    await page.getByTestId('cobertura-volver').click()
-    await expect(page).toHaveURL(/\/$/)
-    await expect(page.getByTestId('vista-red')).toBeVisible()
+    // el visor queda debajo, fuera de la vista; la cabecera sigue, con el buscador
+    await expect(page.locator('#panel')).toBeHidden()
+    await expect(page.getByTestId('buscador')).toBeVisible()
+    // «Mapa» devuelve a la línea que se estaba viendo
+    await irA(page, 'mapa')
+    await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
+    await expect(page.getByTestId('ficha-linea')).toBeVisible()
     await expect(pagina).toHaveCount(0)
   })
 
@@ -95,12 +95,12 @@ test.describe('Cobertura y fuentes, como página', () => {
     await expect(page.getByTestId('fuentes-lineas').getByTestId('fuente-adif-declaracion-red-2026-mapas')).toHaveCount(1)
   })
 
-  test('un término de la página abre el glosario y, al volver, se vuelve a la página', async ({ page }) => {
+  test('un término de la página abre el glosario, y la cabecera devuelve a la página', async ({ page }) => {
     await page.goto('/cobertura')
     await page.getByTestId('pagina-cobertura').getByRole('button', { name: 'Operadores' }).click()
     await page.getByRole('link', { name: 'Ver en el glosario' }).click()
     await expect(page).toHaveURL(/\/glosario\/operador$/)
-    await page.getByTestId('glosario-volver').click()
+    await irA(page, 'cobertura')
     await expect(page).toHaveURL(/\/cobertura$/)
     await expect(page.getByTestId('pagina-cobertura')).toBeVisible()
   })
