@@ -55,6 +55,9 @@ test.describe('Carga de la red por partes', () => {
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {
+    // abre tres veces una línea desde la lista, y cada vez hay que desplegar antes las zonas: en el
+    // móvil del CI ronda el minuto (44 s con trece líneas), así que lleva el triple de margen
+    test.slow()
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await abrirHoja(page)
