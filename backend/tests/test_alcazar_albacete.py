@@ -77,10 +77,10 @@ def test_alcazar_is_the_station_of_the_main_line(
     assert all(n.offset_m < 100 for n in albacete.nodes)
     # con la línea cargada, de Alcázar ya no sale una conexión a trazos hacia Levante...
     assert all(c.node_id != "alcazar-de-san-juan" for c in conv_spec.connections)
-    # ...y de Albacete salen dos: la línea convencional hacia La Encina y la alta velocidad
+    # ...y de Albacete sale una: la línea convencional hacia La Encina. La de alta velocidad
+    # está cargada desde que entró la línea de Albacete a Alicante
     assert {c.id: c.node_id for c in albacete.spec.connections} == {
         "conv-albacete-levante": "albacete-los-llanos",
-        "lav-albacete-madrid-levante": "albacete-los-llanos",
     }
 
 
