@@ -41,6 +41,7 @@ class Settings(BaseSettings):
         "baipas-lleida",
         "lav-albacete-alicante",
         "lav-monforte-murcia",
+        "valencia-castello-tarragona",
     ]
 
 

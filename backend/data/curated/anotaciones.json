@@ -358,6 +358,75 @@
         "el-estrecho-digital-corte-algeciras"
       ],
       "checked_on": "2026-11-12"
+    },
+    {
+      "id": "proyecto-segunda-via-ancho-mixto-valencia-castello",
+      "kind": "proyecto",
+      "status": "en_obras",
+      "line_id": "valencia-castello-tarragona",
+      "from_node": "valencia-joaquin-sorolla",
+      "to_node": "castello-de-la-plana",
+      "expected_end_text": "2026",
+      "title": "Segunda vía de ancho mixto entre València y Castelló",
+      "reason": "Adaptación a ancho mixto de la otra vía de la línea entre València y Castelló, con su vía y su electrificación. Hoy solo una de las dos lleva tercer carril, así que los trenes de ancho estándar comparten una vía única en los dos sentidos.",
+      "note": "El Ministerio de Transportes cuenta estas obras entre las ejecutadas en 2025 y prevé para 2026 la puesta en servicio de la segunda vía. Es un balance de todo el Corredor Mediterráneo: no detalla el estado de las obras ni da una fecha más precisa.",
+      "milestones": [
+        {
+          "date": "2026-04-22",
+          "text": "El Ministerio de Transportes prevé para 2026 la puesta en servicio de la segunda vía de ancho mixto.",
+          "source_id": "moncloa-nota-corredor-mediterraneo-2026-04"
+        }
+      ],
+      "source_ids": [
+        "moncloa-nota-corredor-mediterraneo-2026-04"
+      ],
+      "checked_on": "2026-11-13"
+    },
+    {
+      "id": "proyecto-ancho-estandar-castello-la-boella",
+      "kind": "proyecto",
+      "status": "licitado",
+      "line_id": "valencia-castello-tarragona",
+      "from_node": "castello-de-la-plana",
+      "to_node": "cambiador-la-boella",
+      "title": "Cambio a ancho estándar entre Castelló y La Boella",
+      "reason": "Cambio del ancho de vía, de ibérico a estándar, en unos 180 km de línea entre Castelló de la Plana y el cambiador de La Boella. Con él los trenes de ancho estándar podrían seguir de la alta velocidad de Barcelona a Castelló y València sin cambiar de ancho.",
+      "note": "Adif Alta Velocidad licita desde 2022 obras y suministros para el cambio: los aparatos de vía, la vía y la electrificación entre Vandellòs y La Boella, el balasto, las sujeciones y la asistencia técnica. Las fuentes oficiales que Oniel ha leído no dicen si el cambio de ancho ha empezado ni cuándo se hará; las fechas que da la prensa no se registran. Los anuncios incluyen también el ramal de Tortosa, que no está cargado.",
+      "milestones": [
+        {
+          "date": "2022-05-12",
+          "text": "Se licita el suministro de los aparatos de vía para el ancho estándar entre Castelló y Vandellòs.",
+          "source_id": "boe-b-2022-14800"
+        },
+        {
+          "date": "2022-05-20",
+          "text": "Se licitan las obras de vía y electrificación para el ancho estándar entre Vandellòs y el cambiador de La Boella.",
+          "source_id": "boe-b-2022-15699"
+        },
+        {
+          "date": "2025-07-31",
+          "text": "Se licita el suministro de balasto para la fase del cambio de ancho entre Castelló y La Boella.",
+          "source_id": "boe-b-2025-27952"
+        },
+        {
+          "date": "2026-02-10",
+          "text": "Se licita el suministro de las sujeciones para el ancho estándar entre Castelló y La Boella.",
+          "source_id": "boe-b-2026-3795"
+        },
+        {
+          "date": "2026-06-16",
+          "text": "Se licita la asistencia técnica para el cambio de ancho de los aparatos de vía entre Castelló y La Boella.",
+          "source_id": "boe-b-2026-20400"
+        }
+      ],
+      "source_ids": [
+        "boe-b-2026-20400",
+        "boe-b-2026-3795",
+        "boe-b-2025-27952",
+        "boe-b-2022-15699",
+        "boe-b-2022-14800"
+      ],
+      "checked_on": "2026-11-13"
     }
   ]
 }

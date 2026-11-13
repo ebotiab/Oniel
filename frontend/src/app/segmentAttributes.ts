@@ -72,6 +72,8 @@ const MANDO: Record<string, ValorDicho> = {
 
 const ANCHO: Record<string, ValorDicho> = {
   mixto: { texto: 'Mixto: caben trenes de los dos anchos', termino: 'ancho-mixto' },
+  // un tramo de ancho estándar en una línea de ancho ibérico: del cambiador de La Boella a Camp de Tarragona
+  estandar: { texto: 'Estándar: el de la alta velocidad', termino: 'ancho-de-via' },
 }
 
 export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
@@ -85,8 +87,9 @@ export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
     testId: 'tramo-vias',
     sinCita: true,
   },
-  // Ancho de vía: solo lo traen los tramos que lo tienen distinto del de su línea (hoy, el ancho mixto
-  // del paso por Loja y de la entrada a Granada); los demás no enseñan la fila. Va con lo esencial
+  // Ancho de vía: solo lo traen los tramos que lo tienen distinto del de su línea (el ancho mixto del
+  // paso por Loja, de la entrada a Granada y de València a Castelló, y el estándar del enlace de La
+  // Boella a Camp de Tarragona); los demás no enseñan la fila. Va con lo esencial
   // porque es lo singular del tramo, y su fuente se cita al pie de «Más detalle» (docs/diseno.md).
   {
     clave: 'gauge',
