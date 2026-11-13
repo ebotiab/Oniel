@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { normalize } from '../app/search'
 import type { Source } from '../data/types'
 import { conceptos, terminos, tituloDe } from './glosario'
+import { Marca } from '../app/Marca'
 import { abreAparte } from '../app/navegacion'
 import { rutaGlosario, useAbrirGlosario } from './glosarioContexto'
 import { Dibujo } from './glosarioDibujos'
@@ -83,10 +84,7 @@ export function GlossaryPage({ entrada, sources, onBack }: Props) {
   return (
     <div ref={pagina} className="pagina" data-testid="pagina-glosario">
       <header className="pagina-cabecera">
-        <div className="marca-bloque">
-          <span className="marca">Oniel</span>
-          <span className="lema">Cómo está conectada la red ferroviaria</span>
-        </div>
+        <Marca />
         <button type="button" className="cobertura-pill" onClick={onBack} data-testid="glosario-volver">
           ← Volver al mapa
         </button>

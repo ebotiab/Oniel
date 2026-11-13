@@ -7,6 +7,7 @@ import { annotationHref, formatCount, formatDate, formatKm, lineLabel, lineKind,
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { formatDateLong, lugar } from '../app/annotations'
 import { agruparFuentes } from '../app/fuentes'
+import { Marca } from '../app/Marca'
 import { abreAparte, navegar } from '../app/navegacion'
 import { AnnotationNotice } from './AnnotationNotice'
 import { Muestra } from './Legend'
@@ -222,10 +223,7 @@ export function CoveragePage({ coverage, network, referenceDate, annotations, st
   return (
     <div className="pagina" data-testid="pagina-cobertura">
       <header className="pagina-cabecera">
-        <div className="marca-bloque">
-          <span className="marca">Oniel</span>
-          <span className="lema">Cómo está conectada la red ferroviaria</span>
-        </div>
+        <Marca />
         <button type="button" className="cobertura-pill" onClick={onBack} data-testid="cobertura-volver">
           ← Volver al mapa
         </button>

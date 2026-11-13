@@ -20,6 +20,7 @@ import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
+import { Marca } from './Marca'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
 import { legacyHashPath, networkCount, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
@@ -418,10 +419,7 @@ export default function App() {
       </Suspense>
       <header className="cabecera">
         <div className="cabecera-inicio">
-          <div className="marca-bloque">
-            <span className="marca">Oniel</span>
-            <span className="lema">Cómo está conectada la red ferroviaria</span>
-          </div>
+          <Marca />
           <SearchBox
             network={network}
             label="Buscar una estación o una línea"
