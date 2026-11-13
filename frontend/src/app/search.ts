@@ -59,9 +59,10 @@ function lineEntry(line: LineSummary): SearchEntry {
     key: `linea:${line.id}`,
     target: { type: 'linea', id: line.id },
     name: lineLabel(line),
-    detail: `Línea ${lineKind(line) === 'alta velocidad' ? 'de alta velocidad' : 'convencional'} · ${formatKm(line.length_km)} km`,
+    detail: `${line.bypass_of ? 'Baipás' : 'Línea'} ${lineKind(line) === 'alta velocidad' ? 'de alta velocidad' : 'convencional'} · ${formatKm(line.length_km)} km`,
     adifCode: null,
-    weight: 0,
+    // Un baipás cuelga de su línea: se encuentra por su nombre, detrás de las líneas, y no se ofrece sin escribir.
+    weight: line.bypass_of ? 1 : 0,
     words: text.split(' '),
     text,
   }

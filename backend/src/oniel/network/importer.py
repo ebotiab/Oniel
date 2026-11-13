@@ -132,10 +132,11 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
     await conn.execute(
         """
         INSERT INTO lines (id, name, short_name, sort_order, zone_id, mode, infrastructure_manager_id, gauge_mm, electrification,
-                           max_speed_kmh, opened_on, length_km, reference_length_km, status, description, geometry, source_id)
-        VALUES ($1,$2,$3,$4,$17,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+                           max_speed_kmh, opened_on, length_km, reference_length_km, status, description, geometry, source_id,
+                           bypass_of)
+        VALUES ($1,$2,$3,$4,$17,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$18)
         ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, short_name=EXCLUDED.short_name, sort_order=EXCLUDED.sort_order,
-          zone_id=EXCLUDED.zone_id,
+          zone_id=EXCLUDED.zone_id, bypass_of=EXCLUDED.bypass_of,
           mode=EXCLUDED.mode, infrastructure_manager_id=EXCLUDED.infrastructure_manager_id, gauge_mm=EXCLUDED.gauge_mm,
           electrification=EXCLUDED.electrification, max_speed_kmh=EXCLUDED.max_speed_kmh, opened_on=EXCLUDED.opened_on,
           length_km=EXCLUDED.length_km, reference_length_km=EXCLUDED.reference_length_km, status=EXCLUDED.status,
@@ -158,6 +159,7 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
         geometry,
         line.geometry_source.source_id,
         line.zone,
+        line.bypass_of,
     )
 
 

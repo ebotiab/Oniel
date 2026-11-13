@@ -1350,6 +1350,40 @@
   color: var(--tinta-2);
 }
 
+/* Un baipás cuelga de su línea: sangrado bajo ella, sin muestra de trazo y en un peso más ligero. */
+.zona-lineas .baipases-linea {
+  margin: 0 0 2px 40px;
+}
+
+.fila-baipas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 9px;
+  align-items: baseline;
+  padding: 3px 10px;
+  margin-left: -12px;
+  width: calc(100% + 12px);
+  background: none;
+  border: 0;
+  border-left: 2px solid transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: var(--t-14);
+  color: var(--tinta-2);
+}
+
+.fila-baipas:hover,
+.fila-baipas:focus-visible {
+  background: var(--papel-2);
+  border-left-color: var(--senal-azul);
+  outline: none;
+}
+
+.movil .fila-baipas {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
 .movil .fila-linea {
   padding-top: 9px;
   padding-bottom: 9px;
@@ -1995,6 +2029,15 @@
 .cobertura-lineas .datos {
   color: var(--tinta-2);
   white-space: nowrap;
+}
+
+/* Un baipás va bajo su línea, sangrado. */
+.cobertura-lineas .cobertura-baipas {
+  padding-left: 20px;
+}
+
+.cobertura-lineas .cobertura-baipas a {
+  font-weight: 400;
 }
 
 .cobertura-anotaciones {

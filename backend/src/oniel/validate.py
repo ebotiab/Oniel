@@ -308,8 +308,9 @@ def validate_all(
                 f"es un baipás de {spec.line.bypass_of}, que no está entre las líneas cargadas"
             )
         elif missing := [e for e in ends if e not in parent.nodes]:
+            are_not = "no es un nodo suyo" if len(missing) == 1 else "no son nodos suyos"
             problems.append(
-                f"es un baipás de {parent.line_id}, pero {' y '.join(missing)} no es un nodo suyo"
+                f"es un baipás de {parent.line_id}, pero {' y '.join(missing)} {are_not}"
             )
         else:
             resolved = parent
