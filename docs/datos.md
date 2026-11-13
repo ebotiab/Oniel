@@ -528,7 +528,7 @@ Verificación:
 
 **Lo que cambia en las líneas vecinas.**
 
-- En la de Valencia, Albacete, Villena y Alicante pasan a ser salidas con `via` hacia esta línea, y sobran los `track_km` que llevaban Albacete y Alicante. Elche AV, que sigue fuera de la red cargada, lleva ahora los suyos (234,1 km desde la bifurcación de Albacete).
+- En la de Valencia, Albacete, Villena y Alicante pasan a ser salidas con `via` hacia esta línea, y sobran los `track_km` que llevaban Albacete y Alicante. Elche AV, que entonces seguía fuera de la red cargada, llevó los suyos (234,1 km desde la bifurcación de Albacete) hasta que se cargó la línea de Murcia.
 - Al comprobar que todos los viajes de esta línea están también en la de Valencia salieron 20 que no estaban: los AVE de Madrid-Chamartín a Murcia sin parada hasta Elche AV, que no paran en ninguna estación de ninguna de las dos. Tienen ahora su regla de recorrido en las dos líneas. La de Valencia pasa de 469 a 489 viajes de Renfe y, el día de referencia, de 82 a 86 trenes hasta la bifurcación de Albacete.
 - La ficha de Albacete-Los Llanos enseña ya los trenes de alta velocidad, y las de las estaciones de las demás líneas, Alicante y Villena entre sus destinos directos.
 
