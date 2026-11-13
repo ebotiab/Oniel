@@ -32,10 +32,10 @@ def test_conventional_filter_selects_the_trains_that_use_the_line(
 ) -> None:
     trips = select_trips_for_spec(feed, conv_spec)
     products = Counter(t.product for t in trips)
-    assert products["MD"] > 300 and products["PROXIMDAD"] > 50
-    # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 4 Alvia y 20 Intercity Madrid-Atocha
+    assert products["MD"] == 290 and products["PROXIMDAD"] > 50
+    # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 2 Alvia y 20 Intercity Madrid-Atocha
     # Cercanías–Andalucía por las reglas de recorrido (van por esta línea hasta Manzanares)
-    assert products["ALVIA"] == 8 + 4 and products["Intercity"] == 20
+    assert products["ALVIA"] == 8 + 2 and products["Intercity"] == 20
     assert "AVE" not in products and "AVLO" not in products
     names = {
         _stop_names(feed, t.trip_id)[0] + " → " + _stop_names(feed, t.trip_id)[-1] for t in trips
@@ -85,11 +85,11 @@ def test_madrid_jaen_train_passes_through_despenaperros_as_estimated(
 def test_high_speed_filter_also_takes_the_trains_that_do_not_stop_in_madrid(
     feed: GtfsFeed, spec: NetworkSpec
 ) -> None:
-    """A los 335 que paran en Córdoba y en Madrid se suman 47 que recorren la línea sin parar en
+    """A los 317 que paran en Córdoba y en Madrid se suman 47 que recorren la línea sin parar en
     Madrid: 27 Avant que van de Sevilla a Córdoba sin paradas (por las paradas seguidas del
     filtro) y 20 AVE de Barcelona y de Valencia (por las reglas de recorrido)."""
     trips = select_trips_for_spec(feed, spec)
-    assert len(trips) == 335 + 27 + 20
+    assert len(trips) == 317 + 27 + 20
     madrid = {"60000", "17000", "18000"}
     away = [t for t in trips if not madrid & {st.stop_id for st in t.stop_times}]
     assert len(away) == 47
@@ -103,7 +103,7 @@ def test_high_speed_filter_also_takes_the_trains_that_do_not_stop_in_madrid(
             "corridor_filter": spec.corridor_filter.model_copy(update={"consecutive_stop_ids": []})
         }
     )
-    assert len(select_trips_for_spec(feed, plain)) == 335 + 20
+    assert len(select_trips_for_spec(feed, plain)) == 317 + 20
 
 
 def test_ouigo_trains_run_only_along_the_high_speed_line(

@@ -50,7 +50,7 @@ test.describe('La línea de alta velocidad Madrid – Zaragoza – Barcelona', (
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 100 · Ouigo España 10')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 83 · Ouigo España 10')
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveText(
       'No están los trenes de Iryo, que también opera en esta línea: no publica sus horarios en un formato abierto.',
     )

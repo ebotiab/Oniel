@@ -97,12 +97,13 @@ def test_sources_of_the_line_are_registered(jaen_spec: NetworkSpec) -> None:
 def test_the_filter_selects_the_trains_of_jaen_and_mengibar(
     feed: GtfsFeed, jaen_spec: NetworkSpec, jaen: BuiltNetwork
 ) -> None:
-    """Entran los 221 Media Distancia que paran en Jaén o en Mengíbar-Artichuela. Todos recorren
-    el primer tramo; los 20 que van de Linares-Baeza a Mengíbar-Artichuela no llegan a Jaén."""
+    """Entran los 123 Media Distancia que paran en Jaén o en Mengíbar-Artichuela, y todos recorren
+    la línea entera. Los trozos Linares-Baeza – Mengíbar-Artichuela que trae el fichero ya no son
+    viajes aparte: van dentro del tren al que pertenecen (``oniel.gtfs.variants``)."""
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat) for n in jaen.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in jaen.segments]
     trips = select_trips_for_spec(feed, jaen_spec)
-    assert len(trips) == 221
+    assert len(trips) == 123
     assert {t.product for t in trips} == {"MD"}
     first, second = (s.id for s in jaen.segments)
     by_segment = {first: 0, second: 0}
@@ -115,7 +116,7 @@ def test_the_filter_selects_the_trains_of_jaen_and_mengibar(
         for p in passes:
             by_segment[p.segment_id] += 1
             published += p.kind == "publicado"
-    assert by_segment == {first: 221, second: 201}
+    assert by_segment == {first: 123, second: 123}
     # solo los trenes que paran en Mengíbar-Artichuela y en Jaén tienen horas publicadas
     assert published == 20
 
@@ -127,7 +128,8 @@ def test_the_main_line_reaches_jaen_through_espeluy(conv_spec: NetworkSpec) -> N
         assert [(leg.line, leg.node) for leg in mapping.via] == [("espeluy-jaen", "espeluy")]
     rules = {r.id: r for r in conv_spec.route_overrides}
     assert rules["cordoba-jaen-sin-paradas"].consecutive_stop_ids == ["50500", "03100"]
-    assert rules["linares-baeza-mengibar"].consecutive_stop_ids == ["50300", "03001"]
+    # los trozos Linares-Baeza – Mengíbar-Artichuela van ya dentro de su tren: no hay regla
+    assert "linares-baeza-mengibar" not in rules
 
 
 def test_the_line_has_no_passenger_trains_while_the_main_line_works_last() -> None:

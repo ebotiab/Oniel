@@ -31,6 +31,10 @@ export function configurar({ token, entorno, commit }: Opciones): (capturado: Er
     rum: { session: false, webVitals: false },
     // Los errores los recoge ./arranque.ts desde antes de que llegue este fichero, con la ruta del visor.
     captureGlobalErrors: false,
+    // Error tracking agrupa por la huella del error, y el SDK del navegador no la calcula si no se
+    // le pide: sin ella el error llega pero no abre incidencia ni avisa. Sale de la traza del código
+    // compilado, así que un mismo fallo puede abrir una incidencia nueva tras otro despliegue.
+    errorFingerprinting: true,
     serviceVersion: commit || undefined,
     // configureFrontend no admite `environment`; el entorno va como atributo del recurso, con el
     // mismo nombre que usa el backend (`deployment_environment` en las consultas).
