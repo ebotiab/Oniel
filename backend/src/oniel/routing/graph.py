@@ -231,6 +231,14 @@ class Detour(BaseModel):
     closed_line_length_km: float
 
 
+class ClosureDetours(BaseModel):
+    """Los rodeos que salvan un tramo cerrado y cuántos más largos se han dejado fuera."""
+
+    detours: list[Detour]
+    #: Rodeos que existen y no se listan, por desproporcionados o por pasar del tope.
+    omitted: int
+
+
 #: Un paso del camino: la arista y el nodo al que llega.
 _Step = tuple[Edge, str]
 
@@ -452,15 +460,41 @@ def find_routes(
     return [_route(g, start, steps) for start, steps in ordered[:MAX_ROUTES]]
 
 
+def _along(graph: Graph, line_id: str, a: str, b: str) -> list[_Step]:
+    """Los tramos de la línea entre dos de sus nodos, en el sentido en que crecen sus kilómetros."""
+    km = graph.line_km[line_id]
+    lo, hi = km[a] - KM_TOLERANCE, km[b] + KM_TOLERANCE
+    steps: list[tuple[float, _Step]] = []
+    for edge in graph.edges:
+        if edge.line_id != line_id or edge.a not in km or edge.b not in km:
+            continue
+        near, far = sorted((edge.a, edge.b), key=lambda n: km[n])
+        if km[near] >= lo and km[far] <= hi:
+            steps.append((km[near], (edge, far)))
+    return [step for _, step in sorted(steps, key=lambda s: s[0])]
+
+
 def closure_detours(
-    graph: Graph, segment_id: str, scenario: Scenario | None = None
-) -> list[Detour]:
+    graph: Graph,
+    segment_id: str,
+    scenario: Scenario | None = None,
+    *,
+    max_ratio: float | None = DEFAULT_MAX_RATIO,
+) -> ClosureDetours:
     """Rodeos que salvan el tramo ``segment_id`` cerrado, del más corto al más largo.
 
     Un rodeo sale de la línea del tramo en un nodo situado antes del cierre, no vuelve a tocarla
     hasta un nodo situado después y no usa ninguno de sus tramos. Al no pasar por nodos
     intermedios de la línea, cada rodeo es el más ceñido al tramo de los que siguen su camino.
     El resto del escenario (otros cierres, enlaces, velocidades) se aplica también.
+
+    Como en ``find_routes``, se descarta el rodeo desproporcionado respecto a otro más corto
+    (``max_ratio``; ``None``, sin descartar ninguno). Dos rodeos pueden salir de la línea y
+    volver a ella en nodos distintos, así que para compararlos se completa cada uno con los
+    tramos de la propia línea hasta cubrir el mismo trecho, del nodo de salida más temprano al
+    de vuelta más tardío, y se les aplica la misma regla (``_strays``). El más corto se conserva
+    siempre, mida lo que mida: que exista otro camino es parte de la respuesta. ``omitted`` cuenta
+    los que se dejan fuera, para que quien consulta sepa que los hay.
     """
     closed = graph.edge(segment_id)
     if closed is None or closed.line_id is None:
@@ -484,10 +518,42 @@ def closure_detours(
             None,
         )
     ]
-    return [
-        Detour(
-            route=_route(g, start, steps),
-            closed_line_length_km=_round1(km[steps[-1][1]] - km[start]),
-        )
-        for start, steps in _sorted(found)[:MAX_ROUTES]
-    ]
+    ordered = _sorted(found)
+    if max_ratio is not None:
+
+        def whole(start: str, steps: list[_Step], first: str, last: str) -> list[_Step]:
+            end = steps[-1][1]
+            return [
+                *_along(graph, line_id, first, start),
+                *steps,
+                *_along(graph, line_id, end, last),
+            ]
+
+        kept: list[tuple[str, list[_Step]]] = []
+        for start, steps in ordered:
+            end = steps[-1][1]
+            strays = False
+            for other_start, other_steps in kept:
+                first = min(start, other_start, key=lambda n: km[n])
+                last = max(end, other_steps[-1][1], key=lambda n: km[n])
+                if _strays(
+                    whole(start, steps, first, last),
+                    whole(other_start, other_steps, first, last),
+                    max_ratio,
+                ):
+                    strays = True
+                    break
+            if not strays:
+                kept.append((start, steps))
+        ordered = kept
+    listed = ordered[:MAX_ROUTES]
+    return ClosureDetours(
+        detours=[
+            Detour(
+                route=_route(g, start, steps),
+                closed_line_length_km=_round1(km[steps[-1][1]] - km[start]),
+            )
+            for start, steps in listed
+        ],
+        omitted=len(found) - len(listed),
+    )

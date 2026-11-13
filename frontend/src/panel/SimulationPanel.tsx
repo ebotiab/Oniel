@@ -56,6 +56,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
   }
 
   const affected = result ? result.counts.afectado_publicado + result.counts.afectado_estimado : 0
+  const omitted = result?.omitted_alternatives ?? 0
 
   return (
     <section className="detalle simulacion" aria-labelledby="sim-titulo" data-testid="panel-simulacion">
@@ -128,7 +129,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
             <aside className="alternativa" aria-label="Recorrido alternativo" data-testid="sim-alternativa">
               <p className="sobre">Recorrido alternativo cargado en Oniel</p>
               {result.alternatives.map((a) => (
-                <p key={`${a.from_node_id}>${a.to_node_id}>${(a.line_ids ?? [a.line_id]).join('+')}`} className="texto">
+                <p key={`${a.from_node_id}>${a.to_node_id}>${(a.line_ids ?? [a.line_id]).join('+')}>${a.length_km}`} className="texto">
                   Entre <strong>{a.from_name}</strong> y <strong>{a.to_name}</strong>{' '}
                   {a.legs && a.legs.length > 1
                     ? `existe otro recorrido que encadena ${a.legs.length} ${a.legs.every((leg) => leg.line_id) ? 'líneas' : 'trechos'}: ${joinList(a.legs.map((leg) => `${legName(leg)} hasta ${leg.to_name}`))}`
@@ -151,6 +152,13 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
                   ))}
                 </p>
               ))}
+              {omitted > 0 && (
+                <p className="texto suave" data-testid="sim-alternativa-omitidas">
+                  {omitted === 1
+                    ? 'Existe otro recorrido más largo, que no se enseña: da un rodeo de más del doble respecto a otro más corto.'
+                    : `Existen otros ${omitted} recorridos más largos, que no se enseñan: dan un rodeo de más del doble respecto a otro más corto.`}
+                </p>
+              )}
             </aside>
           )}
           <ul className="contadores">

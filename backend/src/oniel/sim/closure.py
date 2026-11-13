@@ -92,15 +92,17 @@ def alternatives(
     segment_id: str,
     interruptions: list[InterruptionOut] | None = None,
     scenario: Scenario | None = None,
-) -> list[ClosureAlternative]:
-    """Recorridos alternativos al tramo cerrado, del más corto al más largo.
+) -> tuple[list[ClosureAlternative], int]:
+    """Recorridos alternativos al tramo cerrado, del más corto al más largo, y cuántos se omiten.
 
     Cada uno sale de la línea del tramo por un nodo anterior al cierre y vuelve a ella por uno
     posterior, por una línea o por varias encadenadas (``closure_detours``). ``interruptions``
-    son las vigentes el día simulado: cada alternativa lleva las que caen en su recorrido.
+    son las vigentes el día simulado: cada alternativa lleva las que caen en su recorrido. El
+    segundo valor son los rodeos más largos que existen y no se listan por desproporcionados.
     """
     out: list[ClosureAlternative] = []
-    for detour in closure_detours(graph, segment_id, scenario):
+    found = closure_detours(graph, segment_id, scenario)
+    for detour in found.detours:
         route = detour.route
         used = set(route.segment_ids)
         blocking = [i for i in interruptions or [] if used.intersection(i.segment_ids)]
@@ -141,7 +143,7 @@ def alternatives(
                 segment_ids=route.segment_ids,
             )
         )
-    return out
+    return out, found.omitted
 
 
 def _by_lines(route: Route) -> str:
