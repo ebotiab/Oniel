@@ -26,18 +26,18 @@ test.describe('La línea de alta velocidad Madrid – Cuenca – Valencia', () =
     await expect(ficha).toContainText('Albacete-Los Llanos')
   })
 
-  test('la línea tiene su ficha, con la bifurcación de Albacete y sus estaciones en el esquema', async ({ page }) => {
+  test('la línea tiene su ficha, con la bifurcación de Albacete y sus estaciones en el esquema', async ({ page }, testInfo) => {
     await page.goto('/linea/lav-madrid-valencia')
     await expect(page.getByRole('heading', { name: 'Línea de alta velocidad Madrid – Cuenca – Valencia' })).toBeVisible()
     await expect(page.locator('body')).toContainText('Sale de la línea Madrid – Sevilla en Torrejón de Velasco')
     const esquema = page.getByTestId('esquema')
-    await expect(esquema).toContainText('Bifurcación Torrejón de Velasco')
+    await expect(esquema).toContainText('Bif. Torrejón de Velasco')
     await expect(esquema).toContainText('Cuenca-Fernando Zóbel')
-    await expect(esquema).toContainText('Bifurcación Albacete')
+    await expect(esquema).toContainText('Bif. Albacete')
     await expect(esquema).toContainText('Requena-Utiel')
     await expect(esquema).toContainText('València-Joaquín Sorolla')
-    // los recuentos del esquema son de Renfe y de Ouigo; faltan los de Iryo
-    await expect(page.getByTestId('nota-esquema')).toContainText('no incluyen los de Iryo')
+    // los recuentos del esquema son de Renfe y de Ouigo; faltan los de Iryo (el esquema compacto del móvil no lleva la nota)
+    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('nota-esquema')).toContainText('no incluyen los de Iryo')
   })
 
   test('un tramo dice sus trenes por operador, que faltan los de Iryo y su señalización', async ({ page }) => {
@@ -65,7 +65,7 @@ test.describe('La línea de alta velocidad Madrid – Cuenca – Valencia', () =
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos.first()).toBeVisible()
     await expect(recorridos.first()).toContainText('389,7 km')
-    await expect(recorridos.first()).toContainText('Cuenca-Fernando Zóbel')
+    await expect(recorridos.first()).toContainText('Pasa por Cuenca y Requena-Utiel')
     await expect(recorridos.first()).toContainText('Recorre dos líneas')
     await page.goto('/recorridos/madrid-puerta-de-atocha/cuenca-fernando-zobel')
     await expect(recorridos.first()).toBeVisible()

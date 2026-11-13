@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-12 |
 | `ouigo-gtfs-nap` | Horarios de alta velocidad de Ouigo España (GTFS) | OUIGO España, en el Punto de Acceso Nacional del Ministerio de Transportes y Movilidad Sostenible | Licencia de datos abiertos del Ministerio (nap.transportes.gob.es/licencia-datos) | 2026-11-12 |
-| `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla y, hasta Málaga, en la de Córdoba a Málaga, y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-12 |
+| `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla, hasta Málaga en la de Córdoba a Málaga y en la de Madrid a Valencia por Cuenca, y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-12 |
 | `osm-relation-1254828` | Geometría de la LAV Madrid–Sevilla (vías con `ref=010`, operador Adif) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
 | `osm-relation-18368327` | Geometría de la línea 300 Madrid–Valencia; Oniel usa Madrid-Atocha–Alcázar de San Juan y, para la línea de Albacete, Alcázar de San Juan–Albacete-Los Llanos | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
 | `osm-relation-11351144` | Geometría de la línea 400 Alcázar de San Juan–Cádiz; Oniel usa Alcázar–Córdoba y, para la línea de Jaén, los 0,9 km entre la estación de Espeluy y la aguja del ramal | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
@@ -26,9 +26,11 @@
 | `osm-relation-16228313` | Vías de la entrada a Granada de la línea 036 (relación del servicio Avant Málaga → Granada), que faltan en la relación anterior | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
 | `wikipedia-lav-cordoba-malaga` | PK, longitud y fechas de apertura de la línea de alta velocidad Córdoba–Málaga (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
 | `wikipedia-lav-antequera-granada` | PK, fecha de apertura y paso por Loja de la línea de alta velocidad Antequera–Granada (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
+| `osm-relation-11146316` | Geometría de la línea 040, de alta velocidad, de la bifurcación de Torrejón de Velasco a València-Joaquín Sorolla; dónde se une el enlace que viene de la línea de Sevilla | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
+| `wikipedia-lav-madrid-levante` | PK, instalaciones, velocidades y fechas de apertura de la línea de alta velocidad Madrid–Levante; kilómetros de vía hasta Madrid-Chamartín, Albacete y Alicante (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
 | `adif-mapa-red` | Verificación del trazado, códigos de estación y puntos kilométricos de la línea 010 | Adif / Adif Alta Velocidad | Consulta pública | 2026-11-08 |
 | `adif-obras-autopista-ferroviaria` | Corte de la línea convencional al sur de Venta de Cárdenas por obras (información de Adif en prensa) | Adif; Europa Press / Demócrata | Consulta pública | 2026-11-08 |
-| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio | Adif | Consulta pública | 2026-11-12 |
+| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio; que no hay ninguna anunciada en la línea de Valencia | Adif | Consulta pública | 2026-11-12 |
 | `adif-aviso-obras-autopista-ferroviaria` | Aviso de la interrupción por obras entre Córdoba y Santa Cruz de Mudela | Adif | Consulta pública | 2026-11-10 |
 | `adif-salidas-y-llegadas` | Paneles de salidas y llegadas de cuatro estaciones: hasta dónde llegan los trenes a cada lado de una interrupción | Adif | Consulta pública | 2026-11-10 |
 | `renfe-nota-md-jaen-madrid-2026-09` | Inicio de las obras el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel | Renfe | Consulta pública | 2026-11-10 |
@@ -37,7 +39,7 @@
 | `enclm-avant-ciudad-real-puertollano-2026-11` | Anuncio de la vuelta de los Avant entre Ciudad Real y Puertollano el 13 de noviembre de 2026 | En Castilla-La Mancha (ENCLM) | © del medio; se cita el dato | 2026-11-12 |
 | `el-estrecho-digital-corte-algeciras` | Previsión de fin de las obras (otoño de 2027) y límite del corte de la vía en Venta de Cárdenas | El Estrecho Digital | © del medio; se cita el dato | 2026-11-10 |
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
-| `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
+| `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) y nombre del bloqueo «BSL» | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
 | `boe-a-…` y `boe-b-…` (19 fuentes) | Un anuncio del Boletín Oficial del Estado por fuente: estudios informativos, declaraciones de impacto ambiental, licitaciones y adjudicaciones de los proyectos (véase «Proyectos») | Boletín Oficial del Estado | Reutilización citando la fuente | 2026-11-12 |
 | `mitma-nota-baipas-cordoba-jaen-2025-03`, `mitma-nota-baipas-cordoba-jaen-2026-01` | Anuncio del baipás entre la alta velocidad y la línea de Córdoba a Jaén y comienzo de su estudio informativo | Ministerio de Transportes y Movilidad Sostenible | Consulta pública | 2026-11-12 |
 | `moncloa-nota-variante-de-loja-2025-02` | Estado de los tramos de la Variante de Loja en febrero de 2025 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-12 |
@@ -53,12 +55,12 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 | Operador | Líneas | Horarios | Fuente |
 |---|---|---|---|
-| Renfe Viajeros (`renfe`) | las ocho | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
-| Ouigo España (`ouigo`) | LAV Madrid – Sevilla y LAV Córdoba – Málaga | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
-| Iryo (`iryo`) | LAV Madrid – Sevilla y LAV Córdoba – Málaga | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
+| Renfe Viajeros (`renfe`) | las nueve | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
+| Ouigo España (`ouigo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga y LAV Madrid – Cuenca – Valencia | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
+| Iryo (`iryo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga y LAV Madrid – Cuenca – Valencia | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
 
 - **Ouigo** publica su GTFS en el Punto de Acceso Nacional de Transporte Multimodal (nap.transportes.gob.es, conjunto 1515). La descarga exige una cuenta de usuario, gratuita. La licencia permite reutilizar los datos con fines comerciales o no, citando la fuente con la indicación «Powered by MITRAMS» y un enlace a https://www.transportes.gob.es/, sin alterar los metadatos de actualización y manteniendo al día lo que se muestra; el panel de cobertura la cita con su enlace. El fichero es del 2 de julio de 2026 y vale del 26 de junio al 12 de diciembre de 2026: hay que descargar el siguiente a mano antes de esa fecha, y el flujo de refresco lo recuerda con una incidencia tres semanas antes (véase «Refresco de los horarios»).
-- **Iryo** no publica sus horarios en GTFS ni en otro formato reutilizable. El 11 de noviembre de 2026 no figuraba entre los 27 conjuntos ferroviarios del Punto de Acceso Nacional (el buscador no devuelve nada para «iryo» ni para «ILSA»), su web solo ofrece el buscador de billetes y Transitland no lo tiene. Existe un fichero elaborado por un particular, sin licencia declarada, que no se usa. Oniel no reconstruye sus horarios por otros medios: Iryo queda registrado sin horarios como operador de las dos líneas por las que circula (la de Madrid a Sevilla y la de Córdoba a Málaga; Málaga figura entre sus destinos, y Antequera y Granada no), sus trenes no están en los recuentos y el visor lo dice en cada tramo de esas líneas, en la nota del esquema y en la cobertura. Si Iryo publica un GTFS, basta declararlo en `feeds` y quitar `timetable` de su entrada en la especificación.
+- **Iryo** no publica sus horarios en GTFS ni en otro formato reutilizable. El 11 de noviembre de 2026 no figuraba entre los 27 conjuntos ferroviarios del Punto de Acceso Nacional (el buscador no devuelve nada para «iryo» ni para «ILSA»), su web solo ofrece el buscador de billetes y Transitland no lo tiene. Existe un fichero elaborado por un particular, sin licencia declarada, que no se usa. Oniel no reconstruye sus horarios por otros medios: Iryo queda registrado sin horarios como operador de las tres líneas por las que circula (la de Madrid a Sevilla, la de Córdoba a Málaga y la de Madrid a Valencia por Cuenca; Málaga, Valencia y Cuenca figuran entre sus destinos, y Antequera y Granada no), sus trenes no están en los recuentos y el visor lo dice en cada tramo de esas líneas, en la nota del esquema y en la cobertura. Si Iryo publica un GTFS, basta declararlo en `feeds` y quitar `timetable` de su entrada en la especificación.
 - **Particularidades del fichero de Ouigo.** Es una conversión de los horarios que el operador comunica a la base europea MERITS de la UIC, y la entrada de `feeds` declara cómo leerlo. Sus `stop_id` son el código UIC, «0071» seguido del código de estación de Adif: `stop_id_prefix` quita el prefijo al leer, así que sus paradas son las mismas que las del fichero de Renfe y valen las asignaciones de `stop_mappings` sin duplicarlas (solo hubo que añadir Zaragoza-Delicias y Barcelona-Sants como salidas por Madrid). Rotula todos los trenes como «TGV» y escribe «TGV 6477» como número: `product` los rotula «Ouigo» y el lector deja el número solo. Los nombres de parada vienen en mayúsculas y sin tildes; el lector los pasa a mayúscula inicial («Madrid-Puerta de Atocha») y el visor abrevia los que conoce.
 - `oniel-data validate` comprueba que cada operador con horarios cargados tiene un fichero declarado, que cada fichero es de un operador declarado en alguna línea, que un operador sin horarios publicados no tiene ninguno y que los ficheros vigentes coinciden en algún día (`common_validity`).
 
@@ -74,8 +76,9 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Convencional Alcázar de San Juan – Albacete (Adif 300) | `alcazar-albacete` | 130,8 km | 8 (1 compartido) | 7 | 149 (112 MD, 29 Regional Exprés y 8 Alvia) |
 | Alta velocidad Córdoba – Málaga (Adif 030), hasta Antequera-Santa Ana | `lav-cordoba-malaga` | 96,9 km | 5 (1 compartido) | 4 | 199 de Renfe (AVE, AVLO, Alvia, Avant, Intercity) y 15 de Ouigo |
 | Alta velocidad Antequera – Granada (Adif 036) | `lav-antequera-granada` | 114,1 km | 9 (1 compartido) | 8 (5 de vía única) | 74 (AVE, Alvia, Avant) |
+| Alta velocidad Madrid – Cuenca – Valencia (Adif 040), desde la bifurcación de Torrejón de Velasco | `lav-madrid-valencia` | 361,0 km | 13 (1 compartido) | 12 | 521 de Renfe (341 AVE, 83 Avant, 69 AVLO y 28 Alvia) y 22 de Ouigo |
 
-En «compartidos» se cuentan los nodos que define otra línea. Son 1.524,2 km de red, 48 estaciones y 980 viajes distintos (955 de Renfe y 25 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
+En «compartidos» se cuentan los nodos que define otra línea. Son 1.885,2 km de red, 51 estaciones y 1.523 viajes distintos (1.476 de Renfe y 47 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
 
 - Madrid-Puerta de Atocha y Córdoba son comunes a la alta velocidad y a la convencional: la red forma un lazo Madrid–Córdoba con dos recorridos, el de alta velocidad (343,6 km) y el convencional (440,7 km).
 - Manzanares (de la convencional) y Ciudad Real (de la alta velocidad) son los extremos de la tercera línea, que cierra un segundo lazo: de Madrid a Ciudad Real hay 170,8 km por la alta velocidad y 260,5 km por la convencional hasta Manzanares (196,1 km) y la línea de Manzanares a Ciudad Real (64,4 km).
@@ -88,6 +91,7 @@ En «compartidos» se cuentan los nodos que define otra línea. Son 1.524,2 km d
 - Los 25 viajes de Ouigo son 8 Madrid–Sevilla, 13 Madrid–Málaga y 4 que enlazan Barcelona con Sevilla o Málaga parando en Madrid-Puerta de Atocha; los 15 de Málaga dejan la línea de Sevilla en la bifurcación de Málaga y siguen por la de Córdoba a Málaga, sin parar, hasta salir de la red cargada en Antequera-Santa Ana. Ninguno recorre las líneas convencionales ni la de Granada.
 - La bifurcación Málaga-Alta Velocidad (de la línea Madrid–Sevilla) y Antequera-Santa Ana encadenan las tres líneas de alta velocidad: de Madrid a Granada hay 569,0 km, 358,0 por la línea de Sevilla, 96,9 por la de Málaga y 114,1 por la de Granada. Es el camino por el que van hoy los trenes y el tercero que da el comparador, tras el convencional por Moreda (487,3 km) y otro que mezcla las dos redes: mide 81,7 km más que el de Moreda y, sin paradas, se recorre en 2 h 18 min estimados frente a 3 h 32 min.
 - De los 199 viajes de Renfe de la línea de Málaga, 168 ya estaban en la de Sevilla. Los otros 31 son los 23 Avant de Sevilla a Málaga y a Granada y los 8 AVE de Barcelona a Málaga y a Granada, que no paran en Madrid. Los 74 de la línea de Granada están también en la de Málaga, salvo los 6 Avant de Málaga a Granada. En total, 37 viajes nuevos.
+- La bifurcación de Torrejón de Velasco (de la línea Madrid–Sevilla) es el origen de la novena línea, que lleva a Cuenca y a Valencia y no vuelve a tocar la red cargada: de Madrid-Puerta de Atocha a València-Joaquín Sorolla hay 389,7 km, 28,7 por la línea de Sevilla y 361,0 por esta, y a Cuenca-Fernando Zóbel, 187,7 km. Sus 521 viajes de Renfe y sus 22 de Ouigo no pasan por ninguna otra línea cargada: no paran en Córdoba, que es lo que exige el filtro de la de Sevilla, ni en las estaciones intermedias de la de Albacete. Por eso el total de Renfe pasa de 955 a 1.476 y el de Ouigo, de 25 a 47. De los 521, 225 dejan la línea en la bifurcación de Albacete, camino de Albacete, Alicante y Murcia.
 
 El día de referencia, el viernes 13 de noviembre de 2026, cada tramo de la LAV lleva los trenes de los dos operadores:
 
@@ -98,9 +102,11 @@ El día de referencia, el viernes 13 de noviembre de 2026, cada tramo de la LAV 
 | Bifurcación de Málaga – Majarabique | 49 | 6 | 55 |
 | Majarabique – Sevilla-Santa Justa | 47 | 6 | 53 |
 
+En la línea de Madrid a Valencia, los ocho tramos hasta la bifurcación de Albacete llevan 84 trenes de Renfe y 18 de Ouigo, 102 en total (el primero, 82 y 18: los dos AVE de Valencia a Sevilla entran por la bifurcación Blancales), y los cuatro que siguen hasta Valencia, 45 de Renfe y 10 de Ouigo, 55 en total.
+
 En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 71 trenes de Renfe y 6 de Ouigo, 77 en total. En la de Granada todos son de Renfe: 20 entre Antequera-Santa Ana y la bifurcación Bobadilla y 26 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
 
-En las cinco líneas convencionales y en la de alta velocidad a Granada todos los trenes son de Renfe. Los de Ouigo solo paran en Madrid, Córdoba y Sevilla o Málaga, así que su paso por cada tramo es siempre estimado. `GET /api/segment-counts` da el total por tramo (`counts`) y su reparto por operador (`by_operator`); el detalle de cada línea, `counts_by_operator`.
+En las cinco líneas convencionales y en la de alta velocidad a Granada todos los trenes son de Renfe. Los de Ouigo solo paran en Madrid, Córdoba y Sevilla o Málaga y, en la línea de Valencia, en Cuenca y Valencia, así que su paso por cada tramo es siempre estimado. `GET /api/segment-counts` da el total por tramo (`counts`) y su reparto por operador (`by_operator`); el detalle de cada línea, `counts_by_operator`.
 
 ## Cómo se verificó la LAV Madrid–Sevilla con Adif
 
@@ -661,6 +667,8 @@ Con la quinta (Linares-Baeza – Moreda – Granada, 173,7 km y seis tramos), el
 
 Con la sexta (Alcázar de San Juan – Albacete, 130,8 km y siete tramos), el mismo día: `index.json` pasa de 119,2 a 130,6 KB (de 21,0 a 22,9 KB comprimido) y `lines/alcazar-albacete.json`, 31,0 KB (6,9 KB comprimido). La parte de red del índice (sin las anotaciones) son 86,6 KB, unos 14 KB por línea, dentro del tope de 20 KB por línea que comprueba `e2e/carga.spec.ts`.
 
+Con la novena (alta velocidad Madrid – Cuenca – Valencia, 361,0 km y doce tramos; 13 de noviembre de 2026, nueve líneas, 1.885 km, 76 nodos distintos y 78 tramos): `index.json` pasa de 146,0 a 165,6 KB (de 24,9 a 27,8 KB comprimido) y `lines/lav-madrid-valencia.json` pesa 69,8 KB (16,6 KB comprimido). La parte de red del índice son 120,0 KB, unos 13 KB por línea. La instantánea entera ocupa 5,3 MB. `oniel-data import all`, con los tres ficheros de horarios declarados, tarda 20,7 s en local (34 s la primera vez, con la base vacía) y `validate`, 43 s. MEDIDA_ARRANQUE
+
 ## Atributos de tramo
 
 Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Lo usan el número de vías (`tracks`) desde #20, la protección del tren, el bloqueo y el mando (véase «Señalización y protección del tren») y, solo donde la vía es de ancho mixto, el ancho (`gauge`, con el valor `mixto`: el paso por Loja y la entrada a Granada de la línea de Antequera a Granada, que el visor todavía no enseña); una electrificación parcial entrará igual, sin columna, migración ni reparto propios.
@@ -714,6 +722,7 @@ Cada tramo dice qué sistema de protección del tren tiene, qué bloqueo y si su
 | Rótulo «BAD» | `bloqueo` | `bad` | Automático de vía doble |
 | Rótulo «BAU» | `bloqueo` | `bau` | Automático de vía única |
 | Rótulo «BLAU» | `bloqueo` | `blau` | De liberación automática en vía única |
+| Trazo de «BCA» que cambia al de «BSL» donde no hay nodo | `bloqueo` | `bca_bsl` | De control automático en una parte y de señalización lateral en otra |
 | «ctc» tras el rótulo del bloqueo | `mando` | `ctc` | Control de tráfico centralizado |
 | Rótulo del bloqueo sin «ctc», cuando la leyenda trae ese mismo bloqueo con y sin él («BAB», «BAD») | `mando` | `sin_ctc` | Sin control centralizado |
 | Nada sobre el mando | `mando` | `sin_dato_publicado` | Sin dato publicado |
@@ -739,6 +748,8 @@ Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan
 | | La Roda de Albacete – Albacete-Los Llanos | ASFA | BAB | CTC |
 | Alta velocidad Córdoba – Málaga | Bifurcación Málaga-Alta Velocidad – Antequera-Santa Ana | ERTMS de niveles 1 y 2 y ASFA (`ertms_n1_n2_asfa`) | BCA | sin dato publicado |
 | Alta velocidad Antequera – Granada | Antequera-Santa Ana – Granada | ERTMS de nivel 2 y ASFA (`ertms_n2_asfa`) | BCA | sin dato publicado |
+| Alta velocidad Madrid – Cuenca – Valencia | Bifurcación Torrejón de Velasco – Siete Aguas | ERTMS de nivel 1 y ASFA (`ertms_n1_asfa`) | BCA | sin dato publicado |
+| | Siete Aguas – València-Joaquín Sorolla | ERTMS de nivel 1 y ASFA (`ertms_n1_asfa`) | BCA y BSL (`bca_bsl`) | sin dato publicado |
 
 El bloqueo de vía única cae justo en los tramos que Oniel ya tenía como vía única por otras fuentes; una prueba lo comprueba.
 
@@ -748,6 +759,8 @@ La línea de Jaén trajo un valor nuevo, `blau`: el mapa rotula «BLAU ctc», co
 
 - **El mando de la alta velocidad no está publicado.** El mapa solo dice «ctc» junto a los bloqueos automáticos; junto al BCA de la línea Madrid – Sevilla no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos. Sus once tramos llevan `sin_dato_publicado`: un valor declarado, con la fuente en la que se buscó y la fecha, que la ficha dice tal cual. No se dedujo de otras líneas ni de otras publicaciones.
 - **De Alcázar de San Juan a La Roda de Albacete el mapa no pone «ctc».** Rotula «BAB» hasta Villarrobledo y «BAD» hasta La Roda, y solo desde allí hasta Albacete «BAB ctc». La leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD», así que el mapa dice que esos dos trechos no tienen control de tráfico centralizado. Llevan `sin_ctc`, que la ficha dice como «Sin control centralizado» (decidido con el usuario el 12 de noviembre de 2026; al principio fueron como `sin_dato_publicado`). El mapa no dice desde dónde se gobiernan: el valor recoge solo lo que afirma, la ausencia de CTC. `sin_dato_publicado` queda para donde el mapa calla, como en la alta velocidad.
+- **La entrada a Valencia cambia de bloqueo donde no hay nodo.** El trazo de BCA de la alta velocidad de Madrid acaba poco antes de València-Joaquín Sorolla y lo sigue un trazo rojo rotulado «BSL», que la leyenda llama «BSL Alta Velocidad»; en la lista de abreviaturas del Reglamento de Circulación Ferroviaria, BSL es el bloqueo de señalización lateral. El mapa es un esquema y no dice dónde cambia, así que el último tramo, de Siete Aguas a Valencia (50,6 km), lleva el valor mixto `bca_bsl`. El glosario no tiene entrada propia para ese bloqueo: la ficha enlaza con la del bloqueo de control automático.
+- **En la alta velocidad de Valencia el mapa dibuja ERTMS de nivel 1.** El símbolo junto a la línea es el morado oscuro de «ERTMS N1», no el más claro de «ERTMS N1 y 2» (se comprobó con la leyenda), acompañado del de «ASFA - AV»: va como `ertms_n1_asfa`, «ERTMS de nivel 1 y ASFA». Wikipedia dice que la línea tiene los niveles 1 y 2; se declara lo que dibuja la fuente de este atributo.
 - **Ningún tramo dice qué puesto de mando lo gobierna.** `mando` recoge solo si hay control de tráfico centralizado, que es lo que da el mapa.
 - **Cinco Casas – Manzanares cambia de bloqueo donde no hay nodo.** El mapa pasa de «BAB ctc» a «BAD ctc» en Herrera de la Mancha (PK 183,7 según `wikipedia-lineas-300-400`), que Oniel no tiene como nodo. El tramo lleva un valor mixto, `bab_bad`, que la ficha dice como «Automático: banalizado en una parte y de vía doble en otra». Si Herrera de la Mancha entra algún día como nodo, el tramo se parte y el valor mixto sobra.
 - **Manzanares – Ciudad Real se leyó por el color.** El único rótulo cercano, «BAD ctc», está junto a Manzanares, sobre el trazo de vía doble Herrera – Manzanares de la línea 400. La línea 522 es de vía única y lleva el trazo naranja, que en la leyenda de vía única es «BAU ctc».
@@ -802,5 +815,12 @@ Lo aprendido al añadir las de alta velocidad de Córdoba a Granada:
 - **Trenes que ya no están fuera.** Al cargar la línea por la que sigue un tren, sus paradas dejan de ser salidas sin más en las líneas vecinas: se les añade `via`. Y los viajes que solo recorren la línea nueva aparecen por primera vez en las estaciones de las demás, así que cambian sus recuentos (destinos directos, trenes que paran).
 - **Trenes que cruzan sin parar.** Si la línea termina donde la red cargada y hay trenes que la recorren sin parar hacia fuera, su paso es estimado solo si a la otra parada se llega por una línea cargada (`via`).
 - **Proyectos.** Los que eran esbozos sobre la línea nueva pasan a colgar de sus tramos, y sus notas dejan de decir que la línea no está cargada.
+
+Lo aprendido al añadir la de alta velocidad a Valencia:
+
+- **Un nodo compartido puede no ser el arranque de la relación.** La bifurcación de Torrejón de Velasco es en OSM un punto, y la relación de la línea nueva empieza 1,4 km antes. La línea se traza desde el nodo que ya existe, sin moverlo, y `pk_origin_km` lleva el PK que le toca a ese punto: se mide trazando la relación entera una vez y comparando con los PK de la fuente.
+- **Trenes que cruzan la línea entre dos paradas de fuera de la red.** Si a ninguna de las dos llega una línea cargada, su paso queda indeterminado. Cuando una fuente da los kilómetros de vía desde la salida hasta la parada, la asignación los declara con `track_km` (solo en una salida sin `via`) y el paso es estimado. `validate` lo enseña: mientras `passes` traiga `indeterminado`, falta algo.
+- **El filtro, por las estaciones que solo tiene la línea.** Una estación término a la que llegan trenes de otra línea (València-Joaquín Sorolla y los de Castelló) no sirve de filtro. Los trenes que no paran en ninguna estación propia entran por reglas de recorrido con `from_stop_id`, que no cambian su asignación.
+- **Un enlace sin cargar entre dos líneas cargadas.** La salida es el nodo de esta línea donde se une el enlace, y `via` nombra la línea vecina y su nodo más cercano: el reparto suma la línea recta entre los dos nodos y los kilómetros por la otra línea.
 
 El visor dibuja todo lo que trae el índice (`index.json` o `GET /api/lines`): todas las líneas en el mapa y una entrada por línea en la lista de la vista de la red. No hay que tocar el visor: el detalle de la línea nueva se pide solo cuando se abre.
