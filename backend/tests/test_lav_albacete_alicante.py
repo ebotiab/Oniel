@@ -6,7 +6,14 @@ from __future__ import annotations
 from collections import Counter
 
 import pytest
-from conftest import ALBACETE_SPEC, DATA_DIR, LAV_ALICANTE_SPEC, LAV_VALENCIA_SPEC, SOURCES
+from conftest import (
+    ALBACETE_SPEC,
+    DATA_DIR,
+    LAV_ALICANTE_SPEC,
+    LAV_MURCIA_SPEC,
+    LAV_VALENCIA_SPEC,
+    SOURCES,
+)
 
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip
@@ -28,7 +35,8 @@ RELATION = "osm-relation-11146315"
 MAP = "adif-declaracion-red-2026-mapas"
 #: Estaciones de alta velocidad a las que no llega ningún tren convencional.
 ONLY_HIGH_SPEED = {"03309", "03410", "03208"}
-#: Paradas de la línea de alta velocidad de Monforte del Cid a Murcia, que no está cargada.
+#: La línea de alta velocidad de Monforte del Cid a Murcia, que sale de esta, y sus paradas.
+MURCIA = "lav-monforte-murcia"
 MURCIA_LINE = ["03410", "03412", "62002", "62001", "61200"]
 #: Estaciones intermedias de la línea convencional de Alcázar de San Juan a Albacete y de la de
 #: La Encina a Alicante: un tren que para en alguna no va por la alta velocidad.
@@ -52,7 +60,8 @@ def trunk() -> BuiltNetwork:
 
 @pytest.fixture(scope="module")
 def lines(line: BuiltNetwork, trunk: BuiltNetwork) -> list[LoadedLine]:
-    return [loaded_line(line), loaded_line(trunk)]
+    murcia = build_network(load_network_spec(LAV_MURCIA_SPEC), DATA_DIR)
+    return [loaded_line(line), loaded_line(trunk), loaded_line(murcia)]
 
 
 def _stops(trip: GtfsTrip) -> list[str]:
@@ -136,13 +145,21 @@ def test_it_shares_the_junction_and_albacete_station(line: BuiltNetwork) -> None
     assert [c.id for c in conventional.connections] == ["conv-albacete-levante"]
     trunk_spec = load_network_spec(LAV_VALENCIA_SPEC)
     assert all(c.node_id != "bif-albacete" for c in trunk_spec.connections)
-    # lo que queda a trazos: la línea de Murcia y la convencional de La Encina a Alicante. El
-    # enlace de alta velocidad hacia Valencia por Xàtiva figura en la fuente como futuro: no
-    # es un nodo ni una conexión
+    # lo que queda a trazos: el enlace de Monforte del Cid con la línea de Murcia, que ya está
+    # cargada, y la convencional de La Encina a Alicante. El enlace de alta velocidad hacia
+    # Valencia por Xàtiva figura en la fuente como futuro: no es un nodo ni una conexión
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "lav-monforte-murcia": "bif-murcia",
+        "enlace-monforte-vinalopo": "monforte-del-cid-av",
         "conv-alicante-la-encina": "alicante-terminal",
     }
+    murcia = load_network_spec(LAV_MURCIA_SPEC)
+    theirs = next(n for n in murcia.nodes if n.id == "bif-murcia")
+    # la bifurcación de Murcia la define esta línea, por su punto kilométrico; la de Murcia la
+    # incorpora en el mismo punto
+    assert theirs.shared and line.node("bif-murcia").spec.position.km is not None
+    here = line.node("bif-murcia")
+    assert theirs.position.lon is not None and theirs.position.lat is not None
+    assert haversine_km((here.lon, here.lat), (theirs.position.lon, theirs.position.lat)) < 0.001
     assert "encina" not in " ".join(n.spec.id for n in line.nodes)
 
 
@@ -256,6 +273,7 @@ def test_trains_without_a_stop_enter_through_the_rules(feed: GtfsFeed, spec: Net
         "madrid-albacete-sin-cuenca": ["17000", "60600"],
         "madrid-alicante-sin-parada": ["17000", "60911"],
         "madrid-elche-sin-parada": ["17000", "03410"],
+        "madrid-murcia-sin-parada": ["60000", "61200"],
     }
     matched = Counter(
         route.override.id
@@ -286,14 +304,22 @@ def test_trains_to_murcia_leave_by_one_of_two_junctions(
     Murcia, 3,3 km antes."""
     spec = line.spec
     for stop_id in MURCIA_LINE:
-        assert spec.stop_mappings[stop_id].exits == ["monforte-del-cid-av"]
+        mapping = spec.stop_mappings[stop_id]
+        assert mapping.exits == ["monforte-del-cid-av"]
+        # el enlace no está cargado: se sigue por la línea de Murcia desde la bifurcación Vinalopó
+        assert [(leg.line, leg.node) for leg in mapping.via] == [(MURCIA, "bif-vinalopo")]
     for rule in spec.route_overrides:
         if rule.id in ("albacete-elche-sin-alicante", "madrid-elche-sin-parada"):
             assert {s: m.exits for s, m in rule.stop_mappings.items()} == dict.fromkeys(
                 MURCIA_LINE, ["bif-murcia"]
             )
+        elif rule.id == "madrid-murcia-sin-parada":
+            assert {s: m.exits for s, m in rule.stop_mappings.items()} == {"61200": ["bif-murcia"]}
         else:
             assert not rule.stop_mappings
+        for mapping in rule.stop_mappings.values():
+            assert [(leg.line, leg.node) for leg in mapping.via] == [(MURCIA, "bif-murcia")]
+            assert mapping.track_km is None
     trips = select_trips_for_spec(feed, spec)
     # los Avant de Alicante a Murcia solo recorren el último tramo
     avant = [t for t in trips if t.product == "AVANT" and "61200" in _stops(t)]

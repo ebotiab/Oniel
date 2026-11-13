@@ -1,0 +1,108 @@
+{
+  "line": {
+    "id": "lav-monforte-murcia",
+    "name": "Línea de alta velocidad Monforte del Cid – Murcia",
+    "short_name": "046",
+    "sort_order": 14,
+    "zone": "levante",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 200,
+    "tracks": 2,
+    "opened_on": "2021-02-01",
+    "reference_length_km": 68.442,
+    "pk_origin_km": 461.356,
+    "status": "disponible",
+    "description": "El camino por el que la alta velocidad llega a Elche, a Orihuela y a Murcia: sale de la línea de Albacete a Alicante en Monforte del Cid, poco antes de Alicante, y baja por la Vega Baja del Segura hasta Murcia del Carmen.\n\nPara Adif es una línea aparte, la 046. Empieza en la bifurcación de Murcia, por la que llegan los trenes de Madrid que no entran en Alicante. Los que salen de Alicante se unen a ella un poco después, en la bifurcación Vinalopó, por un enlace corto que todavía no está cargado.\n\nSe abrió en dos veces: hasta Beniel, el 1 de febrero de 2021, y de Beniel a Murcia, el 19 de diciembre de 2022. Hasta Orihuela tiene dos vías; desde allí, una sola, al lado de la vía de la línea convencional de Alicante a Murcia. En los últimos kilómetros, desde El Reguerón, comparte la vía con los trenes de Cartagena: tiene tres carriles para que quepan los dos anchos.\n\nDe Murcia siguen las líneas convencionales a Cartagena, a Lorca y Águilas y a Albacete por Cieza, que todavía no están cargadas.",
+    "geometry_source": {
+      "source_id": "osm-relation-18342974",
+      "parts": [
+        {
+          "source_id": "osm-relation-18342974",
+          "file": "raw/osm/relation_18342974_lav_monforte_murcia_2026-11-13.json",
+          "relation_id": 18342974,
+          "from": [-0.741377, 38.40283],
+          "to": [-1.130926, 37.9746356]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-madrid-levante"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"},
+    {"id": "ouigo", "name": "Ouigo España", "role": "operador", "source_id": "ouigo-gtfs-nap"}
+  ],
+  "nodes": [
+    {"id": "bif-murcia", "name": "Bifurcación Murcia", "kind": "bifurcacion", "shared": true, "position": {"lon": -0.741377, "lat": 38.40283}, "reference_pk_km": 461.356},
+    {"id": "bif-vinalopo", "name": "Bifurcación Vinalopó", "kind": "bifurcacion", "position": {"lon": -0.7148912, "lat": 38.394347}, "reference_pk_km": 464.922,
+     "description": "Aquí se une a la línea el enlace que viene de Alicante por Monforte del Cid. Por él llegan los trenes de Alicante a Elche, Orihuela y Murcia, y los de Madrid que paran antes en Alicante."},
+    {"id": "elche-av", "name": "Elche Alta Velocidad", "kind": "estacion", "adif_code": "03410", "position": {"lon": -0.766743, "lat": 38.246044}, "reference_pk_km": 482.21,
+     "description": "La estación de alta velocidad de Elche, en la partida de Matola, a unos kilómetros de la ciudad. Se abrió con la línea, el 1 de febrero de 2021. En los horarios figura como «Elche/Elx AV». Las estaciones de Elche de la línea convencional, Elche-Parc y Elche-Carrús, son otras."},
+    {"id": "san-isidro-albatera-catral-av", "name": "San Isidro-Albatera-Catral", "kind": "paet", "rank": "secundario", "position": {"km": 32.212}, "reference_pk_km": 493.568,
+     "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET): permite que un tren adelante a otro o espere en vía apartada. Los trenes de alta velocidad no paran aquí. Está junto a la estación del mismo nombre de la línea convencional de Alicante a Murcia."},
+    {"id": "callosa-de-segura-cox", "name": "Callosa de Segura-Cox", "kind": "estacion", "adif_code": "03412", "position": {"lon": -0.875093, "lat": 38.137015}, "reference_pk_km": 498.232,
+     "description": "Estación de la línea de alta velocidad entre Callosa de Segura y Cox. Paran en ella trenes Avant de Alicante a Murcia. La estación de Callosa de Segura de la línea convencional es otra."},
+    {"id": "orihuela-miguel-hernandez", "name": "Orihuela-Miguel Hernández", "kind": "estacion", "adif_code": "62002", "position": {"lon": -0.943636, "lat": 38.078275}, "reference_pk_km": 507.582,
+     "description": "La estación de Orihuela. En ella paran los trenes de alta velocidad y los de la línea convencional de Alicante a Murcia, que tiene aquí su propia vía. Desde aquí hasta Murcia la línea de alta velocidad tiene una sola vía."},
+    {"id": "beniel", "name": "Beniel", "kind": "estacion", "adif_code": "62001", "position": {"lon": -0.995289, "lat": 38.047014}, "reference_pk_km": 513.352,
+     "description": "Estación de Beniel, ya en la Región de Murcia. Paran en ella trenes Avant de Alicante a Murcia. Hasta aquí llegó la línea cuando se abrió, en febrero de 2021; el trecho hasta Murcia se abrió en diciembre de 2022."},
+    {"id": "bif-el-regueron", "name": "Bifurcación El Reguerón", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -1.058278, "lat": 37.9911527},
+     "description": "Aquí se une la línea convencional que viene de Cartagena. Desde este punto hasta Murcia los trenes de alta velocidad y los de Cartagena van por la misma vía, que tiene tres carriles para los dos anchos."},
+    {"id": "murcia-del-carmen", "name": "Murcia del Carmen", "kind": "estacion", "adif_code": "61200", "position": {"lon": -1.130589, "lat": 37.974506}, "reference_pk_km": 529.798,
+     "description": "La estación de Murcia, donde acaba la línea. A ella llegan también las líneas convencionales de Alicante, de Cartagena, de Lorca y Águilas y de Albacete por Cieza."}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "orihuela-miguel-hernandez", "to_node": "murcia-del-carmen", "value": 1, "source_id": "wikipedia-lav-madrid-levante", "checked_on": "2026-11-13", "note": "La tabla de puntos kilométricos dice que en el PAET de Orihuela AV empieza la vía única de ancho estándar, con la de ancho ibérico al lado. En la relación 18342974 de OSM la segunda vía acaba en una topera 3,5 km antes de Orihuela (km 42,8 de la línea), y el mapa 4 de la Declaración sobre la Red, que es un esquema, dibuja la línea como vía única desde poco después de Elche AV. Se declara lo que dice la tabla, nodo a nodo."},
+    {"attribute": "gauge", "from_node": "bif-el-regueron", "to_node": "murcia-del-carmen", "value": "mixto", "source_id": "osm-relation-18342974", "checked_on": "2026-11-13", "note": "En OSM, gauge=1435;1668 y ref=354 (la línea de Chinchilla a Cartagena) desde el punto en que la vía de la línea 046 se une a la de Cartagena hasta 2,3 km antes de la estación (4,8 km); la entrada a la estación vuelve a ser de 1435. El mapa 4 de la Declaración sobre la Red dibuja de El Reguerón a Murcia del Carmen una vía única con tercer carril, y la tabla de Wikipedia dice que la línea convencional de Cartagena entra en El Reguerón con ancho mixto."},
+    {"attribute": "proteccion_tren", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "ertms_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: símbolos «ERTMS N2» y «ASFA - AV» junto a la línea entre la bifurcación de Murcia y Elche/Elx AV y, con una línea de llamada, entre Orihuela y Beniel. Entre El Reguerón y Murcia del Carmen, el de «ERTMS N2» con el de «ASFA - Convencional». Wikipedia dice que el tramo de Monforte del Cid a Murcia solo tiene ETCS de nivel 2 y las vías de OSM llevan railway:etcs=2."},
+    {"attribute": "bloqueo", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BCA» y trazo rosa a lo largo de toda la línea. Entre El Reguerón y Murcia del Carmen rotula «BCA ancho 1.435» y «BSL ancho 1.668»: el BSL es el de los trenes de ancho ibérico, que no son los de esta línea."},
+    {"attribute": "mando", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
+  ],
+  "connections": [
+    {"id": "conv-murcia-cartagena", "node_id": "bif-el-regueron", "name": "Línea convencional Murcia–Cartagena", "towards": "Balsicas-Mar Menor, Torre-Pacheco y Cartagena", "status": "no_cargada", "sketch": [[-1.058278, 37.9911527], [-1.02, 37.92], [-0.950891, 37.81884], [-0.967078, 37.746905], [-0.975122, 37.604967]]},
+    {"id": "conv-murcia-lorca-aguilas", "node_id": "murcia-del-carmen", "name": "Línea convencional Murcia–Lorca–Águilas", "towards": "Alhama de Murcia, Totana, Lorca y Águilas; por aquí seguirá la línea de alta velocidad a Almería, en obras", "status": "no_cargada", "sketch": [[-1.130589, 37.974506], [-1.4145141, 37.8494024], [-1.4956153, 37.7635424], [-1.6962305, 37.6721129]]},
+    {"id": "conv-murcia-albacete-por-cieza", "node_id": "murcia-del-carmen", "name": "Línea convencional Chinchilla–Murcia", "towards": "Archena, Cieza, Hellín y Albacete", "status": "no_cargada", "sketch": [[-1.130589, 37.974506], [-1.236037, 38.13132], [-1.421702, 38.246609], [-1.688437, 38.508776]]}
+  ],
+  "stop_mappings": {
+    "03410": {"node": "elche-av"},
+    "03412": {"node": "callosa-de-segura-cox"},
+    "62002": {"node": "orihuela-miguel-hernandez"},
+    "62001": {"node": "beniel"},
+    "61200": {"node": "murcia-del-carmen"},
+    "60911": {"exits": ["bif-vinalopo"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
+    "03309": {"exits": ["bif-vinalopo"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
+    "60600": {"exits": ["bif-vinalopo"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
+    "03208": {"exits": ["bif-vinalopo"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}]},
+    "60000": {"exits": ["bif-vinalopo"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]},
+    "17000": {"exits": ["bif-vinalopo"]},
+    "92102": {"exits": ["bif-vinalopo"]},
+    "08004": {"exits": ["bif-vinalopo"]},
+    "10600": {"exits": ["bif-vinalopo"]},
+    "11014": {"exits": ["bif-vinalopo"]},
+    "14100": {"exits": ["bif-vinalopo"]},
+    "14114": {"exits": ["bif-vinalopo"]},
+    "14202": {"exits": ["bif-vinalopo"]},
+    "14213": {"exits": ["bif-vinalopo"]},
+    "14223": {"exits": ["bif-vinalopo"]},
+    "15100": {"exits": ["bif-vinalopo"]},
+    "15122": {"exits": ["bif-vinalopo"]},
+    "15203": {"exits": ["bif-vinalopo"]},
+    "15211": {"exits": ["bif-vinalopo"]},
+    "15410": {"exits": ["bif-vinalopo"]},
+    "30200": {"exits": ["bif-vinalopo"]},
+    "22100": {"exits": ["bif-vinalopo"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Elche Alta Velocidad o en Callosa de Segura-Cox, estaciones a las que solo se llega por esta línea: los trenes de alta velocidad de Madrid a Murcia y los Avant de Alicante a Murcia. Quedan fuera los trenes convencionales que paran en Orihuela y en Murcia del Carmen. Los que la recorren sin parar en ninguna de las dos entran por las reglas de recorrido.",
+    "any_of_stop_ids": ["03410", "03412"],
+    "min_node_stops": 1
+  },
+  "route_overrides": [
+    {"id": "albacete-elche-sin-alicante", "description": "Trenes que van de Albacete a Elche AV sin entrar en Alicante: llegan por la bifurcación de Murcia y recorren la línea desde su origen. Por esta línea se resuelven desde Albacete.", "consecutive_stop_ids": ["60600", "03410"], "from_stop_id": "60600", "stop_mappings": {"60600": {"exits": ["bif-murcia"], "via": {"line": "lav-albacete-alicante", "node": "bif-murcia"}}}},
+    {"id": "madrid-elche-sin-parada", "description": "Trenes entre Madrid-Chamartín y Murcia sin parada hasta Elche AV: no entran en Alicante, llegan por la bifurcación de Murcia y recorren la línea desde su origen. Por esta línea se resuelven desde Madrid-Chamartín, a la que no llega ninguna línea cargada: la asignación lleva los kilómetros de vía que hay hasta la bifurcación.", "consecutive_stop_ids": ["17000", "03410"], "from_stop_id": "17000", "stop_mappings": {"17000": {"exits": ["bif-murcia"], "track_km": 461.4}}},
+    {"id": "madrid-murcia-sin-parada", "description": "Trenes entre Madrid-Puerta de Atocha y Murcia sin ninguna parada intermedia: recorren la línea entera sin parar en Elche ni en Orihuela y sin entrar en Alicante.", "consecutive_stop_ids": ["60000", "61200"], "stop_mappings": {"60000": {"exits": ["bif-murcia"], "via": [{"line": "lav-albacete-alicante", "node": "bif-murcia"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]}}}
+  ]
+}

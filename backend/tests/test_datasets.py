@@ -229,6 +229,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 6851 + 97 + 224
     passes += 4314  # la de Madrid a Valencia, todos estimados
     passes += 1979  # la de Albacete a Alicante, todos estimados
+    passes += 677 + 120  # la de Monforte del Cid a Murcia
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
