@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { abrirZonas } from './navegar.ts'
 
 const LINEA = 'linares-baeza-moreda-granada'
 
@@ -12,6 +13,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   test('la lista lleva a la línea, de vía única y sin electrificar, con sus estaciones', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
+    await abrirZonas(page)
     await page.getByTestId(`linea-${LINEA}`).click()
     await expect(page).toHaveURL(new RegExp(`/linea/${LINEA}$`))
     await expect(page.getByRole('heading', { name: 'Línea convencional Linares-Baeza – Moreda – Granada' })).toBeVisible()

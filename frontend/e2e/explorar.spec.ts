@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { irA } from './navegar.ts'
+import { abrirZonas, irA } from './navegar.ts'
 
 test.describe('Explorar la red', () => {
   test('se abre con el mapa y la vista de la red', async ({ page }) => {
@@ -11,7 +11,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 2\.947 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.125 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -34,6 +34,7 @@ test.describe('Explorar la red', () => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
+    await abrirZonas(page)
     await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
     await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-alcazar-de-san-juan')).toBeVisible()
@@ -54,8 +55,9 @@ test.describe('Explorar la red', () => {
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
-    // la lista tiene las doce líneas, también en la hoja del móvil, y ya no hay pestañas
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(12)
+    await abrirZonas(page)
+    // con las zonas abiertas la lista tiene las trece líneas, también en la hoja del móvil, y ya no hay pestañas
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(13)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)

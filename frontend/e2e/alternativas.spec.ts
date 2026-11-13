@@ -107,7 +107,7 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 44 de los 124 tramos con trenes, en 7 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 49 de los 129 tramos con trenes, en 8 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
@@ -127,6 +127,9 @@ test.describe('Tramos sin otro camino', () => {
     // y los siete de la de Albacete a Alicante que quedan al sur de Albacete
     await expect(linea('Albacete – Alicante')).toContainText('7 de sus 9 tramos')
     await expect(linea('Albacete – Alicante')).toContainText('de 36 a 56 trenes')
+    // la de Madrid a Valladolid entera: es la única cargada al norte de Madrid
+    await expect(linea('Madrid – Valladolid por Segovia')).toContainText('Toda la línea, 5 tramos')
+    await expect(linea('Madrid – Valladolid por Segovia')).toContainText('de 81 a 122 trenes')
     // y los ocho de la de Monforte del Cid a Murcia: a Murcia solo llega esa línea
     await expect(linea('Monforte del Cid – Murcia')).toContainText('Toda la línea, 8 tramos')
     await expect(linea('Monforte del Cid – Murcia')).toContainText('de 6 a 36 trenes')

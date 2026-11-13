@@ -500,6 +500,20 @@
     "03410": {
       "exits": [
         "madrid-chamartin"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
       ]
     },
     "60600": {
@@ -535,11 +549,39 @@
     "61200": {
       "exits": [
         "madrid-chamartin"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
       ]
     },
     "62002": {
       "exits": [
         "madrid-chamartin"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
       ]
     }
   },

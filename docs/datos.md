@@ -69,7 +69,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 | Operador | Líneas | Horarios | Fuente |
 |---|---|---|---|
-| Renfe Viajeros (`renfe`) | las doce | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
+| Renfe Viajeros (`renfe`) | las trece | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
 | Ouigo España (`ouigo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona, LAV Madrid – Cuenca – Valencia, LAV Albacete – Alicante, LAV Monforte del Cid – Murcia y LAV Madrid – Segovia – Valladolid | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
 | Iryo (`iryo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona, LAV Madrid – Cuenca – Valencia y LAV Albacete – Alicante | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
 
@@ -99,7 +99,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Baipás de Zaragoza (Adif 050; cuelga de la alta velocidad de Barcelona) | `baipas-zaragoza` | 20,7 km | 2 (los 2 compartidos) | 1 | 97 de Renfe (AVE) y 10 de Ouigo: los de la línea de Barcelona que no paran en Zaragoza |
 | Baipás de Lleida (Adif 050; cuelga de la misma línea) | `baipas-lleida` | 14,3 km | 2 (los 2 compartidos) | 1 | 224 de Renfe (169 AVE y 55 AVE internacionales) y 25 de Ouigo: los que no paran en Lleida |
 
-En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases son líneas cortas que cuelgan de la alta velocidad de Barcelona y no cuentan como líneas en el visor (véase «Los baipases de Zaragoza y de Lleida»). Son 2.946,8 km de red, 66 estaciones y 2.007 viajes distintos (1.938 de Renfe y 69 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
+En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases son líneas cortas que cuelgan de la alta velocidad de Barcelona y no cuentan como líneas en el visor (véase «Los baipases de Zaragoza y de Lleida»). Son 3.125,4 km de red, 68 estaciones y 2.668 viajes distintos (2.599 de Renfe y 69 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
 
 - Madrid-Puerta de Atocha y Córdoba son comunes a la alta velocidad y a la convencional: la red forma un lazo Madrid–Córdoba con dos recorridos, el de alta velocidad (343,6 km) y el convencional (440,7 km).
 - Manzanares (de la convencional) y Ciudad Real (de la alta velocidad) son los extremos de la tercera línea, que cierra un segundo lazo: de Madrid a Ciudad Real hay 170,8 km por la alta velocidad y 260,5 km por la convencional hasta Manzanares (196,1 km) y la línea de Manzanares a Ciudad Real (64,4 km).
@@ -123,7 +123,7 @@ En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases
 - Un viaje es aquí un tren con sus días: el fichero de Renfe trae algunos trenes en varios viajes el mismo día y Oniel los junta al leerlo (véase «Trenes repetidos en el horario de Renfe»). Las cifras de esta tabla son las del fichero del 8 de noviembre de 2026, ya juntado.
 - De los 364 viajes de Renfe de la línea de Sevilla, 47 la recorren sin parar en Madrid: esos 31, los 8 AVE de Barcelona a Sevilla, que están también en la línea de Barcelona, y 8 que no pasan por ninguna otra línea cargada (4 Avant de Sevilla a Córdoba y 4 AVE de Valencia a Sevilla).
 
-El día de referencia es el viernes 13 de noviembre de 2026. La regla toma el laborable con más servicios de los ficheros vigentes de Renfe y de Ouigo (véase «Conjuntos de datos»), y la diferencia entre el jueves 12 y el viernes 13 es de muy pocos trenes: con nueve líneas, sin la de Valencia, ganaba el jueves por uno, y con la de Valencia vuelve a ganar el viernes; ni la de Albacete a Alicante ni la de Monforte del Cid a Murcia lo han movido. Cada línea nueva puede moverlo, y con él los recuentos por día de todas. Ese día cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
+El día de referencia es el viernes 13 de noviembre de 2026. La regla toma el laborable con más servicios de los ficheros vigentes de Renfe y de Ouigo (véase «Conjuntos de datos»), y la diferencia entre el jueves 12 y el viernes 13 es de muy pocos trenes: con nueve líneas, sin la de Valencia, ganaba el jueves por uno, y con la de Valencia vuelve a ganar el viernes; ni la de Albacete a Alicante, ni la de Monforte del Cid a Murcia, ni la de Madrid a Valladolid lo han movido. Cada línea nueva puede moverlo, y con él los recuentos por día de todas. Ese día cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
 
 | Tramos de la LAV Madrid – Sevilla | Renfe | Ouigo | Total |
 |---|---|---|---|
@@ -640,7 +640,7 @@ Es la primera línea al norte de Madrid: sale de Madrid-Chamartín, cruza la sie
 
 **Qué se carga.** La línea 080 de Adif entre Madrid-Chamartín y Valladolid-Campo Grande (178,6 km). El número es el de las etiquetas de OSM; Wikipedia no lo da y el mapa 4 de la Declaración sobre la Red no rotula las líneas con su número. Quedan a trazos lo que sale de la bifurcación Medina (la línea de alta velocidad a Zamora, Ourense y Galicia) y lo que sigue desde Valladolid (la alta velocidad a Palencia, León y Burgos y la línea convencional de Madrid a Irún).
 
-**Madrid-Chamartín es el mismo nodo.** Lo define la línea de Valencia, que va antes en `line_ids` y empieza en él desde #168: esta lo incorpora con `shared: true` y sus mismas coordenadas, sin moverlo. De la línea de Valencia se retira la conexión a trazos que salía de Chamartín hacia el norte, y la descripción de la estación dice ya los dos lados. Las dos líneas se nombran una a otra: en esta, Cuenca, Requena-Utiel y Valencia son salidas por Chamartín con `via` hacia la de Valencia, y Albacete, Villena y Alicante, con `via` de dos trechos; en la de Valencia y en la de Albacete a Alicante, Segovia-Guiomar y Valladolid-Campo Grande llevan `via` hacia esta. Los trenes del norte que siguen a Levante paran todos en Chamartín (lo comprobó #168), así que no hace falta ninguna regla de recorrido para ellos.
+**Madrid-Chamartín es el mismo nodo.** Lo define la línea de Valencia, que va antes en `line_ids` y empieza en él desde #168: esta lo incorpora con `shared: true` y sus mismas coordenadas, sin moverlo. De la línea de Valencia se retira la conexión a trazos que salía de Chamartín hacia el norte, y la descripción de la estación dice ya los dos lados. Las dos líneas se nombran una a otra: en esta, Cuenca, Requena-Utiel y Valencia son salidas por Chamartín con `via` hacia la de Valencia; Albacete, Villena y Alicante, con `via` de dos trechos, y Elche AV, Orihuela y Murcia, de tres; en la de Valencia, en la de Albacete a Alicante y en la de Monforte del Cid a Murcia, Segovia-Guiomar y Valladolid-Campo Grande llevan `via` hacia esta. Los trenes del norte que siguen a Levante paran todos en Chamartín (lo comprobó #168), así que no hace falta ninguna regla de recorrido para ellos.
 
 **Geometría.** La relación `4777557` de OpenStreetMap es de infraestructura, trae las dos vías y llega hasta Burgos: se traza el camino más corto por el grafo de vías entre los andenes de Chamartín y Valladolid, sin huecos. El final no es la parada de Valladolid que trae la relación: con ella, el camino más corto pasaba de largo la estación y volvía por la otra vía, 3,3 km de más. Es el vértice de la vía por la que llega el trazado más cercano a la estación, a 16 m de ella. Se vio al comparar la longitud con los puntos kilométricos, y una prueba lo fija.
 
@@ -666,7 +666,7 @@ Verificación:
 
 **Lo que enseña el comparador.** De Madrid-Chamartín a Valladolid-Campo Grande, 178,6 km y 36 min estimados sin paradas, con 41 trenes directos el día de referencia; a Segovia-Guiomar, 67,7 km y 14 min, con 37. De Segovia o de Valladolid a Valencia o a Alicante da el recorrido por Chamartín, sin pasar por Atocha. El tiempo es el de recorrer cada tramo a su velocidad habitual, 300 km/h en los cinco, así que no cuenta la salida de Madrid ni la entrada en Valladolid, más lentas (`docs/simulacion.md`).
 
-**Tramos sin otro camino.** Los cinco de la línea: es la única cargada al norte de Madrid. Al cargarla apareció un fallo del cálculo: a los 7 trenes de Valencia a Valladolid de ese día no les encontraba otro camino en los ocho tramos de la línea de Valencia entre Torrejón de Velasco y la bifurcación de Albacete, aunque existe (por Albacete, Alcázar de San Juan y Madrid-Puerta de Atocha), porque cambia de línea seis veces y el comparador enumera hasta cinco. Desde esta PR, si no hay otro camino con ese tope se busca sin él (`docs/simulacion.md`, «Tramos sin alternativa»).
+**Tramos sin otro camino.** Los cinco de la línea: es la única cargada al norte de Madrid. Con ellos son 49 de los 129 tramos con trenes. Al cargarla apareció un fallo del cálculo: a los 7 trenes de Valencia a Valladolid de ese día no les encontraba otro camino en los ocho tramos de la línea de Valencia entre Torrejón de Velasco y la bifurcación de Albacete, aunque existe (por Albacete, Alcázar de San Juan y Madrid-Puerta de Atocha), porque cambia de línea seis veces y el comparador enumera hasta cinco. Desde esta PR, si no hay otro camino con ese tope se busca sin él (`docs/simulacion.md`, «Tramos sin alternativa»).
 
 **Señalización.** El mapa 4 dibuja el trazo de BCA de Madrid Chamartín a Valladolid Campo Grande y, junto a la línea, el símbolo de «ERTMS N1 y 2» (el morado claro de la leyenda) con el de «ASFA - AV», a los dos lados de Segovia Guiomar y junto a la bifurcación Medina: `ertms_n1_n2_asfa` en los cinco tramos. Del mando no dice nada. Coincide con Wikipedia, que da ASFA digital y ERTMS de niveles 1 y 2.
 
@@ -1058,11 +1058,11 @@ Con los dos baipases de esa línea (20,7 km y 14,3 km, un tramo cada uno), medid
 
 Con el trecho de Madrid-Chamartín a Torrejón de Velasco en la línea de Valencia (36,5 km, dos tramos y dos nodos más), medido el 13 de noviembre de 2026 sobre lo anterior y la undécima línea: `index.json` pasa de 232,5 a 236,1 KB (de 37,7 a 38,3 KB comprimido) y `lines/lav-madrid-valencia.json`, de 69,8 a 83,2 KB (de 16,6 a 19,9 KB comprimido), porque sus trenes llevan dos pasos más. La instantánea entera ocupa 8,0 MB.
 
-Con la línea de alta velocidad Madrid – Segovia – Valladolid (178,6 km, cinco tramos y cinco nodos más), medido el 13 de noviembre de 2026 sobre lo anterior: `index.json` pasa de 236,1 a 245,8 KB (de 38,3 a 39,9 KB comprimido) y `lines/lav-madrid-valladolid.json` pesa 34,3 KB (9,0 KB comprimido).
-
 Con la undécima (alta velocidad Albacete – Alicante, 237,7 km y nueve tramos), medido el 13 de noviembre de 2026 sobre las diez anteriores y los dos baipases (2.843 km, 110 nodos distintos y 115 tramos): `index.json` pasa de 223,8 a 232,5 KB (de 37,0 a 37,7 KB comprimido) y `lines/lav-albacete-alicante.json` pesa 64,9 KB (16,2 KB comprimido). La parte de red del índice son 176,5 KB, dentro del tope de 20 KB por línea. La instantánea entera ocupa 7,8 MB.
 
 Con la duodécima (alta velocidad Monforte del Cid – Murcia, 67,8 km y ocho tramos), medido el 13 de noviembre de 2026 sobre las once anteriores y los dos baipases, ya con la de Valencia desde Madrid-Chamartín (2.947 km, 120 nodos distintos y 125 tramos): `index.json` pesa 250,6 KB (40,4 KB comprimido) y `lines/lav-monforte-murcia.json`, 38,4 KB (8,4 KB comprimido).
+
+Con la decimotercera (alta velocidad Madrid – Segovia – Valladolid, 178,6 km y cinco tramos), medido el 13 de noviembre de 2026 sobre las doce anteriores y los dos baipases (3.125 km, 145 nodos distintos y 130 tramos): `index.json` pasa de 250,6 a 260,3 KB (de 40,4 a 41,9 KB comprimido) y `lines/lav-madrid-valladolid.json` pesa 34,3 KB (9,0 KB comprimido).
 
 ## Atributos de tramo
 
@@ -1276,5 +1276,13 @@ Lo aprendido al llevar la línea de Valencia hasta Madrid-Chamartín:
 - **Mirar el nombre de cada parada antes de moverla de salida.** Entre las paradas «de Madrid hacia fuera» de la línea estaba Toledo, que sale por Atocha y no por Chamartín: `validate` no lo nota, porque la asignación es válida; lo nota el recuento de trenes por tramo.
 - **Una estación nueva enseña todos los trenes que paran en ella.** También los de otras líneas cargadas que la tenían como salida (los convencionales, en Chamartín), y pasa a ser un destino con ficha en las estaciones de esas líneas.
 - **Un paso sin andén no es el nodo de la estación.** Si la línea cruza una estación sin parar ni conectarse, lleva un nodo propio de referencia; las dos estaciones quedan sin unir en el grafo y se dice.
+
+Lo aprendido al añadir la de alta velocidad de Madrid a Valladolid:
+
+- **El final del trazado puede pasarse de la estación.** Si la relación sigue más allá de la estación en la que acaba la línea y sus dos vías solo se tocan lejos, el camino más corto hasta la parada de la relación puede pasar de largo y volver por la otra vía. Se nota al comparar la longitud con los puntos kilométricos: el final es entonces el vértice de la vía de llegada más cercano a la estación.
+- **Un desfase constante de los PK es un origen, no un error.** Si todos los nodos quedan a la misma distancia de su PK, la línea lleva esa distancia en `pk_origin_km` y el nodo del origen no guarda PK.
+- **Una estación que cruzan trenes de dos líneas.** Al compartir una cabecera (Madrid-Chamartín), los trenes que la cruzan unen las dos líneas: las paradas de cada una llevan `via` hacia la otra, y los recorridos de esos trenes se alargan en «Tramos sin otro camino». Su otro camino puede cambiar de línea más veces de las que enumera el comparador; desde esta línea el cálculo lo busca sin ese tope cuando hace falta.
+- **Kilómetros de vía hacia una línea sin cargar.** Si la tabla de puntos kilométricos de la línea vecina continúa la numeración, da los `track_km` de sus paradas desde la bifurcación.
+- **La decimotercera línea pliega la lista.** Con más de doce líneas las zonas de la lista arrancan plegadas: las pruebas que pulsan una línea de la lista abren antes las zonas con `abrirZonas` (`frontend/e2e/navegar.ts`).
 
 El visor dibuja todo lo que trae el índice (`index.json` o `GET /api/lines`): todas las líneas en el mapa y una entrada por línea en la lista de la vista de la red. No hay que tocar el visor: el detalle de la línea nueva se pide solo cuando se abre.
