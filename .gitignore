@@ -24,6 +24,11 @@ frontend/playwright-report/
 .DS_Store
 *.log
 
+# Copia de CLAUDE.md que Codex genera por su cuenta al importar el proyecto (cambia `.claude` por
+# `.Codex`). Oniel no mantiene un AGENTS.md: las instrucciones están en CLAUDE.md. Entró dos veces
+# por error con un `git add -A` (PR 182 y 184).
+/AGENTS.md
+
 # Enlaces de skills que crea library-skills en la raíz (apuntan a backend/.venv). Las skills propias
 # del proyecto sí se versionan: cada una necesita aquí su línea, o git la ignora.
 /.agents/
