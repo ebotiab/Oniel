@@ -24,6 +24,7 @@ from oniel.db.pool import fetch_int
 from oniel.gtfs.reader import GtfsTrip, read_feed
 from oniel.gtfs.trips import (
     LoadedLine,
+    bypasses_of,
     calls_for_trip,
     calls_on_line,
     route_for_trip,
@@ -172,14 +173,17 @@ async def import_gtfs(
         per_line: dict[str, dict[str, Any]] = {}
         unmapped: Counter[str] = Counter()
         models = {spec.line.id: await load_line_model(conn, spec.line.id) for spec in specs}
-        loaded = [LoadedLine(spec, models[spec.line.id][0]) for spec in specs]
+        loaded = [LoadedLine(spec, *models[spec.line.id]) for spec in specs]
         for spec in specs:
             nodes, segments = models[spec.line.id]
             if not segments:
                 raise RuntimeError(
                     f"primero hay que importar la red de {spec.line.id} (oniel-data import network)"
                 )
+            if spec.line.bypass_of is not None:
+                continue  # sus pasos salen al resolver la línea de la que es baipás
             others = [line for line in loaded if line.line_id != spec.line.id]
+            bypasses = bypasses_of(LoadedLine(spec, nodes, segments), others)
             kinds: Counter[str] = Counter()
             resolutions: Counter[str] = Counter()
             rules: Counter[str] = Counter()
@@ -193,9 +197,10 @@ async def import_gtfs(
                 for c in line_calls:
                     if c.node_id is None and not c.exit_node_ids:
                         unmapped[f"{spec.line.id}: {c.stop_id} {c.stop_name}"] += 1
-                passes, resolution = resolve_passes(line_calls, nodes, segments)
+                passes, resolution = resolve_passes(line_calls, nodes, segments, bypasses)
                 resolutions[resolution] += 1
-                kinds.update(p.kind for p in passes)
+                own_ids = {s.id for s in segments}
+                kinds.update(p.kind for p in passes if p.segment_id in own_ids)
                 plan = plans.setdefault(trip.trip_id, _TripPlan(trip, calls))
                 plan.passes.extend(passes)
                 plan.resolutions.append(resolution)
@@ -206,6 +211,23 @@ async def import_gtfs(
                 "passes": dict(kinds),
                 "resolution": dict(resolutions),
                 "route_overrides": dict(rules),
+            }
+        # Un baipás lleva los trenes que la línea de la que sale ha mandado por él.
+        for spec in specs:
+            if spec.line.bypass_of is None:
+                continue
+            own_ids = {s.id for s in models[spec.line.id][1]}
+            through = [
+                (plan, [p for p in plan.passes if p.segment_id in own_ids])
+                for plan in plans.values()
+            ]
+            through = [(plan, passes) for plan, passes in through if passes]
+            per_line[spec.line.id] = {
+                "trips": len(through),
+                "train_numbers": len({plan.trip.train_number for plan, _ in through}),
+                "passes": dict(Counter(p.kind for _, passes in through for p in passes)),
+                "resolution": dict(Counter(plan.resolution for plan, _ in through)),
+                "route_overrides": {},
             }
         feed_version = (
             f"{feed_path.name}:{feed.feed_start.isoformat()}..{feed.feed_end.isoformat()}"

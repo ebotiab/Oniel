@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { normalize } from '../app/search'
 import type { AnnotationLayer } from '../app/annotationLayers'
-import { formatCount, lineKind, lineShortLabel } from '../app/state'
+import { bypassesOf, formatCount, lineKind, lineShortLabel, mainLines } from '../app/state'
 import type { LineSummary, NodeOut, ZoneOut } from '../data/types'
 import { Muestra } from './Legend'
 import { Termino } from './Termino'
@@ -42,9 +42,11 @@ function porTipoYLongitud(a: LineSummary, b: LineSummary): number {
 /**
  * Lista de las líneas cargadas, agrupada por la zona a la que llevan y pensada para decenas de líneas: cada
  * línea es un renglón, cada zona se pliega y, cuando son muchas, la lista arranca como un índice de zonas.
- * El filtro busca en el nombre y en las estaciones por las que pasa cada línea.
+ * El filtro busca en el nombre y en las estaciones por las que pasa cada línea. Un baipás no es un
+ * renglón más: va colgado de la línea de la que sale, sangrado, y no cuenta en los recuentos.
  */
-export function LineList({ lines, nodes, notes, onPick, onHighlight }: Props) {
+export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Props) {
+  const lines = useMemo(() => mainLines(todas), [todas])
   const [query, setQuery] = useState('')
   // Las zonas que el visitante ha abierto o cerrado a mano; las demás siguen la regla general.
   const [tocadas, setTocadas] = useState<Record<string, boolean>>({})
@@ -70,15 +72,18 @@ export function LineList({ lines, nodes, notes, onPick, onHighlight }: Props) {
   const shown = useMemo(() => {
     const out: { line: LineSummary; por: string | null }[] = []
     for (const line of lines) {
-      if (!tokens.length || tokens.every((t) => normalize(line.name).includes(t))) out.push({ line, por: null })
+      const coincide = (nombre: string) => tokens.every((t) => normalize(nombre).includes(t))
+      if (!tokens.length || coincide(line.name)) out.push({ line, por: null })
       else {
         const est = estaciones.get(line.id)?.find((e) => tokens.every((t) => e.text.includes(t)))
         if (est) out.push({ line, por: est.name })
+        // por el nombre de uno de sus baipases, que va colgado de ella
+        else if (bypassesOf(todas, line.id).some((b) => coincide(b.name))) out.push({ line, por: null })
       }
     }
     return out
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lines, estaciones, query])
+  }, [lines, todas, estaciones, query])
 
   const zonas = useMemo(() => {
     const byId = new Map<string, { zone: ZoneOut; rows: typeof shown; all: LineSummary[] }>()
@@ -141,7 +146,7 @@ export function LineList({ lines, nodes, notes, onPick, onHighlight }: Props) {
                 className="zona-cabecera"
                 aria-expanded={abierta}
                 onClick={() => setTocadas((cur) => ({ ...cur, [zone.id]: !abierta }))}
-                {...resaltar(all.map((l) => l.id))}
+                {...resaltar(all.flatMap((l) => [l.id, ...bypassesOf(todas, l.id).map((b) => b.id)]))}
               >
                 <span className="zona-chevron" aria-hidden="true">
                   ›
@@ -170,9 +175,16 @@ export function LineList({ lines, nodes, notes, onPick, onHighlight }: Props) {
                 {rows.map(({ line: l, por }) => {
                   const senales = notes.get(l.id)?.filter((capa) => capa.lista) ?? []
                   const av = lineKind(l) === 'alta velocidad'
+                  const baipases = bypassesOf(todas, l.id)
                   return (
                     <li key={l.id}>
-                      <button type="button" className="fila-linea" onClick={() => onPick(l.id)} data-testid={`linea-${l.id}`} {...resaltar([l.id])}>
+                      <button
+                        type="button"
+                        className="fila-linea"
+                        onClick={() => onPick(l.id)}
+                        data-testid={`linea-${l.id}`}
+                        {...resaltar([l.id, ...baipases.map((b) => b.id)])}
+                      >
                         <span className="fila-linea-trazo" title={av ? 'Alta velocidad' : 'Línea convencional'}>
                           <Muestra trazo={av ? 'alta-velocidad' : 'convencional'} />
                           <span className="visually-hidden">{av ? 'Alta velocidad' : 'Línea convencional'}: </span>
@@ -193,6 +205,18 @@ export function LineList({ lines, nodes, notes, onPick, onHighlight }: Props) {
                           </span>
                         )}
                       </button>
+                      {baipases.length > 0 && (
+                        <ul className="baipases-linea" aria-label={`Baipases de ${lineShortLabel(l)}`}>
+                          {baipases.map((b) => (
+                            <li key={b.id}>
+                              <button type="button" className="fila-baipas" onClick={() => onPick(b.id)} data-testid={`linea-${b.id}`} {...resaltar([b.id])}>
+                                <span>{b.name}</span>
+                                <span className="fila-linea-km datos">{formatCount(Math.round(b.length_km))} km</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </li>
                   )
                 })}

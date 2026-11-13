@@ -30,7 +30,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^10 líneas · 2\.570 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^10 líneas · 2\.605 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)

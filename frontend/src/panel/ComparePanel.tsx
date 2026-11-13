@@ -174,6 +174,11 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
                     </p>
                   ))}
                   {route.via.length > 0 && <p className="suave">Pasa por {enumerar(route.via.map(shortStop))}.</p>}
+                  {r.baipases && (
+                    <p className="suave" data-testid="recorrido-baipases">
+                      {r.baipases}
+                    </p>
+                  )}
                   {suyos && (
                     <p className="suave" data-testid="recorrido-trenes">
                       {trenesTexto(suyos, dia)}
@@ -221,6 +226,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             {trenes && (
               <p className="suave">
                 Un <Termino id="tren-directo">tren directo</Termino> es el que para en las dos estaciones, en este sentido, el {formatDateLong(trenes.date)}. Se asigna a un recorrido cuando pasa por el primer y el último tramo de cada una de sus líneas.
+                {recorridos.some((r) => r.baipases) ? ' El recorrido se mide por los baipases, y también cuentan en él los trenes que entran en las estaciones que rodean.' : ''}
               </p>
             )}
             <PieFuente de="del trazado" sources={fuentes} />

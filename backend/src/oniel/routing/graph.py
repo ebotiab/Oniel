@@ -70,6 +70,10 @@ class Graph:
     line_names: dict[str, str]
     #: Kilómetro de cada nodo en cada línea a la que pertenece.
     line_km: dict[str, dict[str, float]]
+    #: Los baipases: el id de cada línea que lo es y el de la línea de la que lo es. Un baipás
+    #: cuenta como parte de su línea: pasar a él o volver de él no es cambiar de línea, y dos
+    #: caminos que solo se distinguen por ir por él o por lo que rodea son el mismo recorrido.
+    bypass_of: dict[str, str] = field(default_factory=dict)
     _adjacent: dict[str, list[Edge]] = field(default_factory=dict, compare=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -82,6 +86,28 @@ class Graph:
 
     def edge(self, edge_id: str) -> Edge | None:
         return next((e for e in self.edges if e.id == edge_id), None)
+
+    def line_key(self, edge: Edge) -> str:
+        """La línea por la que cuenta un tramo: la suya o, si es de un baipás, la que este rodea.
+
+        Un enlace esbozado cuenta como una línea propia.
+        """
+        if edge.line_id is None:
+            return edge.id
+        return self.bypass_of.get(edge.line_id, edge.line_id)
+
+    def bypass_spans(self) -> list[tuple[str, str, str]]:
+        """Por cada baipás, la línea de la que lo es y los dos nodos de esta que une."""
+        spans = []
+        for line_id, parent in self.bypass_of.items():
+            km = self.line_km.get(line_id, {})
+            if len(km) < 2 or parent not in self.line_km:
+                continue
+            first, last = min(km, key=lambda n: km[n]), max(km, key=lambda n: km[n])
+            if first in self.line_km[parent] and last in self.line_km[parent]:
+                a, b = sorted((first, last))
+                spans.append((parent, a, b))
+        return spans
 
     def apply(self, scenario: Scenario) -> Graph:
         """El grafo con las modificaciones del escenario: cierres, velocidades y enlaces."""
@@ -113,7 +139,7 @@ class Graph:
                     tracks=None,
                 )
             )
-        return Graph(self.nodes, tuple(edges), self.line_names, self.line_km)
+        return Graph(self.nodes, tuple(edges), self.line_names, self.line_km, self.bypass_of)
 
 
 class LineLike(Protocol):
@@ -123,6 +149,8 @@ class LineLike(Protocol):
     def id(self) -> str: ...
     @property
     def name(self) -> str: ...
+    @property
+    def bypass_of(self) -> str | None: ...
 
 
 class NodeLike(Protocol):
@@ -187,7 +215,14 @@ def build_graph(
         for s in segments
         if s.status == "disponible"
     )
-    return Graph(graph_nodes, edges, {line.id: line.name for line in lines}, line_km)
+    lines = list(lines)
+    return Graph(
+        graph_nodes,
+        edges,
+        {line.id: line.name for line in lines},
+        line_km,
+        {line.id: line.bypass_of for line in lines if line.bypass_of is not None},
+    )
 
 
 class RouteLeg(BaseModel):
@@ -254,7 +289,8 @@ def _walk(
     """Caminos simples desde ``start`` hasta un nodo meta, en profundidad.
 
     Un camino termina al llegar a una meta; solo atraviesa los nodos que ``may_pass`` admite y no
-    cambia de línea más de ``max_changes`` veces. Cada enlace esbozado cuenta como una línea.
+    cambia de línea más de ``max_changes`` veces. Cada enlace esbozado cuenta como una línea, y un
+    baipás, como parte de la suya.
     """
     path: list[_Step] = []
     visited = {start}
@@ -265,7 +301,7 @@ def _walk(
             if nxt in visited or not edge_ok(edge):
                 continue
             previous = path[-1][0] if path else None
-            changed = previous is not None and _line_key(previous) != _line_key(edge)
+            changed = previous is not None and graph.line_key(previous) != graph.line_key(edge)
             total = changes + (1 if changed else 0)
             if max_changes is not None and total > max_changes:
                 continue
@@ -279,10 +315,6 @@ def _walk(
             path.pop()
 
     yield from visit(start, 0)
-
-
-def _line_key(edge: Edge) -> str:
-    return edge.line_id if edge.line_id is not None else edge.id
 
 
 def _round1(value: float) -> float:
@@ -315,11 +347,11 @@ def _single_track(edges: list[Edge]) -> float:
 
 
 def _route(graph: Graph, start: str, steps: list[_Step]) -> Route:
-    # Trechos: aristas seguidas de la misma línea.
+    # Trechos: aristas seguidas de la misma línea, con sus baipases dentro.
     groups: list[tuple[str, list[_Step]]] = []
     at = start
     for step in steps:
-        if groups and _line_key(groups[-1][1][-1][0]) == _line_key(step[0]):
+        if groups and graph.line_key(groups[-1][1][-1][0]) == graph.line_key(step[0]):
             groups[-1][1].append(step)
         else:
             groups.append((at, [step]))
@@ -329,11 +361,22 @@ def _route(graph: Graph, start: str, steps: list[_Step]) -> Route:
     for leg_start, leg_steps in groups:
         edges = [e for e, _ in leg_steps]
         leg_end = leg_steps[-1][1]
-        line_id = edges[0].line_id
-        # Por una línea, la distancia es la diferencia de sus kilómetros; un enlace trae la suya.
-        if line_id is not None:
-            km = graph.line_km[line_id]
-            leg_length = abs(km[leg_end] - km[leg_start])
+        own = edges[0].line_id
+        # El trecho es de la línea; si todo él va por un baipás, del baipás.
+        line_id = own if all(e.line_id == own for e in edges) else graph.line_key(edges[0])
+        # Por una línea, la distancia es la diferencia de sus kilómetros (lo que vaya por un
+        # baipás suyo, la de los kilómetros del baipás); un enlace trae la suya.
+        if own is not None:
+            leg_length = 0.0
+            run_line, run_start, at = own, leg_start, leg_start
+            for edge, nxt in leg_steps:
+                if edge.line_id is not None and edge.line_id != run_line:
+                    km = graph.line_km[run_line]
+                    leg_length += abs(km[at] - km[run_start])
+                    run_line, run_start = edge.line_id, at
+                at = nxt
+            km = graph.line_km[run_line]
+            leg_length += abs(km[at] - km[run_start])
         else:
             leg_length = edges[0].length_km
         length += leg_length
@@ -361,7 +404,7 @@ def _route(graph: Graph, start: str, steps: list[_Step]) -> Route:
         length_km=_round1(length),
         time_min=_time_min(all_edges),
         single_track_km=_round1(_single_track(all_edges)),
-        line_ids=list(dict.fromkeys(e.line_id for e in all_edges if e.line_id is not None)),
+        line_ids=list(dict.fromkeys(leg.line_id for leg in legs if leg.line_id is not None)),
         legs=legs,
         via=[n.name for n in inner if n.kind == "estacion" and n.rank == "principal"],
         node_ids=[start, *(n for _, n in steps)],
@@ -395,6 +438,55 @@ def route_along(graph: Graph, start: str, segment_ids: Iterable[str]) -> Route:
 def _sorted(found: list[tuple[str, list[_Step]]]) -> list[tuple[str, list[_Step]]]:
     """Del más corto al más largo; a igual longitud, por los tramos que recorre."""
     return sorted(found, key=lambda f: (_raw_length(f[1]), [e.id for e, _ in f[1]]))
+
+
+def _bypass_key(graph: Graph, start: str, steps: list[_Step]) -> tuple[str, ...]:
+    """Lo que tienen en común los caminos que solo se distinguen por ir por un baipás o por lo que rodea.
+
+    Es la lista de sus tramos, con una misma marca en lugar de los tramos del baipás o de los de
+    su línea entre los dos nodos que el baipás une, cuando el camino los recorre de punta a punta.
+    """
+    spans = graph.bypass_spans()
+    if not spans:
+        return tuple(e.id for e, _ in steps)
+    nodes = [start, *(n for _, n in steps)]
+    edges = [e for e, _ in steps]
+    key: list[str] = []
+    i = 0
+    while i < len(edges):
+        whole = None
+        for parent, a, b in spans:
+            if nodes[i] not in (a, b) or graph.line_key(edges[i]) != parent:
+                continue
+            # hasta el otro nodo sin salir de la línea ni cambiar entre ella y el baipás
+            far = b if nodes[i] == a else a
+            j = i
+            while j < len(edges) and edges[j].line_id == edges[i].line_id and nodes[j + 1] != far:
+                j += 1
+            if j < len(edges) and edges[j].line_id == edges[i].line_id:
+                whole = (f"~{parent}:{a}:{b}", j + 1)
+                break
+        if whole is None:
+            key.append(edges[i].id)
+            i += 1
+        else:
+            key.append(whole[0])
+            i = whole[1]
+    return tuple(key)
+
+
+def _without_bypass_twins(
+    graph: Graph, ordered: list[tuple[str, list[_Step]]]
+) -> list[tuple[str, list[_Step]]]:
+    """De los caminos que solo cambian un baipás por lo que rodea, el primero (el más corto)."""
+    seen: set[tuple[str, ...]] = set()
+    kept = []
+    for start, steps in ordered:
+        key = (start, *_bypass_key(graph, start, steps))
+        if key not in seen:
+            seen.add(key)
+            kept.append((start, steps))
+    return kept
 
 
 def _strays(steps: list[_Step], shorter: list[_Step], max_ratio: float) -> bool:
@@ -436,7 +528,8 @@ def find_routes(
     Son los caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho
     ``max_changes`` veces (``None``, sin tope) y no dan un rodeo de más de ``max_ratio`` veces
     respecto a otro más corto, medido donde se apartan de él (``_strays``; ``None``, sin descartar
-    ninguno por largo).
+    ninguno por largo). Un baipás es parte de su línea: de los caminos que solo se distinguen por
+    ir por él o por la estación que rodea queda el más corto, y cuenta como un recorrido.
     """
     for node_id in (from_node_id, to_node_id):
         if node_id not in graph.nodes:
@@ -450,7 +543,7 @@ def find_routes(
             g, from_node_id, lambda n: n == to_node_id, lambda n: True, lambda e: True, max_changes
         )
     ]
-    ordered = _sorted(found)
+    ordered = _without_bypass_twins(g, _sorted(found))
     if max_ratio is not None:
         kept: list[tuple[str, list[_Step]]] = []
         for candidate in ordered:
@@ -518,7 +611,8 @@ def closure_detours(
             None,
         )
     ]
-    ordered = _sorted(found)
+    found = _without_bypass_twins(g, _sorted(found))
+    ordered = found
     if max_ratio is not None:
 
         def whole(start: str, steps: list[_Step], first: str, last: str) -> list[_Step]:

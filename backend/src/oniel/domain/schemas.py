@@ -63,6 +63,8 @@ class LineSummary(BaseModel):
     status: Literal["disponible", "prevista"]
     description: str | None = None
     source_id: str | None = None
+    #: Si la línea es un baipás, el id de la línea de la que lo es (``LineSpec.bypass_of``).
+    bypass_of: str | None = None
     node_count: int
     segment_count: int
 
