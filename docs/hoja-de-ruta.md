@@ -75,12 +75,13 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay cuatro tareas abiertas: dos salieron al cargar la alta velocidad a Granada (#103), la tercera, al cargar la de Barcelona (#117), y la cuarta, del primer error real que el visor envió a Logfire:
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay cinco tareas abiertas: dos salieron al cargar la alta velocidad a Granada (#103), la tercera, al cargar la de Barcelona (#117), la cuarta, del primer error real que el visor envió a Logfire, y la quinta, al decir en la ficha del tramo que la vía es de ancho mixto (#136):
 
 1. [#135](https://github.com/ebotiab/Oniel/issues/135) Datos: contar en la línea Madrid – Sevilla los trenes que no paran en Madrid. Los Avant de Sevilla y los AVE de Barcelona a Málaga y a Granada ya se importan, pero no cuentan en los tramos de esa línea por los que pasan. Cambia la instantánea y los recuentos: mejor sin otra PR de datos abierta.
 2. [#134](https://github.com/ebotiab/Oniel/issues/134) Simulación de cierre: no listar rodeos desproporcionados. Con el lazo de Granada, un cierre en la alta velocidad enseña un rodeo de 698 km frente a 358. El criterio se propone al usuario antes de implementarlo.
 3. [#142](https://github.com/ebotiab/Oniel/issues/142) Datos: cargar los baipases de Zaragoza y Lleida de la alta velocidad Madrid – Barcelona. Hoy la línea va por las dos estaciones y un tren que no para en ellas figura pasando por allí: infla los trenes de esos tramos y alarga su recorrido hasta 6,9 km. La geometría ya está descargada; falta que un viaje pueda recorrer una línea en dos trozos. Cómo se enseñan (dos líneas cortas, o la principal por los baipases y las estaciones en ramales) se propone al usuario antes de implementarlo. Emparentada con #135: el enlace de Vallecas es el mismo caso. Cambia la instantánea y los recuentos.
 4. [#144](https://github.com/ebotiab/Oniel/issues/144) Visor: decir que el mapa necesita WebGL2 en vez de fallar. En un navegador sin WebGL2 el mapa no se crea y queda una excepción sin atender. El texto que se enseñe es una decisión de diseño. Solo toca el visor.
+5. [#148](https://github.com/ebotiab/Oniel/issues/148) Glosario: el ancho de vía como concepto con dibujo (ibérico, estándar y mixto). Hoy son tres términos sueltos sin dibujo; una vía en sección explica el ancho mixto y el cambiador mejor que el texto. El dibujo se propone al usuario antes de implementarlo. Solo toca el visor.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
