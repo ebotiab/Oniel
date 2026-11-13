@@ -37,7 +37,7 @@ test.describe('Elegir línea sin pestañas', () => {
     for (const cabecera of await red.locator('.zona-cabecera').all()) await expect(cabecera).toHaveAttribute('aria-expanded', 'true')
     await expect(red.getByRole('region', { name: 'Cataluña' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Barcelona por Zaragoza627 km$/])
     await expect(red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' }).locator('.fila-linea')).toHaveText([
-      /^Alta velocidad: Madrid – Valencia por Cuenca361 km$/,
+      /^Alta velocidad: Madrid – Valencia por Cuenca397 km$/,
       /^Alta velocidad: Albacete – Alicante238 km$/,
     ])
     await expect(red.getByRole('region', { name: 'Madrid y Castilla-La Mancha' }).locator('.fila-linea')).toHaveText([
