@@ -50,10 +50,10 @@ LAV, CONV, MZCR = (
 )
 RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
-    "atocha-cercanias-cordoba-por-manzanares": 4,
+    "atocha-cercanias-cordoba-por-manzanares": 2,
 }
-#: La convencional tiene además las reglas de los trenes de Jaén que solo paran una vez en ella.
-JAEN_RULES = {"cordoba-jaen-sin-paradas": 42, "linares-baeza-mengibar": 20}
+#: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
+JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
 
 
 def hm(h: int, m: int) -> int:
@@ -217,9 +217,9 @@ def test_the_diverted_trains_enter_the_three_lines(
     lav_trips = select_trips_for_spec(feed, spec)
     conv_trips = select_trips_for_spec(feed, conv_spec)
     mzcr_trips = select_trips_for_spec(feed, mzcr_spec)
-    assert len(lav_trips) == 335  # ya entraban por el filtro de corredor
-    assert len(conv_trips) == 479 + 24 + 62  # los 24 y los 62 de Jaén entran por las reglas
-    assert len(mzcr_trips) == 130 + 24  # no paran en la línea: también por las reglas
+    assert len(lav_trips) == 317  # ya entraban por el filtro de corredor
+    assert len(conv_trips) == 368 + 22 + 42  # los 22 y los 42 de Jaén entran por las reglas
+    assert len(mzcr_trips) == 124 + 22  # no paran en la línea: también por las reglas
     for line_spec, trips in ((spec, lav_trips), (conv_spec, conv_trips), (mzcr_spec, mzcr_trips)):
         matched = [route_for_trip(line_spec, t) for t in trips]
         by_rule = {
@@ -232,7 +232,7 @@ def test_the_diverted_trains_enter_the_three_lines(
         & {t.trip_id for t in lav_trips}
         & {t.trip_id for t in mzcr_trips}
     )
-    assert len(diverted) == 24
+    assert len(diverted) == 22
     assert {feed.trips[t].product for t in diverted} == {"Intercity", "ALVIA"}
 
 
@@ -356,7 +356,7 @@ def test_alvia_without_ciudad_real_stop_is_measured_along_the_three_lines(
     LAV, Madrid-Atocha Cercanías es una salida por Ciudad Real, y en los dos casos el camino cruza
     la tercera línea. En esta, el tren pasa de largo: las dos paradas están en las otras.
     """
-    trip = trip_named(feed, "09366", "18000", "55007")  # el que termina en Algeciras
+    trip = trip_named(feed, "09366", "18000", "55020")  # termina en Algeciras
     lav_nodes, conv_nodes = lines[LAV][1].nodes, lines[CONV][1].nodes
     mzcr_km = lines[MZCR][0].line.polyline.length_km
     by_conv = conv_nodes["manzanares"].km - conv_nodes["madrid-puerta-de-atocha"].km
@@ -418,9 +418,9 @@ def test_alvia_without_ciudad_real_stop_is_measured_along_the_three_lines(
 def test_no_diverted_train_is_explained_with_a_straight_line(
     feed: GtfsFeed, spec: NetworkSpec, lines: Lines
 ) -> None:
-    """Entre Madrid y Córdoba los 24 viajes se miden por las líneas cargadas, nunca en línea recta."""
+    """Entre Madrid y Córdoba los 22 viajes se miden por las líneas cargadas, nunca en línea recta."""
     diverted = [t for t in select_trips_for_spec(feed, spec) if route_for_trip(spec, t)]
-    assert len(diverted) == 24
+    assert len(diverted) == 22
     lav_nodes = [n.spec.id for n in lines[LAV][0].nodes]
     up_to_cordoba = {
         f"{a}:{b}"
@@ -445,7 +445,7 @@ def test_an_exit_that_is_not_the_joining_node_adds_the_straight_link(
 ) -> None:
     """Sin la tercera línea, el camino de Manzanares a Córdoba enlazaría con la LAV en Ciudad
     Real a 47 km en línea recta: la regla general sigue cubriendo ese caso."""
-    trip = trip_named(feed, "09366", "18000", "55007")
+    trip = trip_named(feed, "09366", "18000", "55020")
     _, loaded = lines[CONV]
     override = RouteOverride.model_validate(
         {
@@ -531,10 +531,10 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # la alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de
         # Huesca y el Alvia que sale por Camp de Tarragona hacia València y Córdoba
         BCN_SPEC.name: {
-            "calatayud-tudela-por-plasencia-de-jalon": 28,
+            "calatayud-tudela-por-plasencia-de-jalon": 24,
             "calatayud-pamplona-por-plasencia-de-jalon": 3,
-            "madrid-tudela-por-plasencia-de-jalon": 59,
-            "zaragoza-huesca": 15,
+            "madrid-tudela-por-plasencia-de-jalon": 53,
+            "zaragoza-huesca": 11,
             "barcelona-andalucia-con-parada-en-madrid": 0,
             "barcelona-cordoba-por-valencia": 14,
         },
@@ -549,11 +549,11 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         assert "indeterminado" not in r["gtfs"]["passes"]
     granada = reports[LBMG_SPEC.name]["gtfs"]
     assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
-    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 565
-    assert reports[SPEC.name]["gtfs"]["trips"] == 335
-    assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 154
-    assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 744
-    assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 130 * 3, "estimado": 24 * 3}
+    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432
+    assert reports[SPEC.name]["gtfs"]["trips"] == 317
+    assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
+    assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
+    assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 124 * 3, "estimado": 22 * 3}
 
 
 def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:

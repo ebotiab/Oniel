@@ -104,14 +104,14 @@ def test_sources_of_the_line_are_registered(mzcr_spec: NetworkSpec) -> None:
 def test_the_filter_selects_the_regional_trains_that_stop_on_the_line(
     feed: GtfsFeed, mzcr_spec: NetworkSpec, mzcr: BuiltNetwork
 ) -> None:
-    """Entran por el filtro los 130 MD y Regional Exprés que paran en las cuatro estaciones; todos
+    """Entran por el filtro los 124 MD y Regional Exprés que paran en las cuatro estaciones; todos
     tienen paso publicado en los tres tramos."""
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat) for n in mzcr.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in mzcr.segments]
     regional = [
         t for t in select_trips_for_spec(feed, mzcr_spec) if route_for_trip(mzcr_spec, t) is None
     ]
-    assert len(regional) == 130
+    assert len(regional) == 124
     assert {t.product for t in regional} == {"MD", "REG.EXP."}
     for trip in regional:
         calls = calls_for_trip(trip, feed, mzcr_spec)

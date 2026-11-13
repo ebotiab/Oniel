@@ -171,7 +171,7 @@ def test_trains_to_malaga_and_to_granada_leave_the_main_line_at_the_junction(
     """A la línea de Málaga van los viajes que paran en Córdoba y siguen a Málaga, a Granada o a
     Algeciras. Todos recorren sus cuatro tramos, pare donde pare cada uno."""
     trips = select_trips_for_spec(feed, malaga.spec)
-    assert len(trips) == 199
+    assert len(trips) == 181
     assert all("50500" in _stops(t) for t in trips)
     assert {t.product for t in trips} == {"AVE", "AVLO", "ALVIA", "AVANT", "Intercity"}
     kinds: dict[str, int] = {}
@@ -180,7 +180,7 @@ def test_trains_to_malaga_and_to_granada_leave_the_main_line_at_the_junction(
         assert len(passes) == 4, trip.train_number
         for p in passes:
             kinds[p.kind] = kinds.get(p.kind, 0) + 1
-    assert kinds == {"estimado": 727, "publicado": 69}
+    assert kinds == {"estimado": 656, "publicado": 68}
     # los Media Distancia que paran en Antequera-Santa Ana por las vías convencionales no entran
     chosen = {t.trip_id for t in trips}
     regional = [t for t in feed.trips.values() if t.product == "MD" and "02003" in _stops(t)]
@@ -214,7 +214,7 @@ def test_trains_to_granada_and_the_link_from_malaga(
     """A la línea de Granada van los AVE, Alvia y Avant que paran en dos de sus estaciones. Los
     Avant de Málaga entran por la bifurcación Bobadilla y no pasan por Antequera-Santa Ana."""
     trips = select_trips_for_spec(feed, granada.spec)
-    assert len(trips) == 74
+    assert len(trips) == 63
     assert {t.product for t in trips} == {"AVE", "ALVIA", "AVANT"}
     assert select_trips_for_spec(ouigo_feed, granada.spec) == []
     first = f"{GRANADA}:antequera-santa-ana:bif-bobadilla"
