@@ -3,7 +3,7 @@
     "id": "lav-plasencia-badajoz",
     "name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
     "short_name": "026",
-    "sort_order": 12,
+    "sort_order": 14,
     "zone": "extremadura",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
@@ -230,7 +230,74 @@
         "35301": {
           "exits": [
             "bif-san-esteban"
+          ],
+          "via": [
+            {
+              "line": "madrid-plasencia",
+              "node": "bif-san-esteban"
+            },
+            {
+              "line": "monfrague-caceres",
+              "node": "monfrague"
+            }
           ]
+        }
+      }
+    },
+    {
+      "id": "merida-hacia-badajoz-garrovilla",
+      "description": "Trenes que van de Mérida hacia Badajoz, o al revés, con Garrovilla-Las Vegas como parada siguiente: salen de Mérida por Aljucén y entran en esta línea junto a Garrovilla-Las Vegas, no por la bifurcación Granja-Las Encinas. Sin la regla, Mérida se tomaría como salida por esa bifurcación y el tren contaría en la curva que une las dos, por la que solo pasan los que no entran en Mérida.",
+      "consecutive_stop_ids": [
+        "37500",
+        "37611"
+      ],
+      "stop_mappings": {
+        "37500": {
+          "exits": [
+            "garrovilla-las-vegas"
+          ],
+          "via": {
+            "line": "ramal-merida",
+            "node": "aljucen"
+          }
+        }
+      }
+    },
+    {
+      "id": "merida-hacia-badajoz-montijo",
+      "description": "Trenes que van de Mérida hacia Badajoz, o al revés, con Montijo como parada siguiente: salen de Mérida por Aljucén y entran en esta línea junto a Garrovilla-Las Vegas, no por la bifurcación Granja-Las Encinas. Sin la regla, Mérida se tomaría como salida por esa bifurcación y el tren contaría en la curva que une las dos, por la que solo pasan los que no entran en Mérida.",
+      "consecutive_stop_ids": [
+        "37500",
+        "37603"
+      ],
+      "stop_mappings": {
+        "37500": {
+          "exits": [
+            "garrovilla-las-vegas"
+          ],
+          "via": {
+            "line": "ramal-merida",
+            "node": "aljucen"
+          }
+        }
+      }
+    },
+    {
+      "id": "merida-hacia-badajoz-badajoz",
+      "description": "Trenes que van de Mérida hacia Badajoz, o al revés, con Badajoz como parada siguiente: salen de Mérida por Aljucén y entran en esta línea junto a Garrovilla-Las Vegas, no por la bifurcación Granja-Las Encinas. Sin la regla, Mérida se tomaría como salida por esa bifurcación y el tren contaría en la curva que une las dos, por la que solo pasan los que no entran en Mérida.",
+      "consecutive_stop_ids": [
+        "37500",
+        "37606"
+      ],
+      "stop_mappings": {
+        "37500": {
+          "exits": [
+            "garrovilla-las-vegas"
+          ],
+          "via": {
+            "line": "ramal-merida",
+            "node": "aljucen"
+          }
         }
       }
     },

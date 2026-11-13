@@ -107,12 +107,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 42 de los 105 tramos con trenes, en 6 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 66 de los 138 tramos con trenes, en 9 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(6)
+    await expect(lineas).toHaveCount(9)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // quince de los veinte de la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
     // Madrid: son los que más trenes llevan. Los cinco de Zaragoza-Delicias y Lleida-Pirineus tienen el baipás
@@ -131,10 +131,21 @@ test.describe('Tramos sin otro camino', () => {
     // el ramal de Jaén, que acaba en una estación término
     await expect(linea('Espelúy – Jaén')).toContainText('Toda la línea, 2 tramos')
     await expect(linea('Espelúy – Jaén')).toContainText('26 trenes')
+    // Extremadura cuelga de Madrid por una sola línea: de la bifurcación Planetario a Monfragüe no hay
+    // otro camino (los dos últimos tramos, hasta la bifurcación San Esteban, tienen el del trazado antiguo)
+    await expect(linea('Madrid – Plasencia por Talavera de la Reina')).toContainText('11 de sus 13 tramos')
+    await expect(linea('Madrid – Plasencia por Talavera de la Reina')).toContainText('de 20 a 34 trenes')
+    // en la alta velocidad de Plasencia a Badajoz, la entrada a Plasencia y todo lo que hay de la
+    // bifurcación Casa de la Torre a Badajoz; entre San Esteban y Casa de la Torre está el trazado antiguo
+    await expect(linea('Plasencia – Badajoz por Cáceres')).toContainText('11 de sus 14 tramos')
+    await expect(linea('Plasencia – Badajoz por Cáceres')).toContainText('de 14 a 24 trenes')
+    // y el ramal de Mérida, que acaba en la estación
+    await expect(linea('Ramal de Mérida')).toContainText('Toda la línea, 2 tramos')
+    await expect(linea('Ramal de Mérida')).toContainText('de 16 a 24 trenes')
     // y de Alcázar de San Juan a Albacete, hasta que se cargue otra línea que llegue a Albacete
-    await expect(lineas.nth(5)).toContainText('Alcázar de San Juan – Albacete')
-    await expect(lineas.nth(5)).toContainText('Toda la línea, 7 tramos')
-    await expect(lineas.nth(5)).toContainText('13 trenes')
+    await expect(lineas.nth(8)).toContainText('Alcázar de San Juan – Albacete')
+    await expect(lineas.nth(8)).toContainText('Toda la línea, 7 tramos')
+    await expect(lineas.nth(8)).toContainText('13 trenes')
     // Granada está unida por los dos lados (la convencional de Moreda y la alta velocidad de Antequera):
     // sus líneas no figuran
     await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Granada')
@@ -143,13 +154,13 @@ test.describe('Tramos sin otro camino', () => {
     // el mapa atenúa el resto de la red; mientras no se mira nada, no hay nada en azul
     await expect(page.getByTestId('mapa')).not.toHaveAttribute('data-recorrido-elegido')
 
-    // los demás, plegados: 63 tramos con lo que añade su otro camino, los dos baipases entre ellos
+    // los demás, plegados: 72 tramos con lo que añade su otro camino, los dos baipases entre ellos
     const resto = page.getByTestId('tramos-con-alternativa')
-    await expect(resto.locator('summary')).toHaveText('Los otros 63 tramos tienen otro camino')
+    await expect(resto.locator('summary')).toHaveText('Los otros 72 tramos tienen otro camino')
     await expect(page.getByTestId('lista-con-alternativa')).toBeHidden()
     await resto.locator('summary').click()
     const otros = page.getByTestId('lista-con-alternativa').locator('li')
-    await expect(otros).toHaveCount(63)
+    await expect(otros).toHaveCount(72)
     // el que más trenes lleva: por él pasan también los que no paran en Madrid
     await expect(otros.first()).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
     await expect(otros.first()).toContainText('140 trenes')

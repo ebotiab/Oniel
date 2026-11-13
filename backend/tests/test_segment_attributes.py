@@ -213,9 +213,14 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         covered = dict(line["covered_segments"])
         # el ancho mixto solo se declara donde lo hay: el paso por Loja y la entrada a Granada
         assert covered.pop("gauge", None) == (3 if line is granada else None)
-        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona
-        barcelona = line["line"] == "lav-madrid-barcelona"
-        assert covered.pop("max_speed_kmh", None) == (3 if barcelona else None)
+        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona y
+        # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata
+        declared_speed = {"lav-madrid-barcelona": 3, "madrid-plasencia": 1}
+        assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
+        # la electrificación solo se declara donde no es la de la línea: de la bifurcación
+        # Planetario a Humanes, tres tramos con catenaria en una línea sin electrificar
+        extremadura = line["line"] == "madrid-plasencia"
+        assert covered.pop("electrification", None) == (3 if extremadura else None)
         assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
         )

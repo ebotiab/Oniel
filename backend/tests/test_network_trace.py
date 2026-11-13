@@ -93,6 +93,40 @@ def test_trace_can_start_mid_line_and_end_on_the_branch() -> None:
     assert [s.maxspeed_kmh for s in line.speed_spans] == [160, 80]
 
 
+def test_trace_without_a_relation_uses_every_way_of_the_file() -> None:
+    """Un extracto de vías sin relación (el enlace de Aljucén, en el ramal de Mérida): sin
+    ``relation_id`` el camino se busca por todas las vías ferroviarias del fichero."""
+    raw = _two_track_relation()
+    ways_only = {"elements": [e for e in raw["elements"] if e["type"] != "relation"]}
+    line = trace_osm_relation(ways_only, None, (0.0, 0.00005), (0.03, -0.00002))
+    with_relation = trace_osm_relation(raw, 7, start=(0.0, 0.00005), end=(0.03, -0.00002))
+    assert line.polyline.coords == with_relation.polyline.coords
+    assert line.polyline.coords[0] == (0.0, 0.0) and line.polyline.coords[-1] == (0.03, 0.0)
+    assert not line.gaps_km
+    assert [s.maxspeed_kmh for s in line.speed_spans] == [160, 100]
+    # también por el ramal, y sin contar el andén, que no es una vía
+    branch = trace_osm_relation(ways_only, None, (0.01, 0.0), (0.02, 0.01))
+    assert branch.polyline.coords == [(0.01, 0.0), (0.02, 0.0), (0.02, 0.01)]
+    assert [s.maxspeed_kmh for s in branch.speed_spans] == [160, 80]
+    # con relación, una vía que no es miembro suyo no se usa; sin ella, sí
+    extra_node = {"type": "node", "id": 50, "lon": 0.04, "lat": 0.0}
+    extra_way = {"type": "way", "id": 500, "nodes": [4, 50], "tags": {"railway": "rail"}}
+    extended = {"elements": [*raw["elements"], extra_node, extra_way]}
+    assert trace_osm_relation(extended, None, (0.0, 0.0), (0.04, 0.0)).polyline.coords[-1] == (
+        0.04,
+        0.0,
+    )
+    assert trace_osm_relation(extended, 7, (0.0, 0.0), (0.04, 0.0)).polyline.coords[-1] == (
+        0.03,
+        0.0,
+    )
+    # los mensajes de error hablan del extracto, no de una relación
+    with pytest.raises(ValueError, match="el extracto de vías no tiene vías ferroviarias"):
+        trace_osm_relation({"elements": []}, None, (0.0, 0.0), (0.03, 0.0))
+    with pytest.raises(ValueError, match="la relación 8 no está en el fichero"):
+        trace_osm_relation(raw, 8, (0.0, 0.0), (0.03, 0.0))
+
+
 def test_chain_in_member_order_is_not_enough_for_unordered_relations() -> None:
     chained = chain_osm_relation(_two_track_relation(), 7)
     assert chained.gaps_km  # el encadenado ingenuo deja huecos: por eso existe el trazado

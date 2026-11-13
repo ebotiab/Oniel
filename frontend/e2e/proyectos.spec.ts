@@ -10,10 +10,13 @@ import { composeNetwork } from '../src/data/network.ts'
 import type { NetworkIndexOut } from '../src/data/types.ts'
 
 // Los proyectos: lo previsto, en obras o parado alrededor de las líneas cargadas. «Hoy» es el 12 de
-// noviembre de 2026, el día en que se comprobaron en sus fuentes.
+// noviembre de 2026, el día en que se comprobaron en sus fuentes (los dos de la alta velocidad de
+// Extremadura, un día después).
 const HOY = new Date('2026-11-12T12:00:00')
 const MORA_ALCAZAR = 'proyecto-lav-mora-alcazar'
 const LOJA = 'proyecto-variante-de-loja'
+const OROPESA = 'proyecto-lav-madrid-oropesa'
+const TALAYUELA = 'proyecto-lav-talayuela-plasencia'
 const TUNELES = 'proyecto-galibo-tuneles-venta-de-cardenas-montoro'
 const TRAMO_CON_OBRAS = 'convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches'
 
@@ -30,7 +33,9 @@ test.describe('Proyectos: datos y registro de capas', () => {
       'proyecto-conexion-lav-cordoba-jaen',
       'proyecto-duplicacion-antequera-granada',
       TUNELES,
+      OROPESA,
       MORA_ALCAZAR,
+      TALAYUELA,
       LOJA,
     ])
     for (const a of proyectos) {
@@ -38,14 +43,16 @@ test.describe('Proyectos: datos y registro de capas', () => {
       expect(a.milestones!.length, a.id).toBeGreaterThan(0)
       // la fuente de cada hito es una de las del proyecto, y tiene dónde consultarse
       for (const h of a.milestones!) expect(a.sources.find((s) => s.id === h.source_id)?.url, `${a.id} ${h.date}`).toBeTruthy()
-      expect(a.checked_on, a.id).toBe('2026-11-12')
+      expect(a.checked_on, a.id).toBe(a.id === OROPESA || a.id === TALAYUELA ? '2026-11-13' : '2026-11-12')
     }
   })
 
   test('el dibujo sale del estado: puntos sobre el papel, trazos en obras, nada sobre una vía que ya existe', () => {
     expect(dibujoDe(proyecto(MORA_ALCAZAR))).toBe('puntos')
-    // hoy ningún proyecto en obras tiene esbozo: el trazo se comprueba con uno que lo estuviera
-    const enObras = { ...proyecto(MORA_ALCAZAR), status: 'en_obras' as const }
+    expect(dibujoDe(proyecto(OROPESA))).toBe('puntos')
+    // el único en obras con dibujo propio: la alta velocidad de Talayuela a Plasencia
+    const enObras = proyecto(TALAYUELA)
+    expect(enObras.status).toBe('en_obras')
     expect(dibujoDe(enObras)).toBe('trazos')
     expect(leyendaDe([enObras]).map((e) => e.texto)).toEqual(['Proyecto en obras'])
     // las obras de los túneles van de nodo a nodo: no tienen geometría propia ni cambian la vía
@@ -56,7 +63,7 @@ test.describe('Proyectos: datos y registro de capas', () => {
     expect(dibujoDe(proyecto(LOJA))).toBeNull()
     expect(proyecto(LOJA).segment_ids).toEqual(['lav-antequera-granada:bif-riofrio:loja', 'lav-antequera-granada:loja:bif-tocon'])
     expect(proyecto('proyecto-duplicacion-antequera-granada').segment_ids).toHaveLength(4)
-    expect(leyendaDe(proyectos).map((e) => e.texto)).toEqual(['Proyecto'])
+    expect(leyendaDe(proyectos).map((e) => e.texto)).toEqual(['Proyecto', 'Proyecto en obras'])
     expect(leyendaDe([proyecto(TUNELES)])).toEqual([])
   })
 
@@ -122,7 +129,7 @@ test.describe('Proyectos: la vista', () => {
   test('la página de cobertura enumera los proyectos, con su estado, y lleva a la ficha de cada uno', async ({ page }) => {
     await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
-    await expect(lista.getByRole('listitem')).toHaveCount(5)
+    await expect(lista.getByRole('listitem')).toHaveCount(7)
     await expect(lista.getByRole('listitem').filter({ hasText: 'Variante de Loja' })).toContainText('en obras')
     await lista.getByTestId('proyecto-enlace').filter({ hasText: 'Variante de Loja' }).click()
     await expect(page).toHaveURL(/\/proyecto\//)
@@ -138,14 +145,16 @@ test.describe('Proyectos: la vista', () => {
       const data = (await (map.getSource('oniel-annotations') as unknown as { getData: () => Promise<GeoJSON.FeatureCollection> }).getData()).features
       return Object.fromEntries(data.map((f) => [String(f.properties!.oniel_id), String(f.properties!.dibujo)]))
     })
-    // solo los dos que no cuelgan de una vía cargada; ninguno está en obras
+    // solo los cuatro que no cuelgan de una vía cargada; el que está en obras va a trazos
     expect(dibujos).toEqual({
       'proyecto-conexion-lav-cordoba-jaen': 'puntos',
+      [OROPESA]: 'puntos',
       [MORA_ALCAZAR]: 'puntos',
+      [TALAYUELA]: 'trazos',
     })
     if (!isMobile) {
       await expect(page.getByTestId('leyenda-proyecto')).toBeVisible()
-      await expect(page.getByTestId('leyenda-proyecto-en-obras')).toHaveCount(0)
+      await expect(page.getByTestId('leyenda-proyecto-en-obras')).toBeVisible()
     }
     // un toque en mitad del esbozo, lejos de cualquier vía cargada
     await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.loaded() === true)

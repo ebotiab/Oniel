@@ -19,11 +19,15 @@ from conftest import (
     DATA_DIR,
     FEED,
     JAEN_SPEC,
+    LAV_BADAJOZ_SPEC,
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
     LAV_VALENCIA_SPEC,
     LBMG_SPEC,
+    MADRID_PLASENCIA_SPEC,
+    MONFRAGUE_CACERES_SPEC,
     MZCR_SPEC,
+    RAMAL_MERIDA_SPEC,
     SPEC,
     SPECS,
 )
@@ -581,6 +585,20 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-albacete-sin-parada": 31,
             "madrid-alicante-sin-parada": 27,
         },
+        # Extremadura: los trenes que entran en Plasencia recorren la convencional hasta la
+        # bifurcación San Esteban y empiezan la línea nueva en la estación; 13 de ellos siguen a
+        # Cáceres por el trazado antiguo. El ramal de Mérida y el trazado antiguo no tienen reglas
+        MADRID_PLASENCIA_SPEC.name: {
+            "a-plasencia-desde-navalmoral": 37,
+            "a-plasencia-desde-monfrague": 59,
+        },
+        LAV_BADAJOZ_SPEC.name: {
+            "plasencia-caceres-por-la-linea-antigua": 13,
+            "desde-plasencia-tras-navalmoral": 37,
+            "desde-plasencia-tras-monfrague": 46,
+        },
+        RAMAL_MERIDA_SPEC.name: {},
+        MONFRAGUE_CACERES_SPEC.name: {},
         # los baipases no tienen reglas: sus trenes salen de resolver la línea de Barcelona
         BYPASS_ZARAGOZA_SPEC.name: {},
         BYPASS_LLEIDA_SPEC.name: {},
@@ -599,6 +617,10 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     assert reports[SPEC.name]["gtfs"]["trips"] == 317 + 47 + 13
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
     assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
+    assert reports[MADRID_PLASENCIA_SPEC.name]["gtfs"]["trips"] == 267
+    assert reports[LAV_BADAJOZ_SPEC.name]["gtfs"]["trips"] == 330
+    assert reports[RAMAL_MERIDA_SPEC.name]["gtfs"]["trips"] == 198
+    assert reports[MONFRAGUE_CACERES_SPEC.name]["gtfs"]["trips"] == 13
     assert reports[BYPASS_ZARAGOZA_SPEC.name]["gtfs"]["trips"] == 97
     assert reports[BYPASS_LLEIDA_SPEC.name]["gtfs"]["trips"] == 224
     assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 124 * 3, "estimado": 22 * 3}

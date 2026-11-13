@@ -78,13 +78,27 @@ def graph(network: Red) -> Graph:
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
-    # los dos últimos, los baipases de Zaragoza y de Lleida
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2
+    # los dos de después de la línea de Valencia, los baipases de Zaragoza y de Lleida; los 13,
+    # 14, 2 y 4 del final, las cuatro líneas de Extremadura
+    assert (
+        len(graph.edges)
+        == len(network.segments)
+        == (54 + 8 + 8 + 20 + 2 + 12 + 2 + 13 + 14 + 2 + 4)
+    )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
     assert {e.line_id for e in graph.edges_at(CIUDAD_REAL)} == {LAV, MZCR}
     assert graph.line_km[MZCR][MANZANARES] == 0 and graph.line_km[CONV][MANZANARES] > 196
+    # Extremadura cuelga de la convencional en la bifurcación Planetario, y sus cuatro líneas se
+    # unen en la bifurcación San Esteban, Monfragüe, Casa de la Torre y Granja-Las Encinas
+    extremadura = "madrid-plasencia", "lav-plasencia-badajoz", "ramal-merida", "monfrague-caceres"
+    by_madrid, new_line, to_merida, old_line = extremadura
+    assert {e.line_id for e in graph.edges_at("bif-planetario")} == {CONV, by_madrid}
+    assert {e.line_id for e in graph.edges_at("bif-san-esteban")} == {by_madrid, new_line}
+    assert {e.line_id for e in graph.edges_at("monfrague")} == {by_madrid, old_line}
+    assert {e.line_id for e in graph.edges_at("bif-casa-de-la-torre")} == {new_line, old_line}
+    assert {e.line_id for e in graph.edges_at("bif-granja-las-encinas")} == {new_line, to_merida}
 
 
 DEFAULTS: dict[str, Any] = {"max_changes": DEFAULT_MAX_CHANGES, "max_ratio": DEFAULT_MAX_RATIO}

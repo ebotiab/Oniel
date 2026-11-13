@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { abrirZona } from './navegar.ts'
+
 const LINEA = 'linares-baeza-moreda-granada'
 
 /** En el móvil la ficha vive en la hoja inferior: hay que ampliarla para verla entera. */
@@ -12,6 +14,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   test('la lista lleva a la línea, de vía única y sin electrificar, con sus estaciones', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
+    await abrirZona(page, 'andalucia')
     await page.getByTestId(`linea-${LINEA}`).click()
     await expect(page).toHaveURL(new RegExp(`/linea/${LINEA}$`))
     await expect(page.getByRole('heading', { name: 'Línea convencional Linares-Baeza – Moreda – Granada' })).toBeVisible()

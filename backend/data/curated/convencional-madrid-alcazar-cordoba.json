@@ -201,6 +201,15 @@
   },
   "route_overrides": [
     {
+      "id": "atocha-cercanias-leganes-linea-de-extremadura",
+      "description": "Trenes de la línea convencional de Extremadura (los de Madrid a Talavera de la Reina, Cáceres, Mérida, Badajoz y Sevilla por Plasencia o Cáceres, y los de Proximidad a Illescas): salen de Madrid-Atocha Cercanías por esta línea y la dejan en la bifurcación Planetario, a 3,7 km, sin parar en ninguna otra de sus estaciones, así que no pasan el filtro de corredor. Se resuelven solo hasta Leganés, su primera parada en la otra línea.",
+      "consecutive_stop_ids": ["18000", "35001"],
+      "to_stop_id": "35001",
+      "stop_mappings": {
+        "35001": {"exits": ["bif-planetario"], "via": {"line": "madrid-plasencia", "node": "bif-planetario"}}
+      }
+    },
+    {
       "id": "atocha-cercanias-ciudad-real-por-manzanares",
       "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por esta línea hasta Manzanares y seguir por la línea Manzanares – Ciudad Real, y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Por esta línea se resuelven entre Madrid y Ciudad Real, saliendo por Manzanares.",
       "consecutive_stop_ids": ["18000", "37200", "50500"],

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { irA } from './navegar.ts'
+import { abrirZona, irA } from './navegar.ts'
 
 test.describe('Explorar la red', () => {
   test('se abre con el mapa y la vista de la red', async ({ page }) => {
@@ -11,7 +11,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('ficha-red')).toContainText(/^10 líneas · 2\.605 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^14 líneas · 3\.134 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -34,6 +34,7 @@ test.describe('Explorar la red', () => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
+    await abrirZona(page, 'andalucia')
     await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
     await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-alcazar-de-san-juan')).toBeVisible()
@@ -54,9 +55,13 @@ test.describe('Explorar la red', () => {
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
-    // la lista tiene las ocho líneas, también en la hoja del móvil, y ya no hay pestañas
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(10)
+    // la lista es un índice de sus cinco zonas, también en la hoja del móvil, y ya no hay pestañas:
+    // con más de doce líneas arranca plegada, y al abrir una zona salen sus líneas
+    await expect(page.getByTestId('lista-lineas').locator('.zona-cabecera')).toHaveCount(5)
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
+    await abrirZona(page, 'madrid-castilla-la-mancha')
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(2)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()

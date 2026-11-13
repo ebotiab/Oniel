@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import type { Map as MapLibreMap } from 'maplibre-gl'
 
 import { IBERIA_BOUNDS, SPAIN_BOUNDS } from '../src/map/bounds.ts'
+import { abrirZona } from './navegar.ts'
 
 // El visor expone el mapa en window.__onielMap en desarrollo, que es como lo arranca Playwright.
 // Las pruebas se tipan con la configuración de Node, sin DOM, así que dentro del navegador se llega
@@ -163,9 +164,11 @@ test.describe('Trazo de la vía', () => {
 
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
+    await abrirZona(page, 'andalucia')
     await page.getByTestId('linea-lav-madrid-sevilla').click()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="alta-velocidad"]').first()).toBeAttached()
     await page.getByTestId('volver-red').click()
+    await abrirZona(page, 'andalucia')
     await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="convencional"]').first()).toBeAttached()
     await expect(page.locator('[data-testid="esquema"] [data-trazo="via-unica"]').first()).toBeAttached()
