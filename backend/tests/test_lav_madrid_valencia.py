@@ -22,13 +22,11 @@ from oniel.validate import loaded_line
 #: Entre qué dos nodos recorre la línea cada viaje del fichero de pruebas, y cuántos son.
 SHAPES = {
     # Madrid – Valencia, pare o no en Cuenca y en Requena-Utiel
-    ("bif-torrejon-de-velasco", "valencia-joaquin-sorolla"): 180,
+    ("bif-torrejon-de-velasco", "valencia-joaquin-sorolla"): 189,
     # Madrid – Albacete, Alicante y Murcia: dejan la línea en la bifurcación de Albacete
-    ("bif-albacete", "bif-torrejon-de-velasco"): 225,
-    # trenes de Madrid que acaban o empiezan en Requena-Utiel
-    ("bif-torrejon-de-velasco", "requena-utiel"): 52,
+    ("bif-albacete", "bif-torrejon-de-velasco"): 215,
     # Avant de Requena-Utiel a Valencia
-    ("requena-utiel", "valencia-joaquin-sorolla"): 60,
+    ("requena-utiel", "valencia-joaquin-sorolla"): 61,
     # Valencia – Sevilla, por el enlace de la bifurcación Blancales
     ("bif-blancales", "valencia-joaquin-sorolla"): 4,
 }
@@ -183,7 +181,7 @@ def test_trains_of_valencia_and_of_alicante_share_the_line_as_far_as_the_albacet
     los que recorren la línea sin parar en ninguna de las dos. Los de Albacete y Alicante la
     dejan en la bifurcación de Albacete; los Avant de Requena-Utiel solo llegan a Valencia."""
     trips = select_trips_for_spec(feed, valencia.spec)
-    assert len(trips) == 521
+    assert len(trips) == 469
     products: dict[str, int] = {}
     rules: dict[str, int] = {}
     shapes: dict[tuple[str, str], int] = {}
@@ -198,20 +196,17 @@ def test_trains_of_valencia_and_of_alicante_share_the_line_as_far_as_the_albacet
         short = _short(passes)
         ends = sorted({short[0].split(":")[0], short[-1].split(":")[1]})
         shapes[(ends[0], ends[1])] = shapes.get((ends[0], ends[1]), 0) + 1
-    assert products == {"AVE": 341, "AVLO": 69, "AVANT": 83, "ALVIA": 28}
+    assert products == {"AVE": 299, "AVLO": 61, "AVANT": 85, "ALVIA": 24}
     assert rules == {
-        "madrid-valencia-sin-parada": 73,
+        "madrid-valencia-sin-parada": 62,
         "madrid-albacete-sin-parada": 31,
         "madrid-alicante-sin-parada": 27,
     }
     # entre dos estaciones siempre hay un PAET o una bifurcación: ningún paso es publicado
     assert kinds == {"estimado"}
     assert shapes == SHAPES
-    # los trenes que solo tocan València-Joaquín Sorolla hacia Castelló no recorren la línea
+    # fuera quedan los Media Distancia de Madrid a Albacete por Alcázar de San Juan
     chosen = {t.trip_id for t in trips}
-    castello = [t for t in feed.trips.values() if set(_stops(t)) == {"03216", "65300"}]
-    assert castello and not chosen & {t.trip_id for t in castello}
-    # ni los Media Distancia de Madrid a Albacete por Alcázar de San Juan
     by_alcazar = [t for t in feed.trips.values() if {"17000", "60400", "60600"} <= set(_stops(t))]
     assert by_alcazar and not chosen & {t.trip_id for t in by_alcazar}
 

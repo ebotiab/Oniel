@@ -217,13 +217,15 @@ def test_the_filter_takes_high_speed_trains_and_leaves_out_the_regional_ones(
     feed: GtfsFeed, bcn_spec: NetworkSpec
 ) -> None:
     trips = select_trips_for_spec(feed, bcn_spec)
-    assert len(trips) == 744
+    # un viaje por número de tren y día: el fichero trae muchos de estos trenes en dos viajes (el
+    # recorrido entero y un trozo, como Madrid – Figueres y Madrid – Barcelona) y el lector los junta
+    assert len(trips) == 571
     assert Counter(t.product for t in trips) == {
-        "AVE": 371,
-        "ALVIA": 151,
-        "AVANT": 83,
-        "AVE INT": 75,
-        "EUROMED": 38,
+        "AVE": 264,
+        "ALVIA": 105,
+        "AVANT": 84,
+        "AVE INT": 55,
+        "EUROMED": 37,
         "Intercity": 24,
         "AVANT EXP": 2,
     }
@@ -238,13 +240,13 @@ def test_the_filter_takes_high_speed_trains_and_leaves_out_the_regional_ones(
         if t.product in {"MD", "REGIONAL", "REG.EXP."}
         and len(feed.stop_ids_of(t) & node_stops) >= 2
     ]
-    assert len(regional) == 75 and all(feed.stop_ids_of(t) & excluded for t in regional)
+    assert len(regional) == 77 and all(feed.stop_ids_of(t) & excluded for t in regional)
     assert not any(feed.stop_ids_of(t) & excluded for t in trips)
-    # 64 viajes entran por una regla aunque solo paran en una estación de la línea
+    # 53 viajes entran por una regla aunque solo paran en una estación de la línea. Los trozos
+    # Zaragoza – Huesca que traía el fichero van ya dentro de su AVE Madrid – Huesca
     one_stop = [t for t in trips if len(feed.stop_ids_of(t) & node_stops) == 1]
     assert Counter(r.override.id for t in one_stop if (r := route_for_trip(bcn_spec, t))) == {
-        "madrid-tudela-por-plasencia-de-jalon": 59,
-        "zaragoza-huesca": 5,
+        "madrid-tudela-por-plasencia-de-jalon": 53,
     }
 
 
@@ -267,8 +269,9 @@ def test_each_train_leaves_the_line_where_it_really_does(
     # Alvia Barcelona – Pamplona: sale por Zaragoza-Delicias, no por Plasencia de Jalón
     north = only(("71801", "04104", "78400", "04040", "81202", "81200", "80108", "80100"))
     assert north[0] == "zaragoza-delicias:bif-huesca" and len(north) == 12
-    # AVE Zaragoza – Huesca: solo el tramo hasta la bifurcación Huesca
-    assert only(("04040", "78200", "74200")) == ("zaragoza-delicias:bif-huesca",)
+    # AVE Madrid – Huesca: de Madrid a la bifurcación Huesca, pasada Zaragoza-Delicias
+    to_huesca = all_segments[: all_segments.index("zaragoza-delicias:bif-huesca") + 1]
+    assert only(("60000", "04007", "70600", "04040", "78200", "74200")) == to_huesca
     # AVE Barcelona – Sevilla sin parar en Madrid: entra en el enlace de Vallecas y no pisa el
     # tramo de Atocha
     assert only(("71801", "04104", "78400", "04040", "50500", "51003")) == all_segments[1:]
