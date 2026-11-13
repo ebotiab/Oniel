@@ -1,5 +1,6 @@
 import {
   type GeoJSONSource,
+  GPUInitializationError,
   LngLatBounds,
   Map as MapLibreMap,
   NavigationControl,
@@ -10,7 +11,7 @@ import {
   setWorkerUrl,
 } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { CAPAS_CON_TRAZO, dibujoDe } from '../app/annotationLayers'
 import type { AnnotationOut, NetworkOut } from '../data/types'
@@ -121,6 +122,8 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
 
 export function MapView({ network, selection, hoverId, closedSegmentId, annotated, annotations, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
+  // El navegador no puede crear el lienzo WebGL2 que necesita MapLibre: en su lugar se explica por qué.
+  const [sinWebgl, setSinWebgl] = useState(false)
   const mapRef = useRef<MapLibreMap | null>(null)
   const idsRef = useRef<{ segments: Map<string, number>; nodes: Map<string, number>; annotations: Map<string, number> }>({ segments: new Map(), nodes: new Map(), annotations: new Map() })
   const readyRef = useRef(false)
@@ -145,23 +148,34 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const map = new MapLibreMap({
-      container: containerRef.current,
-      style: baseStyle as unknown as StyleSpecification,
-      bounds: SPAIN_BOUNDS,
-      fitBoundsOptions: { padding: { top: 70, right: 40, bottom: 40, left: padding.left + 40 } },
-      // El mapa no sale de la península y sus vecinos: el lienzo entero se queda dentro de la caja,
-      // así que el zoom mínimo efectivo depende de la pantalla (unos 5,8 en escritorio, 5,4 en móvil).
-      maxBounds: IBERIA_BOUNDS,
-      minZoom: 4.5,
-      maxZoom: 15,
-      // Siempre con el norte arriba y sin inclinar, como una hoja de mapa.
-      dragRotate: false,
-      pitchWithRotate: false,
-      maxPitch: 0,
-      attributionControl: { compact: true },
-      fadeDuration: reduced ? 0 : 200,
-    })
+    let map: MapLibreMap
+    try {
+      map = new MapLibreMap({
+        container: containerRef.current,
+        style: baseStyle as unknown as StyleSpecification,
+        bounds: SPAIN_BOUNDS,
+        fitBoundsOptions: { padding: { top: 70, right: 40, bottom: 40, left: padding.left + 40 } },
+        // El mapa no sale de la península y sus vecinos: el lienzo entero se queda dentro de la caja,
+        // así que el zoom mínimo efectivo depende de la pantalla (unos 5,8 en escritorio, 5,4 en móvil).
+        maxBounds: IBERIA_BOUNDS,
+        minZoom: 4.5,
+        maxZoom: 15,
+        // Siempre con el norte arriba y sin inclinar, como una hoja de mapa.
+        dragRotate: false,
+        pitchWithRotate: false,
+        maxPitch: 0,
+        attributionControl: { compact: true },
+        fadeDuration: reduced ? 0 : 200,
+      })
+    } catch (err) {
+      // Sin WebGL2 (equipos antiguos, aceleración gráfica desactivada) MapLibre no puede crear el mapa. Es un
+      // límite del navegador de quien visita, no un fallo de Oniel: no se relanza ni llega a Logfire como error.
+      if (err instanceof GPUInitializationError) {
+        setSinWebgl(true)
+        return
+      }
+      throw err
+    }
     map.touchZoomRotate.disableRotation()
     map.keyboard.disableRotation()
     map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
@@ -440,5 +454,30 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frame])
 
+  if (sinWebgl) return <SinWebgl padding={padding} />
+
   return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} data-recorrido-elegido={recorridos?.elegido.length || undefined} />
+}
+
+/**
+ * Lo que ocupa el hueco del mapa cuando el navegador no puede dibujarlo. Va en la parte que el panel deja
+ * a la vista; el resto del visor (buscador, panel, fichas, glosario) no depende del mapa y sigue igual.
+ */
+function SinWebgl({ padding }: { padding: { left: number; bottom: number } }) {
+  return (
+    <div className="mapa mapa-sin-webgl" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa-sin-webgl" style={{ paddingLeft: padding.left, paddingBottom: padding.bottom }}>
+      <div className="mapa-sin-webgl-texto">
+        <p className="mapa-sin-webgl-titulo">Este navegador no puede dibujar el mapa</p>
+        <p>
+          El mapa necesita WebGL2, una función con la que el navegador usa la tarjeta gráfica del equipo. Aquí no está
+          disponible o está desactivada: no es nada que hayas hecho mal.
+        </p>
+        <p>Lo demás funciona igual: el buscador, las líneas, las fichas de estaciones y tramos y el glosario.</p>
+        <p>
+          Para ver el mapa, prueba con otro navegador o actualiza el que usas. También puedes activar en sus ajustes la
+          aceleración por hardware (a veces se llama «usar la aceleración gráfica cuando esté disponible»).
+        </p>
+      </div>
+    </div>
+  )
 }

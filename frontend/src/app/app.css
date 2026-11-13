@@ -9,6 +9,42 @@
   inset: 0;
 }
 
+/* Sin WebGL2 el hueco del mapa explica por qué está vacío: texto llano, sin color, en la parte que deja el panel. */
+.mapa-sin-webgl {
+  display: flex;
+  align-items: center;
+  padding-top: 56px;
+  background: var(--papel);
+}
+
+.mapa-sin-webgl-texto {
+  max-width: 440px;
+  margin: 0 48px;
+  color: var(--tinta-2);
+  font-size: var(--t-14);
+  line-height: 1.35;
+}
+
+.mapa-sin-webgl-texto p {
+  margin: 0 0 10px;
+}
+
+.mapa-sin-webgl-texto .mapa-sin-webgl-titulo {
+  margin-bottom: 12px;
+  color: var(--tinta);
+  font-size: var(--t-17);
+  font-weight: 600;
+}
+
+.app.movil .mapa-sin-webgl {
+  align-items: flex-start;
+  padding-top: 72px;
+}
+
+.app.movil .mapa-sin-webgl-texto {
+  margin: 0 16px;
+}
+
 .maplibregl-ctrl-top-right {
   top: 64px;
 }
