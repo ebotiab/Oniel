@@ -16,7 +16,14 @@ from oniel.domain.schemas import (
     SegmentAlternativesOut,
     SegmentOut,
 )
-from oniel.routing import Graph, ScenarioError, build_graph, find_routes, route_along
+from oniel.routing import (
+    Graph,
+    Scenario,
+    ScenarioError,
+    build_graph,
+    find_routes,
+    route_along,
+)
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
@@ -32,6 +39,7 @@ LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
 BCN = "lav-madrid-barcelona"
 LAV_VALENCIA = "lav-madrid-valencia"
 LAV_ALICANTE = "lav-albacete-alicante"
+LAV_VALLADOLID = "lav-madrid-valladolid"
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
 CORDOBA_BIF_MALAGA = f"{LAV}:cordoba:bif-malaga"
@@ -119,6 +127,26 @@ def test_towards_sevilla_there_is_no_other_way_in_the_loaded_lines(graph: Graph)
     assert north.groups[0].to_node_id == SEVILLA
 
 
+def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparator_allows(
+    graph: Graph,
+) -> None:
+    """Un tren de Valencia a Valladolid cruza Madrid por Chamartín. Con un tramo cerrado entre
+    Torrejón de Velasco y la bifurcación de Albacete, su otro camino baja a Albacete, sube por
+    Alcázar de San Juan a Madrid-Puerta de Atocha y vuelve a Torrejón de Velasco para tomar el
+    túnel: seis cambios de línea, uno más de los que el comparador enumera por defecto."""
+    valencia, valladolid = "valencia-joaquin-sorolla", "valladolid-campo-grande"
+    closed_segment = f"{LAV_VALENCIA}:horcajada:cuenca-fernando-zobel"
+    own = _path(graph, valencia, valladolid)
+    assert closed_segment in own
+    assert not find_routes(graph, valencia, valladolid, Scenario(closures=[closed_segment]))
+    segment = _of(segment_alternatives(graph, [ServicePath("ave-1", "renfe", own)]), closed_segment)
+    assert (segment.with_alternative, segment.without_alternative) == (1, 0)
+    alternative = segment.groups[0].alternative
+    assert alternative is not None
+    assert ALBACETE in alternative.line_ids and CONV in alternative.line_ids
+    assert alternative.extra_km == pytest.approx(167.1, abs=0.2)
+
+
 def test_trains_are_grouped_by_their_way_through_the_loaded_lines(graph: Graph) -> None:
     direct = _path(graph, MADRID, CORDOBA)
     # los desviados: convencional hasta Manzanares, Manzanares – Ciudad Real y alta velocidad
@@ -195,6 +223,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         "baipas-zaragoza",
         "baipas-lleida",
         LAV_ALICANTE,
+        LAV_VALLADOLID,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -206,7 +235,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
     # los dos baipases y los nueve tramos de la línea de Albacete a Alicante
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 5
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -216,7 +245,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
-    apart = (f"{BCN}:", f"{LAV_VALENCIA}:", f"{LAV_ALICANTE}:")
+    apart = (f"{BCN}:", f"{LAV_VALENCIA}:", f"{LAV_ALICANTE}:", f"{LAV_VALLADOLID}:")
     assert {k: n for k, n in without.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 83,
         f"{LAV}:majarabique:sevilla-santa-justa": 81,
@@ -268,6 +297,16 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         (42, 42),
         (36, 36),
         (56, 56),
+    ]
+    # la de Madrid a Valladolid entera: es la única cargada al norte de Madrid. 122 trenes hasta
+    # Segovia, 111 hasta la bifurcación Medina, donde salen los de Galicia, y 81 hasta Valladolid
+    valladolid = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALLADOLID}:")]
+    assert [(s.trains, s.without_alternative) for s in valladolid] == [
+        (122, 122),
+        (122, 122),
+        (111, 111),
+        (111, 111),
+        (81, 81),
     ]
     # tampoco en la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
     # Madrid: quince de sus veinte tramos no tienen otro camino cargado

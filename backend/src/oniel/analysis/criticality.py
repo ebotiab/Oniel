@@ -135,6 +135,18 @@ def segment_alternatives(
             own = route_along(graph, start, path_ids)
             # Sin descartar por largo: se pregunta si existe otro camino, mida lo que mida.
             others = find_routes(graph, own.from_node_id, own.to_node_id, closed, max_ratio=None)
+            if not others:
+                # Ni por número de líneas: un tren que cruza Madrid de una línea a otra (de
+                # Valladolid a Valencia) puede necesitar más cambios de línea de los que admite
+                # el comparador para rodear un tramo, y ese rodeo también es otro camino.
+                others = find_routes(
+                    graph,
+                    own.from_node_id,
+                    own.to_node_id,
+                    closed,
+                    max_changes=None,
+                    max_ratio=None,
+                )
             group_outs.append(
                 SegmentTrainGroupOut(
                     from_node_id=own.from_node_id,

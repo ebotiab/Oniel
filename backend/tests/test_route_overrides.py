@@ -23,6 +23,7 @@ from conftest import (
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
     LAV_VALENCIA_SPEC,
+    LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
     MZCR_SPEC,
     SPEC,
@@ -594,6 +595,14 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # los baipases no tienen reglas: sus trenes salen de resolver la línea de Barcelona
         BYPASS_ZARAGOZA_SPEC.name: {},
         BYPASS_LLEIDA_SPEC.name: {},
+        # los que recorren la de Madrid a Valladolid sin parar en Segovia-Guiomar
+        LAV_VALLADOLID_SPEC.name: {
+            "madrid-valladolid-sin-parada": 188,
+            "madrid-leon-sin-parada": 4,
+            "madrid-medina-sin-parada": 14,
+            "madrid-zamora-sin-parada": 115,
+            "madrid-ourense-sin-parada": 6,
+        },
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe: lo dice el informe de este fichero, y el de todos los

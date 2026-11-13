@@ -107,12 +107,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 36 de los 116 tramos con trenes, en 6 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 41 de los 121 tramos con trenes, en 7 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(6)
+    await expect(lineas).toHaveCount(7)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // quince de los veinte de la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
     // Madrid: son los que más trenes llevan. Los cinco de Zaragoza-Delicias y Lleida-Pirineus tienen el baipás
@@ -127,6 +127,9 @@ test.describe('Tramos sin otro camino', () => {
     // y los siete de la de Albacete a Alicante que quedan al sur de Albacete
     await expect(linea('Albacete – Alicante')).toContainText('7 de sus 9 tramos')
     await expect(linea('Albacete – Alicante')).toContainText('de 36 a 56 trenes')
+    // la de Madrid a Valladolid entera: es la única cargada al norte de Madrid
+    await expect(linea('Madrid – Valladolid por Segovia')).toContainText('Toda la línea, 5 tramos')
+    await expect(linea('Madrid – Valladolid por Segovia')).toContainText('de 81 a 122 trenes')
     // los dos que llevan a Sevilla desde la bifurcación de Málaga
     await expect(linea('Madrid – Sevilla')).toContainText('2 de sus 13 tramos')
     await expect(linea('Madrid – Sevilla')).toContainText('de 81 a 83 trenes')
