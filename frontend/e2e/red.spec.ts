@@ -125,12 +125,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('ficha-red')).toContainText(/^70 líneas · /)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^71 líneas · /)
     // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con nueve que con sesenta y nueve
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     const lista = page.getByTestId('lista-lineas')
     // con más de doce líneas la lista es un índice de zonas: tres renglones, ninguna línea a la vista
-    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia1 línea/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Andalucía66 líneas/])
+    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia2 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Andalucía66 líneas/])
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     // plegar no esconde un corte
     await expect(page.getByTestId('zona-andalucia').locator('.zona-detalle')).toContainText('3 líneas con un tramo sin circulación')

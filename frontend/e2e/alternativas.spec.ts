@@ -114,14 +114,16 @@ test.describe('Tramos sin otro camino', () => {
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
     await expect(lineas).toHaveCount(6)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
-    // quince de los veinte de la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
-    // Madrid: son los que más trenes llevan. Los cinco de Zaragoza-Delicias y Lleida-Pirineus tienen el baipás
+    // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
+    // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
     await expect(lineas.nth(0)).toContainText('Madrid – Barcelona por Zaragoza')
-    await expect(lineas.nth(0)).toContainText('15 de sus 20 tramos')
-    await expect(lineas.nth(0)).toContainText('de 73 a 108 trenes')
-    // los doce de la alta velocidad de Madrid a Valencia, que sale de la de Sevilla y no vuelve a tocar la red cargada
-    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('Toda la línea, 12 tramos')
-    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('de 42 a 82 trenes')
+    await expect(lineas.nth(0)).toContainText('3 de sus 20 tramos')
+    await expect(lineas.nth(0)).toContainText('108 trenes')
+    // la alta velocidad de Madrid a Valencia ya no figura: sus trenes tienen otro camino, dando la vuelta al anillo.
+    // De la línea de València a Camp de Tarragona, solo el primer tramo: a la Estació del Nord no se llega por otro
+    await expect(linea('Madrid – Valencia por Cuenca')).toHaveCount(0)
+    await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('1 de sus 35 tramos')
+    await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('54 trenes')
     // los dos que llevan a Sevilla desde la bifurcación de Málaga
     await expect(linea('Madrid – Sevilla')).toContainText('2 de sus 13 tramos')
     await expect(linea('Madrid – Sevilla')).toContainText('de 81 a 83 trenes')
@@ -145,11 +147,11 @@ test.describe('Tramos sin otro camino', () => {
 
     // los demás, plegados: 63 tramos con lo que añade su otro camino, los dos baipases entre ellos
     const resto = page.getByTestId('tramos-con-alternativa')
-    await expect(resto.locator('summary')).toHaveText('Los otros 63 tramos tienen otro camino')
+    await expect(resto.locator('summary')).toHaveText('Los otros 121 tramos tienen otro camino')
     await expect(page.getByTestId('lista-con-alternativa')).toBeHidden()
     await resto.locator('summary').click()
     const otros = page.getByTestId('lista-con-alternativa').locator('li')
-    await expect(otros).toHaveCount(63)
+    await expect(otros).toHaveCount(121)
     // el que más trenes lleva: por él pasan también los que no paran en Madrid
     await expect(otros.first()).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
     await expect(otros.first()).toContainText('140 trenes')

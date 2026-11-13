@@ -75,7 +75,8 @@ test.describe('Simular un cierre', () => {
     await expect(alternativa).toContainText(/366,9 km frente a 64,4 km/)
     // el de Córdoba (417,4 km) también se enseña; la vuelta por Granada y Córdoba, de más del doble, no
     await expect(alternativa.locator('p.texto:not(.suave)')).toHaveCount(2)
-    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existe otro recorrido más largo, que no se enseña/)
+    // y la que sube a Barcelona y baja por la costa y por València, tampoco
+    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existen otros 2 recorridos más largos, que no se enseñan/)
   })
 
   test('un cierre entre Urda y Ciudad Real señala el desvío por Manzanares, que usa dos líneas', async ({ page }) => {
