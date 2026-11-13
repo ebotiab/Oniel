@@ -93,6 +93,7 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "cordoba", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»."}
   ],
   "connections": [
+    {"id": "tuneles-atocha-chamartin", "node_id": "madrid-puerta-de-atocha", "name": "Túneles de Madrid-Atocha Cercanías a Madrid-Chamartín", "towards": "Madrid-Chamartín, por Recoletos y Nuevos Ministerios", "status": "no_cargada", "sketch": [[-3.690886, 40.406442], [-3.6822622, 40.4720571]]},
     {"id": "conv-madrid-extremadura", "node_id": "bif-planetario", "name": "Línea convencional Madrid–Extremadura", "towards": "Talavera de la Reina, Cáceres, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.677554, 40.385577], [-3.74, 40.36], [-3.85, 40.33], [-4.05, 40.3]]},
     {"id": "conv-cordoba-sevilla", "node_id": "cordoba", "name": "Línea convencional Córdoba–Sevilla", "towards": "Posadas, Palma del Río, Lora del Río, Sevilla y Cádiz", "status": "no_cargada", "sketch": [[-4.789453, 37.888291], [-4.84, 37.87], [-4.92, 37.85], [-5.11, 37.80], [-5.29, 37.72]]}
   ],
