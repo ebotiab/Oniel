@@ -101,6 +101,28 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 1. [#116](https://github.com/ebotiab/Oniel/issues/116) Datos: ramal de alta velocidad a Albacete y Alicante. Sale de la anterior pasado Cuenca y comparte la estación de Albacete-Los Llanos con la línea de Alcázar: con él, de Madrid a Albacete hay dos caminos. Su origen es la bifurcación de Albacete, que ya es un nodo; lo que tiene que retirar y cambiar está al final de «Cómo se construyó la línea de alta velocidad Madrid–Cuenca–Valencia», en `docs/datos.md`.
 2. [#168](https://github.com/ebotiab/Oniel/issues/168) Datos: Madrid-Chamartín y el acceso de la alta velocidad de Levante hasta Torrejón de Velasco. Casi todos los trenes de Valencia, Albacete y Alicante salen de Chamartín, que hoy no es una estación de la red: por eso el comparador cuenta solo 2 trenes directos entre Madrid-Puerta de Atocha y Valencia, aunque por cada tramo pasan hasta 82. Mejor después de #116, que toca las mismas asignaciones de parada.
 
+**Murcia.** Cierra el corredor de Levante y, con él, los corredores de alta velocidad más usados desde Madrid.
+
+- [#170](https://github.com/ebotiab/Oniel/issues/170) Datos: alta velocidad de Alicante a Murcia. Sale del ramal de Albacete y Alicante: depende de #116.
+
+**Norte y noroeste.** Hoy no hay nada cargado al norte de Madrid. El orden lo marcan las dependencias: cada línea cuelga de un nodo que carga la anterior.
+
+- [#171](https://github.com/ebotiab/Oniel/issues/171) Datos: línea de alta velocidad Madrid – Segovia – Valladolid. La puerta de todo el norte; depende de #168, que carga Madrid-Chamartín.
+- [#172](https://github.com/ebotiab/Oniel/issues/172) Datos: línea de alta velocidad Valladolid – Palencia – León. Depende de #171.
+- [#173](https://github.com/ebotiab/Oniel/issues/173) Datos: línea de alta velocidad Venta de Baños – Burgos. Depende de #172.
+- [#174](https://github.com/ebotiab/Oniel/issues/174) Datos: línea de alta velocidad Olmedo – Zamora – Ourense, el camino a Galicia. Depende de #171.
+- [#175](https://github.com/ebotiab/Oniel/issues/175) Datos: alta velocidad Ourense – Santiago y Eje Atlántico (A Coruña – Santiago – Vigo). Depende de #174.
+- [#176](https://github.com/ebotiab/Oniel/issues/176) Datos: línea León – Oviedo – Gijón por la Variante de Pajares. Depende de #172.
+- [#177](https://github.com/ebotiab/Oniel/issues/177) Datos: línea convencional Burgos – Miranda de Ebro – Vitoria y acceso al País Vasco. Depende de #173.
+
+**Mediterráneo.** Para que la red deje de ser radial: une Valencia y Barcelona sin pasar por Madrid.
+
+- [#178](https://github.com/ebotiab/Oniel/issues/178) Datos: Corredor Mediterráneo de Valencia a Tarragona por Castellón. No depende de nada: las líneas de Valencia y de Barcelona ya están cargadas.
+
+**Extremadura.**
+
+- [#179](https://github.com/ebotiab/Oniel/issues/179) Datos: línea Madrid – Cáceres – Mérida – Badajoz. No depende de nada.
+
 Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
 
 ## Pendientes menores
