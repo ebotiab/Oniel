@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import type { Map as MapLibreMap } from 'maplibre-gl'
 
-import { IBERIA_BOUNDS } from '../src/map/bounds.ts'
+import { IBERIA_BOUNDS, SPAIN_BOUNDS } from '../src/map/bounds.ts'
 
 // El visor expone el mapa en window.__onielMap en desarrollo, que es como lo arranca Playwright.
 // Las pruebas se tipan con la configuración de Node, sin DOM, así que dentro del navegador se llega
@@ -25,6 +25,34 @@ test.describe('Navegar por el mapa', () => {
       return { cargado: map.loaded(), capaDeVia: map.getLayer('oniel-segments') !== undefined }
     })
     expect(estado).toEqual({ cargado: false, capaDeVia: true })
+  })
+
+  test('el encuadre inicial abarca toda la red cargada', async ({ page }, testInfo) => {
+    await mapaListo(page)
+    const indice = (await (await page.request.get('/data/index.json')).json()) as { nodes: { id: string; lon: number; lat: number }[] }
+    // la caja del encuadre contiene todos los nodos: si una línea nueva se sale, hay que ensancharla
+    const [[oeste, sur], [este, norte]] = SPAIN_BOUNDS
+    for (const n of indice.nodes) {
+      expect(n.lon, `${n.id}: longitud`).toBeGreaterThan(oeste)
+      expect(n.lon, `${n.id}: longitud`).toBeLessThan(este)
+      expect(n.lat, `${n.id}: latitud`).toBeGreaterThan(sur)
+      expect(n.lat, `${n.id}: latitud`).toBeLessThan(norte)
+    }
+    // En el móvil la red no cabe entera a lo ancho: el mapa no puede alejarse más sin salirse de la
+    // península, y Sevilla y Barcelona quedan justo fuera. En escritorio se ve toda, fuera del panel.
+    test.skip(testInfo.project.name === 'movil', 'en el móvil la red no cabe entera a lo ancho')
+    const panel = await page.getByTestId('vista-red').boundingBox()
+    const lienzo = await page.locator('.maplibregl-canvas').boundingBox()
+    const puntos = await page.evaluate(
+      (nodos) => nodos.map((n) => ({ id: n.id, ...(globalThis as unknown as ConMapa).__onielMap!.project([n.lon, n.lat]) })),
+      indice.nodes,
+    )
+    for (const p of puntos) {
+      expect(p.x, `${p.id}: a la derecha del panel`).toBeGreaterThan(panel!.x + panel!.width - lienzo!.x)
+      expect(p.x, `${p.id}: dentro del lienzo`).toBeLessThan(lienzo!.width)
+      expect(p.y, `${p.id}: dentro del lienzo`).toBeGreaterThan(0)
+      expect(p.y, `${p.id}: dentro del lienzo`).toBeLessThan(lienzo!.height)
+    }
   })
 
   test('el mapa no sale de la península ni de sus vecinos', async ({ page }) => {
