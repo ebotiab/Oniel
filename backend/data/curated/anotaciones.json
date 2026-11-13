@@ -82,6 +82,26 @@
       "checked_on": "2026-11-12"
     },
     {
+      "id": "lav-cordoba-malaga-desprendimiento-alora-2026-02-04",
+      "kind": "interrupcion",
+      "status": "terminada",
+      "line_id": "lav-cordoba-malaga",
+      "from_node": "antequera-santa-ana",
+      "to_node": "malaga-maria-zambrano",
+      "start_date": "2026-02-04",
+      "expected_end_date": null,
+      "expected_end_text": null,
+      "ended_on": "2026-04-30",
+      "reason": "Circulación interrumpida por un desprendimiento de tierras a la altura de Álora (Málaga), tras las lluvias de principios de febrero de 2026.",
+      "note": "Según Adif, la interrupción empezó a las 7.30 h del 4 de febrero de 2026. Renfe llevó a sus viajeros por carretera entre Antequera-Santa Ana y Málaga desde el 18 de febrero, y la línea se reabrió el 30 de abril de 2026 a las 12.00 h. Renfe avisó entonces de que quedaban tramos en los que se circulaba por vía única y de que los horarios cambiaban respecto a los de antes del corte.",
+      "source_ids": [
+        "the-objective-corte-alora-2026-02-04",
+        "renfe-nota-servicios-malaga-2026-04",
+        "the-objective-reapertura-malaga-2026-04-30"
+      ],
+      "checked_on": "2026-11-13"
+    },
+    {
       "id": "proyecto-lav-mora-alcazar",
       "kind": "proyecto",
       "status": "sin_ejecutar",

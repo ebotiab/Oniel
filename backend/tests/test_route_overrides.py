@@ -52,6 +52,9 @@ RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
     "atocha-cercanias-cordoba-por-manzanares": 2,
 }
+#: La alta velocidad de Sevilla tiene además la de los directos de Madrid a Málaga, que no paran
+#: en Córdoba y no pasan su filtro de corredor.
+MALAGA_RULES = {"madrid-malaga-sin-paradas": 13}
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
 
@@ -217,7 +220,7 @@ def test_the_diverted_trains_enter_the_three_lines(
     lav_trips = select_trips_for_spec(feed, spec)
     conv_trips = select_trips_for_spec(feed, conv_spec)
     mzcr_trips = select_trips_for_spec(feed, mzcr_spec)
-    assert len(lav_trips) == 317  # ya entraban por el filtro de corredor
+    assert len(lav_trips) == 317 + 13  # 317 por el filtro de corredor y los directos de Málaga
     assert len(conv_trips) == 368 + 22 + 42  # los 22 y los 42 de Jaén entran por las reglas
     assert len(mzcr_trips) == 124 + 22  # no paran en la línea: también por las reglas
     for line_spec, trips in ((spec, lav_trips), (conv_spec, conv_trips), (mzcr_spec, mzcr_trips)):
@@ -226,7 +229,8 @@ def test_the_diverted_trains_enter_the_three_lines(
             r.id: sum(1 for m in matched if m is not None and m.override.id == r.id)
             for r in line_spec.route_overrides
         }
-        assert by_rule == (RULES | JAEN_RULES if line_spec is conv_spec else RULES)
+        extra = JAEN_RULES if line_spec is conv_spec else MALAGA_RULES if line_spec is spec else {}
+        assert by_rule == RULES | extra
     diverted = (
         {t.trip_id for t in conv_trips}
         & {t.trip_id for t in lav_trips}
@@ -419,7 +423,11 @@ def test_no_diverted_train_is_explained_with_a_straight_line(
     feed: GtfsFeed, spec: NetworkSpec, lines: Lines
 ) -> None:
     """Entre Madrid y Córdoba los 22 viajes se miden por las líneas cargadas, nunca en línea recta."""
-    diverted = [t for t in select_trips_for_spec(feed, spec) if route_for_trip(spec, t)]
+    diverted = [
+        t
+        for t in select_trips_for_spec(feed, spec)
+        if (route := route_for_trip(spec, t)) and route.override.id in RULES
+    ]
     assert len(diverted) == 22
     lav_nodes = [n.spec.id for n in lines[LAV][0].nodes]
     up_to_cordoba = {
@@ -518,7 +526,7 @@ def test_via_legs_say_why_a_chain_cannot_be_followed(lines: Lines) -> None:
 def test_validate_reports_the_rules_and_no_problems() -> None:
     reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
     expected = {
-        SPEC.name: RULES,
+        SPEC.name: RULES | MALAGA_RULES,
         CONV_SPEC.name: RULES | JAEN_RULES,
         MZCR_SPEC.name: RULES,
         JAEN_SPEC.name: {},
@@ -526,7 +534,9 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # paran en Moreda salen por la estación y no por la bifurcación
         LBMG_SPEC.name: {"linares-baeza-almeria-por-moreda": 4},
         ALBACETE_SPEC.name: {},
-        LAV_MALAGA_SPEC.name: {},
+        # la de Málaga: los directos de Madrid y los Avant de Málaga a Granada, que la dejan en
+        # la bifurcación Gobantes
+        LAV_MALAGA_SPEC.name: MALAGA_RULES | {"malaga-granada-por-gobantes": 6},
         LAV_GRANADA_SPEC.name: {},
         # la alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de
         # Huesca y el Alvia que sale por Camp de Tarragona hacia València y Córdoba
@@ -550,7 +560,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     granada = reports[LBMG_SPEC.name]["gtfs"]
     assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
     assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432
-    assert reports[SPEC.name]["gtfs"]["trips"] == 317
+    assert reports[SPEC.name]["gtfs"]["trips"] == 330
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
     assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
     assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 124 * 3, "estimado": 22 * 3}

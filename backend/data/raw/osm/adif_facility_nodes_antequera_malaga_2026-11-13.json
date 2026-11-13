@@ -1,0 +1,133 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T09:52:07Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 2609534280,
+  "lat": 36.7116198,
+  "lon": -4.4323605,
+  "tags": {
+    "addr:housenumber": "1",
+    "addr:postcode": "29002",
+    "addr:street": "Calle Explanada de la Estación",
+    "name": "Málaga María Zambrano",
+    "name:etymology": "María Zambrano",
+    "name:etymology:wikidata": "Q235134",
+    "name:etymology:wikipedia": "es:María Zambrano",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "MMZ",
+    "train": "yes",
+    "website": "https://www.adif.es/w/54413-m%C3%A1laga-m.-zambrano",
+    "wheelchair": "yes",
+    "wikidata": "Q801214"
+  }
+},
+{
+  "type": "node",
+  "id": 3321848202,
+  "lat": 36.8732189,
+  "lon": -4.7192019,
+  "tags": {
+    "name": "Las Mellizas",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846566"
+  }
+},
+{
+  "type": "node",
+  "id": 6572847597,
+  "lat": 37.0283320,
+  "lon": -4.5609704,
+  "tags": {
+    "name": "Antequera Ciudad",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7557413126,
+  "lat": 37.0701682,
+  "lon": -4.7197084,
+  "tags": {
+    "name": "Antequera-Santa Ana",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q3325592"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538139,
+  "lat": 36.9070732,
+  "lon": -4.7591329,
+  "tags": {
+    "name": "El Chorro-Caminito del Rey",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q5846154"
+  }
+},
+{
+  "type": "node",
+  "id": 7567538143,
+  "lat": 37.0376401,
+  "lon": -4.7279832,
+  "tags": {
+    "name": "Bobadilla",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845842"
+  }
+},
+{
+  "type": "node",
+  "id": 8019139591,
+  "lat": 37.0437020,
+  "lon": -4.6950117,
+  "tags": {
+    "name": "Bifurcación Las Maravillas",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 11135074555,
+  "lat": 37.0294830,
+  "lon": -4.5613719,
+  "tags": {
+    "name": "Antequera Alta Velocidad",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "02030",
+    "ref:EU:PLC": "ES02030",
+    "short_name": "Antequera AV",
+    "train": "yes",
+    "uic_ref": "7102030",
+    "wheelchair": "yes",
+    "wikidata": "Q2918304",
+    "wikipedia": "es:Estación de Antequera AV"
+  }
+}
+
+  ]
+}
