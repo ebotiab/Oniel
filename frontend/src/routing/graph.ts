@@ -310,7 +310,31 @@ export function findRoutes(
  * línea del tramo en un nodo situado antes del cierre, no vuelve a tocarla hasta un nodo situado
  * después y no usa ninguno de sus tramos. El resto del escenario se aplica también.
  */
-export function closureDetours(graph: Graph, segmentId: string, scenario?: Scenario): Detour[] {
+/** Los tramos de la línea entre dos de sus nodos, en el sentido en que crecen sus kilómetros. */
+function along(graph: Graph, lineId: string, a: string, b: string): Step[] {
+  const km = graph.lineKm.get(lineId)!
+  const lo = km.get(a)! - KM_TOLERANCE
+  const hi = km.get(b)! + KM_TOLERANCE
+  const steps: { at: number; step: Step }[] = []
+  for (const edge of graph.edges) {
+    if (edge.line_id !== lineId || !km.has(edge.a) || !km.has(edge.b)) continue
+    const [near, far] = km.get(edge.a)! <= km.get(edge.b)! ? [edge.a, edge.b] : [edge.b, edge.a]
+    if (km.get(near)! >= lo && km.get(far)! <= hi) steps.push({ at: km.get(near)!, step: [edge, far] })
+  }
+  return steps.sort((x, y) => x.at - y.at).map((s) => s.step)
+}
+
+/**
+ * Como en `findRoutes`, se descarta el rodeo desproporcionado respecto a otro más corto (`maxRatio`;
+ * `null`, sin descartar ninguno). Para comparar dos rodeos que salen de la línea y vuelven a ella en
+ * nodos distintos, se completa cada uno con los tramos de la propia línea hasta cubrir el mismo trecho.
+ */
+export function closureDetours(
+  graph: Graph,
+  segmentId: string,
+  scenario?: Scenario,
+  maxRatio: number | null = DEFAULT_MAX_RATIO,
+): Detour[] {
   const closed = graph.edges.find((e) => e.id === segmentId)
   if (!closed || closed.line_id === null) throw new ScenarioError(`No hay ningún tramo con id ${segmentId}`)
   const lineId = closed.line_id
@@ -331,7 +355,27 @@ export function closureDetours(graph: Graph, segmentId: string, scenario?: Scena
       null,
     ).map((steps) => ({ start, steps })),
   )
-  return sorted(found)
+  let ordered = sorted(found)
+  if (maxRatio !== null) {
+    const whole = (f: { start: string; steps: Step[] }, first: string, last: string): Step[] => [
+      ...along(graph, lineId, first, f.start),
+      ...f.steps,
+      ...along(graph, lineId, f.steps.at(-1)![1], last),
+    ]
+    const kept: typeof ordered = []
+    for (const candidate of ordered) {
+      const end = candidate.steps.at(-1)![1]
+      const strayed = kept.some((shorter) => {
+        const first = km.get(candidate.start)! <= km.get(shorter.start)! ? candidate.start : shorter.start
+        const shorterEnd = shorter.steps.at(-1)![1]
+        const last = km.get(end)! >= km.get(shorterEnd)! ? end : shorterEnd
+        return strays(whole(candidate, first, last), whole(shorter, first, last), maxRatio)
+      })
+      if (!strayed) kept.push(candidate)
+    }
+    ordered = kept
+  }
+  return ordered
     .slice(0, MAX_ROUTES)
     .map((f) => ({ route: toRoute(g, f.start, f.steps), closed_line_length_km: round1(km.get(f.steps.at(-1)![1])! - km.get(f.start)!) }))
 }
