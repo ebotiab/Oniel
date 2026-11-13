@@ -23,6 +23,7 @@ from conftest import (
     OUIGO_SOURCE_ID,
     OUIGO_STOP_ID_PREFIX,
     SOURCES,
+    SPEC,
     SPECS,
     database_url_for_tests,
     requires_db,
@@ -1604,3 +1605,48 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
     async with connect(dsn) as conn:
         await export_snapshot(conn, tmp_path)
     assert not (tmp_path / "lines" / "retirada.json").exists()
+
+
+async def test_a_connection_dropped_from_a_spec_goes_away_even_on_a_shared_node(
+    dsn: str, imported: dict[str, Any], tmp_path: Path
+) -> None:
+    """La línea de Sevilla anunciaba a trazos el camino de Levante desde la bifurcación de Torrejón
+    de Velasco, que ahora comparte con la línea de Valencia. Al retirar esa conexión de su
+    especificación tiene que desaparecer de la base aunque el nodo sea de dos líneas."""
+    from oniel.db.pool import connect
+    from oniel.network.importer import import_network
+
+    raw = json.loads(SPEC.read_text(encoding="utf-8"))
+    raw["connections"].append(
+        {
+            "id": "conexion-retirada",
+            "node_id": "bif-torrejon-de-velasco",
+            "name": "Conexión de prueba",
+            "towards": "Ninguna parte",
+            "sketch": [[-3.62, 40.09]],
+        }
+    )
+    with_extra = tmp_path / SPEC.name
+    with_extra.write_text(json.dumps(raw), encoding="utf-8")
+    count = "SELECT count(*) FROM connections"
+    async with connect(dsn) as conn:
+        before = len(await conn.fetch("SELECT id FROM connections"))
+        await import_network(conn, with_extra, SOURCES, DATA_DIR)
+        assert await conn.fetchval(count) == before + 1
+        await import_network(conn, SPEC, SOURCES, DATA_DIR)
+        assert await conn.fetchval(count) == before
+        ids = {r["id"] for r in await conn.fetch("SELECT id FROM connections")}
+    assert "conexion-retirada" not in ids and "lav-madrid-levante" not in ids
+    # tampoco queda una conexión sin dueño, de antes de que la base lo guardara, en un nodo de
+    # la línea que se reimporta
+    async with connect(dsn) as conn:
+        await conn.execute(
+            """
+            INSERT INTO connections (id, node_id, name, towards, status)
+            VALUES ('lav-madrid-levante', 'bif-torrejon-de-velasco', 'LAV', 'Levante', 'no_cargada')
+            """
+        )
+        await import_network(conn, SPEC, SOURCES, DATA_DIR)
+        assert await conn.fetchval(count) == before
+    # las de la otra línea que comparte el nodo y las del resto siguen en su sitio
+    assert {"enlace-blancales-lav-sevilla", "lav-la-sagra-toledo"} <= ids
