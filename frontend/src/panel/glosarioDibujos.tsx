@@ -99,8 +99,86 @@ function Cruce({ children }: { children: ReactNode }) {
   )
 }
 
+/** Un carril visto de frente, apoyado en la traviesa: cabeza, alma y patín. `x` es su cara interior y `lado` hacia dónde queda el resto del carril. */
+function Carril({ x, y, lado }: { x: number; y: number; lado: 1 | -1 }) {
+  const c = x + lado * 4
+  return (
+    <path
+      d={`M${c - 4} ${y - 16} h8 v5 h-2.6 v7.5 h6.6 v3.5 h-16 v-3.5 h6.6 v-7.5 h-2.6 z`}
+      fill="var(--tinta)"
+    />
+  )
+}
+
+/** Una cota entre dos caras interiores de carril, con su medida encima. */
+function Cota({ x1, x2, y, texto }: { x1: number; x2: number; y: number; texto: string }) {
+  return (
+    <>
+      <path d={`M${x1} ${y} H${x2} M${x1} ${y - 4} v8 M${x2} ${y - 4} v8`} stroke="var(--tinta-2)" strokeWidth={1} />
+      <text x={(x1 + x2) / 2} y={y - 6} textAnchor="middle">
+        {texto}
+      </text>
+    </>
+  )
+}
+
+/** Un eje del tren visto de frente: dos ruedas que pisan los carriles, con la pestaña por dentro, unidas por el eje. */
+function Eje({ x1, x2, y }: { x1: number; x2: number; y: number }) {
+  const pisa = y - 16
+  const rueda = (x: number, lado: 1 | -1) => {
+    const [a, b] = [x, x + lado * 13].sort((m, n) => m - n) as [number, number]
+    const [p, q] = [x, x - lado * 3.5].sort((m, n) => m - n) as [number, number]
+    return (
+      <>
+        <rect x={p} y={pisa - 14} width={q - p} height={19} fill="var(--tinta)" />
+        <rect x={a} y={pisa - 40} width={b - a} height={40} rx={1.5} fill="var(--papel)" stroke="var(--tinta)" strokeWidth={1.6} />
+      </>
+    )
+  }
+  return (
+    <>
+      <path d={`M${x1 - 4} ${pisa - 20} H${x2 + 4}`} stroke="var(--tinta)" strokeWidth={4} />
+      {rueda(x1, -1)}
+      {rueda(x2, 1)}
+    </>
+  )
+}
+
+/** La vía vista de frente, a escala: 1.668 mm son 250 unidades. `IZQ` es la cara interior del carril de la izquierda. */
+const MM = 250 / 1668
+const IZQ = 75
+const IBERICO = IZQ + 1668 * MM
+const ESTANDAR = IZQ + 1435 * MM
+
+/** La traviesa y un carril en cada cara interior de `caras`: el de la izquierda mira a la derecha y los demás, al revés. */
+function Seccion({ caras, alto = 104, children }: { caras: readonly number[]; alto?: number; children?: ReactNode }) {
+  const y = alto - 14
+  return (
+    <Vineta alto={alto}>
+      <rect x={34} y={y} width={332} height={9} fill="var(--papel-3)" stroke="var(--tinta-3)" strokeWidth={1} />
+      {caras.map((x, i) => (
+        <Carril key={x} x={x} y={y} lado={i === 0 ? -1 : 1} />
+      ))}
+      {children}
+    </Vineta>
+  )
+}
 /** Las viñetas de cada concepto, en el orden de sus frases. `Record` obliga a que ninguno se quede sin dibujo. */
 const DIBUJOS: Record<ConceptoId, readonly (() => ReactNode)[]> = {
+  'anchos-de-via': [
+    () => <Seccion caras={[IZQ, IBERICO]}>
+      <Eje x1={IZQ} x2={IBERICO} y={90} />
+      <Cota x1={IZQ} x2={IBERICO} y={20} texto="1.668 mm" />
+    </Seccion>,
+    () => <Seccion caras={[IZQ, ESTANDAR]}>
+      <Eje x1={IZQ} x2={ESTANDAR} y={90} />
+      <Cota x1={IZQ} x2={ESTANDAR} y={20} texto="1.435 mm" />
+    </Seccion>,
+    () => <Seccion caras={[IZQ, ESTANDAR, IBERICO]}>
+      <Cota x1={IZQ} x2={IBERICO} y={30} texto="1.668 mm, ancho ibérico" />
+      <Cota x1={IZQ} x2={ESTANDAR} y={60} texto="1.435 mm, ancho estándar" />
+    </Seccion>,
+  ],
   'como-se-separan-los-trenes': [
     () => <Cantones detras={14} delante={150} ocupado={[130, 250]} senales={['roja', 'verde']} />,
     () => <Cantones detras={72} delante={190} ocupado={[130, 250]} senales={['roja', 'verde']} />,
