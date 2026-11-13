@@ -115,9 +115,9 @@
     "60600": {"exits": ["bif-albacete"], "via": {"line": "lav-albacete-alicante", "node": "bif-albacete"}},
     "03309": {"exits": ["bif-albacete"], "via": {"line": "lav-albacete-alicante", "node": "bif-albacete"}},
     "60911": {"exits": ["bif-albacete"], "via": {"line": "lav-albacete-alicante", "node": "bif-albacete"}},
-    "03410": {"exits": ["bif-albacete"], "track_km": 234.1},
-    "62002": {"exits": ["bif-albacete"]},
-    "61200": {"exits": ["bif-albacete"]},
+    "03410": {"exits": ["bif-albacete"], "via": [{"line": "lav-albacete-alicante", "node": "bif-albacete"}, {"line": "lav-monforte-murcia", "node": "bif-murcia"}]},
+    "62002": {"exits": ["bif-albacete"], "via": [{"line": "lav-albacete-alicante", "node": "bif-albacete"}, {"line": "lav-monforte-murcia", "node": "bif-murcia"}]},
+    "61200": {"exits": ["bif-albacete"], "via": [{"line": "lav-albacete-alicante", "node": "bif-albacete"}, {"line": "lav-monforte-murcia", "node": "bif-murcia"}]},
     "65300": {"exits": ["valencia-joaquin-sorolla"]}
   },
   "corridor_filter": {
@@ -145,9 +145,15 @@
     },
     {
       "id": "madrid-elche-sin-parada",
-      "description": "Trenes de Madrid-Chamartín a Murcia sin parada hasta Elche AV: recorren la línea de Madrid-Chamartín a la bifurcación de Albacete sin parar en Cuenca, y siguen por la línea de Albacete a Alicante hasta la bifurcación de Murcia.",
+      "description": "Trenes de Madrid-Chamartín a Murcia sin parada hasta Elche AV: recorren la línea de Madrid-Chamartín a la bifurcación de Albacete sin parar en Cuenca, y siguen por la línea de Albacete a Alicante hasta la bifurcación de Murcia, donde empieza la de Monforte del Cid a Murcia.",
       "consecutive_stop_ids": ["17000", "03410"],
       "from_stop_id": "17000"
+    },
+    {
+      "id": "madrid-murcia-sin-parada",
+      "description": "Trenes de Madrid-Puerta de Atocha a Murcia sin ninguna parada intermedia: recorren la línea sin parar en ella, de la bifurcación de Torrejón de Velasco a la de Albacete, y siguen por las líneas de Albacete a Alicante y de Monforte del Cid a Murcia. Por esta línea se resuelven desde Madrid-Puerta de Atocha.",
+      "consecutive_stop_ids": ["60000", "61200"],
+      "from_stop_id": "60000"
     }
   ]
 }

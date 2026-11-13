@@ -25,6 +25,7 @@ LAV_VALENCIA_SPEC = DATA_DIR / "curated" / "lav-madrid-valencia.json"
 BYPASS_ZARAGOZA_SPEC = DATA_DIR / "curated" / "baipas-zaragoza.json"
 BYPASS_LLEIDA_SPEC = DATA_DIR / "curated" / "baipas-lleida.json"
 LAV_ALICANTE_SPEC = DATA_DIR / "curated" / "lav-albacete-alicante.json"
+LAV_MURCIA_SPEC = DATA_DIR / "curated" / "lav-monforte-murcia.json"
 LAV_VALLADOLID_SPEC = DATA_DIR / "curated" / "lav-madrid-valladolid.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
@@ -41,6 +42,7 @@ SPECS = [
     BYPASS_ZARAGOZA_SPEC,
     BYPASS_LLEIDA_SPEC,
     LAV_ALICANTE_SPEC,
+    LAV_MURCIA_SPEC,
     LAV_VALLADOLID_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"

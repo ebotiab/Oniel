@@ -22,6 +22,7 @@ from conftest import (
     LAV_ALICANTE_SPEC,
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
+    LAV_MURCIA_SPEC,
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
@@ -583,6 +584,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-albacete-sin-parada": 31,
             "madrid-alicante-sin-parada": 27,
             "madrid-elche-sin-parada": 20,
+            "madrid-murcia-sin-parada": 0,
         },
         # los que recorren la de Albacete a Alicante sin parar en Cuenca, Villena ni Elche, y los
         # de Madrid a Murcia que no entran en Alicante
@@ -591,6 +593,14 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-albacete-sin-cuenca": 31,
             "madrid-alicante-sin-parada": 27,
             "madrid-elche-sin-parada": 20,
+            "madrid-murcia-sin-parada": 0,
+        },
+        # los que llegan a la de Monforte del Cid a Murcia por la bifurcación de Murcia, sin
+        # entrar en Alicante
+        LAV_MURCIA_SPEC.name: {
+            "albacete-elche-sin-alicante": 0,
+            "madrid-elche-sin-parada": 20,
+            "madrid-murcia-sin-parada": 0,
         },
         # los baipases no tienen reglas: sus trenes salen de resolver la línea de Barcelona
         BYPASS_ZARAGOZA_SPEC.name: {},
@@ -605,17 +615,19 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         },
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
-    # encajan con ningún viaje de Renfe: lo dice el informe de este fichero, y el de todos los
-    # ficheros juntos ya no (validate de la CLI)
-    ouigo_only = {
-        BCN_SPEC.name: "barcelona-andalucia-con-parada-en-madrid",
-        LAV_ALICANTE_SPEC.name: "albacete-elche-sin-alicante",
+    # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin
+    # paradas solo circula en el fichero del 12 de noviembre: lo dice el informe de este fichero,
+    # y el de todos los ficheros juntos ya no (validate de la CLI)
+    not_in_this_feed = {
+        BCN_SPEC.name: ["barcelona-andalucia-con-parada-en-madrid"],
+        LAV_VALENCIA_SPEC.name: ["madrid-murcia-sin-parada"],
+        LAV_ALICANTE_SPEC.name: ["albacete-elche-sin-alicante", "madrid-murcia-sin-parada"],
+        LAV_MURCIA_SPEC.name: ["albacete-elche-sin-alicante", "madrid-murcia-sin-parada"],
     }
     for name, r in reports.items():
         unused = [
             f"la regla de recorrido {rule} no encaja con ningún viaje del GTFS"
-            for line, rule in ouigo_only.items()
-            if line == name
+            for rule in not_in_this_feed.get(name, [])
         ]
         assert r["problems"] == unused
         assert r["gtfs"]["route_overrides"] == expected[name]
