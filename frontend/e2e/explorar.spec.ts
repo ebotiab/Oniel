@@ -141,15 +141,16 @@ test.describe('Explorar la red', () => {
   test('la cobertura y las fuentes están a un clic', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('boton-cobertura').click()
-    // Se busca dentro del panel: «OpenStreetMap» está también en la atribución del mapa, que en el
-    // móvil se pliega con el primer toque y quedaría como primera coincidencia, oculta.
-    const cobertura = page.getByTestId('panel-cobertura')
+    // Se busca dentro de la página: «OpenStreetMap» está también en la atribución del mapa.
+    const cobertura = page.getByTestId('pagina-cobertura')
     await expect(cobertura).toBeVisible()
     await expect(cobertura.getByText(/Renfe Viajeros/).first()).toBeVisible()
-    await expect(cobertura.getByText(/OpenStreetMap/).first()).toBeVisible()
     await expect(cobertura.getByText(/Adif/).first()).toBeVisible()
-    await expect(cobertura.getByText(/línea convencional Madrid – Alcázar de San Juan – Córdoba/).first()).toBeVisible()
-    await expect(cobertura.getByText(/línea convencional Manzanares – Ciudad Real/).first()).toBeVisible()
+    await expect(cobertura.getByTestId('cobertura-lineas')).toContainText('Madrid – Alcázar de San Juan – Córdoba')
+    await expect(cobertura.getByTestId('cobertura-lineas')).toContainText('Manzanares – Ciudad Real')
+    // las fuentes van plegadas por lo que aportan
+    await cobertura.getByTestId('fuentes-trazado').locator('summary').click()
+    await expect(cobertura.getByText(/OpenStreetMap/).first()).toBeVisible()
   })
 
   test('los rótulos del esquema no se pisan aunque haya nodos muy cercanos', async ({ page }) => {

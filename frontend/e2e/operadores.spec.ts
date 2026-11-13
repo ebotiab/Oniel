@@ -48,9 +48,18 @@ test.describe('Trenes por operador', () => {
   test('la cobertura enumera los operadores con su fuente y la validez de sus horarios', async ({ page }) => {
     await page.goto('/cobertura')
     const operadores = page.getByTestId('cobertura-operadores')
-    await expect(operadores.getByRole('listitem').filter({ hasText: 'Renfe Viajeros' })).toContainText(/data\.renfe\.com\) · CC BY 4\.0 · válidos del .* de 2026 al .* de 2027/)
-    await expect(operadores.getByRole('listitem').filter({ hasText: 'Ouigo España' })).toContainText(/Punto de Acceso Nacional.*válidos del .* de junio de 2026 al .* de diciembre de 2026/)
-    await expect(operadores.getByRole('listitem').filter({ hasText: 'Iryo' })).toContainText('No publica sus horarios en un formato abierto')
+    // el estado, en una frase; debajo, la ficha de la fuente: quién la publica, la licencia y el día de la descarga
+    const renfe = operadores.getByTestId('operador-renfe')
+    await expect(renfe).toContainText(/Horarios cargados, válidos del .* de 2026 al .* de 2027\./)
+    await expect(renfe).toContainText('Renfe Viajeros (data.renfe.com)')
+    await expect(renfe.getByRole('link', { name: 'CC BY 4.0' })).toBeVisible()
+    await expect(renfe).toContainText(/Descargado\s*el \d+ de \S+ de 2026/)
+    const ouigo = operadores.getByTestId('operador-ouigo')
+    await expect(ouigo).toContainText(/Horarios cargados, válidos del .* de junio de 2026 al .* de diciembre de 2026\./)
+    await expect(ouigo).toContainText('Punto de Acceso Nacional')
+    await expect(operadores.getByTestId('operador-iryo')).toContainText('No publica sus horarios en un formato abierto')
+    // primero los que tienen horarios cargados
+    await expect(operadores.locator('> div').last()).toHaveAttribute('data-testid', 'operador-iryo')
     // el administrador de la infraestructura no es un operador de trenes
     await expect(operadores).not.toContainText('Adif')
   })

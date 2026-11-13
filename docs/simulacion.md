@@ -178,7 +178,7 @@ Los otros 56 tramos tienen otro camino para todos sus trenes. Los once que no lo
 
 **La API y la instantánea.** `GET /api/alternatives` (con `?date=` para otro día) devuelve un elemento por tramo: trenes, reparto por operador, cuántos tienen otro camino y cuántos no, y los grupos, del más numeroso al menos, cada uno con sus extremos, lo que mide y tarda su recorrido y, si existe, el otro camino (kilómetros, minutos, diferencia con el recorrido, vía única, líneas y estaciones principales). La instantánea lo lleva en `alternatives.json`, que el visor no pide al arrancar (`docs/datos.md`, «Instantánea estática»). Si la API no tiene la ruta o falla, el visor lee ese fichero: Vercel publica el visor unos minutos antes de que Render despliegue la API, y en ese rato una ruta nueva da 404. El cliente no repite el cálculo: necesitaría los tramos de todos los trenes del día.
 
-**En el visor.** La ficha del tramo lo dice en una frase bajo «Trenes que lo recorren» y desglosa los grupos en «Más detalle»; el panel «Cobertura y fuentes» lista los tramos sin alternativa, del que más trenes lleva al que menos, y pliega los demás (`docs/diseno.md`, «Tramos sin alternativa»). Las frases están en `frontend/src/app/alternativas.ts`.
+**En el visor.** La ficha del tramo lo dice en una frase bajo «Trenes que lo recorren» y desglosa los grupos en «Más detalle»; la página «Cobertura y fuentes» lista los tramos sin alternativa, del que más trenes lleva al que menos, y pliega los demás (`docs/diseno.md`, «Tramos sin alternativa»). Las frases están en `frontend/src/app/alternativas.ts`.
 
 **Qué no mide.**
 

@@ -155,7 +155,7 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('sim-interrumpido')).toHaveCount(0)
   })
 
-  test('un nodo del corte y el panel de cobertura enumeran la interrupción', async ({ page }) => {
+  test('un nodo del corte y la página de cobertura enumeran la interrupción', async ({ page }) => {
     await page.goto('/nodo/venta-de-cardenas')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByTestId('interrupcion')).toHaveCount(1)

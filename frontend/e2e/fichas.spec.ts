@@ -62,7 +62,7 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
     await expect(page.getByTestId('mas-detalle')).not.toHaveAttribute('open')
   })
 
-  test('la línea a la vista y el panel de cobertura tienen su ruta en la URL', async ({ page }) => {
+  test('la línea a la vista y la página de cobertura tienen su ruta en la URL', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
     await expect(page).toHaveURL(/\/$/)
@@ -85,6 +85,6 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
     await page.getByTestId('boton-cobertura').click()
     await expect(page).toHaveURL(/\/cobertura$/)
     await page.reload()
-    await expect(page.getByTestId('panel-cobertura')).toBeVisible()
+    await expect(page.getByTestId('pagina-cobertura')).toBeVisible()
   })
 })
