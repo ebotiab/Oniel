@@ -81,7 +81,7 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
         <div data-testid="tramos-sin-alternativa">
           <p className="entrada" data-testid="alternativa-alcance">
             {sin.length > 0
-              ? 'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas.'
+              ? 'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas.'
               : 'Si se cortara un tramo cualquiera, sus trenes tendrían otro camino en las líneas que Oniel tiene cargadas.'}{' '}
             No quiere decir que {sin.length > 0 ? 'no exista otro camino' : 'sea el único'} en la red real.
           </p>

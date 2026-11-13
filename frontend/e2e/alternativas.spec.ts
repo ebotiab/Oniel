@@ -106,7 +106,7 @@ test.describe('Tramos sin otro camino', () => {
     await expect(vista.getByRole('heading', { name: 'Tramos sin otro camino' })).toBeVisible()
     // el alcance, siempre delante: las líneas cargadas, no la red real
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
-      'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
+      'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
     await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 38 de los 149 tramos con trenes, en 7 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
