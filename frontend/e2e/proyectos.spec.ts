@@ -119,12 +119,13 @@ test.describe('Proyectos: la vista', () => {
     await expect(page.getByTestId('ficha-proyecto-fechas')).toContainText('Final previsto: otoño de 2027.')
   })
 
-  test('el panel de cobertura enumera los proyectos y lleva a la ficha de cada uno', async ({ page }) => {
+  test('la página de cobertura enumera los proyectos, con su estado, y lleva a la ficha de cada uno', async ({ page }) => {
     await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
-    await expect(lista.getByTestId('proyecto')).toHaveCount(5)
-    await expect(lista).toContainText('Variante de Loja')
-    await lista.getByTestId('proyecto').filter({ hasText: 'Trazado nuevo de unos 19 km' }).getByTestId('proyecto-enlace').click()
+    await expect(lista.getByRole('listitem')).toHaveCount(5)
+    await expect(lista.getByRole('listitem').filter({ hasText: 'Variante de Loja' })).toContainText('en obras')
+    await lista.getByTestId('proyecto-enlace').filter({ hasText: 'Variante de Loja' }).click()
+    await expect(page).toHaveURL(/\/proyecto\//)
     await expect(page.getByTestId('ficha-proyecto').getByRole('heading', { level: 2 })).toHaveText('Variante de Loja')
     await expect(page.getByTestId('ficha-proyecto-estado')).toContainText('en obras')
   })
