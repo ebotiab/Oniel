@@ -74,7 +74,7 @@ def graph(network: Red) -> Graph:
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 35
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -145,6 +145,7 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         260.5,
         613.5,
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
+        1296.0,  # por Barcelona, la costa y Valencia
     ]
     # Madrid – Andújar: hay un recorrido que pasa tres veces de una línea a otra
     to_andujar = find_routes(graph, MADRID, "andujar")
@@ -295,10 +296,15 @@ def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph
     assert "Madrid-Puerta de Atocha" in by_madrid.route.via
     assert by_cordoba.route.length_km == 417.4 and "Córdoba" in by_cordoba.route.via
     # la vuelta por Granada y Córdoba (689,5 km) se aparta del de Córdoba en Linares-Baeza y
-    # recorre 399,1 km para lo que aquel hace en 127: más del doble, se omite
-    assert found.omitted == 1
-    *_, by_granada = closure_detours(graph, f"{MZCR}:almagro:ciudad-real", max_ratio=None).detours
+    # recorre 399,1 km para lo que aquel hace en 127: más del doble, se omite; y lo mismo la
+    # que sube a Barcelona y baja por la costa y por Valencia
+    assert found.omitted == 2
+    *_, by_granada, by_barcelona = closure_detours(
+        graph, f"{MZCR}:almagro:ciudad-real", max_ratio=None
+    ).detours
     assert by_granada.route.length_km == 689.5 and "Granada" in by_granada.route.via
+    assert by_barcelona.route.length_km == 1492.1
+    assert {"Zaragoza-Delicias", "Castelló de la Plana"} <= set(by_barcelona.route.via)
 
 
 def test_other_closures_of_the_scenario_also_cut_the_detours(graph: Graph) -> None:

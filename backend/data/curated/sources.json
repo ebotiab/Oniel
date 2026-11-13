@@ -336,6 +336,53 @@
       "notes": "Es un gráfico de 2015 que ilustra el artículo de Wikipedia de la línea; se consultó la imagen el 12 de noviembre de 2026 y no se guarda copia. Los valores se leen sobre la rejilla del gráfico, que va de 50 en 50 km/h: son aproximados, con un margen de unos 10 km/h. Solo sirven para el tiempo estimado de los recorridos del comparador y para la ficha de esos tres tramos."
     },
     {
+      "id": "osm-relation-18368664",
+      "name": "Trazado de la línea València-Estació del Nord – cambiador de La Boella (relación OSM 18368664, línea 600 de Adif, vía doble de ancho ibérico a 3 kV con un tramo de ancho mixto)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18368664",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "La relación entera, de València-Estació del Nord al cambiador de ancho de La Boella: 254,1 km medidos por el camino más corto del grafo de vías. Velocidad máxima por tramo; qué vías son de ancho mixto (gauge=1435;1668, del km 2,0 al 73,8, hasta Castelló de la Plana) y dónde empieza el ERTMS (railway:etcs=1 desde el km 211,4, en L'Ametlla de Mar).",
+      "notes": "Descargado por la API Overpass el 13 de noviembre de 2026. La relación («Línia València - canviador de la Boella», route=railway, ref=600) trae las dos vías de la línea (479 vías), todas a 3.000 V, y es de una pieza: se traza de punta a punta sin huecos y mide lo mismo que la longitud que Wikipedia da a la línea (254,1 km). Sale de la Estació del Nord hacia el sur, pasa a 150 m de València-Joaquín Sorolla y rodea la ciudad por València-La Font de Sant Lluís antes de volver al norte por El Cabanyal. Acaba en el nodo railway=gauge_conversion «La Boella». También se descargaron las vías del entorno de Vila-seca (raw/osm/vias_bif_la_feredat_vila_seca_2026-11-13.json): la que sale de la línea en la bifurcación La Feredat lleva ref=632 y el nombre «Bifurcació la Feredat - Bifurcació Vila-seca», y por ella se llega a la estación de Vila-seca y a Tarragona; de ahí que los trenes que van a Barcelona por Tarragona ciudad dejen la línea en esa bifurcación. Las relaciones de servicio de la zona (C-6 València – Castelló, entre otras) confirman que por la línea circulan Cercanías que el GTFS cargado no trae.",
+      "file": "raw/osm/relation_18368664_linea_600_valencia_la_boella_2026-11-13.json"
+    },
+    {
+      "id": "osm-relation-11088348",
+      "name": "Trazado de la línea de alta velocidad cambiador de La Boella – Camp de Tarragona (relación OSM 11088348, línea 640 de Adif, ancho estándar a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11088348",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Del cambiador de La Boella a la estación de Camp de Tarragona, 12,5 km por el camino más corto del grafo de vías; ancho (gauge=1435), electrificación (voltage=25000) y velocidad (200 km/h) de ese trecho.",
+      "notes": "Descargado por la API Overpass el 13 de noviembre de 2026. La relación («Línia d'alta velocitat Cambiador de La Boella - Camp de Tarragona», ref=640, operator=Adif) tiene 47 vías, todas de 1.435 mm a 25 kV. Trae los dos ramales con los que la línea se une a la alta velocidad Madrid – Barcelona: el que llega a la bifurcación Perafort, junto a Camp de Tarragona, que es el que Oniel traza y el que usan los trenes del horario, y el que sale de la bifurcación la Xacona hacia Lleida y Zaragoza (bifurcación La Gatellada), que no usa ningún tren del horario y no se carga. Empieza en el mismo nodo de OSM en el que acaba la relación 18368664: las dos partes empalman sin hueco. El trazado acaba 160 m antes del punto de la estación de Camp de Tarragona.",
+      "file": "raw/osm/relation_11088348_linea_640_la_boella_camp_de_tarragona_2026-11-13.json"
+    },
+    {
+      "id": "osm-instalaciones-valencia-camp-de-tarragona",
+      "name": "Estaciones, apeaderos, bifurcaciones y cambiadores de OpenStreetMap entre València y Camp de Tarragona",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18368664",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Coordenadas de las 33 estaciones y apeaderos de la línea de València a Camp de Tarragona, de la bifurcación La Feredat y del cambiador de La Boella; códigos de València-Estació del Nord (65000) y València-Joaquín Sorolla (03216).",
+      "notes": "Descargado por la API Overpass el 13 de noviembre de 2026: los nodos railway=station, halt, junction, service_station, yard, site, gauge_conversion y milestone del rectángulo que contiene la línea. El fichero trae también estaciones de metro, de tranvía y de otras líneas, que no se usan. Benicàssim, Torreblanca y Ulldecona-Alcanar-La Sénia están dibujadas en OSM como áreas y no como nodos: su punto es el centro del área (raw/osm/estaciones_benicassim_torreblanca_ulldecona_2026-11-13.json). Todas quedan a menos de 25 m del trazado, salvo València-Estació del Nord (70 m, es el final de las vías), Camp de Tarragona (62 m) y València-Joaquín Sorolla (148 m: es una estación contigua, por la que la línea pasa de largo). Los nombres de los nodos son los de las paradas del GTFS de Renfe.",
+      "file": "raw/osm/instalaciones_valencia_camp_de_tarragona_2026-11-13.json"
+    },
+    {
+      "id": "wikipedia-linea-valencia-tarragona",
+      "name": "Artículos «Línea Valencia-Tarragona» y «Corredor Mediterráneo» de Wikipedia en español (longitud, historia, ancho de vía por tramos, variante de Vandellòs)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Valencia-Tarragona",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Que la línea es la 600 de Adif, «Valencia – cambiador de La Boella», de 254,1 km, de vía doble y electrificada a 3.000 V; que se completó el 21 de junio de 1868 con el puente del Ebro en Tortosa; la variante del Ebro de los años noventa, que dejó Tortosa en un ramal de 13 km desde L'Aldea-Amposta-Tortosa; la variante de Vandellòs, abierta el 13 de enero de 2020, con las estaciones nuevas de Cambrils y L'Hospitalet de l'Infant y los dos cambiadores de ancho; el tercer carril entre València-Font de Sant Lluís y Castelló, completado el 17 de noviembre de 2016, por el que los AVE llegan a Castelló desde València-Joaquín Sorolla; el enlace de ancho estándar de los cambiadores de La Boella a la alta velocidad (ramales de 7,0 y 3,5 km y tronco común de 8,5 km) y los 42,6 km de vía doble de ancho ibérico de la variante, hasta L'Ametlla de Mar; que València-Estació del Nord es una estación en fondo de saco.",
+      "notes": "Fuente de verificación, no de geometría; consultados por la API de Wikipedia. «Línea Valencia-Tarragona», revisión del 24 de agosto de 2026 (oldid 174998420); «Corredor Mediterráneo», revisión del 15 de septiembre de 2026 (oldid 175368395). La tabla de estaciones del primero da los puntos kilométricos de la numeración antigua, que no pasaba por València-La Font de Sant Lluís: salvo esa estación (3,8), todos quedan entre 4,1 y 4,5 km por debajo del kilómetro medido sobre el trazado actual, y la tabla sigue por la línea antigua de la costa (Salou, Tarragona) más allá de Vandellòs. Por eso los nodos no guardan esos puntos kilométricos. El artículo del corredor da para Castelló el kilómetro antiguo y el nuevo (69,399 y 73,544), y ese sí se guarda. El artículo del corredor recoge también previsiones sobre el cambio de ancho entre Castelló y Tarragona que cita de la prensa; Oniel no las registra."
+    },
+    {
       "id": "wikipedia-lav-madrid-sevilla",
       "name": "Artículo «Línea de alta velocidad Madrid-Sevilla» de Wikipedia en español (instalaciones y puntos kilométricos)",
       "publisher": "Colaboradores de Wikipedia",
@@ -811,6 +858,78 @@
       "coverage": "Formalización del contrato de las obras de los 13 túneles de la autopista ferroviaria Algeciras – Zaragoza entre Venta de Cárdenas y Montoro.",
       "notes": "Publicado en el BOE el 2025-05-19. Adjudicado el 25 de marzo de 2025. Título oficial: «Anuncio de formalización de contratos de: ADIF -Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción. Autopista ferroviaria Algeciras - Zaragoza. Túneles de Venta de Cárdenas 1, 2, 3 y 4; Las Correderas 1, 2 y 3; Santa Elena; Calancha; Vilches; Espeluy; Andújar; y Montoro. Expediente: 3.24/06110.0134.»",
       "file": "raw/proyectos/boe/BOE-B-2025-17998_2026-11-12.xml"
+    },
+    {
+      "id": "boe-b-2022-14800",
+      "name": "BOE-B-2022-14800: Licitación de los aparatos de vía para el ancho estándar entre Castellón y Vandellós",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2022-14800",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación del suministro y transporte de aparatos de vía para la implantación del ancho estándar en el tramo Castellón – Vinaroz – Vandellós, en dos lotes.",
+      "notes": "Publicado en el BOE el 2022-05-12. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Suministro y transporte de aparatos de vía para la implantación del ancho estándar en el corredor mediterráneo. Tramo Castellón - Vinaroz - Vandellós (2 lotes). Expediente: 3.22/20810.0004.»",
+      "file": "raw/proyectos/boe/BOE-B-2022-14800_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2022-15699",
+      "name": "BOE-B-2022-15699: Licitación de las obras de vía y electrificación para el ancho estándar entre Vandellós y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2022-15699",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación de las obras de vía y electrificación para la implantación del ancho estándar en el subtramo Vandellós – cambiador de La Boella.",
+      "notes": "Publicado en el BOE el 2022-05-20. Duración prevista del contrato: 6 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción para la implantación del ancho estándar en el corredor mediterráneo. Tramo: Castellbisbal-Murcia. Subtramo: Vandellós-Cambiador de La Boella. Vía y electrificación. Expediente: 3.22/20810.0028.»",
+      "file": "raw/proyectos/boe/BOE-B-2022-15699_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2025-27952",
+      "name": "BOE-B-2025-27952: Licitación del balasto para la fase del cambio de ancho entre Castellón y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2025-27952",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación del suministro y transporte de balasto para la fase del cambio de ancho en los tramos entre Castellón, Vinaroz, Vandellós y La Boella y en la estación y el ramal de Tortosa.",
+      "notes": "Publicado en el BOE el 2025-07-31. Duración prevista del contrato: 12 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Presidencia. Objeto: Suministro y transporte de balasto para la implantación del ancho estándar en el corredor mediterráneo. Fase del cambio de ancho. Tramos comprendidos entre Castellón, Vinaroz, Vandellós y La Boella y la estación y ramal de Tortosa. Expediente: 3.25/20810.0051.»",
+      "file": "raw/proyectos/boe/BOE-B-2025-27952_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2026-3795",
+      "name": "BOE-B-2026-3795: Licitación de las sujeciones para el ancho estándar entre Castellón y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-3795",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación del suministro y transporte de sujeciones para la implantación del ancho estándar en el tramo Castellón – Vinaroz – Vandellós – La Boella.",
+      "notes": "Publicado en el BOE el 2026-02-10. Duración prevista del contrato: 12 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Presidencia. Objeto: Suministro y transporte de sujeciones para la implantación del ancho estándar en el tramo Castellón - Vinaroz - Vandellós - La Boella. Expediente: 3.25/20810.0080.»",
+      "file": "raw/proyectos/boe/BOE-B-2026-3795_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2026-20400",
+      "name": "BOE-B-2026-20400: Licitación de la asistencia técnica para el cambio de ancho de los aparatos de vía entre Castellón y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-20400",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación de la asistencia técnica y el suministro de pequeño material para el cambio de ancho de los aparatos de vía del tramo Castellón – Vandellós – La Boella.",
+      "notes": "Publicado en el BOE el 2026-06-16. Duración prevista del contrato: 18 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Asistencia técnica y suministro de pequeño material para el cambio de ancho de los aparatos de vía del tramo Castellón - Vandellós-La Boella. Expediente: 3.26/20810.0006.»",
+      "file": "raw/proyectos/boe/BOE-B-2026-20400_2026-11-13.xml"
+    },
+    {
+      "id": "moncloa-nota-corredor-mediterraneo-2026-04",
+      "name": "Nota de prensa del Ministerio de Transportes y Movilidad Sostenible sobre el desarrollo del Corredor Mediterráneo",
+      "publisher": "Ministerio de Transportes y Movilidad Sostenible; La Moncloa",
+      "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/220426-puente-corredor-mediterraneo.aspx",
+      "license": "Consulta pública; © Gobierno de España",
+      "license_url": "https://www.lamoncloa.gob.es/Paginas/avisolegal.aspx",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Que en 2025 se ejecutaron obras de adaptación a ancho mixto, vía y electrificación entre Castellón y Valencia, y que el Ministerio prevé para 2026 la puesta en servicio de la segunda vía de ancho mixto entre València y Castelló.",
+      "notes": "Publicada el 22 de abril de 2026 en la web de La Moncloa. Es un balance de todo el corredor: del tramo de Castelló a Tarragona no dice nada, ni da fecha para el cambio de ancho. Lo que decía ese día está resumido en el registro de consultas.",
+      "file": "raw/proyectos/consultas_2026-11-13.json"
     },
     {
       "id": "osm-nominatim-lugares",

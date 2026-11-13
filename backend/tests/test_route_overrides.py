@@ -21,6 +21,7 @@ from conftest import (
     LAV_MALAGA_SPEC,
     LAV_VALENCIA_SPEC,
     LBMG_SPEC,
+    MEDITERRANEO_SPEC,
     MZCR_SPEC,
     SPEC,
     SPECS,
@@ -578,6 +579,12 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-valencia-sin-parada": 62,
             "madrid-albacete-sin-parada": 31,
             "madrid-alicante-sin-parada": 27,
+        },
+        # los trenes que dejan la línea de la costa en la bifurcación La Feredat, hacia Tarragona
+        MEDITERRANEO_SPEC.name: {
+            "cambrils-vila-seca-por-la-feredat": 22,
+            "castello-tarragona-por-la-feredat": 4,
+            "l-aldea-tarragona-por-la-feredat": 2,
         },
     }
     # la regla de los Ouigo de Barcelona a Andalucía no encaja con ningún viaje de Renfe: lo

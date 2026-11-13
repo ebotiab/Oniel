@@ -1,0 +1,15 @@
+{
+  "descripcion": "Registro de la consulta hecha el 13 de noviembre de 2026 al cargar la línea de València a Camp de Tarragona, para saber si tenía alguna interrupción del servicio vigente. Queda qué decía la página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "consultado_el": "2026-11-13",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red. Información del tráfico ferroviario",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-13 13:34",
+      "resumen": "La pestaña general trae tres avisos: un robo de cable en una línea de ancho métrico de Asturias, otro entre Fabra i Puig y Montcada Bifurcació que afecta a las líneas R4 y R7 de Rodalies, y la interrupción de la alta velocidad Madrid – Andalucía, ya registrada. Ninguno toca la línea de València a Castelló, Vinaròs, L'Aldea-Amposta-Tortosa y Camp de Tarragona.",
+      "que_aporta": "Que el 13 de noviembre de 2026 no había ninguna interrupción anunciada en la línea de València a Camp de Tarragona."
+    }
+  ]
+}

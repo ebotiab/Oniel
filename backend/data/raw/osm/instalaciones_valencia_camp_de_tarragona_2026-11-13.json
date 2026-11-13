@@ -1,0 +1,2499 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T12:30:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 100986804,
+  "lat": 39.4510701,
+  "lon": -0.4026173,
+  "tags": {
+    "name": "Sant Isidre",
+    "name:ca": "Sant Isidre",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "no",
+    "wikidata": "Q10951323",
+    "wikipedia": "ca:Estació de metro de Sant Isidre"
+  }
+},
+{
+  "type": "node",
+  "id": 241896202,
+  "lat": 40.0922912,
+  "lon": 0.1399978,
+  "tags": {
+    "name": "Orpesa",
+    "name:ca": "Orpesa",
+    "name:es": "Oropesa del Mar",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841351",
+    "wikipedia": "ca:Estació d'Orpesa"
+  }
+},
+{
+  "type": "node",
+  "id": 246824210,
+  "lat": 39.8965047,
+  "lon": -0.1040509,
+  "tags": {
+    "addr:city": "Borriana / Burriana",
+    "addr:postcode": "12530",
+    "name": "Borriana - Les Alqueries",
+    "name:ca": "Borriana - Les Alqueries",
+    "name:es": "Burriana - Alquerías del Niño Perdido",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779430",
+    "wikipedia": "ca:Estació de Borriana-les Alqueries"
+  }
+},
+{
+  "type": "node",
+  "id": 246824211,
+  "lat": 39.9548766,
+  "lon": -0.0769220,
+  "tags": {
+    "addr:city": "Almassora",
+    "addr:postcode": "12550",
+    "addr:street": "Carrer de l'Estació",
+    "internet_access": "no",
+    "name": "Almassora",
+    "name:ca": "Almassora",
+    "network": "RENFE",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8779256",
+    "wikipedia": "es:Estación de Almazora"
+  }
+},
+{
+  "type": "node",
+  "id": 259183803,
+  "lat": 40.0233663,
+  "lon": -0.0016131,
+  "tags": {
+    "name": "Les Palmes",
+    "name:ca": "Les Palmes",
+    "note:opening_hours": "Abre un día al año, para la Romería de les Canyes (Magdalena)",
+    "opening_hours": "easter -28 days: 09:00-18:15",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "65301",
+    "ref:EU:PLC": "ES65301",
+    "uic_ref": "7165301"
+  }
+},
+{
+  "type": "node",
+  "id": 264605155,
+  "lat": 39.5665085,
+  "lon": -0.4052632,
+  "tags": {
+    "name": "Masies",
+    "name:ca": "Masies",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:short": "FGV",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "wikidata": "Q107358621",
+    "wikipedia": "es:Estación de Masies"
+  }
+},
+{
+  "type": "node",
+  "id": 359544261,
+  "lat": 39.6794065,
+  "lon": -0.3206579,
+  "tags": {
+    "name": "Gilet",
+    "name:ca": "Gilet",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 366942270,
+  "lat": 39.7529606,
+  "lon": -0.3657658,
+  "tags": {
+    "alt_name": "Algimia",
+    "alt_name:ca": "Algímia",
+    "name": "Algimia-Ciudad",
+    "name:ca": "Algímia-Ciutat",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q4673630",
+    "wikipedia": "ca:Estació d'Algímia d'Alfara"
+  }
+},
+{
+  "type": "node",
+  "id": 503196005,
+  "lat": 39.7192568,
+  "lon": -0.2396505,
+  "tags": {
+    "name": "Les Valls",
+    "name:ca": "Les Valls",
+    "name:es": "Los Valles",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8840975",
+    "wikipedia": "ca:Estació de les Valls"
+  }
+},
+{
+  "type": "node",
+  "id": 917059169,
+  "lat": 39.8208789,
+  "lon": -0.1623621,
+  "tags": {
+    "name": "Moncofa",
+    "name:ca": "Moncofa",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5576481",
+    "wikipedia": "es:Estación de Moncofar"
+  }
+},
+{
+  "type": "node",
+  "id": 1013407340,
+  "lat": 39.5556769,
+  "lon": -0.3181189,
+  "tags": {
+    "name": "Massalfassar",
+    "name:ca": "Massalfassar",
+    "operator": "Adif",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikipedia": "ca:Estació de Massalfassar"
+  }
+},
+{
+  "type": "node",
+  "id": 1067401293,
+  "lat": 39.5431011,
+  "lon": -0.3205307,
+  "tags": {
+    "name": "Albuixech",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 1113085650,
+  "lat": 40.4276673,
+  "lon": 0.4151605,
+  "tags": {
+    "name": "Benicarló - Peníscola",
+    "name:ca": "Benicarló - Peníscola",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q3095965",
+    "wikipedia": "ca:Estació de Benicarló-Peníscola"
+  }
+},
+{
+  "type": "node",
+  "id": 1113111468,
+  "lat": 40.8071214,
+  "lon": 0.5228767,
+  "tags": {
+    "name": "Tortosa",
+    "name:ca": "Tortosa",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5647848",
+    "wikipedia": "ca:Estació de Tortosa"
+  }
+},
+{
+  "type": "node",
+  "id": 1585031964,
+  "lat": 41.2112712,
+  "lon": 1.1439589,
+  "tags": {
+    "addr:city": "La Selva del Camp",
+    "addr:postcode": "43470",
+    "addr:street": "Passatge de l'Estació",
+    "classification:adif": "apeadero",
+    "name": "la Selva del Camp",
+    "name:ca": "la Selva del Camp",
+    "network": "FFCC la Plana - Picamoixons-Reus",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "uic_ref": "7173102",
+    "wikidata": "Q8779994",
+    "wikipedia": "ca:Estació de la Selva del Camp"
+  }
+},
+{
+  "type": "node",
+  "id": 1596597762,
+  "lat": 39.4557361,
+  "lon": -0.3813302,
+  "tags": {
+    "name": "Cambiador de Valencia",
+    "operator": "Adif",
+    "railway": "gauge_conversion"
+  }
+},
+{
+  "type": "node",
+  "id": 1735270823,
+  "lat": 39.4808270,
+  "lon": -0.4417848,
+  "tags": {
+    "name": "Quart de Poblet",
+    "name:ca": "Quart de Poblet",
+    "network": "Metrovalencia",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2056581884,
+  "lat": 40.7535866,
+  "lon": 0.6145466,
+  "tags": {
+    "addr:postcode": "43896",
+    "name": "L'Aldea - Amposta - Tortosa",
+    "opening_hours": "Mo-Sa 05:55-23:15; Su 07:05-23:15",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779235",
+    "wikipedia": "ca:Estació de l'Aldea - Amposta - Tortosa"
+  }
+},
+{
+  "type": "node",
+  "id": 2056719798,
+  "lat": 40.8119239,
+  "lon": 0.7081790,
+  "tags": {
+    "name": "L'Ampolla - Perelló - Deltebre",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "sorting_name": "Ampolla, l' - Perelló, el - Deltebre"
+  }
+},
+{
+  "type": "node",
+  "id": 2125146085,
+  "lat": 40.8861996,
+  "lon": 0.8004544,
+  "tags": {
+    "name": "l'Ametlla de Mar",
+    "name:ca": "l'Ametlla de Mar",
+    "operator": "Adif",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2240188565,
+  "lat": 41.1064228,
+  "lon": 0.6534183,
+  "tags": {
+    "name": "Móra la Nova",
+    "name:ca": "Móra la Nova",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71300",
+    "uic_ref": "7171300",
+    "wikidata": "Q8841097",
+    "wikipedia": "ca:Estació de Móra la Nova"
+  }
+},
+{
+  "type": "node",
+  "id": 2420238745,
+  "lat": 39.5879683,
+  "lon": -0.3308699,
+  "tags": {
+    "addr:city": "Rafelbunyol",
+    "addr:postcode": "46138",
+    "addr:street": "Carrer València",
+    "internet_access": "no",
+    "name": "Rafelbunyol",
+    "name:ca": "Rafelbunyol",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q11920798",
+    "wikipedia": "es:Estación de Rafelbunyol"
+  }
+},
+{
+  "type": "node",
+  "id": 2580000640,
+  "lat": 40.7590764,
+  "lon": 0.5558624,
+  "tags": {
+    "name": "Campredó",
+    "name:ca": "Campredó",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "65401",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2713026494,
+  "lat": 41.1921725,
+  "lon": 1.2735682,
+  "tags": {
+    "name": "Camp de Tarragona",
+    "name:ca": "Camp de Tarragona",
+    "name:es": "Campo de Tarragona",
+    "network": "AVE",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "website": "https://www.adif.es/-/04104-camp-de-tarragona",
+    "wheelchair": "yes",
+    "wikidata": "Q3096129",
+    "wikipedia": "ca:Estació del Camp de Tarragona"
+  }
+},
+{
+  "type": "node",
+  "id": 2725947903,
+  "lat": 41.1309254,
+  "lon": 0.8105075,
+  "tags": {
+    "name": "Marçà - Falset",
+    "name:ca": "Marçà - Falset",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71303",
+    "uic_ref": "7171303",
+    "wikidata": "Q11681658",
+    "wikipedia": "ca:Estació de Marçà-Falset"
+  }
+},
+{
+  "type": "node",
+  "id": 2725947939,
+  "lat": 41.1331603,
+  "lon": 0.8586408,
+  "tags": {
+    "name": "Pradell",
+    "name:ca": "Pradell",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71304",
+    "uic_ref": "7171304",
+    "wheelchair": "limited",
+    "wikidata": "Q509291",
+    "wikipedia": "ca:Estació de Pradell"
+  }
+},
+{
+  "type": "node",
+  "id": 2725948021,
+  "lat": 41.1400477,
+  "lon": 0.9757780,
+  "tags": {
+    "name": "Riudecanyes - Botarell",
+    "name:ca": "Riudecanyes - Botarell",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71306",
+    "uic_ref": "7171306",
+    "wikidata": "Q5669764",
+    "wikipedia": "ca:Estació de Riudecanyes-Botarell"
+  }
+},
+{
+  "type": "node",
+  "id": 2899831261,
+  "lat": 41.0959105,
+  "lon": 0.7477839,
+  "tags": {
+    "name": "els Guiamets",
+    "name:ca": "els Guiamets",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71301",
+    "uic_ref": "7171301",
+    "wikidata": "Q8779874",
+    "wikipedia": "ca:Estació dels Guiamets"
+  }
+},
+{
+  "type": "node",
+  "id": 2899839346,
+  "lat": 41.1020839,
+  "lon": 0.7803851,
+  "tags": {
+    "name": "Capçanes",
+    "name:ca": "Capçanes",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5405001",
+    "wikipedia": "ca:Estació de Capçanes"
+  }
+},
+{
+  "type": "node",
+  "id": 2899848133,
+  "lat": 41.1436247,
+  "lon": 0.9207881,
+  "tags": {
+    "name": "Duesaigües - l'Argentera",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8779700",
+    "wikipedia": "ca:Estació de Duesaigües - l'Argentera"
+  }
+},
+{
+  "type": "node",
+  "id": 3316606134,
+  "lat": 41.1823199,
+  "lon": 0.5690520,
+  "tags": {
+    "name": "Ascó",
+    "name:ca": "Ascó",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71211",
+    "uic_ref": "7171211",
+    "wikidata": "Q11681633",
+    "wikipedia": "ca:Estació d'Ascó"
+  }
+},
+{
+  "type": "node",
+  "id": 3344868949,
+  "lat": 39.4988913,
+  "lon": -0.4419403,
+  "tags": {
+    "name": "Paterna",
+    "name:ca": "Paterna",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q107363779",
+    "wikipedia": "es:Estación de Paterna"
+  }
+},
+{
+  "type": "node",
+  "id": 3345267594,
+  "lat": 39.4958186,
+  "lon": -0.4352732,
+  "tags": {
+    "name": "Campament",
+    "name:ca": "Campament",
+    "name:es": "Campamento",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q37944176"
+  }
+},
+{
+  "type": "node",
+  "id": 3345267612,
+  "lat": 39.4990148,
+  "lon": -0.4249245,
+  "tags": {
+    "name": "Les Carolines-Fira",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3345267627,
+  "lat": 39.5018496,
+  "lon": -0.4187199,
+  "tags": {
+    "name": "Benimàmet",
+    "name:ca": "Benimàmet",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3345267630,
+  "lat": 39.5025382,
+  "lon": -0.4119442,
+  "tags": {
+    "name": "Cantereria",
+    "name:ca": "Cantereria",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3345948138,
+  "lat": 39.5820242,
+  "lon": -0.4428172,
+  "tags": {
+    "name": "Horta Vella",
+    "name:ca": "Horta Vella",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "S. Psiquiàtric",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:short": "FGV",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q107358622",
+    "wikipedia": "es:Estación de Horta Vella"
+  }
+},
+{
+  "type": "node",
+  "id": 3345948167,
+  "lat": 39.5497488,
+  "lon": -0.3896096,
+  "tags": {
+    "name": "Seminari-CEU",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q107358620",
+    "wikipedia": "es:Estación de Seminari-CEU"
+  }
+},
+{
+  "type": "node",
+  "id": 3345948177,
+  "lat": 39.5435011,
+  "lon": -0.3885714,
+  "tags": {
+    "name": "Moncada-Alfara",
+    "name:ca": "Montcada-Alfara",
+    "name:es": "Moncada-Alfara",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3345979148,
+  "lat": 39.5191851,
+  "lon": -0.4140999,
+  "tags": {
+    "name": "Godella",
+    "name:ca": "Godella",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3345979175,
+  "lat": 39.5131257,
+  "lon": -0.4116669,
+  "tags": {
+    "addr:city": "Burjassot",
+    "addr:postcode": "46100",
+    "internet_access": "no",
+    "name": "Burjassot-Godella",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q107000141",
+    "wikipedia": "es:Estación de Burjassot-Godella"
+  }
+},
+{
+  "type": "node",
+  "id": 3345979191,
+  "lat": 39.5082938,
+  "lon": -0.4067919,
+  "tags": {
+    "name": "Burjassot",
+    "name:ca": "Burjassot",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q28503229",
+    "wikimedia_commons": "File:Burjassot railway station alpha.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 3348096550,
+  "lat": 39.4908715,
+  "lon": -0.3993909,
+  "tags": {
+    "name": "Beniferri",
+    "name:ca": "Beniferri",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q5845817",
+    "wikipedia": "es:Estación de Beniferri"
+  }
+},
+{
+  "type": "node",
+  "id": 3348096551,
+  "lat": 39.4835506,
+  "lon": -0.3941092,
+  "tags": {
+    "name": "Campanar",
+    "name:ca": "Campanar",
+    "old_name": "Campanar - La Fe",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q5845928",
+    "wikipedia": "ca:Estació de Campanar"
+  }
+},
+{
+  "type": "node",
+  "id": 3348096560,
+  "lat": 39.4782542,
+  "lon": -0.3902759,
+  "tags": {
+    "name": "Túria",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q8842106",
+    "wikipedia": "ca:Estació de Túria"
+  }
+},
+{
+  "type": "node",
+  "id": 3348096581,
+  "lat": 39.4662197,
+  "lon": -0.3820885,
+  "tags": {
+    "name": "Plaça Espanya",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "short_name": "Pl. Espanya",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q8841491",
+    "wikipedia": "ca:Estació de la Plaça d'Espanya (València)"
+  }
+},
+{
+  "type": "node",
+  "id": 3348104711,
+  "lat": 39.4550851,
+  "lon": -0.3977688,
+  "tags": {
+    "name": "Safranar",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q5847088",
+    "wikipedia": "ca:Estació de Safranar"
+  }
+},
+{
+  "type": "node",
+  "id": 3348104720,
+  "lat": 39.4565316,
+  "lon": -0.3903656,
+  "tags": {
+    "name": "Patraix",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5846897",
+    "wikipedia": "ca:Estació de Patraix"
+  }
+},
+{
+  "type": "node",
+  "id": 3352043905,
+  "lat": 39.4322203,
+  "lon": -0.4178775,
+  "tags": {
+    "addr:city": "Paiporta",
+    "addr:housenumber": "1C",
+    "addr:postcode": "46200",
+    "addr:street": "Avinguda de Francesc Císcar",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Nova_estaci%C3%B3_de_Paiporta._Metrovalencia%2C_FGV.jpg",
+    "internet_access": "no",
+    "name": "Paiporta",
+    "name:ca": "Paiporta",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "toilets": "no",
+    "wikidata": "Q19367978",
+    "wikipedia": "ca:Estació de Paiporta"
+  }
+},
+{
+  "type": "node",
+  "id": 3352207373,
+  "lat": 39.5008914,
+  "lon": -0.3523606,
+  "tags": {
+    "name": "Alboraia Peris Aragó",
+    "name:ca": "Alboraia Peris Aragó",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "Alboraia-Peris Aragó",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q11920766",
+    "wikipedia": "ca:Estació d'Alboraia-Peris Aragó"
+  }
+},
+{
+  "type": "node",
+  "id": 3352207380,
+  "lat": 39.4958197,
+  "lon": -0.3555609,
+  "tags": {
+    "name": "Alboraia Palmaret",
+    "old_name": "Alboraia-Palmaret",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "website": "https://www.metrovalencia.es/es/consulta-de-horarios-y-planificador/",
+    "wheelchair": "yes",
+    "wikidata": "Q5845618",
+    "wikipedia": "ca:Estació d'Alboraia-Palmaret"
+  }
+},
+{
+  "type": "node",
+  "id": 3352207389,
+  "lat": 39.4920860,
+  "lon": -0.3587134,
+  "tags": {
+    "name": "Machado",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q974538",
+    "wikipedia": "ca:Estació de Machado"
+  }
+},
+{
+  "type": "node",
+  "id": 3352213311,
+  "lat": 39.4848096,
+  "lon": -0.3623520,
+  "tags": {
+    "name": "Benimaclet",
+    "name:ca": "Benimaclet",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q8528822",
+    "wikipedia": "es:Estación de Benimaclet"
+  }
+},
+{
+  "type": "node",
+  "id": 3352213320,
+  "lat": 39.4781042,
+  "lon": -0.3618837,
+  "tags": {
+    "name": "Facultats - Manuel Broseta",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "Facultats",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q5846225",
+    "wikipedia": "ca:Estació de Facultats-Manuel Broseta"
+  }
+},
+{
+  "type": "node",
+  "id": 3352213337,
+  "lat": 39.4731081,
+  "lon": -0.3660177,
+  "tags": {
+    "name": "Alameda",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q8779205",
+    "wikipedia": "ca:Estació de l'Albereda"
+  }
+},
+{
+  "type": "node",
+  "id": 3352213360,
+  "lat": 39.4701853,
+  "lon": -0.3708376,
+  "tags": {
+    "name": "Colón",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8779653",
+    "wikipedia": "ca:Estació de Colom"
+  }
+},
+{
+  "type": "node",
+  "id": 3352213598,
+  "lat": 39.4685471,
+  "lon": -0.3979341,
+  "tags": {
+    "name": "Avinguda del Cid",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "short_name": "Av. del Cid",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "no",
+    "wikidata": "Q5845747",
+    "wikipedia": "ca:Estació d'Avinguda del Cid"
+  }
+},
+{
+  "type": "node",
+  "id": 3353533804,
+  "lat": 39.4707625,
+  "lon": -0.4068717,
+  "tags": {
+    "name": "Nou d'Octubre",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3353533822,
+  "lat": 39.4754869,
+  "lon": -0.4227833,
+  "tags": {
+    "name": "Mislata Almassil",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "Mislata-Almassil",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q107363952",
+    "wikimedia_commons": "File:Metrovalencia MMXIV 210.JPG"
+  }
+},
+{
+  "type": "node",
+  "id": 3353533834,
+  "lat": 39.4776777,
+  "lon": -0.4334105,
+  "tags": {
+    "name": "Faitanar",
+    "name:ca": "Faitanar",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q107358627",
+    "wikipedia": "es:Estación de Faitanar"
+  }
+},
+{
+  "type": "node",
+  "id": 3354222947,
+  "lat": 39.4677747,
+  "lon": -0.3431272,
+  "tags": {
+    "name": "Ayora",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q5648634",
+    "wikipedia": "ca:Estació d'Aiora"
+  }
+},
+{
+  "type": "node",
+  "id": 3354222956,
+  "lat": 39.4703326,
+  "lon": -0.3504900,
+  "tags": {
+    "name": "Amistat",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "Amistat Casa de Salud",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3354222973,
+  "lat": 39.4635964,
+  "lon": -0.3792761,
+  "tags": {
+    "name": "Bailén",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q8779329",
+    "wikipedia": "ca:Estació de Bailén"
+  }
+},
+{
+  "type": "node",
+  "id": 3355509822,
+  "lat": 39.5122240,
+  "lon": -0.3542038,
+  "tags": {
+    "name": "Almàssera",
+    "name:ca": "Almàssera",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3355509840,
+  "lat": 39.5280174,
+  "lon": -0.3516256,
+  "tags": {
+    "name": "Meliana",
+    "name:ca": "Meliana",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "wikidata": "Q102251027",
+    "wikipedia": "es:Estación de Meliana"
+  }
+},
+{
+  "type": "node",
+  "id": 3355509854,
+  "lat": 39.5372733,
+  "lon": -0.3538250,
+  "tags": {
+    "name": "Foios",
+    "name:ca": "Foios",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "wikidata": "Q107363929",
+    "wikipedia": "es:Estación de Foios"
+  }
+},
+{
+  "type": "node",
+  "id": 3355509874,
+  "lat": 39.5453392,
+  "lon": -0.3479811,
+  "tags": {
+    "name": "Albalat dels Sorells",
+    "name:ca": "Albalat dels Sorells",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3356644308,
+  "lat": 39.5617469,
+  "lon": -0.3407042,
+  "tags": {
+    "name": "Museros",
+    "name:ca": "Museros",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q107358617",
+    "wikipedia": "es:Estación de Museros"
+  }
+},
+{
+  "type": "node",
+  "id": 3356644325,
+  "lat": 39.5704987,
+  "lon": -0.3326119,
+  "tags": {
+    "name": "Massamagrell",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q29819725",
+    "wikipedia": "ca:Estació de Massamagrell"
+  }
+},
+{
+  "type": "node",
+  "id": 3356644330,
+  "lat": 39.5789133,
+  "lon": -0.3300548,
+  "tags": {
+    "name": "La Pobla de Farnals",
+    "name:ca": "La Pobla de Farnals",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q107358618",
+    "wikipedia": "es:Estación de La Pobla de Farnals"
+  }
+},
+{
+  "type": "node",
+  "id": 3592103272,
+  "lat": 41.2233947,
+  "lon": 1.3765911,
+  "tags": {
+    "name": "Salomó",
+    "name:ca": "Salomó",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841681",
+    "wikipedia": "ca:Estació de Salomó"
+  }
+},
+{
+  "type": "node",
+  "id": 3973025564,
+  "lat": 39.4000723,
+  "lon": -0.3991880,
+  "tags": {
+    "name": "Catarroja",
+    "name:ca": "Catarroja",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846006",
+    "wikipedia": "ca:Estació de Catarroja"
+  }
+},
+{
+  "type": "node",
+  "id": 3973025583,
+  "lat": 39.4091688,
+  "lon": -0.3953228,
+  "tags": {
+    "name": "Massanassa",
+    "name:ca": "Massanassa",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846685",
+    "wikipedia": "ca:Estació de Massanassa"
+  }
+},
+{
+  "type": "node",
+  "id": 3973594599,
+  "lat": 39.4223290,
+  "lon": -0.3925914,
+  "tags": {
+    "building": "yes",
+    "name": "Alfafar - Benetússer",
+    "name:ca": "Alfafar - Benetússer",
+    "name:es": "Alfafar - Benetúser",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845638",
+    "wikipedia": "ca:Estació d'Alfafar-Benetússer"
+  }
+},
+{
+  "type": "node",
+  "id": 4338272266,
+  "lat": 40.3585915,
+  "lon": 0.2935883,
+  "tags": {
+    "name": "Santa Magdalena de Pulpis",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 4348737763,
+  "lat": 39.4724072,
+  "lon": -0.3575395,
+  "tags": {
+    "name": "Aragó",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:wikidata": "Q750832",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q11681631",
+    "wikipedia": "ca:Estació d'Aragó"
+  }
+},
+{
+  "type": "node",
+  "id": 5157515711,
+  "lat": 41.1394381,
+  "lon": 1.1637819,
+  "tags": {
+    "name": "La Boella",
+    "railway": "gauge_conversion"
+  }
+},
+{
+  "type": "node",
+  "id": 5157515714,
+  "lat": 41.1396432,
+  "lon": 1.1637103,
+  "tags": {
+    "name": "La Boella",
+    "railway": "gauge_conversion"
+  }
+},
+{
+  "type": "node",
+  "id": 5334989513,
+  "lat": 39.7721811,
+  "lon": -0.3676060,
+  "tags": {
+    "name": "Algar de Palancia",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 5434997566,
+  "lat": 40.7751167,
+  "lon": 0.6710986,
+  "tags": {
+    "name": "Camarles - Deltebre",
+    "name:ca": "Camarles - Deltebre",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q11681637",
+    "wikipedia": "ca:Estació de Camarles-Deltebre"
+  }
+},
+{
+  "type": "node",
+  "id": 5435163761,
+  "lat": 41.0879174,
+  "lon": 1.1456007,
+  "tags": {
+    "name": "Salou-Port Aventura",
+    "name:ca": "Salou-Port Aventura",
+    "network": "Rodalies de Catalunya (ATM Tarragona)",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "route_ref": "RT2;R17",
+    "train": "yes",
+    "wikidata": "Q3097333"
+  }
+},
+{
+  "type": "node",
+  "id": 5435193228,
+  "lat": 41.1034678,
+  "lon": 1.1632640,
+  "tags": {
+    "description": "Apartador de mercaderies",
+    "name": "Tres Camins",
+    "name:ca": "Tres Camins",
+    "operator": "Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 5435480586,
+  "lat": 41.1366062,
+  "lon": 1.3732969,
+  "tags": {
+    "name": "Altafulla - Tamarit",
+    "name:ca": "Altafulla - Tamarit",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q507041",
+    "wikipedia": "ca:Estació d'Altafulla-Tamarit"
+  }
+},
+{
+  "type": "node",
+  "id": 5443873391,
+  "lat": 41.2394972,
+  "lon": 1.3174786,
+  "tags": {
+    "name": "Vilabella",
+    "name:ca": "Vilabella",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8842212",
+    "wikipedia": "ca:Estació de Vilabella"
+  }
+},
+{
+  "type": "node",
+  "id": 5452414077,
+  "lat": 41.2294168,
+  "lon": 0.5401481,
+  "tags": {
+    "name": "Flix",
+    "name:ca": "Flix",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71210",
+    "uic_ref": "7171210",
+    "wikidata": "Q8779784",
+    "wikipedia": "ca:Estació de Flix"
+  }
+},
+{
+  "type": "node",
+  "id": 5453800281,
+  "lat": 41.1664122,
+  "lon": 1.0220744,
+  "tags": {
+    "name": "les Borges del Camp",
+    "name:ca": "les Borges del Camp",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71307",
+    "train": "yes",
+    "uic_ref": "7171307"
+  }
+},
+{
+  "type": "node",
+  "id": 5481489048,
+  "lat": 41.1318811,
+  "lon": 1.1444382,
+  "tags": {
+    "name": "Bifurcació Bellissens",
+    "name:ca": "Bifurcació Bellissens",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5481489049,
+  "lat": 41.1217230,
+  "lon": 1.1267256,
+  "tags": {
+    "name": "Bifurcació La Feredat",
+    "name:ca": "Bifurcació La Feredat",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5481489050,
+  "lat": 41.1201399,
+  "lon": 1.1422214,
+  "tags": {
+    "name": "Bifurcació Vila-seca",
+    "name:ca": "Bifurcació Vila-seca",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5481489052,
+  "lat": 41.1935136,
+  "lon": 1.2632252,
+  "tags": {
+    "name": "Bifurcació Perafort",
+    "name:ca": "Bifurcació Perafort",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5481489053,
+  "lat": 41.1799117,
+  "lon": 1.2387488,
+  "tags": {
+    "name": "Bifurcació la Xacona",
+    "name:ca": "Bifurcació la Xacona",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5492057955,
+  "lat": 39.5291910,
+  "lon": -0.4073048,
+  "tags": {
+    "name": "Rocafort",
+    "name:ca": "Rocafort",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q107363667",
+    "wikipedia": "es:Estación de Rocafort (Metrovalencia)"
+  }
+},
+{
+  "type": "node",
+  "id": 5495852822,
+  "lat": 39.4995522,
+  "lon": -0.4021687,
+  "tags": {
+    "name": "Empalme",
+    "name:ca": "Empalme",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5495852823,
+  "lat": 39.4395907,
+  "lon": -0.4114644,
+  "tags": {
+    "addr:city": "València",
+    "addr:housenumber": "s/n",
+    "addr:postcode": "46014",
+    "addr:street": "Partida de Xirivelleta",
+    "image": "https://comunica.gva.es/documents/373428693/400834871/20260115_vice3_foto+principal_Val%C3%A8ncia+Sud.jpeg/e2afca59-8222-6395-e3cb-f962529951b2?t=1768483702542",
+    "name": "València Sud",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5497241958,
+  "lat": 39.4648555,
+  "lon": -0.3386346,
+  "tags": {
+    "name": "Marítim",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "Marítim-Serrería",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5784019615,
+  "lat": 41.2137264,
+  "lon": 0.2423931,
+  "tags": {
+    "name": "Nonaspe",
+    "name:ca": "Nonasp",
+    "name:es": "Nonaspe",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "71207",
+    "train": "yes",
+    "uic_ref": "7171207",
+    "wikidata": "Q8841123"
+  }
+},
+{
+  "type": "node",
+  "id": 5843870851,
+  "lat": 41.2314396,
+  "lon": -0.1554350,
+  "tags": {
+    "name": "Chiprana",
+    "operator": "Adif",
+    "railway": "service_station",
+    "railway:ref": "71203",
+    "uic_ref": "7171203",
+    "wikidata": "Q5846042"
+  }
+},
+{
+  "type": "node",
+  "id": 7108274841,
+  "lat": 40.9996481,
+  "lon": 0.9124003,
+  "tags": {
+    "alt_name": "L'Hospitalet–Mont-roig",
+    "name": "l'Hospitalet de l'Infant",
+    "name:ca": "l'Hospitalet de l'Infant",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q11681650",
+    "wikipedia": "ca:Estació de l'Hospitalet de l'Infant"
+  }
+},
+{
+  "type": "node",
+  "id": 7206954504,
+  "lat": 41.1128765,
+  "lon": 1.1504424,
+  "tags": {
+    "name": "Vila-seca",
+    "name:ca": "Vila-seca",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8842228",
+    "wikipedia": "ca:Estació de Vila-seca"
+  }
+},
+{
+  "type": "node",
+  "id": 7206954520,
+  "lat": 41.1606015,
+  "lon": 1.0999417,
+  "tags": {
+    "addr:postcode": "43202",
+    "addr:street": "Plaça de l'Estació",
+    "internet_access": "no",
+    "name": "Reus",
+    "name:ar": "ريوس",
+    "name:azb": "رئوس",
+    "name:ca": "Reus",
+    "name:sr": "Реус",
+    "opening_hours": "04:45-23:30",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "http://www.adif.es/es_ES/infraestructuras/estaciones/71400/informacion_000094.shtml;https://github.com/trainline-eu/stations",
+    "toilets": "yes",
+    "toilets:access": "permissive",
+    "toilets:wheelchair": "yes",
+    "uic_ref": "7171400",
+    "wheelchair": "yes",
+    "wikidata": "Q3097406",
+    "wikipedia": "ca:Estació de Reus"
+  }
+},
+{
+  "type": "node",
+  "id": 7220776558,
+  "lat": 41.0811053,
+  "lon": 1.0452806,
+  "tags": {
+    "alt_name": "Cambrils–Salou",
+    "name": "Cambrils",
+    "name:ca": "Cambrils",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/-/65422-cambrils",
+    "wikidata": "Q104766835",
+    "wikipedia": "es:Estación de Cambrils Norte"
+  }
+},
+{
+  "type": "node",
+  "id": 7221024117,
+  "lat": 40.3046540,
+  "lon": 0.2286776,
+  "tags": {
+    "name": "Alcalà de Xivert",
+    "name:ca": "Alcalà de Xivert",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779222",
+    "wikipedia": "es:Estación de Alcalá de Chivert"
+  }
+},
+{
+  "type": "node",
+  "id": 7221024125,
+  "lat": 40.4717510,
+  "lon": 0.4554509,
+  "tags": {
+    "name": "Vinaròs",
+    "name:ca": "Vinaròs",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q11681692",
+    "wikipedia": "ca:Estació de Vinaròs"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315770,
+  "lat": 39.5264845,
+  "lon": -0.3237147,
+  "tags": {
+    "name": "Roca-Cúper",
+    "name:ca": "Roca-Cúper",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315771,
+  "lat": 39.5881894,
+  "lon": -0.3119033,
+  "tags": {
+    "name": "El Puig",
+    "name:ca": "El Puig",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315772,
+  "lat": 39.6204852,
+  "lon": -0.3031005,
+  "tags": {
+    "name": "Puçol",
+    "name:ca": "Puçol",
+    "name:es": "Puzol",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841556",
+    "wikipedia": "ca:Estació de Puçol"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315773,
+  "lat": 39.6756707,
+  "lon": -0.2714149,
+  "tags": {
+    "name": "Sagunt",
+    "name:ca": "Sagunt",
+    "name:es": "Sagunto",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q3325475",
+    "wikipedia": "ca:Estació de Sagunt"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315774,
+  "lat": 39.7486679,
+  "lon": -0.2182163,
+  "tags": {
+    "name": "Almenara",
+    "name:ca": "Almenara",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q8779260",
+    "wikipedia": "ca:Estació d'Almenara"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315775,
+  "lat": 39.7677716,
+  "lon": -0.2029647,
+  "tags": {
+    "name": "La Llosa",
+    "name:ca": "La Llosa",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8779964",
+    "wikipedia": "ca:Estació de la Llosa"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315776,
+  "lat": 39.7827793,
+  "lon": -0.1903124,
+  "tags": {
+    "name": "Xilxes",
+    "name:ca": "Xilxes",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315777,
+  "lat": 39.8529669,
+  "lon": -0.1522395,
+  "tags": {
+    "name": "Nules - La Vilavella",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315778,
+  "lat": 39.9329581,
+  "lon": -0.0965352,
+  "tags": {
+    "alt_name": "Villarreal de los Infantes",
+    "name": "Vila-real",
+    "name:ca": "Vila-real",
+    "name:es": "Villarreal",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "start_date": "1862",
+    "wikidata": "Q8842259",
+    "wikipedia": "es:Estación de Villarreal"
+  }
+},
+{
+  "type": "node",
+  "id": 7229233181,
+  "lat": 41.1395412,
+  "lon": 1.1637442,
+  "tags": {
+    "name": "Canviador de la Boella",
+    "name:de": "Umspuranlage La Boella",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 7229825437,
+  "lat": 39.4415280,
+  "lon": -0.3714612,
+  "tags": {
+    "alt_name": "Estació de la Font de Sant Lluís",
+    "alt_name:ca": "Estació de la Font de Sant Lluís",
+    "alt_name:es": "Estación de la Fuente de San Luis",
+    "name": "València - La Font de Sant Lluís",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "short_name": "València - FSL",
+    "wikidata": "Q8842162",
+    "wikipedia": "ca:Estació de la Font de Sant Lluís"
+  }
+},
+{
+  "type": "node",
+  "id": 7246471727,
+  "lat": 39.4600472,
+  "lon": -0.3812078,
+  "tags": {
+    "name": "València Joaquín Sorolla",
+    "name:ca": "València Joaquín Sorolla",
+    "name:es": "Valencia Joaquín Sorolla",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "VJS",
+    "ref": "03216",
+    "ref:EU:PLC": "ES03216",
+    "train": "yes",
+    "uic_ref": "7103216",
+    "website": "https://www.adif.es/w/03216-val%C3%A8ncia-j.sorolla",
+    "wheelchair": "yes",
+    "wikidata": "Q801550",
+    "wikipedia": "es:Estación de Valencia-Joaquín Sorolla"
+  }
+},
+{
+  "type": "node",
+  "id": 7246471728,
+  "lat": 39.4669126,
+  "lon": -0.3771908,
+  "tags": {
+    "addr:city": "València",
+    "addr:housenumber": "24",
+    "addr:postcode": "46007",
+    "addr:street": "Carrer de Xàtiva",
+    "alt_name": "València Nord",
+    "alt_name:ca": "València Nord",
+    "alt_name:en": "Valencia North",
+    "alt_name:es": "Valencia Norte",
+    "building": "train_station",
+    "internet_access": "wlan",
+    "name": "València - Estació del Nord",
+    "name:ca": "València - Estació del Nord",
+    "name:en": "Valencia - North Station",
+    "name:es": "Valencia - Estación del Norte",
+    "name:etymology:wikidata": "Q2990395",
+    "name:ru": "Валенсия - Северный вокзал",
+    "official_name": "Estació del Nord",
+    "opening_hours": "24/7",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "VEN",
+    "ref": "65000",
+    "ref:EU:PLC": "ES65000",
+    "ref:ibnr": "7100054",
+    "uic_ref": "7165000",
+    "wheelchair": "yes",
+    "wikidata": "Q1102684",
+    "wikipedia": "ca:Estació del Nord (València)"
+  }
+},
+{
+  "type": "node",
+  "id": 7468646885,
+  "lat": 39.6796691,
+  "lon": -0.3208130,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "265.0"
+  }
+},
+{
+  "type": "node",
+  "id": 7527423070,
+  "lat": 41.2323732,
+  "lon": 1.2004414,
+  "tags": {
+    "name": "Bifurcació La Gatellada",
+    "name:ca": "Bifurcació La Gatellada",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7527748315,
+  "lat": 41.1676924,
+  "lon": 1.1728144,
+  "tags": {
+    "name": "Constantí Mercaderies",
+    "name:ca": "Constantí Mercaderies",
+    "operator": "Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 7527748316,
+  "lat": 41.1928504,
+  "lon": 1.2221079,
+  "tags": {
+    "name": "Repsol Tarragona Petrochemical",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 7554725804,
+  "lat": 41.2485059,
+  "lon": 0.4807942,
+  "tags": {
+    "name": "Riba-roja d'Ebre",
+    "name:ca": "Riba-roja d'Ebre",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71209",
+    "uic_ref": "7171209",
+    "wikidata": "Q11681675",
+    "wikipedia": "ca:Estació de Riba-roja d'Ebre"
+  }
+},
+{
+  "type": "node",
+  "id": 7557284885,
+  "lat": 41.2249810,
+  "lon": 0.3507766,
+  "tags": {
+    "name": "Faió - la Pobla de Massaluca",
+    "name:ca": "Faió - la Pobla de Massaluca",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "71208",
+    "ref:EU:PLC": "ES71208",
+    "uic_ref": "7171208",
+    "wikidata": "Q8779777",
+    "wikipedia": "ca:Estació de Faió - la Pobla de Massaluca"
+  }
+},
+{
+  "type": "node",
+  "id": 8060137206,
+  "lat": 39.6678032,
+  "lon": -0.2760944,
+  "tags": {
+    "name": "Sagunt aguja km 28,3",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 8060137207,
+  "lat": 39.6716783,
+  "lon": -0.2786213,
+  "tags": {
+    "name": "Sagunt aguja km 268,8",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 8734265540,
+  "lat": 41.2399128,
+  "lon": -0.0427433,
+  "tags": {
+    "name": "Caspe",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71204",
+    "train": "yes",
+    "uic_ref": "7171204"
+  }
+},
+{
+  "type": "node",
+  "id": 11363554764,
+  "lat": 39.4593620,
+  "lon": -0.3846487,
+  "tags": {
+    "name": "Jesús",
+    "name:ca": "Jesús",
+    "network": "Metrovalencia",
+    "network:wikidata": "Q511171",
+    "old_name": "Joaquín Sorolla-Jesús",
+    "operator": "Ferrocarrils de la Generalitat Valenciana",
+    "operator:short": "FGV",
+    "operator:wikidata": "Q750832",
+    "operator:wikipedia": "ca:Ferrocarrils de la Generalitat Valenciana",
+    "owner": "Ferrocarrils de la Generalitat Valenciana",
+    "owner:wikidata": "Q750832",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wikidata": "Q8779929",
+    "wikipedia": "ca:Estació de Jesús (València)"
+  }
+},
+{
+  "type": "node",
+  "id": 13378691482,
+  "lat": 41.2343770,
+  "lon": 0.1428132,
+  "tags": {
+    "name": "Favara",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 13378853513,
+  "lat": 41.2245077,
+  "lon": -0.4381939,
+  "tags": {
+    "addr:city": "La Puebla de Híjar",
+    "name": "La Puebla de Híjar",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71200",
+    "uic_ref": "7171200"
+  }
+},
+{
+  "type": "node",
+  "id": 13378853527,
+  "lat": 41.2124245,
+  "lon": -0.2896235,
+  "tags": {
+    "name": "Escatrón",
+    "operator": "Adif",
+    "railway": "service_station",
+    "train": "yes",
+    "wikidata": "Q5846208"
+  }
+},
+{
+  "type": "node",
+  "id": 13378853528,
+  "lat": 41.1820761,
+  "lon": -0.3687365,
+  "tags": {
+    "name": "Samper",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "71201",
+    "uic_ref": "7171201"
+  }
+},
+{
+  "type": "node",
+  "id": 13379272986,
+  "lat": 41.2295532,
+  "lon": 0.0760621,
+  "tags": {
+    "name": "Val de Pilas",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847392",
+    "wikipedia": "es:Estación de Val de Pilas"
+  }
+},
+{
+  "type": "node",
+  "id": 13894649638,
+  "lat": 39.9882804,
+  "lon": -0.0523134,
+  "tags": {
+    "name": "Castelló",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q3325599",
+    "wikipedia": "ca:Estació de Castelló de la Plana"
+  }
+},
+{
+  "type": "node",
+  "id": 13894696022,
+  "lat": 41.1112229,
+  "lon": 1.2535366,
+  "tags": {
+    "name": "Tarragona",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q3754797"
+  }
+},
+{
+  "type": "node",
+  "id": 14243510920,
+  "lat": 39.4701155,
+  "lon": -0.3345854,
+  "tags": {
+    "addr:city": "València",
+    "addr:postcode": "46022",
+    "addr:street": "Avinguda de Blasco Ibáñez",
+    "name": "València Cabanyal",
+    "opening_hours": "Mo-Fr 05:40-23:40; Sa-Su 06:00-23:40",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q3097922",
+    "wikipedia": "ca:Estació de València-Cabanyal"
+  }
+},
+{
+  "type": "node",
+  "id": 14298082732,
+  "lat": 39.7063424,
+  "lon": -0.3484040,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "261.1"
+  }
+},
+{
+  "type": "node",
+  "id": 14298094532,
+  "lat": 39.7530607,
+  "lon": -0.3657011,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "254.8"
+  }
+},
+{
+  "type": "node",
+  "id": 14298094533,
+  "lat": 39.7722504,
+  "lon": -0.3676130,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "252.3"
+  }
+},
+{
+  "type": "node",
+  "id": 14298094534,
+  "lat": 39.8124897,
+  "lon": -0.4320081,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "244.6"
+  }
+}
+
+  ]
+}

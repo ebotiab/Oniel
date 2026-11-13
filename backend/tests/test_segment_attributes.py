@@ -211,8 +211,12 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     granada = by_line["lav-antequera-granada"]
     for line in by_line.values():
         covered = dict(line["covered_segments"])
-        # el ancho mixto solo se declara donde lo hay: el paso por Loja y la entrada a Granada
-        assert covered.pop("gauge", None) == (3 if line is granada else None)
+        # el ancho solo se declara donde no es el de la línea: el mixto del paso por Loja y de la
+        # entrada a Granada y, en la línea de Valencia a Camp de Tarragona, el mixto hasta
+        # Castelló (18 tramos) y el estándar del último, que además va a otra tensión
+        coast = line["line"] == "valencia-castello-tarragona"
+        assert covered.pop("gauge", None) == (3 if line is granada else 19 if coast else None)
+        assert covered.pop("electrification", None) == (1 if coast else None)
         # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona
         barcelona = line["line"] == "lav-madrid-barcelona"
         assert covered.pop("max_speed_kmh", None) == (3 if barcelona else None)

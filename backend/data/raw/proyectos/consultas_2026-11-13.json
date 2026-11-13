@@ -1,0 +1,22 @@
+{
+  "descripcion": "Registro de las consultas hechas el 13 de noviembre de 2026 para los dos proyectos de la línea de València a Camp de Tarragona de backend/data/curated/anotaciones.json. Los anuncios del BOE se guardan enteros en raw/proyectos/boe/; aquí queda, con palabras propias, qué decía ese día la página que no es del BOE.",
+  "consultado_el": "2026-11-13",
+  "consultas": [
+    {
+      "source_id": "moncloa-nota-corredor-mediterraneo-2026-04",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible; La Moncloa",
+      "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/220426-puente-corredor-mediterraneo.aspx",
+      "fecha_de_la_pagina": "2026-04-22",
+      "resumen": "Balance del Ministerio sobre el Corredor Mediterráneo entre enero de 2024 y marzo de 2026. Entre las actuaciones ejecutadas en 2025 enumera la adaptación a ancho mixto, vía y electrificación entre Castellón y Valencia y la instalación de ancho mixto entre Castellbisbal y Vila-seca. Entre las previsiones para 2026, en la Comunitat Valenciana, la puesta en servicio de la segunda vía de ancho mixto entre València y Castelló, el nuevo acceso al puerto de Sagunt y la terminal intermodal de Fuente de San Luis. No menciona el cambio de ancho entre Castelló y Tarragona ni da ninguna fecha para él.",
+      "que_aporta": "Que la adaptación a ancho mixto de la segunda vía entre València y Castelló estaba en obras en 2025 y que el Ministerio prevé ponerla en servicio en 2026."
+    },
+    {
+      "source_id": "wikipedia-linea-valencia-tarragona",
+      "editor": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/Corredor_Mediterr%C3%A1neo",
+      "fecha_de_la_pagina": "2026-09-15",
+      "resumen": "El artículo «Corredor Mediterráneo» (oldid 175368395) dice, citando un blog y un diario digital, que las obras entre Tarragona y Valencia se prevén terminadas en 2027 y que para cambiar el ancho se planea un corte del tráfico de unos seis meses entre Tarragona y Castelló a mediados de 2027.",
+      "que_aporta": "Nada que se registre: son previsiones recogidas de la prensa, sin una fuente oficial detrás. Se anota para que quien revise el proyecto sepa qué buscar en el BOE y en las notas del Ministerio."
+    }
+  ]
+}

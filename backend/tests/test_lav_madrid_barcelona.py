@@ -197,7 +197,6 @@ def test_bypasses_and_continuations_are_connections_not_loaded(bcn_spec: Network
         "convencional-zaragoza-norte": "zaragoza-delicias",
         "zaragoza-huesca": "bif-huesca",
         "baipas-de-lleida": "bif-les-torres-de-sanui",
-        "corredor-mediterraneo-camp-de-tarragona": "camp-de-tarragona",
         "lav-barcelona-frontera-francesa": "barcelona-sants",
     }
     assert all(c.status == "no_cargada" and len(c.sketch) >= 2 for c in bcn_spec.connections)

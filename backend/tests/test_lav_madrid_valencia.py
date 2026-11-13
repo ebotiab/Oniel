@@ -105,11 +105,11 @@ def test_the_line_leaves_the_seville_line_at_torrejon_and_ends_in_valencia(
     assert [p.source_id for p in valencia.line.part_spans] == ["osm-relation-11146316"]
     assert not valencia.line.gaps_km and not valencia.line.joins_km
     assert all(n.offset_m < 60 for n in valencia.nodes)
-    # lo que sigue sin cargar: el enlace con la línea de Sevilla, el ramal de Albacete y Castelló
+    # lo que sigue sin cargar: el enlace con la línea de Sevilla y el ramal de Albacete; la
+    # línea de Castelló ya está cargada y no sale a trazos
     assert {c.node_id for c in valencia.spec.connections} == {
         "bif-blancales",
         "bif-albacete",
-        "valencia-joaquin-sorolla",
     }
 
 
