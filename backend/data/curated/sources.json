@@ -364,10 +364,10 @@
       "url": "https://www.adif.es/viajeros/estado-de-la-red",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-12",
+      "retrieved_on": "2026-11-13",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 12 de noviembre de 2026 a las 11:53, igual que el día 10, está resumido en el registro de consultas de ese día; el del 10 de noviembre sigue en raw/interrupciones/consultas_2026-11-10.json.",
-      "file": "raw/interrupciones/consultas_2026-11-12.json"
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json.",
+      "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
       "id": "adif-aviso-obras-autopista-ferroviaria",
@@ -376,22 +376,22 @@
       "url": "https://www.adif.es/w/obras-autopista-ferroviaria-algeciras-zaragoza",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-10",
+      "retrieved_on": "2026-11-13",
       "coverage": "Interrupción del servicio entre Córdoba y Santa Cruz de Mudela y en el tramo Algeciras–Bobadilla–Córdoba por las obras de la autopista ferroviaria, con transporte alternativo por carretera.",
       "notes": "El aviso declara su última actualización el 30 de septiembre de 2026. No da fecha de inicio ni previsión de fin: esas salen de la nota de Renfe y de la prensa registradas aparte.",
-      "file": "raw/interrupciones/consultas_2026-11-10.json"
+      "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
       "id": "adif-salidas-y-llegadas",
-      "name": "Salidas y llegadas de las estaciones de Santa Cruz de Mudela, Jaén, Ciudad Real y Córdoba",
+      "name": "Salidas y llegadas de las estaciones de Santa Cruz de Mudela, Jaén, Ciudad Real, Puertollano y Córdoba",
       "publisher": "Adif",
       "url": "https://www.adif.es/viajeros/estaciones",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-10",
-      "coverage": "Qué trenes circulan y cuáles hacen parte del recorrido por carretera el 10 de noviembre de 2026: sirve para fijar hasta qué estación llegan los trenes a cada lado de una interrupción.",
-      "notes": "Paneles en tiempo real, sin histórico; las cuatro páginas consultadas y lo que mostraban están en el registro de consultas de ese día.",
-      "file": "raw/interrupciones/consultas_2026-11-10.json"
+      "retrieved_on": "2026-11-13",
+      "coverage": "Qué trenes circulan y cuáles hacen parte del recorrido por carretera el día de la consulta: sirve para fijar hasta qué estación llegan los trenes a cada lado de una interrupción.",
+      "notes": "Paneles en tiempo real, sin histórico; las páginas consultadas cada día y lo que mostraban están en los registros de consultas (raw/interrupciones/consultas_2026-11-10.json, consultas_2026-11-12.json y consultas_2026-11-13.json). El 13 de noviembre de 2026 se leyeron los de Ciudad Real, Puertollano, Santa Cruz de Mudela y Jaén; el de Córdoba no devolvió información de circulación.",
+      "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
       "id": "renfe-nota-md-jaen-madrid-2026-09",
@@ -440,6 +440,18 @@
       "coverage": "Anuncio de la vuelta de los trenes Avant entre Ciudad Real y Puertollano el 13 de noviembre de 2026.",
       "notes": "Publicada el 12 de noviembre de 2026. Remite a los horarios publicados por Renfe; no se encontró una nota de Renfe ni de Adif que lo recoja.",
       "file": "raw/interrupciones/consultas_2026-11-12.json"
+    },
+    {
+      "id": "cmm-avant-ciudad-real-puertollano-2026-11",
+      "name": "Noticia «Renfe finalmente no reestablece el servicio Avant de alta velocidad entre Puertollano y Ciudad Real»",
+      "publisher": "Castilla-La Mancha Media (CMM)",
+      "url": "https://www.cmmedia.es/noticias/castilla-la-mancha/ciudad-real/renfe-reestablece-el-servicio-avant-entre-puertollano-y-ciud.html",
+      "license": "© del medio; se cita el dato",
+      "license_url": null,
+      "retrieved_on": "2026-11-13",
+      "coverage": "Que Renfe no restableció el 13 de noviembre de 2026 los trenes Avant entre Ciudad Real y Puertollano que había anunciado, y mantuvo el trayecto por carretera.",
+      "notes": "Publicada el 12 de noviembre de 2026 a las 14:37. No cita una nota de Renfe ni da el motivo del cambio; otros dos medios locales publicaron lo mismo el día 13 (registro de consultas de ese día).",
+      "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
       "id": "adif-comunicado-adamuz-2026-01-19",
