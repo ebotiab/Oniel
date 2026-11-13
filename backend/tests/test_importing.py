@@ -115,7 +115,8 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
     ]
     assert [r["outcome"] for r in runs] == ["completed", "skipped", "completed"]
     assert (
-        runs[0]["trips_imported"] == 317 + 432 - 22 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661
+        runs[0]["trips_imported"]
+        == 317 + 432 - 22 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False
     assert "trips_imported" not in runs[1]

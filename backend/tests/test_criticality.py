@@ -287,11 +287,9 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{LAV_ALICANTE}:",
         f"{LAV_MURCIA}:",
         f"{MEDITERRANEO}:",
-    )
-    assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
         f"{LAV_VALLADOLID}:",
     )
-    assert {k: n for k, n in without.items() if not k.startswith(apart)} == {
+    assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 83,
         f"{LAV}:majarabique:sevilla-santa-justa": 81,
         f"{JAEN}:espeluy:mengibar-artichuela": 26,

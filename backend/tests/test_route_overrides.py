@@ -611,6 +611,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "cambrils-vila-seca-por-la-feredat": 22,
             "castello-tarragona-por-la-feredat": 4,
             "l-aldea-tarragona-por-la-feredat": 2,
+        },
         # los que recorren la de Madrid a Valladolid sin parar en Segovia-Guiomar
         LAV_VALLADOLID_SPEC.name: {
             "madrid-valladolid-sin-parada": 188,

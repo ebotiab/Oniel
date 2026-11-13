@@ -552,7 +552,6 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     speed = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "max_speed_kmh"}
     power = {r["segment_id"] for r in rows if r["attribute"] == "electrification"}
     assert len(rows) - len(gauge) - len(speed) - len(power) == 4 * (
-    assert len(rows) - len(gauge) - len(speed) == 4 * (
         13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae: tres tramos de la alta

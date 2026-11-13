@@ -495,7 +495,9 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     )
     assert again["dataset"]["id"] == NEWER_ID and again["dataset"]["reused"] is True
     assert await conn.fetchval("SELECT count(*) FROM datasets") == 2
-    assert await _count(conn, "services", NEWER_ID) == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661
+    assert (
+        await _count(conn, "services", NEWER_ID) == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661
+    )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
         37 + 555 + 8 + 13 + 465 + 92 + 181 + 661
     )

@@ -89,7 +89,9 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # los dos baipases, los nueve tramos de la línea de Albacete a Alicante, los ocho de la de
     # Monforte del Cid a Murcia y los 35 de la de Valencia a Camp de Tarragona
     # y los ocho de la de Monforte del Cid a Murcia
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5
+    assert (
+        len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5
+    )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
