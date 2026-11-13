@@ -15,7 +15,7 @@
     "reference_length_km": 178.559,
     "pk_origin_km": 0.75,
     "status": "disponible",
-    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora, Ourense y Galicia, que todavía no está cargada. En Valladolid la línea continúa hacia Palencia, León y Burgos, también sin cargar: de los trenes que siguen por esas líneas Oniel cuenta el paso por esta, hasta la bifurcación o hasta Valladolid.\n\nMuchos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la alta velocidad de Levante.",
+    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora, Ourense y Galicia, que todavía no está cargada. En Valladolid la línea continúa hacia Palencia, León y Burgos, también sin cargar: de los trenes que siguen por esas líneas Oniel cuenta el paso por esta, hasta la bifurcación o hasta Valladolid.\n\nAlgunos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la línea de alta velocidad de Valencia.",
     "geometry_source": {
       "source_id": "osm-relation-4777557",
       "parts": [
@@ -62,11 +62,11 @@
       "name": "Madrid-Chamartín",
       "kind": "estacion",
       "adif_code": "17000",
+      "shared": true,
       "position": {
         "lon": -3.6822622,
         "lat": 40.4720571
-      },
-      "description": "La estación del norte de Madrid. De ella sale esta línea hacia Segovia y Valladolid; un túnel bajo la ciudad la une con la alta velocidad de Levante."
+      }
     },
     {
       "id": "soto-del-real",
@@ -458,21 +458,43 @@
     "03208": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "lav-madrid-valencia",
+        "node": "madrid-chamartin"
+      }
     },
     "03213": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "lav-madrid-valencia",
+        "node": "madrid-chamartin"
+      }
     },
     "03216": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "lav-madrid-valencia",
+        "node": "madrid-chamartin"
+      }
     },
     "03309": {
       "exits": [
         "madrid-chamartin"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
       ]
     },
     "03410": {
@@ -483,11 +505,31 @@
     "60600": {
       "exits": [
         "madrid-chamartin"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
       ]
     },
     "60911": {
       "exits": [
         "madrid-chamartin"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
       ]
     },
     "61200": {

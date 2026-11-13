@@ -6,7 +6,13 @@ from __future__ import annotations
 from collections import Counter
 
 import pytest
-from conftest import DATA_DIR, LAV_VALLADOLID_SPEC, SOURCES
+from conftest import (
+    DATA_DIR,
+    LAV_ALICANTE_SPEC,
+    LAV_VALENCIA_SPEC,
+    LAV_VALLADOLID_SPEC,
+    SOURCES,
+)
 
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip
@@ -127,6 +133,43 @@ def test_nodes_are_ready_for_the_lines_that_follow(line: BuiltNetwork) -> None:
         "conv-valladolid-medina-del-campo": "valladolid-campo-grande",
     }
     assert all(n.offset_m < 250 for n in line.nodes)
+
+
+def test_it_shares_chamartin_with_the_line_to_valencia(line: BuiltNetwork) -> None:
+    """Madrid-Chamartín la define la línea de Valencia, que va antes en la importación: esta la
+    incorpora sin moverla, y las dos líneas se nombran una a otra en sus asignaciones de parada."""
+    assert {n.spec.id for n in line.nodes if n.spec.shared} == {"madrid-chamartin"}
+    levante = load_network_spec(LAV_VALENCIA_SPEC)
+    theirs = next(n for n in levante.nodes if n.id == "madrid-chamartin")
+    ours = line.node("madrid-chamartin").spec
+    assert not theirs.shared and ours.position == theirs.position
+    assert ours.adif_code == theirs.adif_code == CHAMARTIN
+    # con la línea cargada ya no sale a trazos de Chamartín hacia el norte
+    assert all(c.node_id != "madrid-chamartin" for c in levante.connections)
+    # hacia el sur: Cuenca y Valencia, por la línea de Valencia; Albacete y Alicante, además por
+    # la de Albacete a Alicante
+    spec = line.spec
+    for stop_id in ("03208", "03213", "03216"):
+        mapping = spec.stop_mappings[stop_id]
+        assert mapping.exits == ["madrid-chamartin"]
+        assert [(v.line, v.node) for v in mapping.via] == [
+            ("lav-madrid-valencia", "madrid-chamartin")
+        ]
+    for stop_id in ("60600", "03309", "60911"):
+        assert [(v.line, v.node) for v in spec.stop_mappings[stop_id].via] == [
+            ("lav-madrid-valencia", "madrid-chamartin"),
+            ("lav-albacete-alicante", "bif-albacete"),
+        ]
+    # y al revés: Segovia y Valladolid, desde las dos líneas de Levante
+    for stop_id in (SEGOVIA, VALLADOLID):
+        assert [(v.line, v.node) for v in levante.stop_mappings[stop_id].via] == [
+            (LINE, "madrid-chamartin")
+        ]
+        alicante = load_network_spec(LAV_ALICANTE_SPEC).stop_mappings[stop_id]
+        assert [(v.line, v.node) for v in alicante.via] == [
+            ("lav-madrid-valencia", "bif-albacete"),
+            (LINE, "madrid-chamartin"),
+        ]
 
 
 def test_adif_kilometre_points_are_750_m_ahead_of_the_trace(line: BuiltNetwork) -> None:
