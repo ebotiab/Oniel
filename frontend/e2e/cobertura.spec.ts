@@ -28,8 +28,10 @@ test.describe('Cobertura y fuentes, como página', () => {
     const cifras = page.getByTestId('cobertura-cifras').locator('div')
     await expect(cifras).toHaveCount(4)
     await expect(cifras.nth(0)).toContainText('Líneas cargadas')
-    // la primera cifra es el número de líneas de la lista
-    await expect(page.getByTestId('cobertura-lineas').getByRole('listitem')).toHaveCount(Number(await cifras.nth(0).locator('dd').innerText()))
+    // la primera cifra es el número de líneas de la lista; los baipases van colgados de la suya y no cuentan
+    const lineas = page.getByTestId('cobertura-lineas')
+    await expect(lineas.locator('li:not(.cobertura-baipas)')).toHaveCount(Number(await cifras.nth(0).locator('dd').innerText()))
+    await expect(lineas.locator('li.cobertura-baipas')).toHaveText([/^Baipás de Zaragoza20,7 km$/, /^Baipás de Lleida14,3 km$/])
     await expect(cifras.nth(1)).toContainText('Kilómetros')
     await expect(cifras.nth(2)).toContainText('Estaciones')
     await expect(cifras.nth(3)).toContainText('Trenes distintos')

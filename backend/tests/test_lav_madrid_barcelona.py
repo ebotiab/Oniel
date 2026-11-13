@@ -1,21 +1,32 @@
 """Quinta línea: la alta velocidad Madrid – Zaragoza – Barcelona (línea 050 de Adif), dibujada
-por las estaciones de Zaragoza-Delicias y Lleida-Pirineus."""
+por las estaciones de Zaragoza-Delicias y Lleida-Pirineus, con sus dos baipases cargados aparte
+(``test_baipases.py``)."""
 
 from __future__ import annotations
 
 from collections import Counter
 
 import pytest
-from conftest import BCN_SPEC, DATA_DIR, SOURCES, SPEC
+from conftest import BCN_SPEC, BYPASS_LLEIDA_SPEC, BYPASS_ZARAGOZA_SPEC, DATA_DIR, SOURCES, SPEC
 
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed
-from oniel.gtfs.trips import calls_for_trip, route_for_trip, select_trips_for_spec
+from oniel.gtfs.trips import bypasses_of, calls_for_trip, route_for_trip, select_trips_for_spec
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import NetworkSpec, load_network_spec, load_sources
-from oniel.sim.passes import LineNode, LineSegment, resolve_passes
+from oniel.sim.passes import resolve_passes
+from oniel.validate import expected_pk_km, loaded_line
 
 LINE = "lav-madrid-barcelona"
+BYPASS_ZARAGOZA = "baipas-zaragoza:bif-moncasi:bif-canal-imperial"
+BYPASS_LLEIDA = "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida"
+#: Los tramos que entran y salen de cada estación: los que deja de recorrer el tren que no para.
+THROUGH_ZARAGOZA = (
+    "bif-moncasi:zaragoza-delicias",
+    "zaragoza-delicias:bif-huesca",
+    "bif-huesca:bif-canal-imperial",
+)
+THROUGH_LLEIDA = ("bif-les-torres-de-sanui:lleida-pirineus", "lleida-pirineus:bif-artesa-de-lleida")
 RELATION = "osm-relation-11082425"
 STATIONS = [
     "madrid-puerta-de-atocha",
@@ -38,18 +49,27 @@ def bcn(bcn_spec: NetworkSpec) -> BuiltNetwork:
     return build_network(bcn_spec, DATA_DIR)
 
 
+@pytest.fixture(scope="module")
+def bypasses() -> list[BuiltNetwork]:
+    return [
+        build_network(load_network_spec(path), DATA_DIR)
+        for path in (BYPASS_ZARAGOZA_SPEC, BYPASS_LLEIDA_SPEC)
+    ]
+
+
 def _segments_of(
-    feed: GtfsFeed, spec: NetworkSpec, net: BuiltNetwork
+    feed: GtfsFeed, spec: NetworkSpec, net: BuiltNetwork, bypasses: list[BuiltNetwork]
 ) -> dict[tuple[str, ...], Counter[tuple[str, ...]]]:
-    """Por secuencia de paradas, los tramos (sin el prefijo de la línea) que recorre cada viaje."""
-    nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat) for n in net.nodes}
-    segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
+    """Por secuencia de paradas, los tramos que recorre cada viaje: los de la línea, sin su
+    prefijo, y detrás los de los baipases por los que va."""
+    own = loaded_line(net)
+    around = bypasses_of(own, [loaded_line(b) for b in bypasses])
     out: dict[tuple[str, ...], Counter[tuple[str, ...]]] = {}
     for trip in select_trips_for_spec(feed, spec):
         route = route_for_trip(spec, trip)
         calls = calls_for_trip(trip, feed, spec, route=route)
         assert all(c.node_id or c.exit_node_ids for c in calls), trip.train_number
-        passes, resolution = resolve_passes(calls, nodes, segments)
+        passes, resolution = resolve_passes(calls, own.nodes, own.segments, around)
         assert resolution == "completa" and all(p.kind == "estimado" for p in passes)
         stops = tuple(st.stop_id for st in trip.stop_times)
         ids = tuple(p.segment_id.removeprefix(f"{LINE}:") for p in passes)
@@ -106,30 +126,34 @@ def test_nodes_stations_paet_and_junctions(bcn: BuiltNetwork, spec: NetworkSpec)
         assert (order[i - 1], order[i + 1]) == (before, after)
 
 
-def test_reference_pk_match_up_to_zaragoza_and_are_not_kept_beyond(bcn: BuiltNetwork) -> None:
-    """Los PK de Adif siguen la línea principal, por los baipases. Hasta la bifurcación Huesca el
-    kilómetro medido coincide con ellos; después Oniel va por las estaciones y se adelanta, así
-    que esos nodos no guardan PK de referencia."""
-    with_pk = [n for n in bcn.nodes if n.spec.reference_pk_km is not None]
-    assert [n.spec.id for n in with_pk][-1] == "bif-huesca" and len(with_pk) == 10
-    assert all(abs(n.km - (n.spec.reference_pk_km or 0)) < 0.6 for n in with_pk)
-    assert all(
-        n.spec.reference_pk_km is None for n in bcn.nodes if n.km > bcn.node("bif-huesca").km
-    )
-    # comprobación a mano de los demás: el desfase con el PK crece en cada estación
-    for node_id, pk, ahead in [
-        ("ballobar", 396.799, 4.5),
-        ("l-espluga-de-francoli", 488.868, 6.3),
-        ("camp-de-tarragona", 520.869, 6.4),
-        ("barcelona-sants", 621.0, 6.0),
-    ]:
-        assert bcn.node(node_id).km - pk == pytest.approx(ahead, abs=0.1)
+def test_reference_pk_match_all_along_once_the_numbering_follows_the_bypasses(
+    bcn: BuiltNetwork,
+) -> None:
+    """Los PK de Adif siguen la línea principal, por los baipases, y Oniel mide por las estaciones.
+    Hasta la bifurcación Huesca las dos cuentas coinciden. Después, la numeración se retoma en la
+    bifurcación en la que cada baipás vuelve a la línea (``pk_restarts``): Canal Imperial, PK
+    315,783, y Artesa de Lleida, PK 448,979. Así todos los nodos guardan su PK de referencia."""
+    assert [(r.node, r.pk_km) for r in bcn.spec.line.pk_restarts] == [
+        ("bif-canal-imperial", 315.783),
+        ("bif-artesa-de-lleida", 448.979),
+    ]
+    # las dos bifurcaciones en las que se retoma guardan su PK en el baipás, que es por donde
+    # se cuenta hasta ellas (test_baipases.py)
+    without = [n.spec.id for n in bcn.nodes if n.spec.reference_pk_km is None]
+    assert without == ["bif-canal-imperial", "bif-artesa-de-lleida"]
+    for n in bcn.nodes:
+        if n.spec.reference_pk_km is not None:
+            assert expected_pk_km(bcn, n.km) == pytest.approx(n.spec.reference_pk_km, abs=0.4)
+    # sin retomarla, el kilometraje por las estaciones se adelanta al PK: 4,4 km tras Zaragoza y
+    # 6,0 km al llegar a Barcelona
+    assert bcn.node("ballobar").km - 396.799 == pytest.approx(4.4, abs=0.1)
+    assert bcn.node("barcelona-sants").km - 621.0 == pytest.approx(6.0, abs=0.1)
     # de la bifurcación Moncasi a la de Canal Imperial por Zaragoza-Delicias, y de Les Torres de
     # Sanui a Artesa de Lleida por Lleida-Pirineus
     km = {n.spec.id: n.km for n in bcn.nodes}
-    assert km["bif-canal-imperial"] - km["bif-moncasi"] == pytest.approx(23.7, abs=0.1)
+    assert km["bif-canal-imperial"] - km["bif-moncasi"] == pytest.approx(25.6, abs=0.1)
     assert km["bif-artesa-de-lleida"] - km["bif-les-torres-de-sanui"] == pytest.approx(
-        15.3, abs=0.1
+        16.2, abs=0.1
     )
 
 
@@ -188,29 +212,20 @@ def test_sources_and_operators_are_registered(bcn_spec: NetworkSpec) -> None:
     assert "Zaragoza y Barcelona" in str(sources["iryo-web"].coverage)
 
 
-def test_bypasses_and_continuations_are_connections_not_loaded(bcn_spec: NetworkSpec) -> None:
+def test_continuations_are_connections_not_loaded_and_the_bypasses_no_longer_are(
+    bcn_spec: NetworkSpec,
+) -> None:
     by_node = {c.id: c.node_id for c in bcn_spec.connections}
+    # los dos baipases ya no son conexiones a trazos: son líneas cargadas
     assert by_node == {
         "enlace-vallecas-perales-del-rio": "bif-vallecas-av",
         "convencional-plasencia-de-jalon-tudela": "cambiador-plasencia-de-jalon",
-        "baipas-de-zaragoza": "bif-moncasi",
         "convencional-zaragoza-norte": "zaragoza-delicias",
         "zaragoza-huesca": "bif-huesca",
-        "baipas-de-lleida": "bif-les-torres-de-sanui",
         "corredor-mediterraneo-camp-de-tarragona": "camp-de-tarragona",
         "lav-barcelona-frontera-francesa": "barcelona-sants",
     }
     assert all(c.status == "no_cargada" and len(c.sketch) >= 2 for c in bcn_spec.connections)
-    # cada baipás se dibuja de su bifurcación de entrada a la de salida
-    nodes = {n.id: n.position for n in bcn_spec.nodes}
-    for connection_id, end in [
-        ("baipas-de-zaragoza", "bif-canal-imperial"),
-        ("baipas-de-lleida", "bif-artesa-de-lleida"),
-    ]:
-        sketch = next(c.sketch for c in bcn_spec.connections if c.id == connection_id)
-        target = nodes[end]
-        assert target.lon is not None and target.lat is not None
-        assert haversine_km(sketch[-1], (target.lon, target.lat)) < 0.3
 
 
 def test_the_filter_takes_high_speed_trains_and_leaves_out_the_regional_ones(
@@ -251,17 +266,25 @@ def test_the_filter_takes_high_speed_trains_and_leaves_out_the_regional_ones(
 
 
 def test_each_train_leaves_the_line_where_it_really_does(
-    feed: GtfsFeed, bcn_spec: NetworkSpec, bcn: BuiltNetwork
+    feed: GtfsFeed, bcn_spec: NetworkSpec, bcn: BuiltNetwork, bypasses: list[BuiltNetwork]
 ) -> None:
-    by_stops = _segments_of(feed, bcn_spec, bcn)
+    by_stops = _segments_of(feed, bcn_spec, bcn, bypasses)
     all_segments = tuple(s.id.removeprefix(f"{LINE}:") for s in bcn.segments)
 
     def only(stops: tuple[str, ...]) -> tuple[str, ...]:
         (segments,) = by_stops[stops]
         return segments
 
-    # Madrid – Barcelona sin paradas: la línea entera (figura por las dos estaciones)
-    assert only(("60000", "71801")) == all_segments
+    def without(skipped: tuple[str, ...], *around: str) -> tuple[str, ...]:
+        return (*(s for s in all_segments if s not in skipped), *around)
+
+    # Madrid – Barcelona sin paradas: por los dos baipases, sin los tramos de las dos estaciones
+    direct = without(THROUGH_ZARAGOZA + THROUGH_LLEIDA, BYPASS_ZARAGOZA, BYPASS_LLEIDA)
+    assert only(("60000", "71801")) == direct and len(direct) == 17
+    # con parada en Zaragoza y no en Lleida: por la estación de Zaragoza y por el baipás de Lleida
+    assert only(("60000", "04040", "71801")) == without(THROUGH_LLEIDA, BYPASS_LLEIDA)
+    # con parada en las dos, la línea entera y ningún baipás
+    assert only(("60000", "04040", "78400", "04104", "71801")) == all_segments
     # Alvia Madrid – Pamplona: hasta el cambiador de Plasencia de Jalón, sin llegar a Zaragoza
     to_plasencia = all_segments[: all_segments.index("cambiador-plasencia-de-jalon:bif-moncasi")]
     assert only(("60000", "04007", "70600", "81202", "80108", "80100")) == to_plasencia
@@ -273,7 +296,7 @@ def test_each_train_leaves_the_line_where_it_really_does(
     to_huesca = all_segments[: all_segments.index("zaragoza-delicias:bif-huesca") + 1]
     assert only(("60000", "04007", "70600", "04040", "78200", "74200")) == to_huesca
     # AVE Barcelona – Sevilla sin parar en Madrid: entra en el enlace de Vallecas y no pisa el
-    # tramo de Atocha
+    # tramo de Atocha; para en Zaragoza y en Lleida, así que no va por ningún baipás
     assert only(("71801", "04104", "78400", "04040", "50500", "51003")) == all_segments[1:]
     # Euromed Barcelona – València: de Barcelona a Camp de Tarragona
     euromed = only(("71801", "04104", "65300", "65000"))
@@ -285,12 +308,19 @@ def test_each_train_leaves_the_line_where_it_really_does(
 
 
 def test_ouigo_trains_run_the_whole_line_and_follow_to_andalusia_from_atocha(
-    ouigo_feed: GtfsFeed, bcn_spec: NetworkSpec, bcn: BuiltNetwork
+    ouigo_feed: GtfsFeed, bcn_spec: NetworkSpec, bcn: BuiltNetwork, bypasses: list[BuiltNetwork]
 ) -> None:
-    by_stops = _segments_of(ouigo_feed, bcn_spec, bcn)
+    by_stops = _segments_of(ouigo_feed, bcn_spec, bcn, bypasses)
     assert sum(sum(c.values()) for c in by_stops.values()) == 25
-    # los 25 recorren los veinte tramos: todos van de Madrid a Barcelona o al revés
-    assert all(len(ids) == 20 for c in by_stops.values() for ids in c)
+    # los 25 van de Madrid a Barcelona o al revés y ninguno para en Lleida: todos toman su baipás.
+    # Diez tampoco paran en Zaragoza y toman además el suyo
+    taken = Counter(
+        tuple(i for i in ids if i in (BYPASS_ZARAGOZA, BYPASS_LLEIDA))
+        for c in by_stops.values()
+        for ids in c.elements()
+    )
+    assert taken == {(BYPASS_LLEIDA,): 15, (BYPASS_ZARAGOZA, BYPASS_LLEIDA): 10}
+    assert {len(ids) for c in by_stops.values() for ids in c} == {17, 19}
     # cuatro siguen a Sevilla o a Málaga parando en Madrid: para ellos Córdoba es una salida por
     # Atocha, por la alta velocidad de Sevilla, y no por el enlace de Vallecas
     through = [stops for stops in by_stops if "50500" in stops]

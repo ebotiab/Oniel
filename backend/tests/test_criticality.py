@@ -192,6 +192,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         LAV_GRANADA,
         BCN,
         LAV_VALENCIA,
+        "baipas-zaragoza",
+        "baipas-lleida",
         LAV_ALICANTE,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -203,7 +205,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 9
+    # los dos baipases y los nueve tramos de la línea de Albacete a Alicante
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -260,15 +263,45 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         (36, 36),
         (56, 56),
     ]
-    assert len(without) == 8 + 20 + 4 + 7
     # tampoco en la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
-    # Madrid: ninguno de sus veinte tramos tiene otro camino cargado, ni siquiera los que pasan
-    # por Zaragoza-Delicias y Lleida-Pirineus, porque los baipases no están cargados
+    # Madrid: quince de sus veinte tramos no tienen otro camino cargado
     barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]
     assert len(barcelona) == 20
-    assert all(s.trains == s.without_alternative > 0 for s in barcelona)
     assert _of(exported.segments, f"{BCN}:madrid-puerta-de-atocha:bif-vallecas-av").trains == 74
     assert _of(exported.segments, f"{BCN}:vilafranca-del-penedes:barcelona-sants").trains == 108
+    # los cinco que entran y salen de Zaragoza-Delicias y de Lleida-Pirineus sí lo tienen: el
+    # baipás. Y solo llevan los trenes que paran en la estación o salen de la línea por ella
+    stations = {
+        f"{BCN}:bif-moncasi:zaragoza-delicias": 56,
+        f"{BCN}:zaragoza-delicias:bif-huesca": 55,
+        f"{BCN}:bif-huesca:bif-canal-imperial": 51,
+        f"{BCN}:bif-les-torres-de-sanui:lleida-pirineus": 31,
+        f"{BCN}:lleida-pirineus:bif-artesa-de-lleida": 47,
+    }
+    for s in barcelona:
+        if s.segment_id in stations:
+            assert (s.trains, s.without_alternative) == (stations[s.segment_id], 0)
+        else:
+            assert s.trains == s.without_alternative > 0
+    # los baipases llevan los que no paran: 22 el de Zaragoza y 42 el de Lleida. Con el baipás
+    # cortado entrarían en la estación, 4,9 km y 6 minutos más en Zaragoza
+    around_zaragoza = _of(exported.segments, "baipas-zaragoza:bif-moncasi:bif-canal-imperial")
+    assert (around_zaragoza.trains, around_zaragoza.without_alternative) == (22, 0)
+    assert around_zaragoza.by_operator == {"ouigo": 4, "renfe": 18}
+    (direct,) = around_zaragoza.groups
+    assert (direct.from_node_id, direct.to_node_id) == (MADRID, "barcelona-sants")
+    assert (direct.length_km, direct.line_ids) == (620.1, [BCN])
+    assert direct.alternative is not None and direct.alternative.line_ids == [BCN]
+    assert (direct.alternative.extra_km, direct.alternative.extra_min) == (4.9, 6)
+    around_lleida = _of(
+        exported.segments, "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida"
+    )
+    assert (around_lleida.trains, around_lleida.without_alternative) == (42, 0)
+    # lo que llega a cada bifurcación sale de ella por la estación o por el baipás
+    before = _of(exported.segments, f"{BCN}:cambiador-plasencia-de-jalon:bif-moncasi").trains
+    assert before == 78 == stations[f"{BCN}:bif-moncasi:zaragoza-delicias"] + 22
+    after = _of(exported.segments, f"{BCN}:bif-artesa-de-lleida:l-espluga-de-francoli").trains
+    assert after == 89 == stations[f"{BCN}:lleida-pirineus:bif-artesa-de-lleida"] + 42
     # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
     # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
     # trenes tienen otro camino, aunque sea por una línea de otro ancho

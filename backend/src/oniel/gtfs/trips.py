@@ -16,15 +16,16 @@ from dataclasses import dataclass
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip, select_corridor_trips
 from oniel.network.spec import NetworkSpec, RouteOverride, StopMapping
-from oniel.sim.passes import ExitDistance, LineNode, StopCall
+from oniel.sim.passes import Bypass, BypassPiece, ExitDistance, LineNode, LineSegment, StopCall
 
 
 @dataclass(frozen=True)
 class LoadedLine:
-    """Una línea cargada: su especificación y sus nodos con kilómetro y coordenadas."""
+    """Una línea cargada: su especificación, sus nodos con kilómetro y coordenadas y sus tramos."""
 
     spec: NetworkSpec
     nodes: Mapping[str, LineNode]
+    segments: Sequence[LineSegment] = ()
 
     @property
     def line_id(self) -> str:
@@ -85,7 +86,13 @@ def route_for_trip(spec: NetworkSpec, trip: GtfsTrip) -> MatchedRoute | None:
 
 def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
     """Viajes que recorren la línea: los del filtro de corredor, los que llevan seguidas las paradas
-    que el filtro declara y los de las reglas de recorrido."""
+    que el filtro declara y los de las reglas de recorrido.
+
+    Un baipás no elige viajes: los suyos salen al resolver la línea de la que es baipás
+    (:func:`bypasses_of`).
+    """
+    if spec.line.bypass_of is not None:
+        return []
     f = spec.corridor_filter
     selected = select_corridor_trips(
         feed,
@@ -109,6 +116,48 @@ def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
                 selected.append(trip)
         selected.sort(key=lambda t: (t.train_number, t.trip_id))
     return selected
+
+
+def bypasses_of(line: LoadedLine, others: Sequence[LoadedLine]) -> list[Bypass]:
+    """Los baipases de una línea entre las demás cargadas, medidos sobre el kilometraje de la línea.
+
+    Un baipás es una línea que se declara ``bypass_of`` de esta y cuyos dos extremos son nodos de
+    las dos. Si alguno no lo es, no se puede seguir y se deja fuera: `oniel-data validate` lo dice.
+    """
+    found = []
+    for other in others:
+        if other.spec.line.bypass_of != line.line_id or not other.segments:
+            continue
+        ends = sorted(other.nodes.values(), key=lambda n: n.km)
+        first, last = ends[0], ends[-1]
+        if first.id not in line.nodes or last.id not in line.nodes:
+            continue
+        same = line.nodes[first.id].km < line.nodes[last.id].km
+        km_from, km_to = sorted((line.nodes[first.id].km, line.nodes[last.id].km))
+        pieces = sorted(
+            (
+                BypassPiece(s.id, s.km_from - first.km, s.km_to - first.km, True)
+                if same
+                else BypassPiece(s.id, last.km - s.km_to, last.km - s.km_from, False)
+                for s in other.segments
+            ),
+            key=lambda p: p.km_from,
+        )
+        stations = [
+            n.name
+            for n in line.spec.nodes
+            if n.kind == "estacion" and km_from < line.nodes[n.id].km < km_to
+        ]
+        avoided = (
+            " ni en ".join(stations)
+            if stations
+            else f"entre {first.label} y {last.label}"
+            if same
+            else f"entre {last.label} y {first.label}"
+        )
+        note = f"No para {'en ' if stations else ''}{avoided}: por eso va por aquí."
+        found.append(Bypass(km_from, km_to, tuple(pieces), note))
+    return sorted(found, key=lambda b: b.km_from)
 
 
 def calls_for_trip(

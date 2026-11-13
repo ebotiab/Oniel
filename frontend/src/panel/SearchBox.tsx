@@ -49,7 +49,7 @@ export function SearchBox({ network, scope = 'todo', label, placeholder, onPick,
   const typed = query.trim() !== ''
   // Sin texto, el buscador ofrece las líneas y, tras ellas, el glosario: se llega a cualquiera sin escribir.
   const hits: SearchHit[] = useMemo(
-    () => (typed ? search(index, query) : index.filter((e) => e.target.type === 'linea' || e === GLOSSARY_ENTRY).map((entry) => ({ entry, byCode: false }))),
+    () => (typed ? search(index, query) : index.filter((e) => (e.target.type === 'linea' && e.weight === 0) || e === GLOSSARY_ENTRY).map((entry) => ({ entry, byCode: false }))),
     [index, query, typed],
   )
   const current = Math.min(active, Math.max(0, hits.length - 1))

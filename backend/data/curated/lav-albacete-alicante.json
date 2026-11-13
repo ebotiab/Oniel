@@ -3,7 +3,7 @@
     "id": "lav-albacete-alicante",
     "name": "Línea de alta velocidad Albacete – Alicante",
     "short_name": "042",
-    "sort_order": 11,
+    "sort_order": 13,
     "zone": "levante",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

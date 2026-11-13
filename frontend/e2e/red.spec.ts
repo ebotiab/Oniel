@@ -30,7 +30,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^11 líneas · 2\.808 km\s*60 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^11 líneas · 2\.843 km\s*60 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     // las zonas van de norte a sur, y solo las que tienen alguna línea; con once líneas están todas abiertas
     await expect(red.locator('.zona-cabecera')).toHaveText([/^›Cataluña1 línea$/, /^›Comunidad Valenciana y Murcia2 líneas$/, /^›Madrid y Castilla-La Mancha2 líneas$/, /^›Andalucía6 líneas$/])
@@ -159,8 +159,9 @@ test.describe('Elegir línea sin pestañas', () => {
     const mapa = page.getByTestId('mapa')
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')
+    // una línea se resalta con sus baipases, que son parte de ella
     await page.getByTestId('linea-lav-madrid-barcelona').hover()
-    await expect(mapa).toHaveAttribute('data-lineas-resaltadas', 'lav-madrid-barcelona')
+    await expect(mapa).toHaveAttribute('data-lineas-resaltadas', 'lav-madrid-barcelona|baipas-zaragoza|baipas-lleida')
     await page.getByTestId('zona-madrid-castilla-la-mancha').locator('.zona-cabecera').hover()
     await expect(mapa).toHaveAttribute('data-lineas-resaltadas', /^(manzanares-ciudad-real\|alcazar-albacete|alcazar-albacete\|manzanares-ciudad-real)$/)
     await page.getByTestId('ficha-red').hover()
