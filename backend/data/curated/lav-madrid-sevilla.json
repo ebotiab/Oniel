@@ -4,6 +4,7 @@
     "name": "Línea de alta velocidad Madrid – Sevilla",
     "short_name": "010",
     "sort_order": 1,
+    "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

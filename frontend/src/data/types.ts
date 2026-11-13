@@ -37,11 +37,21 @@ export interface DatasetOut {
   valid_to: string
 }
 
+/** Zona en la que la vista de la red agrupa las líneas; una clasificación de Oniel, declarada en cada línea. */
+export interface ZoneOut {
+  id: string
+  name: string
+  sort_order: number
+  /** Ciudades de la zona; se nombran las que tienen estación cargada. */
+  cities: string[]
+}
+
 export interface LineSummary {
   id: string
   name: string
   short_name: string | null
   sort_order: number
+  zone?: ZoneOut | null
   mode: string
   infrastructure_manager: Operator | null
   /** Operadores de trenes que circulan por la línea, tengan o no sus horarios cargados. */

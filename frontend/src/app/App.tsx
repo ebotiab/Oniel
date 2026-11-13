@@ -21,8 +21,9 @@ import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
+import { Marca } from './Marca'
+import { navegar } from './navegacion'
 import { compararRecorridos } from './recorridos'
-import { abreAparte } from './navegacion'
 import type { SearchTarget } from './search'
 import { legacyHashPath, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
 import './app.css'
@@ -56,6 +57,8 @@ export default function App() {
   const pinTrazo = useCallback((trazo: Trazo) => setFrame((f) => ({ trazo, n: (f?.n ?? 0) + 1 })), [])
   const [route, setRoute] = useState(() => parseRoute(window.location.pathname))
   const [hoverId, setHoverId] = useState<string | null>(null)
+  // Las líneas que señala la lista de la vista de la red: el mapa las resalta mientras dura.
+  const [lineasResaltadas, setLineasResaltadas] = useState<string[] | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseRoute(window.location.pathname).cobertura))
   const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario))
@@ -294,6 +297,8 @@ export default function App() {
     mobile && network ? (
       <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} onPin={pinTrazo} />
     ) : null
+  // La lista de líneas solo existe en la vista de la red: fuera de ella no queda nada resaltado.
+  const enVistaRed = Boolean(network) && !comparador && !segment && !node && !annotation && !lineId
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
@@ -361,7 +366,7 @@ export default function App() {
   else if (annotation)
     panel = <AnnotationDetail key={annotation.id} annotation={annotation} onSelectSegment={(id) => select({ type: 'tramo', id })} onBack={() => showLine(null)} />
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} />
+    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onHighlightLines={setLineasResaltadas} />
   else
     panel = (
       <LineOverview
@@ -408,12 +413,11 @@ export default function App() {
       setShowCoverage(false)
     } else showLine(null)
   }
-  // La marca lleva siempre a la vista de la red.
-  const inicio = (e: React.MouseEvent) => {
-    if (abreAparte(e)) return
-    e.preventDefault()
+  // La marca lleva siempre a la vista de la red, con una entrada en el historial: «atrás» devuelve a lo que se veía.
+  const inicio = () => {
     vuelta.current = null
-    showLine(null)
+    setResult(null)
+    navegar('/')
   }
 
   const lines = network?.lines ?? []
@@ -444,14 +448,12 @@ export default function App() {
           padding={padding}
           lineId={selection ? null : annotation ? null : lineId}
           recorridos={recorridosEnMapa}
+          lineasResaltadas={enVistaRed ? lineasResaltadas : null}
         />}
       </Suspense>
       <header className="cabecera" data-estado={status}>
         <div className="cabecera-inicio">
-          <a className="marca-bloque" href="/" onClick={inicio} data-testid="marca">
-            <span className="marca">Oniel</span>
-            <span className="lema">Cómo está conectada la red ferroviaria</span>
-          </a>
+          <Marca onInicio={inicio} />
           <SearchBox
             network={network}
             label="Buscar una estación o una línea"

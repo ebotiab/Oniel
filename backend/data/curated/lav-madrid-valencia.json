@@ -4,6 +4,7 @@
     "name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
     "short_name": "040",
     "sort_order": 10,
+    "zone": "levante",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

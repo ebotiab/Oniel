@@ -4,6 +4,7 @@
     "name": "Línea convencional Manzanares – Ciudad Real",
     "short_name": "522",
     "sort_order": 3,
+    "zone": "madrid-castilla-la-mancha",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1668,
