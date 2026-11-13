@@ -59,8 +59,7 @@
     {"attribute": "mando", "from_node": "la-roda-de-albacete", "to_node": "albacete-los-llanos", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
   ],
   "connections": [
-    {"id": "conv-albacete-levante", "node_id": "albacete-los-llanos", "name": "Línea convencional Albacete–La Encina", "towards": "Almansa, La Encina, Valencia, Alicante y Murcia", "status": "no_cargada", "sketch": [[-1.84845, 38.999384], [-1.6, 38.93], [-1.35, 38.9], [-1.105446, 38.867822]]},
-    {"id": "lav-albacete-madrid-levante", "node_id": "albacete-los-llanos", "name": "LAV Madrid–Levante", "towards": "Cuenca y Madrid por un lado; Alicante y Murcia por el otro", "status": "no_cargada", "sketch": [[-1.84845, 38.999384], [-1.87, 39.12], [-1.93, 39.3], [-2.0, 39.5]]}
+    {"id": "conv-albacete-levante", "node_id": "albacete-los-llanos", "name": "Línea convencional Albacete–La Encina", "towards": "Almansa, La Encina, Valencia, Alicante y Murcia", "status": "no_cargada", "sketch": [[-1.84845, 38.999384], [-1.6, 38.93], [-1.35, 38.9], [-1.105446, 38.867822]]}
   ],
   "stop_mappings": {
     "60400": {"node": "alcazar-de-san-juan"},

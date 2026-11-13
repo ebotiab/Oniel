@@ -20,6 +20,7 @@ Está implementado en `backend/src/oniel/sim/passes.py` y se precalcula en la im
 4. **Estimado con una parada en otra línea cargada.** Un tren que cambia de línea se resuelve en cada una solo entre las paradas que le corresponden, según su regla de recorrido. En la línea que deja, la primera parada de la otra línea es una salida, y su asignación dice por dónde se llega a ella (`via`): la línea y el nodo por el que el tren entra. La distancia desde la salida hasta esa parada se mide entonces por esa línea, no en línea recta; solo si la salida y el nodo de enlace son puntos distintos se añade la línea recta entre los dos. Margen: 30 %, mínimo 5 minutos, y la explicación del paso dice en qué línea está la parada y por dónde sale o entra el tren.
 5. **Estimado a través de varias líneas.** Un viaje puede recorrer tres líneas o más. El modelo sigue resolviéndolo línea a línea; lo que cambia es que el camino hasta una parada puede cruzar más de una línea, y entonces `via` es una lista de trechos: cada uno entra en su línea por un nodo y la deja en el nodo del trecho siguiente, que tiene que ser común a las dos, y el último llega a la parada. La distancia es la suma de los kilómetros de cada trecho por su línea. Si el tren cruza una línea entera sin parar en ella, sus dos paradas quedan fuera, una a cada lado; cuando a las dos se llega por líneas cargadas, el recorrido está fijado (entra por un nodo y sale por otro) y el paso es estimado. También lo está cuando solo a una se llega por una línea cargada y la otra queda fuera de la red, con coordenadas para medir la línea recta hasta ella: es el caso de los trenes de Córdoba a Málaga que recorren sin parar la línea hasta Antequera-Santa Ana. Y lo está cuando de una de las dos, aunque no llegue a ella ninguna línea cargada, se conocen los kilómetros de vía (`track_km`): es el caso de los trenes de Madrid-Chamartín a Albacete y a Alicante que recorren la línea de Valencia, sin parar en Cuenca, hasta la bifurcación de Albacete. Margen: 30 % del mayor de los dos tiempos que el tren pasa fuera de la línea (de la parada anterior a la entrada, o de la salida a la parada siguiente), mínimo 5 minutos; es el margen que las líneas vecinas dan a esos mismos puntos de enlace.
 6. **Indeterminado.** Si el horario incluye una parada que no sabemos situar, o las dos paradas de un trayecto están fuera de la línea y a ninguna se llega por una línea cargada ni por un camino de longitud conocida, no podemos fijar el recorrido: el paso queda indeterminado.
+7. **Por un baipás.** Si la línea tiene un baipás entre dos de sus nodos y el tren no para ni sale de ella entre los dos, va por el baipás: no pasa por los tramos que quedan entre ellos, pasa por el del baipás y el reparto usa los kilómetros de ese camino (véase «Baipases»).
 
 ## Cómo se decide si un tren está afectado
 
@@ -83,6 +84,14 @@ La simulación de cierre, el recorrido alternativo y el comparador de recorridos
 
 **El grafo.** Los nodos son los de la red y las aristas, los tramos de todas las líneas cargadas. Un nodo común a dos líneas es uno solo, con su kilómetro en cada una: por ahí se cambia de línea. `network_repo.fetch_graph` lo construye con las mismas lecturas que `GET /api/network`.
 
+**Los baipases son parte de su línea.** El grafo sabe qué líneas son un baipás y de cuál (`bypass_of`). Tres cosas dependen de ello:
+
+- Pasar de la línea a su baipás o volver no cuenta como cambio de línea, y el trecho es uno solo, de la línea, con los kilómetros del camino que sigue. Un trecho que va entero por un baipás es del baipás.
+- De los caminos que solo se distinguen por ir por un baipás o por lo que rodea queda uno, el más corto. De Madrid a Barcelona hay cuatro (entrar o no en Zaragoza-Delicias y en Lleida-Pirineus: 620,1 km, 622,0 km, 625,0 km y 627,0 km) y el recorrido es uno, de 620,1 km y una sola línea. Con el baipás de Zaragoza cerrado en el escenario, el recorrido pasa por la estación: 625,0 km.
+- A una estación que un baipás rodea se llega por su ramal: Madrid – Zaragoza-Delicias son 306,5 km.
+
+Lo decidió el usuario el 13 de noviembre de 2026 (`docs/diseno.md`, «Baipases»): cuatro recorridos que se diferencian en 2 a 7 km no ayudan a quien quiere saber cómo se va de Madrid a Barcelona.
+
 **El escenario.** Es una lista de modificaciones sobre la red, no una copia de ella:
 
 - cerrar un tramo;
@@ -130,7 +139,7 @@ El detalle dice cuántos quedan fuera por ser el cuarto o posteriores; los desca
 
 **Escenario.** La ruta admite un escenario detrás de las estaciones (`/recorridos/madrid-puerta-de-atocha/ciudad-real/c~lav-madrid-sevilla:urda:ciudad-real`). Sus enlaces esbozados y sus cambios de velocidad cambian la red; sus cierres se tratan como cortes. Un escenario que no encaja con la red se ignora y el panel lo dice. Todavía no hay un conmutador de enlaces hipotéticos, porque no hay proyectos con trazado cargados (#18): cuando los haya, cada uno será un escenario que se añade a esta ruta. Un enlace esbozado no se dibuja en el mapa.
 
-**Trenes directos.** Son los servicios que paran en las dos estaciones, en ese sentido, el día de referencia de los horarios (las paradas de cada nodo: `nodes/<id>.json` o `GET /api/nodes/{id}/services`), siempre que en la primera se pueda subir y en la segunda bajar: algunos trenes solo dejan o solo recogen viajeros en una parada (de Ciudad Real a Madrid pasan 23 y sirven 12). Es el mismo criterio y el mismo número que los destinos directos de la ficha de cada estación (`docs/datos.md`, «Destinos directos»). El tiempo del más rápido es el publicado, de la salida de una a la llegada a la otra. Un tren se asigna a un recorrido cuando pasa por el primer y el último tramo de cada línea que el recorrido encadena (los pasos de cada tramo: `segments/<id>.json` o `GET /api/segments/{id}/services`). El 13 de noviembre de 2026 hay 55 directos de Madrid a Córdoba, 6 de ellos de Ouigo: 43 por la alta velocidad (el más rápido, 1 h 44 min, frente a 1 h 21 min estimados sin paradas) y 12 por Manzanares y Ciudad Real (3 h 45 min, frente a 2 h 28 min). Son trenes del horario publicado: si el recorrido está cortado, la línea roja de la ficha lo dice.
+**Trenes directos.** Son los servicios que paran en las dos estaciones, en ese sentido, el día de referencia de los horarios (las paradas de cada nodo: `nodes/<id>.json` o `GET /api/nodes/{id}/services`), siempre que en la primera se pueda subir y en la segunda bajar: algunos trenes solo dejan o solo recogen viajeros en una parada (de Ciudad Real a Madrid pasan 23 y sirven 12). Es el mismo criterio y el mismo número que los destinos directos de la ficha de cada estación (`docs/datos.md`, «Destinos directos»). El tiempo del más rápido es el publicado, de la salida de una a la llegada a la otra. Un tren se asigna a un recorrido cuando pasa por el primer y el último tramo de cada línea que el recorrido encadena (los pasos de cada tramo: `segments/<id>.json` o `GET /api/segments/{id}/services`). Un baipás no abre trecho: el recorrido de Madrid a Barcelona se mide por los dos baipases y lleva también los trenes que entran en Zaragoza-Delicias o en Lleida-Pirineus, y una frase lo dice («Rodea Zaragoza y Lleida por sus baipases; el tren que para en Zaragoza-Delicias y en Lleida-Pirineus recorre 6,9 km más»). El 13 de noviembre de 2026 hay 55 directos de Madrid a Córdoba, 6 de ellos de Ouigo: 43 por la alta velocidad (el más rápido, 1 h 44 min, frente a 1 h 21 min estimados sin paradas) y 12 por Manzanares y Ciudad Real (3 h 45 min, frente a 2 h 28 min). Son trenes del horario publicado: si el recorrido está cortado, la línea roja de la ficha lo dice.
 
 **Lo que el comparador dice de sus límites**, a la vista y no en el detalle:
 
@@ -154,19 +163,25 @@ Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tra
 
 Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
 
-**Lo que sale** con los trenes del 13 de noviembre de 2026, el día de referencia (104 tramos; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
+**Lo que sale** con los trenes del 13 de noviembre de 2026, el día de referencia (115 tramos, con los dos de los baipases; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
 
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
-| Madrid-Puerta de Atocha – Barcelona-Sants (alta velocidad de Barcelona, veinte tramos) | 73 a 108 | Ninguno. La línea solo comparte con las demás la cabecera de Madrid, y los baipases de Zaragoza y de Lleida no están cargados: también figuran sin alternativa los tramos que entran y salen de esas dos estaciones, aunque en la red real los trenes que no paran en ellas van por el baipás |
-| Bifurcación Torrejón de Velasco – Bifurcación Albacete (alta velocidad de Valencia, ocho tramos) | 80 a 82 | Ninguno. La línea sale de la de Sevilla y solo vuelve a tocarla por el enlace de Blancales, que no está cargado |
+| Alta velocidad de Barcelona, quince de sus veinte tramos (todos menos los de las estaciones de Zaragoza y Lleida) | 73 a 108 | Ninguno. La línea solo comparte con las demás la cabecera de Madrid |
+| Alta velocidad de Barcelona, los tres tramos de Zaragoza-Delicias | 51 a 56 | El baipás de Zaragoza. Para los 18 de Madrid a Barcelona que paran en Zaragoza y no en Lleida, 4,9 km y 6 min menos: el otro camino es el más corto entre sus extremos y no mira las paradas |
+| Alta velocidad de Barcelona, los dos tramos de Lleida-Pirineus | 31 y 47 | El baipás de Lleida. Para los 16 trenes que salen de Lleida hacia Barcelona, la vuelta por la otra bifurcación: 13,1 km y 3 min más |
+| Baipás de Zaragoza | 22 | Por Zaragoza-Delicias: 4,9 km y 6 min más |
+| Baipás de Lleida | 42 | Por Lleida-Pirineus: 1,9 km y 2 min más para los 22 que tampoco paran en Zaragoza |
 | Bifurcación Albacete – València-Joaquín Sorolla (alta velocidad de Valencia, cuatro tramos) | 42 a 52 | Ninguno |
+| Albacete-Los Llanos – Alicante-Terminal (alta velocidad de Albacete a Alicante, siete tramos) | 36 a 56 | Ninguno. Al sur de Albacete Oniel solo tiene cargada esta línea |
 | Bifurcación Málaga – Majarabique (LAV) | 83 | Ninguno |
 | Antequera-Santa Ana – Málaga-María Zambrano (LAV de Málaga, cuatro tramos) | 57 a 63 | Ninguno. A Málaga solo llega esta línea, y el enlace de la bifurcación Gobantes hacia Granada no está cargado |
 | Majarabique – Sevilla-Santa Justa (LAV) | 81 | Ninguno |
 | Espelúy – Mengíbar-Artichuela (línea de Jaén) | 26 | Ninguno |
 | Mengíbar-Artichuela – Jaén (línea de Jaén) | 26 | Ninguno |
-| Alcázar de San Juan – Albacete (siete tramos) | 13 | Ninguno |
+| Bifurcación Torrejón de Velasco – Bifurcación Albacete (alta velocidad de Valencia, ocho tramos) | 84 a 86 | Por Madrid-Puerta de Atocha, Alcázar de San Juan y Albacete. Para los 36 de Madrid a Alicante, 22 km y 56 min más; para los 40 de Madrid a Valencia, que tendrían que volver de Albacete a la bifurcación, 167 km y 1 h 25 min más |
+| Bifurcación Albacete – Albacete-Los Llanos (alta velocidad de Albacete a Alicante, dos tramos) | 44 | Para los 36 de Madrid a Alicante, por Alcázar de San Juan: 22 km y 56 min más |
+| Alcázar de San Juan – Albacete (siete tramos) | 13 | Para los 5 de Madrid a Albacete, la alta velocidad por Cuenca: 36 km más y 41 min menos |
 | Córdoba – Bifurcación Málaga (LAV) | 140 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 41 de Madrid a Sevilla, 340 km y 3 h 2 min más; para los 6 de Madrid a Granada, 82 km menos y 1 h 15 min más |
 | Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 77 | Para los 33 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 23 min más |
 | Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 18 a 24 | Para los 6 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 15 min más |
@@ -177,7 +192,7 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 8 min menos |
 | Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 30 min menos |
 
-Los otros 56 tramos tienen otro camino para todos sus trenes. Además de los veinte de la alta velocidad de Barcelona, no lo tienen los doce de la de Madrid a Valencia (con el ramal de Albacete, #116, los ocho primeros tendrán otro camino por Alcázar de San Juan para los trenes de Albacete) y otros quince: los dos que llevan a Sevilla desde la bifurcación de Málaga, donde Oniel solo tiene cargada una línea; los cuatro de Antequera-Santa Ana a Málaga, por lo mismo; los dos del ramal de Jaén, que acaba en una estación término (ahí la respuesta no depende de qué líneas estén cargadas), y los siete de la línea de Alcázar de San Juan a Albacete, una rama unida al resto por un solo extremo hasta que se cargue la alta velocidad a Albacete por Cuenca. Desde que están cargadas las dos líneas de alta velocidad de Córdoba a Granada, Granada queda unida por los dos lados, y ni sus líneas ni el tramo de Córdoba a la bifurcación de Málaga salen ya sin alternativa: el otro camino da la vuelta por el lazo, a veces por una línea sin electrificar y de otro ancho, que es justo lo que el cálculo no mira (límite 2, abajo). El tramo entre la estación de Moreda y la Bifurcación Almería no lleva ningún tren de los horarios. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
+Los otros 80 tramos con trenes tienen otro camino para todos ellos, los cinco de las estaciones de Zaragoza y Lleida y los dos baipases entre ellos. Además de quince de los veinte de la alta velocidad de Barcelona, no lo tienen los cuatro últimos de la de Madrid a Valencia, los siete de la de Albacete a Alicante que quedan al sur de Albacete y otros ocho: los dos que llevan a Sevilla desde la bifurcación de Málaga, donde Oniel solo tiene cargada una línea; los cuatro de Antequera-Santa Ana a Málaga, por lo mismo, y los dos del ramal de Jaén, que acaba en una estación término (ahí la respuesta no depende de qué líneas estén cargadas). Desde que está cargada la línea de alta velocidad de Albacete a Alicante, Albacete queda unida a Madrid por dos caminos y cada uno es el otro camino del otro: dejan de figurar los siete tramos de Alcázar de San Juan a Albacete y los ocho de la línea de Valencia hasta la bifurcación de Albacete. Para los trenes de Madrid a Valencia ese otro camino obliga a volver de Albacete a la bifurcación: el cálculo no juzga si tiene sentido, solo que existe. Desde que están cargadas las dos líneas de alta velocidad de Córdoba a Granada, Granada queda unida por los dos lados, y ni sus líneas ni el tramo de Córdoba a la bifurcación de Málaga salen ya sin alternativa: el otro camino da la vuelta por el lazo, a veces por una línea sin electrificar y de otro ancho, que es justo lo que el cálculo no mira (límite 2, abajo). El tramo entre la estación de Moreda y la Bifurcación Almería no lleva ningún tren de los horarios. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
 
 **La API y la instantánea.** `GET /api/alternatives` (con `?date=` para otro día) devuelve un elemento por tramo: trenes, reparto por operador, cuántos tienen otro camino y cuántos no, y los grupos, del más numeroso al menos, cada uno con sus extremos, lo que mide y tarda su recorrido y, si existe, el otro camino (kilómetros, minutos, diferencia con el recorrido, vía única, líneas y estaciones principales). La instantánea lo lleva en `alternatives.json`, que el visor no pide al arrancar (`docs/datos.md`, «Instantánea estática»). Si la API no tiene la ruta o falla, el visor lee ese fichero: Vercel publica el visor unos minutos antes de que Render despliegue la API, y en ese rato una ruta nueva da 404. El cliente no repite el cálculo: necesitaría los tramos de todos los trenes del día.
 
@@ -226,6 +241,30 @@ Los 2 Alvia que no paran en Ciudad Real (Madrid–Córdoba en 3 h 45, el mismo t
 Simulación de un cierre de Almagro – Ciudad Real el 13 de noviembre de 2026 de 8:00 a 9:00 (resultado de la API el 13 de noviembre de 2026, con un tren por número y día): 32 trenes recorren el tramo ese día; 4 afectados (un MD con horario publicado y, con paso estimado, los Intercity 10270 y 10182 y el Alvia 09366), 2 indeterminados y 26 no afectados.
 
 Está automatizado en `backend/tests/test_route_overrides.py`, `backend/tests/test_sim_passes.py` (el tren que cruza una línea sin parar), `backend/tests/test_integration_db.py` y `frontend/e2e/simulacion.spec.ts`.
+
+## Baipases
+
+Un baipás es otra línea cargada que une dos nodos de una línea por un camino que evita lo que hay entre ellos. Hoy hay dos, los de Zaragoza y de Lleida en la alta velocidad de Barcelona, y cada uno rodea una estación (`docs/datos.md`, «Los baipases de Zaragoza y de Lleida»).
+
+**La regla.** Al resolver la línea, cada trecho entre dos paradas seguidas del tren se mira contra sus baipases. Si los dos nodos de un baipás quedan dentro del trecho, el tren no ha parado ni ha salido de la línea entre ellos, y va por el baipás. Si una de las dos paradas cae entre los dos nodos (el tren para en la estación, o sale por ella hacia una parada de fuera), va por la estación. No hay nada que declarar tren a tren.
+
+**Lo que cambia en el cálculo.** El trecho mide lo que mide el camino que el tren sigue: los kilómetros de la línea menos lo que acorta cada baipás que toma. El tiempo se reparte sobre esa distancia. Los tramos de la línea que quedan entre los dos nodos no reciben paso; el tramo del baipás recibe uno, estimado, con el mismo margen que los demás del trecho, y su explicación empieza diciendo por qué el tren va por él. Un trecho con una parada que Oniel no sabe situar sigue siendo indeterminado en los tramos de la línea, como antes: no se puede saber si esa parada cae dentro.
+
+El baipás no elige trenes ni tiene paradas asignadas: sus pasos salen de resolver la línea de la que cuelga, con el mismo reparto, así que las horas encajan en las dos bifurcaciones.
+
+**Comprobado a mano.** El AVE 03071 del 12 de noviembre de 2026 sale de Madrid-Puerta de Atocha a las 6:57 y llega a Barcelona-Sants a las 9:59 sin paradas: 182 minutos. Por las estaciones la línea mide 627,0 km; por los dos baipases, 4,9 km y 2,0 km menos, 620,1 km.
+
+| Punto | Kilómetros desde Madrid | Tiempo proporcional | Hora |
+|---|---|---|---|
+| Bifurcación Moncasi (km 294,7 de la línea) | 294,7 | 182 × 294,7 / 620,1 = 86,5 min | 8:23:30 |
+| Bifurcación Canal Imperial, por el baipás (20,7 km) | 315,4 | 182 × 315,4 / 620,1 = 92,6 min | 8:29:34 |
+| Bifurcación Les Torres de Sanui (118,7 km más por la línea) | 434,1 | 182 × 434,1 / 620,1 = 127,4 min | 9:04:25 |
+| Bifurcación Artesa de Lleida, por el baipás (14,3 km) | 448,4 | 182 × 448,4 / 620,1 = 131,6 min | 9:08:36 |
+| Barcelona-Sants | 620,1 | 182 min | 9:59:00, publicada |
+
+El tren tiene paso en quince tramos de la línea y en los dos baipases, y ninguno en los cinco tramos que entran y salen de las dos estaciones. El margen es de ±27 min, el 15 % de los 182 minutos. Antes de cargar los baipases figuraba en los veinte tramos.
+
+Está automatizado en `backend/tests/test_baipases.py` (la regla con una línea de juguete, los dos sentidos, dos baipases seguidos y los trenes de cada baipás) y en `backend/tests/test_lav_madrid_barcelona.py` (qué tramos recorre cada patrón de paradas).
 
 ## Caso comprobado a mano
 

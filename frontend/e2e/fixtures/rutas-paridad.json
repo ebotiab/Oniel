@@ -1991,6 +1991,234 @@
           ]
         }
       ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "barcelona-sants",
+      "scenario": "",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "barcelona-sants",
+          "to_name": "Barcelona-Sants",
+          "length_km": 620.1,
+          "time_min": 125,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-barcelona"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-barcelona",
+              "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "barcelona-sants",
+              "to_name": "Barcelona-Sants",
+              "length_km": 620.1,
+              "time_min": 125,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Guadalajara-Yebes",
+            "Calatayud",
+            "Camp de Tarragona"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-vallecas-av",
+            "guadalajara-yebes",
+            "las-inviernas",
+            "ariza-av",
+            "calatayud",
+            "cambiador-plasencia-de-jalon",
+            "bif-moncasi",
+            "bif-canal-imperial",
+            "bujaraloz",
+            "ballobar",
+            "bif-les-torres-de-sanui",
+            "bif-artesa-de-lleida",
+            "l-espluga-de-francoli",
+            "camp-de-tarragona",
+            "l-arboc",
+            "vilafranca-del-penedes",
+            "barcelona-sants"
+          ],
+          "segment_ids": [
+            "lav-madrid-barcelona:madrid-puerta-de-atocha:bif-vallecas-av",
+            "lav-madrid-barcelona:bif-vallecas-av:guadalajara-yebes",
+            "lav-madrid-barcelona:guadalajara-yebes:las-inviernas",
+            "lav-madrid-barcelona:las-inviernas:ariza-av",
+            "lav-madrid-barcelona:ariza-av:calatayud",
+            "lav-madrid-barcelona:calatayud:cambiador-plasencia-de-jalon",
+            "lav-madrid-barcelona:cambiador-plasencia-de-jalon:bif-moncasi",
+            "baipas-zaragoza:bif-moncasi:bif-canal-imperial",
+            "lav-madrid-barcelona:bif-canal-imperial:bujaraloz",
+            "lav-madrid-barcelona:bujaraloz:ballobar",
+            "lav-madrid-barcelona:ballobar:bif-les-torres-de-sanui",
+            "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida",
+            "lav-madrid-barcelona:bif-artesa-de-lleida:l-espluga-de-francoli",
+            "lav-madrid-barcelona:l-espluga-de-francoli:camp-de-tarragona",
+            "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
+            "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
+            "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "barcelona-sants",
+      "scenario": "c~baipas-zaragoza:bif-moncasi:bif-canal-imperial",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "barcelona-sants",
+          "to_name": "Barcelona-Sants",
+          "length_km": 625.0,
+          "time_min": 131,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-barcelona"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-barcelona",
+              "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "barcelona-sants",
+              "to_name": "Barcelona-Sants",
+              "length_km": 625.0,
+              "time_min": 131,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Guadalajara-Yebes",
+            "Calatayud",
+            "Zaragoza-Delicias",
+            "Camp de Tarragona"
+          ],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "bif-vallecas-av",
+            "guadalajara-yebes",
+            "las-inviernas",
+            "ariza-av",
+            "calatayud",
+            "cambiador-plasencia-de-jalon",
+            "bif-moncasi",
+            "zaragoza-delicias",
+            "bif-huesca",
+            "bif-canal-imperial",
+            "bujaraloz",
+            "ballobar",
+            "bif-les-torres-de-sanui",
+            "bif-artesa-de-lleida",
+            "l-espluga-de-francoli",
+            "camp-de-tarragona",
+            "l-arboc",
+            "vilafranca-del-penedes",
+            "barcelona-sants"
+          ],
+          "segment_ids": [
+            "lav-madrid-barcelona:madrid-puerta-de-atocha:bif-vallecas-av",
+            "lav-madrid-barcelona:bif-vallecas-av:guadalajara-yebes",
+            "lav-madrid-barcelona:guadalajara-yebes:las-inviernas",
+            "lav-madrid-barcelona:las-inviernas:ariza-av",
+            "lav-madrid-barcelona:ariza-av:calatayud",
+            "lav-madrid-barcelona:calatayud:cambiador-plasencia-de-jalon",
+            "lav-madrid-barcelona:cambiador-plasencia-de-jalon:bif-moncasi",
+            "lav-madrid-barcelona:bif-moncasi:zaragoza-delicias",
+            "lav-madrid-barcelona:zaragoza-delicias:bif-huesca",
+            "lav-madrid-barcelona:bif-huesca:bif-canal-imperial",
+            "lav-madrid-barcelona:bif-canal-imperial:bujaraloz",
+            "lav-madrid-barcelona:bujaraloz:ballobar",
+            "lav-madrid-barcelona:ballobar:bif-les-torres-de-sanui",
+            "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida",
+            "lav-madrid-barcelona:bif-artesa-de-lleida:l-espluga-de-francoli",
+            "lav-madrid-barcelona:l-espluga-de-francoli:camp-de-tarragona",
+            "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
+            "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
+            "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "lleida-pirineus",
+      "to": "madrid-puerta-de-atocha",
+      "scenario": "",
+      "max_changes": 5,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "lleida-pirineus",
+          "from_name": "Lleida-Pirineus",
+          "to_node_id": "madrid-puerta-de-atocha",
+          "to_name": "Madrid-Puerta de Atocha",
+          "length_km": 441.6,
+          "time_min": 91,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-barcelona"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-barcelona",
+              "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
+              "from_node_id": "lleida-pirineus",
+              "from_name": "Lleida-Pirineus",
+              "to_node_id": "madrid-puerta-de-atocha",
+              "to_name": "Madrid-Puerta de Atocha",
+              "length_km": 441.6,
+              "time_min": 91,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Calatayud",
+            "Guadalajara-Yebes"
+          ],
+          "node_ids": [
+            "lleida-pirineus",
+            "bif-les-torres-de-sanui",
+            "ballobar",
+            "bujaraloz",
+            "bif-canal-imperial",
+            "bif-moncasi",
+            "cambiador-plasencia-de-jalon",
+            "calatayud",
+            "ariza-av",
+            "las-inviernas",
+            "guadalajara-yebes",
+            "bif-vallecas-av",
+            "madrid-puerta-de-atocha"
+          ],
+          "segment_ids": [
+            "lav-madrid-barcelona:bif-les-torres-de-sanui:lleida-pirineus",
+            "lav-madrid-barcelona:ballobar:bif-les-torres-de-sanui",
+            "lav-madrid-barcelona:bujaraloz:ballobar",
+            "lav-madrid-barcelona:bif-canal-imperial:bujaraloz",
+            "baipas-zaragoza:bif-moncasi:bif-canal-imperial",
+            "lav-madrid-barcelona:cambiador-plasencia-de-jalon:bif-moncasi",
+            "lav-madrid-barcelona:calatayud:cambiador-plasencia-de-jalon",
+            "lav-madrid-barcelona:ariza-av:calatayud",
+            "lav-madrid-barcelona:las-inviernas:ariza-av",
+            "lav-madrid-barcelona:guadalajara-yebes:las-inviernas",
+            "lav-madrid-barcelona:bif-vallecas-av:guadalajara-yebes",
+            "lav-madrid-barcelona:madrid-puerta-de-atocha:bif-vallecas-av"
+          ]
+        }
+      ]
     }
   ],
   "detours": [
@@ -2173,7 +2401,7 @@
             "closed_line_length_km": 343.6
           }
         ],
-        "omitted": 1
+        "omitted": 4
       }
     },
     {
@@ -2306,7 +2534,7 @@
             "closed_line_length_km": 440.7
           }
         ],
-        "omitted": 0
+        "omitted": 1
       }
     },
     {
@@ -2399,7 +2627,7 @@
             "closed_line_length_km": 64.4
           }
         ],
-        "omitted": 0
+        "omitted": 1
       }
     },
     {
@@ -2854,7 +3082,7 @@
             "closed_line_length_km": 358.0
           }
         ],
-        "omitted": 0
+        "omitted": 1
       }
     },
     {
@@ -2980,7 +3208,101 @@
             "closed_line_length_km": 173.7
           }
         ],
-        "omitted": 2
+        "omitted": 3
+      }
+    },
+    {
+      "segment_id": "lav-madrid-barcelona:bif-moncasi:zaragoza-delicias",
+      "scenario": "",
+      "expected": {
+        "detours": [
+          {
+            "route": {
+              "from_node_id": "bif-moncasi",
+              "from_name": "Bifurcación Moncasi",
+              "to_node_id": "bif-canal-imperial",
+              "to_name": "Bifurcación Canal Imperial",
+              "length_km": 20.7,
+              "time_min": 4,
+              "single_track_km": 0.0,
+              "line_ids": [
+                "baipas-zaragoza"
+              ],
+              "legs": [
+                {
+                  "line_id": "baipas-zaragoza",
+                  "line_name": "Baipás de Zaragoza",
+                  "from_node_id": "bif-moncasi",
+                  "from_name": "Bifurcación Moncasi",
+                  "to_node_id": "bif-canal-imperial",
+                  "to_name": "Bifurcación Canal Imperial",
+                  "length_km": 20.7,
+                  "time_min": 4,
+                  "single_track_km": 0.0
+                }
+              ],
+              "via": [],
+              "node_ids": [
+                "bif-moncasi",
+                "bif-canal-imperial"
+              ],
+              "segment_ids": [
+                "baipas-zaragoza:bif-moncasi:bif-canal-imperial"
+              ]
+            },
+            "closed_line_length_km": 25.6
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    {
+      "segment_id": "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida",
+      "scenario": "",
+      "expected": {
+        "detours": [
+          {
+            "route": {
+              "from_node_id": "bif-les-torres-de-sanui",
+              "from_name": "Bifurcación Les Torres de Sanui",
+              "to_node_id": "bif-artesa-de-lleida",
+              "to_name": "Bifurcación Artesa de Lleida",
+              "length_km": 16.2,
+              "time_min": 6,
+              "single_track_km": 0.0,
+              "line_ids": [
+                "lav-madrid-barcelona"
+              ],
+              "legs": [
+                {
+                  "line_id": "lav-madrid-barcelona",
+                  "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
+                  "from_node_id": "bif-les-torres-de-sanui",
+                  "from_name": "Bifurcación Les Torres de Sanui",
+                  "to_node_id": "bif-artesa-de-lleida",
+                  "to_name": "Bifurcación Artesa de Lleida",
+                  "length_km": 16.2,
+                  "time_min": 6,
+                  "single_track_km": 0.0
+                }
+              ],
+              "via": [
+                "Lleida-Pirineus"
+              ],
+              "node_ids": [
+                "bif-les-torres-de-sanui",
+                "lleida-pirineus",
+                "bif-artesa-de-lleida"
+              ],
+              "segment_ids": [
+                "lav-madrid-barcelona:bif-les-torres-de-sanui:lleida-pirineus",
+                "lav-madrid-barcelona:lleida-pirineus:bif-artesa-de-lleida"
+              ]
+            },
+            "closed_line_length_km": 14.3
+          }
+        ],
+        "omitted": 0
       }
     }
   ]

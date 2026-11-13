@@ -65,6 +65,8 @@ export interface LineSummary {
   status: 'disponible' | 'prevista'
   description: string | null
   source_id: string | null
+  /** Si la línea es un baipás, el id de la línea de la que lo es: el visor la cuelga de ella. */
+  bypass_of?: string | null
   node_count: number
   segment_count: number
 }

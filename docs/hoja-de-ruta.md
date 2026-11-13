@@ -1,6 +1,6 @@
 # Hoja de ruta de Oniel
 
-Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 12 de noviembre de 2026.
+Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 13 de noviembre de 2026.
 
 Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
@@ -67,6 +67,8 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR de la alta velocidad a Málaga (13 de noviembre de 2026, #118): la línea Córdoba – Málaga (Adif 030) llega ya a Málaga-María Zambrano, 154,7 km, sin cambiar de id ni de tramos: cuatro tramos más, con la bifurcación Gobantes, de la que sale el enlace directo a Granada, el puesto de banalización de Álora y el PAET de Los Prados. Misma relación de OpenStreetMap, puntos kilométricos de Wikipedia y señalización del mapa de la Declaración sobre la Red. Dos reglas de recorrido cuentan los trenes que la recorren sin parar en Córdoba: los directos de Madrid a Málaga, que no estaban en ninguna línea y entran también en la de Madrid a Sevilla (13 de Renfe y uno de Ouigo), y los Avant de Málaga a Granada. El comparador da Madrid – Málaga en 512,7 km, y los cuatro tramos nuevos figuran como «sin alternativa», porque a Málaga solo llega esta línea. Queda registrada, ya terminada, la interrupción por el desprendimiento de Álora (del 4 de febrero al 30 de abril de 2026). El enlace entre las bifurcaciones Gobantes y Bobadilla sigue a trazos. `docs/datos.md`, «De Antequera-Santa Ana a Málaga».
 - PR de la marca de la cabecera (13 de noviembre de 2026, #160): la O de «Oniel» es el círculo de una estación al que la vía llega desde el borde de la página, y el icono de pestaña es ese mismo dibujo. La marca es un enlace a la portada desde cualquier vista, sin recargar la página, y la cabecera ya no lleva el lema. Se eligió entre tres variantes vistas en la cabecera real; `docs/diseno.md` lo recoge en «La marca».
 - PR de la línea de alta velocidad a Valencia (13 de noviembre de 2026, #115): el tronco de la línea 040 de Adif, de la bifurcación de Torrejón de Velasco a València-Joaquín Sorolla por Cuenca y Requena-Utiel (361,0 km de vía doble), trazado desde OpenStreetMap, con su señalización (ERTMS de nivel 1 y ASFA) y con 469 viajes de Renfe y 22 de Ouigo; Iryo figura sin horarios. El comparador encuentra Madrid – Valencia (389,7 km) y Madrid – Cuenca (187,7 km). La bifurcación de Torrejón de Velasco es el mismo nodo que ya tenía la línea de Sevilla, y la de Albacete queda definida para el ramal (#116). Una asignación de parada puede llevar los kilómetros de vía que da una fuente hasta una parada sin línea cargada (`track_km`): así los trenes de Madrid-Chamartín a Albacete y Alicante que no paran en Cuenca tienen paso estimado y no indeterminado. Una conexión a trazos retirada de una especificación se borra ya de la base aunque cuelgue de un nodo compartido. Con diez líneas el día de referencia vuelve a ser el viernes 13 de noviembre. Segunda de la etapa de Levante.
+- PR de los baipases de Zaragoza y de Lleida (13 de noviembre de 2026, #142): los dos baipases de la alta velocidad de Barcelona pasan de conexión a trazos a línea cargada, cada uno como una línea corta de un tramo que cuelga de ella (`bypass_of`; 20,7 km y 14,3 km, con la geometría de la misma relación de OpenStreetMap y los PK de la tabla de Wikipedia). El tren que no para ni sale de la línea entre las dos bifurcaciones de un baipás cuenta en él y no en los tramos de la estación, sin reglas por patrón de paradas: el día de referencia, 22 trenes rodean Zaragoza y 42 rodean Lleida. Para el visitante el baipás es parte de su línea: cuelga de ella en la lista, y el comparador da un solo recorrido de Madrid a Barcelona, de 620,1 km, con una frase sobre las estaciones que rodea. De paso, las bifurcaciones Canal Imperial, Les Torres de Sanui y Artesa de Lleida pasan al desvío en el que cae su punto kilométrico, y todos los nodos posteriores a Zaragoza guardan su PK de referencia (`pk_restarts`). Lo que se decidió y lo que se descartó está en `docs/diseno.md`, «Baipases», y en `docs/datos.md`, «Los baipases de Zaragoza y de Lleida».
+- PR de la línea de alta velocidad de Albacete a Alicante (13 de noviembre de 2026, #116): el ramal que sale de la línea de Valencia en la bifurcación de Albacete y llega a Alicante-Terminal por Albacete-Los Llanos y Villena (línea 042 de Adif; 237,7 km de vía doble, tres estaciones, cuatro PAET, un puesto de banalización y dos bifurcaciones), trazado desde OpenStreetMap, con 307 viajes de Renfe y 10 de Ouigo e Iryo sin horarios. Entra como línea propia. Albacete queda unida a Madrid por dos caminos y el comparador los enseña (277,6 km y 1 h 46 min por Alcázar; 313,6 km y 1 h 5 min por Cuenca), y encuentra Madrid – Alicante (478,4 km y 1 h 42 min). Los tramos sin otro camino pasan de 42 a 34: salen los siete de Alcázar a Albacete y los ocho de la línea de Valencia hasta la bifurcación, y entran los siete de Albacete a Alicante. Hacia Murcia se sale por dos sitios, la bifurcación de Murcia y el enlace de Monforte del Cid, según el tren entre o no en Alicante. De paso, la línea de Valencia cuenta 20 viajes que le faltaban, los AVE de Madrid a Murcia sin parada hasta Elche AV. Cierra la etapa de Levante. `docs/datos.md`, «Cómo se construyó la línea de alta velocidad Albacete–Alicante».
 
 ## Principios de arquitectura
 
@@ -84,9 +86,7 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay una tarea abierta, que salió al cargar la alta velocidad de Barcelona (#117):
-
-1. [#142](https://github.com/ebotiab/Oniel/issues/142) Datos: cargar los baipases de Zaragoza y Lleida de la alta velocidad Madrid – Barcelona. Hoy la línea va por las dos estaciones y un tren que no para en ellas figura pasando por allí: infla los trenes de esos tramos y alarga su recorrido hasta 6,9 km. La geometría ya está descargada; falta que un viaje pueda recorrer una línea en dos trozos. Cómo se enseñan (dos líneas cortas, o la principal por los baipases y las estaciones en ramales) se propone al usuario antes de implementarlo. Emparentada con #135: el enlace de Vallecas es el mismo caso. Cambia la instantánea y los recuentos.
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», no hay ninguna tarea abierta.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
@@ -96,10 +96,31 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 **Granada y Jaén.** Para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Hecha: la línea convencional Linares-Baeza – Moreda – Granada (#101), el ramal Espelúy – Jaén (#102) y la alta velocidad de Córdoba a Granada por Antequera (#103), que entró como dos líneas. La línea de alta velocidad Córdoba – Málaga llega ya hasta Málaga-María Zambrano (#118).
 
-**Levante.** Para ver por qué los trenes de Madrid a Valencia y Alicante dejaron el camino de Alcázar y Albacete. La línea convencional Alcázar de San Juan – Albacete (#114) y la de alta velocidad Madrid – Cuenca – Valencia (#115) ya están hechas; quedan:
+**Levante.** Para ver por qué los trenes de Madrid a Valencia y Alicante dejaron el camino de Alcázar y Albacete. Hecha: la línea convencional Alcázar de San Juan – Albacete (#114), la de alta velocidad Madrid – Cuenca – Valencia (#115) y la de alta velocidad Albacete – Alicante (#116). El comparador enseña los dos caminos de Madrid a Albacete: 277,6 km y 1 h 46 min por Alcázar, 313,6 km y 1 h 5 min por Cuenca. Queda:
 
-1. [#116](https://github.com/ebotiab/Oniel/issues/116) Datos: ramal de alta velocidad a Albacete y Alicante. Sale de la anterior pasado Cuenca y comparte la estación de Albacete-Los Llanos con la línea de Alcázar: con él, de Madrid a Albacete hay dos caminos. Su origen es la bifurcación de Albacete, que ya es un nodo; lo que tiene que retirar y cambiar está al final de «Cómo se construyó la línea de alta velocidad Madrid–Cuenca–Valencia», en `docs/datos.md`.
-2. [#168](https://github.com/ebotiab/Oniel/issues/168) Datos: Madrid-Chamartín y el acceso de la alta velocidad de Levante hasta Torrejón de Velasco. Casi todos los trenes de Valencia, Albacete y Alicante salen de Chamartín, que hoy no es una estación de la red: por eso el comparador cuenta solo 2 trenes directos entre Madrid-Puerta de Atocha y Valencia, aunque por cada tramo pasan hasta 82. Mejor después de #116, que toca las mismas asignaciones de parada.
+1. [#168](https://github.com/ebotiab/Oniel/issues/168) Datos: Madrid-Chamartín y el acceso de la alta velocidad de Levante hasta Torrejón de Velasco. Casi todos los trenes de Valencia, Albacete y Alicante salen de Chamartín, que hoy no es una estación de la red: por eso el comparador cuenta solo 2 trenes directos entre Madrid-Puerta de Atocha y Valencia, aunque por cada tramo pasan hasta 86, y ninguno por el camino de Cuenca entre Madrid-Puerta de Atocha y Albacete.
+
+**Murcia.** Cierra el corredor de Levante y, con él, los corredores de alta velocidad más usados desde Madrid.
+
+- [#170](https://github.com/ebotiab/Oniel/issues/170) Datos: alta velocidad de Alicante a Murcia. Sale de la línea de Albacete a Alicante por la bifurcación de Murcia y por el enlace de Monforte del Cid, que ya son nodos (`docs/datos.md`, «Cómo se construyó la línea de alta velocidad Albacete–Alicante»).
+
+**Norte y noroeste.** Hoy no hay nada cargado al norte de Madrid. El orden lo marcan las dependencias: cada línea cuelga de un nodo que carga la anterior.
+
+- [#171](https://github.com/ebotiab/Oniel/issues/171) Datos: línea de alta velocidad Madrid – Segovia – Valladolid. La puerta de todo el norte; depende de #168, que carga Madrid-Chamartín.
+- [#172](https://github.com/ebotiab/Oniel/issues/172) Datos: línea de alta velocidad Valladolid – Palencia – León. Depende de #171.
+- [#173](https://github.com/ebotiab/Oniel/issues/173) Datos: línea de alta velocidad Venta de Baños – Burgos. Depende de #172.
+- [#174](https://github.com/ebotiab/Oniel/issues/174) Datos: línea de alta velocidad Olmedo – Zamora – Ourense, el camino a Galicia. Depende de #171.
+- [#175](https://github.com/ebotiab/Oniel/issues/175) Datos: alta velocidad Ourense – Santiago y Eje Atlántico (A Coruña – Santiago – Vigo). Depende de #174.
+- [#176](https://github.com/ebotiab/Oniel/issues/176) Datos: línea León – Oviedo – Gijón por la Variante de Pajares. Depende de #172.
+- [#177](https://github.com/ebotiab/Oniel/issues/177) Datos: línea convencional Burgos – Miranda de Ebro – Vitoria y acceso al País Vasco. Depende de #173.
+
+**Mediterráneo.** Para que la red deje de ser radial: une Valencia y Barcelona sin pasar por Madrid.
+
+- [#178](https://github.com/ebotiab/Oniel/issues/178) Datos: Corredor Mediterráneo de Valencia a Tarragona por Castellón. No depende de nada: las líneas de Valencia y de Barcelona ya están cargadas.
+
+**Extremadura.**
+
+- [#179](https://github.com/ebotiab/Oniel/issues/179) Datos: línea Madrid – Cáceres – Mérida – Badajoz. No depende de nada.
 
 Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
 

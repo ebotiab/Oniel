@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import type { AnnotationOut, CoverageOut, NetworkOut, Source } from '../data/types'
 import type { ApiStatus } from '../data/api'
-import { annotationHref, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, routePath } from '../app/state'
+import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, routePath } from '../app/state'
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { formatDateLong, lugar } from '../app/annotations'
 import { agruparFuentes } from '../app/fuentes'
@@ -107,7 +107,7 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
     { id: 'fuentes', titulo: 'Fuentes y licencias' },
   ]
   const cifras = [
-    { cifra: formatCount(coverage.lines.length), que: 'Líneas cargadas' },
+    { cifra: formatCount(mainLines(coverage.lines).length), que: 'Líneas cargadas' },
     { cifra: formatKm(coverage.total_length_km), que: 'Kilómetros' },
     { cifra: formatCount(coverage.station_count), que: 'Estaciones' },
     { cifra: formatCount(coverage.service_count), que: 'Trenes distintos' },
@@ -160,7 +160,7 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
           <p className="cobertura-texto">Cada una lleva a su recorrido en el mapa, estación a estación.</p>
           <div data-testid="cobertura-lineas">
             {TIPOS.map((g) => {
-              const lineas = coverage.lines.filter((l) => lineKind(l) === g.kind)
+              const lineas = mainLines(coverage.lines).filter((l) => lineKind(l) === g.kind)
               if (!lineas.length) return null
               return (
                 <section key={g.kind} aria-label={g.label}>
@@ -170,8 +170,8 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
                     <span className="datos">{lineas.length}</span>
                   </h3>
                   <ul className="cobertura-lineas">
-                    {lineas.map((l) => (
-                      <li key={l.id}>
+                    {lineas.flatMap((l) => [l, ...bypassesOf(coverage.lines, l.id)]).map((l) => (
+                      <li key={l.id} className={l.bypass_of ? 'cobertura-baipas' : undefined}>
                         <Enlace href={routePath({ selection: null, simulacion: false, linea: l.id })} onGo={() => onPickLine(l.id)} testId={`cobertura-linea-${l.id}`}>
                           {lineLabel(l)}
                         </Enlace>
