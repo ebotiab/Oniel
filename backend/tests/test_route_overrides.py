@@ -13,6 +13,8 @@ import pytest
 from conftest import (
     ALBACETE_SPEC,
     BCN_SPEC,
+    BYPASS_LLEIDA_SPEC,
+    BYPASS_ZARAGOZA_SPEC,
     CONV_SPEC,
     DATA_DIR,
     FEED,
@@ -580,6 +582,9 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-albacete-sin-parada": 31,
             "madrid-alicante-sin-parada": 27,
         },
+        # los baipases no tienen reglas: sus trenes salen de resolver la línea de Barcelona
+        BYPASS_ZARAGOZA_SPEC.name: {},
+        BYPASS_LLEIDA_SPEC.name: {},
         # los trenes que dejan la línea de la costa en la bifurcación La Feredat, hacia Tarragona
         MEDITERRANEO_SPEC.name: {
             "cambrils-vila-seca-por-la-feredat": 22,
@@ -601,6 +606,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     assert reports[SPEC.name]["gtfs"]["trips"] == 317 + 47 + 13
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
     assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
+    assert reports[BYPASS_ZARAGOZA_SPEC.name]["gtfs"]["trips"] == 97
+    assert reports[BYPASS_LLEIDA_SPEC.name]["gtfs"]["trips"] == 224
     assert reports[MZCR_SPEC.name]["gtfs"]["passes"] == {"publicado": 124 * 3, "estimado": 22 * 3}
 
 

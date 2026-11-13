@@ -47,7 +47,8 @@ def coverage_notice(lines: list[LineSummary], operators: Sequence[Operator] = ()
     """Aviso de cobertura construido a partir de las líneas cargadas y de sus operadores."""
     loaded = [o.name for o in operators if o.timetable == "cargado"] or ["Renfe"]
     missing = [o.name for o in operators if o.timetable == "no_publicado"]
-    names = [line.name[0].lower() + line.name[1:] for line in lines]
+    # Un baipás es parte de la línea de la que sale: no se nombra aparte.
+    names = [line.name[0].lower() + line.name[1:] for line in lines if line.bypass_of is None]
     if not names:
         listed = "ninguna línea todavía"
     elif len(names) == 1:
@@ -148,6 +149,7 @@ async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
                 status=r["status"],
                 description=r["description"],
                 source_id=r["source_id"],
+                bypass_of=r["bypass_of"],
                 node_count=r["node_count"],
                 segment_count=r["segment_count"],
             )

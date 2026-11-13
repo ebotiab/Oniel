@@ -14,7 +14,8 @@ const MIXTOS = [RIOFRIO_LOJA, 'lav-antequera-granada:loja:bif-tocon', 'lav-anteq
 
 test.describe('Ancho de vía: el tramo de ancho mixto lo dice', () => {
   test('solo el paso por Loja y la entrada a Granada traen el ancho mixto', () => {
-    const conAncho = red.segments.filter((s) => s.attributes?.gauge).map((s) => s.id)
+    // en la alta velocidad a Granada; la línea de València a Camp de Tarragona tiene los suyos (e2e/mediterraneo.spec.ts)
+    const conAncho = red.segments.filter((s) => s.attributes?.gauge && s.line_id === 'lav-antequera-granada').map((s) => s.id)
     expect(conAncho.sort()).toEqual([...MIXTOS].sort())
     for (const id of MIXTOS) expect(red.segments.find((s) => s.id === id)?.attributes?.gauge?.value).toBe('mixto')
   })

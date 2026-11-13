@@ -43,6 +43,10 @@ LBMG, LAV_GRANADA, LAV_MALAGA = (
     "lav-cordoba-malaga",
 )
 BY_GRANADA = [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
+#: La alta velocidad de Barcelona y sus dos baipases, que cuentan como parte de ella.
+BCN, BARCELONA, ZARAGOZA = "lav-madrid-barcelona", "barcelona-sants", "zaragoza-delicias"
+AROUND_ZARAGOZA = "baipas-zaragoza:bif-moncasi:bif-canal-imperial"
+AROUND_LLEIDA = "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida"
 MADRID, CIUDAD_REAL, MANZANARES, CORDOBA = (
     "madrid-puerta-de-atocha",
     "ciudad-real",
@@ -74,7 +78,8 @@ def graph(network: Red) -> Graph:
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 35
+    # los dos baipases de Zaragoza y de Lleida y los 35 de la línea de Valencia a Camp de Tarragona
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 35
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -145,7 +150,7 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         260.5,
         613.5,
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
-        1296.0,  # por Barcelona, la costa y Valencia
+        1289.1,  # por Barcelona, la costa y Valencia
     ]
     # Madrid – Andújar: hay un recorrido que pasa tres veces de una línea a otra
     to_andujar = find_routes(graph, MADRID, "andujar")
@@ -303,8 +308,8 @@ def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph
         graph, f"{MZCR}:almagro:ciudad-real", max_ratio=None
     ).detours
     assert by_granada.route.length_km == 689.5 and "Granada" in by_granada.route.via
-    assert by_barcelona.route.length_km == 1492.1
-    assert {"Zaragoza-Delicias", "Castelló de la Plana"} <= set(by_barcelona.route.via)
+    assert by_barcelona.route.length_km == 1485.2
+    assert {"Calatayud", "Castelló de la Plana"} <= set(by_barcelona.route.via)
 
 
 def test_other_closures_of_the_scenario_also_cut_the_detours(graph: Graph) -> None:
@@ -361,6 +366,87 @@ def test_a_route_that_strays_far_from_a_shorter_one_is_dropped(graph: Graph) -> 
     ]
 
 
+def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
+    """De Madrid a Barcelona hay cuatro caminos, según se entre o no en Zaragoza-Delicias y en
+    Lleida-Pirineus (620,1 km, 622,0 km, 625,0 km y 627,0 km). Son el mismo recorrido: queda el
+    más corto, por los dos baipases, y es de una sola línea."""
+    assert graph.bypass_of == {"baipas-zaragoza": BCN, "baipas-lleida": BCN}
+    criteria: list[tuple[int | None, float | None]] = [
+        (DEFAULT_MAX_CHANGES, DEFAULT_MAX_RATIO),
+        (None, None),
+        (0, DEFAULT_MAX_RATIO),  # ni un cambio de línea: pasar a un baipás no lo es
+    ]
+    for max_changes, max_ratio in criteria:
+        # el primero; desde que está la línea de València a Camp de Tarragona hay además otro
+        # recorrido de Madrid a Barcelona, por Cuenca, València y la costa (755,1 km)
+        route, *others = find_routes(
+            graph, MADRID, BARCELONA, max_changes=max_changes, max_ratio=max_ratio
+        )
+        assert all(BCN in r.line_ids and len(r.line_ids) > 1 for r in others)
+        assert (route.length_km, route.time_min, route.line_ids) == (620.1, 125, [BCN])
+        (leg,) = route.legs
+        assert (leg.line_id, leg.length_km, leg.time_min) == (BCN, 620.1, 125)
+        assert AROUND_ZARAGOZA in route.segment_ids and AROUND_LLEIDA in route.segment_ids
+        assert not any(
+            "zaragoza-delicias" in s or "lleida-pirineus" in s for s in route.segment_ids
+        )
+        assert route.via == ["Guadalajara-Yebes", "Calatayud", "Camp de Tarragona"]
+    # en sentido contrario, lo mismo
+    there, by_valencia = find_routes(graph, MADRID, BARCELONA)
+    back, _ = find_routes(graph, BARCELONA, MADRID)
+    assert by_valencia.length_km == 755.1 and "València-Joaquín Sorolla" in by_valencia.via
+    assert (back.length_km, back.segment_ids) == (620.1, there.segment_ids[::-1])
+    # con el baipás de Zaragoza cerrado el recorrido entra en la estación, 4,9 km más; con un
+    # tramo de la estación cerrado, sigue por el baipás
+    through, _ = find_routes(graph, MADRID, BARCELONA, Scenario(closures=[AROUND_ZARAGOZA]))
+    assert (through.length_km, through.line_ids) == (625.0, [BCN])
+    assert "Zaragoza-Delicias" in through.via and AROUND_LLEIDA in through.segment_ids
+    closed = Scenario(closures=[f"{BCN}:zaragoza-delicias:bif-huesca"])
+    assert [r.length_km for r in find_routes(graph, MADRID, BARCELONA, closed)] == [620.1, 755.1]
+    # a una estación que el baipás rodea se llega por su ramal, y desde ella se sigue por el otro
+    (to_zaragoza,) = find_routes(graph, MADRID, ZARAGOZA)
+    assert (to_zaragoza.length_km, to_zaragoza.line_ids) == (306.5, [BCN])
+    (onwards,) = find_routes(graph, ZARAGOZA, BARCELONA)
+    assert onwards.length_km == 318.5 and AROUND_LLEIDA in onwards.segment_ids
+    assert to_zaragoza.length_km + onwards.length_km == pytest.approx(625.0)
+    # un trecho que va entero por un baipás es del baipás
+    (only,) = find_routes(graph, "bif-moncasi", "bif-canal-imperial")
+    assert (only.length_km, only.line_ids, only.segment_ids) == (
+        20.7,
+        ["baipas-zaragoza"],
+        [AROUND_ZARAGOZA],
+    )
+
+
+def test_a_closed_station_stretch_is_saved_by_its_bypass_and_the_other_way_round(
+    graph: Graph,
+) -> None:
+    for segment_id in (
+        f"{BCN}:bif-moncasi:zaragoza-delicias",
+        f"{BCN}:zaragoza-delicias:bif-huesca",
+        f"{BCN}:bif-huesca:bif-canal-imperial",
+    ):
+        found = closure_detours(graph, segment_id)
+        # el baipás y, desde que la línea de València a Camp de Tarragona cierra un anillo, la
+        # vuelta de Madrid a Camp de Tarragona por València; otros tres, más largos, se omiten
+        detour, ring = found.detours
+        assert found.omitted == 3
+        assert (ring.route.from_node_id, ring.route.to_node_id) == (MADRID, "camp-de-tarragona")
+        assert ring.route.length_km == 655.4
+        assert (detour.route.length_km, detour.closed_line_length_km) == (20.7, 25.6)
+        assert detour.route.line_ids == ["baipas-zaragoza"]
+        assert [leg.line_name for leg in detour.route.legs] == ["Baipás de Zaragoza"]
+    # el baipás cerrado se salva entrando en la estación
+    (detour,) = closure_detours(graph, AROUND_LLEIDA).detours  # los del anillo se omiten
+    assert (detour.route.length_km, detour.closed_line_length_km) == (16.2, 14.3)
+    assert detour.route.line_ids == [BCN] and detour.route.via == ["Lleida-Pirineus"]
+    # el resto de la línea, hasta Camp de Tarragona, se salva dando la vuelta por València
+    (ring,) = closure_detours(graph, f"{BCN}:calatayud:cambiador-plasencia-de-jalon").detours
+    assert (ring.route.from_node_id, ring.route.to_node_id) == (MADRID, "camp-de-tarragona")
+    # y de Camp de Tarragona a Barcelona-Sants no hay rodeo: solo llega esta línea
+    assert closure_detours(graph, f"{BCN}:l-arboc:vilafranca-del-penedes").detours == []
+
+
 def test_inverting_the_direction_gives_the_same_routes(graph: Graph) -> None:
     for a, b in [(MADRID, CORDOBA), ("sevilla-santa-justa", MANZANARES), (MADRID, "andujar")]:
         there = [r.segment_ids for r in find_routes(graph, a, b)]
@@ -393,6 +479,11 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"from": MADRID, "to": "andujar", "scenario": "", **DEFAULTS},
         # un rodeo que no llega al doble del total, pero sí donde se aparta del más corto
         {"from": "sevilla-santa-justa", "to": MANZANARES, "scenario": "", **DEFAULTS},
+        # los baipases son parte de su línea: un solo recorrido, por ellos o, cerrado uno, por la
+        # estación; y a una estación que un baipás rodea se llega por su ramal
+        {"from": MADRID, "to": BARCELONA, "scenario": "", **DEFAULTS},
+        {"from": MADRID, "to": BARCELONA, "scenario": f"c~{AROUND_ZARAGOZA}", **DEFAULTS},
+        {"from": "lleida-pirineus", "to": MADRID, "scenario": "", **DEFAULTS},
     ]
     detours: list[dict[str, Any]] = [
         {"segment_id": URDA_CIUDAD_REAL, "scenario": ""},
@@ -402,6 +493,9 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"segment_id": f"{LAV}:cordoba:bif-malaga", "scenario": ""},
         # un solo rodeo listado y dos omitidos, que alargan el mismo camino por Ciudad Real o Madrid
         {"segment_id": f"{LBMG}:iznalloz:granada", "scenario": ""},
+        # la entrada a una estación se salva por su baipás, y el baipás, por la estación
+        {"segment_id": f"{BCN}:bif-moncasi:zaragoza-delicias", "scenario": ""},
+        {"segment_id": AROUND_LLEIDA, "scenario": ""},
     ]
     for case in routes:
         found = find_routes(

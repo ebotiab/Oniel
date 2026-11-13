@@ -7,7 +7,7 @@
 import type { InterruptionOut, LineSummary, NodeCall, Route, SegmentOut } from '../data/types.ts'
 import { findRoutes, type Graph } from '../routing/graph.ts'
 import { ScenarioError, scenarioFromCode, withClosures, type Scenario } from '../routing/scenario.ts'
-import { lineKind, shortStop } from './state.ts'
+import { formatKm, lineKind, shortStop } from './state.ts'
 
 /** Recorridos que se enseñan, del más corto al más largo. El grafo ya descarta los desproporcionados. */
 export const RECORRIDOS_A_LA_VISTA = 3
@@ -29,6 +29,8 @@ export interface Recorrido {
   titulo: string
   /** «Recorre tres líneas», cuando encadena más de una. */
   lineas: string | null
+  /** Lo que el recorrido rodea por un baipás y cuánto más recorre el tren que entra en esas estaciones. */
+  baipases: string | null
   cortes: Corte[]
   /** El más corto que no está cortado, cuando el más corto de todos sí lo está. */
   alternativa: boolean
@@ -86,14 +88,50 @@ function titular(route: Route, lines: Map<string, LineSummary>): string {
   return lineKind(line) === 'alta velocidad' ? 'Por la alta velocidad' : 'Por la línea convencional'
 }
 
-/** Primer y último tramo de cada trecho del recorrido. */
-function tramosClave(route: Route, segments: Map<string, SegmentOut>): string[] {
+/**
+ * Lo que un recorrido rodea por sus baipases, en una frase, o nada si no va por ninguno. Un baipás es
+ * parte de su línea y el recorrido se mide por él; la frase dice qué estaciones deja a un lado y cuánto
+ * más recorre el tren que para en ellas.
+ */
+function baipasesDe(route: Route, graph: Graph, lines: Map<string, LineSummary>, segments: Map<string, SegmentOut>): string | null {
+  const suyos = new Set(route.segment_ids)
+  const rodeados: string[] = []
+  const estaciones: string[] = []
+  let ahorro = 0
+  for (const line of lines.values()) {
+    const propios = [...segments.values()].filter((s) => s.line_id === line.id)
+    if (!line.bypass_of || !propios.length || !propios.every((s) => suyos.has(s.id))) continue
+    const km = graph.lineKm.get(line.id)
+    const enLinea = graph.lineKm.get(line.bypass_of)
+    if (!km || !enLinea) continue
+    const extremos = [...km.keys()].filter((n) => enLinea.has(n)).sort((a, b) => enLinea.get(a)! - enLinea.get(b)!)
+    const [a, b] = [extremos[0], extremos.at(-1)]
+    if (!a || !b || a === b) continue
+    rodeados.push(line.name.replace(/^Baipás de /, ''))
+    ahorro += enLinea.get(b)! - enLinea.get(a)! - Math.abs(km.get(b)! - km.get(a)!)
+    for (const [id, at] of [...enLinea].sort((x, y) => x[1] - y[1])) {
+      const node = graph.nodes.get(id)
+      if (node?.kind === 'estacion' && node.rank === 'principal' && at > enLinea.get(a)! && at < enLinea.get(b)!) estaciones.push(node.name)
+    }
+  }
+  if (!rodeados.length) return null
+  const rodea = `Rodea ${enumerar(rodeados)} por ${rodeados.length === 1 ? 'su baipás' : 'sus baipases'}`
+  if (!estaciones.length) return `${rodea}.`
+  return `${rodea}; el tren que para en ${enumerar(estaciones.map((e, i) => (i ? `en ${e}` : e)))} recorre ${formatKm(ahorro)} km más.`
+}
+
+/**
+ * Primer y último tramo de cada trecho del recorrido. Un baipás es parte de su línea: no abre trecho, y
+ * así el tren que entra en la estación que el baipás rodea sigue contando en el recorrido.
+ */
+function tramosClave(route: Route, segments: Map<string, SegmentOut>, lines: Map<string, LineSummary>): string[] {
   const clave = new Set<string>()
   let anterior: string | null | undefined
   let ultimo: string | undefined
   for (const id of route.segment_ids) {
     // Un enlace hipotético no es un tramo de ninguna línea ni tiene trenes: cuenta como trecho propio.
-    const lineId = segments.get(id)?.line_id ?? null
+    const propia = segments.get(id)?.line_id ?? null
+    const lineId = propia === null ? null : (lines.get(propia)?.bypass_of ?? propia)
     if (lineId !== anterior || lineId === null) {
       if (ultimo) clave.add(ultimo)
       clave.add(id)
@@ -150,9 +188,10 @@ export function compararRecorridos(
     route,
     titulo: titular(route, lines),
     lineas: route.legs.length > 1 ? `Recorre ${NUMERO[route.legs.length] ?? route.legs.length} líneas` : null,
+    baipases: baipasesDe(route, graph, lines, segments),
     cortes: cortesDe(route),
     alternativa: false,
-    tramosClave: tramosClave(route, segments),
+    tramosClave: tramosClave(route, segments, lines),
   })
   const recorridos = found.slice(0, RECORRIDOS_A_LA_VISTA).map(presentar)
   let sinPaso = false

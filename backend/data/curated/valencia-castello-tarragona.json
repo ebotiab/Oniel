@@ -3,7 +3,7 @@
     "id": "valencia-castello-tarragona",
     "name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
     "short_name": "600 y 640",
-    "sort_order": 11,
+    "sort_order": 13,
     "zone": "levante",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

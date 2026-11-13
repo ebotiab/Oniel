@@ -23,6 +23,10 @@ Reglas, en lenguaje llano:
   fuera de la línea.
 * Si no podemos saber por dónde circula el tren (dos paradas fuera de la red cargada, o una
   parada que no se sabe situar), el paso queda **indeterminado**.
+* Si la línea tiene un **baipás** (otra línea cargada que une dos de sus nodos y evita lo que hay
+  entre ellos, como los que rodean Zaragoza y Lleida) y el tren no para ni sale de la línea entre
+  esos dos nodos, va por el baipás: no pasa por los tramos que quedan entre ellos, pasa por los
+  del baipás y el reparto del tiempo usa los kilómetros de ese camino.
 """
 
 from __future__ import annotations
@@ -60,6 +64,43 @@ class LineSegment:
     id: str
     km_from: float
     km_to: float
+
+
+@dataclass(frozen=True)
+class BypassPiece:
+    """Un tramo de un baipás, medido desde el nodo en el que el baipás se separa de la línea."""
+
+    segment_id: str
+    km_from: float
+    km_to: float
+    #: El kilometraje de la línea del baipás crece en el mismo sentido que el de la línea.
+    same_direction: bool = True
+
+
+@dataclass(frozen=True)
+class Bypass:
+    """Otro camino entre dos nodos de la línea, por una línea aparte que evita lo que hay entre ellos.
+
+    Lo toma el tren que recorre la línea de un nodo al otro sin parar ni salir de ella entre los
+    dos: el que no tiene motivo para entrar en la estación que el baipás rodea.
+    """
+
+    #: Kilómetros, en la línea, de los dos nodos que el baipás une.
+    km_from: float
+    km_to: float
+    #: Sus tramos, en el orden en que se recorren desde ``km_from``.
+    pieces: tuple[BypassPiece, ...]
+    #: Frase que explica por qué el tren va por él («No para en Zaragoza-Delicias: …»).
+    note: str = ""
+
+    @property
+    def length_km(self) -> float:
+        return self.pieces[-1].km_to if self.pieces else 0.0
+
+    @property
+    def saved_km(self) -> float:
+        """Lo que el baipás acorta respecto al camino por la línea entre los mismos dos nodos."""
+        return (self.km_to - self.km_from) - self.length_km
 
 
 @dataclass(frozen=True)
@@ -141,9 +182,16 @@ class _Anchor:
 
 
 def resolve_passes(
-    calls: Sequence[StopCall], nodes: Mapping[str, LineNode], segments: Sequence[LineSegment]
+    calls: Sequence[StopCall],
+    nodes: Mapping[str, LineNode],
+    segments: Sequence[LineSegment],
+    bypasses: Sequence[Bypass] = (),
 ) -> tuple[list[SegmentPass], Literal["completa", "parcial"]]:
-    """Calcula el paso del servicio por cada tramo que recorre."""
+    """Calcula el paso del servicio por cada tramo que recorre.
+
+    Con ``bypasses``, el resultado lleva también los pasos por los tramos de los baipases que el
+    tren toma, que son de otra línea: van detrás de los de esta.
+    """
     ordered = sorted(segments, key=lambda s: s.km_from)
     calls = sorted(calls, key=lambda c: c.seq)
     direction = _overall_direction(calls, nodes)
@@ -177,10 +225,11 @@ def resolve_passes(
         b = anchors[j]
         assert b is not None
         unknown_between = j > i + 1
-        for p in _leg_passes(a, b, ordered, unknown_between):
+        for p in _leg_passes(a, b, ordered, unknown_between, bypasses):
             passes.setdefault(p.segment_id, p)
         i = j
-    return [passes[s.id] for s in ordered if s.id in passes], resolution
+    own = [passes.pop(s.id) for s in ordered if s.id in passes]
+    return [*own, *passes.values()], resolution
 
 
 def _overall_direction(calls: Sequence[StopCall], nodes: Mapping[str, LineNode]) -> bool | None:
@@ -225,7 +274,11 @@ def _fmt(seconds: float) -> str:
 
 
 def _leg_passes(
-    a: _Anchor, b: _Anchor, segments: Sequence[LineSegment], unknown_between: bool
+    a: _Anchor,
+    b: _Anchor,
+    segments: Sequence[LineSegment],
+    unknown_between: bool,
+    bypasses: Sequence[Bypass] = (),
 ) -> list[SegmentPass]:
     lo, hi = min(a.km, b.km), max(a.km, b.km)
     if hi - lo < KM_TOLERANCE:
@@ -251,10 +304,20 @@ def _leg_passes(
             for s in inside
         ]
 
+    # Baipases que quedan enteros entre las dos paradas: el tren no para ni sale de la línea
+    # entre sus dos nodos, así que va por ellos y no por los tramos que rodean.
+    taken = [
+        bp for bp in bypasses if bp.km_from >= lo - KM_TOLERANCE and bp.km_to <= hi + KM_TOLERANCE
+    ]
+
+    def along(km: float) -> float:
+        """Kilómetros recorridos desde ``lo`` hasta ese kilómetro de la línea, por donde va el tren."""
+        return km - lo - sum(bp.saved_km for bp in taken if bp.km_to <= km + KM_TOLERANCE)
+
     t0 = float(a.call.departure_s)
     t1 = float(b.call.arrival_s)
     leg_time = max(t1 - t0, 0.0)
-    on_line_km = hi - lo
+    on_line_km = along(hi)
     total_km = on_line_km + a.extra_km + b.extra_km
     # tiempo estimado entre los dos puntos de la línea (si una parada está fuera, parte del
     # tiempo se consume fuera de la red)
@@ -272,18 +335,37 @@ def _leg_passes(
     )
     margin = max(min_margin, ratio * uncertain_s)
 
-    def time_at(km: float) -> float:
-        frac = 0.0 if on_line_km == 0 else (km - lo) / on_line_km
+    def time_at(done_km: float) -> float:
+        frac = 0.0 if on_line_km == 0 else done_km / on_line_km
         if not km_increasing:
             frac = 1.0 - frac
         return t_enter_line + frac * (t_exit_line - t_enter_line)
 
+    # Lo que el tren recorre entre las dos paradas, tramo a tramo: su id, los kilómetros hechos
+    # desde ``lo`` a su principio y a su final, si su kilometraje va en el sentido del de la línea
+    # y, en los de un baipás, la frase que lo explica.
+    stretches: list[tuple[str, float, float, bool, str]] = [
+        (s.id, along(s.km_from), along(s.km_to), True, "")
+        for s in inside
+        if not any(
+            s.km_from >= bp.km_from - KM_TOLERANCE and s.km_to <= bp.km_to + KM_TOLERANCE
+            for bp in taken
+        )
+    ]
+    for bp in taken:
+        base = along(bp.km_from)
+        stretches.extend(
+            (p.segment_id, base + p.km_from, base + p.km_to, p.same_direction, bp.note)
+            for p in bp.pieces
+        )
+    done_a, done_b = (0.0, on_line_km) if km_increasing else (on_line_km, 0.0)
+
     passes = []
-    for s in inside:
-        first_km, last_km = (s.km_from, s.km_to) if km_increasing else (s.km_to, s.km_from)
-        enter, exit_ = time_at(first_km), time_at(last_km)
-        enter_pub = a.on_line and abs(first_km - a.km) <= KM_TOLERANCE
-        exit_pub = b.on_line and abs(last_km - b.km) <= KM_TOLERANCE
+    for segment_id, done_lo, done_hi, same_direction, note in stretches:
+        first, last = (done_lo, done_hi) if km_increasing else (done_hi, done_lo)
+        enter, exit_ = time_at(first), time_at(last)
+        enter_pub = a.on_line and abs(first - done_a) <= KM_TOLERANCE
+        exit_pub = b.on_line and abs(last - done_b) <= KM_TOLERANCE
         if enter_pub and exit_pub:
             kind: PassKind = "publicado"
             basis = (
@@ -304,14 +386,14 @@ def _leg_passes(
                 basis = _outside_basis(a, b, on_line_km, margin)
         passes.append(
             SegmentPass(
-                segment_id=s.id,
+                segment_id=segment_id,
                 kind=kind,
                 enter_s=enter,
                 exit_s=exit_,
                 enter_margin_s=0.0 if enter_pub else margin,
                 exit_margin_s=0.0 if exit_pub else margin,
-                km_increasing=km_increasing,
-                basis=basis,
+                km_increasing=km_increasing if same_direction else not km_increasing,
+                basis=f"{note} {basis}" if note else basis,
             )
         )
     return passes

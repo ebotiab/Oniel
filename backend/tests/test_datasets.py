@@ -223,8 +223,12 @@ async def test_a_new_file_keeps_the_previous_dataset(
     assert await _count(conn, "services", NEWER_ID) == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 181
     passes = (3996 + 121) + (1968 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     passes += (1250 + 68) + 498  # las dos líneas de alta velocidad a Málaga y a Granada
-    passes += 7590  # la alta velocidad de Barcelona, todos estimados
+    # la alta velocidad de Barcelona, todos estimados: 6.851 en la línea y 97 y 224 en los
+    # baipases de Zaragoza y de Lleida. Eran 7.590 cuando el tren que no para figuraba por la
+    # estación: el que rodea Zaragoza deja tres tramos y gana uno; el que rodea Lleida, dos y uno
+    passes += 6851 + 97 + 224
     passes += 4154  # la de Madrid a Valencia, todos estimados
+    passes += 4223 + 2107  # la de Valencia a Camp de Tarragona
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 

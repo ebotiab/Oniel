@@ -1,0 +1,123 @@
+{
+  "line": {
+    "id": "baipas-zaragoza",
+    "name": "Baipás de Zaragoza",
+    "short_name": "050",
+    "sort_order": 11,
+    "zone": "cataluna",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 2,
+    "pk_origin_km": 294.897,
+    "status": "disponible",
+    "bypass_of": "lav-madrid-barcelona",
+    "description": "Vía directa de la alta velocidad de Madrid a Barcelona que rodea Zaragoza por el sur, sin pasar por Zaragoza-Delicias. La toman los trenes que no paran en esa estación.\n\nPara Adif es la línea principal: sus puntos kilométricos siguen por aquí, y a Zaragoza-Delicias se entra por un ramal que sale de una bifurcación y vuelve en la otra. Por el baipás hay 20,7 km entre las dos bifurcaciones, 4,9 km menos que por la estación.\n\nOniel manda por aquí a los trenes de la línea de Madrid a Barcelona que no paran ni salen de ella entre las dos bifurcaciones.",
+    "geometry_source": {
+      "source_id": "osm-relation-11082425",
+      "parts": [
+        {
+          "source_id": "osm-relation-11082425",
+          "file": "raw/osm/relation_11082425_lav_madrid_barcelona_frontera_2026-11-12.json",
+          "relation_id": 11082425,
+          "from": [
+            -1.0270992,
+            41.6346471
+          ],
+          "to": [
+            -0.7975476,
+            41.5731304
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-madrid-barcelona"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    },
+    {
+      "id": "ouigo",
+      "name": "Ouigo España",
+      "role": "operador",
+      "source_id": "ouigo-gtfs-nap"
+    },
+    {
+      "id": "iryo",
+      "name": "Iryo",
+      "role": "operador",
+      "source_id": "iryo-web",
+      "timetable": "no_publicado"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-moncasi",
+      "name": "Bifurcación Moncasi",
+      "kind": "bifurcacion",
+      "shared": true,
+      "position": {
+        "lon": -1.0270992,
+        "lat": 41.6346471
+      },
+      "reference_pk_km": 294.897
+    },
+    {
+      "id": "bif-canal-imperial",
+      "name": "Bifurcación Canal Imperial",
+      "kind": "bifurcacion",
+      "shared": true,
+      "position": {
+        "lon": -0.7975476,
+        "lat": 41.5731304
+      },
+      "reference_pk_km": 315.783
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-moncasi",
+      "to_node": "bif-canal-imperial",
+      "value": "ertms_n1_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-13",
+      "note": "El mapa 4 no dibuja el baipás aparte: lo que rotula junto a Zaragoza es de la línea 050, de la que el baipás es la vía directa. Símbolos de ERTMS N1 y de ASFA de alta velocidad, como en el resto de la línea."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-moncasi",
+      "to_node": "bif-canal-imperial",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-13",
+      "note": "El mapa 4 no dibuja el baipás aparte: lo que rotula junto a Zaragoza es de la línea 050, de la que el baipás es la vía directa. Trazo rosa y rótulo BCA."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-moncasi",
+      "to_node": "bif-canal-imperial",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-13",
+      "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {},
+  "corridor_filter": {
+    "description": "No tiene filtro propio: lleva los trenes de la línea de alta velocidad Madrid – Zaragoza – Barcelona que no paran ni salen de ella entre las dos bifurcaciones del baipás."
+  }
+}

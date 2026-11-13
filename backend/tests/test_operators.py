@@ -49,6 +49,8 @@ def test_only_the_lines_iryo_runs_on_declare_it() -> None:
         "lav-madrid-barcelona",
         "lav-madrid-valencia",
     }
+    # los dos baipases de la línea de Barcelona declaran los mismos operadores que ella
+    with_iryo |= {"baipas-zaragoza", "baipas-lleida"}
     assert {line for line, ops in by_line.items() if "iryo" in ops} == with_iryo
     assert by_line["lav-cordoba-malaga"] == {"renfe", "ouigo", "iryo"}
     assert by_line["lav-antequera-granada"] == {"renfe"}

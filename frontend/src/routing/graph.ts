@@ -50,6 +50,12 @@ export interface Graph {
   lineNames: Map<string, string>
   /** Kilómetro de cada nodo en cada línea a la que pertenece. */
   lineKm: Map<string, Map<string, number>>
+  /**
+   * Los baipases: el id de cada línea que lo es y el de la línea de la que lo es. Un baipás cuenta
+   * como parte de su línea: pasar a él o volver de él no es cambiar de línea, y dos caminos que solo
+   * se distinguen por ir por él o por lo que rodea son el mismo recorrido.
+   */
+  bypassOf: Map<string, string>
   adjacent: Map<string, Edge[]>
 }
 
@@ -70,7 +76,13 @@ export interface ClosureDetours {
 /** Un paso del camino: la arista y el nodo al que llega. */
 type Step = [Edge, string]
 
-function makeGraph(nodes: Graph['nodes'], edges: Edge[], lineNames: Graph['lineNames'], lineKm: Graph['lineKm']): Graph {
+function makeGraph(
+  nodes: Graph['nodes'],
+  edges: Edge[],
+  lineNames: Graph['lineNames'],
+  lineKm: Graph['lineKm'],
+  bypassOf: Graph['bypassOf'],
+): Graph {
   const adjacent = new Map<string, Edge[]>()
   for (const edge of edges) {
     for (const end of [edge.a, edge.b]) {
@@ -79,7 +91,7 @@ function makeGraph(nodes: Graph['nodes'], edges: Edge[], lineNames: Graph['lineN
       else adjacent.set(end, [edge])
     }
   }
-  return { nodes, edges, lineNames, lineKm, adjacent }
+  return { nodes, edges, lineNames, lineKm, bypassOf, adjacent }
 }
 
 /** Grafo de la red disponible. `nodes` trae cada nodo una vez por línea, con su km en ella. */
@@ -103,7 +115,8 @@ export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; se
       speed_kmh: s.typical_speed_kmh || s.max_speed_kmh || null,
       tracks: s.tracks,
     }))
-  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm)
+  const bypassOf = new Map(network.lines.flatMap((l) => (l.bypass_of ? [[l.id, l.bypass_of] as const] : [])))
+  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf)
 }
 
 /** El grafo con las modificaciones del escenario: cierres, velocidades y enlaces. */
@@ -122,15 +135,36 @@ export function applyScenario(graph: Graph, scenario: Scenario): Graph {
     if (link.from_node_id === link.to_node_id) throw new ScenarioError('Un enlace tiene que unir dos nodos distintos')
     edges.push({ id: linkId(link), line_id: null, a: link.from_node_id, b: link.to_node_id, length_km: link.length_km, speed_kmh: link.speed_kmh, tracks: null })
   }
-  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm)
+  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf)
 }
 
-const lineKey = (edge: Edge) => edge.line_id ?? edge.id
+/**
+ * La línea por la que cuenta un tramo: la suya o, si es de un baipás, la que este rodea. Un enlace
+ * esbozado cuenta como una línea propia.
+ */
+const lineKey = (graph: Graph, edge: Edge) => (edge.line_id === null ? edge.id : (graph.bypassOf.get(edge.line_id) ?? edge.line_id))
+
+/** Por cada baipás, la línea de la que lo es y los dos nodos de esta que une. */
+function bypassSpans(graph: Graph): { parent: string; a: string; b: string }[] {
+  const spans: { parent: string; a: string; b: string }[] = []
+  for (const [lineId, parent] of graph.bypassOf) {
+    const km = graph.lineKm.get(lineId)
+    const parentKm = graph.lineKm.get(parent)
+    if (!km || km.size < 2 || !parentKm) continue
+    const ids = [...km.keys()]
+    const first = ids.reduce((x, y) => (km.get(y)! < km.get(x)! ? y : x))
+    const last = ids.reduce((x, y) => (km.get(y)! > km.get(x)! ? y : x))
+    if (!parentKm.has(first) || !parentKm.has(last)) continue
+    const [a, b] = first < last ? [first, last] : [last, first]
+    spans.push({ parent, a, b })
+  }
+  return spans
+}
 
 /**
  * Caminos simples desde `start` hasta un nodo meta, en profundidad. Un camino termina al llegar a
  * una meta; solo atraviesa los nodos que `mayPass` admite y no cambia de línea más de `maxChanges`
- * veces. Cada enlace esbozado cuenta como una línea.
+ * veces. Cada enlace esbozado cuenta como una línea, y un baipás, como parte de la suya.
  */
 function walk(
   graph: Graph,
@@ -148,7 +182,7 @@ function walk(
       const next = edge.a === node ? edge.b : edge.a
       if (visited.has(next) || !edgeOk(edge)) continue
       const previous = path.at(-1)?.[0]
-      const total = changes + (previous !== undefined && lineKey(previous) !== lineKey(edge) ? 1 : 0)
+      const total = changes + (previous !== undefined && lineKey(graph, previous) !== lineKey(graph, edge) ? 1 : 0)
       if (maxChanges !== null && total > maxChanges) continue
       path.push([edge, next])
       if (isGoal(next)) found.push([...path])
@@ -190,12 +224,12 @@ function singleTrack(edges: Edge[]): number {
 
 function toRoute(graph: Graph, start: string, steps: Step[]): Route {
   const name = (id: string) => graph.nodes.get(id)!.name
-  // Trechos: aristas seguidas de la misma línea.
+  // Trechos: aristas seguidas de la misma línea, con sus baipases dentro.
   const groups: { start: string; steps: Step[] }[] = []
   let at = start
   for (const step of steps) {
     const last = groups.at(-1)
-    if (last && lineKey(last.steps.at(-1)![0]) === lineKey(step[0])) last.steps.push(step)
+    if (last && lineKey(graph, last.steps.at(-1)![0]) === lineKey(graph, step[0])) last.steps.push(step)
     else groups.push({ start: at, steps: [step] })
     at = step[1]
   }
@@ -203,12 +237,28 @@ function toRoute(graph: Graph, start: string, steps: Step[]): Route {
   const legs = groups.map<RouteLeg>((group) => {
     const edges = group.steps.map(([e]) => e)
     const end = group.steps.at(-1)![1]
-    const lineId = edges[0]!.line_id
-    // Por una línea, la distancia es la diferencia de sus kilómetros; un enlace trae la suya.
+    const own = edges[0]!.line_id
+    // El trecho es de la línea; si todo él va por un baipás, del baipás.
+    const lineId = own === null || edges.every((e) => e.line_id === own) ? own : lineKey(graph, edges[0]!)
+    // Por una línea, la distancia es la diferencia de sus kilómetros (lo que vaya por un baipás suyo,
+    // la de los kilómetros del baipás); un enlace trae la suya.
     let legLength = edges[0]!.length_km
-    if (lineId !== null) {
-      const km = graph.lineKm.get(lineId)!
-      legLength = Math.abs(km.get(end)! - km.get(group.start)!)
+    if (own !== null) {
+      legLength = 0
+      let runLine = own
+      let runStart = group.start
+      let here = group.start
+      for (const [edge, next] of group.steps) {
+        if (edge.line_id !== null && edge.line_id !== runLine) {
+          const km = graph.lineKm.get(runLine)!
+          legLength += Math.abs(km.get(here)! - km.get(runStart)!)
+          runLine = edge.line_id
+          runStart = here
+        }
+        here = next
+      }
+      const km = graph.lineKm.get(runLine)!
+      legLength += Math.abs(km.get(here)! - km.get(runStart)!)
     }
     length += legLength
     return {
@@ -234,7 +284,7 @@ function toRoute(graph: Graph, start: string, steps: Step[]): Route {
     length_km: round1(length),
     time_min: timeMin(edges),
     single_track_km: round1(singleTrack(edges)),
-    line_ids: [...new Set(edges.flatMap((e) => (e.line_id !== null ? [e.line_id] : [])))],
+    line_ids: [...new Set(legs.flatMap((leg) => (leg.line_id !== null ? [leg.line_id] : [])))],
     legs,
     via: inner.filter((n) => n.kind === 'estacion' && n.rank === 'principal').map((n) => n.name),
     node_ids: [start, ...steps.map(([, n]) => n)],
@@ -253,6 +303,53 @@ function sorted(found: { start: string; steps: Step[] }[]): { start: string; ste
     return x.ids.length - y.ids.length
   })
   return keyed.map((k) => k.f)
+}
+
+/**
+ * Lo que tienen en común los caminos que solo se distinguen por ir por un baipás o por lo que rodea:
+ * la lista de sus tramos, con una misma marca en lugar de los tramos del baipás o de los de su línea
+ * entre los dos nodos que el baipás une, cuando el camino los recorre de punta a punta.
+ */
+function bypassKey(graph: Graph, start: string, steps: Step[]): string {
+  const spans = bypassSpans(graph)
+  const edges = steps.map(([e]) => e)
+  if (!spans.length) return edges.map((e) => e.id).join('|')
+  const nodes = [start, ...steps.map(([, n]) => n)]
+  const key: string[] = []
+  let i = 0
+  while (i < edges.length) {
+    let whole: { mark: string; next: number } | null = null
+    for (const { parent, a, b } of spans) {
+      if ((nodes[i] !== a && nodes[i] !== b) || lineKey(graph, edges[i]!) !== parent) continue
+      // hasta el otro nodo sin salir de la línea ni cambiar entre ella y el baipás
+      const far = nodes[i] === a ? b : a
+      let j = i
+      while (j < edges.length && edges[j]!.line_id === edges[i]!.line_id && nodes[j + 1] !== far) j++
+      if (j < edges.length && edges[j]!.line_id === edges[i]!.line_id) {
+        whole = { mark: `~${parent}:${a}:${b}`, next: j + 1 }
+        break
+      }
+    }
+    if (whole === null) {
+      key.push(edges[i]!.id)
+      i++
+    } else {
+      key.push(whole.mark)
+      i = whole.next
+    }
+  }
+  return key.join('|')
+}
+
+/** De los caminos que solo cambian un baipás por lo que rodea, el primero (el más corto). */
+function withoutBypassTwins(graph: Graph, ordered: { start: string; steps: Step[] }[]): { start: string; steps: Step[] }[] {
+  const seen = new Set<string>()
+  return ordered.filter((f) => {
+    const key = `${f.start}|${bypassKey(graph, f.start, f.steps)}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }
 
 /**
@@ -278,7 +375,9 @@ function strays(steps: Step[], shorter: Step[], maxRatio: number): boolean {
  * Recorridos distintos entre dos nodos con la red del escenario, del más corto al más largo: los
  * caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho `maxChanges`
  * veces (`null`, sin tope) y no dan un rodeo de más de `maxRatio` veces respecto a otro más corto,
- * medido donde se apartan de él (`strays`; `null`, sin descartar ninguno por largo).
+ * medido donde se apartan de él (`strays`; `null`, sin descartar ninguno por largo). Un baipás es
+ * parte de su línea: de los caminos que solo se distinguen por ir por él o por la estación que rodea
+ * queda el más corto, y cuenta como un recorrido.
  */
 export function findRoutes(
   graph: Graph,
@@ -301,7 +400,7 @@ export function findRoutes(
     () => true,
     maxChanges,
   ).map((steps) => ({ start: fromNodeId, steps }))
-  let ordered = sorted(found)
+  let ordered = withoutBypassTwins(g, sorted(found))
   if (maxRatio !== null) {
     const kept: typeof ordered = []
     for (const candidate of ordered) {
@@ -362,7 +461,8 @@ export function closureDetours(
       null,
     ).map((steps) => ({ start, steps })),
   )
-  let ordered = sorted(found)
+  const unique = withoutBypassTwins(g, sorted(found))
+  let ordered = unique
   if (maxRatio !== null) {
     const whole = (f: { start: string; steps: Step[] }, first: string, last: string): Step[] => [
       ...along(graph, lineId, first, f.start),
@@ -385,6 +485,6 @@ export function closureDetours(
   const listed = ordered.slice(0, MAX_ROUTES)
   return {
     detours: listed.map((f) => ({ route: toRoute(g, f.start, f.steps), closed_line_length_km: round1(km.get(f.steps.at(-1)![1])! - km.get(f.start)!) })),
-    omitted: found.length - listed.length,
+    omitted: unique.length - listed.length,
   }
 }

@@ -192,6 +192,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         LAV_GRANADA,
         BCN,
         LAV_VALENCIA,
+        "baipas-zaragoza",
+        "baipas-lleida",
         MEDITERRANEO,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -203,7 +205,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 35
+    # los dos baipases y los 35 de la línea de Valencia a Camp de Tarragona
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 35
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -236,7 +239,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     valencia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
     assert len(valencia) == 12 and all(s.trains == s.with_alternative > 0 for s in valencia)
     # De la alta velocidad de Barcelona solo quedan los tres tramos de Camp de Tarragona a
-    # Barcelona-Sants, fuera del anillo, con sus 108 trenes; los baipases siguen sin cargar.
+    # Barcelona-Sants, fuera del anillo, con sus 108 trenes
     barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]
     assert len(barcelona) == 20
     assert {s: n for s, n in without.items() if s.startswith(f"{BCN}:")} == {
@@ -245,11 +248,42 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{BCN}:vilafranca-del-penedes:barcelona-sants": 108,
     }
     assert _of(exported.segments, f"{BCN}:madrid-puerta-de-atocha:bif-vallecas-av").trains == 74
+    # los cinco que entran y salen de Zaragoza-Delicias y de Lleida-Pirineus sí lo tienen: el
+    # baipás. Y solo llevan los trenes que paran en la estación o salen de la línea por ella
+    stations = {
+        f"{BCN}:bif-moncasi:zaragoza-delicias": 56,
+        f"{BCN}:zaragoza-delicias:bif-huesca": 55,
+        f"{BCN}:bif-huesca:bif-canal-imperial": 51,
+        f"{BCN}:bif-les-torres-de-sanui:lleida-pirineus": 31,
+        f"{BCN}:lleida-pirineus:bif-artesa-de-lleida": 47,
+    }
+    for s in barcelona:
+        if s.segment_id in stations:
+            assert (s.trains, s.without_alternative) == (stations[s.segment_id], 0)
+    # los baipases llevan los que no paran: 22 el de Zaragoza y 42 el de Lleida. Con el baipás
+    # cortado entrarían en la estación, 4,9 km y 6 minutos más en Zaragoza
+    around_zaragoza = _of(exported.segments, "baipas-zaragoza:bif-moncasi:bif-canal-imperial")
+    assert (around_zaragoza.trains, around_zaragoza.without_alternative) == (22, 0)
+    assert around_zaragoza.by_operator == {"ouigo": 4, "renfe": 18}
+    (direct,) = around_zaragoza.groups
+    assert (direct.from_node_id, direct.to_node_id) == (MADRID, "barcelona-sants")
+    assert (direct.length_km, direct.line_ids) == (620.1, [BCN])
+    assert direct.alternative is not None and direct.alternative.line_ids == [BCN]
+    assert (direct.alternative.extra_km, direct.alternative.extra_min) == (4.9, 6)
+    around_lleida = _of(
+        exported.segments, "baipas-lleida:bif-les-torres-de-sanui:bif-artesa-de-lleida"
+    )
+    assert (around_lleida.trains, around_lleida.without_alternative) == (42, 0)
+    # lo que llega a cada bifurcación sale de ella por la estación o por el baipás
+    before = _of(exported.segments, f"{BCN}:cambiador-plasencia-de-jalon:bif-moncasi").trains
+    assert before == 78 == stations[f"{BCN}:bif-moncasi:zaragoza-delicias"] + 22
+    after = _of(exported.segments, f"{BCN}:bif-artesa-de-lleida:l-espluga-de-francoli").trains
+    assert after == 89 == stations[f"{BCN}:lleida-pirineus:bif-artesa-de-lleida"] + 42
     # Y de la línea nueva, el primer tramo: a València-Estació del Nord solo se llega por él.
     assert {s: n for s, n in without.items() if s.startswith(f"{MEDITERRANEO}:")} == {
         f"{MEDITERRANEO}:valencia-estacio-del-nord:valencia-joaquin-sorolla": 54
     }
-    # el otro camino de un regional de València a Vinaròs (151,0 km) son 1.033,2 km por Madrid
+    # el otro camino de un regional de València a Vinaròs (151,0 km) son 1.026,3 km por Madrid
     coast = _of(exported.segments, f"{MEDITERRANEO}:castello-de-la-plana:benicassim")
     regional = next(
         g
@@ -257,7 +291,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         if (g.from_node_id, g.to_node_id) == ("valencia-estacio-del-nord", "vinaros")
     )
     assert (regional.trains, regional.length_km) == (22, 151.0)
-    assert regional.alternative is not None and regional.alternative.length_km == 1033.2
+    assert regional.alternative is not None and regional.alternative.length_km == 1026.3
     # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
     # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
     # trenes tienen otro camino, aunque sea por una línea de otro ancho
