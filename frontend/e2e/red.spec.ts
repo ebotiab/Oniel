@@ -29,11 +29,11 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^9 líneas · 2\.151 km\s*54 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^9 líneas · 2\.209 km\s*55 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     await expect(red.getByRole('region', { name: 'Alta velocidad' }).locator('.fila-linea')).toHaveText([
       /^Madrid – Sevilla470,5 km · hasta 300 km\/h/,
-      /^Córdoba – Málaga96,9 km · hasta 300 km\/h/,
+      /^Córdoba – Málaga154,7 km · hasta 300 km\/h/,
       /^Antequera – Granada114,1 km · hasta 300 km\/h/,
       /^Madrid – Barcelona por Zaragoza627,0 km · hasta 300 km\/h/,
     ])

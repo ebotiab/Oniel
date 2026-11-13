@@ -94,7 +94,7 @@
     "18000": {"exits": ["madrid-puerta-de-atocha"]},
     "04040": {"exits": ["madrid-puerta-de-atocha"], "via": {"line": "lav-madrid-barcelona", "node": "madrid-puerta-de-atocha"}},
     "71801": {"exits": ["madrid-puerta-de-atocha"], "via": {"line": "lav-madrid-barcelona", "node": "madrid-puerta-de-atocha"}},
-    "54413": {"exits": ["bif-malaga"]},
+    "54413": {"exits": ["bif-malaga"], "via": {"line": "lav-cordoba-malaga", "node": "bif-malaga"}},
     "02003": {"exits": ["bif-malaga"], "via": {"line": "lav-cordoba-malaga", "node": "bif-malaga"}},
     "02030": {"exits": ["bif-malaga"], "via": [{"line": "lav-cordoba-malaga", "node": "bif-malaga"}, {"line": "lav-antequera-granada", "node": "antequera-santa-ana"}]},
     "02002": {"exits": ["bif-malaga"], "via": {"line": "lav-cordoba-malaga", "node": "bif-malaga"}},
@@ -114,12 +114,18 @@
     "51405": {"exits": ["sevilla-santa-justa"]}
   },
   "corridor_filter": {
-    "description": "Se importan los viajes del GTFS que paran en Córdoba y en alguna estación de Madrid: son los que recorren el corredor de la línea 010. Entran además los que van de Sevilla-Santa Justa a Córdoba sin paradas intermedias aunque no lleguen a Madrid (los Avant de Sevilla a Córdoba, a Málaga y a Granada): solo la alta velocidad une las dos estaciones sin parar, porque los Media Distancia de la línea convencional paran en Lora del Río o en Posadas. Los AVE de Barcelona y de Valencia que no paran en Madrid entran por las reglas de route_overrides.",
+    "description": "Se importan los viajes del GTFS que paran en Córdoba y en alguna estación de Madrid: son los que recorren el corredor de la línea 010. Entran además los que van de Sevilla-Santa Justa a Córdoba sin paradas intermedias aunque no lleguen a Madrid (los Avant de Sevilla a Córdoba, a Málaga y a Granada): solo la alta velocidad une las dos estaciones sin parar, porque los Media Distancia de la línea convencional paran en Lora del Río o en Posadas. Los AVE de Barcelona y de Valencia que no paran en Madrid entran por las reglas de route_overrides, y los directos entre Madrid y Málaga, que no paran en Córdoba, por otra.",
     "required_stop_ids": ["50500"],
     "any_of_stop_ids": ["60000", "17000", "18000"],
     "consecutive_stop_ids": [["51003", "50500"]]
   },
   "route_overrides": [
+    {
+      "id": "madrid-malaga-sin-paradas",
+      "description": "Trenes directos entre Madrid-Puerta de Atocha y Málaga, de Renfe y de Ouigo: no paran en Córdoba, así que no pasan el filtro de corredor, pero recorren la línea de Madrid a la bifurcación de Málaga y siguen por la de Córdoba a Málaga.",
+      "consecutive_stop_ids": ["60000", "54413"],
+      "from_stop_id": "60000"
+    },
     {
       "id": "atocha-cercanias-ciudad-real-por-manzanares",
       "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: entre Madrid y Ciudad Real van por la línea convencional hasta Manzanares y por la línea Manzanares – Ciudad Real; por esta línea se resuelven desde Ciudad Real.",
