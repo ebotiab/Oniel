@@ -1691,9 +1691,12 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
     assert (south["trains"], south["without_alternative"]) == (83, 83)
     assert all(g["alternative"] is None for g in south["groups"])
-    # entre Córdoba y la bifurcación de Málaga sí, desde que Granada está unida por los dos lados
+    # entre Córdoba y la bifurcación de Málaga sí, desde que Granada está unida por los dos lados,
+    # salvo para los 22 Avant que solo recorren ese tramo de la línea: la vuelta por Granada mide
+    # más del doble que su recorrido y no cuenta
     first = by_id[f"{LAV}:cordoba:bif-malaga"]
-    assert (first["trains"], first["without_alternative"]) == (140, 0)
+    assert (first["trains"], first["without_alternative"]) == (140, 22)
+    assert "más del doble" in out["scope_note"] and "más del doble" in out["method"]
     # al norte, la línea convencional salva el tramo: 97 km más para los trenes de Madrid a Sevilla
     north = by_id[f"{LAV}:adamuz:cordoba"]
     assert (north["trains"], north["without_alternative"]) == (118, 0)
