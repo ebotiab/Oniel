@@ -1,0 +1,67 @@
+{
+  "descripcion": "Registro de las consultas hechas el 13 de noviembre de 2026 para revisar las interrupciones vigentes de backend/data/curated/anotaciones.json: la de la alta velocidad Madrid – Sevilla, por si ya circulaban trenes entre Ciudad Real y Puertollano, y las de la línea convencional y la línea de Jaén. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "consultado_el": "2026-11-13",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red. Información del tráfico ferroviario",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-13 10:47",
+      "resumen": "El aviso para Andalucía, Castilla-La Mancha y Madrid no ha cambiado respecto a los días 10 y 12 de noviembre: la circulación en la línea de alta velocidad Madrid-Andalucía sigue interrumpida por el alcance entre dos trenes del 28 de octubre, se sigue prestando servicio en los tramos Madrid-Toledo y Málaga-Sevilla y no hay fecha de reanudación. No dice nada de trenes entre Ciudad Real y Puertollano. Los demás avisos del día son de otras zonas (Madrid, Asturias, Cataluña y País Vasco).",
+      "que_aporta": "Que la interrupción de la alta velocidad sigue vigente el 13 de noviembre de 2026, con los mismos tramos abiertos y sin fecha."
+    },
+    {
+      "source_id": "adif-salidas-y-llegadas",
+      "titulo": "Salidas y llegadas de las estaciones de Ciudad Real, Puertollano, Santa Cruz de Mudela, Jaén y Córdoba",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estaciones",
+      "fecha_de_la_pagina": "2026-11-13, entre las 11:00 y las 11:07",
+      "paginas": [
+        "https://www.adif.es/w/37200-ciudad-real",
+        "https://www.adif.es/w/37700-puertollano",
+        "https://www.adif.es/w/50200-sta.cruz-de-mudela",
+        "https://www.adif.es/w/03100-ja%C3%A9n",
+        "https://www.adif.es/w/50500-c%C3%B3rdoba-j.-anguita"
+      ],
+      "resumen": "Las tablas cargan al segundo intento; se comprobó con una captura qué pestaña (salidas o llegadas) se leía. Cada tabla trae primero los trenes que quedan del día y, a continuación, otra tanda que vuelve a empezar hacia las 7 de la mañana y que la página no fecha. Ciudad Real, lo que queda del día 13 (11:00): salen, con vía asignada, Media Distancia y regionales a Alcázar de San Juan, Madrid Atocha Cercanías, Madrid Chamartín, Alicante, Badajoz y, a las 23:04, un Media Distancia a Puertollano; llegan los equivalentes. No figura ningún Avant ni ningún otro tren de alta velocidad, y ningún tren lleva ya la observación de circulación suspendida que llevaban el día 10. Puertollano, lo que queda del día 13 (11:02): salen un Media Distancia a Alcázar de San Juan (con vía) y dos regionales a Badajoz; llegan un regional de Alcázar de San Juan, otro de Badajoz y un Media Distancia de Madrid Atocha Cercanías; ningún Avant. En la tanda sin fecha de las dos estaciones sí figuran, sin vía y sin observaciones, Avant entre Ciudad Real y Puertollano (siete salidas de Puertollano, entre las 6:51 y las 20:30) y, en Ciudad Real, un AVE a Sevilla y otro desde Sevilla y un Alvia con Madrid Atocha Cercanías; Oniel no sabe a qué día corresponde esa tanda ni si esos trenes circularán. Santa Cruz de Mudela (11:06): los regionales Madrid-Jaén (18030 a 18037) salen con vía asignada y llevan la observación de que, por obras, el trayecto entre Almuradiel y Jaén se hace por carretera. Jaén (11:07): la misma observación en los trenes a Madrid; los Media Distancia a Córdoba y Cádiz indican recorrido Jaén-Córdoba por carretera, y uno de ellos, todo su recorrido. Córdoba: la página no devolvió información de circulación en cinco intentos entre las 11:03 y las 11:10.",
+      "que_aporta": "Que el 13 de noviembre de 2026, a las 11:00, los paneles de Ciudad Real y Puertollano no muestran Avant entre las dos estaciones en lo que queda de día: los extremos de la interrupción de la alta velocidad no se tocan. Que en la línea convencional y en la de Jaén todo sigue como el día 10 por el norte; el extremo sur (Alcolea de Córdoba) y las salidas de Córdoba quedan sin comprobar en los paneles este día."
+    },
+    {
+      "source_id": "cmm-avant-ciudad-real-puertollano-2026-11",
+      "titulo": "Renfe finalmente no reestablece el servicio Avant de alta velocidad entre Puertollano y Ciudad Real",
+      "editor": "Castilla-La Mancha Media (CMM)",
+      "url": "https://www.cmmedia.es/noticias/castilla-la-mancha/ciudad-real/renfe-reestablece-el-servicio-avant-entre-puertollano-y-ciud.html",
+      "fecha_de_la_pagina": "2026-11-12 14:37",
+      "resumen": "Noticia: Renfe había anunciado que el viernes 13 de noviembre recuperaría la alta velocidad entre Puertollano y Ciudad Real, pero ha cambiado el plan y mantiene la conexión solo por carretera, con autobuses. El plan difundido antes preveía unos quince minutos de viaje entre las dos ciudades y trenes convencionales o autobuses entre Ciudad Real y Madrid. Recoge críticas del Ayuntamiento de Ciudad Real y de viajeros a los cambios de plan. No cita una nota de Renfe, no da el motivo del cambio ni una fecha para la vuelta de los trenes.",
+      "que_aporta": "Que los Avant entre Ciudad Real y Puertollano anunciados para el 13 de noviembre de 2026 no se restablecieron ese día."
+    },
+    {
+      "source_id": null,
+      "titulo": "Confusión absoluta entre los viajeros de Puertollano: Renfe cambia a última hora el plan alternativo de transporte y este viernes solo habrá autobuses",
+      "editor": "La Comarca de Puertollano",
+      "url": "https://www.lacomarcadepuertollano.com/puertollano/confusion-absoluta-entre-viajeros-puertollano-renfe-cambia-ultima-hora-plan-alternativo-transporte-viernes-solo-habra-autobuses/20261113100840655637.html",
+      "fecha_de_la_pagina": "2026-11-13",
+      "resumen": "Noticia: según lo que Renfe comunicó al propio medio, el viernes 13 solo hay transporte por carretera; queda sin efecto la vuelta de la alta velocidad entre Puertollano y Ciudad Real anunciada antes. No da motivo ni fecha, y dice que Renfe no tenía aún los horarios del fin de semana ni de los días siguientes. Otro medio, Lanza Digital, publicó ese día (actualizado a las 10:54) que Renfe mantiene los autobuses Puertollano-Ciudad Real-Madrid, con alguna salida en tren convencional hacia Madrid; los dos medios no coinciden en ese detalle.",
+      "que_aporta": "Corrobora la noticia de CMM, con Renfe como origen de la información. No se registra como fuente aparte."
+    },
+    {
+      "source_id": null,
+      "titulo": "Sala de prensa de Renfe: listado de noticias",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa",
+      "fecha_de_la_pagina": "2026-11-13; la nota más reciente del listado es del 11 de noviembre",
+      "resumen": "Las notas de noviembre de 2026 tratan de las huelgas de los días 10, 11 y 12, de un cambio en la línea C-5 de Cercanías Madrid, de la prórroga hasta el 12 de noviembre del plan por carretera entre Madrid, Ciudad Real y Puertollano (5 de noviembre, ya registrada el día 12) y de la atención a los afectados por el accidente. No hay ninguna nota sobre los Avant entre Ciudad Real y Puertollano, sobre el plan a partir del 13 de noviembre ni sobre la reapertura de la línea Madrid-Sevilla.",
+      "que_aporta": "Que no hay nota oficial de Renfe sobre la vuelta de los Avant ni sobre la reanudación de la alta velocidad."
+    },
+    {
+      "source_id": "adif-aviso-obras-autopista-ferroviaria",
+      "titulo": "Obras autopista ferroviaria Algeciras-Zaragoza",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/obras-autopista-ferroviaria-algeciras-zaragoza",
+      "fecha_de_la_pagina": "2026-09-30 (fecha de actualización que declara el aviso)",
+      "resumen": "El aviso es el mismo del 10 de noviembre: por las obras de adaptación a la autopista ferroviaria Algeciras-Zaragoza, el servicio está interrumpido entre Córdoba y Santa Cruz de Mudela (Ciudad Real) y en el tramo Algeciras-Bobadilla-Córdoba, con transporte alternativo por carretera para los viajeros de media y larga distancia. No da fecha de inicio ni previsión de fin.",
+      "que_aporta": "Que la interrupción por obras de la línea convencional sigue vigente el 13 de noviembre de 2026, sin cambios en lo que Adif publica."
+    }
+  ]
+}
