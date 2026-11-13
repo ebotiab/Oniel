@@ -233,6 +233,40 @@
       "notes": "Fuente de verificación, no de geometría; revisión del 19 de mayo de 2026 (oldid 173533962), consultada por la API de Wikipedia. La tabla trae además seis puestos de banalización, la bifurcación de la base de mantenimiento de Gabaldón y el cambiador de ancho de Valencia, que no se han cargado como nodos. En la línea de Albacete a Alicante trae además los puestos de banalización de Tarazona, La Gineta, Albacete y Caudete y el cambiador de Albacete, que tampoco se han cargado; el de Las Chozas sí, porque es el nodo más cercano a La Encina, donde el mapa de señalización de Adif cambia de símbolo. Las bifurcaciones de La Oliva y de Aguaverde, hacia Valencia por Xàtiva, figuran como futuras y no se han cargado. Dice que entre Albacete y Alicante hay ERTMS solo de nivel 2; Oniel declara lo que dibuja el mapa 4. Dice que la línea lleva ERTMS de niveles 1 y 2 entre Torrejón de Velasco y Valencia; la señalización de Oniel sale del mapa 4 de la Declaración sobre la Red, que dibuja el símbolo de nivel 1. De los artículos de las estaciones se tomaron el código y el año de apertura de València-Joaquín Sorolla (oldid 174521495, que da también el corredor peatonal con la Estació del Nord abierto el 30 de junio de 2025), de Requena-Utiel (oldid 173808086) y de Cuenca-Fernando Zóbel (oldid 172322332); los códigos coinciden con las paradas del GTFS de Renfe. El artículo no da el número de línea de Adif."
     },
     {
+      "id": "osm-relation-4777557",
+      "name": "Trazado de la línea de alta velocidad Madrid–Segovia–Valladolid (relación OSM 4777557, línea 080 de Adif, vía doble de ancho estándar a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/4777557",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Los 178,6 km de la relación entre los andenes de Madrid-Chamartín y la estación de Valladolid-Campo Grande, por Segovia-Guiomar; velocidad máxima por tramo. La relación sigue hasta Burgos; ese trecho no se usa.",
+      "notes": "Descargado por la API Overpass (overpass-api.de) el 13 de noviembre de 2026. La relación es de infraestructura («Línea de Alta Velocidad Madrid–Valladolid-Burgos», ref=080, operator=Adif), trae las dos vías (334 vías) y es de una pieza entre Madrid y Valladolid: se traza el camino más corto por el grafo de vías, sin huecos. Sus vías llevan railway:etcs=2; la velocidad máxima más repetida es 300 km/h y coincide con el cuadro de velocidades de Wikipedia. El trazado acaba en el vértice de la vía más cercano a la estación de Valladolid-Campo Grande: con la parada de la relación como final, el camino más corto pasaba de largo la estación y volvía por la otra vía, 3,3 km de más. Comparte dos nodos con la relación 4777980 («LAV Olmedo-Zamora-Galicia»), en el kilómetro 133,13 del trazado: ahí está la bifurcación Medina. El número de línea de Adif (080) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. Las coordenadas de Madrid-Chamartín, Segovia-Guiomar, Valladolid-Campo Grande y el PAET de Garcillán son las de sus nodos en OSM (raw/osm/adif_facility_nodes_madrid_valladolid_2026-11-13.json, descargado el mismo día); los códigos de estación de esos nodos (17000, 08004 y 10600) coinciden con las paradas del GTFS de Renfe. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
+      "file": "raw/osm/relation_4777557_lav_madrid_valladolid_burgos_2026-11-13.json"
+    },
+    {
+      "id": "wikipedia-lav-madrid-valladolid",
+      "name": "Artículo «Línea de alta velocidad Madrid-Segovia-Valladolid» de Wikipedia en español (puntos kilométricos, instalaciones, velocidades, fecha de apertura)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Madrid-Segovia-Valladolid",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Puntos kilométricos: Madrid-Chamartín (0,000), puesto de banalización de Tres Cantos (18,831), PAET de Soto del Real (35,464), Segovia-Guiomar (68,476), PAET de Garcillán (86,480), puesto de banalización de Nava de la Asunción (107,119), PAET de Olmedo (133,078), bifurcación Medina, hacia Galicia (133,884), puesto de banalización de Valdestillas (158,220), bifurcación del cambiador de Valdestillas (159,900), puesto de banalización de Río Duero (168,717) y Valladolid-Campo Grande (179,309); puesta en servicio el 23 de diciembre de 2007; vía doble de ancho estándar a 25 kV; túneles de Guadarrama (28 km) y de San Pedro (9 km); cuadro de velocidades máximas (300 km/h entre los kilómetros 21,0 y 168,7); servicios que la recorren.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 8 de septiembre de 2026 (oldid 175251328), consultada por la API de Wikipedia el 13 de noviembre de 2026. Los puntos kilométricos de Segovia-Guiomar, Garcillán, la bifurcación Medina y Valladolid quedan todos 0,75 km por delante del kilómetro medido desde los andenes de Madrid-Chamartín en el trazado de OSM, con diferencias de menos de 20 m entre sí: la línea cargada lleva ese origen (pk_origin_km) y Madrid-Chamartín no guarda punto kilométrico de esta línea. No se han cargado como nodos los puestos de banalización, el PAET de Olmedo (a 0,8 km de la bifurcación Medina), la bifurcación Fuencarral ni el cambiador de Valdestillas, que la tabla da fuera de servicio. La bifurcación Barajas figura como futura y no se ha cargado. Dice que la línea lleva ASFA digital y ERTMS de niveles 1 y 2, lo mismo que dibuja el mapa 4 de la Declaración sobre la Red. Dice además que en 2024 se aprobó un baipás cerca de Olmedo, entre esta línea y la de Galicia, con dos noticias de prensa como referencia; Oniel no lo ha registrado como proyecto porque no se ha buscado todavía su fuente oficial. El artículo no da el número de línea de Adif."
+    },
+    {
+      "id": "wikipedia-lav-olmedo-zamora-galicia",
+      "name": "Artículo «Línea de alta velocidad Olmedo-Zamora-Orense-Santiago de Compostela» de Wikipedia en español (puntos kilométricos desde la bifurcación Medina)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Olmedo-Zamora-Orense-Santiago_de_Compostela",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Kilómetros de vía desde la bifurcación Medina (PK 133,884) hasta las paradas de la línea de Galicia, que no está cargada: Medina del Campo AV (155,458), Zamora (232,463), Sanabria AV (333,588), A Gudiña-Porta de Galicia (382,613) y Ourense (462,533). Los puntos kilométricos siguen la numeración de la línea de Madrid a Valladolid.",
+      "notes": "Revisión del 15 de octubre de 2025 (oldid 169994798), consultada por la API de Wikipedia el 13 de noviembre de 2026. Solo se usa para repartir el tiempo de los trenes que dejan la línea Madrid–Valladolid en la bifurcación Medina (track_km de sus asignaciones de parada): la línea de Galicia no está cargada y esta fuente no sustituye a la verificación que tocará hacer al cargarla. La tabla da una «futura bifurcación Valladolid» en el PK 144,473, que no se ha cargado."
+    },
+    {
       "id": "osm-relation-11351146",
       "name": "Trazado de la línea convencional Espeluy–Jaén (relación OSM 11351146, línea 402 de Adif, ancho ibérico, vía única electrificada a 3 kV)",
       "publisher": "Colaboradores de OpenStreetMap",

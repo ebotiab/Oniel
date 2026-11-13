@@ -1,0 +1,557 @@
+{
+  "line": {
+    "id": "lav-madrid-valladolid",
+    "name": "Línea de alta velocidad Madrid – Segovia – Valladolid",
+    "short_name": "080",
+    "sort_order": 20,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 2,
+    "opened_on": "2007-12-23",
+    "reference_length_km": 178.559,
+    "pk_origin_km": 0.75,
+    "status": "disponible",
+    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora, Ourense y Galicia, que todavía no está cargada. En Valladolid la línea continúa hacia Palencia, León y Burgos, también sin cargar: de los trenes que siguen por esas líneas Oniel cuenta el paso por esta, hasta la bifurcación o hasta Valladolid.\n\nMuchos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la alta velocidad de Levante.",
+    "geometry_source": {
+      "source_id": "osm-relation-4777557",
+      "parts": [
+        {
+          "source_id": "osm-relation-4777557",
+          "file": "raw/osm/relation_4777557_lav_madrid_valladolid_burgos_2026-11-13.json",
+          "relation_id": 4777557,
+          "from": [
+            -3.6809556,
+            40.47354
+          ],
+          "to": [
+            -4.7268214,
+            41.6420148
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-madrid-valladolid"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    },
+    {
+      "id": "ouigo",
+      "name": "Ouigo España",
+      "role": "operador",
+      "source_id": "ouigo-gtfs-nap"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "madrid-chamartin",
+      "name": "Madrid-Chamartín",
+      "kind": "estacion",
+      "adif_code": "17000",
+      "position": {
+        "lon": -3.6822622,
+        "lat": 40.4720571
+      },
+      "description": "La estación del norte de Madrid. De ella sale esta línea hacia Segovia y Valladolid; un túnel bajo la ciudad la une con la alta velocidad de Levante."
+    },
+    {
+      "id": "soto-del-real",
+      "name": "Soto del Real",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 34.714
+      },
+      "reference_pk_km": 35.464,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) al pie de la sierra de Guadarrama, antes del túnel. No tiene servicio de viajeros: permite que un tren adelante a otro o espere en vía apartada."
+    },
+    {
+      "id": "segovia-guiomar",
+      "name": "Segovia-Guiomar",
+      "kind": "estacion",
+      "adif_code": "08004",
+      "position": {
+        "lon": -4.0947553,
+        "lat": 40.9102319
+      },
+      "reference_pk_km": 68.476,
+      "description": "La estación de alta velocidad de Segovia y la única intermedia de la línea, al otro lado del túnel de Guadarrama. Es distinta de la estación de Segovia de la línea convencional."
+    },
+    {
+      "id": "garcillan",
+      "name": "Garcillán",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.2754111,
+        "lat": 40.9926943
+      },
+      "reference_pk_km": 86.48,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) entre Segovia y Olmedo. No tiene servicio de viajeros."
+    },
+    {
+      "id": "bif-medina",
+      "name": "Bifurcación Medina",
+      "kind": "bifurcacion",
+      "position": {
+        "km": 133.134
+      },
+      "reference_pk_km": 133.884,
+      "description": "Punto cercano a Olmedo (Valladolid) donde sale de esta línea la de alta velocidad a Medina del Campo, Zamora, Ourense y Galicia. Los trenes de Madrid a Galicia y a Salamanca dejan aquí la línea. Menos de un kilómetro antes está el puesto de adelantamiento de Olmedo, que no se ha cargado como nodo."
+    },
+    {
+      "id": "valladolid-campo-grande",
+      "name": "Valladolid-Campo Grande",
+      "kind": "estacion",
+      "adif_code": "10600",
+      "position": {
+        "lon": -4.7269507,
+        "lat": 41.6421265
+      },
+      "reference_pk_km": 179.309,
+      "description": "La estación de Valladolid, donde acaba esta línea. La comparten la alta velocidad y la línea convencional de Madrid a Irún. De aquí siguen hacia Palencia, León y Burgos las líneas de alta velocidad del norte, que todavía no están cargadas."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-13",
+      "value": "ertms_n1_n2_asfa",
+      "note": "Mapa 4: símbolos «ERTMS N1 y 2» (el morado claro de la leyenda) y «ASFA - AV» junto a la línea, a los dos lados de Segovia Guiomar y junto a la bifurcación Medina."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-13",
+      "value": "bca",
+      "note": "Mapa 4: rótulo «BCA» y trazo rosa a lo largo de toda la línea, de Madrid Chamartín a Valladolid Campo Grande."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-13",
+      "value": "sin_dato_publicado",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    }
+  ],
+  "connections": [
+    {
+      "id": "lav-olmedo-zamora-galicia",
+      "node_id": "bif-medina",
+      "name": "LAV Olmedo–Zamora–Galicia",
+      "towards": "Medina del Campo, Zamora, Ourense y Galicia",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.6802476,
+          41.2731733
+        ],
+        [
+          -4.9229851,
+          41.2913315
+        ],
+        [
+          -5.739675,
+          41.515892
+        ]
+      ]
+    },
+    {
+      "id": "lav-valladolid-palencia-leon",
+      "node_id": "valladolid-campo-grande",
+      "name": "LAV Valladolid–Palencia–León",
+      "towards": "Palencia, León y Burgos",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.7269507,
+          41.6421265
+        ],
+        [
+          -4.495844,
+          41.91736
+        ],
+        [
+          -4.534135,
+          42.015711
+        ]
+      ]
+    },
+    {
+      "id": "conv-valladolid-medina-del-campo",
+      "node_id": "valladolid-campo-grande",
+      "name": "Línea convencional Madrid–Irún",
+      "towards": "Medina del Campo y Ávila",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.7269507,
+          41.6421265
+        ],
+        [
+          -4.772948,
+          41.4887437
+        ],
+        [
+          -4.9096781,
+          41.3172598
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "17000": {
+      "node": "madrid-chamartin"
+    },
+    "08004": {
+      "node": "segovia-guiomar"
+    },
+    "10600": {
+      "node": "valladolid-campo-grande"
+    },
+    "08240": {
+      "exits": [
+        "bif-medina"
+      ],
+      "track_km": 21.574
+    },
+    "30200": {
+      "exits": [
+        "bif-medina"
+      ],
+      "track_km": 98.579
+    },
+    "08247": {
+      "exits": [
+        "bif-medina"
+      ],
+      "track_km": 199.704
+    },
+    "08251": {
+      "exits": [
+        "bif-medina"
+      ],
+      "track_km": 248.729
+    },
+    "22100": {
+      "exits": [
+        "bif-medina"
+      ],
+      "track_km": 328.649
+    },
+    "30100": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "31412": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "20305": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "20309": {
+      "exits": [
+        "bif-medina"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11500": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11600": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "13106": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "13200": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "14114": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "14202": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "14213": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "14223": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15122": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15203": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15211": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15410": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "16403": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20005": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20102": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20104": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20109": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20113": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "81002": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "81100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "03208": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "03213": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "03216": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "03309": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "03410": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "60600": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "60911": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "61200": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "62002": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Segovia-Guiomar, a la que solo se llega por esta línea. Los que la recorren sin parar en Segovia entran por las reglas de recorrido: los que van de Madrid-Chamartín a Valladolid, a León, a Medina del Campo AV, a Zamora o a Ourense sin paradas intermedias. Valladolid-Campo Grande no está en el filtro porque paran en ella los trenes de la línea convencional, que no recorren esta.",
+    "any_of_stop_ids": [
+      "08004"
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "madrid-valladolid-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y Valladolid sin parada en Segovia: recorren la línea entera.",
+      "consecutive_stop_ids": [
+        "17000",
+        "10600"
+      ],
+      "from_stop_id": "17000"
+    },
+    {
+      "id": "madrid-leon-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y León sin paradas intermedias: recorren la línea entera sin parar en Segovia ni en Valladolid.",
+      "consecutive_stop_ids": [
+        "17000",
+        "15100"
+      ],
+      "from_stop_id": "17000"
+    },
+    {
+      "id": "madrid-medina-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y Medina del Campo AV sin parada en Segovia: recorren la línea hasta la bifurcación Medina.",
+      "consecutive_stop_ids": [
+        "17000",
+        "08240"
+      ],
+      "from_stop_id": "17000"
+    },
+    {
+      "id": "madrid-zamora-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y Zamora sin paradas intermedias: recorren la línea hasta la bifurcación Medina.",
+      "consecutive_stop_ids": [
+        "17000",
+        "30200"
+      ],
+      "from_stop_id": "17000"
+    },
+    {
+      "id": "madrid-ourense-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y Ourense sin paradas intermedias: recorren la línea hasta la bifurcación Medina.",
+      "consecutive_stop_ids": [
+        "17000",
+        "22100"
+      ],
+      "from_stop_id": "17000"
+    }
+  ]
+}
