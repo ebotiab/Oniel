@@ -28,7 +28,7 @@ test.describe('Atributos de tramo: de las secciones de la línea a la ficha', ()
     expect(filas.map((f) => [f.atributo.etiqueta, f.atributo.formato(f.valor!.value), f.atributo.termino?.(f.valor!.value)])).toEqual([['Vías', 'Vía única', 'via-unica']])
     // la señalización va plegada, bajo «Más detalle»
     expect(attributeRows(tramo(UNICA), linea(tramo(UNICA)), 'detalle').map((f) => f.atributo.clave)).toEqual(['proteccion_tren', 'bloqueo', 'mando'])
-    expect(SEGMENT_ATTRIBUTES.map((a) => a.clave)).toEqual(['tracks', 'proteccion_tren', 'bloqueo', 'mando'])
+    expect(SEGMENT_ATTRIBUTES.map((a) => a.clave)).toEqual(['tracks', 'gauge', 'proteccion_tren', 'bloqueo', 'mando'])
   })
 
   test('una API anterior a los atributos solo trae `tracks` y se lee igual', () => {
