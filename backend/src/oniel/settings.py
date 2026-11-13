@@ -41,6 +41,8 @@ class Settings(BaseSettings):
         "lav-plasencia-badajoz",
         "ramal-merida",
         "monfrague-caceres",
+        "baipas-zaragoza",
+        "baipas-lleida",
     ]
 
 

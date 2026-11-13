@@ -124,10 +124,25 @@ export function formatCount(n: number): string {
   return n.toLocaleString('es-ES', { useGrouping: 'always', maximumFractionDigits: 0 })
 }
 
+/**
+ * Las líneas que se cuentan y se listan como tales. Un baipás (el de Zaragoza, el de Lleida) es parte
+ * de la línea de la que sale: va colgado de ella y no suma en el recuento de líneas.
+ */
+export function mainLines<L extends Pick<LineSummary, 'id' | 'bypass_of'>>(lines: L[]): L[] {
+  const ids = new Set(lines.map((l) => l.id))
+  return lines.filter((l) => !l.bypass_of || !ids.has(l.bypass_of))
+}
+
+/** Los baipases de una línea, en el orden en que se recorren desde su origen. */
+export function bypassesOf<L extends Pick<LineSummary, 'id' | 'bypass_of' | 'sort_order'>>(lines: L[], lineId: string): L[] {
+  return lines.filter((l) => l.bypass_of === lineId).sort((a, b) => a.sort_order - b.sort_order)
+}
+
 /** «3 líneas · 976 km»: el recuento de la red, igual de largo con tres líneas que con cien. */
 export function networkCount(lines: LineSummary[]): string {
   const km = lines.reduce((sum, l) => sum + l.length_km, 0)
-  return `${formatCount(lines.length)} ${lines.length === 1 ? 'línea' : 'líneas'} · ${formatCount(Math.round(km))} km`
+  const n = mainLines(lines).length
+  return `${formatCount(n)} ${n === 1 ? 'línea' : 'líneas'} · ${formatCount(Math.round(km))} km`
 }
 
 /** Fecha de hoy como AAAA-MM-DD (en UTC, como el resto de fechas ISO que maneja la API). */
