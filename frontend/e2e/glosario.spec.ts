@@ -88,6 +88,35 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(page.getByTestId('glosario-cruces-en-via-unica')).toHaveAttribute('aria-current', 'true')
   })
 
+  test('el ancho de vía tiene su concepto: la vía de frente, a escala, con las ruedas a la medida de cada ancho', async ({ page }) => {
+    // desde la nota del término, como llega quien lee la ficha de un tramo de ancho mixto
+    await page.goto('/glosario/ancho-mixto')
+    const termino = page.getByTestId('glosario-ancho-mixto')
+    await expect(termino).toHaveAttribute('aria-current', 'true')
+    await termino.getByRole('link', { name: 'Anchos de vía: ibérico, estándar y mixto' }).click()
+    await expect(page).toHaveURL(/\/glosario\/anchos-de-via$/)
+    const concepto = page.getByTestId('glosario-anchos-de-via')
+    await expect(concepto).toHaveAttribute('aria-current', 'true')
+    await expect(concepto).toBeInViewport()
+    const pasos = concepto.locator('.glosario-pasos > li')
+    await expect(pasos).toHaveCount(3)
+    await expect(pasos.nth(0)).toContainText('1.668 mm')
+    await expect(pasos.nth(1)).toContainText('1.435 mm')
+    await expect(pasos.nth(2)).toContainText('tercer carril')
+    for (const dibujo of await pasos.locator('svg').all()) {
+      const caja = (await dibujo.boundingBox())!
+      expect(caja.width).toBeGreaterThan(200)
+      expect(caja.height).toBeGreaterThan(40)
+    }
+    // dos carriles en los anchos sencillos y tres en el mixto, y la medida escrita en el dibujo
+    await expect(pasos.nth(0).locator('svg')).toContainText('1.668 mm')
+    await expect(pasos.nth(2).locator('svg')).toContainText('1.435 mm, ancho estándar')
+    await expect(concepto).toContainText('Referencia: Reglamento de Circulación Ferroviaria')
+    await expect(concepto).toContainText('art. 1.1.1.3')
+    // y lleva a los tres términos
+    for (const nombre of ['Ancho de vía', 'Ancho mixto', 'Cambiador de ancho']) await expect(concepto.getByRole('link', { name: nombre, exact: true })).toBeVisible()
+  })
+
   test('la página abre con el índice de los conceptos, todos con dibujo, y cabe en la pantalla', async ({ page }) => {
     await page.goto('/glosario')
     const pagina = page.getByTestId('pagina-glosario')
@@ -96,6 +125,7 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(pagina).toHaveCSS('position', 'absolute')
     const indice = page.getByTestId('glosario-indice')
     await expect(indice.getByRole('link')).toHaveText([
+      'Anchos de vía',
       'Cómo se separan los trenes',
       'Vía única',
       'Marcha a la vista',
