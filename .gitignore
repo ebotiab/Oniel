@@ -24,6 +24,15 @@ frontend/playwright-report/
 .DS_Store
 *.log
 
-# Enlaces de skills que crea library-skills en la raíz (apuntan a backend/.venv)
+# Enlaces de skills que crea library-skills en la raíz (apuntan a backend/.venv). Las skills propias
+# del proyecto sí se versionan: cada una necesita aquí su línea, o git la ignora.
 /.agents/
-/.claude/skills/
+/.claude/skills/*
+!/.claude/skills/anadir-linea/
+!/.claude/skills/revisar-interrupciones/
+!/.claude/skills/poner-rama-al-dia/
+!/.claude/skills/refresco-gtfs/
+# Copias sin cambios de maplibre/maplibre-agent-skills (cada carpeta lleva su ORIGEN.md y su licencia)
+!/.claude/skills/maplibre-v6-migration/
+!/.claude/skills/maplibre-source-wiring/
+!/.claude/skills/maplibre-tile-sources/

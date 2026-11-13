@@ -45,7 +45,7 @@ test.describe('Buscar una estación o una línea', () => {
     await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.focus()
-    await expect(page.getByRole('option')).toHaveCount(17)
+    await expect(page.getByRole('option')).toHaveCount(18)
     await expect(page.getByRole('option').last()).toContainText('Glosario')
     await campo.press('ArrowDown')
     await campo.press('ArrowDown')

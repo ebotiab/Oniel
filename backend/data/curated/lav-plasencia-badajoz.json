@@ -3,7 +3,7 @@
     "id": "lav-plasencia-badajoz",
     "name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
     "short_name": "026",
-    "sort_order": 16,
+    "sort_order": 17,
     "zone": "extremadura",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

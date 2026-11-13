@@ -11,7 +11,7 @@ import type { NetworkIndexOut } from '../src/data/types.ts'
 
 // Los proyectos: lo previsto, en obras o parado alrededor de las líneas cargadas. «Hoy» es el 12 de
 // noviembre de 2026, el día en que se comprobaron en sus fuentes (los dos de la alta velocidad de
-// Extremadura, un día después).
+// Extremadura y los dos de la línea de València a Camp de Tarragona, un día después).
 const HOY = new Date('2026-11-12T12:00:00')
 const MORA_ALCAZAR = 'proyecto-lav-mora-alcazar'
 const LOJA = 'proyecto-variante-de-loja'
@@ -30,12 +30,14 @@ const proyecto = (id: string) => proyectos.find((a) => a.id === id)!
 test.describe('Proyectos: datos y registro de capas', () => {
   test('cada proyecto trae estado, hitos fechados con su fuente y fecha de comprobación', () => {
     expect(proyectos.map((a) => a.id).sort()).toEqual([
+      'proyecto-ancho-estandar-castello-la-boella',
       'proyecto-conexion-lav-cordoba-jaen',
       'proyecto-duplicacion-antequera-granada',
       TUNELES,
       OROPESA,
       MORA_ALCAZAR,
       TALAYUELA,
+      'proyecto-segunda-via-ancho-mixto-valencia-castello',
       LOJA,
     ])
     for (const a of proyectos) {
@@ -43,7 +45,8 @@ test.describe('Proyectos: datos y registro de capas', () => {
       expect(a.milestones!.length, a.id).toBeGreaterThan(0)
       // la fuente de cada hito es una de las del proyecto, y tiene dónde consultarse
       for (const h of a.milestones!) expect(a.sources.find((s) => s.id === h.source_id)?.url, `${a.id} ${h.date}`).toBeTruthy()
-      expect(a.checked_on, a.id).toBe(a.id === OROPESA || a.id === TALAYUELA ? '2026-11-13' : '2026-11-12')
+      // los de Extremadura y los de la línea de València a Camp de Tarragona se comprobaron al cargarlas, un día después
+      expect(['2026-11-12', '2026-11-13'], a.id).toContain(a.checked_on)
     }
   })
 
@@ -129,7 +132,7 @@ test.describe('Proyectos: la vista', () => {
   test('la página de cobertura enumera los proyectos, con su estado, y lleva a la ficha de cada uno', async ({ page }) => {
     await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
-    await expect(lista.getByRole('listitem')).toHaveCount(7)
+    await expect(lista.getByRole('listitem')).toHaveCount(9)
     await expect(lista.getByRole('listitem').filter({ hasText: 'Variante de Loja' })).toContainText('en obras')
     await lista.getByTestId('proyecto-enlace').filter({ hasText: 'Variante de Loja' }).click()
     await expect(page).toHaveURL(/\/proyecto\//)

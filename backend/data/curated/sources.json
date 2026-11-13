@@ -372,98 +372,51 @@
       "notes": "Es un gráfico de 2015 que ilustra el artículo de Wikipedia de la línea; se consultó la imagen el 12 de noviembre de 2026 y no se guarda copia. Los valores se leen sobre la rejilla del gráfico, que va de 50 en 50 km/h: son aproximados, con un margen de unos 10 km/h. Solo sirven para el tiempo estimado de los recorridos del comparador y para la ficha de esos tres tramos."
     },
     {
-      "id": "osm-relation-11717892",
-      "name": "Trazado de la línea convencional de Madrid a Cáceres (relación OSM 11717892, línea 500 de Adif, «Bifurcación Planetario a Bifurcación Casa de la Torre»)",
+      "id": "osm-relation-18368664",
+      "name": "Trazado de la línea València-Estació del Nord – cambiador de La Boella (relación OSM 18368664, línea 600 de Adif, vía doble de ancho ibérico a 3 kV con un tramo de ancho mixto)",
       "publisher": "Colaboradores de OpenStreetMap",
-      "url": "https://www.openstreetmap.org/relation/11717892",
+      "url": "https://www.openstreetmap.org/relation/18368664",
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "De la relación Oniel usa tres trozos: de Villaverde Alto a la entrada de Navalmoral de la Mata (188,0 km) y de allí a Monfragüe (51,5 km), en la línea Madrid – Plasencia, y de Monfragüe a la bifurcación Casa de la Torre (71,0 km), en la línea Monfragüe – Cáceres; velocidad máxima por tramo.",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es la relación de infraestructura de la línea 500 (route=railway, ref=500, operator=Adif), pero no llega a la bifurcación Planetario: empieza en Villaverde Alto. Además está partida en dos junto a Navalmoral de la Mata, donde 3,5 km de la vía antigua figuran como «disused» y los trenes pasan por una vía de la plataforma de la línea de alta velocidad en construcción, que la relación no recoge. Trae también la entrada a Cáceres desde la bifurcación Casa de la Torre, etiquetada ref=026. Las vías dicen ancho de 1668 mm, vía única (passenger_lines=1) y sin electrificar (electrified=no) desde Humanes, y maxspeed de 155 km/h en casi todo el recorrido. También se descargaron las estaciones y bifurcaciones de Adif entre Madrid y Badajoz (raw/osm/adif_facility_nodes_madrid_extremadura_2026-11-13.json), de donde salen las coordenadas de los nodos.",
-      "file": "raw/osm/relation_11717892_linea_500_planetario_casa_de_la_torre_2026-11-13.json"
+      "coverage": "La relación entera, de València-Estació del Nord al cambiador de ancho de La Boella: 254,1 km medidos por el camino más corto del grafo de vías. Velocidad máxima por tramo; qué vías son de ancho mixto (gauge=1435;1668, del km 2,0 al 73,8, hasta Castelló de la Plana) y dónde empieza el ERTMS (railway:etcs=1 desde el km 211,4, en L'Ametlla de Mar).",
+      "notes": "Descargado por la API Overpass el 13 de noviembre de 2026. La relación («Línia València - canviador de la Boella», route=railway, ref=600) trae las dos vías de la línea (479 vías), todas a 3.000 V, y es de una pieza: se traza de punta a punta sin huecos y mide lo mismo que la longitud que Wikipedia da a la línea (254,1 km). Sale de la Estació del Nord hacia el sur, pasa a 150 m de València-Joaquín Sorolla y rodea la ciudad por València-La Font de Sant Lluís antes de volver al norte por El Cabanyal. Acaba en el nodo railway=gauge_conversion «La Boella». También se descargaron las vías del entorno de Vila-seca (raw/osm/vias_bif_la_feredat_vila_seca_2026-11-13.json): la que sale de la línea en la bifurcación La Feredat lleva ref=632 y el nombre «Bifurcació la Feredat - Bifurcació Vila-seca», y por ella se llega a la estación de Vila-seca y a Tarragona; de ahí que los trenes que van a Barcelona por Tarragona ciudad dejen la línea en esa bifurcación. Las relaciones de servicio de la zona (C-6 València – Castelló, entre otras) confirman que por la línea circulan Cercanías que el GTFS cargado no trae.",
+      "file": "raw/osm/relation_18368664_linea_600_valencia_la_boella_2026-11-13.json"
     },
     {
-      "id": "osm-relation-18369030",
-      "name": "Salida de Madrid de la línea convencional de Extremadura (relación OSM 18369030, línea 500 de Adif entre la bifurcación Planetario y Villaverde Alto)",
+      "id": "osm-relation-11088348",
+      "name": "Trazado de la línea de alta velocidad cambiador de La Boella – Camp de Tarragona (relación OSM 11088348, línea 640 de Adif, ancho estándar a 25 kV)",
       "publisher": "Colaboradores de OpenStreetMap",
-      "url": "https://www.openstreetmap.org/relation/18369030",
+      "url": "https://www.openstreetmap.org/relation/11088348",
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "Los 7,4 km de la bifurcación Planetario a Villaverde Alto, primer trecho de la línea Madrid – Plasencia; velocidad máxima.",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Relación de infraestructura (route=railway, ref=500) con las vías de la línea 500 entre la bifurcación Planetario y Villaverde Alto, por Villaverde Bajo: el trecho que le falta a la relación 11717892. Comparte con ella un nodo en Villaverde Alto, donde se empalman las dos partes. Las vías dicen 3000 V y velocidades de 65 a 100 km/h.",
-      "file": "raw/osm/relation_18369030_linea_500_planetario_villaverde_alto_2026-11-13.json"
+      "coverage": "Del cambiador de La Boella a la estación de Camp de Tarragona, 12,5 km por el camino más corto del grafo de vías; ancho (gauge=1435), electrificación (voltage=25000) y velocidad (200 km/h) de ese trecho.",
+      "notes": "Descargado por la API Overpass el 13 de noviembre de 2026. La relación («Línia d'alta velocitat Cambiador de La Boella - Camp de Tarragona», ref=640, operator=Adif) tiene 47 vías, todas de 1.435 mm a 25 kV. Trae los dos ramales con los que la línea se une a la alta velocidad Madrid – Barcelona: el que llega a la bifurcación Perafort, junto a Camp de Tarragona, que es el que Oniel traza y el que usan los trenes del horario, y el que sale de la bifurcación la Xacona hacia Lleida y Zaragoza (bifurcación La Gatellada), que no usa ningún tren del horario y no se carga. Empieza en el mismo nodo de OSM en el que acaba la relación 18368664: las dos partes empalman sin hueco. El trazado acaba 160 m antes del punto de la estación de Camp de Tarragona.",
+      "file": "raw/osm/relation_11088348_linea_640_la_boella_camp_de_tarragona_2026-11-13.json"
     },
     {
-      "id": "osm-relation-8117446",
-      "name": "Trazado de la línea de alta velocidad Madrid–Extremadura (relación OSM 8117446, línea 026 de Adif Alta Velocidad): el trecho en servicio de Plasencia a Badajoz y los que están en obras o en proyecto",
+      "id": "osm-instalaciones-valencia-camp-de-tarragona",
+      "name": "Estaciones, apeaderos, bifurcaciones y cambiadores de OpenStreetMap entre València y Camp de Tarragona",
       "publisher": "Colaboradores de OpenStreetMap",
-      "url": "https://www.openstreetmap.org/relation/8117446",
+      "url": "https://www.openstreetmap.org/relation/18368664",
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "Tres trozos de la línea Plasencia – Badajoz: de la bifurcación San Esteban a la bifurcación Casa de la Torre (63,7 km), de la aguja del km 82,2, al sur de Cáceres, a la bifurcación Granja-Las Encinas (57,2 km) y de allí hasta 350 m antes de la bifurcación San Nicolás (36,5 km); y 3,5 km de la entrada a Navalmoral de la Mata, en la línea Madrid – Plasencia, por la vía de la plataforma nueva que usan los trenes. Velocidad máxima por tramo. Además, el trazado del proyecto Talayuela – Plasencia de la capa de proyectos (69 km siguiendo las vías en obras, simplificado).",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Relación de infraestructura (route=railway, ref=026, «Línea de Alta Velocidad Madrid-Extremadura-Frontera Portuguesa»). Mezcla vías en servicio (railway=rail, 284,6 km sumando las dos vías), en obras (railway=construction) y propuestas (railway=proposed, el tramo de Torrijos del proyecto Madrid–Oropesa); Oniel solo traza por las que están en servicio. No es de una pieza: le faltan la entrada a Plasencia desde la bifurcación San Esteban (que está en la relación 6759679), el paso por Cáceres entre la bifurcación Casa de la Torre y la aguja del km 82,2 (que se toma de la relación 6759731) y los últimos 350 m antes de la bifurcación San Nicolás. Las vías en servicio dicen gauge=1668, electrified=contact_line a 25 000 V y maxspeed=200; passenger_lines=2 salvo en los trechos de vía única. Las vías en obras, que Oniel no usa como línea, sitúan el trazado de Talayuela a Plasencia.",
-      "file": "raw/osm/relation_8117446_lav_madrid_extremadura_2026-11-13.json"
+      "coverage": "Coordenadas de las 33 estaciones y apeaderos de la línea de València a Camp de Tarragona, de la bifurcación La Feredat y del cambiador de La Boella; códigos de València-Estació del Nord (65000) y València-Joaquín Sorolla (03216).",
+      "notes": "Descargado por la API Overpass el 13 de noviembre de 2026: los nodos railway=station, halt, junction, service_station, yard, site, gauge_conversion y milestone del rectángulo que contiene la línea. El fichero trae también estaciones de metro, de tranvía y de otras líneas, que no se usan. Benicàssim, Torreblanca y Ulldecona-Alcanar-La Sénia están dibujadas en OSM como áreas y no como nodos: su punto es el centro del área (raw/osm/estaciones_benicassim_torreblanca_ulldecona_2026-11-13.json). Todas quedan a menos de 25 m del trazado, salvo València-Estació del Nord (70 m, es el final de las vías), Camp de Tarragona (62 m) y València-Joaquín Sorolla (148 m: es una estación contigua, por la que la línea pasa de largo). Los nombres de los nodos son los de las paradas del GTFS de Renfe.",
+      "file": "raw/osm/instalaciones_valencia_camp_de_tarragona_2026-11-13.json"
     },
     {
-      "id": "osm-relation-6759679",
-      "name": "Trazado de la línea de Monfragüe a Plasencia (relación OSM 6759679, línea 530 de Adif)",
-      "publisher": "Colaboradores de OpenStreetMap",
-      "url": "https://www.openstreetmap.org/relation/6759679",
-      "license": "ODbL 1.0",
-      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
-      "retrieved_on": "2026-11-13",
-      "coverage": "De Monfragüe a la bifurcación San Esteban (9,4 km), último trecho de la línea Madrid – Plasencia, y de la bifurcación a la estación de Plasencia (7,4 km), primero de la línea Plasencia – Badajoz; velocidad máxima.",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Relación de infraestructura (route=railway, ref=530, «Monfragüe a Plasencia»), de una pieza: de Monfragüe a la bifurcación El Chaparral y a la bifurcación San Esteban (9,4 km, ref=530, sin electrificar) y, desde allí, los 7,4 km de entrada a Plasencia, que hoy son de la línea de alta velocidad (ref=026, a 25 000 V). Vía única en toda ella.",
-      "file": "raw/osm/relation_6759679_linea_530_monfrague_plasencia_2026-11-13.json"
-    },
-    {
-      "id": "osm-relation-6759731",
-      "name": "Recorrido del Alvia de Madrid a Badajoz (relación OSM 6759731, route=train), usado para el paso por Cáceres y para el trecho de la bifurcación San Nicolás a Badajoz",
-      "publisher": "Colaboradores de OpenStreetMap",
-      "url": "https://www.openstreetmap.org/relation/6759731",
-      "license": "ODbL 1.0",
-      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
-      "retrieved_on": "2026-11-13",
-      "coverage": "De la bifurcación Casa de la Torre a la aguja del km 82,2 por la estación de Cáceres (10,1 km) y del final de la vía nueva a Badajoz por la bifurcación San Nicolás (16,1 km), en la línea Plasencia – Badajoz; velocidad máxima.",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es una relación de servicio, no de infraestructura, y tiene huecos (empieza cerca de Talavera de la Reina y no enlaza Monfragüe con el resto), pero trae seguidas las vías que les faltan a las relaciones de infraestructura: de la bifurcación Casa de la Torre a la estación de Cáceres y a la aguja del km 82,2, y de la bifurcación San Nicolás a Badajoz, por la vía de la línea 520.",
-      "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json"
-    },
-    {
-      "id": "osm-vias-enlace-aljucen",
-      "name": "Vías del enlace de Aljucén a la bifurcación Granja-Las Encinas (extracto de OSM, vías con ref=510)",
-      "publisher": "Colaboradores de OpenStreetMap",
-      "url": "https://www.openstreetmap.org/way/1097348110",
-      "license": "ODbL 1.0",
-      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
-      "retrieved_on": "2026-11-13",
-      "coverage": "Los 1,7 km del enlace, primer tramo del ramal de Mérida; velocidad máxima.",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Ninguna relación de OSM recoge entero el enlace que une la línea de alta velocidad con la línea 520 junto a Aljucén: los 660 m del lado de la bifurcación (vía 1097348110) no están en ninguna. Por eso se descargaron las seis vías etiquetadas ref=510 («Línea Aljucén-Bifurcación Granja-Las Encinas») como un extracto, sin relación, y el trazado busca el camino por todas ellas. Dicen electrified=contact_line, vía única y 100 a 120 km/h.",
-      "file": "raw/osm/vias_enlace_aljucen_granja_las_encinas_2026-11-13.json"
-    },
-    {
-      "id": "wikipedia-linea-500",
-      "name": "Artículo «Línea Madrid-Valencia de Alcántara» de Wikipedia en español (puntos kilométricos, vía única y doble, electrificación, apertura, trenes)",
+      "id": "wikipedia-linea-valencia-tarragona",
+      "name": "Artículos «Línea Valencia-Tarragona» y «Corredor Mediterráneo» de Wikipedia en español (longitud, historia, ancho de vía por tramos, variante de Vandellòs)",
       "publisher": "Colaboradores de Wikipedia",
-      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Madrid-Valencia_de_Alc%C3%A1ntara",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Valencia-Tarragona",
       "license": "CC BY-SA 4.0",
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "Catalogación de Adif como línea 500, de la bifurcación Planetario a Valencia de Alcántara; puntos kilométricos, contados desde Madrid-Atocha: bifurcación Planetario (3,7), Leganés (13,2), Fuenlabrada (18,8), Humanes (22,8), Illescas (38,4), Torrijos (85,4), Montearagón (118,3), Talavera de la Reina (134,2), Oropesa de Toledo (169,2), Navalmoral de la Mata (200,4), Casatejada (211,7), Monfragüe (251,6), Mirabel (265,4), Casas de Millán (277,3), Cañaveral (283,1) y Cáceres (332,8); vía única salvo entre Madrid y Humanes, que es doble; sin electrificar salvo entre Madrid y Humanes, a 3000 V; velocidad máxima de 155 km/h en casi todo el recorrido; apertura en 1881; qué trenes van por la línea nueva desde Monfragüe o Plasencia y cuáles siguen por el trazado antiguo (los que paran en Mirabel, Casas de Millán o Cañaveral).",
-      "notes": "Fuente de verificación, no de geometría; revisión del 19 de agosto de 2024 (oldid 161954929), consultada por la API de Wikipedia. Cita la Declaración sobre la Red de Adif de 2013 para los bloqueos y las velocidades; la señalización de Oniel no sale de aquí sino del mapa 4 de la Declaración de 2026. La tabla trae además estaciones sin parada en los horarios cargados (Villaverde Bajo, Villaverde Alto, Zarzaquemada, Griñón, Villaluenga-Yuncler, Erustes, Calera-Chozas, La Bazagona, Río Tajo, Casar de Cáceres…), que no se han cargado como nodos, y el tramo de Cáceres a Valencia de Alcántara, que no está cargado. Los códigos de estación son los de las paradas del GTFS de Renfe y los de los nodos de Adif en OSM, que coinciden."
-    },
-    {
-      "id": "wikipedia-lav-madrid-extremadura",
-      "name": "Artículo «Línea de alta velocidad Madrid-Extremadura» de Wikipedia en español (instalaciones y puntos kilométricos de Plasencia a Badajoz, fechas, ancho de vía)",
-      "publisher": "Colaboradores de Wikipedia",
-      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Madrid-Extremadura",
-      "license": "CC BY-SA 4.0",
-      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
-      "retrieved_on": "2026-11-13",
-      "coverage": "Puntos kilométricos de la línea de Plasencia a Badajoz, contados desde Plasencia: aguja del km 7,2 (la bifurcación hacia Monfragüe), aguja del km 9,2 (donde se incorpora el ramal nuevo que viene de Monfragüe), bifurcación Casa de la Torre (69,1), Cáceres (78,6), bifurcación Granja-Las Encinas (139,3), bifurcación San Nicolás (179,3) y Badajoz (192,6); apertura al público el 19 de julio de 2022, sin electrificar; vía de ancho ibérico sobre traviesa polivalente; accesos a Plasencia, Cáceres y Badajoz sobre la línea que ya existía; trenes que entran en Mérida y trenes que no.",
-      "notes": "Fuente de verificación, no de geometría; revisión del 30 de junio de 2026 (oldid 174182591), consultada por la API de Wikipedia. La tabla de puntos kilométricos es anterior al baipás de Mérida y no cuadra con el trazado actual al sur de la bifurcación Granja-Las Encinas: por eso los nodos que la siguen no llevan punto kilométrico. Tampoco cuadra en la bifurcación Casa de la Torre (69,1 en la tabla, unos 71 medidos), aunque sí en Cáceres. El artículo nombra las agujas de Plasencia por su kilómetro; los nombres «Bifurcación San Esteban» y «Arroyo de la Herrera» son los de OpenStreetMap y los del mapa 4 de la Declaración sobre la Red. El estado de los tramos sin servicio no se toma de aquí: va en la capa de proyectos, con fuentes oficiales."
+      "coverage": "Que la línea es la 600 de Adif, «Valencia – cambiador de La Boella», de 254,1 km, de vía doble y electrificada a 3.000 V; que se completó el 21 de junio de 1868 con el puente del Ebro en Tortosa; la variante del Ebro de los años noventa, que dejó Tortosa en un ramal de 13 km desde L'Aldea-Amposta-Tortosa; la variante de Vandellòs, abierta el 13 de enero de 2020, con las estaciones nuevas de Cambrils y L'Hospitalet de l'Infant y los dos cambiadores de ancho; el tercer carril entre València-Font de Sant Lluís y Castelló, completado el 17 de noviembre de 2016, por el que los AVE llegan a Castelló desde València-Joaquín Sorolla; el enlace de ancho estándar de los cambiadores de La Boella a la alta velocidad (ramales de 7,0 y 3,5 km y tronco común de 8,5 km) y los 42,6 km de vía doble de ancho ibérico de la variante, hasta L'Ametlla de Mar; que València-Estació del Nord es una estación en fondo de saco.",
+      "notes": "Fuente de verificación, no de geometría; consultados por la API de Wikipedia. «Línea Valencia-Tarragona», revisión del 24 de agosto de 2026 (oldid 174998420); «Corredor Mediterráneo», revisión del 15 de septiembre de 2026 (oldid 175368395). La tabla de estaciones del primero da los puntos kilométricos de la numeración antigua, que no pasaba por València-La Font de Sant Lluís: salvo esa estación (3,8), todos quedan entre 4,1 y 4,5 km por debajo del kilómetro medido sobre el trazado actual, y la tabla sigue por la línea antigua de la costa (Salou, Tarragona) más allá de Vandellòs. Por eso los nodos no guardan esos puntos kilométricos. El artículo del corredor da para Castelló el kilómetro antiguo y el nuevo (69,399 y 73,544), y ese sí se guarda. El artículo del corredor recoge también previsiones sobre el cambio de ancho entre Castelló y Tarragona que cita de la prensa; Oniel no las registra."
     },
     {
       "id": "wikipedia-lav-madrid-sevilla",
@@ -943,6 +896,172 @@
       "file": "raw/proyectos/boe/BOE-B-2025-17998_2026-11-12.xml"
     },
     {
+      "id": "boe-b-2022-14800",
+      "name": "BOE-B-2022-14800: Licitación de los aparatos de vía para el ancho estándar entre Castellón y Vandellós",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2022-14800",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación del suministro y transporte de aparatos de vía para la implantación del ancho estándar en el tramo Castellón – Vinaroz – Vandellós, en dos lotes.",
+      "notes": "Publicado en el BOE el 2022-05-12. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Suministro y transporte de aparatos de vía para la implantación del ancho estándar en el corredor mediterráneo. Tramo Castellón - Vinaroz - Vandellós (2 lotes). Expediente: 3.22/20810.0004.»",
+      "file": "raw/proyectos/boe/BOE-B-2022-14800_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2022-15699",
+      "name": "BOE-B-2022-15699: Licitación de las obras de vía y electrificación para el ancho estándar entre Vandellós y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2022-15699",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación de las obras de vía y electrificación para la implantación del ancho estándar en el subtramo Vandellós – cambiador de La Boella.",
+      "notes": "Publicado en el BOE el 2022-05-20. Duración prevista del contrato: 6 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción para la implantación del ancho estándar en el corredor mediterráneo. Tramo: Castellbisbal-Murcia. Subtramo: Vandellós-Cambiador de La Boella. Vía y electrificación. Expediente: 3.22/20810.0028.»",
+      "file": "raw/proyectos/boe/BOE-B-2022-15699_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2025-27952",
+      "name": "BOE-B-2025-27952: Licitación del balasto para la fase del cambio de ancho entre Castellón y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2025-27952",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación del suministro y transporte de balasto para la fase del cambio de ancho en los tramos entre Castellón, Vinaroz, Vandellós y La Boella y en la estación y el ramal de Tortosa.",
+      "notes": "Publicado en el BOE el 2025-07-31. Duración prevista del contrato: 12 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Presidencia. Objeto: Suministro y transporte de balasto para la implantación del ancho estándar en el corredor mediterráneo. Fase del cambio de ancho. Tramos comprendidos entre Castellón, Vinaroz, Vandellós y La Boella y la estación y ramal de Tortosa. Expediente: 3.25/20810.0051.»",
+      "file": "raw/proyectos/boe/BOE-B-2025-27952_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2026-3795",
+      "name": "BOE-B-2026-3795: Licitación de las sujeciones para el ancho estándar entre Castellón y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-3795",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación del suministro y transporte de sujeciones para la implantación del ancho estándar en el tramo Castellón – Vinaroz – Vandellós – La Boella.",
+      "notes": "Publicado en el BOE el 2026-02-10. Duración prevista del contrato: 12 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Presidencia. Objeto: Suministro y transporte de sujeciones para la implantación del ancho estándar en el tramo Castellón - Vinaroz - Vandellós - La Boella. Expediente: 3.25/20810.0080.»",
+      "file": "raw/proyectos/boe/BOE-B-2026-3795_2026-11-13.xml"
+    },
+    {
+      "id": "boe-b-2026-20400",
+      "name": "BOE-B-2026-20400: Licitación de la asistencia técnica para el cambio de ancho de los aparatos de vía entre Castellón y La Boella",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-20400",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Licitación de la asistencia técnica y el suministro de pequeño material para el cambio de ancho de los aparatos de vía del tramo Castellón – Vandellós – La Boella.",
+      "notes": "Publicado en el BOE el 2026-06-16. Duración prevista del contrato: 18 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Asistencia técnica y suministro de pequeño material para el cambio de ancho de los aparatos de vía del tramo Castellón - Vandellós-La Boella. Expediente: 3.26/20810.0006.»",
+      "file": "raw/proyectos/boe/BOE-B-2026-20400_2026-11-13.xml"
+    },
+    {
+      "id": "moncloa-nota-corredor-mediterraneo-2026-04",
+      "name": "Nota de prensa del Ministerio de Transportes y Movilidad Sostenible sobre el desarrollo del Corredor Mediterráneo",
+      "publisher": "Ministerio de Transportes y Movilidad Sostenible; La Moncloa",
+      "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/220426-puente-corredor-mediterraneo.aspx",
+      "license": "Consulta pública; © Gobierno de España",
+      "license_url": "https://www.lamoncloa.gob.es/Paginas/avisolegal.aspx",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Que en 2025 se ejecutaron obras de adaptación a ancho mixto, vía y electrificación entre Castellón y Valencia, y que el Ministerio prevé para 2026 la puesta en servicio de la segunda vía de ancho mixto entre València y Castelló.",
+      "notes": "Publicada el 22 de abril de 2026 en la web de La Moncloa. Es un balance de todo el corredor: del tramo de Castelló a Tarragona no dice nada, ni da fecha para el cambio de ancho. Lo que decía ese día está resumido en el registro de consultas.",
+      "file": "raw/proyectos/consultas_2026-11-13.json"
+    },
+    {
+      "id": "osm-relation-11717892",
+      "name": "Trazado de la línea convencional de Madrid a Cáceres (relación OSM 11717892, línea 500 de Adif, «Bifurcación Planetario a Bifurcación Casa de la Torre»)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11717892",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "De la relación Oniel usa tres trozos: de Villaverde Alto a la entrada de Navalmoral de la Mata (188,0 km) y de allí a Monfragüe (51,5 km), en la línea Madrid – Plasencia, y de Monfragüe a la bifurcación Casa de la Torre (71,0 km), en la línea Monfragüe – Cáceres; velocidad máxima por tramo.",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es la relación de infraestructura de la línea 500 (route=railway, ref=500, operator=Adif), pero no llega a la bifurcación Planetario: empieza en Villaverde Alto. Además está partida en dos junto a Navalmoral de la Mata, donde 3,5 km de la vía antigua figuran como «disused» y los trenes pasan por una vía de la plataforma de la línea de alta velocidad en construcción, que la relación no recoge. Trae también la entrada a Cáceres desde la bifurcación Casa de la Torre, etiquetada ref=026. Las vías dicen ancho de 1668 mm, vía única (passenger_lines=1) y sin electrificar (electrified=no) desde Humanes, y maxspeed de 155 km/h en casi todo el recorrido. También se descargaron las estaciones y bifurcaciones de Adif entre Madrid y Badajoz (raw/osm/adif_facility_nodes_madrid_extremadura_2026-11-13.json), de donde salen las coordenadas de los nodos.",
+      "file": "raw/osm/relation_11717892_linea_500_planetario_casa_de_la_torre_2026-11-13.json"
+    },
+    {
+      "id": "osm-relation-18369030",
+      "name": "Salida de Madrid de la línea convencional de Extremadura (relación OSM 18369030, línea 500 de Adif entre la bifurcación Planetario y Villaverde Alto)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18369030",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Los 7,4 km de la bifurcación Planetario a Villaverde Alto, primer trecho de la línea Madrid – Plasencia; velocidad máxima.",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Relación de infraestructura (route=railway, ref=500) con las vías de la línea 500 entre la bifurcación Planetario y Villaverde Alto, por Villaverde Bajo: el trecho que le falta a la relación 11717892. Comparte con ella un nodo en Villaverde Alto, donde se empalman las dos partes. Las vías dicen 3000 V y velocidades de 65 a 100 km/h.",
+      "file": "raw/osm/relation_18369030_linea_500_planetario_villaverde_alto_2026-11-13.json"
+    },
+    {
+      "id": "osm-relation-8117446",
+      "name": "Trazado de la línea de alta velocidad Madrid–Extremadura (relación OSM 8117446, línea 026 de Adif Alta Velocidad): el trecho en servicio de Plasencia a Badajoz y los que están en obras o en proyecto",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/8117446",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Tres trozos de la línea Plasencia – Badajoz: de la bifurcación San Esteban a la bifurcación Casa de la Torre (63,7 km), de la aguja del km 82,2, al sur de Cáceres, a la bifurcación Granja-Las Encinas (57,2 km) y de allí hasta 350 m antes de la bifurcación San Nicolás (36,5 km); y 3,5 km de la entrada a Navalmoral de la Mata, en la línea Madrid – Plasencia, por la vía de la plataforma nueva que usan los trenes. Velocidad máxima por tramo. Además, el trazado del proyecto Talayuela – Plasencia de la capa de proyectos (69 km siguiendo las vías en obras, simplificado).",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Relación de infraestructura (route=railway, ref=026, «Línea de Alta Velocidad Madrid-Extremadura-Frontera Portuguesa»). Mezcla vías en servicio (railway=rail, 284,6 km sumando las dos vías), en obras (railway=construction) y propuestas (railway=proposed, el tramo de Torrijos del proyecto Madrid–Oropesa); Oniel solo traza por las que están en servicio. No es de una pieza: le faltan la entrada a Plasencia desde la bifurcación San Esteban (que está en la relación 6759679), el paso por Cáceres entre la bifurcación Casa de la Torre y la aguja del km 82,2 (que se toma de la relación 6759731) y los últimos 350 m antes de la bifurcación San Nicolás. Las vías en servicio dicen gauge=1668, electrified=contact_line a 25 000 V y maxspeed=200; passenger_lines=2 salvo en los trechos de vía única. Las vías en obras, que Oniel no usa como línea, sitúan el trazado de Talayuela a Plasencia.",
+      "file": "raw/osm/relation_8117446_lav_madrid_extremadura_2026-11-13.json"
+    },
+    {
+      "id": "osm-relation-6759679",
+      "name": "Trazado de la línea de Monfragüe a Plasencia (relación OSM 6759679, línea 530 de Adif)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/6759679",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "De Monfragüe a la bifurcación San Esteban (9,4 km), último trecho de la línea Madrid – Plasencia, y de la bifurcación a la estación de Plasencia (7,4 km), primero de la línea Plasencia – Badajoz; velocidad máxima.",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Relación de infraestructura (route=railway, ref=530, «Monfragüe a Plasencia»), de una pieza: de Monfragüe a la bifurcación El Chaparral y a la bifurcación San Esteban (9,4 km, ref=530, sin electrificar) y, desde allí, los 7,4 km de entrada a Plasencia, que hoy son de la línea de alta velocidad (ref=026, a 25 000 V). Vía única en toda ella.",
+      "file": "raw/osm/relation_6759679_linea_530_monfrague_plasencia_2026-11-13.json"
+    },
+    {
+      "id": "osm-relation-6759731",
+      "name": "Recorrido del Alvia de Madrid a Badajoz (relación OSM 6759731, route=train), usado para el paso por Cáceres y para el trecho de la bifurcación San Nicolás a Badajoz",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/6759731",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "De la bifurcación Casa de la Torre a la aguja del km 82,2 por la estación de Cáceres (10,1 km) y del final de la vía nueva a Badajoz por la bifurcación San Nicolás (16,1 km), en la línea Plasencia – Badajoz; velocidad máxima.",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es una relación de servicio, no de infraestructura, y tiene huecos (empieza cerca de Talavera de la Reina y no enlaza Monfragüe con el resto), pero trae seguidas las vías que les faltan a las relaciones de infraestructura: de la bifurcación Casa de la Torre a la estación de Cáceres y a la aguja del km 82,2, y de la bifurcación San Nicolás a Badajoz, por la vía de la línea 520.",
+      "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json"
+    },
+    {
+      "id": "osm-vias-enlace-aljucen",
+      "name": "Vías del enlace de Aljucén a la bifurcación Granja-Las Encinas (extracto de OSM, vías con ref=510)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/1097348110",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Los 1,7 km del enlace, primer tramo del ramal de Mérida; velocidad máxima.",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Ninguna relación de OSM recoge entero el enlace que une la línea de alta velocidad con la línea 520 junto a Aljucén: los 660 m del lado de la bifurcación (vía 1097348110) no están en ninguna. Por eso se descargaron las seis vías etiquetadas ref=510 («Línea Aljucén-Bifurcación Granja-Las Encinas») como un extracto, sin relación, y el trazado busca el camino por todas ellas. Dicen electrified=contact_line, vía única y 100 a 120 km/h.",
+      "file": "raw/osm/vias_enlace_aljucen_granja_las_encinas_2026-11-13.json"
+    },
+    {
+      "id": "wikipedia-linea-500",
+      "name": "Artículo «Línea Madrid-Valencia de Alcántara» de Wikipedia en español (puntos kilométricos, vía única y doble, electrificación, apertura, trenes)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Madrid-Valencia_de_Alc%C3%A1ntara",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Catalogación de Adif como línea 500, de la bifurcación Planetario a Valencia de Alcántara; puntos kilométricos, contados desde Madrid-Atocha: bifurcación Planetario (3,7), Leganés (13,2), Fuenlabrada (18,8), Humanes (22,8), Illescas (38,4), Torrijos (85,4), Montearagón (118,3), Talavera de la Reina (134,2), Oropesa de Toledo (169,2), Navalmoral de la Mata (200,4), Casatejada (211,7), Monfragüe (251,6), Mirabel (265,4), Casas de Millán (277,3), Cañaveral (283,1) y Cáceres (332,8); vía única salvo entre Madrid y Humanes, que es doble; sin electrificar salvo entre Madrid y Humanes, a 3000 V; velocidad máxima de 155 km/h en casi todo el recorrido; apertura en 1881; qué trenes van por la línea nueva desde Monfragüe o Plasencia y cuáles siguen por el trazado antiguo (los que paran en Mirabel, Casas de Millán o Cañaveral).",
+      "notes": "Fuente de verificación, no de geometría; revisión del 19 de agosto de 2024 (oldid 161954929), consultada por la API de Wikipedia. Cita la Declaración sobre la Red de Adif de 2013 para los bloqueos y las velocidades; la señalización de Oniel no sale de aquí sino del mapa 4 de la Declaración de 2026. La tabla trae además estaciones sin parada en los horarios cargados (Villaverde Bajo, Villaverde Alto, Zarzaquemada, Griñón, Villaluenga-Yuncler, Erustes, Calera-Chozas, La Bazagona, Río Tajo, Casar de Cáceres…), que no se han cargado como nodos, y el tramo de Cáceres a Valencia de Alcántara, que no está cargado. Los códigos de estación son los de las paradas del GTFS de Renfe y los de los nodos de Adif en OSM, que coinciden."
+    },
+    {
+      "id": "wikipedia-lav-madrid-extremadura",
+      "name": "Artículo «Línea de alta velocidad Madrid-Extremadura» de Wikipedia en español (instalaciones y puntos kilométricos de Plasencia a Badajoz, fechas, ancho de vía)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Madrid-Extremadura",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Puntos kilométricos de la línea de Plasencia a Badajoz, contados desde Plasencia: aguja del km 7,2 (la bifurcación hacia Monfragüe), aguja del km 9,2 (donde se incorpora el ramal nuevo que viene de Monfragüe), bifurcación Casa de la Torre (69,1), Cáceres (78,6), bifurcación Granja-Las Encinas (139,3), bifurcación San Nicolás (179,3) y Badajoz (192,6); apertura al público el 19 de julio de 2022, sin electrificar; vía de ancho ibérico sobre traviesa polivalente; accesos a Plasencia, Cáceres y Badajoz sobre la línea que ya existía; trenes que entran en Mérida y trenes que no.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 30 de junio de 2026 (oldid 174182591), consultada por la API de Wikipedia. La tabla de puntos kilométricos es anterior al baipás de Mérida y no cuadra con el trazado actual al sur de la bifurcación Granja-Las Encinas: por eso los nodos que la siguen no llevan punto kilométrico. Tampoco cuadra en la bifurcación Casa de la Torre (69,1 en la tabla, unos 71 medidos), aunque sí en Cáceres. El artículo nombra las agujas de Plasencia por su kilómetro; los nombres «Bifurcación San Esteban» y «Arroyo de la Herrera» son los de OpenStreetMap y los del mapa 4 de la Declaración sobre la Red. El estado de los tramos sin servicio no se toma de aquí: va en la capa de proyectos, con fuentes oficiales."
+    },
+    {
       "id": "boe-a-2008-4394",
       "name": "BOE-A-2008-4394: Declaración de impacto ambiental del estudio informativo Madrid – Oropesa",
       "publisher": "Boletín Oficial del Estado",
@@ -987,7 +1106,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Envío del estudio informativo del tramo Talavera de la Reina – Oropesa al Ministerio para la Transición Ecológica para obtener la declaración de impacto ambiental, y división del estudio de 2020 en dos.",
       "notes": "Publicada el 16 de diciembre de 2024. Dice que el estudio de 2020 se sustituye por dos estudios de subtramo: Toledo – Talavera de la Reina y Talavera de la Reina – Oropesa/Talayuela. Se descargó con curl.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "boe-b-2024-47322",
@@ -1011,7 +1130,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Estado de los cuatro tramos del estudio Madrid – Oropesa (I Toledo, II Torrijos, III Talavera, IV Oropesa) en mayo de 2026, anuncio de un nuevo estudio informativo para el paso por Toledo y de la conexión transitoria de Bargas.",
       "notes": "Publicada el 20 de mayo de 2026. Dice que los tramos III y IV están en evaluación ambiental desde diciembre de 2024, que la del tramo II empezó en diciembre de 2025 y que para el tramo I, tras las alegaciones del Ayuntamiento y la Diputación de Toledo y de la Junta de Castilla-La Mancha, hace falta un estudio informativo nuevo. No da fechas de obra ni de puesta en servicio. Se descargó con curl.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "boe-b-2026-17272",
@@ -1083,7 +1202,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Adjudicación de las obras de plataforma del tramo Arroyo de Santa María – Navalmoral de la Mata (unos 6,8 km), con la remodelación de la estación, y cómo se mantiene el tráfico durante las obras.",
       "notes": "Publicada el 24 de febrero de 2022. Dice que, con esta adjudicación, todos los tramos del trayecto Talayuela – Plasencia (68,6 km) están concluidos o en obras, y que el tráfico seguirá por la línea actual mientras se construye la mitad norte de la plataforma y después se desviará por ella para construir la mitad sur. Es un plan de obra: no dice cuándo se hace el desvío. adifaltavelocidad.es responde 403 a las descargas automáticas; se leyó en un navegador.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "adif-nota-proyecto-montaje-via-talayuela-plasencia-2024-03",
@@ -1095,7 +1214,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Comienzo de la redacción del proyecto de montaje de vía del tramo Talayuela – Plasencia: doble vía en ancho convencional.",
       "notes": "Publicada el 14 de marzo de 2024. Dice que la redacción del proyecto es el paso previo a licitar el montaje de vía. Se leyó en un navegador.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "mitma-blog-obras-talayuela-plasencia-2025-03",
@@ -1107,7 +1226,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Estado de los ocho subtramos del tramo Talayuela – Plasencia el 28 de marzo de 2025, con sus longitudes, y lo que se hacía en Navalmoral de la Mata.",
       "notes": "Publicada el 28 de marzo de 2025. Terminados: Talayuela – Arroyo de Santa María, Navalmoral de la Mata – Casatejada, Casatejada – Toril y Toril – Río Tiétar (39,1 km, el 55 %). En obras: Arroyo de Santa María – Navalmoral de la Mata (6,8 km), Río Tiétar – Malpartida de Plasencia (11,73 km), Malpartida de Plasencia – Estación de Plasencia (10,38 km) y el ramal de conexión Madrid – Plasencia (2,2 km, contratado en febrero de 2024). En Navalmoral dice que «se tiende la nueva vía del lado norte para pasar a ella el tráfico ferroviario»: describe la obra en curso, no una puesta en servicio. Da la electrificación para 2025 y el montaje de vía para 2026 como previsión. Se descargó con curl.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "adif-nota-estacion-navalmoral-2025-07",
@@ -1119,7 +1238,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Comienzo de las obras de la estación de Navalmoral de la Mata y estación provisional para viajeros, en servicio desde el 27 de junio de 2025.",
       "notes": "Publicada el 1 de julio de 2025. La estación provisional es un edificio modular junto a la estación, con venta de billetes, sala de espera y aseos; la nota no habla de vías ni de un trazado provisional. Se leyó en un navegador.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "mitma-nota-electrificacion-talayuela-plasencia-2025-10",
@@ -1131,7 +1250,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Adjudicación de la electrificación (catenaria) del tramo Talayuela – Plasencia y estado de las obras de plataforma.",
       "notes": "Publicada el 6 de octubre de 2025. Repite que cuatro de los ocho subtramos tienen la plataforma terminada y que los otros cuatro siguen en obras. Se descargó con curl.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "mitma-nota-contratos-talayuela-plasencia-2025-10",
@@ -1143,7 +1262,7 @@
       "retrieved_on": "2026-11-13",
       "coverage": "Adjudicación de la señalización, de las telecomunicaciones móviles GSM-R y de la base de montaje de vía de Navalmoral de la Mata.",
       "notes": "Publicada el 31 de octubre de 2025. Dice que a estos contratos «seguirá la próxima licitación de los trabajos de montaje de vía» y que la plataforma se sigue completando. No da fecha de puesta en servicio. Se descargó con curl.",
-      "file": "raw/proyectos/consultas_2026-11-13.json"
+      "file": "raw/proyectos/consultas_2026-11-13_lav_madrid_extremadura.json"
     },
     {
       "id": "boe-b-2026-26265",

@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 import type { FeatureCollection } from 'geojson'
 import type { GeoJSONSource, Map as MapLibreMap } from 'maplibre-gl'
+import { abrirZonas } from './navegar.ts'
 
-import { abrirZona } from './navegar.ts'
 
 // «Hoy» es el 10 de noviembre de 2026, el día en que se comprobaron las dos interrupciones
 // iniciales (obras entre Almuradiel y Alcolea de Córdoba; alta velocidad entre La Sagra y Córdoba):
@@ -21,7 +21,7 @@ async function abrirLineaConvencional(page: Page) {
   await page.goto('/')
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })
   if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
-  await abrirZona(page, 'andalucia')
+  await abrirZonas(page)
   await page.getByTestId(`linea-${LINEA}`).click()
   await expect(page.getByTestId('esquema-tramo-16')).toBeAttached()
 }

@@ -14,13 +14,13 @@ export async function irA(page: Page, seccion: Seccion) {
   await page.getByTestId(`nav-${seccion}`).click()
 }
 
-export type Zona = 'cataluna' | 'levante' | 'madrid-castilla-la-mancha' | 'extremadura' | 'andalucia'
-
 /**
- * Despliega una zona de la lista de líneas si está plegada. Con más de doce líneas la lista arranca
- * como un índice de zonas (`FOLD_ABOVE`), y para elegir una línea hay que abrir antes la suya.
+ * Despliega las zonas de la lista de líneas. Con más de doce líneas las zonas empiezan plegadas
+ * (docs/diseno.md, «Elegir línea»): una prueba que busca una línea en la lista las abre antes.
  */
-export async function abrirZona(page: Page, zona: Zona) {
-  const cabecera = page.getByTestId(`zona-${zona}`).locator('.zona-cabecera')
-  if ((await cabecera.getAttribute('aria-expanded')) !== 'true') await cabecera.click()
+export async function abrirZonas(page: Page) {
+  const lista = page.getByTestId('lista-lineas')
+  await lista.locator('.zona-cabecera').first().waitFor()
+  const plegadas = lista.locator('.zona-cabecera[aria-expanded="false"]')
+  while ((await plegadas.count()) > 0) await plegadas.first().click()
 }

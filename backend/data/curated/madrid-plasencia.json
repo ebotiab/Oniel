@@ -3,7 +3,7 @@
     "id": "madrid-plasencia",
     "name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
     "short_name": "500 y 530",
-    "sort_order": 15,
+    "sort_order": 16,
     "zone": "extremadura",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
