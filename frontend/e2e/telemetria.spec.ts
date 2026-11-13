@@ -105,6 +105,8 @@ test.describe('Errores del visor en Logfire', () => {
     const error = atributos(registros[0]!.attributes)
     expect(error['logfire.page.url.path']).toBe('/glosario/via-unica')
     expect(error['exception.message']).toBe('error provocado por la prueba')
+    // con la huella que Error tracking necesita para agruparlo y avisar
+    expect(String(error['logfire.exception.fingerprint'] ?? '')).not.toBe('')
     expect(cuerpo).not.toContain('prueba=1')
     expect(cuerpo).not.toContain('ancla')
     // nada que identifique a quien visita ni a su sesión
