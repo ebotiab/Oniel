@@ -34,12 +34,12 @@ function enumerar(etiquetas: string[]): string {
 }
 
 /**
- * De dónde salen los atributos que la ficha enseña en un sitio y cuándo se comprobaron: un renglón por
- * fuente, bajo la lista. No usa `PieFuente` porque la fecha es la de comprobación de cada valor, no la de
- * descarga de la fuente.
+ * De dónde salen los atributos que la ficha enseña, a la vista o plegados, y cuándo se comprobaron: un
+ * renglón por fuente, al pie de «Más detalle». No usa `PieFuente` porque la fecha es la de comprobación de
+ * cada valor, no la de descarga de la fuente.
  */
-export function FuentesAtributos({ segment, line, lugar, sources }: Props & { sources: Source[] }) {
-  const fuentes = attributeSources(attributeRows(segment, line, lugar))
+export function FuentesAtributos({ segment, line, sources }: Omit<Props, 'lugar'> & { sources: Source[] }) {
+  const fuentes = attributeSources([...attributeRows(segment, line, 'esencial'), ...attributeRows(segment, line, 'detalle')])
   if (!fuentes.length) return null
   return (
     <div className="pie-fuente" data-testid="atributos-fuente">

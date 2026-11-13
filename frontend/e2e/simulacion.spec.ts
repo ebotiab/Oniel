@@ -73,6 +73,9 @@ test.describe('Simular un cierre', () => {
     await expect(alternativa).toContainText(/encadena 2 líneas/)
     await expect(alternativa).toContainText(/hasta Madrid-Puerta de Atocha y línea de alta velocidad Madrid – Sevilla hasta Ciudad Real/)
     await expect(alternativa).toContainText(/366,9 km frente a 64,4 km/)
+    // el de Córdoba (417,4 km) también se enseña; la vuelta por Granada y Córdoba, de más del doble, no
+    await expect(alternativa.locator('p.texto:not(.suave)')).toHaveCount(2)
+    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existe otro recorrido más largo, que no se enseña/)
   })
 
   test('un cierre entre Urda y Ciudad Real señala el desvío por Manzanares, que usa dos líneas', async ({ page }) => {
@@ -88,8 +91,11 @@ test.describe('Simular un cierre', () => {
     await expect(desvio).toContainText(/encadena 2 líneas: línea convencional Madrid – Alcázar de San Juan – Córdoba hasta Manzanares y línea convencional Manzanares – Ciudad Real hasta Ciudad Real/)
     await expect(desvio).toContainText(/260,5 km frente a 170,8 km por la línea cerrada, con 64,4 km de vía única/)
     // la convencional entera, de Madrid a Córdoba, sigue apareciendo como antes
-    await expect(alternativa.locator('p.texto')).toHaveCount(2)
+    await expect(alternativa.locator('p.texto:not(.suave)')).toHaveCount(2)
     await expect(alternativa.locator('p.texto').nth(1)).toContainText(/existe otra línea: línea convencional Madrid – Alcázar de San Juan – Córdoba, por Aranjuez/)
+    // la vuelta por Granada hasta la bifurcación de Málaga (698 km frente a 358) existe, pero no se lista
+    await expect(alternativa).not.toContainText('Granada')
+    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existe otro recorrido más largo, que no se enseña: da un rodeo de más del doble/)
   })
 
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {

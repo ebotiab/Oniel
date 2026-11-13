@@ -35,7 +35,7 @@ Las ventanas que terminan antes de empezar (23:00 a 01:00) se interpretan como q
 
 Desde que Oniel carga líneas que comparten nodos (Madrid-Puerta de Atocha y Córdoba, la alta velocidad y la convencional; Manzanares y Ciudad Real, la tercera con cada una de las otras), el resultado de un cierre dice también si **existe otro recorrido cargado** que salve el tramo. El cálculo sale del grafo de rutas (véase «Grafo y escenarios»): el cierre es un escenario de una modificación, y `oniel.sim.closure.alternatives` pide al grafo los rodeos que lo salvan.
 
-Un rodeo sale de la línea del tramo cerrado por un nodo situado antes del cierre, sigue por otras líneas, una sola o varias encadenadas, y vuelve a la línea por un nodo situado después. No usa ningún tramo de la línea cerrada ni pasa por sus nodos intermedios, así que cada rodeo es el más ceñido al tramo de los que siguen su camino. De cada uno se informa de los kilómetros por cada línea y en total, de los kilómetros entre los mismos dos nodos por la línea cerrada, de las estaciones principales intermedias, de los kilómetros de vía única y del tiempo estimado. Van del más corto al más largo.
+Un rodeo sale de la línea del tramo cerrado por un nodo situado antes del cierre, sigue por otras líneas, una sola o varias encadenadas, y vuelve a la línea por un nodo situado después. No usa ningún tramo de la línea cerrada ni pasa por sus nodos intermedios, así que cada rodeo es el más ceñido al tramo de los que siguen su camino. De cada uno se informa de los kilómetros por cada línea y en total, de los kilómetros entre los mismos dos nodos por la línea cerrada, de las estaciones principales intermedias, de los kilómetros de vía única y del tiempo estimado. Van del más corto al más largo. No se listan los desproporcionados respecto a otro más corto («Rodeos que no se enseñan», abajo).
 
 Ejemplos:
 
@@ -44,7 +44,29 @@ Ejemplos:
 - Cierre de Venta de Cárdenas – Vilches (convencional, Despeñaperros): por la LAV entre Madrid-Puerta de Atocha y Córdoba, 343,6 km frente a 440,7 km. Y de Manzanares a Córdoba por Ciudad Real y la alta velocidad, 237,2 km frente a 244,6 km.
 - Cierre de Almagro – Ciudad Real (línea de Manzanares a Ciudad Real): ninguna línea sola tiene un nodo a cada lado del tramo; el rodeo encadena dos, la convencional hasta Madrid y la alta velocidad hasta Ciudad Real (366,9 km frente a 64,4 km), o la convencional hasta Córdoba y la alta velocidad de vuelta (417,4 km).
 - Cierre de Bifurcación Málaga – Majarabique (LAV): sin alternativa cargada, porque hacia Sevilla Oniel solo tiene una línea.
-- Desde que Granada está unida por los dos lados (la convencional de Moreda y la alta velocidad de Antequera), un cierre en la alta velocidad entre Madrid y la bifurcación de Málaga lista además el rodeo por Linares-Baeza, Moreda, Granada y Antequera: 698 km frente a 358 entre Madrid y la bifurcación. La simulación enseña todos los rodeos que salen de la línea cerrada y vuelven a ella pasado el cierre, sin descartar los desproporcionados; el comparador sí los descarta. Es un rodeo por una línea sin electrificar y de otro ancho: vale como aviso de que el camino existe, no como itinerario.
+- Cierre de Córdoba – Bifurcación Málaga (LAV): el único camino es la vuelta por Linares-Baeza, Moreda, Granada y Antequera, 511,7 km para salvar 14,4 km. Se enseña, porque es lo que hay en las líneas cargadas, junto a sus dos variantes desde Ciudad Real (566,6 km frente a 187,2 km) y desde Madrid (698,3 km frente a 358,0 km): cada una es el camino más corto desde su punto de salida.
+
+**Rodeos que no se enseñan.** Desde que la red cargada tiene lazos (Granada está unida por los dos lados, por la convencional de Moreda y por la alta velocidad de Antequera), casi cualquier cierre tiene además rodeos de cientos de kilómetros: de Madrid a la bifurcación de Málaga por Granada, 698 km frente a 358, cuando la convencional hasta Córdoba ya salva el cierre con 441. La simulación los descarta con la misma regla que el comparador de recorridos (`max_ratio`, 2; véase «Grafo y escenarios»): un rodeo no se lista si, donde se aparta de otro más corto, mide más del doble que él.
+
+Dos rodeos pueden salir de la línea cerrada y volver a ella en nodos distintos, así que para compararlos se completa cada uno con los tramos de la propia línea hasta cubrir el mismo trecho, del nodo de salida más temprano al de vuelta más tardío. Después se quitan los tramos que comparten al principio y al final y se comparan las partes propias. En el ejemplo, los dos van de Madrid a la bifurcación de Málaga y comparten la convencional hasta Linares-Baeza; desde allí uno recorre 384,6 km por Granada y el otro 141,4 km por Córdoba, más del doble.
+
+El rodeo más corto se enseña siempre, mida lo que mida respecto a la línea cerrada: que exista otro camino es parte de la respuesta, y compararlo con el trecho que sustituye dejaría sin ninguno a tramos que sí lo tienen (Manzanares – Ciudad Real, 366,9 km frente a 64,4 km). Los que se descartan no desaparecen sin decirlo: el resultado lleva cuántos son (`omitted_alternatives`) y el visor lo dice en una frase bajo la lista. Lo decidió el usuario el 13 de noviembre de 2026, entre esta regla, la misma con un tope añadido respecto a la línea cerrada y enseñar solo el rodeo más corto.
+
+Con las nueve líneas cargadas ese día, la regla quita rodeos en 36 de los 86 tramos y no deja ninguno sin alternativa:
+
+| Cierre | Se enseña | No se enseña |
+| --- | --- | --- |
+| LAV, de Madrid a Ciudad Real (6 tramos) | 260,5 km por Manzanares y 440,7 km por la convencional | 698,3 km por Granada |
+| LAV, de Ciudad Real a Córdoba (4) | 309,0 km por Manzanares y 440,7 km por la convencional | 566,6 km y 698,3 km por Granada |
+| LAV, Córdoba – Bifurcación Málaga (1) | 511,7 km, 566,6 km y 698,3 km, los tres por Granada | ninguno |
+| Convencional, de Madrid a Linares-Baeza (18) | por Ciudad Real y por la alta velocidad entera | ninguno |
+| Convencional, de Linares-Baeza a Córdoba (7) | 237,2 km por Ciudad Real y 343,6 km por la alta velocidad | 399,1 km por Granada |
+| Manzanares – Ciudad Real (3) | 366,9 km por Madrid y 417,4 km por Córdoba | 689,5 km por Granada y Córdoba |
+| Linares-Baeza – Granada (6) | 352,4 km por Córdoba y Antequera | 580,2 km y 882,7 km, el mismo camino subiendo antes a Ciudad Real o a Madrid |
+| LAV, Bifurcación Málaga – Antequera-Santa Ana (4) | 429,2 km por Linares-Baeza y Granada | 657,0 km y 959,5 km |
+| LAV, Antequera-Santa Ana – Granada (8) | 412,0 km por Córdoba, Linares-Baeza y Moreda | 639,8 km y 942,3 km |
+
+Un rodeo que se enseña puede ir por una línea sin electrificar o de otro ancho: vale como aviso de que el camino existe, no como itinerario (límite 2, abajo).
 
 Las alternativas por una sola línea son las mismas que antes de pasar por el grafo, con los mismos nodos, kilómetros y texto: se comprobó en los 39 tramos, en dos fechas, contra el cálculo anterior (`network_repo.fetch_alternatives`, ya retirado). Lo nuevo son los rodeos por varias líneas.
 

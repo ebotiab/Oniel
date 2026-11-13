@@ -450,6 +450,8 @@ export interface ClosureResult {
   counts: Record<ClosureStatus, number>
   items: ClosureResultItem[]
   alternatives: ClosureAlternative[]
+  /** Rodeos más largos que existen y no se listan por desproporcionados. */
+  omitted_alternatives?: number
   /** Interrupciones vigentes ese día en el tramo que se cierra. */
   interruptions?: InterruptionOut[]
   method: string
