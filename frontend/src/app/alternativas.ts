@@ -86,3 +86,46 @@ export function sinAlternativa(segments: SegmentAlternatives[]): SegmentAlternat
 export function conAlternativa(segments: SegmentAlternatives[]): SegmentAlternatives[] {
   return segments.filter((s) => s.trains > 0 && s.without_alternative === 0).sort((a, b) => b.trains - a.trains)
 }
+
+/** Los tramos de una línea cuyos trenes se quedan sin otro camino, en el orden en que se recorre la línea. */
+export interface LineaSinAlternativa {
+  line: LineSummary
+  tramos: SegmentAlternatives[]
+  /** Los trenes del tramo que más deja sin otro camino y los del que menos. */
+  max: number
+  min: number
+}
+
+/**
+ * Los tramos sin otro camino, agrupados por línea: de la línea cuyo tramo deja a más trenes sin él a la que
+ * menos. Con decenas de líneas la lista sigue teniendo un renglón por línea, no uno por tramo.
+ */
+export function sinAlternativaPorLinea(segments: SegmentAlternatives[], network: { lines: LineSummary[]; segments: { id: string; line_id: string; seq: number }[] }): LineaSinAlternativa[] {
+  const tramo = new Map(network.segments.map((s) => [s.id, s]))
+  const porLinea = new Map<string, SegmentAlternatives[]>()
+  for (const s of segments) {
+    const lineId = tramo.get(s.segment_id)?.line_id
+    if (!lineId || s.without_alternative === 0) continue
+    porLinea.set(lineId, [...(porLinea.get(lineId) ?? []), s])
+  }
+  return [...porLinea.entries()]
+    .flatMap(([lineId, tramos]) => {
+      const line = network.lines.find((l) => l.id === lineId)
+      if (!line) return []
+      const cuantos = tramos.map((s) => s.without_alternative)
+      return [
+        {
+          line,
+          tramos: tramos.sort((a, b) => (tramo.get(a.segment_id)?.seq ?? 0) - (tramo.get(b.segment_id)?.seq ?? 0)),
+          max: Math.max(...cuantos),
+          min: Math.min(...cuantos),
+        },
+      ]
+    })
+    .sort((a, b) => b.max - a.max || b.tramos.length - a.tramos.length)
+}
+
+/** «12 trenes», «de 77 a 111 trenes». */
+export function rangoTrenes(min: number, max: number): string {
+  return min === max ? trenes(max) : `de ${min} a ${trenes(max)}`
+}

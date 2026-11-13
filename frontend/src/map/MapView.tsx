@@ -54,6 +54,8 @@ export interface RecorridosEnMapa {
   elegido: string[]
   /** Las estaciones elegidas. */
   extremos: string[]
+  /** Tramos que el mapa encuadra; sin ellos, todos los que se enseñan. */
+  encuadre?: string[]
 }
 
 /**
@@ -362,7 +364,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
   // Encuadrar la selección. La red se lee de la referencia: que llegue el detalle de una línea cambia
   // la red, pero no debe volver a mover el mapa.
   const hasNetwork = network !== null
-  const recorridosKey = recorridos ? recorridos.todos.join('|') : null
+  const recorridosKey = recorridos ? (recorridos.encuadre ?? recorridos.todos).join('|') : null
   useEffect(() => {
     const map = mapRef.current
     const network = networkRef.current
@@ -376,7 +378,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     if (caja.clientWidth !== lienzo.clientWidth || caja.clientHeight !== lienzo.clientHeight) map.resize()
     if (!selection && recorridosKey !== null) {
       // Comparando recorridos, el mapa encuadra los que se enseñan; mientras se eligen estaciones, no se mueve.
-      const ids = new Set(stateRef.current.recorridos?.todos)
+      const ids = new Set(stateRef.current.recorridos?.encuadre ?? stateRef.current.recorridos?.todos)
       if (!ids.size || framedRef.current === `recorridos:${recorridosKey}`) return
       framedRef.current = `recorridos:${recorridosKey}`
       const b = new LngLatBounds()

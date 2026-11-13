@@ -155,6 +155,20 @@
   .escritorio .lema {
     display: none;
   }
+
+  /* y los cinco enlaces se arriman, para que el buscador no se quede sin sitio */
+  .nav {
+    gap: 0;
+  }
+
+  .nav a {
+    padding: 0 7px;
+  }
+
+  .nav a[aria-current='page']::after {
+    left: 7px;
+    right: 7px;
+  }
 }
 
 /* En el móvil los enlaces van tras «Menú», con su nombre completo y una frase cada uno. */
@@ -1944,23 +1958,6 @@
   margin-top: 6px;
 }
 
-.cobertura-apartado .lista-destinos {
-  margin-top: 16px;
-  border-bottom: 1px solid var(--regla);
-}
-
-.cobertura-apartado .lista-destinos li,
-.cobertura-apartado .lista-destinos .enlace {
-  font-size: var(--t-14);
-}
-
-.cobertura-apartado > div > .texto {
-  margin-top: 10px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--tinta);
-}
-
 /* Las fuentes: un grupo por lo que aportan. El grupo dice cuántas son y de quién; dentro, cada fuente. */
 .cobertura-fuentes {
   margin-top: 16px;
@@ -2012,10 +2009,6 @@
   grid-column: 1;
   line-height: 1.45;
   color: var(--tinta-2);
-}
-
-.cobertura-apartado > div > .texto .enlace {
-  font-size: var(--t-14);
 }
 
 .fuentes-grupo ul {
@@ -2114,4 +2107,117 @@
 
 .movil .operador-ficha div {
   grid-template-columns: 84px minmax(0, 1fr);
+}
+
+/* Tramos sin otro camino: un renglón por línea; al abrirla, sus tramos en el orden en que se recorren */
+.sin-camino-resumen {
+  margin-top: 10px;
+}
+
+.sin-camino-lineas,
+.sin-camino-tramos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sin-camino-lineas {
+  margin-top: 14px;
+  border-bottom: 1px solid var(--regla);
+}
+
+.sin-camino-lineas > li {
+  margin-left: -12px;
+  border-top: 1px solid var(--regla);
+  border-left: 3px solid transparent;
+}
+
+.sin-camino-lineas > li.abierta {
+  border-left-color: var(--tinta);
+}
+
+.sin-camino-linea {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 10px;
+  width: 100%;
+  padding: 9px 0 9px 9px;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-size: var(--t-14);
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.sin-camino-linea:hover,
+.sin-camino-linea:focus-visible {
+  background: var(--papel-2);
+  outline: none;
+}
+
+.sin-camino-nombre {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.sin-camino-linea .cuantos,
+.sin-camino-tramo .cuantos {
+  white-space: nowrap;
+}
+
+.sin-camino-ver {
+  color: var(--senal-azul);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.sin-camino-tramos {
+  padding: 0 0 6px 9px;
+}
+
+.sin-camino-tramos > li {
+  border-left: 3px solid transparent;
+}
+
+.sin-camino-tramos > li.activo {
+  background: var(--papel-2);
+  border-left-color: var(--senal-azul);
+}
+
+.sin-camino-tramo {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 0 6px 8px;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-size: 13px;
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.sin-camino-tramo:hover,
+.sin-camino-tramo:focus-visible {
+  background: var(--papel-2);
+  outline: none;
+}
+
+.sin-camino-detalle {
+  padding: 0 0 9px 8px;
+  font-size: 13px;
+}
+
+.sin-camino-detalle a {
+  margin-right: 16px;
+  color: var(--senal-azul);
+}
+
+.sin-camino-detalle p + p {
+  margin-top: 4px;
 }

@@ -11,7 +11,7 @@ async function abrirPanel(page: Page) {
 
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
-test.describe('Tramos sin alternativa', () => {
+test.describe('Tramos sin otro camino', () => {
   test('si la API todavía no tiene el análisis, el visor usa la instantánea', async ({ page }) => {
     test.skip(estatico, 'sin API el visor ya lee la instantánea')
     // una API anterior a este apartado: el visor se publica antes de que el servidor se despliegue
@@ -23,10 +23,9 @@ test.describe('Tramos sin alternativa', () => {
     // se espera a que el visor hable ya con la API: antes de eso leería la instantánea de todos modos
     await page.goto('/')
     await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
-    await page.goto('/cobertura')
-    await page.getByTestId('sin-alternativa-ver-todos').click()
-    await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(11 + 4 + 20)
-    await expect(page.getByTestId('pagina-cobertura')).not.toContainText('No se ha podido cargar este apartado')
+    await page.goto('/sin-otro-camino')
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(5)
+    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 84 trenes no tendrían otro camino')
     expect(pedidas).toBeGreaterThan(0)
@@ -100,60 +99,49 @@ test.describe('Tramos sin alternativa', () => {
     )
   })
 
-  test('la cobertura lista los tramos sin alternativa y pliega los demás', async ({ page }) => {
-    await page.goto('/cobertura')
-    const apartado = page.getByTestId('tramos-sin-alternativa')
-    await expect(page.getByRole('heading', { name: 'Tramos con más trenes y sin alternativa' })).toBeVisible()
-    // el alcance, siempre delante: las líneas cargadas, no la red real, y sin los trenes de Iryo
+  test('«Tramos sin otro camino» tiene su vista: un renglón por línea y los demás tramos, plegados', async ({ page }) => {
+    await page.goto('/sin-otro-camino')
+    const vista = page.getByTestId('vista-sin-otro-camino')
+    await expect(vista.getByRole('heading', { name: 'Tramos sin otro camino' })).toBeVisible()
+    // el alcance, siempre delante: las líneas cargadas, no la red real
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
-      'Si uno de estos tramos se cortara, sus trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real. Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.',
+      'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    // del que más trenes lleva al que menos
-    const filas = page.getByTestId('lista-sin-alternativa').locator('li')
-    // a la vista, los ocho que más trenes llevan; los demás, tras un enlace que alarga la lista en el sitio
-    await expect(filas).toHaveCount(8)
-    const verTodos = page.getByTestId('sin-alternativa-ver-todos')
-    await expect(verTodos).toHaveText('Ver los 27 tramos restantes')
-    await verTodos.click()
-    await expect(verTodos).toHaveText('Ver solo los que más trenes llevan')
-    // los dos que llevan a Sevilla, los dos del ramal de Jaén y los siete de Alcázar de San Juan a
-    // Albacete, una rama unida al resto por un solo extremo. Granada está unida por los dos lados
-    // (la convencional de Moreda y la alta velocidad de Antequera), así que ni sus líneas ni
-    // Córdoba – Bifurcación Málaga figuran ya: sus trenes tienen otro camino
-    // Con ellos, los veinte de la alta velocidad de Barcelona, que solo comparte con las demás la
-    // cabecera de Madrid y cuyos baipases no están cargados: son los que más trenes llevan
-    // Y los cuatro de Antequera-Santa Ana a Málaga: a Málaga solo llega esa línea
-    await expect(filas).toHaveCount(11 + 4 + 20)
-    await expect(filas.nth(0)).toContainText('111 trenes')
-    await expect(filas.nth(0)).toContainText('Alta velocidad Madrid – Zaragoza – Barcelona')
-    // los dos de Sevilla, con los trenes que no paran en Madrid, quedan entre los de Barcelona
-    await expect(filas.nth(11)).toContainText('Bifurcación Málaga-Alta Velocidad – Cambiador de Majarabique')
-    await expect(filas.nth(11)).toContainText('84 trenes')
-    await expect(filas.nth(14)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
-    await expect(filas.nth(14)).toContainText('82 trenes')
-    await expect(filas.nth(21)).toContainText('Lleida-Pirineus')
-    await expect(filas.nth(21)).toContainText('77 trenes')
-    // los cuatro hacia Málaga; los tres últimos llevan además los Avant de Málaga a Granada
-    await expect(filas.nth(22)).toContainText('61 trenes')
-    await expect(filas.nth(22)).toContainText('Alta velocidad Córdoba – Málaga')
-    await expect(filas.nth(24)).toContainText('61 trenes')
-    await expect(filas.nth(25)).toContainText('Antequera-Santa Ana – Bifurcación Gobantes')
-    await expect(filas.nth(25)).toContainText('55 trenes')
-    // y los dos del ramal de Jaén, que acaba en una estación término
-    await expect(filas.nth(26)).toContainText('Espelúy – Mengíbar-Artichuela')
-    await expect(filas.nth(26)).toContainText('26 trenes')
-    await expect(filas.nth(27)).toContainText('Mengíbar-Artichuela – Jaén')
-    await expect(filas.nth(27)).toContainText('26 trenes')
-    // de Alcázar de San Juan a Albacete, hasta que se cargue otra línea que llegue a Albacete
-    await expect(filas.nth(28)).toContainText('12 trenes')
-    await expect(filas.nth(28)).toContainText('Línea convencional Alcázar de San Juan – Albacete')
-    await expect(filas.nth(34)).toContainText('12 trenes')
-    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
-    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Linares-Baeza – Moreda – Granada')
-    // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
-    await expect(apartado).not.toContainText('Moreda – Bifurcación Almería')
-    await expect(apartado).toContainText('Trenes del jueves, 12 de noviembre de 2026')
-    await expect(apartado).not.toContainText(/criticidad/i)
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 35 de los 91 tramos con trenes, en 5 líneas. En el mapa, lo demás va atenuado.')
+    // y sin los trenes de Iryo
+    await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
+    // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
+    const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
+    await expect(lineas).toHaveCount(5)
+    // los veinte de la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de Madrid y
+    // cuyos baipases no están cargados: son los que más trenes llevan
+    await expect(lineas.nth(0)).toContainText('Madrid – Barcelona por Zaragoza')
+    await expect(lineas.nth(0)).toContainText('Toda la línea, 20 tramos')
+    await expect(lineas.nth(0)).toContainText('de 77 a 111 trenes')
+    // los dos que llevan a Sevilla desde la bifurcación de Málaga
+    await expect(lineas.nth(1)).toContainText('Madrid – Sevilla')
+    await expect(lineas.nth(1)).toContainText('2 de sus 13 tramos')
+    await expect(lineas.nth(1)).toContainText('de 82 a 84 trenes')
+    // los cuatro de Antequera-Santa Ana a Málaga: a Málaga solo llega esa línea
+    await expect(lineas.nth(2)).toContainText('Córdoba – Málaga')
+    await expect(lineas.nth(2)).toContainText('4 de sus 8 tramos')
+    await expect(lineas.nth(2)).toContainText('de 55 a 61 trenes')
+    // el ramal de Jaén, que acaba en una estación término
+    await expect(lineas.nth(3)).toContainText('Espelúy – Jaén')
+    await expect(lineas.nth(3)).toContainText('Toda la línea, 2 tramos')
+    await expect(lineas.nth(3)).toContainText('26 trenes')
+    // y de Alcázar de San Juan a Albacete, hasta que se cargue otra línea que llegue a Albacete
+    await expect(lineas.nth(4)).toContainText('Alcázar de San Juan – Albacete')
+    await expect(lineas.nth(4)).toContainText('Toda la línea, 7 tramos')
+    await expect(lineas.nth(4)).toContainText('12 trenes')
+    // Granada está unida por los dos lados (la convencional de Moreda y la alta velocidad de Antequera):
+    // sus líneas no figuran
+    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Granada')
+    await expect(vista).toContainText('Trenes del jueves, 12 de noviembre de 2026')
+    await expect(vista).not.toContainText(/criticidad/i)
+    // el mapa atenúa el resto de la red; mientras no se mira nada, no hay nada en azul
+    await expect(page.getByTestId('mapa')).not.toHaveAttribute('data-recorrido-elegido')
+
     // los demás, plegados: 56 tramos con lo que añade su otro camino
     const resto = page.getByTestId('tramos-con-alternativa')
     await expect(resto.locator('summary')).toHaveText('Los otros 56 tramos tienen otro camino')
@@ -166,9 +154,61 @@ test.describe('Tramos sin alternativa', () => {
     await expect(otros.first()).toContainText('139 trenes')
     await expect(otros.first()).toContainText('+340 km · +3 h 2 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
+    // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
+    await expect(vista).not.toContainText('Moreda – Bifurcación Almería')
     // cada fila lleva a la ficha de su tramo
-    await filas.nth(0).getByRole('button').click()
-    await expect(page).toHaveURL(/\/tramo\/lav-madrid-barcelona:camp-de-tarragona:l-arboc$/)
+    await otros.first().getByRole('button').click()
+    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+  })
+
+  test('al abrir una línea salen sus tramos en orden, y un tramo lleva a su ficha o a simular su cierre', async ({ page }) => {
+    await page.goto('/sin-otro-camino')
+    const linea = page.getByTestId('sin-camino-linea-lav-madrid-sevilla')
+    const boton = linea.getByRole('button', { name: /Madrid – Sevilla/ })
+    await expect(boton).toHaveAttribute('aria-expanded', 'false')
+    await boton.click()
+    await expect(boton).toHaveAttribute('aria-expanded', 'true')
+    // en el orden en que se recorre la línea, no por trenes
+    const tramos = linea.locator('ol > li')
+    await expect(tramos).toHaveCount(2)
+    await expect(tramos.nth(0)).toContainText('Bifurcación Málaga-Alta Velocidad – Cambiador de Majarabique')
+    await expect(tramos.nth(0)).toContainText('84 trenes')
+    await expect(tramos.nth(1)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
+    await expect(tramos.nth(1)).toContainText('82 trenes')
+    // al elegir un tramo se pinta en azul en el mapa y se despliega en el sitio
+    const tramo = page.getByTestId('tramo-lav-madrid-sevilla:bif-malaga:majarabique')
+    await tramo.click()
+    await expect(tramo).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '1')
+    const detalle = page.getByTestId('sin-camino-detalle')
+    await expect(detalle).toContainText(/Los más numerosos \(\d+\) van entre .+ y Sevilla-Santa Justa\./)
+    await expect(page.getByTestId('sin-camino-ficha')).toHaveAttribute('href', '/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
+    const simular = page.getByTestId('sin-camino-simular')
+    await expect(simular).toHaveText('Simular su cierre')
+    await expect(simular).toHaveAttribute('href', '/tramo/lav-madrid-sevilla:bif-malaga:majarabique/cierre')
+    // la simulación del cierre de ese tramo, a un toque
+    await simular.click()
+    await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:bif-malaga:majarabique\/cierre$/)
+    await expect(page.getByTestId('panel-simulacion')).toBeVisible()
+
+    // y su ficha
+    await page.goto('/sin-otro-camino')
+    await page.getByTestId('sin-camino-linea-espeluy-jaen').getByRole('button').first().click()
+    await page.getByTestId('tramo-espeluy-jaen:mengibar-artichuela:jaen').click()
+    await page.getByTestId('sin-camino-ficha').click()
+    await expect(page).toHaveURL(/\/tramo\/espeluy-jaen:mengibar-artichuela:jaen$/)
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+  })
+
+  test('«Cobertura y fuentes» ya no lleva la lista: enlaza con la vista', async ({ page }) => {
+    await page.goto('/cobertura')
+    await expect(page.getByTestId('pagina-cobertura')).toBeVisible()
+    await expect(page.getByTestId('tramos-sin-alternativa')).toHaveCount(0)
+    const enlace = page.getByTestId('cobertura-sin-otro-camino').getByRole('link', { name: 'Tramos sin otro camino' })
+    await expect(enlace).toHaveAttribute('href', '/sin-otro-camino')
+    await enlace.click()
+    await expect(page).toHaveURL(/\/sin-otro-camino$/)
+    await expect(page.getByTestId('vista-sin-otro-camino')).toBeVisible()
   })
 })

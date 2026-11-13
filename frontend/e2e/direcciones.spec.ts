@@ -18,6 +18,7 @@ const RUTAS: { ruta: string; testId: string }[] = [
   { ruta: '/recorridos', testId: 'comparador' },
   { ruta: `/recorridos/${MADRID}/cordoba`, testId: 'comparador' },
   { ruta: `/recorridos/${MADRID}/ciudad-real/c~${TRAMO}`, testId: 'recorridos-escenario' },
+  { ruta: '/sin-otro-camino', testId: 'vista-sin-otro-camino' },
   { ruta: '/glosario', testId: 'glosario-indice' },
   { ruta: '/glosario/via-unica', testId: 'glosario-indice' },
   { ruta: '/cobertura', testId: 'cobertura-indice' },
