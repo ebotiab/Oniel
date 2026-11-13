@@ -82,12 +82,30 @@ def test_madrid_jaen_train_passes_through_despenaperros_as_estimated(
     assert "espeluy:andujar" not in by_segment
 
 
-def test_high_speed_filter_is_unchanged(feed: GtfsFeed, spec: NetworkSpec) -> None:
-    """El filtro de corredor sigue dando 317 viajes; los 13 directos de Madrid a Málaga, que no
-    paran en Córdoba, entran por una regla de recorrido."""
+def test_high_speed_filter_also_takes_the_trains_that_do_not_stop_in_madrid(
+    feed: GtfsFeed, spec: NetworkSpec
+) -> None:
+    """A los 317 que paran en Córdoba y en Madrid se suman 47 que recorren la línea sin parar en
+    Madrid: 27 Avant que van de Sevilla a Córdoba sin paradas (por las paradas seguidas del
+    filtro) y 20 AVE de Barcelona y de Valencia (por las reglas de recorrido). Y 13 directos de
+    Madrid a Málaga, que no paran en Córdoba y entran por otra regla."""
     trips = select_trips_for_spec(feed, spec)
-    assert len(trips) == 317 + 13
-    assert sum("50500" in feed.stop_ids_of(t) for t in trips) == 317
+    assert len(trips) == 317 + 27 + 20 + 13
+    assert sum("50500" not in feed.stop_ids_of(t) for t in trips) == 13
+    madrid = {"60000", "17000", "18000"}
+    away = [t for t in trips if not madrid & {st.stop_id for st in t.stop_times}]
+    assert len(away) == 47
+    assert {t.product for t in away} == {"AVANT", "AVE"}
+    assert sum(t.product == "AVANT" for t in away) == 27
+    # ningún Media Distancia de la línea convencional de Córdoba a Sevilla: todos paran entre las dos
+    assert not any(t.product == "MD" for t in trips)
+    # sin las paradas seguidas, los Avant se quedan fuera
+    plain = spec.model_copy(
+        update={
+            "corridor_filter": spec.corridor_filter.model_copy(update={"consecutive_stop_ids": []})
+        }
+    )
+    assert len(select_trips_for_spec(feed, plain)) == 317 + 20 + 13
 
 
 def test_ouigo_trains_run_only_along_the_high_speed_line(

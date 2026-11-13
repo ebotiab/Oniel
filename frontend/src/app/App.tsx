@@ -9,7 +9,7 @@ import type { RecorridosEnMapa } from '../map/MapView'
 import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { AnnotationDetail } from '../panel/AnnotationDetail'
-import { CoveragePanel } from '../panel/CoveragePanel'
+import { CoveragePage } from '../panel/CoveragePage'
 import { GlossaryPage } from '../panel/GlossaryPage'
 import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
@@ -301,8 +301,6 @@ export default function App() {
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
-  else if (showCoverage && coverage)
-    panel = <CoveragePanel coverage={coverage} network={network} referenceDate={referenceDate} annotations={annotations} status={status} onSelectSegment={(id) => select({ type: 'tramo', id })} onClose={() => setShowCoverage(false)} />
   else if (comparador)
     panel = (
       <ComparePanel
@@ -390,13 +388,13 @@ export default function App() {
 
   const lines = network?.lines ?? []
   // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
-  const enGlosario = Boolean(route.glosario)
-  const [mapaMontado, setMapaMontado] = useState(!enGlosario)
-  if (!enGlosario && !mapaMontado) setMapaMontado(true)
+  const enPagina = Boolean(route.glosario) || showCoverage
+  const [mapaMontado, setMapaMontado] = useState(!enPagina)
+  if (!enPagina && !mapaMontado) setMapaMontado(true)
 
   return (
     <GlosarioContext value={openGlossary}>
-    <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''} ${enGlosario ? 'en-glosario' : ''}`}>
+    <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''} ${enPagina ? 'en-pagina' : ''}`}>
       <a className="visually-hidden" href="#panel">
         Ir al panel de la línea
       </a>
@@ -469,6 +467,18 @@ export default function App() {
         />
       )}
       {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} onBack={closeGlossary} />}
+      {showCoverage && !route.glosario && coverage && network && (
+        <CoveragePage
+          coverage={coverage}
+          network={network}
+          referenceDate={referenceDate}
+          annotations={annotations}
+          status={status}
+          onSelectSegment={(id) => select({ type: 'tramo', id })}
+          onPickLine={showLine}
+          onBack={() => setShowCoverage(false)}
+        />
+      )}
     </div>
     </GlosarioContext>
   )

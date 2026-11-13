@@ -105,7 +105,7 @@ def test_the_line_value_fills_what_no_section_declares(
     }
     assert values["ciudad-real:puertollano"] == AttributeValue(1, "una-fuente")
     # el valor de la línea no tiene fuente propia
-    assert values["madrid-puerta-de-atocha:bif-torrejon-de-velasco"] == AttributeValue(2)
+    assert values["madrid-puerta-de-atocha:bif-los-gavilanes"] == AttributeValue(2)
     assert sum(1 for v in values.values() if v.value == 1) == 1
 
 

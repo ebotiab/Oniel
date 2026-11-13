@@ -1,0 +1,51 @@
+{
+  "descripcion": "Registro de las consultas hechas el 13 de noviembre de 2026 al prolongar hasta Málaga la línea de alta velocidad Córdoba – Málaga: las que sirvieron para registrar en backend/data/curated/anotaciones.json la interrupción, ya terminada, entre Antequera-Santa Ana y Málaga de febrero a abril de 2026, y la comprobación de que ese día no había ninguna vigente en el tramo. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "consultado_el": "2026-11-13",
+  "consultas": [
+    {
+      "source_id": "the-objective-corte-alora-2026-02-04",
+      "titulo": "Interrumpida la Alta Velocidad entre Málaga y Antequera por un desprendimiento de tierras",
+      "editor": "The Objective, con información de Europa Press",
+      "url": "https://theobjective.com/economia/transporte/2026-02-04/interrumpida-alta-velocidad-malaga-antequera-desprendimiento/",
+      "fecha_de_la_pagina": "2026-02-04 08:31",
+      "resumen": "Noticia del 4 de febrero de 2026: la circulación de alta velocidad entre Málaga y Antequera está interrumpida desde primera hora de ese día por un desprendimiento de tierras a la altura de Álora. Cita a Adif, en sus redes sociales, que sitúa el inicio de la interrupción a las 7.30 h. Añade que también estaba interrumpida la circulación entre Antequera-Santa Ana y Granada por el temporal, entre la bifurcación de Tocón y Loja, sin decir desde cuándo ni hasta cuándo.",
+      "que_aporta": "El día y la hora en que empezó la interrupción (4 de febrero de 2026, 7.30 h, según Adif), el motivo y el tramo (Málaga – Antequera)."
+    },
+    {
+      "source_id": "renfe-nota-servicios-malaga-2026-04",
+      "titulo": "Renfe restablece los servicios directos de alta velocidad con origen y destino Málaga desde el 30 de abril",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/04/renfe-restablece-servicios-av-malaga",
+      "fecha_de_la_pagina": "2026-04-23",
+      "resumen": "Nota de prensa del 23 de abril de 2026, releída: Renfe volverá a dar los servicios directos con origen y destino Málaga desde las 12.00 h del 30 de abril, sin transbordo en Antequera-Santa Ana. Mientras el tráfico estuvo interrumpido por los daños del temporal mantuvo un plan alternativo en autobús entre Málaga y Antequera-Santa Ana, que empezó el 18 de febrero a raíz del desprendimiento de Álora y seguiría hasta la reapertura de la vía, prevista para el 30 de abril. Avisa de que quedan tramos en los que se circula por vía única y de que por eso los horarios cambian respecto a los de antes del corte.",
+      "que_aporta": "Los extremos del trayecto por carretera (Antequera-Santa Ana y Málaga), su inicio el 18 de febrero de 2026, la reapertura prevista para el 30 de abril de 2026 a las 12.00 h y el aviso de circulación por vía única en algunos tramos."
+    },
+    {
+      "source_id": "the-objective-reapertura-malaga-2026-04-30",
+      "titulo": "La conexión directa por alta velocidad entre Málaga-Madrid se restablece este jueves",
+      "editor": "The Objective",
+      "url": "https://theobjective.com/economia/transporte/2026-04-30/conexion-alta-velocidad-malaga-madrid-reestablece/",
+      "fecha_de_la_pagina": "2026-04-30 08:13",
+      "resumen": "Noticia del 30 de abril de 2026: Adif recupera ese día la conexión de alta velocidad con Málaga, una vez reparados los daños de las lluvias del 4 de febrero a la altura de Álora, donde hubo un desprendimiento de tierras y cedió un muro de contención. Adif abre la línea a las 12.00 h y los tres operadores (Renfe, Iryo y Ouigo) vuelven a circular. Repite los datos de la nota de Renfe sobre el plan alternativo por carretera y sobre los tramos con circulación por vía única.",
+      "que_aporta": "Que la reapertura anunciada para el 30 de abril de 2026 a las 12.00 h se mantuvo el mismo día, y el motivo del corte con su fecha (4 de febrero)."
+    },
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red. Información del tráfico ferroviario",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-13 10:47",
+      "resumen": "Ningún aviso sobre la línea de alta velocidad entre Antequera y Málaga. El aviso de la línea Madrid-Andalucía sigue igual que el día 12: circulación interrumpida por el alcance del 28 de octubre, con servicio en los tramos de alta velocidad Madrid-Toledo y Málaga-Sevilla. Los demás avisos son de Cercanías de Madrid, Asturias, Cataluña y el País Vasco.",
+      "que_aporta": "Que el 13 de noviembre de 2026 Adif no anuncia ninguna interrupción entre Antequera-Santa Ana y Málaga y da por prestado el servicio de alta velocidad Málaga-Sevilla."
+    },
+    {
+      "source_id": "adif-salidas-y-llegadas",
+      "titulo": "Salidas y llegadas de Málaga María Zambrano",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/54413-málaga-m.-zambrano",
+      "fecha_de_la_pagina": "2026-11-13 10:56",
+      "resumen": "El panel solo devolvió trenes de Cercanías (líneas C1 y C2) en las horas que mostraba; el filtro de alta velocidad, media y larga distancia no cambió la lista, así que no se pudo leer qué trenes de alta velocidad salían.",
+      "que_aporta": "Nada concluyente sobre la alta velocidad: se deja constancia de que se consultó."
+    }
+  ]
+}

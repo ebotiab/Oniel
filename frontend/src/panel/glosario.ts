@@ -52,13 +52,13 @@ const TERMINOS = {
     nombre: 'Ancho de vía',
     breve:
       'La distancia entre los dos carriles. La red convencional española usa el ancho ibérico (1.668 mm) y la alta velocidad, el ancho estándar europeo (1.435 mm): un tren solo pasa de una a otra si está preparado para cambiar de ancho.',
-    ver: ['cambiador-de-ancho', 'ancho-mixto'],
+    ver: ['anchos-de-via', 'cambiador-de-ancho', 'ancho-mixto'],
   },
   'ancho-mixto': {
     nombre: 'Ancho mixto',
     breve:
       'Vía con un tercer carril: uno de los carriles sirve a los dos anchos y cada uno de los otros dos marca un ancho distinto. Por ella pasan trenes de ancho ibérico y de ancho estándar sin cambiar de ancho.',
-    ver: ['ancho-de-via', 'cambiador-de-ancho'],
+    ver: ['anchos-de-via', 'ancho-de-via', 'cambiador-de-ancho'],
   },
   bifurcacion: {
     nombre: 'Bifurcación',
@@ -86,7 +86,7 @@ const TERMINOS = {
     nombre: 'Cambiador de ancho',
     breve:
       'Instalación por la que los trenes preparados para ello pasan despacio mientras la separación de sus ruedas se ajusta al otro ancho de vía. Así un mismo tren puede circular por la alta velocidad y por la red convencional.',
-    ver: ['ancho-de-via'],
+    ver: ['anchos-de-via', 'ancho-de-via'],
   },
   'cierre-hipotetico': {
     nombre: 'Cierre hipotético',
@@ -228,6 +228,20 @@ const TERMINOS = {
 } as const satisfies Record<string, DefTermino>
 
 const CONCEPTOS = {
+  'anchos-de-via': {
+    titulo: 'Anchos de vía: ibérico, estándar y mixto',
+    pasos: [
+      'Ancho ibérico: 1.668 mm entre los carriles. Es el de la red convencional.',
+      'Ancho estándar: 1.435 mm. Es el de la alta velocidad.',
+      'Ancho mixto: un tercer carril. Uno de los carriles es común y la vía sirve a trenes de los dos anchos.',
+    ],
+    parrafos: [
+      'Las ruedas de un tren están separadas a la medida de un ancho, así que solo circula por las vías de ese ancho. Para pasar de una red a otra, el tren tiene que estar preparado y cruzar un cambiador de ancho, o bien ir por una vía de ancho mixto.',
+      'En Oniel, la ficha de un tramo lo dice cuando su vía es de ancho mixto, como en el paso por Loja de la alta velocidad a Granada.',
+    ],
+    referencia: { ...RCF, cita: 'artículo 1.1.1.3, definiciones de cambiador de ancho y de vía de ancho mixto' },
+    ver: ['ancho-de-via', 'ancho-mixto', 'cambiador-de-ancho'],
+  },
   'como-se-separan-los-trenes': {
     titulo: 'Cómo se separan los trenes: bloqueo y cantón',
     pasos: [

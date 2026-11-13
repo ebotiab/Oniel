@@ -70,7 +70,7 @@ export interface AnnotationLayer {
     enlace: (a: AnnotationOut) => string
     detalle: (a: AnnotationOut) => string
   } | null
-  /** Sección del panel «Qué hay en esta versión». */
+  /** Apartado de la página «Cobertura y fuentes». */
   cobertura: { titulo: string; entrada: string; vacio: string; testId: string }
 }
 

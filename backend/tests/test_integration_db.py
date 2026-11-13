@@ -44,8 +44,15 @@ RULES = {
 }
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
+#: La alta velocidad Madrid – Sevilla tiene además las de los AVE que no paran en Madrid: los de
+#: Barcelona entran por la bifurcación Los Gavilanes y los de Valencia, por la de Yeles.
 #: Los directos de Madrid a Málaga, en la alta velocidad de Sevilla y en la de Málaga.
 MALAGA_RULES = {"madrid-malaga-sin-paradas": 13}
+AWAY_RULES = {
+    "barcelona-cordoba-sin-parar-en-madrid": 8,
+    "barcelona-ciudad-real-sin-parar-en-madrid": 8,
+    "valencia-ciudad-real-sin-parar-en-madrid": 4,
+}
 #: Reglas de la alta velocidad de Barcelona que encajan con el fichero de Renfe; la de los Ouigo
 #: que siguen a Andalucía parando en Madrid solo encaja con el de Ouigo (4 viajes).
 BCN_RULES = {
@@ -168,10 +175,12 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # La alta velocidad de Barcelona añade 571 viajes, de los que 16 ya estaban: los Alvia
     # Barcelona – València – Alcázar de San Juan – Córdoba, que recorren también la convencional,
     # y los AVE de Barcelona a Andalucía de las líneas de Málaga y Granada.
+    # y 8 más que solo recorren la alta velocidad Madrid – Sevilla sin parar en Madrid: 4 Avant de
+    # Sevilla a Córdoba y 4 AVE de Valencia a Sevilla
     assert gtfs1["trips_in_feed"] == 6841 and gtfs1["merged_train_numbers"] == 237
     # Y 13 directos de Madrid a Málaga, que no paran en Córdoba y entran por una regla de
     # recorrido en la alta velocidad de Sevilla y en la de Málaga.
-    trips = 317 + 432 - 22 + 26 + 15 + 37 + 571 - 16 + 13
+    trips = 317 + 432 - 22 + 26 + 15 + 37 + 571 - 16 + 8 + 13
     assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == trips
     assert gtfs1["lines"][BCN]["trips"] == 571
     assert gtfs1["lines"][BCN]["route_overrides"] == BCN_RULES
@@ -179,8 +188,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # hay un PAET o una bifurcación), así que todos sus pasos son estimados
     assert gtfs1["lines"][BCN]["passes"] == {"estimado": 7590}
     # Las dos líneas de alta velocidad de Córdoba a Granada traen 181 y 63 viajes. De ellos, 37 no
-    # estaban: los Avant de Sevilla a Málaga y a Granada, los de Málaga a Granada y los AVE de
-    # Barcelona a Málaga y a Granada, que no paran en Madrid.
+    # estaban: los Avant de Sevilla a Málaga y a Granada, los de Málaga a Granada y los AVE
+    # de Barcelona a Málaga y a Granada, que no paran en Madrid.
     # La de Málaga, ya hasta Málaga-María Zambrano, suma a sus 181 los 13 directos de Madrid y
     # los 6 Avant de Málaga a Granada, que la recorren hasta la bifurcación Gobantes.
     assert gtfs1["lines"][LAV_MALAGA]["trips"] == 181 + 13 + 6
@@ -190,11 +199,15 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][LAV_GRANADA]["trips"] == 63
     assert gtfs1["lines"][LAV_MALAGA]["passes"] == {"estimado": 1250, "publicado": 68}
     assert gtfs1["lines"][LAV_GRANADA]["passes"] == {"estimado": 498}
-    assert gtfs1["lines"][LAV]["trips"] == 317 + 13
+    # En la alta velocidad Madrid – Sevilla, 317 paran en Córdoba y en Madrid y 47 la recorren sin
+    # parar en Madrid: 27 Avant de Sevilla y 20 AVE de Barcelona y de Valencia. De esos 47, 31 ya
+    # se importaban por las líneas de Málaga y de Granada y 16 son nuevos (4 Avant Sevilla – Córdoba,
+    # 8 AVE Barcelona – Sevilla y 4 AVE Valencia – Sevilla).
+    assert gtfs1["lines"][LAV]["trips"] == 317 + 47 + 13
     assert gtfs1["lines"][CONV]["trips"] == 390 + 42
     assert gtfs1["lines"][MZCR]["trips"] == 124 + 22
     assert gtfs1["lines"][JAEN]["trips"] == 123
-    assert gtfs1["lines"][LAV]["route_overrides"] == RULES | MALAGA_RULES
+    assert gtfs1["lines"][LAV]["route_overrides"] == RULES | AWAY_RULES | MALAGA_RULES
     assert gtfs1["lines"][MZCR]["route_overrides"] == RULES
     assert gtfs1["lines"][CONV]["route_overrides"] == RULES | JAEN_RULES
     assert gtfs1["lines"][JAEN]["route_overrides"] == {}
@@ -211,7 +224,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert "indeterminado" not in gtfs1["passes"] and gtfs1["unmapped_stops"] == {}
     # Ouigo: 25 viajes Madrid–Córdoba–Sevilla o Málaga (4 de ellos vienen de Barcelona o siguen
     # hasta allí), todos por la LAV y ninguno por las líneas convencionales. Solo paran en Madrid,
-    # Córdoba y Sevilla, así que el paso por cada tramo es estimado: 245 pasos.
+    # Córdoba y Sevilla, así que el paso por cada tramo es estimado: 295 pasos.
     ouigo1, ouigo2 = imported["ouigo"]
     # Y otros 25 por la alta velocidad de Barcelona; los 4 que enlazan con Andalucía cuentan en
     # las dos líneas, así que son 46 viajes distintos y 500 pasos más, también estimados. Con el
@@ -230,16 +243,16 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # los 16 de Málaga siguen por la línea de Córdoba a Málaga sin parar hasta Málaga: 8 tramos
     assert ouigo1["lines"][LAV_MALAGA]["trips"] == 16 and ouigo1["lines"][LAV_GRANADA]["trips"] == 0
     assert ouigo1["lines"][LAV_MALAGA]["passes"] == {"estimado": 16 * 8}
-    assert ouigo1["passes"] == {"estimado": 254 + 128 + 500} and ouigo1["unmapped_stops"] == {}
+    assert ouigo1["passes"] == {"estimado": 306 + 128 + 500} and ouigo1["unmapped_stops"] == {}
     assert ouigo1["resolution"] == {"completa": 47}
     assert ouigo1["dataset"]["id"] == ouigo2["dataset"]["id"] == OUIGO_DATASET_ID
     assert (ouigo1["feed_start"], ouigo1["feed_end"]) == ("2026-06-26", "2026-12-12")
     c = imported["counts"]
-    assert c["lines"] == 9 and c["segments"] == 11 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20
+    assert c["lines"] == 9 and c["segments"] == 13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20
     assert c["services"] == trips + 47
-    renfe_passes = (3091 + 113) + (1968 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+    renfe_passes = (3996 + 121) + (1968 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     renfe_passes += (1250 + 68) + 498 + 7590
-    assert c["service_segment_passes"] == renfe_passes + 254 + 128 + 500
+    assert c["service_segment_passes"] == renfe_passes + 306 + 128 + 500
     assert c["import_runs"] == 4
     # el mismo fichero dos veces es un solo conjunto de datos, reconocido por su SHA-256
     assert c["datasets"] == 2
@@ -321,10 +334,10 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     data = r.json()
     assert [n["id"] for n in data["nodes"]][:3] == [
         "madrid-puerta-de-atocha",
+        "bif-los-gavilanes",
         "bif-torrejon-de-velasco",
-        "bif-la-sagra",
     ]
-    assert len(data["segment_features"]["features"]) == 11 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20
+    assert len(data["segment_features"]["features"]) == 13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
     # Ciudad Real sale a trazos la convencional hacia Badajoz
@@ -405,7 +418,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # el número de vías y los tres de señalización, en los 86 tramos
     gauge = {r["segment_id"] for r in rows if r["attribute"] == "gauge"}
     speed = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "max_speed_kmh"}
-    assert len(rows) - len(gauge) - len(speed) == 4 * (11 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20)
+    assert len(rows) - len(gauge) - len(speed) == 4 * (13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20)
     # la velocidad declarada, solo donde OpenStreetMap no la trae: tres tramos de la alta
     # velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de Lleida
     assert speed == {
@@ -787,8 +800,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert cov["station_count"] == 6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
+    # y 4 más con los que recorren la alta velocidad Madrid – Sevilla sin parar en Madrid ni pasar
+    # por otra línea cargada (los Avant de Sevilla a Córdoba y los AVE de Valencia a Sevilla)
     # y 3 más con los directos de Madrid a Málaga
-    assert cov["service_count"] == 432
+    assert cov["service_count"] == 429 + 4 + 3
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -870,16 +885,22 @@ async def test_segment_counts_are_split_by_operator(client: httpx.AsyncClient) -
     body = (await client.get("/api/segment-counts", params={"date": "2026-11-13"})).json()
     split, totals = body["by_operator"], body["counts"]
     assert {s: sum(by.values()) for s, by in split.items()} == totals
-    assert split[f"{LAV}:madrid-puerta-de-atocha:bif-torrejon-de-velasco"] == {
+    assert split[f"{LAV}:madrid-puerta-de-atocha:bif-los-gavilanes"] == {
         "renfe": 74,
         "ouigo": 12,
     }
-    assert split[f"{LAV}:ciudad-real:puertollano"] == {"renfe": 96, "ouigo": 12}
-    assert split[f"{LAV}:cordoba:bif-malaga"] == {"renfe": 96, "ouigo": 12}
-    assert split[f"{LAV}:bif-malaga:majarabique"] == {"renfe": 49, "ouigo": 6}
-    assert split[f"{LAV}:majarabique:sevilla-santa-justa"] == {"renfe": 47, "ouigo": 6}
+    # en Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid, y en Yeles,
+    # los 2 de Valencia
+    assert split[f"{LAV}:bif-los-gavilanes:bif-torrejon-de-velasco"] == {"renfe": 82, "ouigo": 12}
+    assert split[f"{LAV}:bif-yeles:bif-la-sagra"] == {"renfe": 84, "ouigo": 12}
+    assert split[f"{LAV}:ciudad-real:puertollano"] == {"renfe": 106, "ouigo": 12}
+    # entre Córdoba y la bifurcación de Málaga pasan además los Avant de Sevilla a Málaga y a
+    # Granada, que van y vuelven por el tramo y cuentan una vez
+    assert split[f"{LAV}:cordoba:bif-malaga"] == {"renfe": 128, "ouigo": 12}
+    assert split[f"{LAV}:bif-malaga:majarabique"] == {"renfe": 77, "ouigo": 6}
+    assert split[f"{LAV}:majarabique:sevilla-santa-justa"] == {"renfe": 75, "ouigo": 6}
     lav = [by for s, by in split.items() if s.startswith(f"{LAV}:")]
-    assert len(lav) == 11 and all(set(by) == {"renfe", "ouigo"} for by in lav)
+    assert len(lav) == 13 and all(set(by) == {"renfe", "ouigo"} for by in lav)
     # los 6 Ouigo de Málaga siguen por la línea de Córdoba a Málaga; a Granada solo va Renfe
     malaga = [by for s, by in split.items() if s.startswith(f"{LAV_MALAGA}:")]
     # hasta Antequera-Santa Ana, 71 de Renfe; allí se van los de Granada y Algeciras, y en la
@@ -911,7 +932,7 @@ async def test_segment_counts_are_split_by_operator(client: httpx.AsyncClient) -
     )
     passes = r.json()["passes"]
     ouigo = [p for p in passes if p["service"]["operator_id"] == "ouigo"]
-    assert len(passes) == 108 and len(ouigo) == 12
+    assert len(passes) == 118 and len(ouigo) == 12
     assert {p["service"]["product"] for p in ouigo} == {"Ouigo"}
     assert {p["kind"] for p in ouigo} == {"estimado"}
     first = ouigo[0]["service"]
@@ -968,11 +989,11 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     assert "ciudad-real" not in by_node
     # del más frecuente al menos
     assert [d["trains"] for d in dest] == sorted((d["trains"] for d in dest), reverse=True)
-    assert (dest[0]["node_id"], dest[0]["name"], dest[0]["trains"]) == ("cordoba", "Córdoba", 24)
+    assert (dest[0]["node_id"], dest[0]["name"], dest[0]["trains"]) == ("cordoba", "Córdoba", 25)
     # cuatro de ellos, los AVE de Barcelona a Sevilla, a Málaga y a Granada, que no pasan por
     # Madrid
     assert dest[0]["products"] == ["Intercity", "AVE", "AVLO", "ALVIA"]
-    assert dest[0]["operators"] == [{"operator_id": "renfe", "trains": 24}]
+    assert dest[0]["operators"] == [{"operator_id": "renfe", "trains": 25}]
     assert (dest[0]["first_departure"], dest[0]["last_departure"]) == ("07:55", "22:01")
     # Por Ciudad Real pasan 23 trenes hacia Madrid, pero 11 solo dejan viajeros allí (los
     # Intercity y un Alvia que vienen de Andalucía): a Madrid se puede ir en 12
@@ -986,7 +1007,7 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     # Genil-Herrera, Antequera-Santa Ana, Antequera AV y Granada
     # y otros 4 por los AVE de Barcelona a Sevilla, que paran en Ciudad Real: Zaragoza-Delicias,
     # Lleida-Pirineus, Camp de Tarragona y Barcelona-Sants
-    assert len(dest) == 55 and len(by_node) == 19 + 4 + 4 + 1
+    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1
     assert {"zaragoza-delicias", "barcelona-sants"} <= set(by_node)
     assert {"antequera-santa-ana", "granada"} <= set(by_node)
 
@@ -1250,7 +1271,7 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
     assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5]
     r = await client.get("/api/routes", params={**wide, "max_ratio": "7"})
     assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5, 613.5]
-    assert body["routes"][0]["time_min"] == 40
+    assert body["routes"][0]["time_min"] == 39
     assert "velocidad habitual" in body["method"]
     assert all(route["interruptions"] == [] for route in body["routes"])
 
@@ -1319,9 +1340,9 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
         "operator_id": "renfe",
         "retrieved_on": "2026-11-08",
         "date": "2026-11-12",
-        "trains": 96,
+        "trains": 106,
         "products": [
-            {"product": "AVE", "trains": 54},
+            {"product": "AVE", "trains": 64},
             {"product": "Intercity", "trains": 22},
             {"product": "ALVIA", "trains": 10},
             {"product": "AVLO", "trains": 10},
@@ -1347,17 +1368,17 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
     node = (await client.get("/api/nodes/ciudad-real/history")).json()
     assert node["id"] == "ciudad-real"
     assert [(p["operator_id"], p["date"], p["trains"]) for p in node["points"]] == [
-        ("renfe", "2026-11-12", 60),
+        ("renfe", "2026-11-12", 62),
         ("ouigo", "2026-07-16", 0),  # Ouigo no para en Ciudad Real: cero, que también es un dato
     ]
     assert node["points"][0]["products"][:2] == [
         {"product": "Intercity", "trains": 20},
-        {"product": "AVE", "trains": 16},
+        {"product": "AVE", "trains": 18},
     ]
     assert node["points"][1]["products"] == []
     # y los mismos que «Trenes que paran aquí»
     calls = (await client.get("/api/nodes/ciudad-real/services")).json()["calls"]
-    assert len(calls) == 60
+    assert len(calls) == 62
     madrid = (await client.get("/api/nodes/madrid-puerta-de-atocha/history")).json()["points"]
     calls = (await client.get("/api/nodes/madrid-puerta-de-atocha/services")).json()["calls"]
     assert madrid[0]["trains"] == sum(c["operator_id"] == "renfe" for c in calls)
@@ -1482,18 +1503,18 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     assert out["missing_operator_ids"] == ["iryo"]
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
-    assert len(by_id) == 54 + 8 + 8 + 20
+    assert len(by_id) == 54 + 8 + 8 + 20 + 2
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
-    assert (south["trains"], south["without_alternative"]) == (56, 56)
+    assert (south["trains"], south["without_alternative"]) == (84, 84)
     assert all(g["alternative"] is None for g in south["groups"])
     # entre Córdoba y la bifurcación de Málaga sí, desde que Granada está unida por los dos lados
     first = by_id[f"{LAV}:cordoba:bif-malaga"]
-    assert (first["trains"], first["without_alternative"]) == (107, 0)
+    assert (first["trains"], first["without_alternative"]) == (139, 0)
     # al norte, la línea convencional salva el tramo: 97 km más para los trenes de Madrid a Sevilla
     north = by_id[f"{LAV}:adamuz:cordoba"]
-    assert (north["trains"], north["without_alternative"]) == (107, 0)
+    assert (north["trains"], north["without_alternative"]) == (117, 0)
     top = north["groups"][0]
     assert (top["trains"], top["from_name"], top["to_name"]) == (
         44,
@@ -1501,7 +1522,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "Sevilla-Santa Justa",
     )
     assert top["alternative"]["line_ids"] == [CONV, LAV]
-    assert (top["alternative"]["extra_km"], top["alternative"]["extra_min"]) == (97.0, 104)
+    assert (top["alternative"]["extra_km"], top["alternative"]["extra_min"]) == (97.0, 106)
     # otro día, otros trenes
     sunday = (await client.get("/api/alternatives", params={"date": "2026-11-15"})).json()
     assert sunday["date"] == "2026-11-15"
@@ -1580,7 +1601,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
 
     assert size(index, set(index) - notes) < size(network, set(network) - notes) / 5
     # y tienen su propio tope: cuando no quepan, su detalle tendrá que pedirse aparte. Subió de
-    # 40 a 45 KB con la interrupción de Álora (42 KB); lo siguiente es retirar el alias
+    # 40 a 45 KB con la interrupción de Álora (43 KB); lo siguiente es retirar el alias
     # `interruptions`, que repite las interrupciones
     assert size(index, notes) < 45_000
     # una línea que deja de estar cargada no deja su fichero en la instantánea
