@@ -126,6 +126,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
         const color = closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : (trazo?.colorCss ?? 'var(--tinta)')
         const n = counts?.[s.id]
         const inset = Math.min(6, Math.max(2, (y2 - y1) / 4))
+        const conConteo = !compact && n !== undefined && maxCount > 0 && y2 - y1 > 14
         return (
           <g
             key={s.id}
@@ -147,13 +148,14 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             onMouseLeave={() => onHover(null)}
             style={{ cursor: 'pointer', pointerEvents: 'all' }}
           >
-            <rect x={X - 14} y={y1 + inset} width={28} height={Math.max(4, y2 - y1 - 2 * inset)} fill="transparent" pointerEvents="all" />
+            {/* la zona que responde al clic llega hasta el final de la barra del recuento: una barra corta no deja un hueco entre la vía y el número */}
+            <rect x={X - 14} y={y1 + inset} width={conConteo ? 50 : 28} height={Math.max(4, y2 - y1 - 2 * inset)} fill="transparent" pointerEvents="all" />
             {(sel || closed || hov) && (
               <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={color} strokeWidth={sel || closed ? 7 : 5} opacity={sel || closed ? 1 : 0.35} strokeLinecap="round" />
             )}
             {/* seleccionado e interrumpido: el rojo de la vía sigue a la vista dentro del azul de la selección */}
             {sel && trazo && !closed && <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={trazo.colorCss} strokeWidth={3} strokeLinecap="round" />}
-            {!compact && n !== undefined && maxCount > 0 && y2 - y1 > 14 && (
+            {conConteo && (
               <g className="esquema-conteo" aria-hidden="true">
                 <rect x={X + 9} y={y1 + inset + 2} width={Math.max(2, (n / maxCount) * 26)} height={Math.max(2, y2 - y1 - 2 * inset - 4)} rx={1} fill={closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : 'var(--tinta)'} opacity={sel || closed ? 0.22 : 0.1} />
                 <text x={X + 40} y={(y1 + y2) / 2 + 3.5} fontSize={10} fill={sel ? 'var(--senal-azul)' : 'var(--tinta-3)'} className="datos">

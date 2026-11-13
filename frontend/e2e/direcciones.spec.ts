@@ -43,8 +43,9 @@ test.describe('Direcciones limpias', () => {
       await page.goto(ruta)
       await expect(page.getByTestId(testId).first()).toBeVisible()
       await expect(page).toHaveURL(direccion(baseURL, ruta))
-      // los datos se piden a la raíz del sitio, no a una carpeta de la ruta
-      expect(datos.length).toBeGreaterThan(0)
+      // los datos se piden a la raíz del sitio, no a una carpeta de la ruta; una página que no
+      // los necesita para pintarse (el glosario) puede estar a la vista antes de que lleguen
+      await expect.poll(() => datos.length).toBeGreaterThan(0)
       expect(datos.every((estado) => estado === 200)).toBe(true)
       await page.reload()
       await expect(page.getByTestId(testId).first()).toBeVisible()
