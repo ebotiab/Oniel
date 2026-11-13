@@ -770,7 +770,7 @@ Verificación:
 
 **Lo que no se ha registrado.** Wikipedia dice que en 2024 se aprobó un baipás cerca de Olmedo, entre esta línea y la de Galicia, para ir de Valladolid a Galicia sin entrar hacia Madrid, y la tabla de la línea de Galicia trae una «futura bifurcación Valladolid». Las referencias son dos noticias de prensa; no se ha buscado todavía su anuncio oficial, así que no figura como proyecto.
 
-**El encuadre del mapa.** La línea cabe en la caja de `SPAIN_BOUNDS` sin tocarla: Valladolid está en la latitud 41,64 y el borde norte, en la 41,9. Se comprobó en escritorio (1280 × 800) y en un móvil (375 × 812). No cabrán las líneas de Galicia, de Asturias ni del País Vasco (`docs/diseno.md`, «Encuadre»).
+**El encuadre del mapa.** La línea cabía en la caja de `SPAIN_BOUNDS`, pero las que vienen (Galicia, Asturias, el País Vasco) no: con esta PR el encuadre inicial pasa a ser la península entera, y el límite oeste del mapa se aleja para que quepa a la derecha del panel (`docs/diseno.md`, «Encuadre»).
 
 ## Límites y avisos
 
