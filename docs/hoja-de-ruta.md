@@ -96,9 +96,10 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 **Granada y Jaén.** Para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Hecha: la línea convencional Linares-Baeza – Moreda – Granada (#101), el ramal Espelúy – Jaén (#102) y la alta velocidad de Córdoba a Granada por Antequera (#103), que entró como dos líneas. La línea de alta velocidad Córdoba – Málaga llega ya hasta Málaga-María Zambrano (#118).
 
-**Levante.** Para ver por qué los trenes de Madrid a Valencia y Alicante dejaron el camino de Alcázar y Albacete. La línea convencional Alcázar de San Juan – Albacete (#114) y la de alta velocidad Madrid – Cuenca – Valencia (#115) ya están hechas; queda:
+**Levante.** Para ver por qué los trenes de Madrid a Valencia y Alicante dejaron el camino de Alcázar y Albacete. La línea convencional Alcázar de San Juan – Albacete (#114) y la de alta velocidad Madrid – Cuenca – Valencia (#115) ya están hechas; quedan:
 
 1. [#116](https://github.com/ebotiab/Oniel/issues/116) Datos: ramal de alta velocidad a Albacete y Alicante. Sale de la anterior pasado Cuenca y comparte la estación de Albacete-Los Llanos con la línea de Alcázar: con él, de Madrid a Albacete hay dos caminos. Su origen es la bifurcación de Albacete, que ya es un nodo; lo que tiene que retirar y cambiar está al final de «Cómo se construyó la línea de alta velocidad Madrid–Cuenca–Valencia», en `docs/datos.md`.
+2. [#168](https://github.com/ebotiab/Oniel/issues/168) Datos: Madrid-Chamartín y el acceso de la alta velocidad de Levante hasta Torrejón de Velasco. Casi todos los trenes de Valencia, Albacete y Alicante salen de Chamartín, que hoy no es una estación de la red: por eso el comparador cuenta solo 2 trenes directos entre Madrid-Puerta de Atocha y Valencia, aunque por cada tramo pasan hasta 82. Mejor después de #116, que toca las mismas asignaciones de parada.
 
 Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
 
