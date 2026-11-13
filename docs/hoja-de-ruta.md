@@ -78,11 +78,12 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay tres tareas abiertas: la primera salió al cargar la alta velocidad de Barcelona (#117), la segunda, del primer error real que el visor envió a Logfire, y la tercera, al rehacer «Cobertura y fuentes» como página (#151):
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay cuatro tareas abiertas: la primera salió al cargar la alta velocidad de Barcelona (#117), la segunda, del primer error real que el visor envió a Logfire, la tercera, al rehacer «Cobertura y fuentes» como página (#151), y la cuarta, al pasar la red de tres a nueve líneas en dos días:
 
 1. [#142](https://github.com/ebotiab/Oniel/issues/142) Datos: cargar los baipases de Zaragoza y Lleida de la alta velocidad Madrid – Barcelona. Hoy la línea va por las dos estaciones y un tren que no para en ellas figura pasando por allí: infla los trenes de esos tramos y alarga su recorrido hasta 6,9 km. La geometría ya está descargada; falta que un viaje pueda recorrer una línea en dos trozos. Cómo se enseñan (dos líneas cortas, o la principal por los baipases y las estaciones en ramales) se propone al usuario antes de implementarlo. Emparentada con #135: el enlace de Vallecas es el mismo caso. Cambia la instantánea y los recuentos.
 2. [#144](https://github.com/ebotiab/Oniel/issues/144) Visor: decir que el mapa necesita WebGL2 en vez de fallar. En un navegador sin WebGL2 el mapa no se crea y queda una excepción sin atender. El texto que se enseñe es una decisión de diseño. Solo toca el visor.
 3. [#152](https://github.com/ebotiab/Oniel/issues/152) Visor: «Tramos sin alternativa» como vista propia, fuera de «Cobertura y fuentes». Es un análisis de la red y no cobertura; hoy son 31 tramos y en la página van recortados a ocho. Si es una vista del panel o una página de lectura se propone al usuario antes de implementarlo. Solo toca el visor.
+4. [#157](https://github.com/ebotiab/Oniel/issues/157) Visor: navegación en la cabecera y lista de líneas pensada para muchas. «Comparar recorridos», «Glosario» y «Cobertura y fuentes» son tres renglones al pie de la vista de la red y pasan a una navegación en la cabecera, también en el móvil y en las páginas de lectura; la lista de líneas se agrupa y se ordena pensando en decenas de líneas, y su filtro busca también por estaciones. La navegación y el criterio de la lista se proponen al usuario antes de implementarlos; si la agrupación pide un campo nuevo por línea, toca también los datos y la instantánea.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
