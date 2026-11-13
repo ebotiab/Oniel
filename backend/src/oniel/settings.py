@@ -37,6 +37,7 @@ class Settings(BaseSettings):
         "lav-antequera-granada",
         "lav-madrid-barcelona",
         "lav-madrid-valencia",
+        "lav-albacete-alicante",
     ]
 
 

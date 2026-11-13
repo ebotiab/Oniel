@@ -17,6 +17,7 @@ from conftest import (
     DATA_DIR,
     FEED,
     JAEN_SPEC,
+    LAV_ALICANTE_SPEC,
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
     LAV_VALENCIA_SPEC,
@@ -578,14 +579,31 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-valencia-sin-parada": 62,
             "madrid-albacete-sin-parada": 31,
             "madrid-alicante-sin-parada": 27,
+            "madrid-elche-sin-parada": 20,
+        },
+        # los que recorren la de Albacete a Alicante sin parar en Cuenca, Villena ni Elche, y los
+        # de Madrid a Murcia que no entran en Alicante
+        LAV_ALICANTE_SPEC.name: {
+            "albacete-elche-sin-alicante": 0,
+            "madrid-albacete-sin-cuenca": 31,
+            "madrid-alicante-sin-parada": 27,
+            "madrid-elche-sin-parada": 20,
         },
     }
-    # la regla de los Ouigo de Barcelona a Andalucía no encaja con ningún viaje de Renfe: lo
-    # dice el informe de este fichero, y el de todos los ficheros juntos ya no (validate de la CLI)
-    ouigo_only = "barcelona-andalucia-con-parada-en-madrid"
-    unused = [f"la regla de recorrido {ouigo_only} no encaja con ningún viaje del GTFS"]
+    # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
+    # encajan con ningún viaje de Renfe: lo dice el informe de este fichero, y el de todos los
+    # ficheros juntos ya no (validate de la CLI)
+    ouigo_only = {
+        BCN_SPEC.name: "barcelona-andalucia-con-parada-en-madrid",
+        LAV_ALICANTE_SPEC.name: "albacete-elche-sin-alicante",
+    }
     for name, r in reports.items():
-        assert r["problems"] == (unused if name == BCN_SPEC.name else [])
+        unused = [
+            f"la regla de recorrido {rule} no encaja con ningún viaje del GTFS"
+            for line, rule in ouigo_only.items()
+            if line == name
+        ]
+        assert r["problems"] == unused
         assert r["gtfs"]["route_overrides"] == expected[name]
         assert "indeterminado" not in r["gtfs"]["passes"]
     granada = reports[LBMG_SPEC.name]["gtfs"]

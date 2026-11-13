@@ -2173,7 +2173,7 @@
             "closed_line_length_km": 343.6
           }
         ],
-        "omitted": 1
+        "omitted": 4
       }
     },
     {
@@ -2306,7 +2306,7 @@
             "closed_line_length_km": 440.7
           }
         ],
-        "omitted": 0
+        "omitted": 1
       }
     },
     {
@@ -2399,7 +2399,7 @@
             "closed_line_length_km": 64.4
           }
         ],
-        "omitted": 0
+        "omitted": 1
       }
     },
     {
@@ -2854,7 +2854,7 @@
             "closed_line_length_km": 358.0
           }
         ],
-        "omitted": 0
+        "omitted": 1
       }
     },
     {
@@ -2980,7 +2980,7 @@
             "closed_line_length_km": 173.7
           }
         ],
-        "omitted": 2
+        "omitted": 3
       }
     }
   ]
