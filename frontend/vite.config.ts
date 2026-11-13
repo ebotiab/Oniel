@@ -36,5 +36,11 @@ export default defineConfig({
       '/healthz': { target: apiTarget, changeOrigin: true },
     },
   },
+  // Vercel da el entorno del despliegue y el commit al compilar; el visor los usa para decidir si
+  // envía sus errores a Logfire y con qué versión (src/telemetria/arranque.ts). Fuera de Vercel quedan vacíos.
+  define: {
+    'import.meta.env.VITE_ENTORNO': JSON.stringify(process.env.VERCEL_ENV ?? ''),
+    'import.meta.env.VITE_COMMIT': JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA ?? ''),
+  },
   build: { sourcemap: false, chunkSizeWarningLimit: 1500 },
 })

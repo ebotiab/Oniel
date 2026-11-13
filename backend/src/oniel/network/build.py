@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from oniel.domain.attributes import ATTRIBUTE_RULES, TRACKS, AttributeValue
+from oniel.domain.attributes import ATTRIBUTE_RULES, MAX_SPEED, TRACKS, AttributeValue
 from oniel.geo import Coord, Polyline, haversine_km
 from oniel.network.spec import NetworkSpec, NodeSpec
 
@@ -358,6 +358,10 @@ def cut_segments(
         if b.km - a.km < 0.05:
             raise ValueError(f"los nodos {a.spec.id} y {b.spec.id} están en el mismo punto")
         max_speed, typical = speed_summary(line, a.km, b.km)
+        declared = attributes[seq - 1].get(MAX_SPEED)
+        if declared is not None:
+            # Una velocidad declarada con su fuente manda sobre la de las vías de la geometría.
+            max_speed = typical = int(declared.value)
         segments.append(
             BuiltSegment(
                 id=f"{spec.line.id}:{a.spec.id}:{b.spec.id}",

@@ -111,7 +111,7 @@ Para que tarde poco, la batería de Playwright va repartida en cuatro fragmentos
 
 Backend (`backend/.env.example`): `DATABASE_URL` u `ONIEL_DATABASE_URL`, `ONIEL_ENVIRONMENT`, `ONIEL_CORS_ORIGINS`, `LOGFIRE_TOKEN`. Sin `LOGFIRE_TOKEN` (ni `backend/.logfire/`) no se envía telemetría y todo funciona igual.
 
-Frontend (`frontend/.env.example`): `VITE_API_URL` (URL pública de la API) y `VITE_DATA_MODE=estatico` para forzar la instantánea.
+Frontend (`frontend/.env.example`): `VITE_API_URL` (URL pública de la API) y `VITE_DATA_MODE=estatico` para forzar la instantánea. `VITE_LOGFIRE_TOKEN` solo lo usa el visor publicado en producción, para enviar sus errores a Logfire (`docs/despliegue.md`, «Errores del visor»); en local no hace falta.
 
 ## Licencias de los datos
 

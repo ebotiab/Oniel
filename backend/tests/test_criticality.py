@@ -29,6 +29,7 @@ LAV, CONV, MZCR, JAEN, LBMG, ALBACETE = (
     "alcazar-albacete",
 )
 LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
+BCN = "lav-madrid-barcelona"
 LAV_VALENCIA = "lav-madrid-valencia"
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
@@ -188,6 +189,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         ALBACETE,
         LAV_MALAGA,
         LAV_GRANADA,
+        BCN,
         LAV_VALENCIA,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -199,7 +201,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 54 + 4 + 8 + 12
+    assert len(exported.segments) == 54 + 4 + 8 + 20 + 12
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -209,7 +211,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
-    assert {s: n for s, n in without.items() if not s.startswith(f"{LAV_VALENCIA}:")} == {
+    apart = (f"{BCN}:", f"{LAV_VALENCIA}:")
+    assert {k: n for k, n in without.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 55,
         f"{LAV}:majarabique:sevilla-santa-justa": 53,
         f"{JAEN}:espeluy:mengibar-artichuela": 50,
@@ -224,6 +227,14 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert sorted(valencia.values()) == [55] * 4 + [100] + [102] * 7
     assert valencia[f"{LAV_VALENCIA}:bif-torrejon-de-velasco:bif-blancales"] == 100
     assert valencia[f"{LAV_VALENCIA}:siete-aguas-av:valencia-joaquin-sorolla"] == 55
+    # tampoco en la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
+    # Madrid: ninguno de sus veinte tramos tiene otro camino cargado, ni siquiera los que pasan
+    # por Zaragoza-Delicias y Lleida-Pirineus, porque los baipases no están cargados
+    barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]
+    assert len(barcelona) == 20
+    assert all(s.trains == s.without_alternative > 0 for s in barcelona)
+    assert _of(exported.segments, f"{BCN}:madrid-puerta-de-atocha:bif-vallecas-av").trains == 97
+    assert _of(exported.segments, f"{BCN}:vilafranca-del-penedes:barcelona-sants").trains == 134
     # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
     # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
     # trenes tienen otro camino, aunque sea por una línea de otro ancho
@@ -241,8 +252,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert _of(exported.segments, f"{LAV_MALAGA}:bif-malaga:la-marota").trains == 77
     # entre la estación de Moreda y la bifurcación no pasa ningún tren de los horarios
     assert _of(exported.segments, f"{LBMG}:moreda:bif-almeria").trains == 0
-    # el grupo más numeroso de Adamuz – Córdoba: los 43 trenes entre Madrid y Sevilla
+    # el grupo más numeroso de Adamuz – Córdoba: los 41 trenes entre Madrid y Sevilla
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
-    assert (top.trains, top.from_node_id, top.to_node_id) == (43, MADRID, SEVILLA)
+    assert (top.trains, top.from_node_id, top.to_node_id) == (41, MADRID, SEVILLA)
     assert top.alternative is not None
     assert (top.alternative.extra_km, top.alternative.extra_min) == (97.0, 104)

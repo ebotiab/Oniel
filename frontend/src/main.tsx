@@ -8,6 +8,10 @@ import { createRoot } from 'react-dom/client'
 import App from './app/App'
 import { legacyHashPath } from './app/state'
 import './index.css'
+import { iniciarTelemetria } from './telemetria/arranque'
+
+// Antes que nada, para no perder un error del propio arranque. No hace nada fuera de producción o sin token.
+iniciarTelemetria()
 
 // Un enlace antiguo (`/#/tramo/<id>`) pasa a su dirección limpia antes de que el visor lea la ruta, sin recargar.
 const limpia = legacyHashPath(window.location.hash)

@@ -3,7 +3,7 @@
     "id": "lav-madrid-valencia",
     "name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
     "short_name": "040",
-    "sort_order": 9,
+    "sort_order": 10,
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,
