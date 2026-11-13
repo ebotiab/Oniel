@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { abrirZonas } from './navegar.ts'
 
 // En un navegador sin WebGL2 MapLibre no puede crear el mapa. El visor lo explica en el hueco del mapa
 // y todo lo que no depende de él sigue funcionando. La prueba quita WebGL al navegador anulando
@@ -45,6 +46,7 @@ test.describe('Sin WebGL2', () => {
 
     // La lista de líneas, la ficha de la línea y el buscador no dependen del mapa.
     await abrirHoja(page)
+    await abrirZonas(page)
     await page.getByTestId('linea-lav-madrid-sevilla').click()
     await expect(page).toHaveURL(/\/linea\/lav-madrid-sevilla/)
     await expect(page.getByRole('button', { name: '← Toda la red' })).toBeVisible()

@@ -26,6 +26,7 @@ from conftest import (
     LAV_VALENCIA_SPEC,
     LBMG_SPEC,
     LINK_MONFORTE_SPEC,
+    MEDITERRANEO_SPEC,
     MZCR_SPEC,
     SPEC,
     SPECS,
@@ -605,6 +606,12 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # los baipases no tienen reglas: sus trenes salen de resolver la línea de Barcelona
         BYPASS_ZARAGOZA_SPEC.name: {},
         BYPASS_LLEIDA_SPEC.name: {},
+        # los trenes que dejan la línea de la costa en la bifurcación La Feredat, hacia Tarragona
+        MEDITERRANEO_SPEC.name: {
+            "cambrils-vila-seca-por-la-feredat": 22,
+            "castello-tarragona-por-la-feredat": 4,
+            "l-aldea-tarragona-por-la-feredat": 2,
+        },
         # el enlace de Monforte del Cid tampoco: le basta su filtro
         LINK_MONFORTE_SPEC.name: {},
     }

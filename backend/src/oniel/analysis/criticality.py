@@ -3,8 +3,10 @@
 Para cada tramo se miran los trenes que lo recorren un día. De cada tren se toma su recorrido
 por las líneas cargadas, del nodo por el que entra al nodo por el que sale, y se pregunta al
 grafo de rutas (``oniel.routing``) por el camino más corto entre esos dos nodos con el tramo
-cerrado. Si existe, se dice cuántos kilómetros y minutos añade al recorrido del tren; si no,
-el tren no tiene alternativa.
+cerrado. Si existe y no mide más del doble que el recorrido del tren, se dice cuántos kilómetros
+y minutos le añade; si no, el tren no tiene alternativa. El tope es el mismo que el del
+comparador y el de los rodeos de un cierre (``DEFAULT_MAX_RATIO``): dar la vuelta a media red
+no es otro camino.
 
 «Sin alternativa» significa siempre «en las líneas que Oniel tiene cargadas», no en la red
 real. El cálculo no decide si el tren podría tomar ese camino (ancho de vía, paradas, capacidad
@@ -23,12 +25,21 @@ from oniel.domain.schemas import (
     SegmentAlternativesOut,
     SegmentTrainGroupOut,
 )
-from oniel.routing import Edge, Graph, Route, Scenario, find_routes, route_along
+from oniel.routing import (
+    DEFAULT_MAX_RATIO,
+    Edge,
+    Graph,
+    Route,
+    Scenario,
+    find_routes,
+    route_along,
+)
 
 #: Lo que el resultado dice siempre de su alcance.
 SCOPE_NOTE = (
     "«Sin alternativa» quiere decir que no hay otro camino en las líneas que Oniel tiene"
-    " cargadas, no que no exista en la red real. Oniel solo comprueba que el camino existe y"
+    " cargadas, no que no exista en la red real. Un camino que mide más del doble que el"
+    " recorrido del tren no cuenta como otro camino. Oniel solo comprueba que el camino existe y"
     " cuánto mide: no mira si el tren cabe por él (ancho de vía, paradas, sitio en la vía)."
 )
 #: Cómo se calcula, para quien lea el resultado sin la documentación delante.
@@ -37,7 +48,8 @@ METHOD = (
     " nodo por el que entra al nodo por el que sale. Con el tramo cerrado, Oniel busca en el grafo"
     " de todas las líneas cargadas el camino más corto entre esos dos nodos y lo compara con el"
     " recorrido del tren: kilómetros medidos por cada línea y minutos a la velocidad habitual de"
-    " cada tramo, sin paradas. Los trenes con el mismo recorrido forman un grupo. No se aplican"
+    " cada tramo, sin paradas. Si ese camino mide más del doble que el recorrido del tren, no"
+    " cuenta. Los trenes con el mismo recorrido forman un grupo. No se aplican"
     " las interrupciones vigentes: cada tramo se cierra por separado sobre la red completa."
 )
 
@@ -56,30 +68,42 @@ def corridor(graph: Graph, segment_ids: Iterable[str], through: str) -> tuple[st
 
     De los tramos del tren se toman los que están unidos al tramo pedido (un tren que sale de las
     líneas cargadas y vuelve a entrar tiene dos trozos sueltos). Si forman un camino sin
-    bifurcaciones, ese es el recorrido, del extremo que va antes en la red al otro. Si no, el
-    recorrido se queda en el propio tramo.
+    bifurcaciones, ese es el recorrido, del extremo que va antes en la red al otro. Si se bifurcan
+    por un enlace entre dos líneas, se prueba sin los tramos del enlace. Si no, el recorrido se
+    queda en el propio tramo.
     """
     asked = graph.edge(through)
     if asked is None:
         raise ValueError(f"No hay ningún tramo con id {through}")
     own = {e.id: e for e in graph.edges if e.id in set(segment_ids)}
     own[asked.id] = asked
-    # Los tramos unidos al pedido.
-    joined: dict[str, Edge] = {asked.id: asked}
-    frontier = [asked]
-    while frontier:
-        edge = frontier.pop()
-        for other in own.values():
-            if other.id not in joined and {other.a, other.b} & {edge.a, edge.b}:
-                joined[other.id] = other
-                frontier.append(other)
-    degree: Counter[str] = Counter()
-    for edge in joined.values():
-        degree[edge.a] += 1
-        degree[edge.b] += 1
     order = {node_id: i for i, node_id in enumerate(graph.nodes)}
-    ends = sorted((n for n, d in degree.items() if d == 1), key=lambda n: order[n])
-    if len(ends) != 2 or any(d > 2 for d in degree.values()):
+
+    def joined_to_asked(edges: dict[str, Edge]) -> tuple[dict[str, Edge], list[str], bool]:
+        """Los tramos unidos al pedido, sus dos extremos y si forman un camino sin bifurcaciones."""
+        joined: dict[str, Edge] = {asked.id: asked}
+        frontier = [asked]
+        while frontier:
+            edge = frontier.pop()
+            for other in edges.values():
+                if other.id not in joined and {other.a, other.b} & {edge.a, edge.b}:
+                    joined[other.id] = other
+                    frontier.append(other)
+        degree: Counter[str] = Counter()
+        for edge in joined.values():
+            degree[edge.a] += 1
+            degree[edge.b] += 1
+        ends = sorted((n for n, d in degree.items() if d == 1), key=lambda n: order[n])
+        return joined, ends, len(ends) == 2 and all(d <= 2 for d in degree.values())
+
+    joined, ends, simple = joined_to_asked(own)
+    if not simple and asked.line_id not in graph.link_of:
+        # Un tren que entra en una estación término y sale de ella por un enlace (los de Madrid a
+        # Murcia que paran en Alicante) pasa dos veces por el mismo tramo, y sus tramos se
+        # bifurcan donde empieza el enlace. Su recorrido se toma sin el enlace: hasta la estación.
+        without_links = {i: e for i, e in own.items() if e.line_id not in graph.link_of}
+        joined, ends, simple = joined_to_asked(without_links)
+    if not simple:
         start = min((asked.a, asked.b), key=lambda n: order[n])
         return start, [asked]
     path: list[Edge] = []
@@ -109,14 +133,30 @@ def _alternative(own: Route, other: Route) -> AlternativeRouteOut:
     )
 
 
+def other_way(own: Route, others: Sequence[Route], max_ratio: float | None) -> Route | None:
+    """El otro camino de un recorrido: el más corto de ``others``, si no pasa del tope.
+
+    ``others`` va del más corto al más largo. Con ``max_ratio`` se descarta el que mide más de
+    esas veces lo que mide el recorrido del tren: existe, pero no es un desvío que tomar.
+    """
+    if not others:
+        return None
+    shortest = others[0]
+    if max_ratio is not None and shortest.length_km > max_ratio * own.length_km:
+        return None
+    return shortest
+
+
 def segment_alternatives(
-    graph: Graph, services: Sequence[ServicePath]
+    graph: Graph, services: Sequence[ServicePath], max_ratio: float | None = DEFAULT_MAX_RATIO
 ) -> list[SegmentAlternativesOut]:
     """Por cada tramo del grafo, sus trenes y la alternativa de cada grupo de trenes.
 
     Los trenes de un tramo se agrupan por su recorrido en las líneas cargadas: todos los de un
     grupo entran y salen por los mismos nodos y siguen el mismo camino, así que comparten
-    alternativa. Los grupos van del que más trenes tiene al que menos.
+    alternativa. Los grupos van del que más trenes tiene al que menos. Un camino que mide más de
+    ``max_ratio`` veces el recorrido del tren no cuenta como alternativa; con ``None``, cuenta
+    cualquiera.
     """
     out: list[SegmentAlternativesOut] = []
     for edge in graph.edges:
@@ -133,8 +173,10 @@ def segment_alternatives(
         group_outs: list[SegmentTrainGroupOut] = []
         for (start, path_ids), operators in groups.items():
             own = route_along(graph, start, path_ids)
-            # Sin descartar por largo: se pregunta si existe otro camino, mida lo que mida.
+            # Se buscan todos, sin el descarte del comparador (que compara caminos entre sí), y
+            # el tope se aplica contra el recorrido del propio tren.
             others = find_routes(graph, own.from_node_id, own.to_node_id, closed, max_ratio=None)
+            other = other_way(own, others, max_ratio)
             group_outs.append(
                 SegmentTrainGroupOut(
                     from_node_id=own.from_node_id,
@@ -146,7 +188,7 @@ def segment_alternatives(
                     length_km=own.length_km,
                     time_min=own.time_min,
                     line_ids=own.line_ids,
-                    alternative=_alternative(own, others[0]) if others else None,
+                    alternative=_alternative(own, other) if other is not None else None,
                 )
             )
         group_outs.sort(key=lambda g: (-g.trains, g.from_name, g.to_name, g.length_km))

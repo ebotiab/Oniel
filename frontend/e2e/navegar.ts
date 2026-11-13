@@ -13,3 +13,14 @@ export async function irA(page: Page, seccion: Seccion) {
   await abrirMenu(page)
   await page.getByTestId(`nav-${seccion}`).click()
 }
+
+/**
+ * Despliega las zonas de la lista de líneas. Con más de doce líneas las zonas empiezan plegadas
+ * (docs/diseno.md, «Elegir línea»): una prueba que busca una línea en la lista las abre antes.
+ */
+export async function abrirZonas(page: Page) {
+  const lista = page.getByTestId('lista-lineas')
+  await lista.locator('.zona-cabecera').first().waitFor()
+  const plegadas = lista.locator('.zona-cabecera[aria-expanded="false"]')
+  while ((await plegadas.count()) > 0) await plegadas.first().click()
+}

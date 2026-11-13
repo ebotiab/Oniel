@@ -27,10 +27,12 @@ const proyecto = (id: string) => proyectos.find((a) => a.id === id)!
 test.describe('Proyectos: datos y registro de capas', () => {
   test('cada proyecto trae estado, hitos fechados con su fuente y fecha de comprobación', () => {
     expect(proyectos.map((a) => a.id).sort()).toEqual([
+      'proyecto-ancho-estandar-castello-la-boella',
       'proyecto-conexion-lav-cordoba-jaen',
       'proyecto-duplicacion-antequera-granada',
       TUNELES,
       MORA_ALCAZAR,
+      'proyecto-segunda-via-ancho-mixto-valencia-castello',
       LOJA,
     ])
     for (const a of proyectos) {
@@ -38,7 +40,8 @@ test.describe('Proyectos: datos y registro de capas', () => {
       expect(a.milestones!.length, a.id).toBeGreaterThan(0)
       // la fuente de cada hito es una de las del proyecto, y tiene dónde consultarse
       for (const h of a.milestones!) expect(a.sources.find((s) => s.id === h.source_id)?.url, `${a.id} ${h.date}`).toBeTruthy()
-      expect(a.checked_on, a.id).toBe('2026-11-12')
+      // los dos de la línea de València a Camp de Tarragona se comprobaron al cargarla, un día después
+      expect(['2026-11-12', '2026-11-13'], a.id).toContain(a.checked_on)
     }
   })
 
@@ -122,7 +125,7 @@ test.describe('Proyectos: la vista', () => {
   test('la página de cobertura enumera los proyectos, con su estado, y lleva a la ficha de cada uno', async ({ page }) => {
     await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
-    await expect(lista.getByRole('listitem')).toHaveCount(5)
+    await expect(lista.getByRole('listitem')).toHaveCount(7)
     await expect(lista.getByRole('listitem').filter({ hasText: 'Variante de Loja' })).toContainText('en obras')
     await lista.getByTestId('proyecto-enlace').filter({ hasText: 'Variante de Loja' }).click()
     await expect(page).toHaveURL(/\/proyecto\//)

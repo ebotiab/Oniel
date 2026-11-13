@@ -3,7 +3,7 @@
     "id": "enlace-monforte-del-cid",
     "name": "Enlace de Monforte del Cid",
     "short_name": "048",
-    "sort_order": 15,
+    "sort_order": 16,
     "zone": "levante",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

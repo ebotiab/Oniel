@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { abrirZonas } from './navegar.ts'
 
 // La red se carga por partes: al arrancar solo el índice; el detalle de cada línea, al abrirla o al
 // acercar el mapa. Vale igual con la instantánea estática (/data/…) que con la API (/api/lines…).
@@ -30,7 +31,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 2\.949 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.216 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -45,7 +46,7 @@ test.describe('Carga de la red por partes', () => {
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
     // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 18 KB de media).
     expect(bytes(red)).toBeLessThan(20_000 * (red.lines as unknown[]).length)
-    expect(bytes({ annotations, interruptions })).toBeLessThan(45_000)
+    expect(bytes({ annotations, interruptions })).toBeLessThan(55_000)
     // Con diez líneas la red del índice (161 KB) pesa ya algo más que el detalle de la línea más
     // grande (148 KB): lo que la acota es el tope por línea de arriba. Sigue pesando menos que las
     // dos líneas más grandes juntas, la convencional de Córdoba y la alta velocidad de Barcelona.
@@ -58,6 +59,7 @@ test.describe('Carga de la red por partes', () => {
     await page.goto('/')
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
+    await abrirZonas(page)
     await red.getByRole('button', { name: /Madrid – Sevilla/ }).click()
     await expect(page.getByTestId('esquema')).toBeVisible()
     await expect(page.getByTestId('esquema-rotulo-trenes').or(page.getByTestId('esquema-tramo-1')).first()).toBeVisible()
@@ -65,12 +67,14 @@ test.describe('Carga de la red por partes', () => {
 
     // una segunda línea pide su detalle; volver a la primera no la pide otra vez
     await page.getByTestId('volver-red').click()
+    await abrirZonas(page)
     await red.getByRole('button', { name: /Manzanares – Ciudad Real/ }).click()
     await expect(page.getByRole('heading', { name: /Manzanares – Ciudad Real/ })).toBeVisible()
     // (al encuadrarla, el mapa queda cerca y puede pedir también las vecinas)
     await expect.poll(() => pedidas.lineas).toContain(MZCR)
     const antes = pedidas.lineas.filter((l) => l === LAV).length
     await page.getByTestId('volver-red').click()
+    await abrirZonas(page)
     await red.getByRole('button', { name: /Madrid – Sevilla/ }).click()
     await expect(page.getByTestId('esquema')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar

@@ -197,16 +197,22 @@ export function compararRecorridos(
   let sinPaso = false
   if (recorridos[0]?.cortes.length) {
     let libre = recorridos.find((r) => r.cortes.length === 0)
-    if (!libre) {
-      // Todos los que se enseñan están cortados: se busca el más corto con la red de hoy, mida lo que mida.
-      const conocidos = new Set(graph.edges.map((e) => e.id))
-      const hoy = withClosures(scenario, [...interrupted.keys()].filter((id) => conocidos.has(id)))
-      const [route] = findRoutes(graph, from, to, hoy, undefined, null)
-      if (route) {
+    // Se busca el más corto con la red de hoy, mida lo que mida. Hace falta también cuando alguno de
+    // los que se enseñan no está cortado: puede haber otro más corto que no estaba a la vista, como el
+    // que entra en una estación cuando su baipás está cerrado.
+    const conocidos = new Set(graph.edges.map((e) => e.id))
+    const hoy = withClosures(scenario, [...interrupted.keys()].filter((id) => conocidos.has(id)))
+    const [route] = findRoutes(graph, from, to, hoy, undefined, null)
+    if (route && (!libre || route.length_km < libre.route.length_km)) {
+      const key = route.segment_ids.join('|')
+      libre = recorridos.find((r) => r.key === key && r.cortes.length === 0)
+      if (!libre) {
         libre = presentar(route)
-        recorridos.push(libre)
-      } else sinPaso = true
-    }
+        // en su sitio, del más corto al más largo
+        const sitio = recorridos.findIndex((r) => r.route.length_km > route.length_km)
+        recorridos.splice(sitio === -1 ? recorridos.length : sitio, 0, libre)
+      }
+    } else if (!libre) sinPaso = true
     if (libre) libre.alternativa = true
   }
   // Un recorrido que cambia de línea en estaciones por las que otro también pasa se confunde con él

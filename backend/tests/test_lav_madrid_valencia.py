@@ -135,12 +135,11 @@ def test_the_line_starts_at_chamartin_and_meets_the_seville_line_at_torrejon(
     assert valencia.line.part_spans[0].km_to == pytest.approx(35.82, abs=0.05)
     assert not valencia.line.gaps_km and not valencia.line.joins_km
     assert all(n.offset_m < 60 for n in valencia.nodes)
-    # lo que sigue sin cargar: la alta velocidad del norte, el enlace con la línea de Sevilla y
-    # Castelló. De la bifurcación de Albacete ya no sale nada a trazos
+    # lo que sigue sin cargar: la alta velocidad del norte y el enlace con la línea de Sevilla. De
+    # la bifurcación de Albacete y de València-Joaquín Sorolla ya no sale nada a trazos
     assert {c.node_id for c in valencia.spec.connections} == {
         "madrid-chamartin",
         "bif-blancales",
-        "valencia-joaquin-sorolla",
     }
 
 

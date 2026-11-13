@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { abrirZonas } from './navegar.ts'
 
 const ENLACE = 'enlace-monforte-del-cid:monforte-del-cid-av:bif-vinalopo'
 
@@ -16,10 +17,11 @@ test.describe('El enlace de Monforte del Cid', () => {
     await page.goto('/')
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
-    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 2\.949 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.216 km/)
     const levante = red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' })
-    await expect(levante.locator('.zona-cabecera')).toHaveText(/^›Comunidad Valenciana y Murcia3 líneas$/)
-    await expect(levante.locator('.fila-linea')).toHaveCount(3)
+    await expect(levante.locator('.zona-cabecera')).toHaveText(/^›Comunidad Valenciana y Murcia4 líneas/)
+    await abrirZonas(page)
+    await expect(levante.locator('.fila-linea')).toHaveCount(4)
     const enlaces = levante.getByRole('list', { name: 'Enlaces de Monforte del Cid – Murcia' }).getByRole('button')
     await expect(enlaces).toHaveText([/^Enlace de Monforte del Cid2 km$/])
     // el filtro encuentra la línea de Murcia por el nombre de su enlace
@@ -27,6 +29,7 @@ test.describe('El enlace de Monforte del Cid', () => {
     await filtro.fill('enlace')
     await expect(red.locator('.fila-linea')).toHaveText([/Monforte del Cid – Murcia68 km$/])
     await filtro.fill('')
+    await abrirZonas(page)
     // y el enlace tiene su ficha de línea
     await page.getByTestId('linea-enlace-monforte-del-cid').click()
     await expect(page).toHaveURL(/\/linea\/enlace-monforte-del-cid$/)
