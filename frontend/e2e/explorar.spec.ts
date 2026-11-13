@@ -11,7 +11,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('ficha-red')).toContainText(/^10 líneas · 2\.512 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^9 líneas · 2\.209 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe('Explorar la red', () => {
     const movil = await asa.isVisible()
     if (movil) await asa.click()
     // la lista tiene las ocho líneas, también en la hoja del móvil, y ya no hay pestañas
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(10)
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(9)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)

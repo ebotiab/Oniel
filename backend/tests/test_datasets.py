@@ -214,13 +214,16 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # el anterior sigue entero y el nuevo tiene un viaje menos; 26 de cada uno son los Media
     # Distancia de la línea de Linares-Baeza a Granada, que no pasan por ninguna otra
     # y 555 más, los de la alta velocidad de Barcelona que no estaban ya en otra línea (571
-    # menos los 16 que también recorren la convencional o las líneas de Málaga y Granada)
-    assert await _count(conn, "services", FEED_DATASET_ID) == 727 + 26 + 15 + 37 + 555 + 8 + 465
-    assert await _count(conn, "services", NEWER_ID) == 726 + 26 + 15 + 37 + 555 + 8 + 465
-    passes = (3853 + 121) + (1968 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
-    passes += (656 + 68) + 498  # las dos líneas de alta velocidad de Córdoba a Granada
+    # menos los 16 que también recorren la convencional o las líneas de Málaga y Granada), y 13
+    # los directos de Madrid a Málaga, que entran por una regla de recorrido
+    assert (
+        await _count(conn, "services", FEED_DATASET_ID) == 727 + 26 + 15 + 37 + 555 + 8 + 13 + 465
+    )
+    assert await _count(conn, "services", NEWER_ID) == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465
+    passes = (3996 + 121) + (1968 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+    passes += (1250 + 68) + 498  # las dos líneas de alta velocidad a Málaga y a Granada
     passes += 7590  # la alta velocidad de Barcelona, todos estimados
-    passes += 4154  # la de Madrid a Valencia: 469 viajes que no pasan por ninguna otra
+    passes += 4154  # la de Madrid a Valencia, todos estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -479,9 +482,9 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     )
     assert again["dataset"]["id"] == NEWER_ID and again["dataset"]["reused"] is True
     assert await conn.fetchval("SELECT count(*) FROM datasets") == 2
-    assert await _count(conn, "services", NEWER_ID) == 767 + 37 + 555 + 8 + 465
+    assert await _count(conn, "services", NEWER_ID) == 767 + 37 + 555 + 8 + 13 + 465
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 465
+        37 + 555 + 8 + 13 + 465
     )
 
 
@@ -514,8 +517,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both, tmp_path)
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768 + 37 + 555 + 8 + 465,
-        767 + 37 + 555 + 8 + 465,
+        768 + 37 + 555 + 8 + 13 + 465,
+        767 + 37 + 555 + 8 + 13 + 465,
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -555,7 +558,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     # un conjunto que deja de estar declarado se retira, también de la instantánea
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
-    assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 37 + 555 + 8 + 465
+    assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 37 + 555 + 8 + 13 + 465
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]
     )

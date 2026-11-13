@@ -147,8 +147,8 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-12",
-      "coverage": "De la relación completa (bifurcación Málaga-Alta Velocidad – Málaga-María Zambrano, 154,6 km medidos) Oniel usa los 96,9 km entre la bifurcación y la estación de Antequera-Santa Ana, recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo.",
-      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación trae las dos vías de la línea (309 km de vías), todas con ref=030, operator=Adif, ancho de 1435 mm, 25 kV y passenger_lines=2. El número de línea de Adif (030) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
+      "coverage": "La relación completa, de la bifurcación Málaga-Alta Velocidad a Málaga-María Zambrano (154,7 km medidos), recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo; el desvío del que sale el enlace hacia la línea de Granada (bifurcación Gobantes).",
+      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación trae las dos vías de la línea (309 km de vías), todas con ref=030, operator=Adif, ancho de 1435 mm, 25 kV y passenger_lines=2. El número de línea de Adif (030) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. La longitud y los puntos kilométricos se contrastaron con Wikipedia. Hasta el 13 de noviembre de 2026 Oniel usaba solo los 96,9 km hasta Antequera-Santa Ana; desde ese día, la línea entera, con el mismo fichero. La bifurcación Gobantes se sitúa en el desvío (nodo 2258256210) en el que la relación 16228313, la del servicio Avant Málaga → Granada, deja las vías de la línea 030. La estación de Málaga-María Zambrano se sitúa con su nodo de Adif en OSM (2609534280, que enlaza a la ficha 54413 de adif.es), descargado el 13 de noviembre de 2026 con las demás estaciones y bifurcaciones de Adif de la zona (raw/osm/adif_facility_nodes_antequera_malaga_2026-11-13.json).",
       "file": "raw/osm/relation_11143233_lav_cordoba_malaga_2026-11-12.json"
     },
     {
@@ -183,7 +183,7 @@
       "license": "CC BY-SA 4.0",
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
       "retrieved_on": "2026-11-12",
-      "coverage": "Origen de la línea en el km 357,997 de la línea Madrid–Sevilla; longitud (154,5 km) y vía doble; puntos kilométricos del PB La Marota (7,701), el PAET Santaella (34,640), Puente Genil-Herrera (61,434), la bifurcación hacia Granada (95,946) y Antequera-Santa Ana (96,772); velocidades máximas autorizadas (300 km/h desde el km 2,1); apertura hasta Antequera (16 de diciembre de 2006) y hasta Málaga (23 de diciembre de 2007); enlace directo Málaga–Granada en servicio desde abril de 2022.",
+      "coverage": "Origen de la línea en el km 357,997 de la línea Madrid–Sevilla; longitud (154,5 km) y vía doble; puntos kilométricos del PB La Marota (7,701), el PAET Santaella (34,640), Puente Genil-Herrera (61,434), la bifurcación hacia Granada (95,946), Antequera-Santa Ana (96,772), el PB Álora (121,413), el PAET Los Prados (149,488) y Málaga-María Zambrano (154,517); velocidades máximas autorizadas (300 km/h desde el km 2,1 hasta el 138,5 y 120 km/h en los últimos 5 km); túneles de Abdalajís (7,3 km); vías de los dos anchos en la estación de Málaga; nombre de la bifurcación de Gobantes, de la que sale el enlace a Granada; apertura hasta Antequera (16 de diciembre de 2006) y hasta Málaga (23 de diciembre de 2007); enlace directo Málaga–Granada en servicio desde abril de 2022.",
       "notes": "Fuente de verificación, no de geometría; revisión del 24 de octubre de 2026 (oldid 175979048), consultada por la API de Wikipedia. Los códigos de estación (02002 Puente Genil-Herrera, 02003 Antequera-Santa Ana) y la fecha de apertura de Antequera-Santa Ana se tomaron de los artículos de cada estación (oldid 167283412 y 174167580) y coinciden con las paradas del GTFS de Renfe. El artículo no da el número de línea de Adif."
     },
     {
@@ -496,9 +496,33 @@
       "license": "Consulta pública; © Renfe",
       "license_url": null,
       "retrieved_on": "2026-11-12",
-      "coverage": "Trayecto por carretera entre Villanueva de Córdoba y Córdoba desde el 20 de enero de 2026 y reapertura de la alta velocidad en Adamuz el 17 de febrero de 2026.",
-      "notes": "Publicada el 23 de abril de 2026. Da esas fechas al hacer balance de los planes alternativos por carretera.",
+      "coverage": "Trayecto por carretera entre Villanueva de Córdoba y Córdoba desde el 20 de enero de 2026 y reapertura de la alta velocidad en Adamuz el 17 de febrero de 2026. Trayecto por carretera entre Antequera-Santa Ana y Málaga desde el 18 de febrero de 2026, por el desprendimiento de Álora, y vuelta de los trenes directos a Málaga el 30 de abril de 2026 a las 12.00 h, con tramos en los que se circula por vía única.",
+      "notes": "Publicada el 23 de abril de 2026. Da las fechas de enero y febrero al hacer balance de los planes alternativos por carretera, y anuncia la reapertura del 30 de abril con una semana de antelación. Releída el 13 de noviembre de 2026 (raw/interrupciones/consultas_2026-11-13_malaga.json); el resumen del día 12 sigue en raw/interrupciones/consultas_2026-11-12.json.",
       "file": "raw/interrupciones/consultas_2026-11-12.json"
+    },
+    {
+      "id": "the-objective-corte-alora-2026-02-04",
+      "name": "Noticia «Interrumpida la Alta Velocidad entre Málaga y Antequera por un desprendimiento de tierras»",
+      "publisher": "The Objective, con información de Europa Press",
+      "url": "https://theobjective.com/economia/transporte/2026-02-04/interrumpida-alta-velocidad-malaga-antequera-desprendimiento/",
+      "license": "© The Objective; se cita como fuente del dato, sin reproducir el texto",
+      "license_url": null,
+      "retrieved_on": "2026-11-13",
+      "coverage": "Interrupción de la circulación de alta velocidad entre Málaga y Antequera desde las 7.30 h del 4 de febrero de 2026 por un desprendimiento de tierras a la altura de Álora.",
+      "notes": "Publicada el 4 de febrero de 2026. Prensa que recoge lo que Adif informó en sus redes sociales; no se encontró el aviso original de Adif, que no conserva histórico.",
+      "file": "raw/interrupciones/consultas_2026-11-13_malaga.json"
+    },
+    {
+      "id": "the-objective-reapertura-malaga-2026-04-30",
+      "name": "Noticia «La conexión directa por alta velocidad entre Málaga-Madrid se restablece este jueves»",
+      "publisher": "The Objective",
+      "url": "https://theobjective.com/economia/transporte/2026-04-30/conexion-alta-velocidad-malaga-madrid-reestablece/",
+      "license": "© The Objective; se cita como fuente del dato, sin reproducir el texto",
+      "license_url": null,
+      "retrieved_on": "2026-11-13",
+      "coverage": "Reapertura de la línea de alta velocidad a Málaga el 30 de abril de 2026 a las 12.00 h, con los tres operadores circulando de nuevo.",
+      "notes": "Publicada el 30 de abril de 2026, el día de la reapertura. Confirma en la fecha lo que la nota de Renfe del 23 de abril daba como previsto.",
+      "file": "raw/interrupciones/consultas_2026-11-13_malaga.json"
     },
     {
       "id": "boe-reglamento-circulacion-ferroviaria",

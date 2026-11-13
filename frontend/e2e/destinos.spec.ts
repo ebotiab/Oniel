@@ -21,10 +21,10 @@ test.describe('Destinos directos de una estación', () => {
     await expect(filas.nth(3)).toContainText('12 trenes')
     // con un solo operador no se nombra
     await expect(filas.nth(0)).not.toContainText('Renfe')
-    // un destino fuera de la red cargada se nombra, sin enlace
+    // Málaga es ya una estación de la red: lleva a su ficha
     const malaga = filas.filter({ hasText: 'Málaga' })
     await expect(malaga).toContainText('9 trenes')
-    await expect(malaga.getByRole('button')).toHaveCount(0)
+    await expect(malaga.getByRole('button')).toHaveCount(1)
     // los horarios son los publicados y faltan los de quien no los publica
     await expect(page.getByTestId('destinos-nota-horario')).toBeVisible()
     await expect(page.getByTestId('destinos-sin-horarios')).toHaveText('No están los trenes de Iryo: no publica sus horarios en un formato abierto.')

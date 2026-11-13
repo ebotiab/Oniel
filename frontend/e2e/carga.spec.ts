@@ -30,7 +30,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^10 líneas · 2\.512 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^9 líneas · 2\.209 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -45,12 +45,10 @@ test.describe('Carga de la red por partes', () => {
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
     // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 18 KB de media).
     expect(bytes(red)).toBeLessThan(20_000 * (red.lines as unknown[]).length)
-    expect(bytes({ annotations, interruptions })).toBeLessThan(40_000)
-    // Con diez líneas la red del índice (155 KB) pesa ya algo más que el detalle de la línea más
-    // grande (148 KB): lo que la acota es el tope por línea de arriba. Sigue pesando menos que las
-    // dos líneas más grandes juntas, la convencional de Córdoba y la alta velocidad de Barcelona.
-    const otra = await (await request.get('/data/lines/lav-madrid-barcelona.json')).body()
-    expect(bytes(red)).toBeLessThan(linea.byteLength + otra.byteLength)
+    expect(bytes({ annotations, interruptions })).toBeLessThan(45_000)
+    // La red del índice sigue pesando menos que el detalle de la línea más grande. El índice entero,
+    // con las anotaciones, ya no: con ocho líneas son 150 KB (26 KB comprimido) frente a 148 KB.
+    expect(bytes(red)).toBeLessThan(linea.byteLength)
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {
