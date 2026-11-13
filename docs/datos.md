@@ -687,7 +687,7 @@ Las pruebas usan dos ficheros: el fijo del 8 de noviembre y una copia sin un tre
 | `segments/<id>.json`, `nodes/<id>.json` | Los trenes de un tramo y, de una estación, sus paradas y sus destinos directos el día de referencia (véase «Destinos directos»). | Al abrir su ficha. |
 | `historico/nodes/<id>.json`, `historico/segments/<id>.json` | Los trenes de cada conjunto de datos en una estación o un tramo (véase «Evolución del servicio»). | Al abrir su ficha. |
 | `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos. | No lo lee el visor: lo usa el resumen del refresco de horarios. |
-| `alternatives.json` | Trenes por tramo el día de referencia y si las líneas cargadas les ofrecen otro camino con el tramo cortado (`docs/simulacion.md`, «Tramos sin alternativa»). 93 KB, 3,2 KB con gzip (12 de noviembre de 2026). | Al abrir la ficha de un tramo o el panel de cobertura; nunca al arrancar. |
+| `alternatives.json` | Trenes por tramo el día de referencia y si las líneas cargadas les ofrecen otro camino con el tramo cortado (`docs/simulacion.md`, «Tramos sin alternativa»). 93 KB, 3,2 KB con gzip (12 de noviembre de 2026). | Al abrir la ficha de un tramo o la vista «Tramos sin otro camino»; nunca al arrancar. |
 
 La red entera en un solo fichero (`network.json`, con `segment-counts.json`) dejó de exportarse el 11 de noviembre de 2026: el visor ya no la descargaba y las pruebas del grafo de rutas leen el índice.
 

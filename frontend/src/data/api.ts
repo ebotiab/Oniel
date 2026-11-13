@@ -182,7 +182,7 @@ const alternativesCache = new Map<string, Promise<AlternativesOut>>()
 
 /**
  * Trenes por tramo y si las líneas cargadas les ofrecen otro camino. No se pide al arrancar: solo
- * al abrir la ficha de un tramo o el panel de cobertura, y una vez por origen y día.
+ * al abrir la ficha de un tramo o la vista «Tramos sin otro camino», y una vez por origen y día.
  */
 export function fetchAlternatives(date?: string): Promise<AlternativesOut> {
   const api = currentMode() === 'api'

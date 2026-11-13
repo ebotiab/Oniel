@@ -16,6 +16,8 @@ export interface Route {
   escenario?: string
   /** El comparador de recorridos está abierto, con las estaciones que ya se han elegido. */
   recorridos?: Comparador
+  /** La vista «Tramos sin otro camino» está abierta. */
+  sinOtroCamino?: boolean
   /** El glosario está abierto; con `entrada`, en ese término o concepto. */
   glosario?: { entrada: string | null }
 }
@@ -31,7 +33,7 @@ export interface Comparador {
  * Ruta en la dirección. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
  * / (la vista de la red), /linea/<id>, /tramo/<id>, /nodo/<id>, /tramo/<id>/cierre, /escenario/<cadena>,
  * /recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), /glosario,
- * /glosario/<entrada>, /cobertura y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
+ * /glosario/<entrada>, /cobertura, /sin-otro-camino y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
  * (/proyecto/<id>).
  *
  * `parseRoute` interpreta la ruta y `routePath` la construye: ninguna vista arma direcciones a mano.
@@ -46,6 +48,7 @@ export function parseRoute(pathname: string): Route {
   if (capa && id) return { selection: { type: 'anotacion', kind: capa.kind, id }, simulacion: false }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
+  if (kind === 'sin-otro-camino') return { selection: null, simulacion: false, sinOtroCamino: true }
   if (kind === 'glosario') return { selection: null, simulacion: false, glosario: { entrada: id ?? null } }
   if (kind === 'recorridos') {
     const end = (value: string | undefined) => (value && value !== '-' ? value : null)
@@ -90,6 +93,7 @@ function code(value: string): string {
 export function routePath(route: Route): string {
   if (route.cobertura) return '/cobertura'
   if (route.glosario) return route.glosario.entrada ? `/glosario/${encodeURIComponent(route.glosario.entrada)}` : '/glosario'
+  if (route.sinOtroCamino) return '/sin-otro-camino'
   if (route.recorridos) {
     const { from, to, escenario } = route.recorridos
     const parts = escenario ? [from ?? '-', to ?? '-', escenario] : to ? [from ?? '-', to] : from ? [from] : []
