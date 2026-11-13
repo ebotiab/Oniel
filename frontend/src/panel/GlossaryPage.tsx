@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { normalize } from '../app/search'
 import type { Source } from '../data/types'
 import { conceptos, terminos, tituloDe } from './glosario'
-import { Marca } from '../app/Marca'
 import { abreAparte } from '../app/navegacion'
 import { rutaGlosario, useAbrirGlosario } from './glosarioContexto'
 import { Dibujo } from './glosarioDibujos'
@@ -14,7 +13,6 @@ interface Props {
   entrada: string | null
   /** Fuentes registradas, para citar las referencias de los conceptos. */
   sources: Source[]
-  onBack: () => void
 }
 
 /** Enlace a otra entrada del glosario: cambia la ruta sin recargar y se puede copiar como cualquier enlace. */
@@ -66,7 +64,7 @@ function articulos(cita: string): string {
  * red (cada uno con su dibujo por pasos, un texto corto y su referencia) y, aparte, las palabras de las
  * fichas por orden alfabético, con un campo para filtrarlas. Cada entrada tiene su ruta.
  */
-export function GlossaryPage({ entrada, sources, onBack }: Props) {
+export function GlossaryPage({ entrada, sources }: Props) {
   const pagina = useRef<HTMLDivElement>(null)
   const [filtro, setFiltro] = useState('')
   const existe = entrada !== null && tituloDe(entrada) !== null
@@ -83,12 +81,6 @@ export function GlossaryPage({ entrada, sources, onBack }: Props) {
 
   return (
     <div ref={pagina} className="pagina" data-testid="pagina-glosario">
-      <header className="pagina-cabecera">
-        <Marca />
-        <button type="button" className="cobertura-pill" onClick={onBack} data-testid="glosario-volver">
-          ← Volver al mapa
-        </button>
-      </header>
       <main className="pagina-columna glosario" aria-labelledby="glosario-titulo">
         <p className="sobre">Para entender la red</p>
         <h1 id="glosario-titulo" className="pagina-titulo">

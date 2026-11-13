@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { irA } from './navegar.ts'
+
 const TRAMO = 'lav-madrid-sevilla:urda:ciudad-real'
 
 /** En el móvil la ficha vive en la hoja inferior: hay que ampliarla para verla entera. */
@@ -82,7 +84,7 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
     await page.getByTestId('volver-red').click()
     await expect(page).toHaveURL(/\/$/)
     // la cobertura
-    await page.getByTestId('boton-cobertura').click()
+    await irA(page, 'cobertura')
     await expect(page).toHaveURL(/\/cobertura$/)
     await page.reload()
     await expect(page.getByTestId('pagina-cobertura')).toBeVisible()

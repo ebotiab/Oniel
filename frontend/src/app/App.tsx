@@ -14,6 +14,7 @@ import { GlossaryPage } from '../panel/GlossaryPage'
 import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
+import { Navegacion, type Seccion } from '../panel/Navegacion'
 import { NetworkOverview } from '../panel/NetworkOverview'
 import { NodeDetail } from '../panel/NodeDetail'
 import { SegmentDetail } from '../panel/SegmentDetail'
@@ -21,9 +22,10 @@ import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
 import { Marca } from './Marca'
+import { navegar } from './navegacion'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
-import { legacyHashPath, networkCount, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
+import { legacyHashPath, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
 import './app.css'
 
 // MapLibre pesa tres cuartas partes del JavaScript del visor: va en un fichero aparte para que el panel
@@ -177,12 +179,6 @@ export default function App() {
     },
     [route, showCoverage],
   )
-  const closeGlossary = () => {
-    const antes = vuelta.current
-    vuelta.current = null
-    setRoute(antes?.route ?? { selection: null, simulacion: false })
-    setShowCoverage(antes?.cobertura ?? false)
-  }
   const pick = useCallback(
     (target: SearchTarget) => (target.type === 'nodo' ? select(target) : target.type === 'glosario' ? openGlossary(target.id) : showLine(target.id)),
     [select, showLine, openGlossary],
@@ -366,7 +362,7 @@ export default function App() {
   else if (annotation)
     panel = <AnnotationDetail key={annotation.id} annotation={annotation} onSelectSegment={(id) => select({ type: 'tramo', id })} onBack={() => showLine(null)} />
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onShowCoverage={() => setShowCoverage(true)} onCompare={() => compare({ from: null, to: null })} onGlossary={() => openGlossary(null)} />
+    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} />
   else
     panel = (
       <LineOverview
@@ -386,6 +382,39 @@ export default function App() {
         leyenda={leyendaMovil}
       />
     )
+
+  // La navegación de la cabecera. «Mapa» devuelve desde una página a lo que se estaba viendo; desde el propio
+  // mapa lleva a la vista de la red. Entre páginas se conserva a qué vista del mapa hay que volver.
+  const seccion: Seccion = route.glosario ? 'glosario' : showCoverage ? 'cobertura' : comparador ? 'recorridos' : 'mapa'
+  const ir = (destino: Seccion) => {
+    const debajo: Route = route.glosario ? (vuelta.current?.route ?? { selection: null, simulacion: false }) : route
+    if (destino === 'glosario') {
+      if (route.glosario) return
+      vuelta.current = { route: debajo, cobertura: false }
+      setRoute({ selection: null, simulacion: false, glosario: { entrada: null } })
+      setShowCoverage(false)
+      return
+    }
+    vuelta.current = null
+    if (destino === 'cobertura') {
+      setRoute(debajo)
+      setShowCoverage(true)
+    } else if (destino === 'recorridos') {
+      if (debajo.recorridos) {
+        setRoute(debajo)
+        setShowCoverage(false)
+      } else compare({ from: null, to: null })
+    } else if (seccion === 'glosario' || seccion === 'cobertura') {
+      setRoute(debajo)
+      setShowCoverage(false)
+    } else showLine(null)
+  }
+  // La marca lleva siempre a la vista de la red, con una entrada en el historial: «atrás» devuelve a lo que se veía.
+  const inicio = () => {
+    vuelta.current = null
+    setResult(null)
+    navegar('/')
+  }
 
   const lines = network?.lines ?? []
   // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
@@ -417,9 +446,9 @@ export default function App() {
           recorridos={recorridosEnMapa}
         />}
       </Suspense>
-      <header className="cabecera">
+      <header className="cabecera" data-estado={status}>
         <div className="cabecera-inicio">
-          <Marca />
+          <Marca onInicio={inicio} />
           <SearchBox
             network={network}
             label="Buscar una estación o una línea"
@@ -430,20 +459,7 @@ export default function App() {
             testId="buscador"
           />
         </div>
-        {/* en el móvil la cabecera va justa: allí al glosario se llega por el buscador y por la vista de la red */}
-        {!mobile && (
-          <button type="button" className="cobertura-pill glosario-boton" onClick={() => openGlossary(null)} data-testid="boton-glosario">
-            Glosario
-          </button>
-        )}
-        <button type="button" className="cobertura-pill" onClick={() => showLine(null)} data-testid="recuento-red">
-          <span className="punto" aria-hidden="true" />
-          <span className="pill-texto">
-            <strong>{network ? networkCount(network.lines) : 'Oniel'}</strong>
-          </span>
-          {network && status === 'buscando' && <span className="senal gris">despertando el servidor…</span>}
-          {network && status === 'ausente' && <span className="senal gris">vista estática</span>}
-        </button>
+        <Navegacion actual={seccion} onIr={ir} mobile={mobile} status={network ? status : null} />
       </header>
       <aside id="panel" className="panel" aria-label="Panel de la línea">
         {mobile && (
@@ -464,7 +480,7 @@ export default function App() {
           onPin={pinTrazo}
         />
       )}
-      {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} onBack={closeGlossary} />}
+      {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} />}
       {showCoverage && !route.glosario && coverage && network && (
         <CoveragePage
           coverage={coverage}
@@ -474,7 +490,6 @@ export default function App() {
           status={status}
           onSelectSegment={(id) => select({ type: 'tramo', id })}
           onPickLine={showLine}
-          onBack={() => setShowCoverage(false)}
         />
       )}
     </div>
