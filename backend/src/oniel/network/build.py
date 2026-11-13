@@ -99,6 +99,20 @@ class BuiltNetwork:
         raise KeyError(node_id)
 
 
+def _ref_ways(raw: dict[str, Any], way_ref: str) -> tuple[list[dict[str, Any]], dict[int, Coord]]:
+    """Las vías del fichero que llevan esa etiqueta ``ref``, para los que no traen relación."""
+    elements = raw["elements"]
+    members = [
+        e for e in elements if e["type"] == "way" and e.get("tags", {}).get("ref") == way_ref
+    ]
+    if not members:
+        raise ValueError(f"el fichero no tiene vías con ref={way_ref}")
+    nodes: dict[int, Coord] = {
+        e["id"]: (e["lon"], e["lat"]) for e in elements if e["type"] == "node"
+    }
+    return members, nodes
+
+
 def _relation_ways(
     raw: dict[str, Any], relation_id: int
 ) -> tuple[list[dict[str, Any]], dict[int, Coord]]:
@@ -148,7 +162,12 @@ def chain_osm_relation(raw: dict[str, Any], relation_id: int) -> ChainedLine:
 
 
 def trace_osm_relation(
-    raw: dict[str, Any], relation_id: int, start: Coord, end: Coord
+    raw: dict[str, Any],
+    relation_id: int | None,
+    start: Coord,
+    end: Coord,
+    *,
+    way_ref: str | None = None,
 ) -> ChainedLine:
     """Camino más corto por las vías de una relación OSM entre dos puntos.
 
@@ -156,7 +175,13 @@ def trace_osm_relation(
     orden: el grafo son los nodos de las vías ``railway=rail`` y las aristas sus tramos; se
     prueban los nodos más cercanos a cada extremo hasta encontrar un camino.
     """
-    members, nodes = _relation_ways(raw, relation_id)
+    if relation_id is not None:
+        members, nodes = _relation_ways(raw, relation_id)
+        what = f"la relación {relation_id}"
+    else:
+        assert way_ref is not None
+        members, nodes = _ref_ways(raw, way_ref)
+        what = f"las vías con ref={way_ref}"
     adjacency: dict[int, list[tuple[int, float, int]]] = defaultdict(list)
     way_speed: dict[int, int | None] = {}
     for way in members:
@@ -169,7 +194,7 @@ def trace_osm_relation(
             adjacency[a].append((b, length, way["id"]))
             adjacency[b].append((a, length, way["id"]))
     if not adjacency:
-        raise ValueError(f"la relación {relation_id} no tiene vías ferroviarias")
+        raise ValueError(f"{what} no tiene vías ferroviarias")
 
     def nearest(p: Coord) -> list[int]:
         return sorted(adjacency, key=lambda n: haversine_km(nodes[n], p))[:TRACE_CANDIDATES]
@@ -185,7 +210,7 @@ def trace_osm_relation(
             break
     if best is None:
         raise ValueError(
-            f"no hay camino en la relación {relation_id} entre {start} y {end}; "
+            f"no hay camino en {what} entre {start} y {end}; "
             "¿están los dos puntos sobre la misma vía?"
         )
     s, e, prev = best
@@ -381,13 +406,28 @@ def cut_segments(
     return segments
 
 
+def _trimmed(line: ChainedLine, start: Coord, end: Coord) -> ChainedLine:
+    """El trazado entre los puntos en los que se proyectan ``start`` y ``end``."""
+    km_from, km_to = sorted((line.polyline.project(start).km, line.polyline.project(end).km))
+    spans = [
+        SpeedSpan(max(s.km_from, km_from) - km_from, min(s.km_to, km_to) - km_from, s.maxspeed_kmh)
+        for s in line.speed_spans
+        if s.km_to > km_from and s.km_from < km_to
+    ]
+    return ChainedLine(polyline=Polyline(line.polyline.slice(km_from, km_to)), speed_spans=spans)
+
+
 def build_line_geometry(spec: NetworkSpec, data_dir: Path) -> ChainedLine:
     source = spec.line.geometry_source
     if source.parts:
         parts: list[tuple[ChainedLine, str]] = []
         for part in source.parts:
             raw = json.loads((data_dir / part.file).read_text(encoding="utf-8"))
-            traced = trace_osm_relation(raw, part.relation_id, part.from_point, part.to_point)
+            traced = trace_osm_relation(
+                raw, part.relation_id, part.from_point, part.to_point, way_ref=part.way_ref
+            )
+            if part.trim:
+                traced = _trimmed(traced, part.from_point, part.to_point)
             parts.append((traced, part.source_id))
         return concat_parts(parts)
     assert source.file is not None and source.relation_id is not None

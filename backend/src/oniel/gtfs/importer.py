@@ -27,6 +27,7 @@ from oniel.gtfs.trips import (
     bypasses_of,
     calls_for_trip,
     calls_on_line,
+    link_far_node,
     route_for_trip,
     select_trips_for_spec,
 )
@@ -184,6 +185,7 @@ async def import_gtfs(
                 continue  # sus pasos salen al resolver la línea de la que es baipás
             others = [line for line in loaded if line.line_id != spec.line.id]
             bypasses = bypasses_of(LoadedLine(spec, nodes, segments), others)
+            far_node = link_far_node(LoadedLine(spec, nodes, segments), others)
             kinds: Counter[str] = Counter()
             resolutions: Counter[str] = Counter()
             rules: Counter[str] = Counter()
@@ -197,7 +199,7 @@ async def import_gtfs(
                 for c in line_calls:
                     if c.node_id is None and not c.exit_node_ids:
                         unmapped[f"{spec.line.id}: {c.stop_id} {c.stop_name}"] += 1
-                passes, resolution = resolve_passes(line_calls, nodes, segments, bypasses)
+                passes, resolution = resolve_passes(line_calls, nodes, segments, bypasses, far_node)
                 resolutions[resolution] += 1
                 own_ids = {s.id for s in segments}
                 kinds.update(p.kind for p in passes if p.segment_id in own_ids)

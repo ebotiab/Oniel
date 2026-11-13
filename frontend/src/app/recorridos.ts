@@ -7,7 +7,7 @@
 import type { InterruptionOut, LineSummary, NodeCall, Route, SegmentOut } from '../data/types.ts'
 import { findRoutes, type Graph } from '../routing/graph.ts'
 import { ScenarioError, scenarioFromCode, withClosures, type Scenario } from '../routing/scenario.ts'
-import { formatKm, lineKind, shortStop } from './state.ts'
+import { formatKm, lineKind, parentOf, shortStop } from './state.ts'
 
 /** Recorridos que se enseñan, del más corto al más largo. El grafo ya descarta los desproporcionados. */
 export const RECORRIDOS_A_LA_VISTA = 3
@@ -121,7 +121,7 @@ function baipasesDe(route: Route, graph: Graph, lines: Map<string, LineSummary>,
 }
 
 /**
- * Primer y último tramo de cada trecho del recorrido. Un baipás es parte de su línea: no abre trecho, y
+ * Primer y último tramo de cada trecho del recorrido. Un baipás o un enlace es parte de su línea: no abre trecho, y
  * así el tren que entra en la estación que el baipás rodea sigue contando en el recorrido.
  */
 function tramosClave(route: Route, segments: Map<string, SegmentOut>, lines: Map<string, LineSummary>): string[] {
@@ -131,7 +131,7 @@ function tramosClave(route: Route, segments: Map<string, SegmentOut>, lines: Map
   for (const id of route.segment_ids) {
     // Un enlace hipotético no es un tramo de ninguna línea ni tiene trenes: cuenta como trecho propio.
     const propia = segments.get(id)?.line_id ?? null
-    const lineId = propia === null ? null : (lines.get(propia)?.bypass_of ?? propia)
+    const lineId = propia === null ? null : (parentOf(lines.get(propia) ?? {}) ?? propia)
     if (lineId !== anterior || lineId === null) {
       if (ultimo) clave.add(ultimo)
       clave.add(id)

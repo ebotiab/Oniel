@@ -25,6 +25,7 @@ from conftest import (
     LAV_MURCIA_SPEC,
     LAV_VALENCIA_SPEC,
     LBMG_SPEC,
+    LINK_MONFORTE_SPEC,
     MZCR_SPEC,
     SPEC,
     SPECS,
@@ -604,6 +605,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # los baipases no tienen reglas: sus trenes salen de resolver la línea de Barcelona
         BYPASS_ZARAGOZA_SPEC.name: {},
         BYPASS_LLEIDA_SPEC.name: {},
+        # el enlace de Monforte del Cid tampoco: le basta su filtro
+        LINK_MONFORTE_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

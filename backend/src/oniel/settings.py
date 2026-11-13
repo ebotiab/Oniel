@@ -41,6 +41,7 @@ class Settings(BaseSettings):
         "baipas-lleida",
         "lav-albacete-alicante",
         "lav-monforte-murcia",
+        "enlace-monforte-del-cid",
     ]
 
 

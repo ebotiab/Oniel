@@ -26,6 +26,7 @@ BYPASS_ZARAGOZA_SPEC = DATA_DIR / "curated" / "baipas-zaragoza.json"
 BYPASS_LLEIDA_SPEC = DATA_DIR / "curated" / "baipas-lleida.json"
 LAV_ALICANTE_SPEC = DATA_DIR / "curated" / "lav-albacete-alicante.json"
 LAV_MURCIA_SPEC = DATA_DIR / "curated" / "lav-monforte-murcia.json"
+LINK_MONFORTE_SPEC = DATA_DIR / "curated" / "enlace-monforte-del-cid.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -42,6 +43,7 @@ SPECS = [
     BYPASS_LLEIDA_SPEC,
     LAV_ALICANTE_SPEC,
     LAV_MURCIA_SPEC,
+    LINK_MONFORTE_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

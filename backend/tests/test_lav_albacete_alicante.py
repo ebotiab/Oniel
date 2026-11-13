@@ -145,11 +145,10 @@ def test_it_shares_the_junction_and_albacete_station(line: BuiltNetwork) -> None
     assert [c.id for c in conventional.connections] == ["conv-albacete-levante"]
     trunk_spec = load_network_spec(LAV_VALENCIA_SPEC)
     assert all(c.node_id != "bif-albacete" for c in trunk_spec.connections)
-    # lo que queda a trazos: el enlace de Monforte del Cid con la línea de Murcia, que ya está
-    # cargada, y la convencional de La Encina a Alicante. El enlace de alta velocidad hacia
-    # Valencia por Xàtiva figura en la fuente como futuro: no es un nodo ni una conexión
+    # lo que queda a trazos: la convencional de La Encina a Alicante. El enlace de Monforte del
+    # Cid con la línea de Murcia ya está cargado, y el de alta velocidad hacia Valencia por Xàtiva
+    # figura en la fuente como futuro: no es un nodo ni una conexión
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "enlace-monforte-vinalopo": "monforte-del-cid-av",
         "conv-alicante-la-encina": "alicante-terminal",
     }
     murcia = load_network_spec(LAV_MURCIA_SPEC)
@@ -306,8 +305,11 @@ def test_trains_to_murcia_leave_by_one_of_two_junctions(
     for stop_id in MURCIA_LINE:
         mapping = spec.stop_mappings[stop_id]
         assert mapping.exits == ["monforte-del-cid-av"]
-        # el enlace no está cargado: se sigue por la línea de Murcia desde la bifurcación Vinalopó
-        assert [(leg.line, leg.node) for leg in mapping.via] == [(MURCIA, "bif-vinalopo")]
+        # por el enlace hasta la bifurcación Vinalopó y, desde allí, por la línea de Murcia
+        assert [(leg.line, leg.node) for leg in mapping.via] == [
+            ("enlace-monforte-del-cid", "monforte-del-cid-av"),
+            (MURCIA, "bif-vinalopo"),
+        ]
     for rule in spec.route_overrides:
         if rule.id in ("albacete-elche-sin-alicante", "madrid-elche-sin-parada"):
             assert {s: m.exits for s, m in rule.stop_mappings.items()} == dict.fromkeys(

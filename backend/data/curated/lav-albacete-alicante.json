@@ -64,7 +64,6 @@
     {"attribute": "mando", "from_node": "bif-albacete", "to_node": "alicante-terminal", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
   ],
   "connections": [
-    {"id": "enlace-monforte-vinalopo", "node_id": "monforte-del-cid-av", "name": "Enlace de Monforte del Cid", "towards": "Elche, Orihuela y Murcia, para los trenes que salen de Alicante", "status": "no_cargada", "sketch": [[-0.69832, 38.4064], [-0.70977, 38.40449], [-0.71415, 38.40356], [-0.71643, 38.40201], [-0.71752, 38.40025], [-0.71768, 38.39793], [-0.71682, 38.39605], [-0.71489, 38.39435]]},
     {"id": "conv-alicante-la-encina", "node_id": "alicante-terminal", "name": "Línea convencional La Encina–Alicante", "towards": "Elda, Villena y La Encina", "status": "no_cargada", "sketch": [[-0.4955241, 38.3447127], [-0.56, 38.4], [-0.80109, 38.484879], [-0.867689, 38.631738]]}
   ],
   "stop_mappings": {
@@ -90,11 +89,11 @@
     "15410": {"exits": ["bif-albacete"]},
     "30200": {"exits": ["bif-albacete"]},
     "22100": {"exits": ["bif-albacete"]},
-    "03410": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
-    "03412": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
-    "62002": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
-    "62001": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
-    "61200": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}}
+    "03410": {"exits": ["monforte-del-cid-av"], "via": [{"line": "enlace-monforte-del-cid", "node": "monforte-del-cid-av"}, {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}]},
+    "03412": {"exits": ["monforte-del-cid-av"], "via": [{"line": "enlace-monforte-del-cid", "node": "monforte-del-cid-av"}, {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}]},
+    "62002": {"exits": ["monforte-del-cid-av"], "via": [{"line": "enlace-monforte-del-cid", "node": "monforte-del-cid-av"}, {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}]},
+    "62001": {"exits": ["monforte-del-cid-av"], "via": [{"line": "enlace-monforte-del-cid", "node": "monforte-del-cid-av"}, {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}]},
+    "61200": {"exits": ["monforte-del-cid-av"], "via": [{"line": "enlace-monforte-del-cid", "node": "monforte-del-cid-av"}, {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}]}
   },
   "corridor_filter": {
     "description": "Se importan los viajes del GTFS que paran en alguna estación de la línea y, además, en Villena Alta Velocidad, en Elche AV o en Cuenca-Fernando Zóbel: estaciones de alta velocidad a las que no llega ningún tren convencional. Así entran los trenes de alta velocidad de Madrid a Albacete, Alicante y Murcia y los Avant de Alicante a Murcia, y quedan fuera los trenes convencionales que paran en Albacete y en Alicante. Los que la recorren sin parar en ninguna de esas tres entran por las reglas de recorrido.",

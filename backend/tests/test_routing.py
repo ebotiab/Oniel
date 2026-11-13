@@ -55,6 +55,8 @@ ALBACETE, LAV_VALENCIA, LAV_ALICANTE = (
 )
 #: La alta velocidad que sigue hasta Murcia desde la bifurcación de Murcia, antes de Alicante.
 LAV_MURCIA, MURCIA = "lav-monforte-murcia", "murcia-del-carmen"
+#: El enlace por el que los trenes de Alicante entran en la línea de Murcia.
+LINK = "enlace-monforte-del-cid:monforte-del-cid-av:bif-vinalopo"
 MADRID, CIUDAD_REAL, MANZANARES, CORDOBA = (
     "madrid-puerta-de-atocha",
     "ciudad-real",
@@ -87,8 +89,8 @@ def graph(network: Red) -> Graph:
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
     # los dos baipases de Zaragoza y de Lleida, los nueve tramos de la línea de Albacete a Alicante
-    # y los ocho de la de Monforte del Cid a Murcia
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8
+    # los ocho de la de Monforte del Cid a Murcia y el del enlace de Monforte del Cid
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 1
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -228,11 +230,54 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     from_chamartin = find_routes(graph, "madrid-chamartin", MURCIA)[0]
     assert from_chamartin.line_ids == [LAV_VALENCIA, LAV_ALICANTE, LAV_MURCIA]
     assert (from_chamartin.length_km, from_chamartin.time_min) == (529.5, 123)
-    # de Alicante a Murcia el recorrido retrocede hasta la bifurcación de Murcia, porque el
-    # enlace de Monforte del Cid no está cargado: 92,2 km, unos 4 más que por el enlace
+    # de Alicante a Murcia el recorrido va por el enlace de Monforte del Cid, como los trenes:
+    # 88,4 km, 3,8 menos que retrocediendo hasta la bifurcación de Murcia. El enlace cuenta como
+    # parte de la línea de Murcia, de la que cuelga
     (from_alicante,) = find_routes(graph, "alicante-terminal", MURCIA)
+    assert LINK in from_alicante.segment_ids
+    assert "bif-murcia" not in from_alicante.node_ids
     assert from_alicante.line_ids == [LAV_ALICANTE, LAV_MURCIA]
-    assert (from_alicante.length_km, from_alicante.time_min) == (92.2, 26)
+    assert (from_alicante.length_km, from_alicante.time_min) == (88.4, 26)
+    assert [(leg.line_id, leg.from_node_id, leg.to_node_id) for leg in from_alicante.legs] == [
+        (LAV_ALICANTE, "alicante-terminal", "monforte-del-cid-av"),
+        (LAV_MURCIA, "monforte-del-cid-av", MURCIA),
+    ]
+    # el trecho que va entero por el enlace es del enlace
+    (only_link,) = find_routes(graph, "monforte-del-cid-av", "bif-vinalopo")
+    assert only_link.line_ids == ["enlace-monforte-del-cid"] and only_link.length_km == 2.1
+
+
+def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
+    """El enlace de Monforte del Cid cierra un triángulo con la línea de Alicante y la de Murcia,
+    y de un lado a otro solo se pasa invirtiendo la marcha: ningún recorrido lo hace."""
+    assert graph.link_of == {"enlace-monforte-del-cid": LAV_MURCIA}
+    side_alicante = f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av"
+    side_murcia = f"{LAV_MURCIA}:bif-murcia:bif-vinalopo"
+    assert graph.link_sides() == {
+        LINK: ("enlace-monforte-del-cid", 0),
+        side_alicante: ("enlace-monforte-del-cid", 1),
+        side_murcia: ("enlace-monforte-del-cid", 2),
+    }
+    sides = {LINK, side_alicante, side_murcia}
+    for start, end in (
+        (MADRID, MURCIA),
+        (MADRID, "alicante-terminal"),
+        ("alicante-terminal", MURCIA),
+        ("villena-av", "elche-av"),
+    ):
+        for route in find_routes(graph, start, end, max_ratio=None):
+            assert len(sides.intersection(route.segment_ids)) == 1
+    # por eso cerrar un lado no tiene rodeo por los otros dos: ni el enlace, ni la entrada a la
+    # línea de Murcia desde Madrid, ni el tramo de la de Alicante entre las dos salidas
+    for side in sides:
+        assert closure_detours(graph, side).detours == []
+        assert find_routes(graph, *_ends(graph, side), Scenario(closures=[side])) == []
+
+
+def _ends(graph: Graph, segment_id: str) -> tuple[str, str]:
+    edge = graph.edge(segment_id)
+    assert edge is not None
+    return edge.a, edge.b
 
 
 def test_time_is_length_over_typical_speed(graph: Graph, network: Red) -> None:
@@ -553,6 +598,10 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"from": MADRID, "to": BARCELONA, "scenario": "", **DEFAULTS},
         {"from": MADRID, "to": BARCELONA, "scenario": f"c~{AROUND_ZARAGOZA}", **DEFAULTS},
         {"from": "lleida-pirineus", "to": MADRID, "scenario": "", **DEFAULTS},
+        # un enlace es parte de la línea de la que cuelga, y ningún recorrido dobla una esquina
+        # de su triángulo: de Alicante a Murcia hay uno, por el enlace
+        {"from": "alicante-terminal", "to": MURCIA, "scenario": "", **DEFAULTS},
+        {"from": MADRID, "to": MURCIA, "scenario": "", **DEFAULTS},
     ]
     detours: list[dict[str, Any]] = [
         {"segment_id": URDA_CIUDAD_REAL, "scenario": ""},
