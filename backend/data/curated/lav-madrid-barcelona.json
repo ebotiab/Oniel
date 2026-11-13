@@ -4,6 +4,7 @@
     "name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
     "short_name": "050",
     "sort_order": 9,
+    "zone": "cataluna",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

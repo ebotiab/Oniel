@@ -4,6 +4,7 @@
     "name": "Línea convencional Espelúy – Jaén",
     "short_name": "402",
     "sort_order": 4,
+    "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1668,

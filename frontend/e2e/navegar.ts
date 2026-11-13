@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test'
 
-export type Seccion = 'mapa' | 'recorridos' | 'glosario' | 'cobertura'
+export type Seccion = 'mapa' | 'recorridos' | 'sin-otro-camino' | 'glosario' | 'cobertura'
 
 /** En el móvil los enlaces de la cabecera van tras «Menú»: lo abre si está cerrado. */
 export async function abrirMenu(page: Page) {

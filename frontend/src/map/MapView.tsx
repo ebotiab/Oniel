@@ -18,7 +18,7 @@ import type { AnnotationOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
 import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
-import { CAPAS_DE_VIA, LAYER, OPACIDAD_RECORRIDOS, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeVia, type Trazo } from './layers'
+import { CAPAS_DE_VIA, LAYER, OPACIDAD_RECORRIDOS, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeLineas, opacidadDeVia, type Trazo } from './layers'
 import baseStyle from './style/oniel-base.json'
 
 interface Props {
@@ -44,6 +44,8 @@ interface Props {
   lineId?: string | null
   /** Comparador de recorridos abierto: qué se resalta. Nulo fuera del comparador. */
   recorridos?: RecorridosEnMapa | null
+  /** Líneas que señala la lista de la vista de la red: se resaltan y el resto se atenúa. No mueve el mapa. */
+  lineasResaltadas?: readonly string[] | null
 }
 
 /** Lo que el comparador de recorridos pinta en el mapa, por ids de tramo y de nodo. */
@@ -54,6 +56,8 @@ export interface RecorridosEnMapa {
   elegido: string[]
   /** Las estaciones elegidas. */
   extremos: string[]
+  /** Tramos que el mapa encuadra; sin ellos, todos los que se enseñan. */
+  encuadre?: string[]
 }
 
 /**
@@ -120,7 +124,7 @@ function withNumericIds<P extends Record<string, unknown>>(fc: { features: { id:
   return { data: { type: 'FeatureCollection' as const, features }, index }
 }
 
-export function MapView({ network, selection, hoverId, closedSegmentId, annotated, annotations, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null }: Props) {
+export function MapView({ network, selection, hoverId, closedSegmentId, annotated, annotations, highlight = null, frame = null, onSelect, onHover, onNearLines, padding, lineId = null, recorridos = null, lineasResaltadas = null }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   // El navegador no puede crear el lienzo WebGL2 que necesita MapLibre: en su lugar se explica por qué.
   const [sinWebgl, setSinWebgl] = useState(false)
@@ -141,6 +145,8 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
   annotationsRef.current = annotations
   const highlightRef = useRef(highlight)
   highlightRef.current = highlight
+  const lineasRef = useRef(lineasResaltadas)
+  lineasRef.current = lineasResaltadas
   const stateRef = useRef({ selection, hoverId, closedSegmentId, recorridos })
   stateRef.current = { selection, hoverId, closedSegmentId, recorridos }
 
@@ -313,17 +319,22 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
 
   function applyHighlight(map: MapLibreMap) {
     // Comparando recorridos manda el comparador: la leyenda no atenúa otra vez lo que ya está atenuado.
-    const opacity = stateRef.current.recorridos?.todos.length ? OPACIDAD_RECORRIDOS : opacidadDeVia(highlightRef.current)
+    const opacity = stateRef.current.recorridos?.todos.length
+      ? OPACIDAD_RECORRIDOS
+      : lineasRef.current?.length
+        ? opacidadDeLineas(lineasRef.current)
+        : opacidadDeVia(highlightRef.current)
     for (const id of CAPAS_DE_VIA) if (map.getLayer(id)) map.setPaintProperty(id, 'line-opacity', opacity)
   }
 
-  // Resaltar el trazo que señala la leyenda
+  const lineasKey = lineasResaltadas?.join('|') ?? null
+  // Resaltar el trazo que señala la leyenda, o las líneas que señala la lista
   useEffect(() => {
     const map = mapRef.current
     if (!map || !map.getSource(SRC.segments)) return
     applyHighlight(map)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [highlight, recorridos])
+  }, [highlight, recorridos, lineasKey])
 
   function applyStates(map: MapLibreMap) {
     const { selection, hoverId, closedSegmentId, recorridos } = stateRef.current
@@ -362,7 +373,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
   // Encuadrar la selección. La red se lee de la referencia: que llegue el detalle de una línea cambia
   // la red, pero no debe volver a mover el mapa.
   const hasNetwork = network !== null
-  const recorridosKey = recorridos ? recorridos.todos.join('|') : null
+  const recorridosKey = recorridos ? (recorridos.encuadre ?? recorridos.todos).join('|') : null
   useEffect(() => {
     const map = mapRef.current
     const network = networkRef.current
@@ -376,7 +387,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     if (caja.clientWidth !== lienzo.clientWidth || caja.clientHeight !== lienzo.clientHeight) map.resize()
     if (!selection && recorridosKey !== null) {
       // Comparando recorridos, el mapa encuadra los que se enseñan; mientras se eligen estaciones, no se mueve.
-      const ids = new Set(stateRef.current.recorridos?.todos)
+      const ids = new Set(stateRef.current.recorridos?.encuadre ?? stateRef.current.recorridos?.todos)
       if (!ids.size || framedRef.current === `recorridos:${recorridosKey}`) return
       framedRef.current = `recorridos:${recorridosKey}`
       const b = new LngLatBounds()
@@ -456,7 +467,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
 
   if (sinWebgl) return <SinWebgl padding={padding} />
 
-  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} data-recorrido-elegido={recorridos?.elegido.length || undefined} />
+  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} data-lineas-resaltadas={lineasKey ?? undefined} data-recorrido-elegido={recorridos?.elegido.length || undefined} />
 }
 
 /**

@@ -95,6 +95,23 @@ def validate_annotations(
     }
 
 
+def validate_zones(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+    """Comprueba que cada línea declara una zona del registro (data/curated/zonas.json)."""
+    from oniel.network.importer import ZONES_FILE
+    from oniel.network.spec import load_zones
+
+    zones = {z.id: z.name for z in load_zones(data_dir / ZONES_FILE)}
+    lines = {(spec := load_network_spec(path)).line.id: spec.line.zone for path in spec_paths}
+    return {
+        "zones": {line_id: zones.get(zone, zone) for line_id, zone in lines.items()},
+        "problems": [
+            f"{line_id} declara la zona {zone}, que no está en zonas.json"
+            for line_id, zone in lines.items()
+            if zone not in zones
+        ],
+    }
+
+
 def validate_operators(
     spec_paths: Sequence[Path], sources_path: Path, data_dir: Path
 ) -> dict[str, Any]:
