@@ -52,7 +52,7 @@
     {"id": "bif-murcia", "name": "Bifurcación Murcia", "kind": "bifurcacion", "position": {"km": 213.256}, "reference_pk_km": 461.356,
      "description": "Aquí se separa la línea de alta velocidad a Elche, Orihuela y Murcia. Los trenes de Madrid a Murcia que no entran en Alicante dejan esta línea en este punto."},
     {"id": "monforte-del-cid-av", "name": "Monforte del Cid", "kind": "paet", "rank": "secundario", "position": {"km": 216.549}, "reference_pk_km": 464.649,
-     "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET), sin servicio de viajeros en esta línea. Aquí se une el enlace que viene de la línea de Murcia, de 2,6 km y una sola vía: por él pasan los trenes de Alicante a Elche, Orihuela y Murcia, sin llegar a la bifurcación de Murcia."},
+     "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET), sin servicio de viajeros en esta línea. Aquí se une el enlace de Monforte del Cid, una vía corta que viene de la línea de Murcia: por él pasan los trenes de Alicante a Elche, Orihuela y Murcia, sin llegar a la bifurcación de Murcia."},
     {"id": "alicante-terminal", "name": "Alicante-Terminal", "kind": "estacion", "adif_code": "60911", "position": {"lon": -0.4955241, "lat": 38.3447127}, "reference_pk_km": 485.925,
      "description": "La estación de Alicante, donde acaba la línea. Es una estación término: las vías no siguen, y un tren que continúa hacia Murcia tiene que salir por donde entró. A ella llegan también las líneas convencionales de La Encina y de Murcia."}
   ],

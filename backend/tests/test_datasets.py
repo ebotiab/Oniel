@@ -232,6 +232,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 5048
     passes += 1979  # la de Albacete a Alicante, todos estimados
     passes += 677 + 120  # la de Monforte del Cid a Murcia
+    passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 

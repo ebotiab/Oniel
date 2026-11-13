@@ -11,7 +11,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 2\.947 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 2\.949 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {

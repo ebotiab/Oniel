@@ -30,7 +30,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^12 líneas · 2\.947 km\s*66 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^12 líneas · 2\.949 km\s*66 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     // las zonas van de norte a sur, y solo las que tienen alguna línea; con doce líneas están todas abiertas
     await expect(red.locator('.zona-cabecera')).toHaveText([/^›Cataluña1 línea$/, /^›Comunidad Valenciana y Murcia3 líneas$/, /^›Madrid y Castilla-La Mancha2 líneas$/, /^›Andalucía6 líneas$/])
