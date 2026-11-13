@@ -97,13 +97,38 @@
   position: relative;
 }
 
-.marca-bloque {
-  display: flex;
-  flex-direction: column;
+/* La marca es un enlace a la portada: sin subrayado ni azul de enlace; el foco, el contorno de siempre.
+   La O es el círculo de una estación y la vía le llega desde el borde izquierdo de la página. */
+.marca {
+  display: inline-flex;
+  align-items: baseline;
   flex: none;
-  line-height: 1.1;
-  color: inherit;
+  position: relative;
+  color: var(--tinta);
   text-decoration: none;
+  font-size: 25px;
+  line-height: 1;
+  border-radius: 2px;
+}
+
+.marca::before {
+  content: '';
+  position: absolute;
+  right: calc(100% - 0.1em);
+  top: calc(50% + 0.03em);
+  width: 100vw;
+  height: 2.5px;
+  margin-top: -1.25px;
+  background: var(--tinta);
+}
+
+.marca-o {
+  position: relative;
+  flex: none;
+  width: 0.72em;
+  height: 0.72em;
+  margin-right: 0.05em;
+  transform: translateY(0.015em);
 }
 
 /* Navegación: enlaces de texto en la barra; la sección a la vista, en tinta y subrayada. Sin color: no es una señal. */
@@ -148,13 +173,6 @@
 
 .nav .senal {
   margin-right: 8px;
-}
-
-/* Con la ventana estrecha, antes de pasar a la composición del móvil, el lema deja sitio a los enlaces. */
-@media (max-width: 1000px) {
-  .escritorio .lema {
-    display: none;
-  }
 }
 
 /* En el móvil los enlaces van tras «Menú», con su nombre completo y una frase cada uno. */
@@ -219,15 +237,6 @@
 .nav-menu .senal {
   align-self: flex-start;
   margin: 8px 14px 0;
-}
-
-.marca-bloque .marca {
-  font-size: var(--t-22);
-}
-
-.lema {
-  font-size: var(--t-11);
-  color: var(--tinta-2);
 }
 
 /* Buscador */
@@ -981,13 +990,8 @@
   display: contents;
 }
 
-.movil .marca-bloque {
-  flex: none;
+.movil .marca {
   margin-right: auto;
-}
-
-.movil .lema {
-  max-width: 150px;
 }
 
 .movil .buscador {

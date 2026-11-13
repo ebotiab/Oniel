@@ -21,8 +21,9 @@ import { SegmentDetail } from '../panel/SegmentDetail'
 import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
+import { Marca } from './Marca'
+import { navegar } from './navegacion'
 import { compararRecorridos } from './recorridos'
-import { abreAparte } from './navegacion'
 import type { SearchTarget } from './search'
 import { legacyHashPath, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
 import './app.css'
@@ -408,12 +409,11 @@ export default function App() {
       setShowCoverage(false)
     } else showLine(null)
   }
-  // La marca lleva siempre a la vista de la red.
-  const inicio = (e: React.MouseEvent) => {
-    if (abreAparte(e)) return
-    e.preventDefault()
+  // La marca lleva siempre a la vista de la red, con una entrada en el historial: «atrás» devuelve a lo que se veía.
+  const inicio = () => {
     vuelta.current = null
-    showLine(null)
+    setResult(null)
+    navegar('/')
   }
 
   const lines = network?.lines ?? []
@@ -448,10 +448,7 @@ export default function App() {
       </Suspense>
       <header className="cabecera" data-estado={status}>
         <div className="cabecera-inicio">
-          <a className="marca-bloque" href="/" onClick={inicio} data-testid="marca">
-            <span className="marca">Oniel</span>
-            <span className="lema">Cómo está conectada la red ferroviaria</span>
-          </a>
+          <Marca onInicio={inicio} />
           <SearchBox
             network={network}
             label="Buscar una estación o una línea"

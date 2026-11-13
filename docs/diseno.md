@@ -38,7 +38,7 @@ Mapa base (sobre teselas vectoriales de OpenFreeMap): agua `#D3DCDF`, tierra `#E
 
 Tipografía
 - Una sola familia: **Archivo** variable (ejes de anchura 62–125 y peso 100–900), autoalojada.
-- Marca "Oniel": Archivo ancho (wdth 118), peso 700.
+- Marca «Oniel»: Archivo normal (wdth 100), peso 620, a 25 px y algo apretada; la O es un círculo dibujado (véase «La marca»).
 - Interfaz: Archivo normal. Datos y PK: Archivo estrecho (wdth 88–90) con cifras tabulares.
 - Escala: 11 / 12,5 / 14 / 17 / 22 / 28 px. Interlineado 1,35 en texto corrido. El título de una página de lectura (el glosario y «Cobertura y fuentes») sube a 40 px en escritorio y 30 en el móvil, en Archivo ancho.
 
@@ -48,6 +48,13 @@ Composición
 - La cabecera es una barra de papel con un filete debajo, en escritorio y en el móvil: el mapa empieza bajo ella. Hasta el 13 de noviembre de 2026 la marca y el buscador iban sobre el mapa, con un fondo de papel que se desvanecía para que ningún rótulo asomara entre las letras; la barra lo resuelve sin degradado.
 - Móvil: mapa arriba, hoja inferior arrastrable con el esquema compacto y la selección.
 - Varias líneas: el mapa las dibuja todas y el panel muestra una a la vez. Cómo se elige está en «Elegir línea». Un nodo común a dos líneas (Madrid-Puerta de Atocha, Córdoba, Manzanares, Ciudad Real) es un solo punto en el mapa y aparece en el esquema de cada línea con su kilómetro.
+
+La marca (decidida el 13 de noviembre de 2026, con tres variantes delante; captura en `docs/capturas/marca/variantes.png`)
+- La O de «Oniel» es el círculo de una estación, como los del mapa y del esquema: relleno de papel y borde de tinta del grueso de las letras. La vía le llega desde el borde izquierdo de la página, una raya de tinta de 2,5 px. El resto de la palabra es Archivo normal, peso 620. Todo en tinta: la marca no lleva color.
+- El icono de pestaña es lo mismo sin letras: el círculo y la vía que le llega por la izquierda, sobre papel.
+- Es un enlace a la portada (`/`, la vista de la red) desde cualquier vista, también desde el glosario y «Cobertura y fuentes», que llevan la misma cabecera. No recarga la página, se llama «Oniel, ir al inicio» para los lectores de pantalla, no lleva subrayado ni el azul de los enlaces, y el foco es el contorno azul de siempre.
+- No lleva lema. «Cómo está conectada la red ferroviaria» se quitó de la cabecera porque repetía lo que ya dicen el título de la página y la vista de la red; el sitio que dejó queda libre.
+- Se descartaron la palabra sola, sin dibujo (correcta, pero sin nada propio), y un signo aparte delante de la palabra, un trecho de vía con su estación (más convencional y más ancho en la cabecera del móvil). También el Archivo ancho y pesado (wdth 118, peso 700) que llevaba hasta entonces.
 
 Elegir línea (decidido el 11 de noviembre de 2026, con dos variantes delante; capturas en `docs/capturas/selector-lineas/`)
 - Ningún elemento de la interfaz crece con el número de líneas: no hay pestañas ni enumeraciones. La navegación tiene tres niveles, cada uno con su ruta: la red (`/`), una línea (`/linea/<id>`) y un tramo o una estación.
@@ -66,7 +73,7 @@ Navegación (decidido el 13 de noviembre de 2026, #157, con una maqueta y dos va
 - «Mapa» está marcado en cualquier vista con mapa (la red, una línea, un tramo, una estación, una simulación). Desde una página de lectura devuelve a lo que se estaba viendo; desde el propio mapa lleva a la vista de la red. La marca «Oniel» lleva siempre a la vista de la red.
 - Son enlaces de verdad, con su dirección: se pueden abrir en otra pestaña.
 - El estado del servidor («despertando el servidor…», «vista estática») es una etiqueta gris junto a los enlaces, solo mientras el servidor no responde; en el móvil va al pie del menú.
-- Una sección nueva es una entrada más de la lista de `frontend/src/panel/Navegacion.tsx`. En el móvil no estrecha la cabecera; en escritorio caben cinco o seis, y por debajo de 1000 px de ancho el lema deja su sitio a los enlaces.
+- Una sección nueva es una entrada más de la lista de `frontend/src/panel/Navegacion.tsx`. En el móvil no estrecha la cabecera; en escritorio caben cinco o seis.
 - Se descartó dejar el mapa a sangre con los enlaces en un grupo de pastillas arriba a la derecha y, en el móvil, una tira fija bajo la cabecera: la tira ocupaba 40 px fijos de mapa, obligaba a acortar los nombres («Recorridos», «Fuentes») y no admitía un quinto enlace. La barra quita 56 px de alto al mapa de escritorio.
 
 Trazo de la vía (decidido el 11 de noviembre de 2026, con las variantes delante: `docs/capturas/escritorio-16-trazos.jpg` y `movil-07-trazos.jpg`)
