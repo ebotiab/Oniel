@@ -69,7 +69,7 @@
     {"attribute": "gauge", "from_node": "bif-la-chana", "to_node": "granada", "value": "mixto", "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM, gauge=1435;1668 desde la bifurcación La Chana hasta la estación de Granada."}
   ],
   "connections": [
-    {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga–Granada", "towards": "Málaga, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7197, 37.0177]]}
+    {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga–Granada", "towards": "Málaga por la bifurcación Gobantes, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7153, 37.0244], [-4.7235031, 37.0106686]]}
   ],
   "stop_mappings": {
     "02003": {"node": "antequera-santa-ana"},

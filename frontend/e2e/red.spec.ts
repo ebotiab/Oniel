@@ -30,7 +30,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^9 líneas · 2\.151 km\s*54 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^9 líneas · 2\.209 km\s*55 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     // las zonas van de norte a sur, y solo las que tienen alguna línea; con nueve líneas están todas abiertas
     await expect(red.locator('.zona-cabecera')).toHaveText([/^›Cataluña1 línea$/, /^›Madrid y Castilla-La Mancha2 líneas$/, /^›Andalucía6 líneas$/])
@@ -44,8 +44,8 @@ test.describe('Elegir línea sin pestañas', () => {
     // el tramo sin circulación va bajo el nombre
     await expect(red.getByRole('region', { name: 'Andalucía' }).locator('.fila-linea')).toHaveText([
       /^Alta velocidad: Madrid – Sevilla471 kmun tramo sin circulación$/,
+      /^Alta velocidad: Córdoba – Málaga155 km$/,
       /^Alta velocidad: Antequera – Granada114 km$/,
-      /^Alta velocidad: Córdoba – Málaga97 km$/,
       /^Línea convencional: Madrid – Córdoba por Alcázar de San Juan441 kmun tramo sin circulación$/,
       /^Línea convencional: Linares-Baeza – Granada por Moreda174 km$/,
       /^Línea convencional: Espelúy – Jaén33 kmun tramo sin circulación$/,
@@ -56,7 +56,7 @@ test.describe('Elegir línea sin pestañas', () => {
     const andalucia = red.getByRole('region', { name: 'Andalucía' })
     await andalucia.locator('.zona-cabecera').click()
     await expect(andalucia.locator('.fila-linea')).toHaveCount(0)
-    await expect(andalucia.locator('.zona-detalle')).toHaveText('Sevilla, Córdoba, Granada, Jaén3 líneas con un tramo sin circulación')
+    await expect(andalucia.locator('.zona-detalle')).toHaveText('Sevilla, Córdoba, Málaga, Granada, Jaén3 líneas con un tramo sin circulación')
     await andalucia.locator('.zona-cabecera').click()
     await expect(andalucia.locator('.fila-linea')).toHaveCount(6)
     // no arranca en ninguna línea: ni esquema ni pestañas, y con ocho líneas aparece ya el filtro de la lista

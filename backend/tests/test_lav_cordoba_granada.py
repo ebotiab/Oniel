@@ -1,5 +1,5 @@
-"""El camino de alta velocidad a Granada: las líneas Córdoba – Málaga (Adif 030, cargada hasta
-Antequera-Santa Ana) y Antequera – Granada (Adif 036)."""
+"""La alta velocidad a Málaga y a Granada: las líneas Córdoba – Málaga (Adif 030, hasta
+Málaga-María Zambrano) y Antequera – Granada (Adif 036)."""
 
 from __future__ import annotations
 
@@ -8,7 +8,13 @@ from conftest import DATA_DIR, LAV_GRANADA_SPEC, LAV_MALAGA_SPEC, SOURCES
 
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip
-from oniel.gtfs.trips import LoadedLine, calls_for_trip, select_trips_for_spec
+from oniel.gtfs.trips import (
+    LoadedLine,
+    calls_for_trip,
+    calls_on_line,
+    route_for_trip,
+    select_trips_for_spec,
+)
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import NetworkSpec, load_network_spec, load_sources
 from oniel.sim.passes import LineSegment, SegmentPass, resolve_passes
@@ -38,7 +44,9 @@ def _passes(
 ) -> list[SegmentPass]:
     own = loaded_line(net)
     others = [line for line in lines if line.line_id != own.line_id]
-    calls = calls_for_trip(trip, feed, net.spec, nodes=own.nodes, others=others)
+    route = route_for_trip(net.spec, trip)
+    calls = calls_for_trip(trip, feed, net.spec, nodes=own.nodes, others=others, route=route)
+    calls = calls_on_line(calls, route)
     assert all(c.node_id or c.exit_node_ids for c in calls), trip.train_number
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
     passes, resolution = resolve_passes(calls, own.nodes, segments)
@@ -53,8 +61,9 @@ def _stops(trip: GtfsTrip) -> list[str]:
 def test_the_two_lines_chain_from_the_malaga_junction_to_granada(
     malaga: BuiltNetwork, granada: BuiltNetwork, spec: NetworkSpec
 ) -> None:
-    """La primera sale de la bifurcación de la línea Madrid – Sevilla y llega a Antequera-Santa Ana;
-    la segunda sigue desde allí hasta Granada. Miden lo que dicen sus puntos kilométricos."""
+    """La primera sale de la bifurcación de la línea Madrid – Sevilla y llega a Málaga; la segunda
+    sale de ella en Antequera-Santa Ana y llega a Granada. Miden lo que dicen sus puntos
+    kilométricos."""
     junction = next(n for n in spec.nodes if n.id == "bif-malaga")
     assert not junction.shared and malaga.node("bif-malaga").spec.shared
     assert malaga.node("bif-malaga").spec.position == junction.position
@@ -64,6 +73,10 @@ def test_the_two_lines_chain_from_the_malaga_junction_to_granada(
         "santaella",
         "puente-genil-herrera",
         "antequera-santa-ana",
+        "bif-gobantes",
+        "pb-alora",
+        "paet-los-prados",
+        "malaga-maria-zambrano",
     ]
     assert [n.spec.id for n in granada.nodes] == [
         "antequera-santa-ana",
@@ -79,10 +92,17 @@ def test_the_two_lines_chain_from_the_malaga_junction_to_granada(
     # Antequera-Santa Ana la define la línea de Málaga y la de Granada la incorpora
     ours, theirs = granada.node("antequera-santa-ana").spec, malaga.node("antequera-santa-ana").spec
     assert ours.shared and not theirs.shared and ours.position == theirs.position
-    assert haversine_km(malaga.line.polyline.coords[-1], granada.line.polyline.coords[0]) < 0.05
-    assert malaga.line.polyline.length_km == pytest.approx(96.772, abs=0.2)
+    at_station = malaga.node("antequera-santa-ana")
+    station = (-4.7197084, 37.0701682)
+    assert (theirs.position.lon, theirs.position.lat) == station
+    assert haversine_km(station, granada.line.polyline.coords[0]) < 0.05
+    assert at_station.km == pytest.approx(96.772, abs=0.2)
+    assert malaga.line.polyline.length_km == pytest.approx(154.517, abs=0.2)
+    assert not malaga.spec.connections
     assert granada.line.polyline.length_km == pytest.approx(211.021 - 96.772, abs=0.2)
-    assert all(n.offset_m < 20 for n in (*malaga.nodes, *granada.nodes))
+    # la estación de Málaga queda tras los topes de sus vías, a 32 m del final del trazado
+    assert all(n.offset_m < 20 for n in (*malaga.nodes[:-1], *granada.nodes))
+    assert malaga.nodes[-1].offset_m < 40
     # la entrada a Granada sale de otra relación de OSM, y empalma sin hueco
     assert [p.source_id for p in malaga.line.part_spans] == ["osm-relation-11143233"]
     assert [p.source_id for p in granada.line.part_spans] == [
@@ -100,6 +120,9 @@ def test_the_two_lines_chain_from_the_malaga_junction_to_granada(
         (MALAGA, "santaella", 34.64),
         (MALAGA, "puente-genil-herrera", 61.434),
         (MALAGA, "antequera-santa-ana", 96.772),
+        (MALAGA, "pb-alora", 121.413),
+        (MALAGA, "paet-los-prados", 149.488),
+        (MALAGA, "malaga-maria-zambrano", 154.517),
         (GRANADA, "antequera-santa-ana", 96.772),
         (GRANADA, "bif-bobadilla", 105.753),
         (GRANADA, "antequera-av", 113.417),
@@ -121,7 +144,15 @@ def test_nodes_sit_on_kilometre_points_that_run_on_from_one_line_to_the_next(
 def test_single_track_starts_at_archidona_and_loja_is_crossed_on_the_old_line(
     malaga: BuiltNetwork, granada: BuiltNetwork
 ) -> None:
-    assert all(s.tracks == 2 and s.max_speed_kmh == 300 for s in malaga.segments)
+    assert len(malaga.segments) == 8 and all(s.tracks == 2 for s in malaga.segments)
+    assert all(s.max_speed_kmh == 300 for s in malaga.segments[:-1])
+    # la entrada a Málaga, desde Los Prados, es mucho más lenta: 50 km/h en el túnel urbano
+    into_malaga = malaga.segments[-1]
+    assert (into_malaga.max_speed_kmh, into_malaga.typical_speed_kmh) == (160, 50)
+    # ninguna fuente da el punto kilométrico de la bifurcación Gobantes: se sitúa en su desvío
+    gobantes = malaga.node("bif-gobantes")
+    assert gobantes.spec.reference_pk_km is None and gobantes.offset_m < 1
+    assert gobantes.km - malaga.node("antequera-santa-ana").km == pytest.approx(6.8, abs=0.1)
     tracks = {s.id.split(":", 1)[1]: s.tracks for s in granada.segments}
     assert tracks == {
         "antequera-santa-ana:bif-bobadilla": 2,
@@ -169,18 +200,34 @@ def test_trains_to_malaga_and_to_granada_leave_the_main_line_at_the_junction(
     feed: GtfsFeed, malaga: BuiltNetwork, lines: list[LoadedLine]
 ) -> None:
     """A la línea de Málaga van los viajes que paran en Córdoba y siguen a Málaga, a Granada o a
-    Algeciras. Todos recorren sus cuatro tramos, pare donde pare cada uno."""
+    Algeciras, más los que la recorren sin parar en Córdoba: los directos de Madrid a Málaga y los
+    Avant de Málaga a Granada. Los de Málaga recorren sus ocho tramos; los de Granada y Algeciras,
+    los cuatro primeros, y los Avant de Málaga a Granada, los tres últimos."""
     trips = select_trips_for_spec(feed, malaga.spec)
-    assert len(trips) == 181
-    assert all("50500" in _stops(t) for t in trips)
+    assert len(trips) == 200
+    rules: dict[str, int] = {}
+    for trip in trips:
+        route = route_for_trip(malaga.spec, trip)
+        if route is not None:
+            rules[route.override.id] = rules.get(route.override.id, 0) + 1
+    assert rules == {"madrid-malaga-sin-paradas": 13, "malaga-granada-por-gobantes": 6}
+    assert sum("50500" in _stops(t) for t in trips) == 181
     assert {t.product for t in trips} == {"AVE", "AVLO", "ALVIA", "AVANT", "Intercity"}
     kinds: dict[str, int] = {}
+    lengths: dict[int, int] = {}
+    last_three = [s.id for s in malaga.segments[-3:]]
     for trip in trips:
         passes = _passes(trip, feed, malaga, lines)
-        assert len(passes) == 4, trip.train_number
+        stops = set(_stops(trip))
+        if {"54413", "02030"} <= stops:
+            assert [p.segment_id for p in passes] in (last_three, last_three[::-1])
+        else:
+            assert len(passes) == (8 if "54413" in stops else 4), trip.train_number
+        lengths[len(passes)] = lengths.get(len(passes), 0) + 1
         for p in passes:
             kinds[p.kind] = kinds.get(p.kind, 0) + 1
-    assert kinds == {"estimado": 656, "publicado": 68}
+    assert lengths == {8: 131, 4: 63, 3: 6}
+    assert kinds == {"estimado": 1250, "publicado": 68}
     # los Media Distancia que paran en Antequera-Santa Ana por las vías convencionales no entran
     chosen = {t.trip_id for t in trips}
     regional = [t for t in feed.trips.values() if t.product == "MD" and "02003" in _stops(t)]
@@ -190,22 +237,22 @@ def test_trains_to_malaga_and_to_granada_leave_the_main_line_at_the_junction(
 def test_a_train_that_does_not_stop_between_cordoba_and_malaga_is_estimated(
     feed: GtfsFeed, ouigo_feed: GtfsFeed, malaga: BuiltNetwork, lines: list[LoadedLine]
 ) -> None:
-    """Córdoba está en la línea Madrid – Sevilla y Málaga fuera de la red cargada: el tren cruza la
-    línea entera sin parar, y el paso por sus tramos es estimado, no indeterminado."""
+    """El tren recorre la línea entera sin parar entre Córdoba, o Madrid, y Málaga: el paso por
+    sus tramos es estimado entre dos horas publicadas, la de Málaga y la de la parada anterior, a
+    la que se llega por la línea Madrid – Sevilla."""
     nonstop = [
         t
         for t in select_trips_for_spec(feed, malaga.spec)
         if not {"02002", "02003", "02030", "05012", "05000"} & set(_stops(t))
     ]
-    assert len(nonstop) == 37
+    # 37 paran en Córdoba y 13 van directos de Madrid a Málaga
+    assert len(nonstop) == 50
+    assert sum("50500" not in _stops(t) for t in nonstop) == 13
     ouigo = select_trips_for_spec(ouigo_feed, malaga.spec)
-    assert len(ouigo) == 15
+    assert len(ouigo) == 16 and sum("50500" not in _stops(t) for t in ouigo) == 1
     for source, trip in [(feed, t) for t in nonstop] + [(ouigo_feed, t) for t in ouigo]:
         passes = _passes(trip, source, malaga, lines)
-        assert [p.kind for p in passes] == ["estimado"] * 4, trip.train_number
-    basis = _passes(ouigo[0], ouigo_feed, malaga, lines)[0].basis
-    assert "recorre la línea sin parar en ella" in basis
-    assert "está fuera de la red cargada" in basis and "en línea recta" in basis
+        assert [p.kind for p in passes] == ["estimado"] * 8, trip.train_number
 
 
 def test_trains_to_granada_and_the_link_from_malaga(

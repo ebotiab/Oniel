@@ -87,9 +87,11 @@ def test_high_speed_filter_also_takes_the_trains_that_do_not_stop_in_madrid(
 ) -> None:
     """A los 317 que paran en Córdoba y en Madrid se suman 47 que recorren la línea sin parar en
     Madrid: 27 Avant que van de Sevilla a Córdoba sin paradas (por las paradas seguidas del
-    filtro) y 20 AVE de Barcelona y de Valencia (por las reglas de recorrido)."""
+    filtro) y 20 AVE de Barcelona y de Valencia (por las reglas de recorrido). Y 13 directos de
+    Madrid a Málaga, que no paran en Córdoba y entran por otra regla."""
     trips = select_trips_for_spec(feed, spec)
-    assert len(trips) == 317 + 27 + 20
+    assert len(trips) == 317 + 27 + 20 + 13
+    assert sum("50500" not in feed.stop_ids_of(t) for t in trips) == 13
     madrid = {"60000", "17000", "18000"}
     away = [t for t in trips if not madrid & {st.stop_id for st in t.stop_times}]
     assert len(away) == 47
@@ -103,7 +105,7 @@ def test_high_speed_filter_also_takes_the_trains_that_do_not_stop_in_madrid(
             "corridor_filter": spec.corridor_filter.model_copy(update={"consecutive_stop_ids": []})
         }
     )
-    assert len(select_trips_for_spec(feed, plain)) == 317 + 20
+    assert len(select_trips_for_spec(feed, plain)) == 317 + 20 + 13
 
 
 def test_ouigo_trains_run_only_along_the_high_speed_line(
@@ -115,8 +117,9 @@ def test_ouigo_trains_run_only_along_the_high_speed_line(
     assert ouigo_feed.stops["60000"].name == "Madrid-Puerta de Atocha"
     assert not any(stop_id.startswith("0071") for stop_id in ouigo_feed.stops)
     trips = select_trips_for_spec(ouigo_feed, spec)
-    # 8 Madrid–Sevilla, 13 Madrid–Málaga y 4 que enlazan Barcelona con Sevilla o Málaga por Madrid
-    assert len(trips) == 25 and len({t.train_number for t in trips}) == 20
+    # 8 Madrid–Sevilla, 14 Madrid–Málaga (uno sin parar en Córdoba, que entra por una regla de
+    # recorrido) y 4 que enlazan Barcelona con Sevilla o Málaga por Madrid
+    assert len(trips) == 26 and len({t.train_number for t in trips}) == 20
     assert all(t.train_number.isdigit() for t in trips)
     ends = Counter(
         " – ".join(
@@ -126,7 +129,7 @@ def test_ouigo_trains_run_only_along_the_high_speed_line(
     )
     assert ends == {
         "Madrid-Puerta de Atocha – Sevilla-Santa Justa": 8,
-        "Madrid-Puerta de Atocha – Malaga Maria Zambrano": 13,
+        "Madrid-Puerta de Atocha – Malaga Maria Zambrano": 14,
         "Barcelona-Sants – Sevilla-Santa Justa": 2,
         "Barcelona-Sants – Malaga Maria Zambrano": 2,
     }
