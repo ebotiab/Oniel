@@ -19,22 +19,22 @@ test.describe('Trenes por operador', () => {
     if (await asa.isVisible()) await asa.click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     // lo primero, el reparto: los trenes del día de referencia, del operador que más tiene al que menos
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 106 · Ouigo España 12')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 106 · Ouigo España 11')
     // Iryo opera en la línea y no publica sus horarios: el panel dice que sus trenes no están
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveText(
       'No están los trenes de Iryo, que también opera en esta línea: no publica sus horarios en un formato abierto.',
     )
     // la lista va agrupada por operador, cada grupo con su nombre y su cifra
     const lista = page.getByTestId('lista-servicios')
-    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 106', 'Ouigo España · 12'])
+    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 106', 'Ouigo España · 11'])
     await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(106)
-    await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(12)
+    await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(11)
     await expect(page.getByTestId('trenes-ouigo').locator('li').first()).toContainText('Ouigo 6476')
     await expect(page.getByTestId('trenes-ouigo')).toContainText('Madrid-Puerta de Atocha → Málaga')
     await expect(page.getByTestId('trenes-iryo')).toHaveCount(0)
     // la barra del esquema lleva el total de todos los operadores
     await page.getByRole('button', { name: '← Toda la línea' }).click()
-    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('118')
+    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('117')
   })
 
   test('la nota del esquema dice de quién son los trenes de las barras', async ({ page }, testInfo) => {

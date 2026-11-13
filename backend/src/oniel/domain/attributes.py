@@ -38,6 +38,7 @@ TRACKS = "tracks"
 PROTECCION_TREN = "proteccion_tren"
 BLOQUEO = "bloqueo"
 MANDO = "mando"
+MAX_SPEED = "max_speed_kmh"
 
 #: La fuente consultada no da el dato para ese tramo. Es un valor declarado, con su fuente y su
 #: fecha como cualquier otro: dice que se miró y no estaba, que no es lo mismo que no haber mirado.
@@ -49,7 +50,7 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
     TRACKS: AttributeRule(value_type=int, required=True, line_field="tracks"),
     # Señalización, según el mapa 4 de la Declaración sobre la Red (docs/datos.md, «Señalización
     # y protección del tren»). Los tres cubren toda línea cargada y cada sección cita su fuente.
-    # Sistema de protección del tren: ASFA, o LZB con ASFA de respaldo.
+    # Sistema de protección del tren: ASFA, LZB con ASFA de respaldo o ERTMS, solo o con ASFA.
     PROTECCION_TREN: AttributeRule(
         value_type=str,
         required=True,
@@ -59,6 +60,8 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
                 "asfa",
                 "lzb_asfa",
                 "ertms_n1",
+                # ERTMS de nivel 1 con ASFA de respaldo: la alta velocidad de Barcelona
+                "ertms_n1_asfa",
                 "ertms_n2",
                 # ERTMS con ASFA de respaldo, como lo dibuja el mapa en las líneas de Málaga y Granada
                 "ertms_n1_n2_asfa",
@@ -76,6 +79,10 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
         sourced=True,
         values=frozenset({"bca", "bab", "bad", "bau", "blau", "bab_bad", SIN_DATO_PUBLICADO}),
     ),
+    # Velocidad máxima del tramo cuando la geometría no la trae o la trae mal (las entradas a
+    # Zaragoza-Delicias y a Lleida-Pirineus): la sección manda sobre lo que diga la geometría.
+    # Es opcional; donde no se declara vale la velocidad de las vías de la fuente de geometría.
+    MAX_SPEED: AttributeRule(value_type=int, sourced=True),
     # Mando: desde dónde se gobiernan las señales y los desvíos del tramo. ``sin_ctc`` es un
     # tramo cuyo bloqueo el mapa rotula sin «ctc», cuando la leyenda distingue los dos casos:
     # la fuente dice que no hay control de tráfico centralizado, que no es lo mismo que callar.

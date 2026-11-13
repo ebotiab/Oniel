@@ -92,8 +92,8 @@
     "51003": {"node": "sevilla-santa-justa"},
     "17000": {"exits": ["madrid-puerta-de-atocha"]},
     "18000": {"exits": ["madrid-puerta-de-atocha"]},
-    "04040": {"exits": ["madrid-puerta-de-atocha"]},
-    "71801": {"exits": ["madrid-puerta-de-atocha"]},
+    "04040": {"exits": ["madrid-puerta-de-atocha"], "via": {"line": "lav-madrid-barcelona", "node": "madrid-puerta-de-atocha"}},
+    "71801": {"exits": ["madrid-puerta-de-atocha"], "via": {"line": "lav-madrid-barcelona", "node": "madrid-puerta-de-atocha"}},
     "54413": {"exits": ["bif-malaga"]},
     "02003": {"exits": ["bif-malaga"], "via": {"line": "lav-cordoba-malaga", "node": "bif-malaga"}},
     "02030": {"exits": ["bif-malaga"], "via": [{"line": "lav-cordoba-malaga", "node": "bif-malaga"}, {"line": "lav-antequera-granada", "node": "antequera-santa-ana"}]},
@@ -138,13 +138,13 @@
       "id": "barcelona-cordoba-sin-parar-en-madrid",
       "description": "AVE entre Barcelona y Andalucía que no paran en Madrid: llegan de Zaragoza por la conexión de Perales y se incorporan a esta línea en la bifurcación Los Gavilanes, así que para estos viajes las paradas de la línea de Barcelona son salidas por esa bifurcación. Los que paran primero en Córdoba.",
       "consecutive_stop_ids": ["04040", "50500"],
-      "stop_mappings": {"04040": {"exits": ["bif-los-gavilanes"]}, "78400": {"exits": ["bif-los-gavilanes"]}, "04104": {"exits": ["bif-los-gavilanes"]}, "71801": {"exits": ["bif-los-gavilanes"]}}
+      "stop_mappings": {"04040": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "78400": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "04104": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "71801": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}}
     },
     {
       "id": "barcelona-ciudad-real-sin-parar-en-madrid",
       "description": "Los mismos AVE entre Barcelona y Andalucía, cuando su primera parada en esta línea es Ciudad Real.",
       "consecutive_stop_ids": ["04040", "37200"],
-      "stop_mappings": {"04040": {"exits": ["bif-los-gavilanes"]}, "78400": {"exits": ["bif-los-gavilanes"]}, "04104": {"exits": ["bif-los-gavilanes"]}, "71801": {"exits": ["bif-los-gavilanes"]}}
+      "stop_mappings": {"04040": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "78400": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "04104": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "71801": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}}
     },
     {
       "id": "valencia-ciudad-real-sin-parar-en-madrid",

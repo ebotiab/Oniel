@@ -213,6 +213,9 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         covered = dict(line["covered_segments"])
         # el ancho mixto solo se declara donde lo hay: el paso por Loja y la entrada a Granada
         assert covered.pop("gauge", None) == (3 if line is granada else None)
+        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona
+        barcelona = line["line"] == "lav-madrid-barcelona"
+        assert covered.pop("max_speed_kmh", None) == (3 if barcelona else None)
         assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
         )
