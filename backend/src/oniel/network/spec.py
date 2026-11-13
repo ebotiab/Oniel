@@ -192,11 +192,29 @@ class PkRestart(BaseModel):
     pk_km: float = 0.0
 
 
+class ZoneSpec(BaseModel):
+    """Una zona en la que el visor agrupa las líneas (data/curated/zonas.json).
+
+    Es una clasificación propia de Oniel, no un dato con fuente. ``cities`` son las ciudades de
+    la zona, de la más grande a la menos: el visor nombra las que tienen estación cargada.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    name: str
+    sort_order: int
+    cities: list[str] = Field(default_factory=list)
+
+
 class LineSpec(BaseModel):
     id: str
     name: str
     short_name: str | None = None
     sort_order: int = 1
+    #: Zona en la que el visor lista la línea; un id de ``zonas.json``. La del extremo más alejado
+    #: de Madrid o, si la línea no pasa por Madrid, la zona en la que está.
+    zone: str
     mode: str = "ferrocarril"
     infrastructure_manager: str
     gauge_mm: int | None = None
@@ -585,6 +603,17 @@ def load_network_spec(path: Path) -> NetworkSpec:
 def load_annotations(path: Path) -> list[AnnotationSpec]:
     raw = json.loads(path.read_text(encoding="utf-8"))
     return AnnotationsFile.model_validate(raw).annotations
+
+
+def load_zones(path: Path) -> list[ZoneSpec]:
+    """Zonas del registro, en el orden en que se enseñan; ni el id ni el orden pueden repetirse."""
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    zones = sorted((ZoneSpec.model_validate(z) for z in raw["zones"]), key=lambda z: z.sort_order)
+    for field in ("id", "sort_order"):
+        values = [getattr(z, field) for z in zones]
+        if len(values) != len(set(values)):
+            raise ValueError(f"zonas.json repite un valor de {field}")
+    return zones
 
 
 def load_sources(path: Path) -> list[SourceSpec]:

@@ -4,6 +4,7 @@
     "name": "Línea convencional Linares-Baeza – Moreda – Granada",
     "short_name": "410 y 416",
     "sort_order": 5,
+    "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1668,

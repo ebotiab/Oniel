@@ -97,13 +97,38 @@
   position: relative;
 }
 
-.marca-bloque {
-  display: flex;
-  flex-direction: column;
+/* La marca es un enlace a la portada: sin subrayado ni azul de enlace; el foco, el contorno de siempre.
+   La O es el círculo de una estación y la vía le llega desde el borde izquierdo de la página. */
+.marca {
+  display: inline-flex;
+  align-items: baseline;
   flex: none;
-  line-height: 1.1;
-  color: inherit;
+  position: relative;
+  color: var(--tinta);
   text-decoration: none;
+  font-size: 25px;
+  line-height: 1;
+  border-radius: 2px;
+}
+
+.marca::before {
+  content: '';
+  position: absolute;
+  right: calc(100% - 0.1em);
+  top: calc(50% + 0.03em);
+  width: 100vw;
+  height: 2.5px;
+  margin-top: -1.25px;
+  background: var(--tinta);
+}
+
+.marca-o {
+  position: relative;
+  flex: none;
+  width: 0.72em;
+  height: 0.72em;
+  margin-right: 0.05em;
+  transform: translateY(0.015em);
 }
 
 /* Navegación: enlaces de texto en la barra; la sección a la vista, en tinta y subrayada. Sin color: no es una señal. */
@@ -150,13 +175,9 @@
   margin-right: 8px;
 }
 
-/* Con la ventana estrecha, antes de pasar a la composición del móvil, el lema deja sitio a los enlaces. */
+/* Con la ventana estrecha, antes de pasar a la composición del móvil, los cinco enlaces se arriman para que el
+   buscador no se quede sin sitio. */
 @media (max-width: 1000px) {
-  .escritorio .lema {
-    display: none;
-  }
-
-  /* y los cinco enlaces se arriman, para que el buscador no se quede sin sitio */
   .nav {
     gap: 0;
   }
@@ -233,15 +254,6 @@
 .nav-menu .senal {
   align-self: flex-start;
   margin: 8px 14px 0;
-}
-
-.marca-bloque .marca {
-  font-size: var(--t-22);
-}
-
-.lema {
-  font-size: var(--t-11);
-  color: var(--tinta-2);
 }
 
 /* Buscador */
@@ -995,13 +1007,8 @@
   display: contents;
 }
 
-.movil .marca-bloque {
-  flex: none;
+.movil .marca {
   margin-right: auto;
-}
-
-.movil .lema {
-  max-width: 150px;
 }
 
 .movil .buscador {
@@ -1213,21 +1220,91 @@
   outline: 2px solid var(--senal-azul-suave);
 }
 
-.grupo-lineas {
+/* La clave de los trazos, sobre las zonas: qué dice la muestra de cada fila. */
+.clave-lineas {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 14px 0 2px;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 10px 0 8px;
   font-size: var(--t-12);
-  font-weight: 400;
   color: var(--tinta-2);
 }
 
-.fila-linea {
+.clave-lineas > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Cada zona es un renglón plegable; plegada dice sus ciudades y, si la hay, la señal de sus líneas. */
+.zona-lineas {
+  border-top: 1px solid var(--regla);
+}
+
+.zona-lineas:last-of-type {
+  border-bottom: 1px solid var(--regla);
+}
+
+.zona-lineas h4 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.zona-cabecera {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  column-gap: 8px;
+  align-items: baseline;
+  width: calc(100% + 12px);
+  margin-left: -12px;
+  padding: 9px 10px;
+  background: none;
+  border: 0;
+  border-left: 2px solid transparent;
+  text-align: left;
+  font-size: var(--t-14);
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.zona-chevron {
+  display: inline-block;
+  font-size: var(--t-17);
+  line-height: 1;
+  color: var(--tinta-2);
+  transition: transform 120ms ease;
+}
+
+.zona-cabecera[aria-expanded='true'] .zona-chevron {
+  transform: rotate(90deg);
+}
+
+.zona-nombre {
+  font-weight: 600;
+}
+
+.zona-detalle {
+  grid-column: 2 / -1;
   display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 7px 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  margin-top: 2px;
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+.zona-lineas ul {
+  margin: 0 0 8px 20px;
+}
+
+/* Cada línea, un renglón: la muestra de su trazo, el nombre y los kilómetros. */
+.fila-linea {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: 9px;
+  align-items: baseline;
+  padding: 6px 10px;
   margin-left: -12px;
   width: calc(100% + 12px);
   background: none;
@@ -1240,23 +1317,48 @@
 }
 
 .fila-linea:hover,
-.fila-linea:focus-visible {
+.fila-linea:focus-visible,
+.zona-cabecera:hover,
+.zona-cabecera:focus-visible {
   background: var(--papel-2);
   border-left-color: var(--senal-azul);
   outline: none;
+}
+
+.fila-linea-trazo {
+  align-self: center;
+  display: inline-flex;
 }
 
 .fila-linea-nombre {
   font-weight: 600;
 }
 
+.fila-linea-km {
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
 .fila-linea-detalle {
+  grid-column: 2 / -1;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 2px 8px;
+  margin-top: 2px;
   font-size: var(--t-12);
   color: var(--tinta-2);
+}
+
+.movil .fila-linea {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zona-chevron {
+    transition: none;
+  }
 }
 
 /* Comparador de recorridos */

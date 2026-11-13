@@ -4,6 +4,7 @@
     "name": "Línea de alta velocidad Antequera – Granada",
     "short_name": "036",
     "sort_order": 8,
+    "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1435,

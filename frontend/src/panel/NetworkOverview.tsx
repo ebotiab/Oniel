@@ -9,10 +9,12 @@ interface Props {
   /** Anotaciones vigentes hoy en cualquier línea. */
   annotations: AnnotationOut[]
   onPickLine: (id: string) => void
+  /** Las líneas por las que pasa el cursor o el foco en la lista: el mapa las resalta. */
+  onHighlightLines: (ids: string[] | null) => void
 }
 
 /** Vista de la red: lo que se ve cuando no hay ninguna línea elegida. Dice qué hay cargado y por dónde empezar. */
-export function NetworkOverview({ network, coverage, annotations, onPickLine }: Props) {
+export function NetworkOverview({ network, coverage, annotations, onPickLine, onHighlightLines }: Props) {
   // Qué capas tienen algún tramo anotado hoy en cada línea: su nota va junto al nombre.
   const notas = new Map(
     network.lines.map((l) => [l.id, capasDe(annotations.filter((a) => a.line_id === l.id && a.segment_ids.length > 0))] as const),
@@ -30,11 +32,11 @@ export function NetworkOverview({ network, coverage, annotations, onPickLine }: 
           ))}
         </ul>
         <p className="entrada">
-          Toca una vía en el mapa o elige una línea de la lista para recorrerla estación a estación. Oniel va incorporando las líneas poco a poco.
+          Toca una vía en el mapa o elige una línea de la lista, por zonas, para recorrerla estación a estación. Oniel va incorporando las líneas poco a poco.
         </p>
       </div>
       <h3 className="subtitulo">Líneas</h3>
-      <LineList lines={network.lines} notes={notas} onPick={onPickLine} />
+      <LineList lines={network.lines} nodes={network.nodes} notes={notas} onPick={onPickLine} onHighlight={onHighlightLines} />
     </section>
   )
 }
