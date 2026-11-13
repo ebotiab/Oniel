@@ -107,7 +107,7 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 34 de los 114 tramos con trenes, en 6 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 36 de los 116 tramos con trenes, en 6 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
@@ -119,10 +119,11 @@ test.describe('Tramos sin otro camino', () => {
     await expect(lineas.nth(0)).toContainText('Madrid – Barcelona por Zaragoza')
     await expect(lineas.nth(0)).toContainText('15 de sus 20 tramos')
     await expect(lineas.nth(0)).toContainText('de 73 a 108 trenes')
-    // los cuatro últimos de la alta velocidad de Madrid a Valencia, de la bifurcación de Albacete a Valencia: hasta
-    // esa bifurcación el otro camino es el de Alcázar de San Juan y Albacete
-    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('4 de sus 12 tramos')
-    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('de 42 a 52 trenes')
+    // de la alta velocidad de Madrid a Valencia, los dos primeros, de Madrid-Chamartín a la bifurcación de Torrejón
+    // de Velasco (a Chamartín solo llega esta línea), y los cuatro últimos, de la bifurcación de Albacete a
+    // Valencia: entre las dos bifurcaciones el otro camino es el de Alcázar de San Juan y Albacete
+    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('6 de sus 14 tramos')
+    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('de 42 a 74 trenes')
     // y los siete de la de Albacete a Alicante que quedan al sur de Albacete
     await expect(linea('Albacete – Alicante')).toContainText('7 de sus 9 tramos')
     await expect(linea('Albacete – Alicante')).toContainText('de 36 a 56 trenes')

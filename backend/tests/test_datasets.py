@@ -227,7 +227,9 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # baipases de Zaragoza y de Lleida. Eran 7.590 cuando el tren que no para figuraba por la
     # estación: el que rodea Zaragoza deja tres tramos y gana uno; el que rodea Lleida, dos y uno
     passes += 6851 + 97 + 224
-    passes += 4314  # la de Madrid a Valencia, todos estimados
+    # la de Madrid a Valencia, todos estimados: eran 4.314 antes de cargar el trecho de
+    # Madrid-Chamartín a Torrejón de Velasco, que añade dos tramos a los 367 viajes de Chamartín
+    passes += 5048
     passes += 1979  # la de Albacete a Alicante, todos estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
