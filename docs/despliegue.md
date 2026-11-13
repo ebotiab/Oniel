@@ -192,7 +192,7 @@ Comprobado así el 13 de noviembre de 2026 con el commit `ade16fe`: el error lle
 
 Un bloqueador de contenido puede cortar las peticiones a Logfire: de esas visitas no llega nada, y el visor funciona igual.
 
-El primer error real llegó ese mismo día: MapLibre lanza `GPUInitializationError` cuando el navegador no tiene WebGL2 y el visor no lo atiende (#144).
+El primer error real llegó ese mismo día: MapLibre lanza `GPUInitializationError` cuando el navegador no tiene WebGL2. Desde #144 el visor lo atiende, explica en el hueco del mapa por qué no hay mapa y no lo envía: es un límite del navegador de quien visita, no un fallo de Oniel.
 
 ### Alertas
 
