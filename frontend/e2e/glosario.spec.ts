@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { irA } from './navegar.ts'
+
 /** En el móvil la ficha vive en la hoja inferior: hay que ampliarla para verla entera. */
 async function abrirHoja(page: Page) {
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })
@@ -37,8 +39,8 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     // la página tapa el visor: ni el mapa ni el panel quedan a la vista
     await expect(page.getByTestId('pagina-glosario')).toBeVisible()
     await expect(page.locator('#panel')).toBeHidden()
-    // «Volver al mapa» devuelve a la ficha de la que salió el término
-    await page.getByTestId('glosario-volver').click()
+    // «Mapa» devuelve a la ficha de la que salió el término
+    await irA(page, 'mapa')
     await expect(page).toHaveURL(/\/nodo\/urda$/)
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
   })
@@ -169,26 +171,21 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await expect(palabras).toHaveCount(todas)
   })
 
-  test('se entra desde la cabecera, desde el buscador y desde la vista de la red', async ({ page, isMobile }) => {
+  test('se entra desde la cabecera y desde el buscador', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    if (isMobile) {
-      // en el móvil la cabecera no lleva botón: el buscador ofrece el glosario sin escribir
-      await expect(page.getByTestId('boton-glosario')).toHaveCount(0)
-      await page.getByTestId('buscador-abrir').click()
-      await page.getByRole('option', { name: /^Glosario/ }).click()
-    } else {
-      await page.getByTestId('boton-glosario').click()
-    }
+    await irA(page, 'glosario')
     await expect(page).toHaveURL(/\/glosario$/)
     await expect(page.getByRole('heading', { level: 1, name: 'Glosario' })).toBeVisible()
-    await page.getByTestId('glosario-volver').click()
+    await irA(page, 'mapa')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    // el renglón al pie de la vista de la red
-    await abrirHoja(page)
-    await page.getByTestId('boton-glosario-red').click()
+    // el buscador ofrece el glosario sin escribir
+    const abrir = page.getByTestId('buscador-abrir')
+    if (await abrir.isVisible()) await abrir.click()
+    else await page.getByRole('combobox', { name: 'Buscar una estación o una línea' }).focus()
+    await page.getByRole('option', { name: /^Glosario/ }).click()
     await expect(page).toHaveURL(/\/glosario$/)
-    await page.getByTestId('glosario-volver').click()
+    await irA(page, 'mapa')
     // y el buscador encuentra un término por su nombre, sin acentos
     const lupa = page.getByTestId('buscador-abrir')
     if (await lupa.isVisible()) await lupa.click()

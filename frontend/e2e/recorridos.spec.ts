@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs'
 
 import { expect, test } from '@playwright/test'
 
+import { irA } from './navegar.ts'
+
 import { activeInterruptions, bySegment } from '../src/app/interruptions.ts'
 import { compararRecorridos, formatDuracion, minutosEntre, trenesDelRecorrido, trenesDirectos } from '../src/app/recorridos.ts'
 import { parseRoute, routePath } from '../src/app/state.ts'
@@ -115,9 +117,9 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
 })
 
 test.describe('Comparador de recorridos: la vista', () => {
-  test('desde la vista de la red se eligen dos estaciones y se comparan Madrid y Córdoba', async ({ page }) => {
+  test('desde la cabecera se abre el comparador, se eligen dos estaciones y se comparan Madrid y Córdoba', async ({ page }) => {
     await page.goto('/')
-    await page.getByTestId('boton-recorridos').click()
+    await irA(page, 'recorridos')
     await expect(page).toHaveURL(/\/recorridos$/)
     const panel = page.getByTestId('comparador')
     await expect(panel.getByRole('heading', { name: 'Comparar recorridos' })).toBeVisible()

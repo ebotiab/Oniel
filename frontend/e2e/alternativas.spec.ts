@@ -22,8 +22,7 @@ test.describe('Tramos sin alternativa', () => {
     })
     // se espera a que el visor hable ya con la API: antes de eso leería la instantánea de todos modos
     await page.goto('/')
-    await expect(page.getByTestId('recuento-red')).not.toContainText('despertando el servidor')
-    await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
+    await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
     await page.goto('/cobertura')
     await page.getByTestId('sin-alternativa-ver-todos').click()
     await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(11 + 20 + 12)

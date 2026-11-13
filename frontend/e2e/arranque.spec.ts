@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+import { abrirMenu } from './navegar.ts'
+
 // La API en Render duerme tras 15 minutos sin tráfico y tarda más de un minuto en despertar.
 // El visor no debe esperar a /healthz: pinta la instantánea estática y cambia a la API cuando responde.
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
@@ -24,12 +26,15 @@ test.describe('Arranque con el servidor dormido', () => {
 
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible({ timeout: 5_000 })
-    const cobertura = page.getByTestId('recuento-red')
-    await expect(cobertura).toContainText('despertando el servidor')
+    // la cabecera lleva el estado del servidor; a la vista, como una etiqueta gris junto a los enlaces
+    const cabecera = page.locator('.cabecera')
+    await expect(cabecera).toHaveAttribute('data-estado', 'buscando')
+    await abrirMenu(page)
+    await expect(page.getByTestId('estado-servidor')).toHaveText('despertando el servidor…')
 
     despertar()
-    await expect(cobertura).not.toContainText('despertando el servidor')
-    await expect(cobertura).not.toContainText('vista estática')
+    await expect(cabecera).toHaveAttribute('data-estado', 'disponible')
+    await expect(page.getByTestId('estado-servidor')).toHaveCount(0)
     expect(errores.filter((e) => e.includes('[oniel mapa]'))).toEqual([])
   })
 
@@ -38,8 +43,10 @@ test.describe('Arranque con el servidor dormido', () => {
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible({ timeout: 5_000 })
     // un fallo rápido no basta para rendirse: se reintenta durante VITE_API_WAKE_MS (20 s en las pruebas)
-    const cobertura = page.getByTestId('recuento-red')
-    await expect(cobertura).toContainText('despertando el servidor')
-    await expect(cobertura).toContainText('vista estática', { timeout: 30_000 })
+    const cabecera = page.locator('.cabecera')
+    await expect(cabecera).toHaveAttribute('data-estado', 'buscando')
+    await expect(cabecera).toHaveAttribute('data-estado', 'ausente', { timeout: 30_000 })
+    await abrirMenu(page)
+    await expect(page.getByTestId('estado-servidor')).toHaveText('vista estática')
   })
 })
