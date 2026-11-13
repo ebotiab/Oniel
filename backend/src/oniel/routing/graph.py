@@ -231,6 +231,14 @@ class Detour(BaseModel):
     closed_line_length_km: float
 
 
+class ClosureDetours(BaseModel):
+    """Los rodeos que salvan un tramo cerrado y cuántos más largos se han dejado fuera."""
+
+    detours: list[Detour]
+    #: Rodeos que existen y no se listan, por desproporcionados o por pasar del tope.
+    omitted: int
+
+
 #: Un paso del camino: la arista y el nodo al que llega.
 _Step = tuple[Edge, str]
 
@@ -472,7 +480,7 @@ def closure_detours(
     scenario: Scenario | None = None,
     *,
     max_ratio: float | None = DEFAULT_MAX_RATIO,
-) -> list[Detour]:
+) -> ClosureDetours:
     """Rodeos que salvan el tramo ``segment_id`` cerrado, del más corto al más largo.
 
     Un rodeo sale de la línea del tramo en un nodo situado antes del cierre, no vuelve a tocarla
@@ -485,7 +493,8 @@ def closure_detours(
     volver a ella en nodos distintos, así que para compararlos se completa cada uno con los
     tramos de la propia línea hasta cubrir el mismo trecho, del nodo de salida más temprano al
     de vuelta más tardío, y se les aplica la misma regla (``_strays``). El más corto se conserva
-    siempre.
+    siempre, mida lo que mida: que exista otro camino es parte de la respuesta. ``omitted`` cuenta
+    los que se dejan fuera, para que quien consulta sepa que los hay.
     """
     closed = graph.edge(segment_id)
     if closed is None or closed.line_id is None:
@@ -537,10 +546,14 @@ def closure_detours(
             if not strays:
                 kept.append((start, steps))
         ordered = kept
-    return [
-        Detour(
-            route=_route(g, start, steps),
-            closed_line_length_km=_round1(km[steps[-1][1]] - km[start]),
-        )
-        for start, steps in ordered[:MAX_ROUTES]
-    ]
+    listed = ordered[:MAX_ROUTES]
+    return ClosureDetours(
+        detours=[
+            Detour(
+                route=_route(g, start, steps),
+                closed_line_length_km=_round1(km[steps[-1][1]] - km[start]),
+            )
+            for start, steps in listed
+        ],
+        omitted=len(found) - len(listed),
+    )

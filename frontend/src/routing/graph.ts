@@ -60,6 +60,13 @@ export interface Detour {
   closed_line_length_km: number
 }
 
+/** Los rodeos que salvan un tramo cerrado y cuántos más largos se han dejado fuera. */
+export interface ClosureDetours {
+  detours: Detour[]
+  /** Rodeos que existen y no se listan, por desproporcionados o por pasar del tope. */
+  omitted: number
+}
+
 /** Un paso del camino: la arista y el nodo al que llega. */
 type Step = [Edge, string]
 
@@ -305,11 +312,6 @@ export function findRoutes(
   return ordered.slice(0, MAX_ROUTES).map((f) => toRoute(g, f.start, f.steps))
 }
 
-/**
- * Rodeos que salvan el tramo `segmentId` cerrado, del más corto al más largo. Un rodeo sale de la
- * línea del tramo en un nodo situado antes del cierre, no vuelve a tocarla hasta un nodo situado
- * después y no usa ninguno de sus tramos. El resto del escenario se aplica también.
- */
 /** Los tramos de la línea entre dos de sus nodos, en el sentido en que crecen sus kilómetros. */
 function along(graph: Graph, lineId: string, a: string, b: string): Step[] {
   const km = graph.lineKm.get(lineId)!
@@ -325,16 +327,21 @@ function along(graph: Graph, lineId: string, a: string, b: string): Step[] {
 }
 
 /**
+ * Rodeos que salvan el tramo `segmentId` cerrado, del más corto al más largo. Un rodeo sale de la
+ * línea del tramo en un nodo situado antes del cierre, no vuelve a tocarla hasta un nodo situado
+ * después y no usa ninguno de sus tramos. El resto del escenario se aplica también.
+ *
  * Como en `findRoutes`, se descarta el rodeo desproporcionado respecto a otro más corto (`maxRatio`;
  * `null`, sin descartar ninguno). Para comparar dos rodeos que salen de la línea y vuelven a ella en
- * nodos distintos, se completa cada uno con los tramos de la propia línea hasta cubrir el mismo trecho.
+ * nodos distintos, se completa cada uno con los tramos de la propia línea hasta cubrir el mismo
+ * trecho. El más corto se conserva siempre, y `omitted` cuenta los que se dejan fuera.
  */
 export function closureDetours(
   graph: Graph,
   segmentId: string,
   scenario?: Scenario,
   maxRatio: number | null = DEFAULT_MAX_RATIO,
-): Detour[] {
+): ClosureDetours {
   const closed = graph.edges.find((e) => e.id === segmentId)
   if (!closed || closed.line_id === null) throw new ScenarioError(`No hay ningún tramo con id ${segmentId}`)
   const lineId = closed.line_id
@@ -375,7 +382,9 @@ export function closureDetours(
     }
     ordered = kept
   }
-  return ordered
-    .slice(0, MAX_ROUTES)
-    .map((f) => ({ route: toRoute(g, f.start, f.steps), closed_line_length_km: round1(km.get(f.steps.at(-1)![1])! - km.get(f.start)!) }))
+  const listed = ordered.slice(0, MAX_ROUTES)
+  return {
+    detours: listed.map((f) => ({ route: toRoute(g, f.start, f.steps), closed_line_length_km: round1(km.get(f.steps.at(-1)![1])! - km.get(f.start)!) })),
+    omitted: found.length - listed.length,
+  }
 }
