@@ -697,10 +697,9 @@ async def test_closure_of_an_interrupted_segment_says_so(client: httpx.AsyncClie
     # la simulación sigue calculándose sobre el horario publicado
     assert res["items"] and sum(res["counts"].values()) == len(res["items"])
     # la alternativa por Despeñaperros cruza el corte por obras, y el rodeo por Manzanares también
-    # (los otros dos, por Moreda y Granada, salen de la convencional antes de los túneles o
-    # después, y se comprueban en las pruebas del grafo)
-    by_manzanares, alt, *by_granada = res["alternatives"]
-    assert [a["line_ids"][-2:] for a in by_granada] == [[LAV_GRANADA, LAV_MALAGA]] * 2
+    # (los dos que bajan por Moreda y Granada se descartan por desproporcionados; se comprueban
+    # en las pruebas del grafo)
+    by_manzanares, alt = res["alternatives"]
     assert alt["line_ids"] == ["convencional-madrid-alcazar-cordoba"]
     assert by_manzanares["line_ids"] == [MZCR, CONV]
     assert [i["id"] for i in by_manzanares["interruptions"]] == [WORKS_CUT]
@@ -724,7 +723,7 @@ async def test_closure_before_the_interruptions_has_no_notes(client: httpx.Async
     res = r.json()
     assert res["interruptions"] == []
     assert not any("interrupción real" in c for c in res["caveats"])
-    assert len(res["alternatives"]) == 4
+    assert len(res["alternatives"]) == 2
     for alt in res["alternatives"]:
         assert alt["interruptions"] == [] and "no está disponible" not in alt["note"]
 
@@ -1079,10 +1078,8 @@ async def test_closure_between_manzanares_and_ciudad_real_affects_the_diverted_t
     assert sum(res["counts"].values()) == len(res["items"])
     # ninguna línea sola une los dos lados del tramo; el grafo encuentra el rodeo por dos:
     # la convencional hasta Madrid (o hasta Córdoba) y la alta velocidad hasta Ciudad Real
-    by_madrid, by_cordoba, by_granada = res["alternatives"]
+    by_madrid, by_cordoba = res["alternatives"]
     assert by_madrid["line_ids"] == by_cordoba["line_ids"] == [CONV, LAV]
-    assert by_granada["line_ids"] == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA, LAV]
-    assert by_granada["length_km"] == 689.5
     assert (by_madrid["from_node_id"], by_madrid["to_node_id"]) == ("manzanares", "ciudad-real")
     assert (by_madrid["length_km"], by_madrid["closed_line_length_km"]) == (366.9, 64.4)
     assert [leg["to_name"] for leg in by_madrid["legs"]] == [
@@ -1115,10 +1112,10 @@ async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
     alt = [a for a in res["alternatives"] if len(a["legs"]) == 1]
     lines = [a["line_ids"] for a in res["alternatives"]]
     assert lines[:2] == [[MZCR, CONV], [CONV]]
-    # y los dos que bajan por Moreda y Granada hasta la bifurcación de Málaga, mucho más largos
-    by_granada = [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
-    assert lines[2:] == [[MZCR, *by_granada], by_granada]
-    assert [a["length_km"] for a in res["alternatives"]] == [309.0, 440.7, 566.6, 698.3]
+    # los dos que bajan por Moreda y Granada hasta la bifurcación de Málaga (566,6 y 698,3 km)
+    # ya no salen: dan un rodeo de más del doble respecto a estos
+    assert lines[2:] == []
+    assert [a["length_km"] for a in res["alternatives"]] == [309.0, 440.7]
     assert [a["line_id"] for a in alt] == [CONV]
     assert alt[0]["from_node_id"] == "madrid-puerta-de-atocha" and alt[0]["to_node_id"] == "cordoba"
     assert alt[0]["length_km"] > alt[0]["closed_line_length_km"]
@@ -1180,11 +1177,7 @@ async def test_closure_between_urda_and_ciudad_real_finds_the_detour_through_man
         },
     )
     assert r.status_code == 200
-    detour, whole_line, by_granada = r.json()["alternatives"]
-    assert (
-        by_granada["line_ids"] == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
-        and by_granada["to_node_id"] == "bif-malaga"
-    )
+    detour, whole_line = r.json()["alternatives"]
     assert detour["line_ids"] == [CONV, MZCR]
     assert (detour["from_node_id"], detour["to_node_id"]) == (
         "madrid-puerta-de-atocha",
@@ -1210,10 +1203,7 @@ async def test_closure_with_a_scenario_adds_its_other_changes(client: httpx.Asyn
     }
     r = await client.post("/api/simulations/closure", json=body)
     assert r.status_code == 200
-    assert [a["line_ids"] for a in r.json()["alternatives"]] == [
-        [CONV],
-        [CONV, LBMG, LAV_GRANADA, LAV_MALAGA],
-    ]
+    assert [a["line_ids"] for a in r.json()["alternatives"]] == [[CONV]]
     r = await client.post("/api/simulations/closure", json={**body, "scenario": "c~no:existe"})
     assert r.status_code == 422 and "Escenario no válido" in r.json()["detail"]
 
