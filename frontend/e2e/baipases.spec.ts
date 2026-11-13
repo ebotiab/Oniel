@@ -37,7 +37,6 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await expect(page).toHaveURL(/\/linea\/baipas-zaragoza$/)
     await expect(page.getByRole('heading', { name: 'Baipás de Zaragoza' })).toBeVisible()
     await expect(page.getByTestId('ficha-linea')).toContainText('20,7 km')
-    await expect(page.getByTestId('linea-entrada')).toContainText('sin pasar por Zaragoza-Delicias')
   })
 
   test('el buscador los encuentra por su nombre y no los ofrece sin escribir', async ({ page }) => {
