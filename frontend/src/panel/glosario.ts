@@ -52,7 +52,13 @@ const TERMINOS = {
     nombre: 'Ancho de vía',
     breve:
       'La distancia entre los dos carriles. La red convencional española usa el ancho ibérico (1.668 mm) y la alta velocidad, el ancho estándar europeo (1.435 mm): un tren solo pasa de una a otra si está preparado para cambiar de ancho.',
-    ver: ['cambiador-de-ancho'],
+    ver: ['cambiador-de-ancho', 'ancho-mixto'],
+  },
+  'ancho-mixto': {
+    nombre: 'Ancho mixto',
+    breve:
+      'Vía con un tercer carril: uno de los carriles sirve a los dos anchos y cada uno de los otros dos marca un ancho distinto. Por ella pasan trenes de ancho ibérico y de ancho estándar sin cambiar de ancho.',
+    ver: ['ancho-de-via', 'cambiador-de-ancho'],
   },
   bifurcacion: {
     nombre: 'Bifurcación',
