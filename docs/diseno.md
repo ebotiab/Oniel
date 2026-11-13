@@ -212,6 +212,11 @@ Encuadre
 - En el móvil la franja de mapa que deja la hoja es baja y ese renglón se reduce a la escala y el botón «i». La atribución llega desplegada, como la trae MapLibre, y se pliega con el primer toque en cualquier parte de la pantalla (MapLibre solo la plegaba al arrastrar el mapa); «i» la vuelve a enseñar, con la escala en el renglón de encima, y las fuentes siguen en «Cobertura y fuentes». En escritorio la atribución solo se pliega al arrastrar el mapa. Con la hoja abierta el mapa visible mide unos 200 px de alto y la escala caía sobre las estaciones: ahí se oculta, y vuelve al recoger la hoja (decidido el 12 de noviembre de 2026).
 - Siempre con el norte arriba y sin inclinación, como una hoja de mapa: ni el arrastre con el botón derecho, ni los dos dedos, ni el teclado giran el mapa. La brújula ya estaba oculta.
 
+Sin mapa (#144, decidido el 13 de noviembre de 2026, con capturas de escritorio y móvil delante)
+- En un navegador sin WebGL2 (equipos antiguos, aceleración gráfica desactivada) MapLibre no puede dibujar el mapa. El hueco del mapa lo dice, en la parte que deja el panel: en escritorio, centrado en vertical a la derecha del panel; en el móvil, bajo la cabecera.
+- Texto llano, alineado a la izquierda, sin color ni filete, porque no es una señal de la red: un título en tinta a 17 px, «Este navegador no puede dibujar el mapa», y tres párrafos cortos en gris secundario a 14 px. El primero dice qué es WebGL2 («una función con la que el navegador usa la tarjeta gráfica del equipo») y que no es culpa de quien visita; el segundo, que lo demás funciona igual (el buscador, las líneas, las fichas y el glosario); el tercero, qué puede hacer: otro navegador, actualizar el que usa o activar la aceleración por hardware.
+- El resto del visor no cambia: la leyenda sigue en su sitio y el panel no menciona la falta del mapa.
+
 Principios
 - La vía es tinta; el color es señal. Nada se colorea por decoración.
 - El esquema de línea y el mapa son la misma cosa vista de dos formas: siempre sincronizados.
