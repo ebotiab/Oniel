@@ -57,6 +57,8 @@ export default function App() {
   const pinTrazo = useCallback((trazo: Trazo) => setFrame((f) => ({ trazo, n: (f?.n ?? 0) + 1 })), [])
   const [route, setRoute] = useState(() => parseRoute(window.location.pathname))
   const [hoverId, setHoverId] = useState<string | null>(null)
+  // Las líneas que señala la lista de la vista de la red: el mapa las resalta mientras dura.
+  const [lineasResaltadas, setLineasResaltadas] = useState<string[] | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseRoute(window.location.pathname).cobertura))
   const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario))
@@ -295,6 +297,8 @@ export default function App() {
     mobile && network ? (
       <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} onPin={pinTrazo} />
     ) : null
+  // La lista de líneas solo existe en la vista de la red: fuera de ella no queda nada resaltado.
+  const enVistaRed = Boolean(network) && !comparador && !segment && !node && !annotation && !lineId
   let panel: React.ReactNode = null
   if (loadError) panel = <p className="aviso">{loadError}</p>
   else if (!network) panel = <p className="suave cargando">Cargando la red…</p>
@@ -362,7 +366,7 @@ export default function App() {
   else if (annotation)
     panel = <AnnotationDetail key={annotation.id} annotation={annotation} onSelectSegment={(id) => select({ type: 'tramo', id })} onBack={() => showLine(null)} />
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} />
+    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onHighlightLines={setLineasResaltadas} />
   else
     panel = (
       <LineOverview
@@ -444,6 +448,7 @@ export default function App() {
           padding={padding}
           lineId={selection ? null : annotation ? null : lineId}
           recorridos={recorridosEnMapa}
+          lineasResaltadas={enVistaRed ? lineasResaltadas : null}
         />}
       </Suspense>
       <header className="cabecera" data-estado={status}>

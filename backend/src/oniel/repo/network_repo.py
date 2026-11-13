@@ -31,6 +31,7 @@ from oniel.domain.schemas import (
     SegmentOut,
     Source,
     SourceRef,
+    ZoneOut,
 )
 from oniel.geo import simplify
 from oniel.repo import datasets_repo, services_repo
@@ -106,11 +107,13 @@ async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
     rows = await conn.fetch(
         """
         SELECT l.*, o.id AS op_id, o.name AS op_name, o.role AS op_role,
+               z.name AS zone_name, z.sort_order AS zone_order, z.cities AS zone_cities,
                (SELECT count(*) FROM line_nodes ln WHERE ln.line_id = l.id) AS node_count,
                (SELECT count(*) FROM segments s WHERE s.line_id = l.id) AS segment_count,
                ARRAY(SELECT lo.operator_id FROM line_operators lo
                      WHERE lo.line_id = l.id ORDER BY lo.operator_id) AS operator_ids
         FROM lines l LEFT JOIN operators o ON o.id = l.infrastructure_manager_id
+             LEFT JOIN zones z ON z.id = l.zone_id
         ORDER BY l.sort_order, l.id
         """
     )
@@ -123,6 +126,14 @@ async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
                 name=r["name"],
                 short_name=r["short_name"],
                 sort_order=r["sort_order"],
+                zone=ZoneOut(
+                    id=r["zone_id"],
+                    name=r["zone_name"],
+                    sort_order=r["zone_order"],
+                    cities=list(r["zone_cities"]),
+                )
+                if r["zone_id"]
+                else None,
                 mode=r["mode"],
                 infrastructure_manager=op,
                 operator_ids=list(r["operator_ids"]),

@@ -129,6 +129,11 @@ export function opacidadDeVia(resaltado: Trazo | null): ExpressionSpecification 
  */
 export const OPACIDAD_RECORRIDOS: ExpressionSpecification = ['case', ['boolean', ['feature-state', 'recorrido'], false], 1, 0.18]
 
+/** Opacidad de la vía mientras la lista de líneas señala unas cuantas: esas, enteras; las demás, atenuadas. */
+export function opacidadDeLineas(ids: readonly string[]): ExpressionSpecification {
+  return ['case', ['in', ['get', 'line_id'], ['literal', [...ids]]], 1, 0.18]
+}
+
 export function onielLayers(): LayerSpecification[] {
   return [
     {
