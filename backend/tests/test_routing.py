@@ -88,7 +88,7 @@ def graph(network: Red) -> Graph:
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
     # los dos baipases de Zaragoza y de Lleida, los nueve tramos de la línea de Albacete a Alicante
     # y los ocho de la de Monforte del Cid a Murcia
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9 + 8
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -157,7 +157,7 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
     assert [r.length_km for r in find_routes(graph, MADRID, CIUDAD_REAL, max_ratio=None)] == [
         170.8,
         260.5,
-        557.9,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
+        558.0,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
         613.5,
         704.6,  # lo mismo al revés: por Alcázar a Albacete y vuelta por Cuenca
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
@@ -223,6 +223,11 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     )
     # los últimos 21,5 km, desde Orihuela, son de vía única
     assert high_speed.single_track_km == 21.5
+    # desde Madrid-Chamartín, de donde salen casi todos sus trenes, el de alta velocidad entero es
+    # el primero: por la línea de Valencia, la de Albacete a Alicante y esta
+    from_chamartin = find_routes(graph, "madrid-chamartin", MURCIA)[0]
+    assert from_chamartin.line_ids == [LAV_VALENCIA, LAV_ALICANTE, LAV_MURCIA]
+    assert (from_chamartin.length_km, from_chamartin.time_min) == (529.5, 123)
     # de Alicante a Murcia el recorrido retrocede hasta la bifurcación de Murcia, porque el
     # enlace de Monforte del Cid no está cargado: 92,2 km, unos 4 más que por el enlace
     (from_alicante,) = find_routes(graph, "alicante-terminal", MURCIA)

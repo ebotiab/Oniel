@@ -291,8 +291,8 @@ def test_trains_join_at_one_of_two_junctions(
         assert len(passes) == 8 and first in _short(passes)
         assert all(p.kind != "indeterminado" for p in passes)
     assert len(avant) + len(through) + len(direct) == len(trips)
-    # la asignación de esa regla lleva los kilómetros de vía desde Madrid-Chamartín, que son el
-    # punto kilométrico de la bifurcación
+    # en esa regla, a Madrid-Chamartín se llega por la línea de Alicante y la de Valencia, de la
+    # que es cabecera
     rules = {r.id: r for r in spec.route_overrides}
     assert list(rules) == [
         "albacete-elche-sin-alicante",
@@ -300,7 +300,11 @@ def test_trains_join_at_one_of_two_junctions(
         "madrid-murcia-sin-parada",
     ]
     chamartin = rules["madrid-elche-sin-parada"].stop_mappings["17000"]
-    assert chamartin.exits == ["bif-murcia"] and chamartin.track_km == 461.4
+    assert chamartin.exits == ["bif-murcia"] and chamartin.track_km is None
+    assert [(leg.line, leg.node) for leg in chamartin.via] == [
+        (BRANCH, "bif-murcia"),
+        (TRUNK, "bif-albacete"),
+    ]
     # los dos de Ouigo que van de Albacete a Elche AV sin entrar en Alicante, por la suya
     ouigo = select_trips_for_spec(ouigo_feed, spec)
     assert len(ouigo) == 7

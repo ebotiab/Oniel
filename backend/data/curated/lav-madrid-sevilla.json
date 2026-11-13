@@ -30,7 +30,7 @@
   ],
   "nodes": [
     {"id": "madrid-puerta-de-atocha", "name": "Madrid-Puerta de Atocha", "kind": "estacion", "adif_code": "60000", "position": {"lon": -3.690886, "lat": 40.406442}, "reference_pk_km": 0.0,
-     "description": "Cabecera de la línea. Estación término de la alta velocidad hacia Andalucía, Levante y Cataluña, conectada con Madrid-Chamartín por el túnel de ancho estándar. Forma un mismo complejo con Madrid-Atocha Cercanías, de donde salen los trenes de la línea convencional por Aranjuez y Alcázar de San Juan."},
+     "description": "Cabecera de la línea. Estación término de la alta velocidad hacia Andalucía y Cataluña. Los trenes de Levante salen casi todos de Madrid-Chamartín desde 2022 y pasan por un túnel bajo esta estación, sin andén ni parada. Forma un mismo complejo con Madrid-Atocha Cercanías, de donde salen los trenes de la línea convencional por Aranjuez y Alcázar de San Juan."},
     {"id": "bif-los-gavilanes", "name": "Bifurcación Los Gavilanes", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 13.445}, "reference_pk_km": 13.445,
      "description": "Punto donde se incorporan a la línea los trenes que vienen de Zaragoza y Barcelona sin pasar por Madrid-Puerta de Atocha."},
     {"id": "bif-torrejon-de-velasco", "name": "Bifurcación Torrejón de Velasco", "kind": "bifurcacion", "position": {"lon": -3.75006, "lat": 40.19457}, "reference_pk_km": 27.4,
@@ -77,7 +77,6 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."}
   ],
   "connections": [
-    {"id": "tunel-atocha-chamartin", "node_id": "madrid-puerta-de-atocha", "name": "Túnel Atocha–Chamartín", "towards": "Madrid-Chamartín y la red de alta velocidad del norte", "status": "no_cargada", "sketch": [[-3.690886, 40.406442], [-3.6829524, 40.4711789]]},
     {"id": "lav-la-sagra-toledo", "node_id": "bif-la-sagra", "name": "Ramal La Sagra–Toledo", "towards": "Toledo", "status": "no_cargada", "sketch": [[-3.98, 39.96], [-4.0112, 39.8623]]},
     {"id": "majarabique-huelva", "node_id": "majarabique", "name": "Red convencional por Majarabique", "towards": "Huelva", "status": "no_cargada", "sketch": [[-6.1, 37.45], [-6.55, 37.39]]},
     {"id": "sevilla-cadiz", "node_id": "sevilla-santa-justa", "name": "Red convencional Sevilla–Cádiz", "towards": "Jerez de la Frontera y Cádiz", "status": "no_cargada", "sketch": [[-5.974927, 37.392496], [-5.95, 37.25], [-6.0, 36.9], [-6.13, 36.68]]},

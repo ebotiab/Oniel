@@ -285,12 +285,12 @@ def test_trains_without_a_stop_enter_through_the_rules(feed: GtfsFeed, spec: Net
         "madrid-alicante-sin-parada": 27,
         "madrid-elche-sin-parada": 20,
     }
-    # Madrid-Chamartín es una salida por la bifurcación de Albacete y lleva los kilómetros de vía
-    # hasta ella; a Cuenca se llega por la línea de Valencia
-    assert spec.stop_mappings["17000"].exits == ["bif-albacete"]
-    assert spec.stop_mappings["17000"].track_km == 248.1
-    cuenca = spec.stop_mappings["03208"]
-    assert [(leg.line, leg.node) for leg in cuenca.via] == [(TRUNK, "bif-albacete")]
+    # Madrid-Chamartín y Cuenca son salidas por la bifurcación de Albacete, y a las dos se llega
+    # por la línea de Valencia, que empieza en Chamartín
+    for stop_id in ("17000", "03208"):
+        mapping = spec.stop_mappings[stop_id]
+        assert mapping.exits == ["bif-albacete"] and mapping.track_km is None
+        assert [(leg.line, leg.node) for leg in mapping.via] == [(TRUNK, "bif-albacete")]
 
 
 def test_trains_to_murcia_leave_by_one_of_two_junctions(

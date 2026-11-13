@@ -61,4 +61,12 @@ test.describe('La línea de alta velocidad Monforte del Cid – Murcia', () => {
     await expect(porCuenca).toContainText('Recorre cuatro líneas')
     await expect(porCuenca).not.toContainText('Alicante-Terminal')
   })
+
+  test('desde Madrid-Chamartín el primer recorrido a Murcia es el de alta velocidad entero', async ({ page }) => {
+    await page.goto('/recorridos/madrid-chamartin/murcia-del-carmen')
+    const recorridos = page.getByTestId('recorrido')
+    await expect(recorridos.first()).toBeVisible()
+    await expect(recorridos.first()).toContainText('529,5 km · 2 h 3 min sin paradas')
+    await expect(recorridos.first()).toContainText('Recorre tres líneas')
+  })
 })

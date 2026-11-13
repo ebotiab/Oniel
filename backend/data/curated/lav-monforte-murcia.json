@@ -77,7 +77,7 @@
     "60600": {"exits": ["bif-vinalopo"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
     "03208": {"exits": ["bif-vinalopo"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}]},
     "60000": {"exits": ["bif-vinalopo"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]},
-    "17000": {"exits": ["bif-vinalopo"]},
+    "17000": {"exits": ["bif-vinalopo"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}]},
     "92102": {"exits": ["bif-vinalopo"]},
     "08004": {"exits": ["bif-vinalopo"]},
     "10600": {"exits": ["bif-vinalopo"]},
@@ -102,7 +102,7 @@
   },
   "route_overrides": [
     {"id": "albacete-elche-sin-alicante", "description": "Trenes que van de Albacete a Elche AV sin entrar en Alicante: llegan por la bifurcación de Murcia y recorren la línea desde su origen. Por esta línea se resuelven desde Albacete.", "consecutive_stop_ids": ["60600", "03410"], "from_stop_id": "60600", "stop_mappings": {"60600": {"exits": ["bif-murcia"], "via": {"line": "lav-albacete-alicante", "node": "bif-murcia"}}}},
-    {"id": "madrid-elche-sin-parada", "description": "Trenes entre Madrid-Chamartín y Murcia sin parada hasta Elche AV: no entran en Alicante, llegan por la bifurcación de Murcia y recorren la línea desde su origen. Por esta línea se resuelven desde Madrid-Chamartín, a la que no llega ninguna línea cargada: la asignación lleva los kilómetros de vía que hay hasta la bifurcación.", "consecutive_stop_ids": ["17000", "03410"], "from_stop_id": "17000", "stop_mappings": {"17000": {"exits": ["bif-murcia"], "track_km": 461.4}}},
+    {"id": "madrid-elche-sin-parada", "description": "Trenes entre Madrid-Chamartín y Murcia sin parada hasta Elche AV: no entran en Alicante, llegan por la bifurcación de Murcia y recorren la línea desde su origen. Por esta línea se resuelven desde Madrid-Chamartín, adonde se llega por la línea de Albacete a Alicante y la de Valencia.", "consecutive_stop_ids": ["17000", "03410"], "from_stop_id": "17000", "stop_mappings": {"17000": {"exits": ["bif-murcia"], "via": [{"line": "lav-albacete-alicante", "node": "bif-murcia"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}]}}},
     {"id": "madrid-murcia-sin-parada", "description": "Trenes entre Madrid-Puerta de Atocha y Murcia sin ninguna parada intermedia: recorren la línea entera sin parar en Elche ni en Orihuela y sin entrar en Alicante.", "consecutive_stop_ids": ["60000", "61200"], "stop_mappings": {"60000": {"exits": ["bif-murcia"], "via": [{"line": "lav-albacete-alicante", "node": "bif-murcia"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]}}}
   ]
 }

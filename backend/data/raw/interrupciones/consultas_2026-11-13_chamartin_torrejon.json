@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 13 de noviembre de 2026 al cargar el trecho de Madrid-Chamartín a la bifurcación de Torrejón de Velasco de la línea de alta velocidad Madrid – Cuenca – Valencia: la comprobación de que ese día no había ninguna interrupción anunciada en él. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-13",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-13 16:38",
+   "resumen": "Tres avisos: uno de Galicia, por un desprendimiento entre San Estevo do Sil y Os Peares, en la línea convencional de Monforte de Lemos a Ourense; uno de Cantabria y el País Vasco, por un árbol caído en la estación de Gama, de la línea de ancho métrico de Santander a Bilbao, y el de Andalucía, Castilla-La Mancha y Madrid sobre la línea de alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre. Ninguno nombra Madrid-Chamartín, el túnel de alta velocidad bajo Madrid ni la alta velocidad de Madrid a Levante.",
+   "que_aporta": "Que el 13 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción entre Madrid-Chamartín y Torrejón de Velasco."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-13",
+   "resumen": "Doce avisos de obras y restablecimientos. Los que nombran Madrid son de otras líneas: las obras entre Miranda de Ebro y Logroño, las de la alta velocidad Murcia-Almería (trayectos de ancho convencional con origen o destino Madrid), las de Huércal-Viator a Almería, las de la línea convencional de Madrid a Zaragoza entre Guadalajara y Plasencia de Jalón y las de la línea C9 de Cercanías entre Cercedilla y Cotos. Ninguno afecta al trecho de alta velocidad de Madrid-Chamartín a Torrejón de Velasco.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en ese trecho."
+  }
+ ]
+}
