@@ -24,6 +24,7 @@ from conftest import (
     LAV_MALAGA_SPEC,
     LAV_MURCIA_SPEC,
     LAV_VALENCIA_SPEC,
+    LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
     MEDITERRANEO_SPEC,
     MZCR_SPEC,
@@ -610,6 +611,14 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "cambrils-vila-seca-por-la-feredat": 22,
             "castello-tarragona-por-la-feredat": 4,
             "l-aldea-tarragona-por-la-feredat": 2,
+        },
+        # los que recorren la de Madrid a Valladolid sin parar en Segovia-Guiomar
+        LAV_VALLADOLID_SPEC.name: {
+            "madrid-valladolid-sin-parada": 188,
+            "madrid-leon-sin-parada": 4,
+            "madrid-medina-sin-parada": 14,
+            "madrid-zamora-sin-parada": 115,
+            "madrid-ourense-sin-parada": 6,
         },
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no

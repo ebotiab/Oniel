@@ -34,7 +34,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.213 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^14 líneas · 3\.392 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -58,6 +58,9 @@ test.describe('Carga de la red por partes', () => {
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {
+    // abre tres veces una línea desde la lista, y cada vez hay que desplegar antes las zonas: en el
+    // móvil del CI ronda el minuto (44 s con trece líneas), así que lleva el triple de margen
+    test.slow()
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await abrirHoja(page)
