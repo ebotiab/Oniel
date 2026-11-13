@@ -1364,10 +1364,18 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
     ]
     assert node["points"][1]["products"] == []
     # y los mismos que «Trenes que paran aquí»
-    calls = (await client.get("/api/nodes/ciudad-real/services")).json()["calls"]
+    calls = (
+        await client.get("/api/nodes/ciudad-real/services", params={"date": "2026-11-12"})
+    ).json()["calls"]
     assert len(calls) == 66
     madrid = (await client.get("/api/nodes/madrid-puerta-de-atocha/history")).json()["points"]
-    calls = (await client.get("/api/nodes/madrid-puerta-de-atocha/services")).json()["calls"]
+    # el punto de Renfe se cuenta en el día de referencia de su fichero (el jueves 12), que ya no
+    # es el común a los dos operadores (el viernes 13): se compara con los trenes de ese día
+    calls = (
+        await client.get(
+            "/api/nodes/madrid-puerta-de-atocha/services", params={"date": madrid[0]["date"]}
+        )
+    ).json()["calls"]
     assert madrid[0]["trains"] == sum(c["operator_id"] == "renfe" for c in calls)
     # un apeadero sin trenes tiene sus puntos, a cero
     urda = (await client.get("/api/nodes/urda/history")).json()["points"]
