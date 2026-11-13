@@ -37,12 +37,13 @@ class Settings(BaseSettings):
         "lav-antequera-granada",
         "lav-madrid-barcelona",
         "lav-madrid-valencia",
+        "baipas-zaragoza",
+        "baipas-lleida",
+        "lav-albacete-alicante",
         "madrid-plasencia",
         "lav-plasencia-badajoz",
         "ramal-merida",
         "monfrague-caceres",
-        "baipas-zaragoza",
-        "baipas-lleida",
     ]
 
 

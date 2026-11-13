@@ -19,6 +19,7 @@ from conftest import (
     DATA_DIR,
     FEED,
     JAEN_SPEC,
+    LAV_ALICANTE_SPEC,
     LAV_BADAJOZ_SPEC,
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
@@ -64,6 +65,9 @@ RULES = {
 MALAGA_RULES = {"madrid-malaga-sin-paradas": 13}
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
+#: Y la de los trenes de la línea de Extremadura, que la recorren de Madrid-Atocha Cercanías a la
+#: bifurcación Planetario sin parar en ninguna otra de sus estaciones.
+EXTREMADURA_RULES = {"atocha-cercanias-leganes-linea-de-extremadura": 260}
 #: La alta velocidad Madrid – Sevilla tiene además las de los AVE que no paran en Madrid: los de
 #: Barcelona entran por la bifurcación Los Gavilanes y los de Valencia, por la de Yeles.
 AWAY_RULES = {
@@ -250,7 +254,8 @@ def test_the_diverted_trains_enter_the_three_lines(
     mzcr_trips = select_trips_for_spec(feed, mzcr_spec)
     # 317 ya entraban por el filtro; 47 no paran en Madrid y 13 van directos a Málaga
     assert len(lav_trips) == 317 + 47 + 13
-    assert len(conv_trips) == 368 + 22 + 42  # los 22 y los 42 de Jaén entran por las reglas
+    # los 22, los 42 de Jaén y los 260 de la línea de Extremadura entran por las reglas
+    assert len(conv_trips) == 368 + 22 + 42 + 260
     assert len(mzcr_trips) == 124 + 22  # no paran en la línea: también por las reglas
     for line_spec, trips in ((spec, lav_trips), (conv_spec, conv_trips), (mzcr_spec, mzcr_trips)):
         matched = [route_for_trip(line_spec, t) for t in trips]
@@ -259,7 +264,8 @@ def test_the_diverted_trains_enter_the_three_lines(
             for r in line_spec.route_overrides
         }
         lav_rules = AWAY_RULES | MALAGA_RULES
-        extra = JAEN_RULES if line_spec is conv_spec else lav_rules if line_spec is spec else {}
+        conv_rules = JAEN_RULES | EXTREMADURA_RULES
+        extra = conv_rules if line_spec is conv_spec else lav_rules if line_spec is spec else {}
         assert by_rule == RULES | extra
     diverted = (
         {t.trip_id for t in conv_trips}
@@ -558,7 +564,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
     expected = {
         SPEC.name: RULES | AWAY_RULES | MALAGA_RULES,
-        CONV_SPEC.name: RULES | JAEN_RULES,
+        CONV_SPEC.name: RULES | JAEN_RULES | EXTREMADURA_RULES,
         MZCR_SPEC.name: RULES,
         JAEN_SPEC.name: {},
         # la línea de Linares-Baeza a Granada tiene su propia regla: los trenes a Almería que
@@ -584,16 +590,30 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-valencia-sin-parada": 62,
             "madrid-albacete-sin-parada": 31,
             "madrid-alicante-sin-parada": 27,
+            "madrid-elche-sin-parada": 20,
+        },
+        # los que recorren la de Albacete a Alicante sin parar en Cuenca, Villena ni Elche, y los
+        # de Madrid a Murcia que no entran en Alicante
+        LAV_ALICANTE_SPEC.name: {
+            "albacete-elche-sin-alicante": 0,
+            "madrid-albacete-sin-cuenca": 31,
+            "madrid-alicante-sin-parada": 27,
+            "madrid-elche-sin-parada": 20,
         },
         # Extremadura: los trenes que entran en Plasencia recorren la convencional hasta la
         # bifurcación San Esteban y empiezan la línea nueva en la estación; 13 de ellos siguen a
-        # Cáceres por el trazado antiguo. El ramal de Mérida y el trazado antiguo no tienen reglas
+        # Cáceres por el trazado antiguo, y los que van de Mérida hacia Badajoz entran en la línea
+        # nueva junto a Garrovilla-Las Vegas. La línea de Aljucén a Mérida y el trazado antiguo no
+        # tienen reglas
         MADRID_PLASENCIA_SPEC.name: {
             "a-plasencia-desde-navalmoral": 37,
             "a-plasencia-desde-monfrague": 59,
         },
         LAV_BADAJOZ_SPEC.name: {
             "plasencia-caceres-por-la-linea-antigua": 13,
+            "merida-hacia-badajoz-garrovilla": 50,
+            "merida-hacia-badajoz-montijo": 41,
+            "merida-hacia-badajoz-badajoz": 37,
             "desde-plasencia-tras-navalmoral": 37,
             "desde-plasencia-tras-monfrague": 46,
         },
@@ -603,17 +623,25 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         BYPASS_ZARAGOZA_SPEC.name: {},
         BYPASS_LLEIDA_SPEC.name: {},
     }
-    # la regla de los Ouigo de Barcelona a Andalucía no encaja con ningún viaje de Renfe: lo
-    # dice el informe de este fichero, y el de todos los ficheros juntos ya no (validate de la CLI)
-    ouigo_only = "barcelona-andalucia-con-parada-en-madrid"
-    unused = [f"la regla de recorrido {ouigo_only} no encaja con ningún viaje del GTFS"]
+    # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
+    # encajan con ningún viaje de Renfe: lo dice el informe de este fichero, y el de todos los
+    # ficheros juntos ya no (validate de la CLI)
+    ouigo_only = {
+        BCN_SPEC.name: "barcelona-andalucia-con-parada-en-madrid",
+        LAV_ALICANTE_SPEC.name: "albacete-elche-sin-alicante",
+    }
     for name, r in reports.items():
-        assert r["problems"] == (unused if name == BCN_SPEC.name else [])
+        unused = [
+            f"la regla de recorrido {rule} no encaja con ningún viaje del GTFS"
+            for line, rule in ouigo_only.items()
+            if line == name
+        ]
+        assert r["problems"] == unused
         assert r["gtfs"]["route_overrides"] == expected[name]
         assert "indeterminado" not in r["gtfs"]["passes"]
     granada = reports[LBMG_SPEC.name]["gtfs"]
     assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
-    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432
+    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432 + 260
     assert reports[SPEC.name]["gtfs"]["trips"] == 317 + 47 + 13
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
     assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
@@ -629,15 +657,21 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
 def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:
     """Un «via» mal encadenado volvería a la línea recta sin avisar: validate lo señala."""
     raw = json.loads(CONV_SPEC.read_text(encoding="utf-8"))
-    rule = raw["route_overrides"][1]
+    rule = next(
+        r for r in raw["route_overrides"] if r["id"] == "atocha-cercanias-cordoba-por-manzanares"
+    )
     rule["stop_mappings"]["50500"]["via"] = [
         {"line": MZCR, "node": "manzanares"},
         {"line": LAV, "node": "cordoba"},
     ]
     broken = tmp_path / CONV_SPEC.name
     broken.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
+    # (con la de Madrid a Plasencia, por la que sigue la regla de la línea de Extremadura)
     report = validate_all(
-        broken, FEED, DATA_DIR, [SPEC, MZCR_SPEC, JAEN_SPEC, LBMG_SPEC, ALBACETE_SPEC]
+        broken,
+        FEED,
+        DATA_DIR,
+        [SPEC, MZCR_SPEC, JAEN_SPEC, LBMG_SPEC, ALBACETE_SPEC, MADRID_PLASENCIA_SPEC],
     )
     assert report["problems"] == [
         f"la regla {rule['id']}: el «via» de la parada 50500 no se sostiene: cordoba no es un"

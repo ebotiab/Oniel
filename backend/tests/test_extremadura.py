@@ -138,6 +138,11 @@ LAV_SINGLE = {
     "bif-san-nicolas:badajoz",
 }
 
+#: Prefijo de las tres reglas de la línea nueva para los trenes que van de Mérida hacia Badajoz.
+MERIDA_RULE = "merida-hacia-badajoz-"
+#: El tramo de la línea nueva que une la bifurcación Granja-Las Encinas con Garrovilla-Las Vegas.
+CURVE = "bif-granja-las-encinas:garrovilla-las-vegas"
+
 #: Los viajes del fichero de pruebas por línea: cuántos son y de qué producto («PROXIMDAD» es
 #: como lo escribe el fichero de Renfe).
 PRODUCTS = {
@@ -151,6 +156,10 @@ RULES = {
     MADRID: {"a-plasencia-desde-navalmoral": 37, "a-plasencia-desde-monfrague": 59},
     LAV: {
         "plasencia-caceres-por-la-linea-antigua": 13,
+        # los que van de Mérida hacia Badajoz, o al revés, según su parada siguiente a Mérida
+        "merida-hacia-badajoz-garrovilla": 50,
+        "merida-hacia-badajoz-montijo": 41,
+        "merida-hacia-badajoz-badajoz": 37,
         "desde-plasencia-tras-navalmoral": 37,
         "desde-plasencia-tras-monfrague": 46,
     },
@@ -182,8 +191,8 @@ SHAPES = {
         # de Cáceres a Badajoz y a Mérida
         ("badajoz", "caceres"): 82,
         ("bif-granja-las-encinas", "caceres"): 7,
-        # de Mérida a Badajoz
-        ("badajoz", "bif-granja-las-encinas"): 52,
+        # de Mérida a Badajoz: salen de Mérida por Aljucén y entran junto a Garrovilla-Las Vegas
+        ("badajoz", "garrovilla-las-vegas"): 52,
     },
     MERIDA: {
         # los que vienen de Cáceres o van hacia ella, por el enlace
@@ -196,14 +205,15 @@ SHAPES = {
 #: Viajes por tramo, en el orden de la línea.
 BY_SEGMENT = {
     MADRID: [267] * 4 + [203] * 3 + [172] * 5 + [96],
-    LAV: [113, 100] + [176] * 3 + [207] * 3 + [189] * 6,
+    # los 52 de Mérida a Badajoz no pasan por el tramo de Granja-Las Encinas a Garrovilla-Las Vegas
+    LAV: [113, 100] + [176] * 3 + [207] * 3 + [137] + [189] * 5,
     MERIDA: [146, 198],
     OLD: [13] * 4,
 }
 #: Pasos de cada clase.
 KINDS = {
     MADRID: {"estimado": 2051, "publicado": 582},
-    LAV: {"estimado": 2362, "publicado": 134},
+    LAV: {"estimado": 2310, "publicado": 134},
     MERIDA: {"estimado": 344},
     OLD: {"estimado": 26, "publicado": 26},
 }
@@ -662,7 +672,8 @@ def test_trains_that_call_at_plasencia_reach_san_esteban_and_the_rest_leave_at_e
         assert r.rule is None and len(r.crossed) == 12
         assert "bif-el-chaparral:bif-san-esteban" not in r.crossed
         other = lav[r.trip.trip_id]
-        assert other.rule is None
+        # la única regla que les puede tocar es la de la salida de Mérida hacia Badajoz
+        assert other.rule is None or other.rule.startswith(MERIDA_RULE), r.trip.train_number
         assert not {"plasencia:bif-san-esteban", "bif-san-esteban:arroyo-de-la-herrera"} & set(
             other.crossed
         )
@@ -672,7 +683,7 @@ def test_trains_that_call_at_plasencia_reach_san_esteban_and_the_rest_leave_at_e
         assert "enlaza en Bifurcación El Chaparral" in basis
     # las reglas de las dos líneas casan los mismos trenes
     assert {r.trip.trip_id for r in madrid.values() if r.rule} == {
-        r.trip.trip_id for r in lav.values() if r.rule
+        r.trip.trip_id for r in lav.values() if r.rule and not r.rule.startswith(MERIDA_RULE)
     }
     # los que no pasan de Monfragüe no llegan a la línea nueva: Proximidad a Illescas y
     # regionales a Talavera de la Reina
@@ -719,3 +730,50 @@ def test_trains_enter_merida_by_the_link_or_by_aljucen(
     assert sum(1 for r in merida if len(r.crossed) == 2) == 146
     # todos están también en la línea nueva
     assert {r.trip.trip_id for r in merida} <= {r.trip.trip_id for r in resolved[LAV]}
+
+
+def test_trains_between_merida_and_badajoz_join_the_new_line_at_garrovilla(
+    resolved: dict[str, list[Resolved]],
+) -> None:
+    """Los trenes que van de Mérida hacia Badajoz, o al revés, casan una de las tres reglas de
+    recorrido, según su parada siguiente a Mérida. Los 52 que no pasan por Cáceres (los que
+    empiezan o acaban en Mérida y los que vienen de Ciudad Real, Cabeza del Buey o Villanueva de
+    la Serena) entran en la línea nueva junto a Garrovilla-Las Vegas y no cuentan en el tramo de
+    la bifurcación Granja-Las Encinas a Garrovilla-Las Vegas."""
+    lav = resolved[LAV]
+    on_rule = [r for r in lav if r.rule and r.rule.startswith(MERIDA_RULE)]
+    assert len(on_rule) == 50 + 41 + 37
+    by_merida = [r for r in lav if "37500" in r.stops and "37606" in r.stops]
+    assert {r.trip.trip_id for r in by_merida} == {r.trip.trip_id for r in on_rule}
+    only = [r for r in on_rule if not {"35400", "30002"} & set(r.stops)]
+    assert len(only) == 52
+    # los 50 que paran en Garrovilla-Las Vegas y 2 con Montijo como parada siguiente
+    assert Counter(r.rule for r in only) == {
+        f"{MERIDA_RULE}garrovilla": 50,
+        f"{MERIDA_RULE}montijo": 2,
+    }
+    for r in only:
+        assert CURVE not in r.crossed, r.trip.train_number
+        assert {r.crossed[0], r.crossed[-1]} == {
+            "garrovilla-las-vegas:montijo",
+            "bif-san-nicolas:badajoz",
+        }, r.trip.train_number
+        assert len(r.crossed) == 5
+    # de ellos, 50 vienen del este de Mérida o siguen hacia allí; los otros 2 empiezan o acaban
+    # en Mérida
+    beyond = [r for r in only if {r.stops[0], r.stops[-1]} != {"37500", "37606"}]
+    assert len(beyond) == 50
+    # los que paran en Garrovilla-Las Vegas llevan allí el horario publicado; los 2 que no, un
+    # paso estimado posterior a la salida de Mérida
+    for r in only:
+        times = [s for p in r.passes for s in (p.enter_s, p.exit_s) if s is not None]
+        assert len(times) == 2 * len(r.passes), r.trip.train_number
+        merida = next(st for st in r.trip.stop_times if st.stop_id == "37500")
+        if r.stops.index("37500") < r.stops.index("37606"):
+            assert min(times) > merida.departure_s, r.trip.train_number
+        else:
+            assert max(times) < merida.arrival_s, r.trip.train_number
+    # Los otros 76 pasan también por Cáceres: recorren la línea de Cáceres a Badajoz y siguen
+    # contando en ese tramo, aunque entran y salen de Mérida
+    through = [r for r in on_rule if r not in only]
+    assert len(through) == 76 and all(CURVE in r.crossed for r in through)

@@ -34,7 +34,7 @@ def test_declared_operators_and_feeds_hold_together() -> None:
 
 
 def test_only_the_lines_iryo_runs_on_declare_it() -> None:
-    """Iryo va de Madrid a Sevilla, a Málaga y a Barcelona: no circula por las convencionales ni
+    """Iryo va de Madrid a Sevilla, a Málaga, a Barcelona, a Valencia y a Alicante: no circula por las convencionales ni
     llega a Granada."""
     by_line = {
         load_network_spec(path).line.id: {
@@ -48,6 +48,7 @@ def test_only_the_lines_iryo_runs_on_declare_it() -> None:
         "lav-cordoba-malaga",
         "lav-madrid-barcelona",
         "lav-madrid-valencia",
+        "lav-albacete-alicante",
     }
     # los dos baipases de la línea de Barcelona declaran los mismos operadores que ella
     with_iryo |= {"baipas-zaragoza", "baipas-lleida"}

@@ -16,7 +16,7 @@ async function abrirBuscador(page: Page) {
 }
 
 // De Madrid a Badajoz se va por cuatro líneas: la convencional hasta las puertas de Plasencia, la de
-// alta velocidad de Plasencia a Badajoz por Cáceres, el ramal que entra en Mérida y el trazado antiguo
+// alta velocidad de Plasencia a Badajoz por Cáceres, la línea que entra en Mérida desde Aljucén y el trazado antiguo
 // de Monfragüe a Cáceres por Cañaveral (docs/datos.md).
 test.describe('Las líneas de Extremadura', () => {
   test('la zona «Extremadura» sale en la lista con sus cuatro líneas', async ({ page }) => {
@@ -34,7 +34,7 @@ test.describe('Las líneas de Extremadura', () => {
       /^Alta velocidad: Plasencia – Badajoz por Cáceres191 km$/,
       /^Línea convencional: Madrid – Plasencia por Talavera de la Reina260 km$/,
       /^Línea convencional: Monfragüe – Cáceres por Cañaveral71 km$/,
-      /^Línea convencional: Ramal de Mérida7 km$/,
+      /^Línea convencional: Aljucén – Mérida7 km$/,
     ])
     await page.getByTestId('linea-lav-plasencia-badajoz').click()
     await expect(page).toHaveURL(/\/linea\/lav-plasencia-badajoz$/)
