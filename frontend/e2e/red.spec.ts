@@ -27,13 +27,14 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^9 líneas · 2\.151 km\s*54 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^10 líneas · 2\.512 km\s*57 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     await expect(red.getByRole('region', { name: 'Alta velocidad' }).locator('.fila-linea')).toHaveText([
       /^Madrid – Sevilla470,5 km · hasta 300 km\/h/,
       /^Córdoba – Málaga96,9 km · hasta 300 km\/h/,
       /^Antequera – Granada114,1 km · hasta 300 km\/h/,
       /^Madrid – Barcelona por Zaragoza627,0 km · hasta 300 km\/h/,
+      /^Madrid – Valencia por Cuenca361,0 km · hasta 300 km\/h/,
     ])
     await expect(red.getByRole('region', { name: 'Línea convencional' }).locator('.fila-linea')).toHaveCount(5)
     // no arranca en ninguna línea: ni esquema ni pestañas, y con ocho líneas aparece ya el filtro de la lista
@@ -94,12 +95,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('recuento-red')).toContainText(/^69 líneas · /)
+    await expect(page.getByTestId('recuento-red')).toContainText(/^70 líneas · /)
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     // el recuento solo gana las cifras de más: no enumera
     expect((await page.getByTestId('recuento-red').locator('.pill-texto').boundingBox())!.width).toBeLessThan(anchoConTres + 40)
     const lista = page.getByTestId('lista-lineas')
-    await expect(lista.locator('.fila-linea')).toHaveCount(69)
+    await expect(lista.locator('.fila-linea')).toHaveCount(70)
     const filtro = page.getByTestId('filtro-lineas')
     await filtro.fill('alcazar')
     // dos líneas pasan por Alcázar: la de Madrid a Córdoba y la que sale de allí hacia Albacete
