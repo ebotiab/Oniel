@@ -34,11 +34,22 @@ class Operator(BaseModel):
     timetable: Literal["cargado", "no_publicado"] | None = None
 
 
+class ZoneOut(BaseModel):
+    """Zona en la que el visor agrupa las líneas; una clasificación de Oniel, sin fuente."""
+
+    id: str
+    name: str
+    sort_order: int
+    #: Ciudades de la zona; el visor nombra las que tienen estación cargada.
+    cities: list[str] = Field(default_factory=list)
+
+
 class LineSummary(BaseModel):
     id: str
     name: str
     short_name: str | None = None
     sort_order: int = 1
+    zone: ZoneOut | None = None
     mode: str
     infrastructure_manager: Operator | None = None
     #: Operadores de trenes que circulan por la línea, tengan o no sus horarios cargados.

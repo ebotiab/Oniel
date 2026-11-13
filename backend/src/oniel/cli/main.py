@@ -248,6 +248,7 @@ def validate_cmd(
         validate_annotations,
         validate_attributes,
         validate_operators,
+        validate_zones,
     )
 
     # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
@@ -284,6 +285,8 @@ def validate_cmd(
     reports.append(validate_annotations(annotations, sources, context, settings.data_dir))
     # Los operadores y sus ficheros de horarios también se contrastan con todas las líneas.
     reports.append(validate_operators(context, sources, settings.data_dir))
+    # La zona en la que el visor lista cada línea tiene que estar en el registro.
+    reports.append(validate_zones(context, settings.data_dir))
     reports.append(attributes)
     _echo_json(reports)
     if any(r["problems"] for r in reports):

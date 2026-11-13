@@ -318,6 +318,20 @@ def monkeypatch_module() -> Iterator[pytest.MonkeyPatch]:
     mp.undo()
 
 
+async def test_lines_carry_their_zone(client: httpx.AsyncClient) -> None:
+    r = await client.get("/api/network")
+    assert r.status_code == 200
+    zones = {ln["id"]: ln["zone"] for ln in r.json()["lines"]}
+    assert zones["lav-madrid-sevilla"]["id"] == "andalucia"
+    assert zones["lav-madrid-sevilla"]["name"] == "Andalucía"
+    assert "Sevilla" in zones["lav-madrid-sevilla"]["cities"]
+    assert zones["lav-madrid-barcelona"]["id"] == "cataluna"
+    assert zones["alcazar-albacete"]["id"] == "madrid-castilla-la-mancha"
+    # el orden de las zonas va de norte a sur
+    assert zones["lav-madrid-barcelona"]["sort_order"] < zones["lav-madrid-sevilla"]["sort_order"]
+    assert all(zone is not None for zone in zones.values())
+
+
 async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     r = await client.get("/api/network")
     assert r.status_code == 200

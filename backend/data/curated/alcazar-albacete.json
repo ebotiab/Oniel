@@ -4,6 +4,7 @@
     "name": "Línea convencional Alcázar de San Juan – Albacete",
     "short_name": "300",
     "sort_order": 6,
+    "zone": "madrid-castilla-la-mancha",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1668,

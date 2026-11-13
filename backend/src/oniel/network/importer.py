@@ -12,7 +12,7 @@ import asyncpg
 import logfire
 
 from oniel.network.build import BuiltNetwork, build_network, round_coords
-from oniel.network.spec import SourceSpec, load_network_spec, load_sources
+from oniel.network.spec import SourceSpec, ZoneSpec, load_network_spec, load_sources, load_zones
 
 
 def _sha256(path: Path) -> str | None:
@@ -51,15 +51,41 @@ async def upsert_sources(
     return len(sources)
 
 
+#: El registro de zonas, dentro del directorio de datos.
+ZONES_FILE = Path("curated") / "zonas.json"
+
+
+async def upsert_zones(conn: asyncpg.Connection, zones: list[ZoneSpec]) -> int:
+    for z in zones:
+        await conn.execute(
+            """
+            INSERT INTO zones (id, name, sort_order, cities) VALUES ($1,$2,$3,$4)
+            ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, sort_order=EXCLUDED.sort_order,
+              cities=EXCLUDED.cities
+            """,
+            z.id,
+            z.name,
+            z.sort_order,
+            z.cities,
+        )
+    return len(zones)
+
+
 async def import_network(
     conn: asyncpg.Connection, spec_path: Path, sources_path: Path, data_dir: Path
 ) -> dict[str, Any]:
     spec = load_network_spec(spec_path)
     sources = load_sources(sources_path)
+    zones = load_zones(data_dir / ZONES_FILE)
+    if spec.line.zone not in {z.id for z in zones}:
+        raise ValueError(
+            f"{spec.line.id} declara la zona {spec.line.zone}, que no está en zonas.json"
+        )
     with logfire.span("import network {line}", line=spec.line.id):
         net = build_network(spec, data_dir)
         async with conn.transaction():
             await upsert_sources(conn, sources, data_dir)
+            await upsert_zones(conn, zones)
             for op in spec.operators:
                 await conn.execute(
                     """
@@ -105,10 +131,11 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
     geometry = {"type": "LineString", "coordinates": round_coords(net.line.polyline.coords)}
     await conn.execute(
         """
-        INSERT INTO lines (id, name, short_name, sort_order, mode, infrastructure_manager_id, gauge_mm, electrification,
+        INSERT INTO lines (id, name, short_name, sort_order, zone_id, mode, infrastructure_manager_id, gauge_mm, electrification,
                            max_speed_kmh, opened_on, length_km, reference_length_km, status, description, geometry, source_id)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+        VALUES ($1,$2,$3,$4,$17,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
         ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, short_name=EXCLUDED.short_name, sort_order=EXCLUDED.sort_order,
+          zone_id=EXCLUDED.zone_id,
           mode=EXCLUDED.mode, infrastructure_manager_id=EXCLUDED.infrastructure_manager_id, gauge_mm=EXCLUDED.gauge_mm,
           electrification=EXCLUDED.electrification, max_speed_kmh=EXCLUDED.max_speed_kmh, opened_on=EXCLUDED.opened_on,
           length_km=EXCLUDED.length_km, reference_length_km=EXCLUDED.reference_length_km, status=EXCLUDED.status,
@@ -130,6 +157,7 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
         line.description,
         geometry,
         line.geometry_source.source_id,
+        line.zone,
     )
 
 

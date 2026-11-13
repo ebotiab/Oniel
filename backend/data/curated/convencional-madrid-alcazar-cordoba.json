@@ -4,6 +4,7 @@
     "name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
     "short_name": "300 y 400",
     "sort_order": 2,
+    "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1668,
