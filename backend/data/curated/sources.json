@@ -401,7 +401,7 @@
       "license_url": "https://www.adif.es/aviso-legal",
       "retrieved_on": "2026-11-13",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json.",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
