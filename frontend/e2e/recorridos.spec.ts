@@ -179,13 +179,8 @@ test.describe('Comparador de recorridos: la vista', () => {
     await desde.fill('m')
     const primera = page.getByTestId('recorridos-desde').getByRole('option').first()
     await expect(primera).toBeVisible()
-    // Lo que hay bajo el centro de la primera sugerencia es la propia sugerencia, no la fila «Hasta» que tiene debajo.
-    const encima = await primera.evaluate((li) => {
-      const r = li.getBoundingClientRect()
-      const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
-      return el !== null && li.contains(el)
-    })
-    expect(encima).toBe(true)
+    // Playwright solo da por pulsable un elemento si es él quien recibe el clic en ese punto: con la fila «Hasta» encima, falla.
+    await primera.click({ trial: true })
     // Y la lista sale alineada con el campo en el que se escribe.
     const campo = await page.getByTestId('recorridos-desde-buscador').boundingBox()
     const lista = await page.getByTestId('recorridos-desde').locator('.buscador-lista').boundingBox()
