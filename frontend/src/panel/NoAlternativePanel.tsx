@@ -178,8 +178,9 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
             >
               <p className="suave">
                 Del que más trenes lleva al que menos. Lo que añade el otro camino es lo de los trenes más numerosos de cada tramo: kilómetros por cada línea y
-                tiempo a la velocidad habitual, sin paradas. Oniel solo comprueba que el camino existe y cuánto mide: no mira si el tren cabe por él (ancho de
-                vía, paradas, sitio en la vía).
+                tiempo a la velocidad habitual, sin paradas. Un camino de más del doble que el recorrido del tren no cuenta: en algunos de estos tramos
+                parte de los trenes se queda sin él, y la fila dice cuántos. Oniel solo comprueba que el camino existe y cuánto mide: no mira si el tren
+                cabe por él (ancho de vía, paradas, sitio en la vía).
               </p>
               <ol className="lista-destinos" data-testid="lista-con-alternativa">
                 {con.map((s) => {
@@ -192,7 +193,10 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
                         </button>
                         <span className="suave">{principal?.alternative ? costeCorto(principal.alternative) : ''}</span>
                       </span>
-                      <span className="cuantos datos">{trenes(s.trains)}</span>
+                      <span className="cuantos datos">
+                        {trenes(s.trains)}
+                        {s.without_alternative > 0 && <span className="suave"> · {s.without_alternative} sin él</span>}
+                      </span>
                     </li>
                   )
                 })}

@@ -94,8 +94,9 @@ test.describe('Tramos sin otro camino', () => {
   test('para un tren desviado, el otro camino puede ser más corto', async ({ page }) => {
     await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real')
     await abrirPanel(page)
+    // los 4 regionales de Ciudad Real a Alcázar de San Juan no tienen otro camino: el que hay mide más del doble
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 32 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (10, entre Madrid-Puerta de Atocha y Málaga-María Zambrano), 90 km y 1 h 7 min menos.',
+      'Si este tramo se cortara, 4 de sus 32 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (10, entre Madrid-Puerta de Atocha y Málaga-María Zambrano), 90 km y 1 h 7 min menos.',
     )
   })
 
@@ -107,23 +108,27 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, sus trenes no tendrían por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 19 de los 149 tramos con trenes, en 6 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 38 de los 149 tramos con trenes, en 7 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(6)
+    await expect(lineas).toHaveCount(7)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
     await expect(lineas.nth(0)).toContainText('Madrid – Barcelona por Zaragoza')
     await expect(lineas.nth(0)).toContainText('3 de sus 20 tramos')
     await expect(lineas.nth(0)).toContainText('108 trenes')
-    // la alta velocidad de Madrid a Valencia ya no figura: sus trenes tienen otro camino, dando la vuelta al anillo.
-    // De la línea de València a Camp de Tarragona, solo el primer tramo: a la Estació del Nord no se llega por otro
+    // la alta velocidad de Madrid a Valencia no figura: en sus últimos tramos los AVE de Castelló sí tienen otro camino.
+    // De la línea de València a Camp de Tarragona, el primer tramo y los dieciséis de Castelló a Camp de Tarragona:
+    // dar la vuelta por Madrid mide más del doble y no cuenta
     await expect(linea('Madrid – Valencia por Cuenca')).toHaveCount(0)
-    await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('1 de sus 35 tramos')
-    await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('54 trenes')
+    await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('17 de sus 35 tramos')
+    await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('de 19 a 54 trenes')
+    // los tres de Linares-Baeza a Moreda, con sus dos trenes de Almería
+    await expect(linea('Linares-Baeza – Granada por Moreda')).toContainText('3 de sus 6 tramos')
+    await expect(linea('Linares-Baeza – Granada por Moreda')).toContainText('2 trenes')
     // y los siete de la de Albacete a Alicante que quedan al sur de Albacete
     await expect(linea('Albacete – Alicante')).toContainText('7 de sus 9 tramos')
     await expect(linea('Albacete – Alicante')).toContainText('de 36 a 56 trenes')
@@ -140,8 +145,8 @@ test.describe('Tramos sin otro camino', () => {
     // Albacete tiene dos caminos
     await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Alcázar de San Juan – Albacete')
     // Granada está unida por los dos lados (la convencional de Moreda y la alta velocidad de Antequera):
-    // sus líneas no figuran
-    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Granada')
+    // la alta velocidad de Antequera a Granada no figura
+    await expect(page.getByTestId('lista-sin-alternativa')).not.toContainText('Antequera – Granada')
     await expect(vista).toContainText('Trenes del viernes, 13 de noviembre de 2026')
     await expect(vista).not.toContainText(/criticidad/i)
     // el mapa atenúa el resto de la red; mientras no se mira nada, no hay nada en azul
@@ -149,14 +154,16 @@ test.describe('Tramos sin otro camino', () => {
 
     // los demás, plegados: 80 tramos con lo que añade su otro camino, los dos baipases entre ellos
     const resto = page.getByTestId('tramos-con-alternativa')
-    await expect(resto.locator('summary')).toHaveText('Los otros 130 tramos tienen otro camino')
+    await expect(resto.locator('summary')).toHaveText('Los otros 111 tramos tienen otro camino')
     await expect(page.getByTestId('lista-con-alternativa')).toBeHidden()
     await resto.locator('summary').click()
     const otros = page.getByTestId('lista-con-alternativa').locator('li')
-    await expect(otros).toHaveCount(130)
+    await expect(otros).toHaveCount(111)
     // el que más trenes lleva: por él pasan también los que no paran en Madrid
     await expect(otros.first()).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
     await expect(otros.first()).toContainText('140 trenes')
+    // de ellos, los Avant que solo recorren ese tramo no lo tienen: la fila lo dice
+    await expect(otros.first()).toContainText('22 sin él')
     await expect(otros.first()).toContainText('+340 km · +3 h 2 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista

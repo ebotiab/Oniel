@@ -8,7 +8,13 @@ from typing import Any
 
 import pytest
 
-from oniel.analysis.criticality import SCOPE_NOTE, ServicePath, corridor, segment_alternatives
+from oniel.analysis.criticality import (
+    SCOPE_NOTE,
+    ServicePath,
+    corridor,
+    other_way,
+    segment_alternatives,
+)
 from oniel.domain.schemas import (
     AlternativesOut,
     LineSummary,
@@ -16,7 +22,15 @@ from oniel.domain.schemas import (
     SegmentAlternativesOut,
     SegmentOut,
 )
-from oniel.routing import Graph, ScenarioError, build_graph, find_routes, route_along
+from oniel.routing import (
+    DEFAULT_MAX_RATIO,
+    Graph,
+    Scenario,
+    ScenarioError,
+    build_graph,
+    find_routes,
+    route_along,
+)
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
@@ -176,6 +190,24 @@ def test_route_along_measures_a_known_way_like_find_routes(graph: Graph) -> None
         route_along(graph, MADRID, [])
 
 
+def test_a_way_round_of_more_than_twice_the_journey_is_not_another_way(graph: Graph) -> None:
+    """El tope del comparador y de los rodeos de un cierre vale también aquí, medido contra el
+    recorrido del propio tren: con la red en anillo siempre existe la vuelta entera."""
+    # de Madrid a Córdoba, 343,6 km por la alta velocidad y 440,7 por la convencional: cuenta
+    own, other = find_routes(graph, MADRID, CORDOBA, max_changes=0)
+    assert other_way(own, [other], DEFAULT_MAX_RATIO) is other
+    assert other_way(own, [other], 1.2) is None and other_way(own, [other], None) is other
+    assert other_way(own, [], DEFAULT_MAX_RATIO) is None
+    # un tren que solo recorre Urda – Ciudad Real: el rodeo por Manzanares pasa del doble
+    short = route_along(graph, "urda", [f"{LAV}:urda:ciudad-real"])
+    round_about = find_routes(
+        graph, "urda", "ciudad-real", Scenario(closures=[short.segment_ids[0]]), max_ratio=None
+    )
+    assert round_about and round_about[0].length_km > 2 * short.length_km
+    assert other_way(short, round_about, DEFAULT_MAX_RATIO) is None
+    assert other_way(short, round_about, None) is round_about[0]
+
+
 def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     lines: list[LineSummary],
 ) -> None:
@@ -216,11 +248,16 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert s.with_alternative + s.without_alternative == s.trains
     # no queda otro camino hacia Sevilla, adonde Oniel solo llega por la alta velocidad, ni en
     # el ramal de Jaén, que acaba en una estación término
+    # Un camino de más del doble que el recorrido del tren no cuenta como otro camino. «Sin otro
+    # camino» es el tramo en el que ningún tren lo tiene (`none`); en otros se queda sin él solo
+    # una parte de los trenes, los de recorrido corto
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
+    none = {k: n for k, n in without.items() if n == _of(exported.segments, k).trains}
+    assert (len(none), len(without)) == (38, 105)
     apart = (f"{BCN}:", f"{LAV_VALENCIA}:", f"{LAV_ALICANTE}:", f"{MEDITERRANEO}:")
-    assert {k: n for k, n in without.items() if not k.startswith(apart)} == {
+    assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 83,
         f"{LAV}:majarabique:sevilla-santa-justa": 81,
         f"{JAEN}:espeluy:mengibar-artichuela": 26,
@@ -231,6 +268,11 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{LAV_MALAGA}:bif-gobantes:pb-alora": 63,
         f"{LAV_MALAGA}:pb-alora:paet-los-prados": 63,
         f"{LAV_MALAGA}:paet-los-prados:malaga-maria-zambrano": 63,
+        # los dos trenes de Linares-Baeza a Almería: la vuelta por Córdoba, Antequera y Granada
+        # mide más del doble
+        f"{LBMG}:linares-baeza:jodar-ubeda": 2,
+        f"{LBMG}:jodar-ubeda:cabra-del-santo-cristo": 2,
+        f"{LBMG}:cabra-del-santo-cristo:moreda": 2,
     }
     # desde que Albacete está unida a Madrid por dos caminos, el convencional por Alcázar de San
     # Juan y el de alta velocidad por Cuenca, cada uno es el otro camino del otro: los 13 trenes
@@ -242,12 +284,17 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert [s.trains for s in trunk[:8]] == [84] + [86] * 7
     assert all(s.without_alternative == 0 for s in trunk[:8])
     # La línea de Valencia a Camp de Tarragona cierra un anillo con la de Madrid a Valencia y la de
-    # Madrid a Barcelona: todo tren de las tres tiene otro camino cargado, dando la vuelta por
-    # Madrid, aunque sea de más de mil kilómetros y por vías de otro ancho. Ya no figura ningún
-    # tramo de la línea de Madrid a Valencia.
-    assert not any(s.startswith(f"{LAV_VALENCIA}:") for s in without)
+    # Madrid a Barcelona, pero dar la vuelta entera no cuenta: de la bifurcación de Albacete a
+    # València solo tienen otro camino los 4 AVE de Madrid a Castelló (434 km frente a 742 por
+    # Zaragoza y la costa); los de Madrid a València (361 km frente a 815), no
     valencia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
-    assert len(valencia) == 12 and all(s.trains == s.with_alternative > 0 for s in valencia)
+    assert [(s.trains, s.without_alternative) for s in valencia[8:]] == [
+        (42, 38),
+        (42, 38),
+        (52, 48),
+        (52, 48),
+    ]
+    assert not any(s.startswith(f"{LAV_VALENCIA}:") for s in none)
     # y en la de Albacete a Alicante, los siete que van de Albacete a Alicante: 42 trenes hasta
     # la bifurcación de Murcia, 36 de allí a Monforte del Cid (los 6 de Madrid a Murcia que no
     # entran en Alicante ya han salido) y 56 de Monforte del Cid a Alicante, con los 20 Avant de
@@ -268,7 +315,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # Barcelona-Sants, fuera del anillo, con sus 108 trenes
     barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]
     assert len(barcelona) == 20
-    assert {s: n for s, n in without.items() if s.startswith(f"{BCN}:")} == {
+    assert {s: n for s, n in none.items() if s.startswith(f"{BCN}:")} == {
         f"{BCN}:camp-de-tarragona:l-arboc": 108,
         f"{BCN}:l-arboc:vilafranca-del-penedes": 108,
         f"{BCN}:vilafranca-del-penedes:barcelona-sants": 108,
@@ -305,11 +352,17 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert before == 78 == stations[f"{BCN}:bif-moncasi:zaragoza-delicias"] + 22
     after = _of(exported.segments, f"{BCN}:bif-artesa-de-lleida:l-espluga-de-francoli").trains
     assert after == 89 == stations[f"{BCN}:lleida-pirineus:bif-artesa-de-lleida"] + 42
-    # Y de la línea nueva, el primer tramo: a València-Estació del Nord solo se llega por él.
-    assert {s: n for s, n in without.items() if s.startswith(f"{MEDITERRANEO}:")} == {
-        f"{MEDITERRANEO}:valencia-estacio-del-nord:valencia-joaquin-sorolla": 54
-    }
-    # el otro camino de un regional de València a Vinaròs (151,0 km) son 1.026,3 km por Madrid
+    # De la línea nueva, el primer tramo, porque a València-Estació del Nord solo se llega por
+    # él, y los dieciséis de Castelló a Camp de Tarragona: la vuelta por Madrid mide más del doble
+    # para todos sus trenes. De Joaquín Sorolla a Castelló solo la tienen los 4 AVE de Madrid
+    coast_none = {s: n for s, n in none.items() if s.startswith(f"{MEDITERRANEO}:")}
+    assert len(coast_none) == 17
+    assert coast_none[f"{MEDITERRANEO}:valencia-estacio-del-nord:valencia-joaquin-sorolla"] == 54
+    assert coast_none[f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona"] == 19
+    partly = _of(exported.segments, f"{MEDITERRANEO}:almassora:castello-de-la-plana")
+    assert (partly.trains, partly.without_alternative) == (52, 48)
+    # un regional de València a Vinaròs (151,0 km) no tiene otro camino: los 1.026 km por Madrid
+    # no cuentan
     coast = _of(exported.segments, f"{MEDITERRANEO}:castello-de-la-plana:benicassim")
     regional = next(
         g
@@ -317,14 +370,15 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         if (g.from_node_id, g.to_node_id) == ("valencia-estacio-del-nord", "vinaros")
     )
     assert (regional.trains, regional.length_km) == (22, 151.0)
-    assert regional.alternative is not None and regional.alternative.length_km == 1026.3
+    assert regional.alternative is None
     # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
-    # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
-    # trenes tienen otro camino, aunque sea por una línea de otro ancho
+    # Antequera), así que ni la alta velocidad de Granada ni Córdoba – bifurcación de Málaga
+    # figuran ya: sus trenes de largo recorrido tienen otro camino, aunque sea por una línea de
+    # otro ancho. Los de recorrido corto (los Avant de Sevilla, Málaga y Granada), no
     first = _of(exported.segments, CORDOBA_BIF_MALAGA)
-    assert (first.trains, first.without_alternative) == (140, 0)
+    assert (first.trains, first.without_alternative) == (140, 22)
     loja = _of(exported.segments, f"{LAV_GRANADA}:loja:bif-tocon")
-    assert (loja.trains, loja.without_alternative) == (24, 0)
+    assert (loja.trains, loja.without_alternative) == (24, 14)
     # para los 6 trenes de Madrid a Granada (los dos Alvia que siguen a Almería cuentan con
     # ese destino, no con Granada), el otro camino, por Moreda, es 81,7 km más corto
     to_granada = next(
