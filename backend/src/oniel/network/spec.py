@@ -218,6 +218,11 @@ class LineSpec(BaseModel):
     description: str | None = None
     geometry_source: GeometrySource
     verification_source_id: str | None = None
+    #: Id de la línea de la que esta es un baipás: une dos nodos de aquella por otro camino, que
+    #: evita lo que hay entre ellos (el de Zaragoza rodea Zaragoza-Delicias). Sus trenes no se
+    #: eligen con un filtro propio: son los de aquella línea que no paran ni salen de ella entre
+    #: los dos nodos (``oniel.sim.passes.Bypass``).
+    bypass_of: str | None = None
 
 
 class CorridorFilter(BaseModel):
@@ -321,6 +326,15 @@ class NetworkSpec(BaseModel):
                         f"la sección de «{t.attribute}» {t.from_node}–{t.to_node} apunta a un"
                         f" nodo desconocido {ref}"
                     )
+        if self.line.bypass_of is not None:
+            if self.line.bypass_of == self.line.id:
+                raise ValueError(f"la línea {self.line.id} se declara baipás de sí misma")
+            if self.stop_mappings or self.route_overrides:
+                raise ValueError(
+                    f"la línea {self.line.id} es un baipás: sus trenes son los de"
+                    f" {self.line.bypass_of} que no paran entre sus dos extremos, y no lleva"
+                    " stop_mappings ni route_overrides"
+                )
         rule_ids = [r.id for r in self.route_overrides]
         if len(set(rule_ids)) != len(rule_ids):
             raise ValueError("ids de regla de recorrido repetidos en route_overrides")

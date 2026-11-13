@@ -10,6 +10,7 @@ from typing import Any
 from oniel.gtfs.reader import read_feed
 from oniel.gtfs.trips import (
     LoadedLine,
+    bypasses_of,
     calls_for_trip,
     calls_on_line,
     route_for_trip,
@@ -32,7 +33,8 @@ LENGTH_TOLERANCE_KM = 3.0
 
 def loaded_line(net: BuiltNetwork) -> LoadedLine:
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat, n.spec.name) for n in net.nodes}
-    return LoadedLine(net.spec, nodes)
+    segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
+    return LoadedLine(net.spec, nodes, segments)
 
 
 def expected_pk_km(net: BuiltNetwork, km: float) -> float:
@@ -277,25 +279,49 @@ def validate_all(
             )
 
     feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix)
-    trips = select_trips_for_spec(feed, spec)
-    nodes = loaded_line(net).nodes
-    segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
+    own = loaded_line(net)
+    # Los trenes de un baipás salen al resolver la línea de la que es baipás: se resuelve aquella
+    # y se cuentan los viajes que pasan por los tramos de esta.
+    resolved = own
+    if spec.line.bypass_of is not None:
+        parent = next((o for o in others if o.line_id == spec.line.bypass_of), None)
+        ends = [net.nodes[0].spec.id, net.nodes[-1].spec.id]
+        if parent is None:
+            problems.append(
+                f"es un baipás de {spec.line.bypass_of}, que no está entre las líneas cargadas"
+            )
+        elif missing := [e for e in ends if e not in parent.nodes]:
+            problems.append(
+                f"es un baipás de {parent.line_id}, pero {' y '.join(missing)} no es un nodo suyo"
+            )
+        else:
+            resolved = parent
+    beside = [o for o in (own, *others) if o is not resolved]
+    bypasses = bypasses_of(resolved, beside)
+    own_ids = {s.id for s in net.segments}
+    trips = []
     kinds: Counter[str] = Counter()
     resolutions: Counter[str] = Counter()
     unmapped: Counter[str] = Counter()
     products: Counter[str] = Counter()
     rules: Counter[str] = Counter({r.id: 0 for r in spec.route_overrides})
-    for trip in trips:
-        products[trip.product or "tren"] += 1
-        route = route_for_trip(spec, trip)
-        if route is not None:
-            rules[route.override.id] += 1
-        calls = calls_for_trip(trip, feed, spec, nodes=nodes, others=others, route=route)
+    for trip in select_trips_for_spec(feed, resolved.spec):
+        route = route_for_trip(resolved.spec, trip)
+        calls = calls_for_trip(
+            trip, feed, resolved.spec, nodes=resolved.nodes, others=beside, route=route
+        )
         line_calls = calls_on_line(calls, route)
-        for c in line_calls:
+        passes, resolution = resolve_passes(line_calls, resolved.nodes, resolved.segments, bypasses)
+        passes = [p for p in passes if p.segment_id in own_ids]
+        if resolved is not own and not passes:
+            continue
+        trips.append(trip)
+        products[trip.product or "tren"] += 1
+        if route is not None and resolved is own:
+            rules[route.override.id] += 1
+        for c in line_calls if resolved is own else ():
             if c.node_id is None and not c.exit_node_ids:
                 unmapped[f"{c.stop_id} {c.stop_name}"] += 1
-        passes, resolution = resolve_passes(line_calls, nodes, segments)
         resolutions[resolution] += 1
         kinds.update(p.kind for p in passes)
     if unmapped:
