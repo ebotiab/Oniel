@@ -86,13 +86,13 @@ def test_the_conventional_line_is_the_alternative_to_high_speed_between_madrid_a
     assert segment.by_operator == {"ouigo": 1, "renfe": 2}
     [group] = segment.groups
     assert (group.from_node_id, group.to_node_id, group.trains) == (MADRID, CORDOBA, 3)
-    assert (group.length_km, group.time_min, group.line_ids) == (343.6, 81, [LAV])
+    assert (group.length_km, group.time_min, group.line_ids) == (343.6, 80, [LAV])
     alternative = group.alternative
     assert alternative is not None
     # con Adamuz – Córdoba cerrado queda la línea convencional entera: 440,7 km frente a 343,6
     assert alternative.line_ids == [CONV]
     assert (alternative.length_km, alternative.extra_km) == (440.7, 97.1)
-    assert alternative.time_min is not None and alternative.extra_min == alternative.time_min - 81
+    assert alternative.time_min is not None and alternative.extra_min == alternative.time_min - 80
     assert alternative.single_track_km == 194.1
     assert alternative.via[:2] == ["Aranjuez", "Alcázar de San Juan"]
 
@@ -188,7 +188,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    assert len(exported.segments) == 54 + 4 + 8
+    assert len(exported.segments) == 54 + 4 + 8 + 2
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -199,8 +199,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
     assert without == {
-        f"{LAV}:bif-malaga:majarabique": 55,
-        f"{LAV}:majarabique:sevilla-santa-justa": 53,
+        f"{LAV}:bif-malaga:majarabique": 83,
+        f"{LAV}:majarabique:sevilla-santa-justa": 81,
         f"{JAEN}:espeluy:mengibar-artichuela": 50,
         f"{JAEN}:mengibar-artichuela:jaen": 44,
         # de Alcázar de San Juan a Albacete, mientras no esté cargada otra línea que llegue a
@@ -210,7 +210,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # Antequera), así que ni sus dos líneas ni Córdoba – bifurcación de Málaga figuran ya: sus
     # trenes tienen otro camino, aunque sea por una línea de otro ancho
     first = _of(exported.segments, CORDOBA_BIF_MALAGA)
-    assert (first.trains, first.without_alternative) == (108, 0)
+    assert (first.trains, first.without_alternative) == (140, 0)
     loja = _of(exported.segments, f"{LAV_GRANADA}:loja:bif-tocon")
     assert (loja.trains, loja.without_alternative) == (26, 0)
     # para los 8 trenes de Madrid a Granada, el otro camino, por Moreda, es 81,7 km más corto
@@ -227,4 +227,4 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
     assert (top.trains, top.from_node_id, top.to_node_id) == (43, MADRID, SEVILLA)
     assert top.alternative is not None
-    assert (top.alternative.extra_km, top.alternative.extra_min) == (97.0, 104)
+    assert (top.alternative.extra_km, top.alternative.extra_min) == (97.0, 106)

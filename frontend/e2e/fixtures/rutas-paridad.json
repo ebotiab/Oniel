@@ -13,7 +13,7 @@
           "to_node_id": "cordoba",
           "to_name": "Córdoba",
           "length_km": 343.6,
-          "time_min": 81,
+          "time_min": 80,
           "single_track_km": 0.0,
           "line_ids": [
             "lav-madrid-sevilla"
@@ -27,7 +27,7 @@
               "to_node_id": "cordoba",
               "to_name": "Córdoba",
               "length_km": 343.6,
-              "time_min": 81,
+              "time_min": 80,
               "single_track_km": 0.0
             }
           ],
@@ -38,7 +38,9 @@
           ],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real",
@@ -48,8 +50,10 @@
             "cordoba"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real",
             "lav-madrid-sevilla:ciudad-real:puertollano",
@@ -163,7 +167,7 @@
           "to_node_id": "ciudad-real",
           "to_name": "Ciudad Real",
           "length_km": 170.8,
-          "time_min": 40,
+          "time_min": 39,
           "single_track_km": 0.0,
           "line_ids": [
             "lav-madrid-sevilla"
@@ -177,21 +181,25 @@
               "to_node_id": "ciudad-real",
               "to_name": "Ciudad Real",
               "length_km": 170.8,
-              "time_min": 40,
+              "time_min": 39,
               "single_track_km": 0.0
             }
           ],
           "via": [],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real"
           ]
@@ -401,7 +409,7 @@
           "to_node_id": "sevilla-santa-justa",
           "to_name": "Sevilla-Santa Justa",
           "length_km": 470.3,
-          "time_min": 115,
+          "time_min": 113,
           "single_track_km": 0.0,
           "line_ids": [
             "lav-madrid-sevilla"
@@ -415,7 +423,7 @@
               "to_node_id": "sevilla-santa-justa",
               "to_name": "Sevilla-Santa Justa",
               "length_km": 470.3,
-              "time_min": 115,
+              "time_min": 113,
               "single_track_km": 0.0
             }
           ],
@@ -427,7 +435,9 @@
           ],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real",
@@ -440,8 +450,10 @@
             "sevilla-santa-justa"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real",
             "lav-madrid-sevilla:ciudad-real:puertollano",
@@ -948,7 +960,7 @@
           "to_node_id": "cordoba",
           "to_name": "Córdoba",
           "length_km": 343.6,
-          "time_min": 81,
+          "time_min": 80,
           "single_track_km": 0.0,
           "line_ids": [
             "lav-madrid-sevilla"
@@ -962,7 +974,7 @@
               "to_node_id": "cordoba",
               "to_name": "Córdoba",
               "length_km": 343.6,
-              "time_min": 81,
+              "time_min": 80,
               "single_track_km": 0.0
             }
           ],
@@ -973,7 +985,9 @@
           ],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real",
@@ -983,8 +997,10 @@
             "cordoba"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real",
             "lav-madrid-sevilla:ciudad-real:puertollano",
@@ -1189,7 +1205,7 @@
           "to_node_id": "cordoba",
           "to_name": "Córdoba",
           "length_km": 479.8,
-          "time_min": 174,
+          "time_min": 173,
           "single_track_km": 258.6,
           "line_ids": [
             "lav-madrid-sevilla",
@@ -1205,7 +1221,7 @@
               "to_node_id": "ciudad-real",
               "to_name": "Ciudad Real",
               "length_km": 170.8,
-              "time_min": 40,
+              "time_min": 39,
               "single_track_km": 0.0
             },
             {
@@ -1244,7 +1260,9 @@
           ],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real",
@@ -1267,8 +1285,10 @@
             "cordoba"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real",
             "manzanares-ciudad-real:almagro:ciudad-real",
@@ -1305,7 +1325,7 @@
           "to_node_id": "ciudad-real",
           "to_name": "Ciudad Real",
           "length_km": 170.8,
-          "time_min": 40,
+          "time_min": 39,
           "single_track_km": 0.0,
           "line_ids": [
             "lav-madrid-sevilla"
@@ -1319,21 +1339,25 @@
               "to_node_id": "ciudad-real",
               "to_name": "Ciudad Real",
               "length_km": 170.8,
-              "time_min": 40,
+              "time_min": 39,
               "single_track_km": 0.0
             }
           ],
           "via": [],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real"
           ]
@@ -1509,7 +1533,7 @@
           "to_node_id": "andujar",
           "to_name": "Andújar",
           "length_km": 401.0,
-          "time_min": 145,
+          "time_min": 144,
           "single_track_km": 179.8,
           "line_ids": [
             "lav-madrid-sevilla",
@@ -1525,7 +1549,7 @@
               "to_node_id": "ciudad-real",
               "to_name": "Ciudad Real",
               "length_km": 170.8,
-              "time_min": 40,
+              "time_min": 39,
               "single_track_km": 0.0
             },
             {
@@ -1563,7 +1587,9 @@
           ],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real",
@@ -1581,8 +1607,10 @@
             "andujar"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real",
             "manzanares-ciudad-real:almagro:ciudad-real",
@@ -1605,7 +1633,7 @@
           "to_node_id": "andujar",
           "to_name": "Andújar",
           "length_km": 422.4,
-          "time_min": 111,
+          "time_min": 110,
           "single_track_km": 78.7,
           "line_ids": [
             "lav-madrid-sevilla",
@@ -1620,7 +1648,7 @@
               "to_node_id": "cordoba",
               "to_name": "Córdoba",
               "length_km": 343.6,
-              "time_min": 81,
+              "time_min": 80,
               "single_track_km": 0.0
             },
             {
@@ -1643,7 +1671,9 @@
           ],
           "node_ids": [
             "madrid-puerta-de-atocha",
+            "bif-los-gavilanes",
             "bif-torrejon-de-velasco",
+            "bif-yeles",
             "bif-la-sagra",
             "urda",
             "ciudad-real",
@@ -1658,8 +1688,10 @@
             "andujar"
           ],
           "segment_ids": [
-            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+            "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+            "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+            "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+            "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real",
             "lav-madrid-sevilla:ciudad-real:puertollano",
@@ -2377,7 +2409,7 @@
             "to_node_id": "cordoba",
             "to_name": "Córdoba",
             "length_km": 343.6,
-            "time_min": 81,
+            "time_min": 80,
             "single_track_km": 0.0,
             "line_ids": [
               "lav-madrid-sevilla"
@@ -2391,7 +2423,7 @@
                 "to_node_id": "cordoba",
                 "to_name": "Córdoba",
                 "length_km": 343.6,
-                "time_min": 81,
+                "time_min": 80,
                 "single_track_km": 0.0
               }
             ],
@@ -2402,7 +2434,9 @@
             ],
             "node_ids": [
               "madrid-puerta-de-atocha",
+              "bif-los-gavilanes",
               "bif-torrejon-de-velasco",
+              "bif-yeles",
               "bif-la-sagra",
               "urda",
               "ciudad-real",
@@ -2412,8 +2446,10 @@
               "cordoba"
             ],
             "segment_ids": [
-              "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-              "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+              "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+              "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+              "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+              "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
               "lav-madrid-sevilla:bif-la-sagra:urda",
               "lav-madrid-sevilla:urda:ciudad-real",
               "lav-madrid-sevilla:ciudad-real:puertollano",
@@ -2437,7 +2473,7 @@
             "to_node_id": "ciudad-real",
             "to_name": "Ciudad Real",
             "length_km": 366.9,
-            "time_min": 119,
+            "time_min": 118,
             "single_track_km": 0.0,
             "line_ids": [
               "convencional-madrid-alcazar-cordoba",
@@ -2463,7 +2499,7 @@
                 "to_node_id": "ciudad-real",
                 "to_name": "Ciudad Real",
                 "length_km": 170.8,
-                "time_min": 40,
+                "time_min": 39,
                 "single_track_km": 0.0
               }
             ],
@@ -2485,7 +2521,9 @@
               "aranjuez",
               "bif-planetario",
               "madrid-puerta-de-atocha",
+              "bif-los-gavilanes",
               "bif-torrejon-de-velasco",
+              "bif-yeles",
               "bif-la-sagra",
               "urda",
               "ciudad-real"
@@ -2502,8 +2540,10 @@
               "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
               "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
               "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-              "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco",
-              "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-la-sagra",
+              "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes",
+              "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
+              "lav-madrid-sevilla:bif-torrejon-de-velasco:bif-yeles",
+              "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
               "lav-madrid-sevilla:bif-la-sagra:urda",
               "lav-madrid-sevilla:urda:ciudad-real"
             ]

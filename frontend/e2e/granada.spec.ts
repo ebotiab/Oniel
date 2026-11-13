@@ -73,7 +73,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     const alta = recorridos.filter({ hasText: '569,0 km' })
     await expect(alta).toContainText('Por Bifurcación Málaga-Alta Velocidad y Antequera-Santa Ana')
     await expect(alta).toContainText('Recorre tres líneas')
-    await expect(alta).toContainText('2 h 18 min sin paradas')
+    await expect(alta).toContainText('2 h 17 min sin paradas')
     await expect(alta).toContainText('81,0 km de vía única')
     await expect(alta).toContainText(/Pasa por Ciudad Real, .*Córdoba, .*Antequera-Santa Ana, Antequera AV y Loja/)
     await expect(alta.getByTestId('recorrido-trenes')).toContainText('5 trenes directos')

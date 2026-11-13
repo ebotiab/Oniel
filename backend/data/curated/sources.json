@@ -267,6 +267,17 @@
       "notes": "Fuente de verificación, no de geometría, consultada por la API de Wikipedia: «Línea Linares Baeza-Almería», revisión del 25 de abril de 2026 (oldid 173143149, https://es.wikipedia.org/wiki/L%C3%ADnea_Linares_Baeza-Almer%C3%ADa), y «Línea Moreda-Granada», revisión del 1 de junio de 2025 (oldid 167737374). Las dos citan el listado de líneas y estaciones del Ministerio de Fomento y la Declaración sobre la Red de Adif. Los puntos kilométricos de la 410 se cuentan desde la antigua estación de Linares-San José, por eso Linares-Baeza no es el km 0; los de la 416 empiezan en cero en Moreda. Los códigos de estación (56004 Jódar-Úbeda, 56009 Cabra del Santo Cristo-Alicún, 56100 Moreda, 57003 Iznalloz, 05000 Granada) y las fechas de apertura de Jódar-Úbeda (15 de noviembre de 1895), Moreda (22 de octubre de 1896) y Cabra del Santo Cristo-Alicún (22 de marzo de 1898) se tomaron de los artículos de cada estación; los códigos coinciden con las paradas del GTFS de Renfe. Los artículos de las estaciones redondean algunos PK (Jódar-Úbeda 47,00; Iznalloz 23,7): Oniel usa los del esquema de cada línea. La ficha del artículo de la 410 da 160 km/h de velocidad máxima y su texto, 140 km/h: Oniel anota 140, que es también lo que dicen las vías de OpenStreetMap entre Linares-Baeza y Moreda."
     },
     {
+      "id": "wikipedia-lav-madrid-sevilla",
+      "name": "Artículo «Línea de alta velocidad Madrid-Sevilla» de Wikipedia en español (instalaciones y puntos kilométricos)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Madrid-Sevilla",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Puntos kilométricos de la bifurcación Los Gavilanes (13,445, «incorporación desde Barcelona por Perales») y de la bifurcación Yeles (34,395, «incorporación desde Levante»), por donde entran en la línea 010 los trenes que no pasan por Madrid-Puerta de Atocha.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 4 de noviembre de 2026 (oldid 176143997), consultada por la API de Wikipedia. Es la misma tabla de instalaciones con la que se contrastaron los demás puntos kilométricos de la línea. Los dos nodos se sitúan por kilómetro sobre la geometría de OpenStreetMap, que entre Madrid y Torrejón de Velasco mide 1,3 km más que la numeración de Adif."
+    },
+    {
       "id": "adif-mapa-red",
       "name": "Mapa de la red ferroviaria española y referencias de la línea 010",
       "publisher": "Adif / Adif Alta Velocidad",
