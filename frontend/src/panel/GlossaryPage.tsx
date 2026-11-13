@@ -81,7 +81,7 @@ export function GlossaryPage({ entrada, sources, onBack }: Props) {
   const visibles = consulta ? terminos.filter((t) => t.id === entrada || normalize(`${t.nombre} ${t.breve}`).includes(consulta)) : terminos
 
   return (
-    <div ref={pagina} className="pagina-glosario" data-testid="pagina-glosario">
+    <div ref={pagina} className="pagina" data-testid="pagina-glosario">
       <header className="pagina-cabecera">
         <div className="marca-bloque">
           <span className="marca">Oniel</span>
@@ -91,17 +91,17 @@ export function GlossaryPage({ entrada, sources, onBack }: Props) {
           ← Volver al mapa
         </button>
       </header>
-      <main className="glosario" aria-labelledby="glosario-titulo">
+      <main className="pagina-columna glosario" aria-labelledby="glosario-titulo">
         <p className="sobre">Para entender la red</p>
-        <h1 id="glosario-titulo" className="glosario-titulo">
+        <h1 id="glosario-titulo" className="pagina-titulo">
           Glosario
         </h1>
-        <p className="glosario-entrada">
+        <p className="pagina-entrada">
           Unas ideas sobre cómo circulan los trenes, cada una con su dibujo, y las palabras que aparecen en las fichas.
         </p>
 
-        <nav className="glosario-indice" aria-label="Índice del glosario" data-testid="glosario-indice">
-          <p className="glosario-indice-rotulo">Cómo funciona</p>
+        <nav className="pagina-indice" aria-label="Índice del glosario" data-testid="glosario-indice">
+          <p className="pagina-indice-rotulo">Cómo funciona</p>
           <ul>
             {conceptos.map((c) => (
               <li key={c.id}>
