@@ -19,6 +19,7 @@ from conftest import (
     JAEN_SPEC,
     LAV_GRANADA_SPEC,
     LAV_MALAGA_SPEC,
+    LAV_VALENCIA_SPEC,
     LBMG_SPEC,
     MZCR_SPEC,
     SPEC,
@@ -114,6 +115,20 @@ def test_rule_validation() -> None:
         rule()
     with pytest.raises(ValidationError, match="solo tiene sentido"):
         StopMapping.model_validate({"node": "n", "via": {"line": "l", "node": "m"}})
+
+
+def test_track_km_only_goes_with_an_exit_that_has_no_via() -> None:
+    """La distancia por vía de una fuente es para una parada a la que no llega ninguna línea
+    cargada: no vale en un nodo de la línea ni junto a un «via», que ya mide el camino."""
+    assert StopMapping.model_validate({"exits": ["n"], "track_km": 36.1}).track_km == 36.1
+    assert StopMapping.model_validate({"exits": ["n"]}).track_km is None
+    for wrong in (
+        {"node": "n", "track_km": 36.1},
+        {"exits": ["n"], "via": {"line": "l", "node": "m"}, "track_km": 36.1},
+        {"exits": ["n"], "track_km": 0},
+    ):
+        with pytest.raises(ValidationError):
+            StopMapping.model_validate(wrong)
 
 
 def test_via_is_one_leg_or_a_chain_of_them() -> None:
@@ -557,6 +572,12 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "zaragoza-huesca": 11,
             "barcelona-andalucia-con-parada-en-madrid": 0,
             "barcelona-cordoba-por-valencia": 14,
+        },
+        # los trenes que recorren la línea de Valencia sin parar en Cuenca ni en Requena-Utiel
+        LAV_VALENCIA_SPEC.name: {
+            "madrid-valencia-sin-parada": 62,
+            "madrid-albacete-sin-parada": 31,
+            "madrid-alicante-sin-parada": 27,
         },
     }
     # la regla de los Ouigo de Barcelona a Andalucía no encaja con ningún viaje de Renfe: lo

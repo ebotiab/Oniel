@@ -21,8 +21,11 @@ test.describe('La línea de Alcázar de San Juan a Albacete', () => {
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Albacete-Los Llanos' })).toBeVisible()
     await expect(ficha).toContainText('vías de dos anchos')
-    // destinos directos del día de referencia, por la línea convencional
+    // destinos directos del día de referencia: delante, los de la alta velocidad por Cuenca
+    await expect(ficha).toContainText('Cuenca-Fernando Zóbel')
     await expect(ficha).toContainText('Alcázar de San Juan')
+    // y, al desplegar la lista, los de la línea convencional
+    await page.getByTestId('destinos-ver-todos').click()
     await expect(ficha).toContainText('Socuéllamos')
   })
 
@@ -31,11 +34,9 @@ test.describe('La línea de Alcázar de San Juan a Albacete', () => {
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Alcázar de San Juan' })).toBeVisible()
     await expect(ficha).toContainText('hacia Andalucía y hacia Levante')
-    // el jueves de referencia Albacete es el séptimo destino por número de trenes: se ve al
-    // desplegar la lista, que de entrada enseña los seis más frecuentes
-    await page.getByTestId('destinos-ver-todos').click()
+    // Albacete está entre los seis destinos con más trenes, que son los que se ven de entrada
     await expect(ficha).toContainText('Albacete-Los Llanos')
-    await expect(ficha).toContainText('MD, ALVIA y Regional Exprés')
+    await expect(ficha).toContainText('MD, Regional Exprés y ALVIA')
   })
 
   test('la línea tiene su ficha, con Alcázar como enlace y sus estaciones en el esquema', async ({ page }) => {

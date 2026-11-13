@@ -78,6 +78,11 @@ class StopMapping(BaseModel):
     #: repartir el tiempo con la distancia por esas líneas en vez de la línea recta, y explicar
     #: en el visor por dónde sigue el tren.
     via: list[ViaLine] = Field(default_factory=list)
+    #: Solo con ``exits`` y sin ``via``: kilómetros de vía desde la salida hasta la parada, cuando
+    #: una fuente los da y el camino no está cargado (de la bifurcación de Torrejón de Velasco a
+    #: Madrid-Chamartín, por los puntos kilométricos de la línea). El reparto del tiempo los usa
+    #: en vez de la línea recta, y un tren que cruza la línea sin parar puede fijarse con ellos.
+    track_km: float | None = Field(default=None, gt=0)
 
     @field_validator("via", mode="before")
     @classmethod
@@ -92,6 +97,11 @@ class StopMapping(BaseModel):
             raise ValueError("una parada se asigna a un nodo o a una lista de salidas")
         if self.via and self.node is not None:
             raise ValueError("«via» solo tiene sentido en una parada que es salida de la línea")
+        if self.track_km is not None and (self.node is not None or self.via):
+            raise ValueError(
+                "«track_km» solo tiene sentido en una parada que es salida de la línea y no"
+                " lleva «via»"
+            )
         lines = [v.line for v in self.via]
         if any(a == b for a, b in zip(lines, lines[1:], strict=False)):
             raise ValueError("«via» repite la misma línea en dos trechos seguidos")

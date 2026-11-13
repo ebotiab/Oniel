@@ -240,8 +240,19 @@ async def _replace_nodes_and_segments(conn: asyncpg.Connection, net: BuiltNetwor
 async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
     line_id = net.spec.line.id
     node_ids = [n.spec.id for n in net.nodes]
-    # Se borran las conexiones de esta especificación y las de los nodos que solo pertenecen a
-    # esta línea; las de un nodo compartido que declare otra línea se conservan.
+    # Se borran las conexiones que esta línea declaró en la importación anterior (también las que
+    # ya no están en su especificación, aunque cuelguen de un nodo compartido), las de sus nodos
+    # que aún no tienen dueño (anteriores a la columna ``declared_by``), las que declara ahora y
+    # las de los nodos que solo pertenecen a esta línea; las de un nodo compartido que declare
+    # otra línea se conservan.
+    await conn.execute(
+        """
+        DELETE FROM connections
+        WHERE declared_by = $1 OR (declared_by IS NULL AND node_id = ANY($2::text[]))
+        """,
+        line_id,
+        node_ids,
+    )
     await conn.execute(
         "DELETE FROM connections WHERE id = ANY($1::text[])",
         [c.id for c in net.spec.connections],
@@ -269,7 +280,10 @@ async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> N
             {"type": "LineString", "coordinates": round_coords(coords)} if len(coords) > 1 else None
         )
         await conn.execute(
-            "INSERT INTO connections (id, node_id, name, towards, status, line_id, geometry) VALUES ($1,$2,$3,$4,$5,$6,$7)",
+            """
+            INSERT INTO connections (id, node_id, name, towards, status, line_id, geometry, declared_by)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+            """,
             c.id,
             c.node_id,
             c.name,
@@ -277,6 +291,7 @@ async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> N
             c.status,
             None,
             geometry,
+            line_id,
         )
 
 
