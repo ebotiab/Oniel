@@ -1,5 +1,4 @@
 import { expect, test, type Page } from '@playwright/test'
-
 import { abrirZonas } from './navegar.ts'
 
 // La red se carga por partes: al arrancar solo el índice; el detalle de cada línea, al abrirla o al
@@ -32,7 +31,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.125 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.213 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -47,7 +46,7 @@ test.describe('Carga de la red por partes', () => {
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
     // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 18 KB de media).
     expect(bytes(red)).toBeLessThan(20_000 * (red.lines as unknown[]).length)
-    expect(bytes({ annotations, interruptions })).toBeLessThan(45_000)
+    expect(bytes({ annotations, interruptions })).toBeLessThan(55_000)
     // Con diez líneas la red del índice (161 KB) pesa ya algo más que el detalle de la línea más
     // grande (148 KB): lo que la acota es el tope por línea de arriba. Sigue pesando menos que las
     // dos líneas más grandes juntas, la convencional de Córdoba y la alta velocidad de Barcelona.

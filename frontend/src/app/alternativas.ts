@@ -77,14 +77,17 @@ export function fraseTramo(s: SegmentAlternatives): string {
   return `Si este tramo se cortara, ${s.without_alternative} de ${sus} no tendría${s.without_alternative === 1 ? '' : 'n'} otro camino ${donde}; los demás, sí.${cuanto}`
 }
 
-/** Tramos cuyos trenes se quedan sin otro camino, del que deja a más trenes sin él al que menos. */
+/** Un tramo «sin otro camino» es aquel en el que ningún tren lo tiene; si lo tiene alguno, va con los demás. */
+const ninguno = (s: SegmentAlternatives) => s.trains > 0 && s.without_alternative === s.trains
+
+/** Tramos en los que ningún tren tiene otro camino, del que más trenes lleva al que menos. */
 export function sinAlternativa(segments: SegmentAlternatives[]): SegmentAlternatives[] {
-  return segments.filter((s) => s.without_alternative > 0).sort((a, b) => b.without_alternative - a.without_alternative || b.trains - a.trains)
+  return segments.filter(ninguno).sort((a, b) => b.trains - a.trains)
 }
 
-/** Los demás tramos con trenes, del que más lleva al que menos. */
+/** Los demás tramos con trenes, del que más lleva al que menos: todos o parte de sus trenes tienen otro camino. */
 export function conAlternativa(segments: SegmentAlternatives[]): SegmentAlternatives[] {
-  return segments.filter((s) => s.trains > 0 && s.without_alternative === 0).sort((a, b) => b.trains - a.trains)
+  return segments.filter((s) => s.trains > 0 && !ninguno(s)).sort((a, b) => b.trains - a.trains)
 }
 
 /** Los tramos de una línea cuyos trenes se quedan sin otro camino, en el orden en que se recorre la línea. */
@@ -105,7 +108,7 @@ export function sinAlternativaPorLinea(segments: SegmentAlternatives[], network:
   const porLinea = new Map<string, SegmentAlternatives[]>()
   for (const s of segments) {
     const lineId = tramo.get(s.segment_id)?.line_id
-    if (!lineId || s.without_alternative === 0) continue
+    if (!lineId || !ninguno(s)) continue
     porLinea.set(lineId, [...(porLinea.get(lineId) ?? []), s])
   }
   return [...porLinea.entries()]

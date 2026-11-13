@@ -55,7 +55,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     // con la alta velocidad de Antequera cargada, Granada está unida por los dos lados: el otro
     // camino existe, dando la vuelta por Linares-Baeza, Córdoba y Antequera
     await expect(page.getByTestId('tramo-alternativa')).toContainText(
-      'sus 12 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (10, entre Bifurcación Almería y Granada), 415 km y 2 h 11 min más.',
+      '10 de sus 12 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (2, entre Madrid-Puerta de Atocha y Bifurcación Almería), 192 km menos y 29 min más.',
     )
   })
 

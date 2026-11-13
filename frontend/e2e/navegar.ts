@@ -15,13 +15,12 @@ export async function irA(page: Page, seccion: Seccion) {
 }
 
 /**
- * Abre las zonas plegadas de la lista de líneas. Con más de doce líneas la lista arranca como un
- * índice de zonas y ninguna línea está a la vista: quien va a pulsar una tiene que abrir antes la suya.
+ * Despliega las zonas de la lista de líneas. Con más de doce líneas las zonas empiezan plegadas
+ * (docs/diseno.md, «Elegir línea»): una prueba que busca una línea en la lista las abre antes.
  */
 export async function abrirZonas(page: Page) {
   const lista = page.getByTestId('lista-lineas')
   await lista.locator('.zona-cabecera').first().waitFor()
   const plegadas = lista.locator('.zona-cabecera[aria-expanded="false"]')
-  // cada zona abierta deja de casar con el selector: se abre siempre la primera que quede
   while ((await plegadas.count()) > 0) await plegadas.first().click()
 }

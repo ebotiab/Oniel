@@ -53,7 +53,7 @@ test.describe('La línea de alta velocidad Madrid – Cuenca – Valencia', () =
     await expect(page).toHaveURL(/\/nodo\/madrid-chamartin$/)
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Madrid-Chamartín' })).toBeVisible()
-    await expect(ficha).toContainText('La estación del norte de Madrid')
+    await expect(ficha).toContainText('Cabecera de la línea desde el 1 de julio de 2022')
     // destinos directos del día de referencia: Valencia por Cuenca, y Albacete y Alicante
     await expect(ficha).toContainText('València-Joaquín Sorolla')
     await expect(ficha).toContainText('Cuenca-Fernando Zóbel')

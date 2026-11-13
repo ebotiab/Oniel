@@ -1,0 +1,77 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T12:31:20Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 190636937,
+  "center": {
+    "lat": 40.5959339,
+    "lon": 0.4493012
+  },
+  "tags": {
+    "addr:city": "Ulldecona",
+    "addr:postcode": "43550",
+    "addr:street": "Passeig de l'Estació",
+    "building": "yes",
+    "name": "Ulldecona-Alcanar-la Sénia",
+    "name:ca": "Ulldecona-Alcanar-la Sénia",
+    "network": "Rodalies de Catalunya",
+    "network:guid": "ES-CT-ATMT",
+    "network:short": "ATM Camp de Tarragona",
+    "network:wikidata": "Q3322422",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8842117",
+    "wikipedia": "ca:Estació d'Ulldecona - Alcanar - la Sénia"
+  }
+},
+{
+  "type": "way",
+  "id": 800511864,
+  "center": {
+    "lat": 40.0580545,
+    "lon": 0.0577554
+  },
+  "tags": {
+    "building": "train_station",
+    "building:levels": "2",
+    "name": "Benicàssim",
+    "name:ca": "Benicàssim",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q11681636",
+    "wikipedia": "es:Estación de Benicasim"
+  }
+},
+{
+  "type": "way",
+  "id": 1230530875,
+  "center": {
+    "lat": 40.2121871,
+    "lon": 0.1990093
+  },
+  "tags": {
+    "building": "train_station",
+    "name": "Torreblanca",
+    "name:ca": "Torreblanca",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8842068",
+    "wikipedia": "ca:Estació de Torreblanca (Renfe)"
+  }
+}
+
+  ]
+}

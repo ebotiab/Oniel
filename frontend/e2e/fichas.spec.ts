@@ -67,8 +67,8 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
   test('la línea a la vista y la página de cobertura tienen su ruta en la URL', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
-    await abrirZonas(page)
     await expect(page).toHaveURL(/\/$/)
+    await abrirZonas(page)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     // el enlace abre esa misma línea
