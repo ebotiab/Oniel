@@ -235,15 +235,18 @@ def test_a_sketched_link_opens_a_new_route(graph: Graph) -> None:
 
 def test_detours_of_a_closure_between_madrid_and_ciudad_real(graph: Graph) -> None:
     """Cierre de Urda – Ciudad Real: el rodeo por Manzanares (dos líneas) y la convencional entera."""
-    short, long, by_granada = closure_detours(graph, URDA_CIUDAD_REAL)
+    found = closure_detours(graph, URDA_CIUDAD_REAL)
+    short, long = found.detours
     assert short.route.line_ids == [CONV, MZCR]
     assert (short.route.from_node_id, short.route.to_node_id) == (MADRID, CIUDAD_REAL)
     assert (short.route.length_km, short.closed_line_length_km) == (260.5, 170.8)
     assert long.route.line_ids == [CONV]
     assert (long.route.from_node_id, long.route.to_node_id) == (MADRID, CORDOBA)
     assert (long.route.length_km, long.closed_line_length_km) == (440.7, 343.6)
-    # y, desde que Granada está unida por los dos lados, la vuelta por Linares-Baeza, Moreda,
-    # Granada y Antequera hasta la bifurcación de Málaga
+    # desde que Granada está unida por los dos lados existe además la vuelta por Linares-Baeza,
+    # Moreda, Granada y Antequera hasta la bifurcación de Málaga; no se lista, pero se cuenta
+    assert found.omitted == 1
+    short, long, by_granada = closure_detours(graph, URDA_CIUDAD_REAL, max_ratio=None).detours
     assert by_granada.route.line_ids == BY_GRANADA
     assert (by_granada.route.from_node_id, by_granada.route.to_node_id) == (MADRID, "bif-malaga")
     assert (by_granada.route.length_km, by_granada.closed_line_length_km) == (698.3, 358.0)
@@ -254,7 +257,14 @@ def test_detours_leave_the_closed_line_and_only_come_back_past_the_closure(graph
         assert edge.line_id is not None
         km = graph.line_km[edge.line_id]
         lo, hi = sorted((km[edge.a], km[edge.b]))
-        for detour in closure_detours(graph, edge.id):
+        found = closure_detours(graph, edge.id)
+        everything = closure_detours(graph, edge.id, max_ratio=None)
+        # lo que se omite son los más largos de los que existen, y el más corto no se omite nunca
+        assert len(found.detours) + found.omitted == len(everything.detours)
+        assert everything.omitted == 0
+        assert found.detours[:1] == everything.detours[:1]
+        assert all(d in everything.detours for d in found.detours)
+        for detour in everything.detours:
             route = detour.route
             assert edge.line_id not in route.line_ids
             assert km[route.from_node_id] <= lo and km[route.to_node_id] >= hi
@@ -269,33 +279,42 @@ def test_closure_towards_sevilla_has_no_detour_and_the_first_stretch_goes_round_
 ) -> None:
     """A Sevilla solo se llega por la alta velocidad; hasta la bifurcación de Málaga hay otro
     camino desde que Granada está unida por los dos lados, mucho más largo."""
-    assert closure_detours(graph, f"{LAV}:bif-malaga:majarabique") == []
-    first, *_ = closure_detours(graph, f"{LAV}:cordoba:bif-malaga")
+    none = closure_detours(graph, f"{LAV}:bif-malaga:majarabique")
+    assert (none.detours, none.omitted) == ([], 0)
+    first, *_ = closure_detours(graph, f"{LAV}:cordoba:bif-malaga").detours
     assert first.route.line_ids == BY_GRANADA
     assert (first.route.from_node_id, first.route.to_node_id) == (CORDOBA, "bif-malaga")
     assert (first.route.length_km, first.closed_line_length_km) == (511.7, 14.4)
 
 
 def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph: Graph) -> None:
-    by_madrid, by_cordoba, by_granada = closure_detours(graph, f"{MZCR}:almagro:ciudad-real")
+    found = closure_detours(graph, f"{MZCR}:almagro:ciudad-real")
+    by_madrid, by_cordoba = found.detours
     assert by_madrid.route.line_ids == by_cordoba.route.line_ids == [CONV, LAV]
     assert (by_madrid.route.length_km, by_madrid.closed_line_length_km) == (366.9, 64.4)
     assert "Madrid-Puerta de Atocha" in by_madrid.route.via
     assert by_cordoba.route.length_km == 417.4 and "Córdoba" in by_cordoba.route.via
+    # la vuelta por Granada y Córdoba (689,5 km) se aparta del de Córdoba en Linares-Baeza y
+    # recorre 399,1 km para lo que aquel hace en 127: más del doble, se omite
+    assert found.omitted == 1
+    *_, by_granada = closure_detours(graph, f"{MZCR}:almagro:ciudad-real", max_ratio=None).detours
     assert by_granada.route.length_km == 689.5 and "Granada" in by_granada.route.via
 
 
 def test_other_closures_of_the_scenario_also_cut_the_detours(graph: Graph) -> None:
     scenario = Scenario(closures=[f"{MZCR}:daimiel:almagro"])
-    conventional, by_granada = closure_detours(graph, URDA_CIUDAD_REAL, scenario)
+    found = closure_detours(graph, URDA_CIUDAD_REAL, scenario)
+    (conventional,) = found.detours
     assert conventional.route.line_ids == [CONV]
-    assert by_granada.route.line_ids == BY_GRANADA
+    assert found.omitted == 1
 
 
 def test_alternatives_of_a_closure_keep_the_single_line_wording(graph: Graph) -> None:
     """La alternativa de una sola línea se describe como antes de pasar por el grafo."""
-    two_lines, one_line, *by_granada = alternatives(graph, f"{LAV}:villanueva-de-cordoba:adamuz")
-    assert [a.to_node_id for a in by_granada] == ["bif-malaga", "bif-malaga"]
+    listed, omitted = alternatives(graph, f"{LAV}:villanueva-de-cordoba:adamuz")
+    two_lines, one_line = listed
+    # las dos vueltas por Granada hasta la bifurcación de Málaga no se listan
+    assert omitted == 2
     assert (one_line.line_id, one_line.line_ids) == (CONV, [CONV])
     assert (one_line.from_node_id, one_line.to_node_id) == (MADRID, CORDOBA)
     assert (one_line.length_km, one_line.closed_line_length_km) == (440.7, 343.6)
@@ -373,6 +392,10 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"segment_id": URDA_CIUDAD_REAL, "scenario": ""},
         {"segment_id": f"{CONV}:venta-de-cardenas:vilches", "scenario": ""},
         {"segment_id": f"{MZCR}:almagro:ciudad-real", "scenario": f"c~{LAV}:adamuz:cordoba"},
+        # los tres salen por nodos distintos y ninguno sobra: cada uno es el más corto desde el suyo
+        {"segment_id": f"{LAV}:cordoba:bif-malaga", "scenario": ""},
+        # un solo rodeo listado y dos omitidos, que alargan el mismo camino por Ciudad Real o Madrid
+        {"segment_id": f"{LBMG}:iznalloz:granada", "scenario": ""},
     ]
     for case in routes:
         found = find_routes(
@@ -386,9 +409,7 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         case["expected"] = [r.model_dump() for r in found]
     for case in detours:
         scenario = Scenario.from_code(case["scenario"])
-        case["expected"] = [
-            d.model_dump() for d in closure_detours(graph, case["segment_id"], scenario)
-        ]
+        case["expected"] = closure_detours(graph, case["segment_id"], scenario).model_dump()
     return {"routes": routes, "detours": detours}
 
 
@@ -403,4 +424,5 @@ def test_parity_cases_match_the_fixture_shared_with_the_client(graph: Graph) -> 
         PARITY.parent.mkdir(parents=True, exist_ok=True)
         PARITY.write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     assert cases == json.loads(PARITY.read_text(encoding="utf-8"))
-    assert all(case["expected"] for case in [*cases["routes"], *cases["detours"]])
+    assert all(case["expected"] for case in cases["routes"])
+    assert all(case["expected"]["detours"] for case in cases["detours"])

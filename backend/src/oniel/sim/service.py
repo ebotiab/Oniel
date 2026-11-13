@@ -79,7 +79,7 @@ async def simulate_closure(
         dated: list[DatedPass] = await passes_on_segment(conn, segment.id, req.date)
         # El cierre es un escenario de una modificación sobre el grafo de todas las líneas.
         active = await fetch_interruptions(conn, day=req.date)
-        detours = alternatives(
+        detours, omitted = alternatives(
             await fetch_graph(conn), segment.id, active, Scenario.from_code(req.scenario)
         )
         interruptions = [i for i in active if segment.id in i.segment_ids]
@@ -126,6 +126,7 @@ async def simulate_closure(
             counts=dict(counts),
             items=items,
             alternatives=detours,
+            omitted_alternatives=omitted,
             interruptions=interruptions,
             method=METHOD,
             caveats=[

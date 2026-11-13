@@ -151,6 +151,11 @@ Tramos sin alternativa (decidido el 12 de noviembre de 2026, entre tres formas d
 - Al pie, el día de los trenes y que cada tramo se corta por separado, sin contar las interrupciones vigentes.
 - Nada de esto se dibuja en el mapa ni en el esquema: no hay color ni trazo nuevo.
 
+Rodeos que no se enseñan en la simulación de cierre (decidido el 13 de noviembre de 2026, entre no decir nada, una frase y un desplegable)
+- Cuando la simulación descarta rodeos por desproporcionados (`docs/simulacion.md`, «Rodeos que no se enseñan»), lo dice en una frase en gris al final del bloque «Recorrido alternativo cargado en Oniel»: «Existe otro recorrido más largo, que no se enseña: da un rodeo de más del doble respecto a otro más corto», o «Existen otros 2 recorridos más largos, que no se enseñan…».
+- Sin botón ni desplegable: los rodeos descartados no se pueden ver en el visor. Se descartó plegarlos bajo «Ver otros rodeos más largos», que añade un elemento a un panel ya largo para enseñar caminos de cientos de kilómetros.
+- Si no se descarta ninguno, la frase no aparece.
+
 Evolución del servicio (12 de noviembre de 2026; la lista con tres o más horarios, decidida ese día entre lista y gráfico)
 - Va dentro de «Más detalle» de la ficha de una estación y de la de un tramo, no a la vista: es un dato para quien quiere más. Sin plegable ni rótulo nuevos; lleva el sobre «De un horario al siguiente».
 - Una línea por operador con más de un horario descargado, en cifras tabulares: «Renfe Viajeros. Horario del 8 nov 2026: 56 trenes el 13 nov · horario del 12 nov 2026: 56 trenes el 13 nov». La fecha del horario es el día en que se descargó; la del final, el día que se cuenta. Sin color, sin flechas y sin signo: no se califica el cambio ni se dice por qué ocurre.

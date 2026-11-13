@@ -479,6 +479,8 @@ class ClosureResult(BaseModel):
     counts: dict[str, int]
     items: list[ClosureResultItem]
     alternatives: list[ClosureAlternative] = Field(default_factory=list)
+    #: Rodeos más largos que existen y no se listan por desproporcionados (``closure_detours``).
+    omitted_alternatives: int = 0
     #: Interrupciones vigentes ese día en el tramo que se cierra: el cierre simulado se suma a una real.
     interruptions: list[InterruptionOut] = Field(default_factory=list)
     method: str
