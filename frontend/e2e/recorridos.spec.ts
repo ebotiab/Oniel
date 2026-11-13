@@ -173,6 +173,27 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(page.getByTestId('vista-red')).toBeVisible()
   })
 
+  test('la lista de sugerencias de «Desde» queda por delante del campo «Hasta» y se puede pulsar', async ({ page }) => {
+    await page.goto('/recorridos')
+    const desde = page.getByRole('combobox', { name: 'Desde: buscar una estación' })
+    await desde.fill('m')
+    const primera = page.getByTestId('recorridos-desde').getByRole('option').first()
+    await expect(primera).toBeVisible()
+    // Lo que hay bajo el centro de la primera sugerencia es la propia sugerencia, no la fila «Hasta» que tiene debajo.
+    const encima = await primera.evaluate((li) => {
+      const r = li.getBoundingClientRect()
+      const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
+      return el !== null && li.contains(el)
+    })
+    expect(encima).toBe(true)
+    // Y la lista sale alineada con el campo en el que se escribe.
+    const campo = await page.getByTestId('recorridos-desde-buscador').boundingBox()
+    const lista = await page.getByTestId('recorridos-desde').locator('.buscador-lista').boundingBox()
+    expect(Math.abs(lista!.x - campo!.x)).toBeLessThan(2)
+    await primera.click()
+    await expect(page).toHaveURL(/\/recorridos\/[a-z0-9-]+$/)
+  })
+
   test('Madrid – Ciudad Real con la alta velocidad cerrada señala el recorrido por Manzanares', async ({ page }) => {
     await page.goto(`/recorridos/${MADRID}/ciudad-real/c~${URDA_CIUDAD_REAL}`)
     const recorridos = page.getByTestId('recorrido')
