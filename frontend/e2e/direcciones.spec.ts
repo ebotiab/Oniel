@@ -20,7 +20,7 @@ const RUTAS: { ruta: string; testId: string }[] = [
   { ruta: `/recorridos/${MADRID}/ciudad-real/c~${TRAMO}`, testId: 'recorridos-escenario' },
   { ruta: '/glosario', testId: 'glosario-indice' },
   { ruta: '/glosario/via-unica', testId: 'glosario-indice' },
-  { ruta: '/cobertura', testId: 'panel-cobertura' },
+  { ruta: '/cobertura', testId: 'cobertura-indice' },
   { ruta: '/proyecto/proyecto-lav-mora-alcazar', testId: 'ficha-proyecto' },
 ]
 

@@ -10,7 +10,7 @@ export interface Route {
   simulacion: boolean
   /** Línea a la vista en el panel cuando no hay nada seleccionado; sin ella, la vista de la red. */
   linea?: string | null
-  /** El panel «Cobertura y fuentes» está abierto. */
+  /** La página «Cobertura y fuentes» está abierta. */
   cobertura?: boolean
   /** Escenario abierto desde la URL, como cadena corta (`frontend/src/routing/scenario.ts`). */
   escenario?: string

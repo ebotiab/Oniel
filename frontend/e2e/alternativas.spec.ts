@@ -25,9 +25,9 @@ test.describe('Tramos sin alternativa', () => {
     await expect(page.getByTestId('recuento-red')).not.toContainText('despertando el servidor')
     await expect(page.getByTestId('recuento-red')).not.toContainText('vista estática')
     await page.goto('/cobertura')
-    await abrirPanel(page)
+    await page.getByTestId('sin-alternativa-ver-todos').click()
     await expect(page.getByTestId('lista-sin-alternativa').locator('li')).toHaveCount(11 + 20)
-    await expect(page.getByTestId('panel-cobertura')).not.toContainText('No se ha podido cargar este apartado')
+    await expect(page.getByTestId('pagina-cobertura')).not.toContainText('No se ha podido cargar este apartado')
     await page.goto('/tramo/lav-madrid-sevilla:cordoba:bif-malaga')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 103 trenes tendrían otro camino')
     expect(pedidas).toBeGreaterThan(0)
@@ -102,7 +102,6 @@ test.describe('Tramos sin alternativa', () => {
 
   test('la cobertura lista los tramos sin alternativa y pliega los demás', async ({ page }) => {
     await page.goto('/cobertura')
-    await abrirPanel(page)
     const apartado = page.getByTestId('tramos-sin-alternativa')
     await expect(page.getByRole('heading', { name: 'Tramos con más trenes y sin alternativa' })).toBeVisible()
     // el alcance, siempre delante: las líneas cargadas, no la red real, y sin los trenes de Iryo
@@ -111,6 +110,12 @@ test.describe('Tramos sin alternativa', () => {
     )
     // del que más trenes lleva al que menos
     const filas = page.getByTestId('lista-sin-alternativa').locator('li')
+    // a la vista, los ocho que más trenes llevan; los demás, tras un enlace que alarga la lista en el sitio
+    await expect(filas).toHaveCount(8)
+    const verTodos = page.getByTestId('sin-alternativa-ver-todos')
+    await expect(verTodos).toHaveText('Ver los 23 tramos restantes')
+    await verTodos.click()
+    await expect(verTodos).toHaveText('Ver solo los que más trenes llevan')
     // los dos que llevan a Sevilla, los dos del ramal de Jaén y los siete de Alcázar de San Juan a
     // Albacete, una rama unida al resto por un solo extremo. Granada está unida por los dos lados
     // (la convencional de Moreda y la alta velocidad de Antequera), así que ni sus líneas ni
