@@ -75,11 +75,12 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay tres tareas abiertas, que salieron al cargar la alta velocidad a Granada (#103):
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay cuatro tareas abiertas: tres salieron al cargar la alta velocidad a Granada (#103) y la cuarta, al cargar la de Barcelona (#117):
 
 1. [#135](https://github.com/ebotiab/Oniel/issues/135) Datos: contar en la línea Madrid – Sevilla los trenes que no paran en Madrid. Los Avant de Sevilla y los AVE de Barcelona a Málaga y a Granada ya se importan, pero no cuentan en los tramos de esa línea por los que pasan. Cambia la instantánea y los recuentos: mejor sin otra PR de datos abierta.
 2. [#134](https://github.com/ebotiab/Oniel/issues/134) Simulación de cierre: no listar rodeos desproporcionados. Con el lazo de Granada, un cierre en la alta velocidad enseña un rodeo de 698 km frente a 358. El criterio se propone al usuario antes de implementarlo.
 3. [#136](https://github.com/ebotiab/Oniel/issues/136) Visor: decir en la ficha del tramo que la vía es de ancho mixto. El dato ya está cargado en el paso por Loja y en la entrada a Granada; falta la decisión de diseño.
+4. [#142](https://github.com/ebotiab/Oniel/issues/142) Datos: cargar los baipases de Zaragoza y Lleida de la alta velocidad Madrid – Barcelona. Hoy la línea va por las dos estaciones y un tren que no para en ellas figura pasando por allí: infla los trenes de esos tramos y alarga su recorrido hasta 6,9 km. La geometría ya está descargada; falta que un viaje pueda recorrer una línea en dos trozos. Cómo se enseñan (dos líneas cortas, o la principal por los baipases y las estaciones en ramales) se propone al usuario antes de implementarlo. Emparentada con #135: el enlace de Vallecas es el mismo caso. Cambia la instantánea y los recuentos.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
