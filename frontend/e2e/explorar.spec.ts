@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+import { irA } from './navegar.ts'
+
 test.describe('Explorar la red', () => {
   test('se abre con el mapa y la vista de la red', async ({ page }) => {
     await page.goto('/')
@@ -8,8 +10,8 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('vista-red')).toBeVisible()
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
-    // la cabecera dice cuánta red hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('recuento-red')).toHaveText(/^9 líneas · 2\.151 km/)
+    // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
+    await expect(page.getByTestId('ficha-red')).toContainText(/^9 líneas · 2\.151 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -140,7 +142,7 @@ test.describe('Explorar la red', () => {
 
   test('la cobertura y las fuentes están a un clic', async ({ page }) => {
     await page.goto('/')
-    await page.getByTestId('boton-cobertura').click()
+    await irA(page, 'cobertura')
     // Se busca dentro de la página: «OpenStreetMap» está también en la atribución del mapa.
     const cobertura = page.getByTestId('pagina-cobertura')
     await expect(cobertura).toBeVisible()

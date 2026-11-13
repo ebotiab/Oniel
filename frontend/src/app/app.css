@@ -46,45 +46,143 @@
   justify-content: space-between;
   gap: 16px;
   padding: 0 16px;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.cabecera > * {
-  pointer-events: auto;
-}
-
-/* En escritorio la marca y el buscador van sobre el mapa: un fondo de papel que se desvanece hacia la derecha
-   y hacia abajo evita que un rótulo del mapa asome entre las letras. */
-.escritorio .cabecera::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(var(--panel-ancho) + 72px);
-  height: 80px;
   background: var(--papel);
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent), linear-gradient(#000 56px, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent), linear-gradient(#000 56px, transparent);
-  mask-composite: intersect;
-  pointer-events: none;
-  z-index: -1;
+  border-bottom: 1px solid var(--regla);
+  /* por encima de las páginas de lectura, que llevan la misma cabecera */
+  z-index: 25;
 }
 
 .cabecera-inicio {
   display: flex;
   align-items: center;
   gap: 16px;
-  width: var(--panel-ancho);
-  flex: none;
+  flex: 0 1 var(--panel-ancho);
+  min-width: 0;
   position: relative;
 }
 
 .marca-bloque {
   display: flex;
   flex-direction: column;
+  flex: none;
   line-height: 1.1;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Navegación: enlaces de texto en la barra; la sección a la vista, en tinta y subrayada. Sin color: no es una señal. */
+.nav {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 4px;
+  flex: none;
+}
+
+.nav a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 11px;
+  font-size: var(--t-14);
+  color: var(--tinta-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav a:hover {
+  color: var(--tinta);
+}
+
+.nav a[aria-current='page'] {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  bottom: -1px;
+  height: 3px;
+  background: var(--tinta);
+}
+
+.nav .senal {
+  margin-right: 8px;
+}
+
+/* Con la ventana estrecha, antes de pasar a la composición del móvil, el lema deja sitio a los enlaces. */
+@media (max-width: 1000px) {
+  .escritorio .lema {
+    display: none;
+  }
+}
+
+/* En el móvil los enlaces van tras «Menú», con su nombre completo y una frase cada uno. */
+.nav-movil {
+  flex: none;
+  order: 2;
+}
+
+.nav-menu-boton {
+  height: 40px;
+  padding: 0 12px;
+  background: var(--papel);
+  border: 1px solid var(--regla);
+  border-radius: 3px;
+  font-size: var(--t-14);
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.nav-menu-boton[aria-expanded='true'] {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--papel);
+}
+
+.nav-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0 10px;
+  background: var(--papel);
+  border-top: 1px solid var(--regla);
+  border-bottom: 1px solid var(--regla);
+  box-shadow: var(--sombra);
+}
+
+.nav-menu a {
+  padding: 12px 14px 12px 11px;
+  border-left: 3px solid transparent;
+  font-size: var(--t-17);
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.nav-menu a small {
+  display: block;
+  margin-top: 1px;
+  font-size: var(--t-12);
+  font-weight: 400;
+  color: var(--tinta-2);
+}
+
+.nav-menu a[aria-current='page'] {
+  font-weight: 600;
+  border-left-color: var(--tinta);
+  background: var(--papel-2);
+}
+
+.nav-menu .senal {
+  align-self: flex-start;
+  margin: 8px 14px 0;
 }
 
 .marca-bloque .marca {
@@ -94,34 +192,6 @@
 .lema {
   font-size: var(--t-11);
   color: var(--tinta-2);
-}
-
-.cobertura-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--papel);
-  border: 1px solid var(--regla);
-  border-radius: 3px;
-  padding: 6px 10px;
-  font-size: var(--t-12);
-  color: var(--tinta-2);
-  cursor: pointer;
-  box-shadow: var(--sombra);
-  text-align: left;
-}
-
-.cobertura-pill strong {
-  color: var(--tinta);
-  font-weight: 600;
-}
-
-.cobertura-pill .punto {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--senal-verde);
-  flex: none;
 }
 
 /* Buscador */
@@ -860,22 +930,10 @@
 .movil .cabecera {
   height: 52px;
   padding: 0 14px;
-  background: linear-gradient(var(--papel) 60%, rgba(237, 239, 233, 0));
-}
-
-.movil .cobertura-pill {
-  max-width: 48vw;
-  font-size: var(--t-11);
-  padding: 5px 8px;
-  box-shadow: none;
 }
 
 .movil .solo-escritorio {
   display: none;
-}
-
-.movil .cobertura-pill {
-  max-width: 46vw;
 }
 
 /* En el móvil la lupa va al final de la cabecera, tras la marca y la cobertura. */
@@ -894,11 +952,6 @@
 
 .movil .lema {
   max-width: 150px;
-}
-
-.movil .cobertura-pill {
-  flex: 0 1 auto;
-  min-width: 0;
 }
 
 .movil .buscador {
@@ -960,12 +1013,6 @@
 .movil .buscador-lista li {
   padding-top: 10px;
   padding-bottom: 10px;
-}
-
-.movil .cobertura-pill .pill-texto {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .movil .maplibregl-ctrl-top-right {
@@ -1160,17 +1207,6 @@
   gap: 2px 8px;
   font-size: var(--t-12);
   color: var(--tinta-2);
-}
-
-/* En el móvil el recuento se lee entero; si falta sitio, lo que se recorta es el estado del servidor. */
-.movil .cobertura-pill .pill-texto {
-  flex: none;
-}
-
-.movil .cobertura-pill .senal {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* Comparador de recorridos */
@@ -1419,40 +1455,18 @@
   font-size: var(--t-12);
 }
 
-/* El botón de la cabecera: la misma pastilla que el recuento de la red, a su izquierda. */
-.glosario-boton {
-  margin-left: auto;
-  margin-right: -6px;
-  color: var(--tinta);
-}
-
 /* El glosario y «Cobertura y fuentes» son páginas enteras, sin mapa: tapan el visor, que se queda montado debajo pero fuera de la
    vista, del teclado y de los lectores de pantalla. */
-.app.en-pagina > :not(.pagina) {
+.app.en-pagina > :not(.pagina):not(.cabecera) {
   visibility: hidden;
 }
 
 .pagina {
   position: absolute;
-  inset: 0;
+  inset: 56px 0 0;
   z-index: 20;
   overflow-y: auto;
   background: var(--papel);
-}
-
-.pagina-cabecera {
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--regla);
-}
-
-.pagina-cabecera .cobertura-pill {
-  color: var(--tinta);
-  box-shadow: none;
 }
 
 /* Una columna de lectura: el texto a 17 px, alineado a la izquierda. */
@@ -1679,6 +1693,10 @@
 
 .glosario .plegable {
   margin-top: 40px;
+}
+
+.movil .pagina {
+  top: 52px;
 }
 
 .movil .pagina-columna {

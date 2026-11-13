@@ -23,7 +23,6 @@ interface Props {
   /** Anotaciones de red vigentes hoy; cada tipo tiene su apartado. */
   annotations: AnnotationOut[]
   status: ApiStatus
-  onBack: () => void
 }
 
 /** Tramos sin otro camino a la vista antes de «Ver los … restantes», como en los destinos directos de una estación. */
@@ -196,7 +195,7 @@ function Fuente({ source: s }: { source: Source }) {
  * camino), lo que falta y, al final, todas las fuentes con su licencia y su fecha, agrupadas por lo
  * que aportan.
  */
-export function CoveragePage({ coverage, network, referenceDate, annotations, status, onSelectSegment, onPickLine, onBack }: Props) {
+export function CoveragePage({ coverage, network, referenceDate, annotations, status, onSelectSegment, onPickLine }: Props) {
   const operadores = coverage.operators
     .filter((o) => o.role === 'operador')
     // primero los que tienen horarios cargados
@@ -221,15 +220,6 @@ export function CoveragePage({ coverage, network, referenceDate, annotations, st
 
   return (
     <div className="pagina" data-testid="pagina-cobertura">
-      <header className="pagina-cabecera">
-        <div className="marca-bloque">
-          <span className="marca">Oniel</span>
-          <span className="lema">Cómo está conectada la red ferroviaria</span>
-        </div>
-        <button type="button" className="cobertura-pill" onClick={onBack} data-testid="cobertura-volver">
-          ← Volver al mapa
-        </button>
-      </header>
       <main className="pagina-columna cobertura" aria-labelledby="cob-titulo">
         <p className="sobre">Qué hay en esta versión</p>
         <h1 id="cob-titulo" className="pagina-titulo">
