@@ -137,12 +137,21 @@ def test_towards_sevilla_there_is_no_other_way_in_the_loaded_lines(graph: Graph)
 
 
 def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparator_allows(
-    graph: Graph,
+    lines: list[LineSummary],
 ) -> None:
     """Un tren de Valencia a Valladolid cruza Madrid por Chamartín. Con un tramo cerrado entre
     Torrejón de Velasco y la bifurcación de Albacete, su otro camino baja a Albacete, sube por
     Alcázar de San Juan a Madrid-Puerta de Atocha y vuelve a Torrejón de Velasco para tomar el
-    túnel: seis cambios de línea, uno más de los que el comparador enumera por defecto."""
+    túnel: seis cambios de línea, uno más de los que el comparador enumera por defecto. Se
+    prueba sin la línea de València a Camp de Tarragona, que da a ese tren un rodeo más corto
+    en cambios de línea por Barcelona."""
+    index = NetworkIndexOut.model_validate(_read("index.json"))
+    segments = [
+        SegmentOut(id=f.id, **f.properties)
+        for f in index.segment_features.features
+        if not f.id.startswith(f"{MEDITERRANEO}:")
+    ]
+    graph = build_graph([line for line in lines if line.id != MEDITERRANEO], index.nodes, segments)
     valencia, valladolid = "valencia-joaquin-sorolla", "valladolid-campo-grande"
     closed_segment = f"{LAV_VALENCIA}:horcajada:cuenca-fernando-zobel"
     own = _path(graph, valencia, valladolid)
@@ -280,7 +289,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
     none = {k: n for k, n in without.items() if n == _of(exported.segments, k).trains}
-    assert (len(none), len(without)) == (48, 115)
+    assert (len(none), len(without)) == (53, 120)
     apart = (
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
@@ -321,13 +330,16 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # La línea de Valencia a Camp de Tarragona cierra un anillo con la de Madrid a Valencia y la de
     # Madrid a Barcelona, pero dar la vuelta entera no cuenta: de la bifurcación de Albacete a
     # València solo tienen otro camino los 4 AVE de Madrid a Castelló; los de Madrid a València,
-    # no. Y a Madrid-Chamartín no llega ninguna otra línea cargada: sus dos tramos, sin otro camino
+    # no. Y a Madrid-Chamartín no llega ninguna otra línea cargada: sus dos tramos, sin otro camino.
+    # Desde que está cargada la línea de Madrid a Valladolid lo tienen también los 7 trenes de
+    # Valencia a Valladolid: su recorrido es más largo (576 km) y la vuelta por Camp de Tarragona
+    # y Madrid ya no pasa del doble
     valencia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
     assert [(s.trains, s.without_alternative) for s in valencia[10:]] == [
-        (42, 38),
-        (42, 38),
-        (52, 48),
-        (52, 48),
+        (42, 31),
+        (42, 31),
+        (52, 41),
+        (52, 41),
     ]
     assert {s: n for s, n in none.items() if s.startswith(f"{LAV_VALENCIA}:")} == {
         f"{LAV_VALENCIA}:madrid-chamartin:paso-bajo-atocha": 74,
