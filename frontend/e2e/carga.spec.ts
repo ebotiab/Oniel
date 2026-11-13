@@ -32,7 +32,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^15 líneas · 3\.408 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^16 líneas · 3\.476 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -50,7 +50,7 @@ test.describe('Carga de la red por partes', () => {
     // El de las anotaciones subió de 45 a 60 KB con los dos proyectos de la alta velocidad de
     // Extremadura, que traen muchos hitos y un esbozo propio: hoy pesan 54 KB.
     expect(bytes({ annotations, interruptions })).toBeLessThan(60_000)
-    // Con diecisiete entradas, quince líneas y dos baipases, la red del índice (234 KB) pesa ya bastante más que el detalle de la línea más
+    // Con dieciocho entradas, dieciséis líneas y dos baipases, la red del índice (248 KB) pesa ya bastante más que el detalle de la línea más
     // grande (148 KB): lo que la acota es el tope por línea de arriba. Sigue pesando menos que las
     // dos líneas más grandes juntas, la convencional de Córdoba y la alta velocidad de Barcelona.
     const otra = await (await request.get('/data/lines/lav-madrid-barcelona.json')).body()

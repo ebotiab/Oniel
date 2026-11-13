@@ -156,8 +156,20 @@ test.describe('Proyectos: la vista', () => {
       await expect(page.getByTestId('leyenda-proyecto')).toBeVisible()
       await expect(page.getByTestId('leyenda-proyecto-en-obras')).toBeVisible()
     }
-    // un toque en mitad del esbozo, lejos de cualquier vía cargada
+    // Un toque en mitad del esbozo, lejos de cualquier vía cargada. Antes se acerca el mapa a ese punto:
+    // en la vista inicial, que en el móvil enseña la red entera, el esbozo queda a pocos píxeles de la
+    // vía de Urda a Ciudad Real y el toque caería sobre ella. El punto se deja en el tercio alto del
+    // lienzo, que ni el panel de escritorio ni la hoja del móvil tapan.
     await page.waitForFunction(() => (globalThis as unknown as ConMapa).__onielMap?.loaded() === true)
+    await page.evaluate(() => {
+      const map = (globalThis as unknown as ConMapa).__onielMap!
+      map.jumpTo({ center: [-3.5925, 39.489], zoom: 9 })
+      map.panBy([0, map.getContainer().clientHeight * 0.2], { animate: false })
+    })
+    await page.waitForFunction(() => {
+      const map = (globalThis as unknown as ConMapa).__onielMap!
+      return map.loaded() && !map.isMoving()
+    })
     const punto = await page.evaluate(() => {
       const map = (globalThis as unknown as ConMapa).__onielMap!
       const p = map.project([-3.5925, 39.489])

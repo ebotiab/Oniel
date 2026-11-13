@@ -1,0 +1,503 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T15:44:50Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1036962145,
+  "lat": 38.3982449,
+  "lon": -0.7177341
+},
+{
+  "type": "node",
+  "id": 1036962170,
+  "lat": 38.3960483,
+  "lon": -0.7168175
+},
+{
+  "type": "node",
+  "id": 1036962187,
+  "lat": 38.4014457,
+  "lon": -0.7168905
+},
+{
+  "type": "node",
+  "id": 1036962197,
+  "lat": 38.3979291,
+  "lon": -0.7176794
+},
+{
+  "type": "node",
+  "id": 1036962199,
+  "lat": 38.4044855,
+  "lon": -0.7097698
+},
+{
+  "type": "node",
+  "id": 1036962213,
+  "lat": 38.4007319,
+  "lon": -0.7173147
+},
+{
+  "type": "node",
+  "id": 1036962227,
+  "lat": 38.3974360,
+  "lon": -0.7175480
+},
+{
+  "type": "node",
+  "id": 1036962244,
+  "lat": 38.4028047,
+  "lon": -0.7155113
+},
+{
+  "type": "node",
+  "id": 1036962247,
+  "lat": 38.3995896,
+  "lon": -0.7176953
+},
+{
+  "type": "node",
+  "id": 1036962257,
+  "lat": 38.3966403,
+  "lon": -0.7172035
+},
+{
+  "type": "node",
+  "id": 1036962259,
+  "lat": 38.4025937,
+  "lon": -0.7157864
+},
+{
+  "type": "node",
+  "id": 2199295130,
+  "lat": 38.4040937,
+  "lon": -0.7122778
+},
+{
+  "type": "node",
+  "id": 2199295145,
+  "lat": 38.4043331,
+  "lon": -0.7107905
+},
+{
+  "type": "node",
+  "id": 2199295229,
+  "lat": 38.4038248,
+  "lon": -0.7134175
+},
+{
+  "type": "node",
+  "id": 2199295230,
+  "lat": 38.3953511,
+  "lon": -0.7161953
+},
+{
+  "type": "node",
+  "id": 2199295284,
+  "lat": 38.4032095,
+  "lon": -0.7148657
+},
+{
+  "type": "node",
+  "id": 2199295331,
+  "lat": 38.4035594,
+  "lon": -0.7141505
+},
+{
+  "type": "node",
+  "id": 2199295375,
+  "lat": 38.4056762,
+  "lon": -0.7021265
+},
+{
+  "type": "node",
+  "id": 6143341429,
+  "lat": 38.4061260,
+  "lon": -0.6997860,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 6143341431,
+  "lat": 38.4059351,
+  "lon": -0.7007742
+},
+{
+  "type": "node",
+  "id": 6143343336,
+  "lat": 38.4046630,
+  "lon": -0.7086311,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 6143343337,
+  "lat": 38.4060142,
+  "lon": -0.7003635,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 6143343347,
+  "lat": 38.4064030,
+  "lon": -0.6983239,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 7195605438,
+  "lat": 38.3955266,
+  "lon": -0.7163715
+},
+{
+  "type": "node",
+  "id": 7195605439,
+  "lat": 38.3957878,
+  "lon": -0.7166065
+},
+{
+  "type": "node",
+  "id": 7195605440,
+  "lat": 38.3963213,
+  "lon": -0.7170108
+},
+{
+  "type": "node",
+  "id": 7195605441,
+  "lat": 38.3969499,
+  "lon": -0.7173570
+},
+{
+  "type": "node",
+  "id": 7195605442,
+  "lat": 38.3972505,
+  "lon": -0.7174862
+},
+{
+  "type": "node",
+  "id": 7195605443,
+  "lat": 38.4004533,
+  "lon": -0.7174358
+},
+{
+  "type": "node",
+  "id": 7195605444,
+  "lat": 38.4002489,
+  "lon": -0.7175159
+},
+{
+  "type": "node",
+  "id": 7195605445,
+  "lat": 38.3999523,
+  "lon": -0.7176063
+},
+{
+  "type": "node",
+  "id": 7195605446,
+  "lat": 38.3992427,
+  "lon": -0.7177458
+},
+{
+  "type": "node",
+  "id": 7195605447,
+  "lat": 38.3988935,
+  "lon": -0.7177703
+},
+{
+  "type": "node",
+  "id": 7195605448,
+  "lat": 38.3985412,
+  "lon": -0.7177626
+},
+{
+  "type": "node",
+  "id": 7195605449,
+  "lat": 38.3976747,
+  "lon": -0.7176218
+},
+{
+  "type": "node",
+  "id": 7195605450,
+  "lat": 38.4012085,
+  "lon": -0.7170496
+},
+{
+  "type": "node",
+  "id": 7195605451,
+  "lat": 38.4009372,
+  "lon": -0.7172084
+},
+{
+  "type": "node",
+  "id": 7195605452,
+  "lat": 38.4022855,
+  "lon": -0.7161493
+},
+{
+  "type": "node",
+  "id": 7195605453,
+  "lat": 38.4020051,
+  "lon": -0.7164296
+},
+{
+  "type": "node",
+  "id": 7195605454,
+  "lat": 38.4016872,
+  "lon": -0.7167034
+},
+{
+  "type": "node",
+  "id": 7195605455,
+  "lat": 38.4030406,
+  "lon": -0.7151509
+},
+{
+  "type": "node",
+  "id": 7195605456,
+  "lat": 38.4033949,
+  "lon": -0.7145141
+},
+{
+  "type": "node",
+  "id": 7195605457,
+  "lat": 38.4037046,
+  "lon": -0.7137817
+},
+{
+  "type": "node",
+  "id": 7195605458,
+  "lat": 38.4039323,
+  "lon": -0.7130481
+},
+{
+  "type": "node",
+  "id": 7195605459,
+  "lat": 38.4040153,
+  "lon": -0.7126826
+},
+{
+  "type": "node",
+  "id": 7195620289,
+  "lat": 38.3943470,
+  "lon": -0.7148912,
+  "tags": {
+    "name": "Bifurcación Vinalopó",
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 7195620290,
+  "lat": 38.3948524,
+  "lon": -0.7155952
+},
+{
+  "type": "node",
+  "id": 7195620291,
+  "lat": 38.3950427,
+  "lon": -0.7158445
+},
+{
+  "type": "node",
+  "id": 8369815329,
+  "lat": 38.4057336,
+  "lon": -0.7018121
+},
+{
+  "type": "way",
+  "id": 89400601,
+  "nodes": [
+    1036962199,
+    2199295145,
+    2199295130,
+    7195605459,
+    7195605458,
+    2199295229,
+    7195605457,
+    2199295331,
+    7195605456,
+    2199295284,
+    7195605455,
+    1036962244
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "048 - Bifurcación Vinalopó - Monforte del Cid Alta Velocidad",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "048",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 89400604,
+  "nodes": [
+    1036962197,
+    7195605449,
+    1036962227
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "100",
+    "name": "048 - Bifurcación Vinalopó - Monforte del Cid Alta Velocidad",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "048",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 89400610,
+  "nodes": [
+    1036962244,
+    1036962259,
+    7195605452,
+    7195605453,
+    7195605454,
+    1036962187,
+    7195605450,
+    7195605451,
+    1036962213,
+    7195605443,
+    7195605444,
+    7195605445,
+    1036962247,
+    7195605446,
+    7195605447,
+    7195605448,
+    1036962145,
+    1036962197
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "100",
+    "name": "048 - Bifurcación Vinalopó - Monforte del Cid Alta Velocidad",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "048",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 89400614,
+  "nodes": [
+    1036962227,
+    7195605442,
+    7195605441,
+    1036962257,
+    7195605440,
+    1036962170,
+    7195605439,
+    7195605438,
+    2199295230,
+    7195620291,
+    7195620290,
+    7195620289
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "100",
+    "name": "048 - Bifurcación Vinalopó - Monforte del Cid Alta Velocidad",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "048",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 655721343,
+  "nodes": [
+    6143341429,
+    6143343337,
+    6143341431,
+    8369815329,
+    2199295375,
+    6143343336,
+    1036962199
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "100",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "048",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1221267976,
+  "nodes": [
+    6143343347,
+    6143341429
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1435",
+    "highspeed": "yes",
+    "maxspeed": "100",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:etcs": "2",
+    "railway:traffic_mode": "passenger",
+    "ref": "048",
+    "usage": "main",
+    "voltage": "25000"
+  }
+}
+
+  ]
+}
