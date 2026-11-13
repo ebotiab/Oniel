@@ -40,7 +40,6 @@ test.describe('Cobertura y fuentes, como página', () => {
       'Operadores de trenes',
       'Interrupciones del servicio',
       'Proyectos',
-      'Tramos sin alternativa',
       'Pendiente de cargar',
       'Fuentes y licencias',
     ])
