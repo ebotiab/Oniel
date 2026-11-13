@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { irA } from './navegar.ts'
+
 /** En el móvil la hoja empieza plegada: se amplía para ver la lista entera. */
 async function abrirHoja(page: Page) {
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })
@@ -66,10 +68,15 @@ test.describe('Elegir línea sin pestañas', () => {
     await expect(page.getByTestId('vista-red')).toBeVisible()
   })
 
-  test('el recuento de la cabecera lleva a la vista de la red desde cualquier ficha', async ({ page }) => {
+  test('«Mapa» y la marca de la cabecera llevan a la vista de la red desde cualquier ficha', async ({ page }) => {
     await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano')
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
-    await page.getByTestId('recuento-red').click()
+    await irA(page, 'mapa')
+    await expect(page.getByTestId('vista-red')).toBeVisible()
+    await expect(page).toHaveURL(/\/$/)
+    await page.goto('/nodo/ciudad-real')
+    await expect(page.getByTestId('detalle-nodo')).toBeVisible()
+    await page.getByTestId('marca').click()
     await expect(page.getByTestId('vista-red')).toBeVisible()
     await expect(page).toHaveURL(/\/$/)
   })
@@ -89,15 +96,13 @@ test.describe('Elegir línea sin pestañas', () => {
     await expect(page.getByTestId('vista-red')).toBeVisible()
     const cabecera = page.locator('.cabecera')
     const altoConTres = (await cabecera.boundingBox())!.height
-    const anchoConTres = (await page.getByTestId('recuento-red').locator('.pill-texto').boundingBox())!.width
 
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('recuento-red')).toContainText(/^69 líneas · /)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^69 líneas · /)
+    // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con nueve que con sesenta y nueve
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
-    // el recuento solo gana las cifras de más: no enumera
-    expect((await page.getByTestId('recuento-red').locator('.pill-texto').boundingBox())!.width).toBeLessThan(anchoConTres + 40)
     const lista = page.getByTestId('lista-lineas')
     await expect(lista.locator('.fila-linea')).toHaveCount(69)
     const filtro = page.getByTestId('filtro-lineas')
