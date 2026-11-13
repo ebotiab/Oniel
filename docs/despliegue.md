@@ -36,7 +36,7 @@ Al enlazar, la CLI deja `.vercel/` y un `.env.local` con un token temporal; git 
 
 - `VITE_API_URL`: URL pública de la API en Render. Está fijada a `https://oniel-api-5e63.onrender.com` en los entornos Production y Preview de Vercel (8 de noviembre de 2026). Sin ella, el visor sirve la instantánea estática de `frontend/public/data` y la simulación avisa de que necesita el servidor. Con ella, el visor arranca igualmente desde la instantánea y pasa a la API en cuanto `/healthz` responde (ver `frontend/src/data/api.ts`).
 
-- `VITE_LOGFIRE_TOKEN`: token público de la aplicación web `oniel-visor` de Logfire, solo en el entorno Production. Con él, el visor publicado envía sus errores a Logfire; sin él no envía nada ni descarga el SDK. Pendiente de crear: los pasos están en «Logfire», «Errores del visor».
+- `VITE_LOGFIRE_TOKEN`: token público de la aplicación web `oniel-visor` de Logfire, solo en el entorno Production. Con él, el visor publicado envía sus errores a Logfire; sin él no envía nada ni descarga el SDK. Está puesta desde el 13 de noviembre de 2026, de tipo Config: Vercel no deja guardar como Secret una variable con el prefijo `VITE_` (el formulario la rechaza con «cannot use visibility: secret»), y no hace falta, porque el token es público. Cómo se dio de alta está en «Logfire», «Errores del visor».
 
 El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_ENV` (`production` o `preview`) y `VERCEL_GIT_COMMIT_SHA`; `frontend/vite.config.ts` las pasa al código. Necesitan que el proyecto tenga marcado Settings → Environment Variables → «Automatically expose System Environment Variables», que es el valor por defecto.
 
@@ -162,6 +162,7 @@ Desde #131 el visor publicado envía a Logfire sus errores, y solo sus errores, 
 | Atributo | Qué es |
 |---|---|
 | `exception.message`, `exception.stacktrace` | El mensaje del error y su traza, con los nombres del código compilado (no se publican mapas de código) |
+| `logfire.exception.fingerprint` | La huella con la que «Errores agrupados» junta las repeticiones de un mismo error. Sale de la traza del código compilado, así que un mismo fallo puede abrir una incidencia nueva tras otro despliegue |
 | `logfire.page.url.path` | La ruta del visor en la que ocurrió (`/tramo/<id>`), sin parámetros ni fragmento. Lo añade Oniel |
 | `service.version` | El commit que compiló Vercel |
 | `deployment.environment.name` | `production` |
@@ -174,12 +175,18 @@ Desde #131 el visor publicado envía a Logfire sus errores, y solo sus errores, 
 
 **Token.** El visor envía directamente a `https://logfire-us.pydantic.dev/v1/traces` con el token de una «aplicación web» (frontend application) de Logfire. Ese token es público por diseño, queda a la vista en el JavaScript publicado y solo permite enviar datos de esa aplicación: no lee nada del proyecto ni puede hacerse pasar por otro servicio. El token de escritura de Render no sale nunca al navegador. El nombre del servicio lo pone la aplicación de Logfire, no el código (`configureFrontend` no admite `serviceName` ni `environment`; el entorno va como atributo del recurso).
 
-**Alta, pendiente a 12 de noviembre de 2026.** Es configuración de las cuentas y la hace quien las administra:
+**Alta, hecha el 13 de noviembre de 2026.** Es configuración de las cuentas; si hay que repetirla (otro proyecto, un token nuevo), los pasos son estos:
 
-1. Logfire → proyecto `oniel` → Frontend → Set up → crear la aplicación `oniel-visor` y copiar su token (no la URL ni el código de ejemplo: ya están en el repositorio).
-2. Vercel → proyecto `oniel` → Settings → Environment Variables → `VITE_LOGFIRE_TOKEN` con ese token, solo en Production.
-3. Volver a desplegar producción (la variable se lee al compilar): una fusión que toque `frontend/`, o Deployments → Redeploy.
-4. Comprobarlo: abrir https://oniel.vercel.app, ejecutar en la consola `setTimeout(() => { throw new Error('prueba de Logfire') })` y, a los pocos segundos, buscar en Logfire el registro `Uncaught error` de `oniel-visor`. Hay que confirmar entonces dos cosas que no se pueden probar sin token: que `deployment_environment` llega como `production`, porque de eso depende el filtro de «Errores agrupados», y que la incidencia aparece allí con su correo.
+1. Logfire → proyecto `oniel` → Frontend → Frontend applications → Create application. El formulario pide el nombre (`oniel-visor`, que no se puede cambiar después y es el nombre del servicio), el entorno (`production`) y un espacio de nombres, que se dejó vacío. La página de la aplicación enseña su token siempre que se quiera («Copy token»).
+2. Vercel → proyecto `oniel` → Settings → Environment Variables → `VITE_LOGFIRE_TOKEN` con ese token, tipo Config y solo en Production.
+3. Volver a desplegar producción, porque la variable se lee al compilar. Sirve una fusión que toque `frontend/`. El «Redeploy» de un despliegue anterior no sirve si `frontend/` no ha cambiado desde entonces: pasa por el mismo `ignoreCommand` y Vercel lo cancela. Sin una fusión a mano, queda `vercel --prod` («La CLI como respaldo»).
+4. Comprobarlo: abrir https://oniel.vercel.app, ejecutar en la consola `setTimeout(() => { throw new Error('prueba de Logfire') })` y, a los diez segundos, buscarlo:
+
+```bash
+uv run oniel-data obs consulta "select start_timestamp, service_version, deployment_environment, span_name, exception_message from records where service_name = 'oniel-visor' order by start_timestamp desc limit 5" --horas 1
+```
+
+Comprobado así el 13 de noviembre de 2026 con el commit `ade16fe`: el error llegó como `Uncaught error` de `oniel-visor`, nivel 17, con `is_exception`, `deployment_environment = production`, el commit como versión y la ruta `/glosario/via-unica`. Ese primer error no abrió incidencia en «Errores agrupados»: le faltaba la huella por la que Logfire agrupa (`logfire.exception.fingerprint`), que el SDK del navegador no calcula si no se le pide. Desde entonces el visor la envía (`errorFingerprinting: true`).
 
 **Volumen y peso**, medidos el 12 de noviembre de 2026 con el visor compilado y un token de mentira. Una visita sin errores: 0 peticiones a Logfire y 0 registros. Un error: 1 registro; dos errores seguidos salieron en una sola petición de 3,8 kB. El arranque del visor crece 0,9 kB (0,5 kB comprimido). El SDK va en ficheros aparte, 180 kB (55 kB comprimidos), que se piden al arrancar sin esperar a ellos para pintar; los errores que ocurran mientras llegan se guardan (hasta diez) y se envían después. Sin token, lo publicado es idéntico byte a byte a lo de antes.
 
