@@ -3,6 +3,7 @@
 from oniel.routing.graph import (
     DEFAULT_MAX_CHANGES,
     DEFAULT_MAX_RATIO,
+    ClosureDetours,
     Detour,
     Edge,
     Graph,
@@ -19,6 +20,7 @@ from oniel.routing.scenario import Scenario, ScenarioError, SketchLink, SpeedCha
 __all__ = [
     "DEFAULT_MAX_CHANGES",
     "DEFAULT_MAX_RATIO",
+    "ClosureDetours",
     "Detour",
     "Edge",
     "Graph",

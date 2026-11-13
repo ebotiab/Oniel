@@ -242,7 +242,8 @@ def test_trains_between_valencia_and_seville_join_at_blancales(
     feed: GtfsFeed, valencia: BuiltNetwork, lines: list[LoadedLine]
 ) -> None:
     """Los AVE de Valencia a Sevilla paran en Cuenca y en Ciudad Real sin pasar por Madrid: dejan
-    la línea por el enlace de la bifurcación Blancales y no recorren su primer tramo."""
+    la línea por el enlace de la bifurcación Blancales, que lleva a la de Yeles en la línea de
+    Sevilla, y no recorren su primer tramo."""
     trips = [t for t in select_trips_for_spec(feed, valencia.spec) if "51003" in _stops(t)]
     assert len(trips) == 4
     for trip in trips:
@@ -251,4 +252,4 @@ def test_trains_between_valencia_and_seville_join_at_blancales(
     # Ciudad Real está en la línea de Sevilla: la distancia hasta ella se mide por esa línea
     basis = _passes(trips[0], feed, valencia, lines)[0].basis
     assert "Ciudad Real está en la línea de alta velocidad Madrid – Sevilla" in basis
-    assert "línea recta hasta Bifurcación Torrejón de Velasco" in basis
+    assert "línea recta hasta Bifurcación Yeles" in basis

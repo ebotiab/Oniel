@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
 
 import { composeNetwork } from '../src/data/network.ts'
 import type { NetworkIndexOut, Route } from '../src/data/types.ts'
-import { buildGraph, closureDetours, findRoutes, type Detour } from '../src/routing/graph.ts'
+import { buildGraph, closureDetours, findRoutes, type ClosureDetours } from '../src/routing/graph.ts'
 import { ScenarioError, closureScenario, scenarioFromCode, scenarioToCode } from '../src/routing/scenario.ts'
 
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
@@ -15,7 +15,7 @@ const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 // la instantánea estática: le basta el índice, que lleva todas las líneas, nodos y tramos.
 interface Paridad {
   routes: { from: string; to: string; scenario: string; max_changes: number; max_ratio: number | null; expected: Route[] }[]
-  detours: { segment_id: string; scenario: string; expected: Detour[] }[]
+  detours: { segment_id: string; scenario: string; expected: ClosureDetours }[]
 }
 const leer = <T>(ruta: string) => JSON.parse(readFileSync(new URL(ruta, import.meta.url), 'utf-8')) as T
 const paridad = leer<Paridad>('./fixtures/rutas-paridad.json')

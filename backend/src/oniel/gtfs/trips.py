@@ -54,9 +54,9 @@ class MatchedRoute:
         return self.override.from_stop_id if self.reversed else self.override.to_stop_id
 
 
-def match_override(override: RouteOverride, stop_ids: Sequence[str]) -> bool | None:
-    """``None`` si el viaje no encaja; si encaja, si lo hace en sentido inverso al declarado."""
-    pattern = list(override.consecutive_stop_ids)
+def match_run(pattern: Sequence[str], stop_ids: Sequence[str]) -> bool | None:
+    """``None`` si el viaje no lleva esas paradas seguidas; si las lleva, si es en sentido inverso."""
+    pattern = list(pattern)
     ids = list(stop_ids)
     n = len(pattern)
     for i in range(len(ids) - n + 1):
@@ -66,6 +66,11 @@ def match_override(override: RouteOverride, stop_ids: Sequence[str]) -> bool | N
         if window == pattern[::-1]:
             return True
     return None
+
+
+def match_override(override: RouteOverride, stop_ids: Sequence[str]) -> bool | None:
+    """``None`` si el viaje no encaja; si encaja, si lo hace en sentido inverso al declarado."""
+    return match_run(override.consecutive_stop_ids, stop_ids)
 
 
 def route_for_trip(spec: NetworkSpec, trip: GtfsTrip) -> MatchedRoute | None:
@@ -79,7 +84,8 @@ def route_for_trip(spec: NetworkSpec, trip: GtfsTrip) -> MatchedRoute | None:
 
 
 def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
-    """Viajes que recorren la línea: los del filtro de corredor más los de las reglas de recorrido."""
+    """Viajes que recorren la línea: los del filtro de corredor, los que llevan seguidas las paradas
+    que el filtro declara y los de las reglas de recorrido."""
     f = spec.corridor_filter
     selected = select_corridor_trips(
         feed,
@@ -89,10 +95,17 @@ def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
         node_stop_ids=spec.node_stop_ids,
         exclude_stop_ids=f.exclude_stop_ids,
     )
-    if spec.route_overrides:
+    if spec.route_overrides or f.consecutive_stop_ids:
         chosen = {t.trip_id for t in selected}
+        excluded = set(f.exclude_stop_ids)
         for trip in feed.trips.values():
-            if trip.trip_id not in chosen and route_for_trip(spec, trip) is not None:
+            if trip.trip_id in chosen:
+                continue
+            stop_ids = [st.stop_id for st in trip.stop_times]
+            in_a_row = not excluded.intersection(stop_ids) and any(
+                match_run(run, stop_ids) is not None for run in f.consecutive_stop_ids
+            )
+            if in_a_row or route_for_trip(spec, trip) is not None:
                 selected.append(trip)
         selected.sort(key=lambda t: (t.train_number, t.trip_id))
     return selected

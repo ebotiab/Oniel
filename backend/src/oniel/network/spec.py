@@ -237,6 +237,17 @@ class CorridorFilter(BaseModel):
     #: Mínimo de paradas distintas del viaje que sean nodos de la línea.
     min_node_stops: int = 0
     exclude_stop_ids: list[str] = Field(default_factory=list)
+    #: Parejas (o series) de paradas que, si el viaje las lleva seguidas en ese orden o en el
+    #: inverso, lo hacen entrar aunque no cumpla lo anterior: sirve para los trenes que recorren
+    #: la línea entre dos estaciones sin parar entre ellas, cuando eso los distingue de los de una
+    #: línea paralela (de Sevilla a Córdoba sin paradas solo se va por la alta velocidad).
+    consecutive_stop_ids: list[list[str]] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _runs_have_two_stops(self) -> CorridorFilter:
+        if any(len(run) < 2 or len(set(run)) != len(run) for run in self.consecutive_stop_ids):
+            raise ValueError("cada serie de consecutive_stop_ids lleva dos paradas distintas o más")
+        return self
 
 
 class RouteOverride(BaseModel):

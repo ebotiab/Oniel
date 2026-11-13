@@ -742,23 +742,6 @@
   background: var(--papel-2);
 }
 
-.fuentes {
-  list-style: none;
-  padding: 0;
-  margin: 6px 0 0;
-  font-size: 13px;
-}
-
-.fuentes li {
-  padding: 8px 0;
-  border-top: 1px solid var(--regla);
-}
-
-.fuentes a {
-  font-size: var(--t-12);
-  word-break: break-all;
-}
-
 /* Leyenda */
 .leyenda {
   position: absolute;
@@ -1443,13 +1426,13 @@
   color: var(--tinta);
 }
 
-/* El glosario es una página entera, sin mapa: tapa el visor, que se queda montado debajo pero fuera de la
+/* El glosario y «Cobertura y fuentes» son páginas enteras, sin mapa: tapan el visor, que se queda montado debajo pero fuera de la
    vista, del teclado y de los lectores de pantalla. */
-.app.en-glosario > :not(.pagina-glosario) {
+.app.en-pagina > :not(.pagina) {
   visibility: hidden;
 }
 
-.pagina-glosario {
+.pagina {
   position: absolute;
   inset: 0;
   z-index: 20;
@@ -1473,13 +1456,13 @@
 }
 
 /* Una columna de lectura: el texto a 17 px, alineado a la izquierda. */
-.glosario {
+.pagina-columna {
   max-width: 712px;
   margin: 0 auto;
   padding: 40px 16px 96px;
 }
 
-.glosario-titulo {
+.pagina-titulo {
   margin: 2px 0 14px;
   font-size: 40px;
   font-weight: 700;
@@ -1487,25 +1470,25 @@
   line-height: 1.1;
 }
 
-.glosario-entrada {
+.pagina-entrada {
   font-size: var(--t-17);
   line-height: 1.5;
   max-width: 60ch;
 }
 
-.glosario-indice {
+.pagina-indice {
   margin-top: 28px;
   border-top: 1px solid var(--tinta);
 }
 
-.glosario-indice-rotulo {
+.pagina-indice-rotulo {
   padding: 10px 0 2px;
   font-size: var(--t-12);
   font-weight: 600;
   color: var(--tinta-2);
 }
 
-.glosario-indice ul {
+.pagina-indice ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1513,12 +1496,12 @@
   column-gap: 32px;
 }
 
-.glosario-indice li {
+.pagina-indice li {
   break-inside: avoid;
   border-bottom: 1px solid var(--regla);
 }
 
-.glosario-indice a {
+.pagina-indice a {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -1528,16 +1511,16 @@
   text-decoration: none;
 }
 
-.glosario-indice a::after {
+.pagina-indice a::after {
   content: '↓';
   color: var(--tinta-3);
 }
 
-.glosario-indice a:hover {
+.pagina-indice a:hover {
   color: var(--senal-azul);
 }
 
-.glosario-indice .aparte a {
+.pagina-indice .aparte a {
   font-weight: 400;
 }
 
@@ -1698,20 +1681,20 @@
   margin-top: 40px;
 }
 
-.movil .glosario {
+.movil .pagina-columna {
   padding: 24px 16px 72px;
 }
 
-.movil .glosario-titulo {
+.movil .pagina-titulo {
   font-size: 30px;
 }
 
-.movil .glosario-entrada,
+.movil .pagina-entrada,
 .movil .glosario-texto {
   font-size: 16px;
 }
 
-.movil .glosario-indice ul {
+.movil .pagina-indice ul {
   columns: 1;
 }
 
@@ -1735,4 +1718,346 @@
 .movil .glosario-palabra {
   grid-template-columns: minmax(0, 1fr);
   gap: 3px;
+}
+
+/* «Cobertura y fuentes», como página: el esqueleto, la columna y el índice son los del glosario. */
+.cobertura-cifras {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 28px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--tinta);
+}
+
+.cobertura-cifras div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+}
+
+.cobertura-cifras dt {
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+.cobertura-cifras dd {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.cobertura-nota {
+  margin-top: 14px;
+  line-height: 1.45;
+  color: var(--tinta-2);
+}
+
+.cobertura-apartado {
+  margin-top: 64px;
+  scroll-margin-top: 20px;
+}
+
+.cobertura-apartado h2 {
+  margin: 0;
+  font-size: var(--t-22);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.cobertura-texto {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
+.cobertura-texto + .cobertura-texto {
+  margin-top: 8px;
+}
+
+/* Las líneas: un renglón por línea, en dos columnas, bajo la muestra de su trazo. */
+.cobertura-grupo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--tinta);
+  font-size: var(--t-12);
+  font-weight: 600;
+  color: var(--tinta-2);
+}
+
+.cobertura-grupo .datos {
+  font-weight: 400;
+}
+
+.cobertura-lineas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 32px;
+}
+
+.cobertura-lineas li,
+.cobertura-anotaciones li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--regla);
+  break-inside: avoid;
+}
+
+.cobertura-lineas a,
+.cobertura-anotaciones a {
+  color: var(--senal-azul);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.cobertura-lineas .datos {
+  color: var(--tinta-2);
+  white-space: nowrap;
+}
+
+.cobertura-anotaciones {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--tinta);
+}
+
+/* Los operadores: el nombre a la izquierda y, a la derecha, su estado en una frase y la ficha de su fuente. */
+.cobertura-operadores {
+  margin: 16px 0 0;
+  border-top: 1px solid var(--tinta);
+}
+
+.cobertura-operadores > div {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 20px;
+  padding: 14px 0 16px;
+  border-bottom: 1px solid var(--regla);
+}
+
+.cobertura-operadores > div > dt {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cobertura-operadores dd {
+  margin: 0;
+}
+
+.operador-estado {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.operador-ficha {
+  margin: 10px 0 0;
+  font-size: var(--t-12);
+  line-height: 1.45;
+  color: var(--tinta-2);
+}
+
+.operador-ficha div {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.operador-ficha dt {
+  color: var(--tinta-3);
+}
+
+.operador-ficha a,
+.cobertura-fuentes .fuente-ficha a {
+  color: inherit;
+}
+
+.cobertura-avisos {
+  max-width: 62ch;
+  margin-top: 6px;
+}
+
+.cobertura-apartado .lista-destinos {
+  margin-top: 16px;
+  border-bottom: 1px solid var(--regla);
+}
+
+.cobertura-apartado .lista-destinos li,
+.cobertura-apartado .lista-destinos .enlace {
+  font-size: var(--t-14);
+}
+
+.cobertura-apartado > div > .texto {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--tinta);
+}
+
+/* Las fuentes: un grupo por lo que aportan. El grupo dice cuántas son y de quién; dentro, cada fuente. */
+.cobertura-fuentes {
+  margin-top: 16px;
+  border-top: 1px solid var(--tinta);
+}
+
+.fuentes-grupo {
+  border-bottom: 1px solid var(--regla);
+}
+
+.fuentes-grupo summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 16px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.fuentes-grupo summary::-webkit-details-marker {
+  display: none;
+}
+
+.fuentes-grupo summary::after {
+  content: 'Ver';
+  grid-column: 2;
+  grid-row: 1;
+  font-size: var(--t-12);
+  color: var(--senal-azul);
+}
+
+.fuentes-grupo[open] summary::after {
+  content: 'Ocultar';
+}
+
+.fuentes-titulo {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.fuentes-titulo .datos {
+  margin-left: 4px;
+  font-weight: 400;
+  color: var(--tinta-2);
+}
+
+.fuentes-entrada {
+  grid-column: 1;
+  line-height: 1.45;
+  color: var(--tinta-2);
+}
+
+.cobertura-apartado > div > .texto .enlace {
+  font-size: var(--t-14);
+}
+
+.fuentes-grupo ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px 14px;
+  border-left: 1px solid var(--regla);
+}
+
+.fuentes-grupo li {
+  padding: 10px 0;
+  scroll-margin-top: 20px;
+}
+
+.fuentes-grupo li + li {
+  border-top: 1px solid var(--regla);
+}
+
+.fuente-nombre {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.fuente-nombre a {
+  color: var(--tinta);
+  text-decoration-color: var(--tinta-3);
+  text-underline-offset: 2px;
+}
+
+.fuente-nombre a:hover {
+  color: var(--senal-azul);
+}
+
+.fuente-ficha,
+.fuente-detalle,
+.fuente-id {
+  margin-top: 3px;
+  font-size: var(--t-12);
+  line-height: 1.45;
+  color: var(--tinta-2);
+}
+
+.fuente-detalle p {
+  margin-top: 6px;
+  max-width: 68ch;
+}
+
+.fuente-id {
+  margin-top: 3px;
+  font-size: var(--t-12);
+  line-height: 1.45;
+  color: var(--tinta-2);
+}
+
+.fuente-detalle p {
+  margin-top: 6px;
+  max-width: 68ch;
+}
+
+.fuente-detalle summary {
+  display: block;
+  padding: 2px 0;
+  width: fit-content;
+  color: var(--senal-azul);
+}
+
+.fuente-detalle summary::after {
+  content: none;
+}
+
+.fuente-id {
+  color: var(--tinta-3);
+}
+
+.movil .cobertura-cifras {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.movil .cobertura-cifras dd {
+  font-size: 28px;
+}
+
+.movil .cobertura-apartado {
+  margin-top: 48px;
+}
+
+.movil .cobertura-lineas {
+  columns: 1;
+}
+
+.movil .cobertura-operadores > div {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+
+.movil .operador-ficha div {
+  grid-template-columns: 84px minmax(0, 1fr);
 }

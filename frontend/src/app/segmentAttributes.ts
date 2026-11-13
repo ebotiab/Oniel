@@ -27,6 +27,8 @@ export interface SegmentAttribute {
   sinDato?: string
   /** Identificador de la celda para las pruebas; por defecto, `tramo-atributo-<clave>`. */
   testId?: string
+  /** Si su fuente no se cita al pie de «Más detalle» (las vías, que la ficha no ha citado nunca). */
+  sinCita?: true
 }
 
 interface ValorDicho {
@@ -68,6 +70,10 @@ const MANDO: Record<string, ValorDicho> = {
   sin_dato_publicado: SIN_DATO_PUBLICADO,
 }
 
+const ANCHO: Record<string, ValorDicho> = {
+  mixto: { texto: 'Mixto: caben trenes de los dos anchos', termino: 'ancho-mixto' },
+}
+
 export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
   {
     clave: 'tracks',
@@ -77,6 +83,18 @@ export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
     lugar: 'esencial',
     sinDato: 'sin dato',
     testId: 'tramo-vias',
+    sinCita: true,
+  },
+  // Ancho de vía: solo lo traen los tramos que lo tienen distinto del de su línea (hoy, el ancho mixto
+  // del paso por Loja y de la entrada a Granada); los demás no enseñan la fila. Va con lo esencial
+  // porque es lo singular del tramo, y su fuente se cita al pie de «Más detalle» (docs/diseno.md).
+  {
+    clave: 'gauge',
+    etiqueta: 'Ancho de vía',
+    terminoEtiqueta: 'ancho-de-via',
+    formato: (v) => ANCHO[String(v)]?.texto ?? String(v),
+    termino: (v) => ANCHO[String(v)]?.termino,
+    lugar: 'esencial',
   },
   // Señalización: lo que da el mapa 4 de la Declaración sobre la Red (docs/datos.md, «Señalización y
   // protección del tren»). Las claves de cada valor son las de `ATTRIBUTE_RULES` en el backend.
@@ -147,11 +165,11 @@ export interface FuenteAtributos {
   etiquetas: string[]
 }
 
-/** Las fuentes de los atributos que un tramo enseña en un sitio de la ficha: una por fuente, con lo que da cada una. */
+/** Las fuentes de unas filas de atributos: una por fuente, con lo que da cada una; sin las de los atributos que no se citan. */
 export function attributeSources(filas: FilaAtributo[]): FuenteAtributos[] {
   const porFuente = new Map<string, FuenteAtributos>()
   for (const { atributo, valor } of filas) {
-    if (!valor?.source_id) continue
+    if (!valor?.source_id || atributo.sinCita) continue
     const fuente = porFuente.get(valor.source_id) ?? { sourceId: valor.source_id, checkedOn: null, etiquetas: [] }
     fuente.etiquetas.push(atributo.etiqueta)
     if (valor.checked_on && (!fuente.checkedOn || valor.checked_on > fuente.checkedOn)) fuente.checkedOn = valor.checked_on

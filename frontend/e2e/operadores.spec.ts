@@ -19,22 +19,22 @@ test.describe('Trenes por operador', () => {
     if (await asa.isVisible()) await asa.click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     // lo primero, el reparto: los trenes del día de referencia, del operador que más tiene al que menos
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 92 · Ouigo España 12')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 102 · Ouigo España 11')
     // Iryo opera en la línea y no publica sus horarios: el panel dice que sus trenes no están
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveText(
       'No están los trenes de Iryo, que también opera en esta línea: no publica sus horarios en un formato abierto.',
     )
     // la lista va agrupada por operador, cada grupo con su nombre y su cifra
     const lista = page.getByTestId('lista-servicios')
-    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 92', 'Ouigo España · 12'])
-    await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(92)
-    await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(12)
+    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 102', 'Ouigo España · 11'])
+    await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(102)
+    await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(11)
     await expect(page.getByTestId('trenes-ouigo').locator('li').first()).toContainText('Ouigo 6476')
     await expect(page.getByTestId('trenes-ouigo')).toContainText('Madrid-Puerta de Atocha → Málaga')
     await expect(page.getByTestId('trenes-iryo')).toHaveCount(0)
     // la barra del esquema lleva el total de todos los operadores
     await page.getByRole('button', { name: '← Toda la línea' }).click()
-    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-5')).toContainText('104')
+    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('113')
   })
 
   test('la nota del esquema dice de quién son los trenes de las barras', async ({ page }, testInfo) => {
@@ -48,9 +48,18 @@ test.describe('Trenes por operador', () => {
   test('la cobertura enumera los operadores con su fuente y la validez de sus horarios', async ({ page }) => {
     await page.goto('/cobertura')
     const operadores = page.getByTestId('cobertura-operadores')
-    await expect(operadores.getByRole('listitem').filter({ hasText: 'Renfe Viajeros' })).toContainText(/data\.renfe\.com\) · CC BY 4\.0 · válidos del .* de 2026 al .* de 2027/)
-    await expect(operadores.getByRole('listitem').filter({ hasText: 'Ouigo España' })).toContainText(/Punto de Acceso Nacional.*válidos del .* de junio de 2026 al .* de diciembre de 2026/)
-    await expect(operadores.getByRole('listitem').filter({ hasText: 'Iryo' })).toContainText('No publica sus horarios en un formato abierto')
+    // el estado, en una frase; debajo, la ficha de la fuente: quién la publica, la licencia y el día de la descarga
+    const renfe = operadores.getByTestId('operador-renfe')
+    await expect(renfe).toContainText(/Horarios cargados, válidos del .* de 2026 al .* de 2027\./)
+    await expect(renfe).toContainText('Renfe Viajeros (data.renfe.com)')
+    await expect(renfe.getByRole('link', { name: 'CC BY 4.0' })).toBeVisible()
+    await expect(renfe).toContainText(/Descargado\s*el \d+ de \S+ de 2026/)
+    const ouigo = operadores.getByTestId('operador-ouigo')
+    await expect(ouigo).toContainText(/Horarios cargados, válidos del .* de junio de 2026 al .* de diciembre de 2026\./)
+    await expect(ouigo).toContainText('Punto de Acceso Nacional')
+    await expect(operadores.getByTestId('operador-iryo')).toContainText('No publica sus horarios en un formato abierto')
+    // primero los que tienen horarios cargados
+    await expect(operadores.locator('> div').last()).toHaveAttribute('data-testid', 'operador-iryo')
     // el administrador de la infraestructura no es un operador de trenes
     await expect(operadores).not.toContainText('Adif')
   })

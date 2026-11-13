@@ -107,7 +107,7 @@ test.describe('Interrupciones del servicio', () => {
     expect(tramos.cortados).toContain('lav-madrid-sevilla:bif-la-sagra:urda')
     expect(tramos.cortados).toContain('lav-madrid-sevilla:adamuz:cordoba')
     expect(tramos.abiertos).toContain(TRAMO_ABIERTO)
-    expect(tramos.abiertos).toContain('lav-madrid-sevilla:madrid-puerta-de-atocha:bif-torrejon-de-velasco')
+    expect(tramos.abiertos).toContain('lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes')
     expect(tramos.abiertos).toContain('lav-madrid-sevilla:cordoba:bif-malaga')
     expect(tramos.color).toContain('"interrumpido"')
     expect(tramos.color).toContain('#B4232A')
@@ -155,7 +155,7 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('sim-interrumpido')).toHaveCount(0)
   })
 
-  test('un nodo del corte y el panel de cobertura enumeran la interrupción', async ({ page }) => {
+  test('un nodo del corte y la página de cobertura enumeran la interrupción', async ({ page }) => {
     await page.goto('/nodo/venta-de-cardenas')
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await expect(page.getByTestId('interrupcion')).toHaveCount(1)

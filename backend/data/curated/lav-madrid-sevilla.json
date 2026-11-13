@@ -30,8 +30,12 @@
   "nodes": [
     {"id": "madrid-puerta-de-atocha", "name": "Madrid-Puerta de Atocha", "kind": "estacion", "adif_code": "60000", "position": {"lon": -3.690886, "lat": 40.406442}, "reference_pk_km": 0.0,
      "description": "Cabecera de la línea. Estación término de la alta velocidad hacia Andalucía, Levante y Cataluña, conectada con Madrid-Chamartín por el túnel de ancho estándar. Forma un mismo complejo con Madrid-Atocha Cercanías, de donde salen los trenes de la línea convencional por Aranjuez y Alcázar de San Juan."},
+    {"id": "bif-los-gavilanes", "name": "Bifurcación Los Gavilanes", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 13.445}, "reference_pk_km": 13.445,
+     "description": "Punto donde se incorporan a la línea los trenes que vienen de Zaragoza y Barcelona sin pasar por Madrid-Puerta de Atocha."},
     {"id": "bif-torrejon-de-velasco", "name": "Bifurcación Torrejón de Velasco", "kind": "bifurcacion", "position": {"lon": -3.75006, "lat": 40.19457}, "reference_pk_km": 27.4,
      "description": "Punto donde la línea de alta velocidad a Cuenca y Valencia, por la que van también los trenes de Albacete y Alicante, se separa de la de Andalucía."},
+    {"id": "bif-yeles", "name": "Bifurcación Yeles", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 34.395}, "reference_pk_km": 34.395,
+     "description": "Punto donde se incorporan a la línea los trenes que vienen de Cuenca y Valencia sin pasar por Madrid."},
     {"id": "bif-la-sagra", "name": "Bifurcación La Sagra", "kind": "bifurcacion", "position": {"km": 52.7}, "reference_pk_km": 52.7,
      "description": "Arranque del ramal de alta velocidad a Toledo. Junto a ella está el PAET de La Sagra."},
     {"id": "urda", "name": "Urda", "kind": "paet", "adif_code": "37107", "position": {"lon": -3.82211, "lat": 39.41902}, "reference_pk_km": 119.7,
@@ -109,9 +113,10 @@
     "51405": {"exits": ["sevilla-santa-justa"]}
   },
   "corridor_filter": {
-    "description": "Se importan los viajes del GTFS que paran en Córdoba y en alguna estación de Madrid: son los que recorren el corredor de la línea 010.",
+    "description": "Se importan los viajes del GTFS que paran en Córdoba y en alguna estación de Madrid: son los que recorren el corredor de la línea 010. Entran además los que van de Sevilla-Santa Justa a Córdoba sin paradas intermedias aunque no lleguen a Madrid (los Avant de Sevilla a Córdoba, a Málaga y a Granada): solo la alta velocidad une las dos estaciones sin parar, porque los Media Distancia de la línea convencional paran en Lora del Río o en Posadas. Los AVE de Barcelona y de Valencia que no paran en Madrid entran por las reglas de route_overrides.",
     "required_stop_ids": ["50500"],
-    "any_of_stop_ids": ["60000", "17000", "18000"]
+    "any_of_stop_ids": ["60000", "17000", "18000"],
+    "consecutive_stop_ids": [["51003", "50500"]]
   },
   "route_overrides": [
     {
@@ -127,6 +132,24 @@
       "stop_mappings": {
         "18000": {"exits": ["ciudad-real"], "via": [{"line": "manzanares-ciudad-real", "node": "ciudad-real"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}]}
       }
+    },
+    {
+      "id": "barcelona-cordoba-sin-parar-en-madrid",
+      "description": "AVE entre Barcelona y Andalucía que no paran en Madrid: llegan de Zaragoza por la conexión de Perales y se incorporan a esta línea en la bifurcación Los Gavilanes, así que para estos viajes las paradas de la línea de Barcelona son salidas por esa bifurcación. Los que paran primero en Córdoba.",
+      "consecutive_stop_ids": ["04040", "50500"],
+      "stop_mappings": {"04040": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "78400": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "04104": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "71801": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}}
+    },
+    {
+      "id": "barcelona-ciudad-real-sin-parar-en-madrid",
+      "description": "Los mismos AVE entre Barcelona y Andalucía, cuando su primera parada en esta línea es Ciudad Real.",
+      "consecutive_stop_ids": ["04040", "37200"],
+      "stop_mappings": {"04040": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "78400": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "04104": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}, "71801": {"exits": ["bif-los-gavilanes"], "via": {"line": "lav-madrid-barcelona", "node": "bif-vallecas-av"}}}
+    },
+    {
+      "id": "valencia-ciudad-real-sin-parar-en-madrid",
+      "description": "AVE entre Valencia y Sevilla por Cuenca: no pasan por Madrid y se incorporan a esta línea en la bifurcación Yeles, así que para estos viajes Cuenca y Valencia son salidas por esa bifurcación.",
+      "consecutive_stop_ids": ["03208", "37200"],
+      "stop_mappings": {"03208": {"exits": ["bif-yeles"], "via": {"line": "lav-madrid-valencia", "node": "bif-blancales"}}, "03216": {"exits": ["bif-yeles"], "via": {"line": "lav-madrid-valencia", "node": "bif-blancales"}}}
     }
   ]
 }

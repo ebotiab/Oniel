@@ -134,7 +134,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
-        <FuentesAtributos segment={segment} line={line} lugar="detalle" sources={sources} />
+        <FuentesAtributos segment={segment} line={line} sources={sources} />
         {alternativa && alternativa.trains > 0 && (
           <section data-testid="tramo-alternativa-detalle">
             <p className="sobre">Si este tramo se cortara</p>
