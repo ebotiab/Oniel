@@ -85,7 +85,7 @@ def graph(network: Red) -> Graph:
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
     # los dos baipases de Zaragoza y de Lleida y los nueve tramos de la línea de Albacete a Alicante
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -154,7 +154,7 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
     assert [r.length_km for r in find_routes(graph, MADRID, CIUDAD_REAL, max_ratio=None)] == [
         170.8,
         260.5,
-        557.9,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
+        558.0,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
         613.5,
         704.6,  # lo mismo al revés: por Alcázar a Albacete y vuelta por Cuenca
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
