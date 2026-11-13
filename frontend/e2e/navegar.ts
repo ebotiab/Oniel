@@ -24,3 +24,15 @@ export async function abrirZonas(page: Page) {
   const plegadas = lista.locator('.zona-cabecera[aria-expanded="false"]')
   while ((await plegadas.count()) > 0) await plegadas.first().click()
 }
+
+/**
+ * Despliega una sola zona de la lista de líneas, si está plegada. Para la prueba que vuelve varias
+ * veces a la lista: al volver, las zonas están otra vez plegadas, y cada despliegue repinta el mapa
+ * con el trazado completo de las líneas ya abiertas. En el CI, que pinta sin tarjeta gráfica, son
+ * unos dos segundos por zona, y abrirlas todas cada vez no cabe en el tiempo de una prueba.
+ */
+export async function abrirZona(page: Page, id: string) {
+  const cabecera = page.getByTestId(`zona-${id}`).locator('.zona-cabecera')
+  await cabecera.waitFor()
+  if ((await cabecera.getAttribute('aria-expanded')) !== 'true') await cabecera.click()
+}
