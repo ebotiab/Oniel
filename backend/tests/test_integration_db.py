@@ -210,7 +210,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # recorrido (432 + 260 = 692), sin sumar viajes: son los mismos.
     trips = 317 + 432 - 22 + 26 + 15 + 37 + 571 - 16 + 8 + 13 + 465 + 92 + 425 - 16
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
-    assert gtfs1["lines"][LAV_VALENCIA]["passes"] == {"estimado": 4314}
+    # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
+    # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
+    assert gtfs1["lines"][LAV_VALENCIA]["passes"] == {"estimado": 5048}
     assert gtfs1["lines"][MADRID_PLASENCIA]["trips"] == 267
     assert gtfs1["lines"][MADRID_PLASENCIA]["passes"] == {"estimado": 2051, "publicado": 582}
     assert gtfs1["lines"][MADRID_PLASENCIA]["route_overrides"] == {
@@ -313,7 +315,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert ouigo1["trips_imported"] == ouigo2["trips_imported"] == 25 + 25 - 4 + 1 + 22
     assert ouigo1["train_numbers"] == 30 + 18
     assert ouigo1["lines"][LAV_VALENCIA]["trips"] == 22
-    assert ouigo1["lines"][LAV_VALENCIA]["passes"] == {"estimado": 224}
+    # sus 22 viajes salen todos de Madrid-Chamartín: dos tramos más cada uno (224 + 44)
+    assert ouigo1["lines"][LAV_VALENCIA]["passes"] == {"estimado": 268}
     # 10 de ellos siguen por la línea de Albacete a Alicante; dos dejan la línea en la bifurcación
     # de Murcia sin entrar en Alicante, por su regla de recorrido
     assert ouigo1["lines"][LAV_ALICANTE]["trips"] == 10
@@ -340,7 +343,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert ouigo1["lines"][BCN]["passes"] == {"estimado": 420}
     assert ouigo1["lines"][BYPASS_ZARAGOZA]["trips"] == 10
     assert ouigo1["lines"][BYPASS_LLEIDA]["trips"] == 25
-    assert ouigo1["passes"] == {"estimado": 306 + 128 + 420 + 35 + 224 + 86}
+    assert ouigo1["passes"] == {"estimado": 306 + 128 + 420 + 35 + 268 + 86}
     assert ouigo1["unmapped_stops"] == {}
     assert ouigo1["resolution"] == {"completa": 47 + 22}
     assert ouigo1["dataset"]["id"] == ouigo2["dataset"]["id"] == OUIGO_DATASET_ID
@@ -351,17 +354,17 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert c["lines"] == 11 + 2 + 4
     # los 9 son los tramos de la línea de Albacete a Alicante; los 13, 14, 2 y 4 del final, los
     # de las cuatro líneas de Extremadura
-    assert c["segments"] == 13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 12 + 2 + 9 + 13 + 14 + 2 + 4
+    assert c["segments"] == 13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 13 + 14 + 2 + 4
     assert c["services"] == trips + 47 + 22
     # (los 260 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
     renfe_passes = (
         (3996 + 121) + (1968 + 260 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     )
-    renfe_passes += (1250 + 68) + 498 + 6851 + 97 + 224 + 4314 + 1979
+    renfe_passes += (1250 + 68) + 498 + 6851 + 97 + 224 + 5048 + 1979
     # Extremadura: Madrid – Plasencia, Plasencia – Badajoz, el ramal de Mérida y el trazado antiguo
     renfe_passes += (2051 + 582) + (2310 + 134) + 344 + (26 + 26)
-    assert c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 224 + 86
+    assert c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86
     assert c["import_runs"] == 4
     # el mismo fichero dos veces es un solo conjunto de datos, reconocido por su SHA-256
     assert c["datasets"] == 2
@@ -462,7 +465,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     ]
     # los 13, 14, 2 y 4 del final son los tramos de las cuatro líneas de Extremadura
     assert len(data["segment_features"]["features"]) == (
-        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 12 + 2 + 9 + 13 + 14 + 2 + 4
+        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 13 + 14 + 2 + 4
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -566,7 +569,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     wire = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "electrification"}
     # los 13, 14, 2 y 4 del final son los tramos de las cuatro líneas de Extremadura
     assert len(rows) - len(gauge) - len(speed) - len(wire) == 4 * (
-        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 12 + 2 + 9 + 13 + 14 + 2 + 4
+        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 13 + 14 + 2 + 4
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -985,7 +988,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y las cuatro de Extremadura, 22: las 11 de Leganés a Monfragüe; 7 en la línea nueva
     # (Plasencia, Cáceres, Garrovilla-Las Vegas, Montijo, Montijo-El Molino, Guadiana y Badajoz);
     # Mérida, y Mirabel, Casas de Millán y Cañaveral en el trazado antiguo
-    assert cov["station_count"] == 6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 11 + 7 + 1 + 3
+    # y Madrid-Chamartín, la cabecera de la línea de Valencia desde que se cargó su túnel
+    assert cov["station_count"] == 6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 11 + 7 + 1 + 3 + 1
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
     # y 4 más con los que recorren la alta velocidad Madrid – Sevilla sin parar en Madrid ni pasar
@@ -1026,10 +1030,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "boe-a-2007-21008",
         "mitma-nota-talavera-oropesa-2024-12",
     }
-    # 70 fuentes antes de Extremadura (con la relación de OSM de la línea de Albacete a
-    # Alicante) y 31 con ella: 6 de geometría, 2 artículos de Wikipedia y
-    # 23 notas y anuncios oficiales de la línea nueva y de sus proyectos
-    assert len(cov["sources"]) == 70 + 6 + 2 + 23
+    # 71 fuentes antes de Extremadura (con la relación de OSM de la línea de Albacete a
+    # Alicante y la del trazado de Madrid-Chamartín a Torrejón de Velasco) y 31 con ella:
+    # 6 de geometría, 2 artículos de Wikipedia y 23 notas y anuncios oficiales de la línea
+    # nueva y de sus proyectos
+    assert len(cov["sources"]) == 71 + 6 + 2 + 23
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1268,7 +1273,8 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     # y 1 más con la de Albacete a Alicante: Alicante-Terminal, adonde llegan dos Media Distancia;
     # y 5 más con las de Extremadura, del camino de Ciudad Real a Badajoz: Mérida,
     # Garrovilla-Las Vegas, Montijo, Montijo-El Molino y Badajoz
-    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5
+    # y 1 más: Madrid-Chamartín, que ya era un destino y ahora es una estación de la red
+    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5 + 1
     assert by_node["alicante-terminal"]["trains"] == 2
     assert {"merida", "garrovilla-las-vegas", "montijo", "montijo-el-molino"} <= set(by_node)
     assert by_node["valencia-joaquin-sorolla"]["trains"] == 1
@@ -1537,15 +1543,15 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
     # para lo que el otro hace en 64,4 km: 6,5 veces. Con un tope de 4 sigue fuera; con 7, entra.
     wide = {"from": "madrid-puerta-de-atocha", "to": "ciudad-real"}
     # Con un tope de 4 entra, en cambio, el que va por Cuenca hasta Albacete y vuelve por Alcázar
-    # de San Juan (557,9 km): se aparta del más corto en Torrejón de Velasco y recorre 529,2 km
+    # de San Juan (558,0 km): se aparta del más corto en Torrejón de Velasco y recorre 529,2 km
     # para lo que aquel hace en 142,1 km, 3,7 veces.
     r = await client.get("/api/routes", params={**wide, "max_ratio": "4"})
-    assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5, 557.9]
+    assert [route["length_km"] for route in r.json()["routes"]] == [170.8, 260.5, 558.0]
     r = await client.get("/api/routes", params={**wide, "max_ratio": "7"})
     assert [route["length_km"] for route in r.json()["routes"]] == [
         170.8,
         260.5,
-        557.9,
+        558.0,
         613.5,
         910.9,
     ]
@@ -1789,7 +1795,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
     # los 13, 14, 2 y 4 del final son los tramos de las cuatro líneas de Extremadura
-    assert len(by_id) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9 + 13 + 14 + 2 + 4
+    assert len(by_id) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 13 + 14 + 2 + 4
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]

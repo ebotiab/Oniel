@@ -30,7 +30,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^15 líneas · 3\.372 km\s*82 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^15 líneas · 3\.408 km\s*83 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     // las zonas van de norte a sur, y solo las que tienen alguna línea; con quince líneas (más de doce)
     // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
@@ -47,7 +47,7 @@ test.describe('Elegir línea sin pestañas', () => {
     for (const zona of ['cataluna', 'levante', 'madrid-castilla-la-mancha', 'extremadura', 'andalucia'] as const) await abrirZona(page, zona)
     await expect(red.getByRole('region', { name: 'Cataluña' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Barcelona por Zaragoza627 km$/])
     await expect(red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' }).locator('.fila-linea')).toHaveText([
-      /^Alta velocidad: Madrid – Valencia por Cuenca361 km$/,
+      /^Alta velocidad: Madrid – Valencia por Cuenca397 km$/,
       /^Alta velocidad: Albacete – Alicante238 km$/,
     ])
     await expect(red.getByRole('region', { name: 'Madrid y Castilla-La Mancha' }).locator('.fila-linea')).toHaveText([

@@ -79,9 +79,9 @@ class StopMapping(BaseModel):
     #: en el visor por dónde sigue el tren.
     via: list[ViaLine] = Field(default_factory=list)
     #: Solo con ``exits`` y sin ``via``: kilómetros de vía desde la salida hasta la parada, cuando
-    #: una fuente los da y el camino no está cargado (de la bifurcación de Torrejón de Velasco a
-    #: Madrid-Chamartín, por los puntos kilométricos de la línea). El reparto del tiempo los usa
-    #: en vez de la línea recta, y un tren que cruza la línea sin parar puede fijarse con ellos.
+    #: una fuente los da y el camino no está cargado (de la bifurcación de Albacete a Elche AV,
+    #: por los puntos kilométricos de la línea). El reparto del tiempo los usa en vez de la línea
+    #: recta, y un tren que cruza la línea sin parar puede fijarse con ellos.
     track_km: float | None = Field(default=None, gt=0)
 
     @field_validator("via", mode="before")

@@ -73,7 +73,7 @@
     "60911": {"node": "alicante-terminal"},
     "03208": {"exits": ["bif-albacete"], "via": {"line": "lav-madrid-valencia", "node": "bif-albacete"}},
     "60000": {"exits": ["bif-albacete"], "via": [{"line": "lav-madrid-valencia", "node": "bif-albacete"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]},
-    "17000": {"exits": ["bif-albacete"], "track_km": 248.1},
+    "17000": {"exits": ["bif-albacete"], "via": {"line": "lav-madrid-valencia", "node": "bif-albacete"}},
     "92102": {"exits": ["bif-albacete"]},
     "08004": {"exits": ["bif-albacete"]},
     "10600": {"exits": ["bif-albacete"]},

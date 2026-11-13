@@ -219,7 +219,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         by_operator |= detail["counts_by_operator"]
     # los dos de después de la línea de Valencia son los baipases; los nueve siguientes, la
     # línea de Albacete a Alicante; los 13, 14, 2 y 4 del final, las cuatro de Extremadura
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9 + 13 + 14 + 2 + 4
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 13 + 14 + 2 + 4
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -255,12 +255,18 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     for segment_id in ALBACETE_SEGMENTS:
         assert _of(exported.segments, segment_id).trains == 13
     trunk = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
-    assert [s.trains for s in trunk[:8]] == [84] + [86] * 7
-    assert all(s.without_alternative == 0 for s in trunk[:8])
-    # en la línea de Valencia solo quedan los cuatro tramos que siguen de la bifurcación de
+    # los dos primeros tramos son el túnel y el acceso desde Madrid-Chamartín: 74 trenes, los que
+    # salen de Chamartín; los 10 que faltan hasta 84 entran por la bifurcación de Torrejón de
+    # Velasco desde Madrid-Puerta de Atocha
+    assert [s.trains for s in trunk[:10]] == [74, 74, 84] + [86] * 7
+    assert all(s.without_alternative == 0 for s in trunk[2:10])
+    # en la línea de Valencia quedan los dos tramos de Chamartín a Torrejón de Velasco, porque a
+    # Chamartín no llega ninguna otra línea cargada, y los cuatro que siguen de la bifurcación de
     # Albacete a Valencia: 42 trenes hasta Requena-Utiel y 52 desde allí, con los Avant
     valencia = {s: n for s, n in without.items() if s.startswith(f"{LAV_VALENCIA}:")}
     assert valencia == {
+        f"{LAV_VALENCIA}:madrid-chamartin:paso-bajo-atocha": 74,
+        f"{LAV_VALENCIA}:paso-bajo-atocha:bif-torrejon-de-velasco": 74,
         f"{LAV_VALENCIA}:bif-albacete:iniesta": 42,
         f"{LAV_VALENCIA}:iniesta:requena-utiel": 42,
         f"{LAV_VALENCIA}:requena-utiel:siete-aguas-av": 52,

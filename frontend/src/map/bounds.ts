@@ -15,10 +15,14 @@ export const SPAIN_BOUNDS: Caja = [
 
 /**
  * Hasta dónde se puede mover el mapa: la península, Portugal, Baleares y una franja de los países
- * vecinos. MapLibre obliga a que todo el lienzo quepa dentro, y en escritorio el panel tapa unos
- * cinco grados por la izquierda; por eso el límite oeste va bastante más allá de Portugal.
+ * vecinos. MapLibre obliga a que todo el lienzo quepa dentro, así que la caja fija también cuánto
+ * se puede alejar el mapa, y tiene que dejar que la red entera quepa en lo que el panel no tapa:
+ * en escritorio el panel cubre el tercio izquierdo, y por eso el límite oeste va bastante más allá
+ * de Portugal (pasó de −12,5 a −14,5 cuando la red llegó a Badajoz); en el móvil la pantalla es
+ * alta y estrecha, y para que quepa de Badajoz a Barcelona a lo ancho hace falta más latitud de la
+ * que ocupa la península (de 34–46 pasó a 30,5–48,5). Canarias sigue fuera.
  */
 export const IBERIA_BOUNDS: Caja = [
-  [-12.5, 34],
-  [6, 46],
+  [-14.5, 30.5],
+  [6, 48.5],
 ]

@@ -160,9 +160,13 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
         container: containerRef.current,
         style: baseStyle as unknown as StyleSpecification,
         bounds: SPAIN_BOUNDS,
-        fitBoundsOptions: { padding: { top: 70, right: 40, bottom: 40, left: padding.left + 40 } },
+        // en el móvil los márgenes laterales son más justos: la red, de Badajoz a Barcelona, ocupa todo el ancho;
+        // en escritorio el derecho deja sitio al rótulo de Barcelona-Sants
+        fitBoundsOptions: {
+          padding: padding.left === 0 ? { top: 70, right: 20, bottom: 40, left: 20 } : { top: 70, right: 110, bottom: 40, left: padding.left + 40 },
+        },
         // El mapa no sale de la península y sus vecinos: el lienzo entero se queda dentro de la caja,
-        // así que el zoom mínimo efectivo depende de la pantalla (unos 5,8 en escritorio, 5,4 en móvil).
+        // así que el zoom mínimo efectivo depende de la pantalla (docs/diseno.md, «Encuadre»).
         maxBounds: IBERIA_BOUNDS,
         minZoom: 4.5,
         maxZoom: 15,
