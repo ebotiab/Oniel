@@ -44,7 +44,7 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
     expect(c.ocultos).toBe(1)
     expect(c.recorridos.every((r) => r.cortes.length === 0 && !r.alternativa)).toBe(true)
     // primer y último tramo de cada línea que recorre
-    expect(c.recorridos[0]!.tramosClave).toEqual([`lav-madrid-sevilla:${MADRID}:bif-torrejon-de-velasco`, 'lav-madrid-sevilla:adamuz:cordoba'])
+    expect(c.recorridos[0]!.tramosClave).toEqual([`lav-madrid-sevilla:${MADRID}:bif-los-gavilanes`, 'lav-madrid-sevilla:adamuz:cordoba'])
     expect(c.recorridos[1]!.tramosClave).toHaveLength(6)
   })
 
@@ -136,7 +136,7 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(recorridos).toHaveCount(3)
     await expect(page.getByTestId('recorridos-resumen')).toContainText('Tres recorridos, del más corto al más largo.')
     await expect(recorridos.nth(0)).toContainText('Por la alta velocidad')
-    await expect(recorridos.nth(0)).toContainText('343,6 km · 1 h 21 min sin paradas · sin vía única')
+    await expect(recorridos.nth(0)).toContainText('343,6 km · 1 h 20 min sin paradas · sin vía única')
     await expect(recorridos.nth(0)).toContainText('Pasa por Ciudad Real, Puertollano y Villanueva de Córdoba.')
     await expect(recorridos.nth(1)).toContainText('Por Manzanares y Ciudad Real')
     await expect(recorridos.nth(1)).toContainText('Recorre tres líneas')
@@ -155,7 +155,7 @@ test.describe('Comparador de recorridos: la vista', () => {
 
     // el primero es el elegido; al tocar otro, cambia el resaltado del mapa
     await expect(recorridos.nth(0).getByRole('button', { name: 'Por la alta velocidad' })).toHaveAttribute('aria-pressed', 'true')
-    await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '8')
+    await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '10')
     await recorridos.nth(2).getByRole('button', { name: 'Por la línea convencional' }).click()
     await expect(recorridos.nth(2).locator('.recorrido-titulo')).toHaveAttribute('aria-pressed', 'true')
     await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '25')

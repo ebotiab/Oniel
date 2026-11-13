@@ -56,7 +56,7 @@ Con las nueve líneas cargadas ese día, la regla quita rodeos en 36 de los 86 t
 
 | Cierre | Se enseña | No se enseña |
 | --- | --- | --- |
-| LAV, de Madrid a Ciudad Real (4 tramos) | 260,5 km por Manzanares y 440,7 km por la convencional | 698,3 km por Granada |
+| LAV, de Madrid a Ciudad Real (6 tramos) | 260,5 km por Manzanares y 440,7 km por la convencional | 698,3 km por Granada |
 | LAV, de Ciudad Real a Córdoba (4) | 309,0 km por Manzanares y 440,7 km por la convencional | 566,6 km y 698,3 km por Granada |
 | LAV, Córdoba – Bifurcación Málaga (1) | 511,7 km, 566,6 km y 698,3 km, los tres por Granada | ninguno |
 | Convencional, de Madrid a Linares-Baeza (18) | por Ciudad Real y por la alta velocidad entera | ninguno |
@@ -98,7 +98,7 @@ Hasta la PR del comparador el criterio era otro: un solo paso de una línea a ot
 Cada recorrido lleva:
 
 - **Kilómetros.** Por cada línea, la diferencia entre los kilómetros del nodo de entrada y el de salida; un enlace esbozado aporta los suyos. El total es la suma de los trechos.
-- **Tiempo estimado.** La suma, tramo a tramo, de su longitud entre su velocidad habitual (`typical_speed_kmh`; la máxima si no hay habitual), en minutos enteros. Es el tiempo de recorrer cada tramo a esa velocidad sin parar, sin acelerar ni frenar y sin esperar cruces en vía única: sirve para comparar recorridos entre sí, no es un horario. Madrid – Ciudad Real sale en 40 minutos por la alta velocidad y en 107 por Manzanares; los Intercity desviados tardan 155 minutos publicados en ese mismo recorrido. Si a algún tramo le falta la velocidad, el recorrido no lleva tiempo.
+- **Tiempo estimado.** La suma, tramo a tramo, de su longitud entre su velocidad habitual (`typical_speed_kmh`; la máxima si no hay habitual), en minutos enteros. Es el tiempo de recorrer cada tramo a esa velocidad sin parar, sin acelerar ni frenar y sin esperar cruces en vía única: sirve para comparar recorridos entre sí, no es un horario. Madrid – Ciudad Real sale en 39 minutos por la alta velocidad y en 107 por Manzanares; los Intercity desviados tardan 155 minutos publicados en ese mismo recorrido. Si a algún tramo le falta la velocidad, el recorrido no lleva tiempo.
 - **Kilómetros de vía única**, las **líneas usadas** en orden, un **trecho** por cada línea (con sus nodos, kilómetros, tiempo y vía única) y las **estaciones principales** intermedias en el orden en que se recorren.
 
 **La API.** `GET /api/routes?from=<nodo>&to=<nodo>` devuelve los recorridos y el método. Admite `scenario` (la cadena corta o el JSON), `max_changes`, `max_ratio`, `date` (cada recorrido lleva entonces las interrupciones vigentes ese día en sus tramos) y `avoid_interruptions=true` (con fecha, los tramos interrumpidos se cierran además). `POST /api/simulations/closure` acepta también `scenario`: el cierre del tramo se suma a sus otras modificaciones al buscar la alternativa.
@@ -159,22 +159,22 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
 | Madrid-Puerta de Atocha – Barcelona-Sants (alta velocidad de Barcelona, veinte tramos) | 77 a 111 | Ninguno. La línea solo comparte con las demás la cabecera de Madrid, y los baipases de Zaragoza y de Lleida no están cargados: también figuran sin alternativa los tramos que entran y salen de esas dos estaciones, aunque en la red real los trenes que no paran en ellas van por el baipás |
-| Bifurcación Málaga – Majarabique (LAV) | 56 | Ninguno |
-| Majarabique – Sevilla-Santa Justa (LAV) | 54 | Ninguno |
+| Bifurcación Málaga – Majarabique (LAV) | 84 | Ninguno |
+| Majarabique – Sevilla-Santa Justa (LAV) | 82 | Ninguno |
 | Espelúy – Mengíbar-Artichuela (línea de Jaén) | 26 | Ninguno |
 | Mengíbar-Artichuela – Jaén (línea de Jaén) | 26 | Ninguno |
 | Alcázar de San Juan – Albacete (siete tramos) | 12 | Ninguno |
-| Córdoba – Bifurcación Málaga (LAV) | 103 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 44 de Madrid a Sevilla, 340 km y 3 h más; para los 6 de Madrid a Granada, 82 km menos y 1 h 14 min más |
-| Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 71 | Para los 27 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 22 min más |
-| Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 18 a 24 | Para los 6 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 14 min más |
+| Córdoba – Bifurcación Málaga (LAV) | 135 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 44 de Madrid a Sevilla, 340 km y 3 h 2 min más; para los 6 de Madrid a Granada, 82 km menos y 1 h 15 min más |
+| Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 71 | Para los 27 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 23 min más |
+| Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 18 a 24 | Para los 6 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 15 min más |
 | Bifurcación Almería – Iznalloz – Granada (dos tramos) | 12 | Para los 10 de Granada a Almería, la vuelta por Antequera, Córdoba y Linares-Baeza: 415 km y 2 h 11 min más |
 | Linares-Baeza – Moreda (tres tramos) | 2 | La vuelta por Córdoba, Antequera y Granada |
-| Ciudad Real – Córdoba (LAV, cuatro tramos) | 103 | Para los 44 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 44 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
-| Madrid – Ciudad Real (LAV, cuatro tramos) | 81 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 6 min más |
-| Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 6 min menos |
-| Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 28 min menos |
+| Ciudad Real – Córdoba (LAV, cuatro tramos) | 113 | Para los 44 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 46 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
+| Madrid – Ciudad Real (LAV, seis tramos) | 81 a 91 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 8 min más |
+| Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 8 min menos |
+| Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 30 min menos |
 
-Los otros 54 tramos tienen otro camino para todos sus trenes. Los once que no lo tienen son los dos que llevan a Sevilla desde la bifurcación de Málaga, donde Oniel solo tiene cargada una línea; los dos del ramal de Jaén, que acaba en una estación término (ahí la respuesta no depende de qué líneas estén cargadas), y los siete de la línea de Alcázar de San Juan a Albacete, una rama unida al resto por un solo extremo hasta que se cargue la alta velocidad a Albacete por Cuenca. Desde que están cargadas las dos líneas de alta velocidad de Córdoba a Granada, Granada queda unida por los dos lados, y ni sus líneas ni el tramo de Córdoba a la bifurcación de Málaga salen ya sin alternativa: el otro camino da la vuelta por el lazo, a veces por una línea sin electrificar y de otro ancho, que es justo lo que el cálculo no mira (límite 2, abajo). El tramo entre la estación de Moreda y la Bifurcación Almería no lleva ningún tren de los horarios. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
+Los otros 56 tramos tienen otro camino para todos sus trenes. Los once que no lo tienen son los dos que llevan a Sevilla desde la bifurcación de Málaga, donde Oniel solo tiene cargada una línea; los dos del ramal de Jaén, que acaba en una estación término (ahí la respuesta no depende de qué líneas estén cargadas), y los siete de la línea de Alcázar de San Juan a Albacete, una rama unida al resto por un solo extremo hasta que se cargue la alta velocidad a Albacete por Cuenca. Desde que están cargadas las dos líneas de alta velocidad de Córdoba a Granada, Granada queda unida por los dos lados, y ni sus líneas ni el tramo de Córdoba a la bifurcación de Málaga salen ya sin alternativa: el otro camino da la vuelta por el lazo, a veces por una línea sin electrificar y de otro ancho, que es justo lo que el cálculo no mira (límite 2, abajo). El tramo entre la estación de Moreda y la Bifurcación Almería no lleva ningún tren de los horarios. Que el otro camino salga más corto o más rápido no es un error: los trenes desviados tras la interrupción de la alta velocidad ya dan un rodeo, y el tiempo estimado de la alta velocidad es menor aunque recorra más kilómetros.
 
 **La API y la instantánea.** `GET /api/alternatives` (con `?date=` para otro día) devuelve un elemento por tramo: trenes, reparto por operador, cuántos tienen otro camino y cuántos no, y los grupos, del más numeroso al menos, cada uno con sus extremos, lo que mide y tarda su recorrido y, si existe, el otro camino (kilómetros, minutos, diferencia con el recorrido, vía única, líneas y estaciones principales). La instantánea lo lleva en `alternatives.json`, que el visor no pide al arrancar (`docs/datos.md`, «Instantánea estática»). Si la API no tiene la ruta o falla, el visor lee ese fichero: Vercel publica el visor unos minutos antes de que Render despliegue la API, y en ese rato una ruta nueva da 404. El cliente no repite el cálculo: necesitaría los tramos de todos los trenes del día.
 

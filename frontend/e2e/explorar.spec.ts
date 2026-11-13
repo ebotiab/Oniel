@@ -16,7 +16,7 @@ test.describe('Explorar la red', () => {
     await page.goto('/linea/lav-madrid-sevilla')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
-    await page.getByTestId('esquema-tramo-5').click() // Ciudad Real – Puertollano
+    await page.getByTestId('esquema-tramo-7').click() // Ciudad Real – Puertollano
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByRole('heading', { name: /Ciudad Real/ })).toBeVisible()
     await expect(page.getByRole('heading', { name: /Puertollano/ })).toBeVisible()
@@ -64,7 +64,9 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('linea-detalle')).toHaveText(/Adif.*522.*ibérico \(1\.668 mm\).*3 kV CC/)
     for (const nodo of ['manzanares', 'daimiel', 'almagro', 'ciudad-real']) await expect(page.getByTestId(`esquema-nodo-${nodo}`)).toBeVisible()
     // Daimiel – Almagro: vía única, con los Media Distancia y los Intercity y Alvia que la cruzan sin parar
-    await page.getByTestId('esquema-tramo-2').click()
+    // se toca sobre la vía: el centro del grupo cae entre la barra de trenes y su cifra, que con
+    // una barra corta (38 trenes frente a los 140 del tramo con más) deja un hueco sin dibujo
+    await page.getByTestId('esquema-tramo-2').click({ position: { x: 14, y: 12 } })
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
     await expect(page).toHaveURL(/\/tramo\/manzanares-ciudad-real:daimiel:almagro/)

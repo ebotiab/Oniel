@@ -313,6 +313,17 @@
       "notes": "Es un gráfico de 2015 que ilustra el artículo de Wikipedia de la línea; se consultó la imagen el 12 de noviembre de 2026 y no se guarda copia. Los valores se leen sobre la rejilla del gráfico, que va de 50 en 50 km/h: son aproximados, con un margen de unos 10 km/h. Solo sirven para el tiempo estimado de los recorridos del comparador y para la ficha de esos tres tramos."
     },
     {
+      "id": "wikipedia-lav-madrid-sevilla",
+      "name": "Artículo «Línea de alta velocidad Madrid-Sevilla» de Wikipedia en español (instalaciones y puntos kilométricos)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Madrid-Sevilla",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-13",
+      "coverage": "Puntos kilométricos de la bifurcación Los Gavilanes (13,445, «incorporación desde Barcelona por Perales») y de la bifurcación Yeles (34,395, «incorporación desde Levante»), por donde entran en la línea 010 los trenes que no pasan por Madrid-Puerta de Atocha.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 4 de noviembre de 2026 (oldid 176143997), consultada por la API de Wikipedia. Es la misma tabla de instalaciones con la que se contrastaron los demás puntos kilométricos de la línea. Los dos nodos se sitúan por kilómetro sobre la geometría de OpenStreetMap, que entre Madrid y Torrejón de Velasco mide 1,3 km más que la numeración de Adif."
+    },
+    {
       "id": "adif-mapa-red",
       "name": "Mapa de la red ferroviaria española y referencias de la línea 010",
       "publisher": "Adif / Adif Alta Velocidad",
