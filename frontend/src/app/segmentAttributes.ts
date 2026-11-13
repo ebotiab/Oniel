@@ -58,6 +58,8 @@ const BLOQUEO: Record<string, ValorDicho> = {
   blau: { texto: 'De liberación automática en vía única', termino: 'bloqueo' },
   // un tramo que cambia de bloqueo donde Oniel no tiene nodo
   bab_bad: { texto: 'Automático: banalizado en una parte y de vía doble en otra', termino: 'bloqueo-automatico' },
+  // la alta velocidad cambia de bloqueo a la entrada de Valencia: «BSL» es el de señalización lateral
+  bca_bsl: { texto: 'De control automático en una parte y de señalización lateral en otra', termino: 'bloqueo-de-control-automatico' },
   sin_dato_publicado: SIN_DATO_PUBLICADO,
 }
 

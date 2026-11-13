@@ -3,7 +3,7 @@
     "id": "baipas-lleida",
     "name": "Baipás de Lleida",
     "short_name": "050",
-    "sort_order": 11,
+    "sort_order": 12,
     "zone": "cataluna",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

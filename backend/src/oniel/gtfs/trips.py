@@ -190,6 +190,12 @@ def calls_for_trip(
             distances, note = _via_other_lines(
                 st.stop_id, stop.name if stop else st.stop_id, mapping, nodes or {}, others
             )
+        elif mapping is not None and mapping.track_km is not None:
+            # distancia por vía que da una fuente, hasta una parada a la que no llega ninguna
+            # línea cargada: vale para todas las salidas de la asignación
+            name = stop.name if stop else st.stop_id
+            how = f"{_km(mapping.track_km)} km de vía hasta {name}"
+            distances = {e: ExitDistance(mapping.track_km, how) for e in mapping.exits}
         calls.append(
             StopCall(
                 seq=st.seq,
@@ -206,6 +212,10 @@ def calls_for_trip(
             )
         )
     return calls
+
+
+def _km(value: float) -> str:
+    return f"{value:.0f}"
 
 
 @dataclass(frozen=True)

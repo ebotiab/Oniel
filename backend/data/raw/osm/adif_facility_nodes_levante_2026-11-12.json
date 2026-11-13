@@ -1,0 +1,645 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-12T22:31:35Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 264034596,
+  "lat": 39.6939703,
+  "lon": -3.4300967,
+  "tags": {
+    "name": "El Romeral",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60207",
+    "ref:EU:PLC": "ES60207",
+    "train": "yes",
+    "uic_ref": "7160207",
+    "website": "https://www.adif.es/-/60207-el-romeral",
+    "wikidata": "Q5846182",
+    "wikipedia": "es:Estación de El Romeral"
+  }
+},
+{
+  "type": "node",
+  "id": 264034930,
+  "lat": 39.6219709,
+  "lon": -3.3302479,
+  "tags": {
+    "name": "Villacañas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60300",
+    "ref:EU:PLC": "ES60300",
+    "train": "yes",
+    "uic_ref": "7160300",
+    "website": "https://www.adif.es/w/60300-villaca%C3%B1as",
+    "wheelchair": "yes",
+    "wikidata": "Q5847461",
+    "wikipedia": "es:Estación de Villacañas"
+  }
+},
+{
+  "type": "node",
+  "id": 358501945,
+  "lat": 40.0115585,
+  "lon": -0.6964160,
+  "tags": {
+    "name": "Barracas",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845775"
+  }
+},
+{
+  "type": "node",
+  "id": 359544261,
+  "lat": 39.6794065,
+  "lon": -0.3206579,
+  "tags": {
+    "name": "Gilet",
+    "name:ca": "Gilet",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 366942270,
+  "lat": 39.7529606,
+  "lon": -0.3657658,
+  "tags": {
+    "alt_name": "Algimia",
+    "alt_name:ca": "Algímia",
+    "name": "Algimia-Ciudad",
+    "name:ca": "Algímia-Ciutat",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q4673630",
+    "wikipedia": "ca:Estació d'Algímia d'Alfara"
+  }
+},
+{
+  "type": "node",
+  "id": 503189462,
+  "lat": 39.8545315,
+  "lon": -0.4938521,
+  "tags": {
+    "name": "Segorbe - Arrabal",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8841918"
+  }
+},
+{
+  "type": "node",
+  "id": 1013407340,
+  "lat": 39.5556769,
+  "lon": -0.3181189,
+  "tags": {
+    "name": "Massalfassar",
+    "name:ca": "Massalfassar",
+    "operator": "Adif",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikipedia": "ca:Estació de Massalfassar"
+  }
+},
+{
+  "type": "node",
+  "id": 1064038509,
+  "lat": 39.5217526,
+  "lon": -1.1347266,
+  "tags": {
+    "name": "Requena - Utiel",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "03213",
+    "ref:EU:PLC": "ES03213",
+    "uic_ref": "7103213",
+    "wikidata": "Q8841592"
+  }
+},
+{
+  "type": "node",
+  "id": 1067401293,
+  "lat": 39.5431011,
+  "lon": -0.3205307,
+  "tags": {
+    "name": "Albuixech",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 2331876446,
+  "lat": 40.1106333,
+  "lon": -0.7409531,
+  "tags": {
+    "name": "Rubielos de Mora",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q5847073"
+  }
+},
+{
+  "type": "node",
+  "id": 2393743376,
+  "lat": 39.7225089,
+  "lon": -3.4969780,
+  "tags": {
+    "name": "Tembleque",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60206",
+    "ref:EU:PLC": "ES60206",
+    "train": "yes",
+    "uic_ref": "7160206",
+    "website": "https://www.adif.es/gl/w/60206-tembleque",
+    "wikidata": "Q5847321",
+    "wikipedia": "es:Estación de Tembleque"
+  }
+},
+{
+  "type": "node",
+  "id": 2393787650,
+  "lat": 39.8795230,
+  "lon": -3.7284893,
+  "tags": {
+    "name": "Villasequilla",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60203",
+    "ref:EU:PLC": "ES60203",
+    "train": "yes",
+    "uic_ref": "7160203",
+    "website": "https://www.adif.es/w/60203-villasequilla",
+    "wheelchair": "yes",
+    "wikidata": "Q5847510",
+    "wikipedia": "es:Estación de Villasequilla"
+  }
+},
+{
+  "type": "node",
+  "id": 2579743614,
+  "lat": 39.5042227,
+  "lon": -3.2663651,
+  "tags": {
+    "name": "Quero",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60301",
+    "ref:EU:PLC": "ES60301",
+    "train": "yes",
+    "uic_ref": "7160301",
+    "website": "https://www.adif.es/w/60301-quero",
+    "wikidata": "Q5495487",
+    "wikipedia": "es:Estación de Quero"
+  }
+},
+{
+  "type": "node",
+  "id": 2617060382,
+  "lat": 39.4007455,
+  "lon": -3.2112994,
+  "tags": {
+    "name": "Alcázar S. J. Mercancías",
+    "operator": "Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 3973025564,
+  "lat": 39.4000723,
+  "lon": -0.3991880,
+  "tags": {
+    "name": "Catarroja",
+    "name:ca": "Catarroja",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846006",
+    "wikipedia": "ca:Estació de Catarroja"
+  }
+},
+{
+  "type": "node",
+  "id": 3973025583,
+  "lat": 39.4091688,
+  "lon": -0.3953228,
+  "tags": {
+    "name": "Massanassa",
+    "name:ca": "Massanassa",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846685",
+    "wikipedia": "ca:Estació de Massanassa"
+  }
+},
+{
+  "type": "node",
+  "id": 3973594599,
+  "lat": 39.4223290,
+  "lon": -0.3925914,
+  "tags": {
+    "building": "yes",
+    "name": "Alfafar - Benetússer",
+    "name:ca": "Alfafar - Benetússer",
+    "name:es": "Alfafar - Benetúser",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845638",
+    "wikipedia": "ca:Estació d'Alfafar-Benetússer"
+  }
+},
+{
+  "type": "node",
+  "id": 3973594649,
+  "lat": 39.3617545,
+  "lon": -0.4149384,
+  "tags": {
+    "name": "Silla",
+    "name:ca": "Silla",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5847257",
+    "wikipedia": "ca:Estació de Silla"
+  }
+},
+{
+  "type": "node",
+  "id": 5248502186,
+  "lat": 39.6041979,
+  "lon": -1.9576409,
+  "tags": {
+    "name": "Bifurcación de Motilla del Palancar",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5248861970,
+  "lat": 40.1945731,
+  "lon": -3.7500580,
+  "tags": {
+    "name": "Bifurcación Torrejón de Velasco",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 5249315100,
+  "lat": 39.6160200,
+  "lon": -1.9574815,
+  "tags": {
+    "ele": "918",
+    "name": "Bifurcación Albacete",
+    "operator": "Adif",
+    "railway": "junction",
+    "railway:position:exact": "247.025"
+  }
+},
+{
+  "type": "node",
+  "id": 5249315104,
+  "lat": 39.9771648,
+  "lon": -2.9960902,
+  "tags": {
+    "alt_name": "PAET Tarancón",
+    "ele": "774",
+    "name": "Tarancón",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "railway": "service_station",
+    "railway:position:exact": "118.590",
+    "ref": "03205",
+    "uic_ref": "7103205"
+  }
+},
+{
+  "type": "node",
+  "id": 5868423604,
+  "lat": 39.9495725,
+  "lon": -3.7385925,
+  "tags": {
+    "internet_access": "no",
+    "name": "Castillejo-Añover",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60202",
+    "ref:EU:PLC": "ES60202",
+    "train": "yes",
+    "uic_ref": "7160202",
+    "wikidata": "Q5845997",
+    "wikipedia": "es:Estación de Castillejo-Añover"
+  }
+},
+{
+  "type": "node",
+  "id": 6167041751,
+  "lat": 40.2123934,
+  "lon": -0.9439513,
+  "tags": {
+    "name": "Puebla de Valverde",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846977"
+  }
+},
+{
+  "type": "node",
+  "id": 6167089167,
+  "lat": 40.1178431,
+  "lon": -0.7734666,
+  "tags": {
+    "name": "Mora de Rubielos",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846760"
+  }
+},
+{
+  "type": "node",
+  "id": 6766511991,
+  "lat": 39.3956628,
+  "lon": -3.2053714,
+  "tags": {
+    "name": "Alcázar de San Juan",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "60400",
+    "ref:EU:PLC": "ES60400",
+    "train": "yes",
+    "uic_ref": "7160400",
+    "website": "https://www.adif.es/w/60400-alc%C3%A1zar-de-s.-juan",
+    "wheelchair": "yes",
+    "wikidata": "Q5845633",
+    "wikipedia": "es:Estación de Alcázar de San Juan"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315770,
+  "lat": 39.5264845,
+  "lon": -0.3237147,
+  "tags": {
+    "name": "Roca-Cúper",
+    "name:ca": "Roca-Cúper",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315771,
+  "lat": 39.5881894,
+  "lon": -0.3119033,
+  "tags": {
+    "name": "El Puig",
+    "name:ca": "El Puig",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 7221315772,
+  "lat": 39.6204852,
+  "lon": -0.3031005,
+  "tags": {
+    "name": "Puçol",
+    "name:ca": "Puçol",
+    "name:es": "Puzol",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841556",
+    "wikipedia": "ca:Estació de Puçol"
+  }
+},
+{
+  "type": "node",
+  "id": 7246471727,
+  "lat": 39.4600472,
+  "lon": -0.3812078,
+  "tags": {
+    "name": "València Joaquín Sorolla",
+    "name:ca": "València Joaquín Sorolla",
+    "name:es": "Valencia Joaquín Sorolla",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "VJS",
+    "ref": "03216",
+    "ref:EU:PLC": "ES03216",
+    "train": "yes",
+    "uic_ref": "7103216",
+    "website": "https://www.adif.es/w/03216-val%C3%A8ncia-j.sorolla",
+    "wheelchair": "yes",
+    "wikidata": "Q801550",
+    "wikipedia": "es:Estación de Valencia-Joaquín Sorolla"
+  }
+},
+{
+  "type": "node",
+  "id": 7246471728,
+  "lat": 39.4669126,
+  "lon": -0.3771908,
+  "tags": {
+    "addr:city": "València",
+    "addr:housenumber": "24",
+    "addr:postcode": "46007",
+    "addr:street": "Carrer de Xàtiva",
+    "alt_name": "València Nord",
+    "alt_name:ca": "València Nord",
+    "alt_name:en": "Valencia North",
+    "alt_name:es": "Valencia Norte",
+    "building": "train_station",
+    "internet_access": "wlan",
+    "name": "València - Estació del Nord",
+    "name:ca": "València - Estació del Nord",
+    "name:en": "Valencia - North Station",
+    "name:es": "Valencia - Estación del Norte",
+    "name:etymology:wikidata": "Q2990395",
+    "name:ru": "Валенсия - Северный вокзал",
+    "official_name": "Estació del Nord",
+    "opening_hours": "24/7",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "VEN",
+    "ref": "65000",
+    "ref:EU:PLC": "ES65000",
+    "ref:ibnr": "7100054",
+    "uic_ref": "7165000",
+    "wheelchair": "yes",
+    "wikidata": "Q1102684",
+    "wikipedia": "ca:Estació del Nord (València)"
+  }
+},
+{
+  "type": "node",
+  "id": 8060131557,
+  "lat": 40.1461535,
+  "lon": -0.8235830,
+  "tags": {
+    "name": "Sarrión",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5847195"
+  }
+},
+{
+  "type": "node",
+  "id": 8060131561,
+  "lat": 39.9647857,
+  "lon": -0.6368825,
+  "tags": {
+    "name": "Masadas Blancas",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 8060137197,
+  "lat": 39.9472816,
+  "lon": -0.5721960,
+  "tags": {
+    "name": "Caudiel",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779537"
+  }
+},
+{
+  "type": "node",
+  "id": 8072630141,
+  "lat": 39.3943842,
+  "lon": -3.1177032,
+  "tags": {
+    "name": "Campo de Criptana",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5845938"
+  }
+},
+{
+  "type": "node",
+  "id": 10592347455,
+  "lat": 40.0339646,
+  "lon": -2.1436891,
+  "tags": {
+    "name": "Cuenca-Fernando Zóbel",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position:exact": "151.499",
+    "ref": "03208",
+    "ref:EU:PLC": "ES03208",
+    "uic_ref": "7103208",
+    "website": "https://www.adif.es/w/03208-cuenca-fdo.-z%C3%B3bel",
+    "wheelchair": "yes",
+    "wikidata": "Q3817337"
+  }
+},
+{
+  "type": "node",
+  "id": 14243510920,
+  "lat": 39.4701155,
+  "lon": -0.3345854,
+  "tags": {
+    "addr:city": "València",
+    "addr:postcode": "46022",
+    "addr:street": "Avinguda de Blasco Ibáñez",
+    "name": "València Cabanyal",
+    "opening_hours": "Mo-Fr 05:40-23:40; Sa-Su 06:00-23:40",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q3097922",
+    "wikipedia": "ca:Estació de València-Cabanyal"
+  }
+}
+
+  ]
+}

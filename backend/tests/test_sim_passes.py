@@ -380,3 +380,65 @@ def test_two_stops_outside_the_network_stay_indeterminate() -> None:
         ),
     ]
     assert {x.kind for x in resolve_passes(loose, NODES, SEGMENTS)[0]} == {"indeterminado"}
+
+
+def test_a_sourced_track_distance_replaces_the_straight_line() -> None:
+    """Una parada fuera de la red cargada a la que una fuente dice cuánta vía hay.
+
+    Córdoba 9:00 → parada X 10:00 (60 min), saliendo por la bifurcación de Málaga (14,4 km).
+    Con 43,2 km de vía declarados hasta X, el tren llega a la bifurcación a los
+    60 × 14,4 / (14,4 + 43,2) = 15 min: las 9:15. La explicación dice de dónde sale la cifra y
+    que X está fuera de la red cargada.
+    """
+    calls = [
+        call(1, "50500", "Córdoba", hm(9, 0), hm(9, 0), node="cordoba"),
+        StopCall(
+            2,
+            "x",
+            "Parada X",
+            hm(10, 0),
+            hm(10, 0),
+            exit_node_ids=("bif-malaga",),
+            exit_distances={"bif-malaga": ExitDistance(43.2, "43 km de vía hasta Parada X")},
+        ),
+    ]
+    p = by_id(resolve_passes(calls, NODES, SEGMENTS)[0])
+    co_bif = p["co-bif"]
+    assert co_bif.kind == "estimado"
+    assert co_bif.exit_s == pytest.approx(hm(9, 15), abs=1)
+    assert "Parada X está fuera de la red cargada" in co_bif.basis
+    assert "sale de esta línea por bif-malaga" in co_bif.basis
+    assert "y, desde bif-malaga, 43 km de vía hasta Parada X;" in co_bif.basis
+    assert "línea recta" not in co_bif.basis
+
+
+def test_a_sourced_track_distance_anchors_a_train_that_crosses_without_stopping() -> None:
+    """Dos paradas fuera de la red cargada, pero de una se sabe cuánta vía hay hasta la línea:
+    el tren la cruza de un nodo a otro y su paso es estimado, no indeterminado.
+
+    X 8:00 → Y 10:00 (120 min): 57,2 km de vía de X a Ciudad Real, 172,8 km por la línea hasta
+    Córdoba (dos tramos enteros y dos más) y 10 km en línea recta... Y no lleva coordenadas, así
+    que su distancia es 0: entra en Ciudad Real a los 120 × 57,2 / 230 = 29,8 min.
+    """
+    calls = [
+        StopCall(
+            1,
+            "x",
+            "Parada X",
+            hm(8, 0),
+            hm(8, 0),
+            exit_node_ids=("ciudad-real",),
+            exit_distances={"ciudad-real": ExitDistance(57.2, "57 km de vía hasta Parada X")},
+        ),
+        StopCall(2, "y", "Parada Y", hm(10, 0), hm(10, 0), -4.8, 37.9, None, ("cordoba",)),
+    ]
+    passes, resolution = resolve_passes(calls, NODES, SEGMENTS)
+    assert resolution == "completa"
+    assert [p.segment_id for p in passes] == ["cr-pu", "pu-vi", "vi-ad", "ad-co"]
+    assert {p.kind for p in passes} == {"estimado"}
+    beyond = haversine_km((-4.8, 37.9), (NODES["cordoba"].lon, NODES["cordoba"].lat))
+    total = 57.2 + 172.8 + beyond
+    assert passes[0].enter_s == pytest.approx(hm(8, 0) + 7200 * 57.2 / total, abs=1)
+    assert "recorre la línea sin parar en ella" in passes[0].basis
+    assert "Parada Y está fuera de la red cargada" in passes[0].basis
+    assert "Parada X está fuera" not in passes[0].basis

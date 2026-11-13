@@ -19,8 +19,8 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto('/')
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
-    // nueve líneas, con los kilómetros de los dos baipases sumados
-    await expect(page.getByTestId('ficha-red')).toContainText(/^9 líneas · 2\.244 km/)
+    // diez líneas, con los kilómetros de los dos baipases sumados
+    await expect(page.getByTestId('ficha-red')).toContainText(/^10 líneas · 2\.605 km/)
     const cataluna = red.getByRole('region', { name: 'Cataluña' })
     await expect(cataluna.locator('.zona-cabecera')).toHaveText(/^›Cataluña1 línea$/)
     await expect(cataluna.locator('.fila-linea')).toHaveText([/Madrid – Barcelona por Zaragoza627 km$/])
@@ -64,15 +64,15 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await expect(ficha).toContainText('Tramo 1 de 1 · Baipás de Zaragoza')
     await expect(ficha).toContainText('20,7 km')
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Alta velocidad')
-    // 26 trenes el día de referencia: los que van de Madrid a Barcelona sin parar en Zaragoza
-    await expect(ficha).toContainText('26 el jueves, 12 de noviembre de 2026')
+    // 22 trenes el día de referencia: los que van de Madrid a Barcelona sin parar en Zaragoza
+    await expect(ficha).toContainText('22 el viernes, 13 de noviembre de 2026')
     const trenes = page.getByTestId('lista-servicios').locator('li')
-    await expect(trenes).toHaveCount(26)
+    await expect(trenes).toHaveCount(22)
     // todos con paso estimado, y la explicación empieza por el motivo
-    await expect(page.getByTestId('lista-servicios').locator('[title^="No para en Zaragoza-Delicias: por eso va por aquí. Estimado"]')).toHaveCount(26)
+    await expect(page.getByTestId('lista-servicios').locator('[title^="No para en Zaragoza-Delicias: por eso va por aquí. Estimado"]')).toHaveCount(22)
     // si se cortara, sus trenes entrarían en la estación
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 26 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Ese camino tiene 5 km y 6 min más.',
+      'Si este tramo se cortara, sus 22 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Ese camino tiene 5 km y 6 min más.',
     )
   })
 
@@ -80,11 +80,11 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto(`/tramo/${ENTRADA_ZARAGOZA}`)
     await abrirPanel(page)
     const ficha = page.getByTestId('detalle-tramo')
-    // eran 83 cuando el tren que no para figuraba por la estación; lo que llega a la bifurcación sale
-    // por aquí (57) o por el baipás (26)
-    await expect(ficha).toContainText('57 el jueves, 12 de noviembre de 2026')
-    await expect(page.getByTestId('lista-servicios').locator('li')).toHaveCount(57)
-    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 57 trenes tendrían otro camino en las líneas que Oniel tiene cargadas')
+    // eran 78 cuando el tren que no para figuraba por la estación; lo que llega a la bifurcación sale
+    // por aquí (56) o por el baipás (22)
+    await expect(ficha).toContainText('56 el viernes, 13 de noviembre de 2026')
+    await expect(page.getByTestId('lista-servicios').locator('li')).toHaveCount(56)
+    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 56 trenes tendrían otro camino en las líneas que Oniel tiene cargadas')
     // la ficha de la bifurcación enseña los dos caminos que salen de ella
     await page.goto('/nodo/bif-moncasi')
     await abrirPanel(page)
@@ -100,7 +100,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto('/recorridos/madrid-puerta-de-atocha/barcelona-sants')
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos).toHaveCount(1)
-    await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Un solo recorrido con las líneas cargadas\. Hay 31 trenes directos en este sentido/)
+    await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Un solo recorrido con las líneas cargadas\. Hay 29 trenes directos en este sentido/)
     const unico = recorridos.first()
     await expect(unico.getByRole('button', { name: 'Por la alta velocidad' })).toBeVisible()
     await expect(unico).toContainText('620,1 km · 2 h 5 min sin paradas')
@@ -111,7 +111,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
       'Rodea Zaragoza y Lleida por sus baipases; el tren que para en Zaragoza-Delicias y en Lleida-Pirineus recorre 6,9 km más.',
     )
     // todos los directos son de este recorrido, paren o no en las dos estaciones
-    await expect(unico.getByTestId('recorrido-trenes')).toContainText('31 trenes directos')
+    await expect(unico.getByTestId('recorrido-trenes')).toContainText('29 trenes directos')
     // el mapa lo dibuja por los dos baipases: quince tramos de la línea y los dos de los baipases, no los veinte
     await expect(page.getByTestId('mapa')).toHaveAttribute('data-recorrido-elegido', '17')
 
@@ -149,7 +149,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await abrirPanel(page)
     await page.getByTestId('boton-simular').click()
     await expect(page.getByTestId('panel-simulacion')).toBeVisible()
-    await page.getByTestId('sim-fecha').fill('2026-11-12')
+    await page.getByTestId('sim-fecha').fill('2026-11-13')
     await page.getByTestId('sim-inicio').fill('08:00')
     await page.getByTestId('sim-fin').fill('10:00')
     await page.getByTestId('sim-calcular').click()

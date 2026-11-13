@@ -3,7 +3,7 @@
     "id": "baipas-zaragoza",
     "name": "Baipás de Zaragoza",
     "short_name": "050",
-    "sort_order": 10,
+    "sort_order": 11,
     "zone": "cataluna",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

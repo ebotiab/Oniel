@@ -1429,6 +1429,16 @@
   box-shadow: none;
 }
 
+/* Las dos filas son hermanas con posición y sin orden de apilado, así que la segunda se pintaba encima de la lista de
+   sugerencias de la primera. La fila en la que se escribe pasa delante, y la lista se ancla a su campo, no a la fila con el rótulo. */
+.extremo:focus-within {
+  z-index: 2;
+}
+
+.extremo .buscador {
+  position: relative;
+}
+
 .extremos .invertir {
   justify-self: start;
   margin-left: 56px;

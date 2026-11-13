@@ -50,11 +50,11 @@ test.describe('La línea de alta velocidad Madrid – Zaragoza – Barcelona', (
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 83 · Ouigo España 10')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 79 · Ouigo España 11')
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveText(
       'No están los trenes de Iryo, que también opera en esta línea: no publica sus horarios en un formato abierto.',
     )
-    await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(10)
+    await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(11)
     await expect(page.getByTestId('trenes-iryo')).toHaveCount(0)
     // la señalización va bajo «Más detalle»: está en la ficha aunque plegada
     await expect(ficha.getByText('ERTMS de nivel 1 y ASFA')).toHaveCount(1)

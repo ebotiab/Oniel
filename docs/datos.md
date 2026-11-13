@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-12 |
 | `ouigo-gtfs-nap` | Horarios de alta velocidad de Ouigo España (GTFS) | OUIGO España, en el Punto de Acceso Nacional del Ministerio de Transportes y Movilidad Sostenible | Licencia de datos abiertos del Ministerio (nap.transportes.gob.es/licencia-datos) | 2026-11-12 |
-| `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla, hasta Málaga en la de Córdoba a Málaga y en la de Madrid a Zaragoza y Barcelona, y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-12 |
+| `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla, hasta Málaga en la de Córdoba a Málaga, en la de Madrid a Zaragoza y Barcelona y en la de Madrid a Valencia por Cuenca, y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-12 |
 | `osm-relation-1254828` | Geometría de la LAV Madrid–Sevilla (vías con `ref=010`, operador Adif) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
 | `osm-relation-18368327` | Geometría de la línea 300 Madrid–Valencia; Oniel usa Madrid-Atocha–Alcázar de San Juan y, para la línea de Albacete, Alcázar de San Juan–Albacete-Los Llanos | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
 | `osm-relation-11351144` | Geometría de la línea 400 Alcázar de San Juan–Cádiz; Oniel usa Alcázar–Córdoba y, para la línea de Jaén, los 0,9 km entre la estación de Espeluy y la aguja del ramal | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
@@ -31,9 +31,11 @@
 | `wikipedia-lav-cordoba-malaga` | PK, longitud y fechas de apertura de la línea de alta velocidad Córdoba–Málaga (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
 | `wikipedia-lav-antequera-granada` | PK, fecha de apertura y paso por Loja de la línea de alta velocidad Antequera–Granada (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
 | `wikipedia-lav-madrid-sevilla` | PK de las bifurcaciones Los Gavilanes y Yeles, por donde se incorporan a la línea 010 los trenes de Barcelona y de Levante que no pasan por Madrid (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-13 |
+| `osm-relation-11146316` | Geometría de la línea 040, de alta velocidad, de la bifurcación de Torrejón de Velasco a València-Joaquín Sorolla; dónde se une el enlace que viene de la línea de Sevilla | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
+| `wikipedia-lav-madrid-levante` | PK, instalaciones, velocidades y fechas de apertura de la línea de alta velocidad Madrid–Levante; kilómetros de vía hasta Madrid-Chamartín, Albacete y Alicante (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-12 |
 | `adif-mapa-red` | Verificación del trazado, códigos de estación y puntos kilométricos de la línea 010 | Adif / Adif Alta Velocidad | Consulta pública | 2026-11-08 |
 | `adif-obras-autopista-ferroviaria` | Corte de la línea convencional al sur de Venta de Cárdenas por obras (información de Adif en prensa) | Adif; Europa Press / Demócrata | Consulta pública | 2026-11-08 |
-| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio | Adif | Consulta pública | 2026-11-13 |
+| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio; el 12 de noviembre, que no había ninguna anunciada en la línea de Valencia | Adif | Consulta pública | 2026-11-13 |
 | `adif-aviso-obras-autopista-ferroviaria` | Aviso de la interrupción por obras entre Córdoba y Santa Cruz de Mudela | Adif | Consulta pública | 2026-11-13 |
 | `adif-salidas-y-llegadas` | Paneles de salidas y llegadas de cinco estaciones: hasta dónde llegan los trenes a cada lado de una interrupción | Adif | Consulta pública | 2026-11-13 |
 | `renfe-nota-md-jaen-madrid-2026-09` | Inicio de las obras el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel | Renfe | Consulta pública | 2026-11-10 |
@@ -45,7 +47,7 @@
 | `cmm-avant-ciudad-real-puertollano-2026-11` | Que Renfe no restableció el 13 de noviembre de 2026 los Avant entre Ciudad Real y Puertollano que había anunciado | Castilla-La Mancha Media (CMM) | © del medio; se cita el dato | 2026-11-13 |
 | `el-estrecho-digital-corte-algeciras` | Previsión de fin de las obras (otoño de 2027) y límite del corte de la vía en Venta de Cárdenas | El Estrecho Digital | © del medio; se cita el dato | 2026-11-10 |
 | `europa-press-reapertura-madrid-sevilla` | Estimación del Ministerio de Transportes sobre la reanudación de la alta velocidad | Europa Press; Pressdigital | © de la agencia; se cita el dato | 2026-11-10 |
-| `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
+| `boe-reglamento-circulacion-ferroviaria` | Referencia de los conceptos de circulación del glosario (bloqueo y cantón, marcha a la vista, puesto de mando, ASFA, LZB y ERTMS) y nombre del bloqueo «BSL» | Agencia Estatal Boletín Oficial del Estado | Texto legal; aviso legal del BOE | 2026-11-12 |
 | `boe-a-…` y `boe-b-…` (19 fuentes) | Un anuncio del Boletín Oficial del Estado por fuente: estudios informativos, declaraciones de impacto ambiental, licitaciones y adjudicaciones de los proyectos (véase «Proyectos») | Boletín Oficial del Estado | Reutilización citando la fuente | 2026-11-12 |
 | `mitma-nota-baipas-cordoba-jaen-2025-03`, `mitma-nota-baipas-cordoba-jaen-2026-01` | Anuncio del baipás entre la alta velocidad y la línea de Córdoba a Jaén y comienzo de su estudio informativo | Ministerio de Transportes y Movilidad Sostenible | Consulta pública | 2026-11-12 |
 | `moncloa-nota-variante-de-loja-2025-02` | Estado de los tramos de la Variante de Loja en febrero de 2025 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-12 |
@@ -61,9 +63,9 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 | Operador | Líneas | Horarios | Fuente |
 |---|---|---|---|
-| Renfe Viajeros (`renfe`) | las nueve | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
-| Ouigo España (`ouigo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga y LAV Madrid – Zaragoza – Barcelona | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
-| Iryo (`iryo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga y LAV Madrid – Zaragoza – Barcelona | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
+| Renfe Viajeros (`renfe`) | las diez | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
+| Ouigo España (`ouigo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona y LAV Madrid – Cuenca – Valencia | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
+| Iryo (`iryo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona y LAV Madrid – Cuenca – Valencia | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
 
 - **Ouigo** publica su GTFS en el Punto de Acceso Nacional de Transporte Multimodal (nap.transportes.gob.es, conjunto 1515). La descarga exige una cuenta de usuario, gratuita. La licencia permite reutilizar los datos con fines comerciales o no, citando la fuente con la indicación «Powered by MITRAMS» y un enlace a https://www.transportes.gob.es/, sin alterar los metadatos de actualización y manteniendo al día lo que se muestra; el panel de cobertura la cita con su enlace. El fichero es del 2 de julio de 2026 y vale del 26 de junio al 12 de diciembre de 2026: hay que descargar el siguiente a mano antes de esa fecha, y el flujo de refresco lo recuerda con una incidencia tres semanas antes (véase «Refresco de los horarios»).
 - **Iryo** no publica sus horarios en GTFS ni en otro formato reutilizable. El 11 de noviembre de 2026 no figuraba entre los 27 conjuntos ferroviarios del Punto de Acceso Nacional (el buscador no devuelve nada para «iryo» ni para «ILSA»), su web solo ofrece el buscador de billetes y Transitland no lo tiene. Existe un fichero elaborado por un particular, sin licencia declarada, que no se usa. Oniel no reconstruye sus horarios por otros medios: Iryo queda registrado sin horarios como operador de las tres líneas por las que circula (la de Madrid a Sevilla, la de Córdoba a Málaga y la de Madrid a Barcelona; Málaga, Zaragoza, Tarragona y Barcelona figuran entre sus destinos, y Antequera y Granada no), sus trenes no están en los recuentos y el visor lo dice en cada tramo de esas líneas, en la nota del esquema y en la cobertura. Si Iryo publica un GTFS, basta declararlo en `feeds` y quitar `timetable` de su entrada en la especificación.
@@ -83,10 +85,11 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Alta velocidad Córdoba – Málaga (Adif 030) | `lav-cordoba-malaga` | 154,7 km | 9 (1 compartido) | 8 | 200 de Renfe (AVE, AVLO, Alvia, Avant, Intercity) y 16 de Ouigo |
 | Alta velocidad Antequera – Granada (Adif 036) | `lav-antequera-granada` | 114,1 km | 9 (1 compartido) | 8 (5 de vía única) | 63 (AVE, Alvia, Avant) |
 | Alta velocidad Madrid – Zaragoza – Barcelona (Adif 050, con 054 y 056 por las estaciones de Zaragoza y Lleida) | `lav-madrid-barcelona` | 627,0 km | 21 (1 compartido) | 20 | 571 de Renfe (264 AVE, 105 Alvia, 84 Avant, 55 AVE internacionales, 37 Euromed, 24 Intercity y 2 Avant Exprés) y 25 de Ouigo |
-| Baipás de Zaragoza (Adif 050; cuelga de la anterior) | `baipas-zaragoza` | 20,7 km | 2 (los 2 compartidos) | 1 | 97 de Renfe (AVE) y 10 de Ouigo: los de la línea de Barcelona que no paran en Zaragoza |
-| Baipás de Lleida (Adif 050; cuelga de la misma) | `baipas-lleida` | 14,3 km | 2 (los 2 compartidos) | 1 | 224 de Renfe (169 AVE y 55 AVE internacionales) y 25 de Ouigo: los que no paran en Lleida |
+| Alta velocidad Madrid – Cuenca – Valencia (Adif 040), desde la bifurcación de Torrejón de Velasco | `lav-madrid-valencia` | 361,0 km | 13 (1 compartido) | 12 | 469 de Renfe (299 AVE, 85 Avant, 61 AVLO y 24 Alvia) y 22 de Ouigo |
+| Baipás de Zaragoza (Adif 050; cuelga de la alta velocidad de Barcelona) | `baipas-zaragoza` | 20,7 km | 2 (los 2 compartidos) | 1 | 97 de Renfe (AVE) y 10 de Ouigo: los de la línea de Barcelona que no paran en Zaragoza |
+| Baipás de Lleida (Adif 050; cuelga de la misma línea) | `baipas-lleida` | 14,3 km | 2 (los 2 compartidos) | 1 | 224 de Renfe (169 AVE y 55 AVE internacionales) y 25 de Ouigo: los que no paran en Lleida |
 
-En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases son líneas cortas que cuelgan de la alta velocidad de Barcelona y no cuentan como líneas en el visor (véase «Los baipases de Zaragoza y de Lleida»). Son 2.244,0 km de red, 55 estaciones y 1.428 viajes distintos (1.381 de Renfe y 47 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
+En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases son líneas cortas que cuelgan de la alta velocidad de Barcelona y no cuentan como líneas en el visor (véase «Los baipases de Zaragoza y de Lleida»). Son 2.604,9 km de red, 58 estaciones y 1.915 viajes distintos (1.846 de Renfe y 69 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
 
 - Madrid-Puerta de Atocha y Córdoba son comunes a la alta velocidad y a la convencional: la red forma un lazo Madrid–Córdoba con dos recorridos, el de alta velocidad (343,6 km) y el convencional (440,7 km).
 - Manzanares (de la convencional) y Ciudad Real (de la alta velocidad) son los extremos de la tercera línea, que cierra un segundo lazo: de Madrid a Ciudad Real hay 170,8 km por la alta velocidad y 260,5 km por la convencional hasta Manzanares (196,1 km) y la línea de Manzanares a Ciudad Real (64,4 km).
@@ -102,39 +105,42 @@ En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases
 - Desde que la línea de Málaga llega a Málaga-María Zambrano (13 de noviembre de 2026) tiene 200 viajes de Renfe: a los 181 que paran en Córdoba se suman 13 directos entre Madrid y Málaga y los 6 Avant de Málaga a Granada, que ya estaban en la de Granada y aquí cuentan entre Málaga y la bifurcación Gobantes. Los dos grupos entran por reglas de recorrido, porque no paran en Córdoba. Los 13 directos no estaban en ninguna línea, ni el de Ouigo: entran también en la de Sevilla, que pasa de 364 a 377 viajes de Renfe y de 25 a 26 de Ouigo, y los totales, de 1.368 a 1.381 y de 46 a 47. De Madrid a Málaga hay 512,7 km: 358,0 por la línea de Sevilla y 154,7 por esta.
 - Madrid-Puerta de Atocha es también la cabecera de la novena línea, la alta velocidad a Zaragoza y Barcelona, que no comparte ningún otro nodo con las demás: no cierra ningún lazo, y de Madrid a Barcelona hay un solo camino cargado, de 627,0 km. De sus 571 viajes de Renfe, 555 no estaban en ninguna otra línea; los otros 16 son los Alvia Barcelona – València – Alcázar de San Juan – Córdoba, que ya recorrían la convencional, y los AVE de Barcelona a Málaga y a Granada. Por eso el total de Renfe pasa de 805 a 1.360.
 - Los 25 viajes de Ouigo de esa línea van todos de Madrid a Barcelona o al revés: 4 son los que siguen a Sevilla o a Málaga parando en Madrid, que ya contaban en la línea de Sevilla, y los otros 21 son nuevos. El total de Ouigo pasa de 25 a 46.
+- La bifurcación de Torrejón de Velasco (de la línea Madrid–Sevilla) es el origen de la décima línea, que lleva a Cuenca y a Valencia y no vuelve a tocar la red cargada: de Madrid-Puerta de Atocha a València-Joaquín Sorolla hay 389,7 km, 28,7 por la línea de Sevilla y 361,0 por esta, y a Cuenca-Fernando Zóbel, 187,7 km. De sus 469 viajes de Renfe, 465 no pasan por ninguna otra línea cargada, y tampoco sus 22 de Ouigo; los otros 4 son los AVE de Valencia a Sevilla, que pasan a la línea de Sevilla por el enlace de Blancales a Yeles y cuentan en las dos. De los 469, 215 dejan la línea en la bifurcación de Albacete, camino de Albacete, Alicante y Murcia.
 - Un viaje es aquí un tren con sus días: el fichero de Renfe trae algunos trenes en varios viajes el mismo día y Oniel los junta al leerlo (véase «Trenes repetidos en el horario de Renfe»). Las cifras de esta tabla son las del fichero del 8 de noviembre de 2026, ya juntado.
 - De los 364 viajes de Renfe de la línea de Sevilla, 47 la recorren sin parar en Madrid: esos 31, los 8 AVE de Barcelona a Sevilla, que están también en la línea de Barcelona, y 8 que no pasan por ninguna otra línea cargada (4 Avant de Sevilla a Córdoba y 4 AVE de Valencia a Sevilla).
 
-El día de referencia es el jueves 12 de noviembre de 2026. Era el viernes 13 hasta que se cargó la alta velocidad de Barcelona: la regla toma el laborable con más servicios, y con sus trenes el jueves tiene más que el viernes: hoy, 380 frente a 379 (un tren por número y día, con los ficheros vigentes de Renfe y de Ouigo; véase «Conjuntos de datos»). Ese día cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
+El día de referencia es el viernes 13 de noviembre de 2026. La regla toma el laborable con más servicios de los ficheros vigentes de Renfe y de Ouigo (véase «Conjuntos de datos»), y la diferencia entre el jueves 12 y el viernes 13 es de muy pocos trenes: con nueve líneas, sin la de Valencia, ganaba el jueves por uno, y con la de Valencia vuelve a ganar el viernes. Cada línea nueva puede moverlo, y con él los recuentos por día de todas. Ese día cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
 
 | Tramos de la LAV Madrid – Sevilla | Renfe | Ouigo | Total |
 |---|---|---|---|
-| Madrid-Puerta de Atocha – bifurcación Los Gavilanes | 74 | 11 | 85 |
-| Bifurcación Los Gavilanes – Torrejón de Velasco – bifurcación Yeles (2 tramos) | 82 | 11 | 93 |
-| Bifurcación Yeles – Urda – Ciudad Real (3 tramos) | 84 | 11 | 95 |
-| Ciudad Real – Córdoba (4 tramos) | 106 | 11 | 117 |
-| Córdoba – bifurcación de Málaga | 128 | 11 | 139 |
-| Bifurcación de Málaga – Majarabique | 78 | 6 | 84 |
-| Majarabique – Sevilla-Santa Justa | 76 | 6 | 82 |
+| Madrid-Puerta de Atocha – bifurcación Los Gavilanes | 74 | 12 | 86 |
+| Bifurcación Los Gavilanes – Torrejón de Velasco – bifurcación Yeles (2 tramos) | 82 | 12 | 94 |
+| Bifurcación Yeles – Urda – Ciudad Real (3 tramos) | 84 | 12 | 96 |
+| Ciudad Real – Córdoba (4 tramos) | 106 | 12 | 118 |
+| Córdoba – bifurcación de Málaga | 128 | 12 | 140 |
+| Bifurcación de Málaga – Majarabique | 77 | 6 | 83 |
+| Majarabique – Sevilla-Santa Justa | 75 | 6 | 81 |
 
 En Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid y en Yeles, los 2 de Valencia; desde Córdoba cuentan además los Avant de Sevilla.
 
-En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 70 trenes de Renfe y 5 de Ouigo, 75 en total; el de Antequera-Santa Ana a la bifurcación Gobantes, 50 y 5, porque allí se han ido los de Granada y Algeciras, y los tres últimos, hasta Málaga, 56 y 5, con los 6 Avant de Málaga a Granada. En la de Granada todos son de Renfe: 18 entre Antequera-Santa Ana y la bifurcación Bobadilla y 24 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
+En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 71 trenes de Renfe y 6 de Ouigo, 77 en total; el de Antequera-Santa Ana a la bifurcación Gobantes, 51 y 6, porque allí se han ido los de Granada y Algeciras, y los tres últimos, hasta Málaga, 57 y 6, con los 6 Avant de Málaga a Granada. En la de Granada todos son de Renfe: 18 entre Antequera-Santa Ana y la bifurcación Bobadilla y 24 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
 
-En la de Barcelona, los veinte tramos llevan 10 trenes de Ouigo; los de Renfe cambian donde entran o salen trenes:
+En la de Barcelona, los veinte tramos llevan 11 trenes de Ouigo; los de Renfe cambian donde entran o salen trenes:
 
 | Tramos de la LAV Madrid – Barcelona | Renfe | Ouigo | Total |
 |---|---|---|---|
-| Madrid-Puerta de Atocha – bifurcación de Vallecas | 67 | 10 | 77 |
-| Bifurcación de Vallecas – Calatayud (4 tramos) | 75 | 10 | 85 |
-| Calatayud – cambiador de Plasencia de Jalón | 83 | 10 | 93 |
-| Cambiador de Plasencia de Jalón – bifurcación Moncasi – Zaragoza-Delicias (2 tramos) | 73 | 10 | 83 |
-| Zaragoza-Delicias – bifurcación Huesca | 71 | 10 | 81 |
-| Bifurcación Huesca – Lleida-Pirineus (5 tramos) | 67 | 10 | 77 |
-| Lleida-Pirineus – Camp de Tarragona (3 tramos) | 83 | 10 | 93 |
-| Camp de Tarragona – Barcelona-Sants (3 tramos) | 101 | 10 | 111 |
+| Madrid-Puerta de Atocha – bifurcación de Vallecas | 63 | 11 | 74 |
+| Bifurcación de Vallecas – Calatayud (4 tramos) | 71 | 11 | 82 |
+| Calatayud – cambiador de Plasencia de Jalón | 79 | 11 | 90 |
+| Cambiador de Plasencia de Jalón – bifurcación Moncasi – Zaragoza-Delicias (2 tramos) | 67 | 11 | 78 |
+| Zaragoza-Delicias – bifurcación Huesca | 66 | 11 | 77 |
+| Bifurcación Huesca – Lleida-Pirineus (5 tramos) | 62 | 11 | 73 |
+| Lleida-Pirineus – Camp de Tarragona (3 tramos) | 78 | 11 | 89 |
+| Camp de Tarragona – Barcelona-Sants (3 tramos) | 97 | 11 | 108 |
 
 Por Vallecas entran los AVE de Barcelona a Andalucía que no pasan por Atocha; en Plasencia de Jalón salen los Alvia de Madrid a Pamplona y Logroño; en la bifurcación Huesca, los de Huesca; desde Lleida se suman los Avant de Lleida a Barcelona, y de Camp de Tarragona a Barcelona, los Euromed y los demás trenes del Corredor Mediterráneo. Cada tren cuenta una vez: el GTFS de Renfe trae muchos de los de esta línea partidos en dos viajes (un AVE Madrid – Calatayud y otro Madrid – Barcelona con el mismo número y el mismo horario), y Oniel los junta (véase «Trenes repetidos en el horario de Renfe»).
+
+En la de Madrid a Valencia, los ocho tramos hasta la bifurcación de Albacete llevan 64 trenes de Renfe y 18 de Ouigo, 82 en total (el primero, 62 y 18: los dos AVE de Valencia a Sevilla entran por la bifurcación Blancales); los dos que siguen hasta Requena-Utiel, 32 y 10, 42 en total, y los dos últimos, hasta Valencia, 42 y 10, 52 en total, con los Avant de Requena-Utiel.
 
 En las cinco líneas convencionales y en la de alta velocidad a Granada todos los trenes son de Renfe. Los de Ouigo solo paran en Madrid, Córdoba y Sevilla o Málaga, así que su paso por cada tramo es siempre estimado. `GET /api/segment-counts` da el total por tramo (`counts`) y su reparto por operador (`by_operator`); el detalle de cada línea, `counts_by_operator`.
 
@@ -377,7 +383,7 @@ Que los Alvia de Madrid a Pamplona y Logroño cambian de ancho en Plasencia de J
 
 **En las estaciones solo figuran los trenes de las líneas cargadas.** En Calatayud, Zaragoza-Delicias, Lleida-Pirineus y Barcelona-Sants paran además muchos trenes regionales y de Rodalies que van por líneas que Oniel no tiene: no salen en «Trenes que paran aquí» ni en los destinos directos de esas estaciones.
 
-**Lo que enseña el comparador.** De Madrid a Barcelona, un recorrido de 620,1 km y 2 h 5 min estimados sin paradas, medido por los dos baipases, con 31 trenes directos el 12 de noviembre de 2026; una frase dice que el tren que para en Zaragoza-Delicias y en Lleida-Pirineus recorre 6,9 km más. De Madrid a Zaragoza, 306,5 km y 1 h 3 min, por el ramal de la estación. De Barcelona a Sevilla el comparador encadena esta línea y la de Sevilla por Madrid-Puerta de Atocha (1.090,3 km), porque el enlace de Vallecas no está cargado.
+**Lo que enseña el comparador.** De Madrid a Barcelona, un recorrido de 620,1 km y 2 h 5 min estimados sin paradas, medido por los dos baipases, con 29 trenes directos el día de referencia (23 de Renfe y 6 de Ouigo); una frase dice que el tren que para en Zaragoza-Delicias y en Lleida-Pirineus recorre 6,9 km más. De Madrid a Zaragoza, 306,5 km y 1 h 3 min, por el ramal de la estación. De Barcelona a Sevilla el comparador encadena esta línea y la de Sevilla por Madrid-Puerta de Atocha (1.090,3 km), porque el enlace de Vallecas no está cargado.
 
 ### Los baipases de Zaragoza y de Lleida
 
@@ -406,29 +412,66 @@ Un baipás es la vía directa que rodea una ciudad para los trenes que no paran 
 
 **Por qué no bastó una regla de recorrido.** El caso emparentado, los trenes que no paran en Madrid (#135), se resolvió con reglas de recorrido (`route_overrides`) y la condición `consecutive_stop_ids`. Aquí no alcanza por dos motivos. Una regla dice entre qué paradas el viaje va por la línea, y eso es un trozo seguido: un tren directo necesita dos (hasta la bifurcación de entrada y desde la de salida), con un hueco en medio, y el cálculo de pasos reparte cada trecho entre dos paradas por todos los tramos que hay entre sus kilómetros. Y una regla encaja por paradas seguidas: habría que escribir una por cada pareja de paradas de un lado y otro de cada estación, y un patrón nuevo en el refresco semanal de horarios contaría mal sin que nada avisara. La extensión es un campo, `bypass_of`, y una regla general en el cálculo de pasos. El enlace de Vallecas entre esta línea y la de Sevilla es otro caso, un enlace entre dos líneas, y sigue con `via`.
 
-**Lo que cambia en los recuentos.** Con los trenes del 12 de noviembre de 2026, el día de referencia:
+**Lo que cambia en los recuentos.** Con los trenes del 13 de noviembre de 2026, el día de referencia:
 
 | Tramo | Antes | Ahora |
 |---|---|---|
-| Bifurcación Moncasi – Zaragoza-Delicias | 83 | 57 |
-| Zaragoza-Delicias – Bifurcación Huesca | 81 | 55 |
-| Bifurcación Huesca – Bifurcación Canal Imperial | 77 | 51 |
-| Baipás de Zaragoza | no estaba | 26 (22 de Renfe y 4 de Ouigo) |
-| Bifurcación Les Torres de Sanui – Lleida-Pirineus | 77 | 30 |
-| Lleida-Pirineus – Bifurcación Artesa de Lleida | 93 | 46 |
-| Baipás de Lleida | no estaba | 47 (37 de Renfe y 10 de Ouigo) |
+| Bifurcación Moncasi – Zaragoza-Delicias | 78 | 56 |
+| Zaragoza-Delicias – Bifurcación Huesca | 77 | 55 |
+| Bifurcación Huesca – Bifurcación Canal Imperial | 73 | 51 |
+| Baipás de Zaragoza | no estaba | 22 (18 de Renfe y 4 de Ouigo) |
+| Bifurcación Les Torres de Sanui – Lleida-Pirineus | 73 | 31 |
+| Lleida-Pirineus – Bifurcación Artesa de Lleida | 89 | 47 |
+| Baipás de Lleida | no estaba | 42 (31 de Renfe y 11 de Ouigo) |
 
-Los otros quince tramos de la línea no cambian. Lo que llega a cada bifurcación sale de ella por la estación o por el baipás: 57 y 26 son los 83 que llegan a Moncasi. En el fichero del 8 de noviembre, los pasos de la línea bajan de 7.590 a 6.851 y los baipases suman 97 y 224: cada viaje que rodea Zaragoza deja tres tramos y gana uno, y cada uno que rodea Lleida, dos y uno. No cambia el número de viajes ni el de trenes: son los mismos, por otro camino.
+Los otros quince tramos de la línea no cambian. Lo que llega a cada bifurcación sale de ella por la estación o por el baipás: 56 y 22 son los 78 que llegan a Moncasi. En el fichero del 8 de noviembre, los pasos de la línea bajan de 7.590 a 6.851 y los baipases suman 97 y 224: cada viaje que rodea Zaragoza deja tres tramos y gana uno, y cada uno que rodea Lleida, dos y uno. No cambia el número de viajes ni el de trenes: son los mismos, por otro camino.
 
 **Para el visitante, el baipás es parte de su línea.** `bypass_of` viaja en cada línea (`LineSummary.bypass_of`, columna `lines.bypass_of`) y lo usan tres sitios:
 
-- La lista de líneas y la página de cobertura cuelgan cada baipás de su línea, sangrado, y no lo cuentan: siguen siendo nueve líneas, con 2.244 km.
+- La lista de líneas y la página de cobertura cuelgan cada baipás de su línea, sangrado, y no lo cuentan: siguen siendo diez líneas, con 2.605 km.
 - El cálculo de recorridos (`oniel.routing` y `frontend/src/routing/`) no cuenta como cambio de línea pasar al baipás o volver de él, y trata como un solo recorrido los caminos que solo se distinguen por ir por el baipás o por la estación (`docs/simulacion.md`, «Grafo y escenarios»).
 - El aviso de cobertura no los nombra aparte.
 
 Todo lo demás los trata como líneas: tienen su ficha, su tramo se elige en el mapa, se puede simular su cierre y salen en el buscador.
 
 **Límites.** Un tren que pasara por una de las dos estaciones sin parada comercial contaría por el baipás; en los horarios cargados no se ha visto ninguno, y el horario no lo diría. Los trenes de Iryo, que no publica horarios, tampoco están aquí. Y los dos desvíos de cada bifurcación se juntan en un solo nodo: Oniel no distingue por cuál de las dos vías va cada tren.
+
+## Cómo se construyó la línea de alta velocidad Madrid–Cuenca–Valencia
+
+Es el camino por el que van desde 2010 los trenes de Madrid a Valencia: deja la línea Madrid–Sevilla en la bifurcación de Torrejón de Velasco, 29 km después de Madrid-Puerta de Atocha, y llega a València-Joaquín Sorolla por Cuenca y Requena-Utiel. Hasta la bifurcación de Albacete, pasado Cuenca, lo comparten los trenes de Albacete, Alicante y Murcia.
+
+**Qué se carga.** El tronco de la línea 040 de Adif, de la bifurcación de Torrejón de Velasco a Valencia (361,0 km). El ramal que sale de la bifurcación de Albacete queda como conexión a trazos, y también el trecho de Madrid-Chamartín a Torrejón de Velasco, que la línea tiene desde el 1 de julio de 2022: un túnel bajo Madrid y dos vías propias junto a las de la línea de Sevilla. El número de línea es el de las etiquetas de OSM; Wikipedia no lo da y el mapa 4 de la Declaración sobre la Red no rotula las líneas con su número.
+
+**Geometría.** La relación `11146316` trae las dos vías de la línea y es de una pieza: se traza el camino más corto por el grafo de vías, de punta a punta y sin huecos.
+
+**La bifurcación de Torrejón de Velasco es el mismo nodo.** Lo define la línea Madrid–Sevilla, que va antes en `line_ids`, y esta lo incorpora con `shared: true` y sus mismas coordenadas: no se ha movido ni ha cambiado nada de lo que ya se veía de él, salvo su descripción y que la conexión a trazos «LAV Madrid–Levante» desaparece de la línea de Sevilla. Al retirarla apareció un fallo del importador: una conexión quitada de una especificación se quedaba en la base si colgaba de un nodo compartido. Desde la migración `0010` cada conexión guarda qué línea la declara (`declared_by`) y la reimportación de esa línea la borra. La relación de OSM arranca 1,37 km al norte de ese nodo, donde las vías de Levante empiezan a apartarse; ese arranque es el punto kilométrico 34,698 que Wikipedia da para la bifurcación, y de ahí que el origen de los puntos kilométricos de la línea cargada sea el 36,072 (`pk_origin_km`). El nodo compartido no lleva PK de esta línea: el suyo, 27,4, es de la numeración de la de Sevilla.
+
+Verificación:
+
+1. **Longitud.** De punta a punta la relación mide 362,3 km, frente a los 362,852 que hay entre los PK 34,698 y 397,550. La línea cargada, desde el nodo compartido, mide 361,0 km.
+2. **Puntos kilométricos.** Se cuentan desde Madrid-Chamartín. Las diferencias con el kilómetro medido son de 180 m en la bifurcación Blancales (PK 40,273), 30 m en el PAET de Tarancón (PK 118,590), 30 m en Cuenca-Fernando Zóbel (PK 195,100), 60 m en Requena-Utiel (PK 327,450) y 510 m en València-Joaquín Sorolla (PK 397,550), donde el trazado acaba en el punto de parada y no en el final de las vías.
+3. **Códigos de estación.** Las paradas del GTFS (03208 Cuenca-Fernando Zóbel, 03213 Requena-Utiel, 03216 València-Joaquín Sorolla) coinciden con los códigos de Wikipedia y de OSM. Las estaciones y el PAET de Tarancón se sitúan con sus coordenadas en OSM (`raw/osm/adif_facility_nodes_levante_2026-11-12.json`) y quedan a entre 2 y 58 m del trazado.
+4. **Número de vías y velocidad.** Vía doble en toda la línea (Wikipedia). La velocidad de cada tramo es la de las vías de OSM: 300 km/h salvo en los dos primeros, a 285; coincide con el cuadro de velocidades de Wikipedia.
+
+**Nodos.** Además de las tres estaciones entran, como nodos secundarios, los siete PAET que Wikipedia da con su PK (Valdemoro, Villarrubia de Santiago, Tarancón, Horcajada, Monteagudo de las Salinas, Iniesta y Siete Aguas, situados por kilómetro salvo Tarancón) y la bifurcación Blancales. La bifurcación de Albacete es un nodo principal: allí se separan los dos caminos de Levante. No se han cargado los seis puestos de banalización, la bifurcación de la base de mantenimiento de Gabaldón ni el cambiador de ancho de Valencia.
+
+**La bifurcación Blancales.** A 4,4 km de la de Torrejón de Velasco se une a la línea un enlace de 5 km que viene de la de Sevilla (en OSM, vías con `ref=24`; `raw/osm/vias_enlace_torrejon_blancales_2026-11-12.json`). Por él pasan, sin entrar en Madrid, los cuatro AVE de Valencia a Sevilla del horario, que paran en Cuenca y en Ciudad Real. El otro extremo del enlace es la bifurcación Yeles, que la línea de Sevilla tiene como nodo desde #135. El enlace queda a trazos; para esos trenes, las paradas de la línea de Sevilla son salidas por Blancales con `via` hacia esa línea por Yeles (4 km en línea recta entre las dos bifurcaciones y el resto por la línea), y en la de Sevilla, Cuenca y Valencia son salidas por Yeles con `via` hacia esta por Blancales. Los cuatro viajes cuentan en las dos líneas.
+
+**Operadores.** Renfe y Ouigo, con sus horarios cargados, e Iryo, que no los publica: Valencia y Cuenca figuran entre los destinos de su web (`raw/operadores/consultas_2026-11-12.json`), así que el visor avisa en esta línea de que faltan sus trenes.
+
+**Trenes.** Entran los viajes que paran en Cuenca-Fernando Zóbel o en Requena-Utiel, a las que solo se llega por esta línea. Los que la recorren sin parar en ninguna de las dos entran por tres reglas de recorrido: Madrid-Chamartín – Valencia, Madrid-Chamartín – Albacete y Madrid-Chamartín – Alicante sin paradas intermedias. València-Joaquín Sorolla no está en el filtro porque también paran en ella trenes que solo van a Castelló. Con el fichero de las pruebas son 469 viajes de Renfe, con un tren por número y día, y 22 de Ouigo. De los de Renfe, 189 recorren la línea entera, 215 la dejan en la bifurcación de Albacete, 61 son Avant de Requena-Utiel a Valencia y 4, los de Valencia a Sevilla. Entre dos estaciones hay siempre un PAET o una bifurcación, así que el paso por cada tramo es siempre estimado.
+
+**Madrid no es un nodo de esta línea.** Madrid-Chamartín y Madrid-Puerta de Atocha son salidas por la bifurcación de Torrejón de Velasco. A Atocha se llega por la línea de Sevilla (`via`). A Chamartín no llega ninguna línea cargada, pero Wikipedia da los kilómetros de vía que hay: la asignación los lleva en un campo nuevo, `track_km` (36,1 km), y el reparto del tiempo los usa en vez de la línea recta. Lo mismo con Albacete-Los Llanos (73,0 km desde la bifurcación de Albacete) y Alicante (237,8 km). Sin ese dato, los 58 viajes de Renfe y los 5 de Ouigo que van de Madrid a Albacete o a Alicante sin parar en Cuenca habrían quedado con paso indeterminado, porque sus dos paradas están fuera de la red cargada (`docs/simulacion.md`). Cuando se cargue el ramal (#116), Albacete pasa a ser una salida con `via` y su `track_km` sobra.
+
+Los trenes de Valencia no cuentan en el primer tramo de la línea de Sevilla (Madrid-Puerta de Atocha – bifurcación de Torrejón de Velasco): casi todos salen de Chamartín y van por sus propias vías, que no están cargadas. Los pocos que salen de Atocha tampoco cuentan allí, porque el filtro de esa línea exige parar en Córdoba.
+
+**Lo que enseña el comparador, y lo que no.** De Madrid-Puerta de Atocha a València-Joaquín Sorolla, 389,7 km y 1 h 21 min estimados sin paradas; a Cuenca-Fernando Zóbel, 187,7 km. Los trenes directos que cuenta entre Madrid-Puerta de Atocha y Valencia son solo los que salen de Atocha (2 el día de referencia) y entre Atocha y Cuenca, 5: los demás salen de Madrid-Chamartín, que no es un nodo de la red cargada, y el comparador no los cuenta aunque sí están en cada tramo de la línea (82 trenes ese día). Cargar el trecho de Chamartín a Torrejón de Velasco lo resolvería; queda propuesto como tarea aparte.
+
+**Señalización.** El mapa 4 dibuja junto a la línea el símbolo de «ERTMS N1» y el de «ASFA - AV» (`ertms_n1_asfa`), y el trazo de BCA hasta la entrada de Valencia, donde cambia a un trazo rojo rotulado «BSL», «BSL Alta Velocidad» en la leyenda. El mapa no dice en qué punto cambia y no hay nodo, así que el último tramo, de Siete Aguas a Valencia, lleva un valor mixto, `bca_bsl` (véase «Señalización y protección del tren»).
+
+**Interrupciones.** El 12 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en esta línea (`raw/interrupciones/consultas_2026-11-12.json`).
+
+**Lo que queda para el ramal de Albacete (#116).** Su origen es `bif-albacete`, que esta línea define (va antes en `line_ids`): lo incorpora con `shared: true`. Retira de aquí la conexión a trazos `lav-bif-albacete-alicante` y, de la línea de Alcázar, `lav-albacete-madrid-levante`. Las paradas 60600, 03309, 60911, 03410, 62002 y 61200 pasan a llevar `via` en esta especificación.
 
 ## Límites y avisos
 
@@ -716,7 +759,7 @@ La ficha de una estación y la de un tramo dicen, dentro de «Más detalle», cu
 
 **Límites.**
 
-- Con los dos ficheros de Renfe de hoy, el día de referencia es el mismo (jueves 12 de noviembre de 2026, desde que está cargada la alta velocidad de Barcelona; antes era el viernes 13) y ese día tienen los mismos trenes en todas las estaciones y tramos. La diferencia la enseña la cuenta en los mismos días: del 11 de noviembre al 8 de diciembre, en Ciudad Real paran 1.180 trenes según el fichero del 8 de noviembre y 1.190 según el del 12, y por el tramo Ciudad Real – Puertollano de la alta velocidad pasan 1.979 y 1.987. De los 85 tramos con trenes, 77 cambian; de las 52 estaciones con trenes, 39.
+- Con los dos ficheros de Renfe de hoy, el día de referencia es el mismo (viernes 13 de noviembre de 2026; fue el jueves 12 mientras estuvo cargada la alta velocidad de Barcelona sin la de Valencia) y ese día tienen los mismos trenes en todas las estaciones y tramos. La diferencia la enseña la cuenta en los mismos días: del 11 de noviembre al 8 de diciembre, en Ciudad Real paran 1.180 trenes según el fichero del 8 de noviembre y 1.190 según el del 12, y por el tramo Ciudad Real – Puertollano de la alta velocidad pasan 1.979 y 1.987. De los 85 tramos con trenes, 77 cambian; de las 52 estaciones con trenes, 39.
 - La cuenta en los mismos días solo mira las primeras cuatro semanas del fichero nuevo: un cambio que empiece después no aparece hasta el fichero siguiente.
 - Si los días de referencia de dos ficheros son distintos, parte de la diferencia puede venir del día de la semana y no del horario; la ficha lo dice.
 - Solo están los trenes que recorren las líneas cargadas, y no los de Iryo, como en el resto de Oniel.
@@ -806,7 +849,9 @@ Con la sexta (Alcázar de San Juan – Albacete, 130,8 km y siete tramos), el mi
 
 Con la novena (la alta velocidad Madrid – Zaragoza – Barcelona, 627,0 km y veinte tramos, la más larga y la que más trenes lleva), medido el 12 de noviembre de 2026 sobre las ocho anteriores: `index.json` pasa de 150,2 a 184,7 KB (de 25,6 a 31,0 KB comprimido) y `lines/lav-madrid-barcelona.json` pesa 136,4 KB (34,0 KB comprimido), más que ninguna otra salvo la convencional de Madrid a Córdoba (148,4 KB). La instantánea entera pasa de 4,7 a 6,2 MB, casi todo en las listas de trenes de sus veinte tramos (unos 70 KB cada una) y de sus seis estaciones. En local y sobre una base vacía, `oniel-data import all` pasa de 7,0 a 7,7 s de procesador; el tiempo de reloj fue de 42 y 55 s con el equipo ocupado por otras sesiones, y de 23 s al repetir la importación completa a solas. La base de datos pasa de 30 a 48 MB, los servicios guardados de 1.914 a 3.350 y los pasos por tramo de 20.276 a 39.174 filas (`service_segment_passes`, 20 MB; los días de servicio, 11 MB). La importación ocupa 178 MB de memoria como máximo, lejos de los 512 MB de la instancia gratuita de Render. `oniel-data validate` tarda unos 40 s. En Render, la reimportación del despliegue con las nueve líneas tardó 188 s el 13 de noviembre de 2026 (3.350 viajes de tres ficheros), sin errores; con tres líneas eran unos 61 s.
 
-Con los dos baipases de esa línea (20,7 km y 14,3 km, un tramo cada uno), medido el 13 de noviembre de 2026: `index.json` pasa de 200,1 a 204,2 KB (de 33,7 a 34,0 KB comprimido), y `lines/baipas-zaragoza.json` y `lines/baipas-lleida.json` pesan 8,0 KB y 6,5 KB.
+Con la décima (alta velocidad Madrid – Cuenca – Valencia, 361,0 km y doce tramos), medido el 13 de noviembre de 2026 sobre las nueve anteriores (diez líneas, 2.570 km, 102 nodos distintos y 104 tramos): `index.json` pasa de 195,4 a 214,0 KB (de 32,5 a 35,3 KB comprimido) y `lines/lav-madrid-valencia.json` pesa 69,8 KB (16,6 KB comprimido). La parte de red del índice son 159,3 KB, unos 16 KB por línea, dentro del tope de 20 KB por línea; pesa ya algo más que el detalle de la línea más grande (148,4 KB), así que `e2e/carga.spec.ts` la compara ahora con las dos mayores juntas. La instantánea entera ocupa 7,3 MB. En local y sobre una base vacía, `oniel-data import all` gasta 9,5 s de procesador (64 s de reloj con el equipo ocupado por otras sesiones; 25 s al repetirla) y ocupa 174 MB de memoria como máximo, de los 512 MB de la instancia gratuita de Render. La base de datos tiene 3.716 servicios guardados y 44.514 pasos por tramo. El arranque del visor no cambia de forma medible: con un Pixel 7 emulado, 4G lenta (1,6 Mbit/s, 150 ms), el procesador ralentizado cuatro veces y la instantánea servida en local sin comprimir, la lista de líneas tarda en verse 7,6 s con nueve líneas y 7,5 – 7,6 s con diez (seis pasadas por caso, alternadas); los 18 KB de más del índice son una décima de segundo a esa velocidad.
+
+Con los dos baipases de esa línea (20,7 km y 14,3 km, un tramo cada uno), medido el 13 de noviembre de 2026: `index.json` pasa de 219,1 a 223,8 KB (de 36,6 a 37,0 KB comprimido), y `lines/baipas-zaragoza.json` y `lines/baipas-lleida.json` pesan 8,0 KB y 6,5 KB.
 
 ## Atributos de tramo
 
@@ -864,6 +909,7 @@ Cada tramo dice qué sistema de protección del tren tiene, qué bloqueo y si su
 | Rótulo «BAD» | `bloqueo` | `bad` | Automático de vía doble |
 | Rótulo «BAU» | `bloqueo` | `bau` | Automático de vía única |
 | Rótulo «BLAU» | `bloqueo` | `blau` | De liberación automática en vía única |
+| Trazo de «BCA» que cambia al de «BSL» donde no hay nodo | `bloqueo` | `bca_bsl` | De control automático en una parte y de señalización lateral en otra |
 | «ctc» tras el rótulo del bloqueo | `mando` | `ctc` | Control de tráfico centralizado |
 | Rótulo del bloqueo sin «ctc», cuando la leyenda trae ese mismo bloqueo con y sin él («BAB», «BAD») | `mando` | `sin_ctc` | Sin control centralizado |
 | Nada sobre el mando | `mando` | `sin_dato_publicado` | Sin dato publicado |
@@ -890,6 +936,8 @@ Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan
 | Alta velocidad Córdoba – Málaga | Bifurcación Málaga-Alta Velocidad – Málaga-María Zambrano (de Antequera-Santa Ana a Málaga, comprobado el 13 de noviembre) | ERTMS de niveles 1 y 2 y ASFA (`ertms_n1_n2_asfa`) | BCA | sin dato publicado |
 | Alta velocidad Antequera – Granada | Antequera-Santa Ana – Granada | ERTMS de nivel 2 y ASFA (`ertms_n2_asfa`) | BCA | sin dato publicado |
 | Alta velocidad Madrid – Zaragoza – Barcelona | Madrid-Puerta de Atocha – Barcelona-Sants | ERTMS de nivel 1 y ASFA (`ertms_n1_asfa`) | BCA | sin dato publicado |
+| Alta velocidad Madrid – Cuenca – Valencia | Bifurcación Torrejón de Velasco – Siete Aguas | ERTMS de nivel 1 y ASFA (`ertms_n1_asfa`) | BCA | sin dato publicado |
+| | Siete Aguas – València-Joaquín Sorolla | ERTMS de nivel 1 y ASFA (`ertms_n1_asfa`) | BCA y BSL (`bca_bsl`) | sin dato publicado |
 
 El bloqueo de vía única cae justo en los tramos que Oniel ya tenía como vía única por otras fuentes; una prueba lo comprueba.
 
@@ -899,6 +947,8 @@ La línea de Jaén trajo un valor nuevo, `blau`: el mapa rotula «BLAU ctc», co
 
 - **El mando de la alta velocidad no está publicado.** El mapa solo dice «ctc» junto a los bloqueos automáticos; junto al BCA de la línea Madrid – Sevilla no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos. Sus once tramos llevan `sin_dato_publicado`: un valor declarado, con la fuente en la que se buscó y la fecha, que la ficha dice tal cual. No se dedujo de otras líneas ni de otras publicaciones.
 - **De Alcázar de San Juan a La Roda de Albacete el mapa no pone «ctc».** Rotula «BAB» hasta Villarrobledo y «BAD» hasta La Roda, y solo desde allí hasta Albacete «BAB ctc». La leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD», así que el mapa dice que esos dos trechos no tienen control de tráfico centralizado. Llevan `sin_ctc`, que la ficha dice como «Sin control centralizado» (decidido con el usuario el 12 de noviembre de 2026; al principio fueron como `sin_dato_publicado`). El mapa no dice desde dónde se gobiernan: el valor recoge solo lo que afirma, la ausencia de CTC. `sin_dato_publicado` queda para donde el mapa calla, como en la alta velocidad.
+- **La entrada a Valencia cambia de bloqueo donde no hay nodo.** El trazo de BCA de la alta velocidad de Madrid acaba poco antes de València-Joaquín Sorolla y lo sigue un trazo rojo rotulado «BSL», que la leyenda llama «BSL Alta Velocidad»; en la lista de abreviaturas del Reglamento de Circulación Ferroviaria, BSL es el bloqueo de señalización lateral. El mapa es un esquema y no dice dónde cambia, así que el último tramo, de Siete Aguas a Valencia (50,6 km), lleva el valor mixto `bca_bsl`. El glosario no tiene entrada propia para ese bloqueo: la ficha enlaza con la del bloqueo de control automático.
+- **En la alta velocidad de Valencia el mapa dibuja ERTMS de nivel 1,** como en la de Barcelona: el símbolo morado oscuro de «ERTMS N1», no el más claro de «ERTMS N1 y 2» (se comprobó con la leyenda), con el de «ASFA - AV». Wikipedia dice que la línea tiene los niveles 1 y 2; se declara lo que dibuja la fuente de este atributo.
 - **Ningún tramo dice qué puesto de mando lo gobierna.** `mando` recoge solo si hay control de tráfico centralizado, que es lo que da el mapa.
 - **Cinco Casas – Manzanares cambia de bloqueo donde no hay nodo.** El mapa pasa de «BAB ctc» a «BAD ctc» en Herrera de la Mancha (PK 183,7 según `wikipedia-lineas-300-400`), que Oniel no tiene como nodo. El tramo lleva un valor mixto, `bab_bad`, que la ficha dice como «Automático: banalizado en una parte y de vía doble en otra». Si Herrera de la Mancha entra algún día como nodo, el tramo se parte y el valor mixto sobra.
 - **Manzanares – Ciudad Real se leyó por el color.** El único rótulo cercano, «BAD ctc», está junto a Manzanares, sobre el trazo de vía doble Herrera – Manzanares de la línea 400. La línea 522 es de vía única y lleva el trazo naranja, que en la leyenda de vía única es «BAU ctc».
@@ -957,7 +1007,7 @@ La vista de la red agrupa las líneas por zonas (`docs/diseno.md`, «Elegir lín
 13. `uv run oniel-data import all`, que carga todas las líneas y exporta la instantánea. Subir con la PR la instantánea regenerada: `index.json` lleva la línea nueva y aparece su `lines/<id>.json`. Anotar en «Medidas» de «Instantánea estática» lo que pesan ahora el índice y su fichero.
 14. **Pruebas.** Añadir la especificación a `SPECS` en `backend/tests/conftest.py` y escribir las pruebas de la línea (`test_<línea>.py`: trazado, nodos, PK, vías, fuentes y trenes). Cambian, y se explican en la PR, los recuentos de `test_integration_db.py`, `test_datasets.py`, `test_importing.py`, `test_route_overrides.py`, `test_routing.py` y `test_criticality.py` (líneas, tramos, estaciones, viajes, pasos y tramos sin alternativa), y en el visor los de `e2e/red.spec.ts`, `e2e/explorar.spec.ts`, `e2e/carga.spec.ts`, `e2e/buscador.spec.ts`, `e2e/senalizacion.spec.ts` y `e2e/alternativas.spec.ts` (líneas, kilómetros, estaciones, tramos y tramos sin alternativa). Si el nombre de la línea nueva contiene el de una estación por la que ya pasa otra, cambia también el filtro por nombre de `e2e/red.spec.ts`.
 15. **Documentación.** Las tablas «Fuentes de esta versión», «Operadores y sus horarios» y «Líneas cargadas» de este documento, un apartado «Cómo se construyó…» para la línea, la tabla de «Tramos sin alternativa» de `docs/simulacion.md` y la lista de líneas del `README.md` y de `CLAUDE.md`.
-16. **Contar con que el día de referencia puede moverse.** Es el laborable con más servicios, así que una línea con muchos trenes puede cambiarlo (la alta velocidad de Barcelona lo pasó del viernes 13 al jueves 12 de noviembre de 2026). Entonces cambian los recuentos del día de referencia de todas las líneas, no solo los de la nueva: los de las pruebas, las tablas de este documento y la de «Tramos sin alternativa».
+16. **Contar con que el día de referencia puede moverse.** Es el laborable con más servicios, así que una línea con muchos trenes puede cambiarlo (la alta velocidad de Barcelona lo pasó del viernes 13 al jueves 12 de noviembre de 2026, y la de Valencia lo devolvió al viernes 13). Entonces cambian los recuentos del día de referencia de todas las líneas, no solo los de la nueva: los de las pruebas, las tablas de este documento y la de «Tramos sin alternativa».
 17. **Mirar que ningún tramo se queda sin velocidad.** Si las vías de OpenStreetMap no la traen en algún trozo, el comparador no da tiempo para los recorridos que pasan por él: se declara con el atributo `max_speed_kmh` y su fuente (véase «Atributos de tramo»).
 
 Lo aprendido al añadir las de alta velocidad de Córdoba a Granada:
@@ -974,6 +1024,15 @@ Lo aprendido al prolongar la línea de Córdoba a Málaga hasta Málaga:
 - **Prolongar no es añadir.** La línea crece sin cambiar de id: basta mover el final de la geometría, añadir nodos y secciones y retirar la conexión a trazos. Cambian los recuentos de las líneas vecinas por las que llegan sus trenes.
 - **El encuadre del mapa.** Si la línea se sale de la caja de `SPAIN_BOUNDS` (`frontend/src/map/bounds.ts`), se ensancha y se anota en `docs/diseno.md`; `e2e/mapa.spec.ts` lo avisa.
 - **El tope de las anotaciones.** Cada interrupción registrada pesa unos 3 KB en el índice, la mitad por el alias `interruptions`: el tope de las pruebas pasó de 40 a 45 KB.
+
+Lo aprendido al añadir la de alta velocidad a Valencia:
+
+- **Un nodo compartido puede no ser el arranque de la relación.** La bifurcación de Torrejón de Velasco es en OSM un punto, y la relación de la línea nueva empieza 1,4 km antes. La línea se traza desde el nodo que ya existe, sin moverlo, y `pk_origin_km` lleva el PK que le toca a ese punto: se mide trazando la relación entera una vez y comparando con los PK de la fuente.
+- **Trenes que cruzan la línea entre dos paradas de fuera de la red.** Si a ninguna de las dos llega una línea cargada, su paso queda indeterminado. Cuando una fuente da los kilómetros de vía desde la salida hasta la parada, la asignación los declara con `track_km` (solo en una salida sin `via`) y el paso es estimado. `validate` lo enseña: mientras `passes` traiga `indeterminado`, falta algo.
+- **El filtro, por las estaciones que solo tiene la línea.** Una estación término a la que llegan trenes de otra línea (València-Joaquín Sorolla y los de Castelló) no sirve de filtro. Los trenes que no paran en ninguna estación propia entran por reglas de recorrido con `from_stop_id`, que no cambian su asignación.
+- **Un enlace sin cargar entre dos líneas cargadas.** La salida es el nodo de esta línea donde se une el enlace, y `via` nombra la línea vecina y su nodo más cercano: el reparto suma la línea recta entre los dos nodos y los kilómetros por la otra línea.
+
+- **Una conexión a trazos que se retira.** Cuando la línea nueva sustituye a una conexión de otra especificación, conviene reimportar sobre una base vacía antes de dar la instantánea por buena: así se ve lo mismo que verá una base recién creada.
 
 Lo aprendido al cargar los baipases de Zaragoza y de Lleida:
 

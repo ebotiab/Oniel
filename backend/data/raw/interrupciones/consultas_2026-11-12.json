@@ -68,6 +68,19 @@
       "fecha_de_la_pagina": "Sin fecha visible; el texto la sitúa en torno al 5 de noviembre de 2026",
       "resumen": "Nota de prensa: el servicio de autobuses entre Madrid, Ciudad Real y Puertollano, que empezó el 31 de octubre, se prorroga en principio hasta el jueves 12 de noviembre. No dice nada de trenes Avant ni del 13 de noviembre.",
       "que_aporta": "Nada que cambie lo registrado: no se encontró una nota de Renfe ni de Adif sobre la vuelta de los Avant."
+    },
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red y avisos de Adif, leídos al cargar la línea de alta velocidad Madrid – Cuenca – Valencia",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-12 17:38",
+      "paginas": [
+        "https://www.adif.es/viajeros/estado-de-la-red",
+        "https://www.adif.es/viajeros/avisos"
+      ],
+      "resumen": "El estado de la red trae tres avisos: retrasos en la R1 de Rodalies, una incidencia en la línea de ancho métrico de Bilbao y la interrupción de la alta velocidad Madrid-Andalucía. La lista de avisos de obras nombra, en la Comunidad Valenciana y Castilla-La Mancha, las de Xàtiva-Alcoi, Zaragoza-Teruel-Sagunt, Murcia-Almería y la vuelta al servicio del tramo Loriguilla-Buñol de cercanías. Ninguno habla de la línea de alta velocidad de Madrid a Cuenca y Valencia.",
+      "que_aporta": "Que el 12 de noviembre de 2026 no hay ninguna interrupción anunciada en la línea de alta velocidad Madrid – Cuenca – Valencia."
     }
   ]
 }

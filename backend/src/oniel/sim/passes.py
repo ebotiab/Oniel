@@ -13,9 +13,12 @@ Reglas, en lenguaje llano:
 * Si esa parada está en otra línea cargada (un tren que cambia de línea a mitad de recorrido),
   la asignación puede traer la distancia real desde la salida hasta la parada por la otra línea;
   entonces el reparto la usa en vez de la línea recta, con el mismo margen del 30 %.
+* Si la parada está fuera de la red cargada pero una fuente dice cuántos kilómetros de vía hay
+  hasta ella desde la salida (de la bifurcación de Torrejón de Velasco a Madrid-Chamartín), el
+  reparto usa esa distancia en vez de la línea recta, con el mismo margen del 30 %.
 * Si las dos paradas están fuera de la línea y a una de ellas, al menos, se llega por otra línea
-  cargada con distancia conocida, el tren cruza la línea sin parar: entra por un nodo y sale por
-  otro. Si la otra parada está fuera de la red cargada, su distancia es la línea recta, como
+  cargada o por un camino de longitud conocida, el tren cruza la línea sin parar: entra por un
+  nodo y sale por otro. Si la otra parada está fuera de la red cargada, su distancia es la línea recta, como
   arriba (hacen falta sus coordenadas). El paso es estimado y el margen es el 30 % del mayor de los dos tiempos que pasa
   fuera de la línea.
 * Si no podemos saber por dónde circula el tren (dos paradas fuera de la red cargada, o una
@@ -125,8 +128,8 @@ class StopCall:
     exit_node_ids: tuple[
         str, ...
     ] = ()  # la parada está fuera; el tren entra o sale por uno de estos
-    #: Distancia conocida desde cada nodo de salida hasta la parada (por otra línea cargada);
-    #: si falta, se usa la línea recta.
+    #: Distancia conocida desde cada nodo de salida hasta la parada (por otra línea cargada, o
+    #: por vía según una fuente); si falta, se usa la línea recta.
     exit_distances: Mapping[str, ExitDistance] = field(default_factory=dict)
     #: Dónde está la parada cuando no es de esta línea pero sí de otra cargada, para explicarlo
     #: («está en la línea de alta velocidad Madrid – Sevilla, con la que enlaza en Ciudad Real»).
@@ -173,7 +176,8 @@ class _Anchor:
 
     @property
     def along_loaded_lines(self) -> bool:
-        """La parada es exterior, pero se llega a ella por otras líneas cargadas y se sabe cuánto hay."""
+        """La parada es exterior, pero se sabe cuánta vía hay hasta ella: por otras líneas
+        cargadas o porque una fuente da la distancia."""
         return not self.on_line and self.exit_node is not None and self.extra_how is not None
 
 
@@ -400,6 +404,14 @@ def _outside_basis(a: _Anchor, b: _Anchor, on_line_km: float, margin: float) -> 
     outside = b if not b.on_line else a
     t0, t1 = _fmt(a.call.departure_s), _fmt(b.call.arrival_s)
     minutes = int(margin // 60)
+    if outside.exit_node is not None and outside.call.exit_note is None and outside.extra_how:
+        verb = "sale de" if outside is b else "entra en"
+        return (
+            f"Estimado: {outside.call.stop_name} está fuera de la red cargada; el tren {verb}"
+            f" esta línea por {outside.exit_node.label}. El reparto entre {a.call.stop_name}"
+            f" ({t0}) y {b.call.stop_name} ({t1}) usa {on_line_km:.0f} km por la línea y, desde"
+            f" {outside.exit_node.label}, {outside.extra_how}; margen de ±{minutes} min."
+        )
     if outside.call.exit_note is None or outside.exit_node is None:
         return (
             f"Estimado: {outside.call.stop_name} está fuera de la red cargada, así que el reparto"

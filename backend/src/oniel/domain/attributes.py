@@ -60,7 +60,7 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
                 "asfa",
                 "lzb_asfa",
                 "ertms_n1",
-                # ERTMS de nivel 1 con ASFA de respaldo: la alta velocidad de Barcelona
+                # ERTMS de nivel 1 con ASFA de respaldo: la alta velocidad de Barcelona y la de Valencia
                 "ertms_n1_asfa",
                 "ertms_n2",
                 # ERTMS con ASFA de respaldo, como lo dibuja el mapa en las líneas de Málaga y Granada
@@ -71,13 +71,16 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
         ),
     ),
     # Bloqueo: de control automático (BCA), automático banalizado (BAB), de vía doble (BAD) o
-    # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` es un tramo
-    # que cambia de uno a otro donde no hay nodo.
+    # de vía única (BAU), o de liberación automática en vía única (BLAU). ``bab_bad`` y ``bca_bsl``
+    # son tramos que cambian de uno a otro donde no hay nodo; el segundo acaba en el bloqueo de
+    # señalización lateral (BSL) de la entrada de la alta velocidad a Valencia.
     BLOQUEO: AttributeRule(
         value_type=str,
         required=True,
         sourced=True,
-        values=frozenset({"bca", "bab", "bad", "bau", "blau", "bab_bad", SIN_DATO_PUBLICADO}),
+        values=frozenset(
+            {"bca", "bab", "bad", "bau", "blau", "bab_bad", "bca_bsl", SIN_DATO_PUBLICADO}
+        ),
     ),
     # Velocidad máxima del tramo cuando la geometría no la trae o la trae mal (las entradas a
     # Zaragoza-Delicias y a Lleida-Pirineus): la sección manda sobre lo que diga la geometría.

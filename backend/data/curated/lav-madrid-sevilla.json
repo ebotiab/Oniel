@@ -34,7 +34,7 @@
     {"id": "bif-los-gavilanes", "name": "Bifurcación Los Gavilanes", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 13.445}, "reference_pk_km": 13.445,
      "description": "Punto donde se incorporan a la línea los trenes que vienen de Zaragoza y Barcelona sin pasar por Madrid-Puerta de Atocha."},
     {"id": "bif-torrejon-de-velasco", "name": "Bifurcación Torrejón de Velasco", "kind": "bifurcacion", "position": {"lon": -3.75006, "lat": 40.19457}, "reference_pk_km": 27.4,
-     "description": "Punto donde la línea de alta velocidad Madrid–Levante se separa del tronco común hacia Andalucía."},
+     "description": "Punto donde la línea de alta velocidad a Cuenca y Valencia, por la que van también los trenes de Albacete y Alicante, se separa de la de Andalucía."},
     {"id": "bif-yeles", "name": "Bifurcación Yeles", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 34.395}, "reference_pk_km": 34.395,
      "description": "Punto donde se incorporan a la línea los trenes que vienen de Cuenca y Valencia sin pasar por Madrid."},
     {"id": "bif-la-sagra", "name": "Bifurcación La Sagra", "kind": "bifurcacion", "position": {"km": 52.7}, "reference_pk_km": 52.7,
@@ -78,7 +78,6 @@
   ],
   "connections": [
     {"id": "tunel-atocha-chamartin", "node_id": "madrid-puerta-de-atocha", "name": "Túnel Atocha–Chamartín", "towards": "Madrid-Chamartín y la red de alta velocidad del norte", "status": "no_cargada", "sketch": [[-3.690886, 40.406442], [-3.6829524, 40.4711789]]},
-    {"id": "lav-madrid-levante", "node_id": "bif-torrejon-de-velasco", "name": "LAV Madrid–Levante", "towards": "Cuenca, Valencia, Albacete y Alicante", "status": "no_cargada", "sketch": [[-3.75006, 40.19457], [-3.62, 40.09], [-3.35, 39.98]]},
     {"id": "lav-la-sagra-toledo", "node_id": "bif-la-sagra", "name": "Ramal La Sagra–Toledo", "towards": "Toledo", "status": "no_cargada", "sketch": [[-3.98, 39.96], [-4.0112, 39.8623]]},
     {"id": "majarabique-huelva", "node_id": "majarabique", "name": "Red convencional por Majarabique", "towards": "Huelva", "status": "no_cargada", "sketch": [[-6.1, 37.45], [-6.55, 37.39]]},
     {"id": "sevilla-cadiz", "node_id": "sevilla-santa-justa", "name": "Red convencional Sevilla–Cádiz", "towards": "Jerez de la Frontera y Cádiz", "status": "no_cargada", "sketch": [[-5.974927, 37.392496], [-5.95, 37.25], [-6.0, 36.9], [-6.13, 36.68]]},
@@ -157,7 +156,7 @@
       "id": "valencia-ciudad-real-sin-parar-en-madrid",
       "description": "AVE entre Valencia y Sevilla por Cuenca: no pasan por Madrid y se incorporan a esta línea en la bifurcación Yeles, así que para estos viajes Cuenca y Valencia son salidas por esa bifurcación.",
       "consecutive_stop_ids": ["03208", "37200"],
-      "stop_mappings": {"03208": {"exits": ["bif-yeles"]}, "03216": {"exits": ["bif-yeles"]}}
+      "stop_mappings": {"03208": {"exits": ["bif-yeles"], "via": {"line": "lav-madrid-valencia", "node": "bif-blancales"}}, "03216": {"exits": ["bif-yeles"], "via": {"line": "lav-madrid-valencia", "node": "bif-blancales"}}}
     }
   ]
 }
