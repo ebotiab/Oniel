@@ -186,11 +186,13 @@ Desde #131 el visor publicado envía a Logfire sus errores, y solo sus errores, 
 uv run oniel-data obs consulta "select start_timestamp, service_version, deployment_environment, span_name, exception_message from records where service_name = 'oniel-visor' order by start_timestamp desc limit 5" --horas 1
 ```
 
-Comprobado así el 13 de noviembre de 2026 con el commit `ade16fe`: el error llegó como `Uncaught error` de `oniel-visor`, nivel 17, con `is_exception`, `deployment_environment = production`, el commit como versión y la ruta `/glosario/via-unica`. Ese primer error no abrió incidencia en «Errores agrupados»: le faltaba la huella por la que Logfire agrupa (`logfire.exception.fingerprint`), que el SDK del navegador no calcula si no se le pide. Desde entonces el visor la envía (`errorFingerprinting: true`).
+Comprobado así el 13 de noviembre de 2026 con el commit `ade16fe`: el error llegó como `Uncaught error` de `oniel-visor`, nivel 17, con `is_exception`, `deployment_environment = production`, el commit como versión y la ruta `/glosario/via-unica`. Ese primer error no abrió incidencia en «Errores agrupados»: le faltaba la huella por la que Logfire agrupa (`logfire.exception.fingerprint`), que el SDK del navegador no calcula si no se le pide. Desde entonces el visor la envía (`errorFingerprinting: true`). Repetida la prueba con el commit `7f3762e`, dos errores iguales abrieron a los tres minutos una sola incidencia con dos apariciones, de `oniel-visor` y `production`, y llegó su correo («[Logfire Issues] Exceptions»). La incidencia de prueba se puede resolver o borrar en Error tracking.
 
 **Volumen y peso**, medidos el 12 de noviembre de 2026 con el visor compilado y un token de mentira. Una visita sin errores: 0 peticiones a Logfire y 0 registros. Un error: 1 registro; dos errores seguidos salieron en una sola petición de 3,8 kB. El arranque del visor crece 0,9 kB (0,5 kB comprimido). El SDK va en ficheros aparte, 180 kB (55 kB comprimidos), que se piden al arrancar sin esperar a ellos para pintar; los errores que ocurran mientras llegan se guardan (hasta diez) y se envían después. Sin token, lo publicado es idéntico byte a byte a lo de antes.
 
 Un bloqueador de contenido puede cortar las peticiones a Logfire: de esas visitas no llega nada, y el visor funciona igual.
+
+El primer error real llegó ese mismo día: MapLibre lanza `GPUInitializationError` cuando el navegador no tiene WebGL2 y el visor no lo atiende (#144).
 
 ### Alertas
 
