@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from conftest import DATA_DIR, LAV_GRANADA_SPEC, SOURCES, SPEC
+from conftest import DATA_DIR, LAV_GRANADA_SPEC, LAV_MALAGA_SPEC, SOURCES, SPEC
 from pydantic import ValidationError
 from typer.testing import CliRunner
 
@@ -27,7 +27,7 @@ ANNOTATIONS = DATA_DIR / "curated" / "anotaciones.json"
 CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
 JAEN_SPEC = DATA_DIR / "curated" / "espeluy-jaen.json"
 #: Las líneas de las que cuelgan las anotaciones registradas.
-SPECS = [SPEC, CONV_SPEC, JAEN_SPEC, LAV_GRANADA_SPEC]
+SPECS = [SPEC, CONV_SPEC, JAEN_SPEC, LAV_MALAGA_SPEC, LAV_GRANADA_SPEC]
 
 #: Una línea de juguete, con sus nodos en el orden del kilometraje.
 LINE_NODES = {"linea": ["a", "b", "c", "d"]}
@@ -71,8 +71,16 @@ def test_the_curated_file_loads_and_every_entry_has_source_and_check_date() -> N
 
 def test_the_curated_file_keeps_an_ended_interruption_as_a_record() -> None:
     ended = [a for a in load_annotations(ANNOTATIONS) if a.ended_on is not None]
-    assert [a.id for a in ended] == ["lav-madrid-andalucia-2026-01-19"]
-    adamuz = ended[0]
+    assert [a.id for a in ended] == [
+        "lav-madrid-andalucia-2026-01-19",
+        "lav-cordoba-malaga-desprendimiento-alora-2026-02-04",
+    ]
+    adamuz, alora = ended
+    # la de Álora: sin trenes entre Antequera-Santa Ana y Málaga hasta la reapertura del 30 de abril
+    assert (alora.line_id, alora.status) == ("lav-cordoba-malaga", "terminada")
+    assert (alora.from_node, alora.to_node) == ("antequera-santa-ana", "malaga-maria-zambrano")
+    assert not alora.active_on(dt.date(2026, 2, 3)) and alora.active_on(dt.date(2026, 2, 4))
+    assert alora.active_on(dt.date(2026, 4, 29)) and not alora.active_on(dt.date(2026, 4, 30))
     assert (adamuz.from_node, adamuz.to_node) == ("villanueva-de-cordoba", "cordoba")
     assert adamuz.status == "terminada"
     # vigente desde el primer día completo sin trenes hasta la víspera de la reapertura

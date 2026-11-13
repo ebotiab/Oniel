@@ -62,6 +62,7 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - PR de los trenes que no paran en Madrid (13 de noviembre de 2026, #135): la alta velocidad Madrid – Sevilla cuenta también los 47 viajes que la recorren sin parar en Madrid: los Avant de Sevilla a Córdoba, Málaga y Granada y los AVE de Barcelona y de Valencia a Andalucía. Para que entren por donde entran, la línea gana dos nodos, las bifurcaciones Los Gavilanes (Barcelona) y Yeles (Levante), y pasa de 11 a 13 tramos; el filtro de corredor admite además paradas seguidas (`consecutive_stop_ids`). Los recuentos de dos tramos seguidos cuadran ya en la bifurcación de Málaga. `docs/datos.md`, «Trenes que no paran en Madrid».
 - PR de «Cobertura y fuentes» como página (13 de noviembre de 2026, #151): deja el panel lateral y pasa a una página entera, sin mapa, en `/cobertura`, con el esqueleto del glosario: cuatro cifras arriba, un índice, las líneas en una lista enlazada por tipo, cada operador con su estado en una frase y la ficha de su fuente, los proyectos enlazados a su ficha y las 63 fuentes agrupadas por lo que aportan y plegadas, todas con su enlace, su licencia y su fecha. Ningún dato cambia. La incidencia se abrió y se cerró en la misma sesión, así que no llegó a estar en la lista de «Orden». Lo decidido está en `docs/diseno.md`, «Cobertura y fuentes como página»; de ahí salió #152.
 - PR del mapa sin WebGL2 (13 de noviembre de 2026, #144): en un navegador sin WebGL2 MapLibre lanza `GPUInitializationError` al crear el mapa; sin atenderla, React desmontaba el visor entero y quedaba la página en blanco. `MapView` la atiende y enseña en el hueco del mapa por qué no hay mapa y qué se puede hacer; el panel, el buscador, las fichas y el glosario siguen funcionando. Como es un límite del navegador y no un fallo de Oniel, ya no llega a Logfire. `docs/diseno.md`, «Sin mapa».
+- PR de la alta velocidad a Málaga (13 de noviembre de 2026, #118): la línea Córdoba – Málaga (Adif 030) llega ya a Málaga-María Zambrano, 154,7 km, sin cambiar de id ni de tramos: cuatro tramos más, con la bifurcación Gobantes, de la que sale el enlace directo a Granada, el puesto de banalización de Álora y el PAET de Los Prados. Misma relación de OpenStreetMap, puntos kilométricos de Wikipedia y señalización del mapa de la Declaración sobre la Red. Dos reglas de recorrido cuentan los trenes que la recorren sin parar en Córdoba: los directos de Madrid a Málaga, que no estaban en ninguna línea y entran también en la de Madrid a Sevilla (13 de Renfe y uno de Ouigo), y los Avant de Málaga a Granada. El comparador da Madrid – Málaga en 512,7 km, y los cuatro tramos nuevos figuran como «sin alternativa», porque a Málaga solo llega esta línea. Queda registrada, ya terminada, la interrupción por el desprendimiento de Álora (del 4 de febrero al 30 de abril de 2026). El enlace entre las bifurcaciones Gobantes y Bobadilla sigue a trazos. `docs/datos.md`, «De Antequera-Santa Ana a Málaga».
 
 ## Principios de arquitectura
 
@@ -91,16 +92,12 @@ Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Có
 
 La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `docs/datos.md`, y por etapas. Las incidencias abiertas, en este orden:
 
-**Granada y Jaén.** Para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Hecha: la línea convencional Linares-Baeza – Moreda – Granada (#101), el ramal Espelúy – Jaén (#102) y la alta velocidad de Córdoba a Granada por Antequera (#103), que entró como dos líneas. Málaga queda a un tramo: falta cargar la línea de alta velocidad Córdoba – Málaga desde Antequera-Santa Ana.
+**Granada y Jaén.** Para que el comparador de recorridos enseñe los dos caminos de Madrid a Granada. Hecha: la línea convencional Linares-Baeza – Moreda – Granada (#101), el ramal Espelúy – Jaén (#102) y la alta velocidad de Córdoba a Granada por Antequera (#103), que entró como dos líneas. La línea de alta velocidad Córdoba – Málaga llega ya hasta Málaga-María Zambrano (#118).
 
 **Levante.** Para ver por qué los trenes de Madrid a Valencia y Alicante dejaron el camino de Alcázar y Albacete. La línea convencional Alcázar de San Juan – Albacete (#114) ya está hecha; quedan:
 
 1. [#115](https://github.com/ebotiab/Oniel/issues/115) Datos: línea de alta velocidad Madrid – Cuenca – Valencia. Sale de la alta velocidad Madrid – Sevilla poco después de Madrid.
 2. [#116](https://github.com/ebotiab/Oniel/issues/116) Datos: ramal de alta velocidad a Albacete y Alicante. Sale de la anterior pasado Cuenca y comparte la estación de Albacete-Los Llanos con la línea de Alcázar: con él, de Madrid a Albacete hay dos caminos. Depende de #115.
-
-**Después.**
-
-4. [#118](https://github.com/ebotiab/Oniel/issues/118) Datos: alta velocidad Antequera – Málaga, que completa Córdoba – Málaga. Depende de #103.
 
 Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
 
