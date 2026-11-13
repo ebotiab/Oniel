@@ -31,6 +31,7 @@ LAV, CONV, MZCR, JAEN, LBMG, ALBACETE = (
 LAV_MALAGA, LAV_GRANADA = "lav-cordoba-malaga", "lav-antequera-granada"
 BCN = "lav-madrid-barcelona"
 LAV_VALENCIA = "lav-madrid-valencia"
+LAV_ALICANTE = "lav-albacete-alicante"
 MEDITERRANEO = "valencia-castello-tarragona"
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
@@ -194,6 +195,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         LAV_VALENCIA,
         "baipas-zaragoza",
         "baipas-lleida",
+        LAV_ALICANTE,
         MEDITERRANEO,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -205,8 +207,9 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert detail["date"] == str(exported.date)
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    # los dos baipases y los 35 de la línea de Valencia a Camp de Tarragona
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 35
+    # los dos baipases, los nueve de la línea de Albacete a Alicante y los 35 de la de Valencia a
+    # Camp de Tarragona
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9 + 35
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -216,7 +219,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     without = {
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
-    apart = (f"{BCN}:", f"{MEDITERRANEO}:")
+    apart = (f"{BCN}:", f"{LAV_VALENCIA}:", f"{LAV_ALICANTE}:", f"{MEDITERRANEO}:")
     assert {k: n for k, n in without.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 83,
         f"{LAV}:majarabique:sevilla-santa-justa": 81,
@@ -228,9 +231,16 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{LAV_MALAGA}:bif-gobantes:pb-alora": 63,
         f"{LAV_MALAGA}:pb-alora:paet-los-prados": 63,
         f"{LAV_MALAGA}:paet-los-prados:malaga-maria-zambrano": 63,
-        # de Alcázar de San Juan a Albacete, mientras no esté cargada otra línea que llegue a
-        # Albacete: sus 13 trenes la recorren entera
-    } | dict.fromkeys(ALBACETE_SEGMENTS, 13)
+    }
+    # desde que Albacete está unida a Madrid por dos caminos, el convencional por Alcázar de San
+    # Juan y el de alta velocidad por Cuenca, cada uno es el otro camino del otro: los 13 trenes
+    # de Alcázar de San Juan a Albacete, los 86 de la línea de Valencia hasta la bifurcación de
+    # Albacete (84 en el primer tramo) y los 44 de esa bifurcación a Albacete tienen alternativa
+    for segment_id in ALBACETE_SEGMENTS:
+        assert _of(exported.segments, segment_id).trains == 13
+    trunk = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
+    assert [s.trains for s in trunk[:8]] == [84] + [86] * 7
+    assert all(s.without_alternative == 0 for s in trunk[:8])
     # La línea de Valencia a Camp de Tarragona cierra un anillo con la de Madrid a Valencia y la de
     # Madrid a Barcelona: todo tren de las tres tiene otro camino cargado, dando la vuelta por
     # Madrid, aunque sea de más de mil kilómetros y por vías de otro ancho. Ya no figura ningún
@@ -238,6 +248,22 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert not any(s.startswith(f"{LAV_VALENCIA}:") for s in without)
     valencia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
     assert len(valencia) == 12 and all(s.trains == s.with_alternative > 0 for s in valencia)
+    # y en la de Albacete a Alicante, los siete que van de Albacete a Alicante: 42 trenes hasta
+    # la bifurcación de Murcia, 36 de allí a Monforte del Cid (los 6 de Madrid a Murcia que no
+    # entran en Alicante ya han salido) y 56 de Monforte del Cid a Alicante, con los 20 Avant de
+    # Alicante a Murcia. De la bifurcación a Albacete, 44, con otro camino
+    alicante = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_ALICANTE}:")]
+    assert [(s.trains, s.without_alternative) for s in alicante] == [
+        (44, 0),
+        (44, 0),
+        (42, 42),
+        (42, 42),
+        (42, 42),
+        (42, 42),
+        (42, 42),
+        (36, 36),
+        (56, 56),
+    ]
     # De la alta velocidad de Barcelona solo quedan los tres tramos de Camp de Tarragona a
     # Barcelona-Sants, fuera del anillo, con sus 108 trenes
     barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]

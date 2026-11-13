@@ -48,9 +48,9 @@ test.describe('Línea de València a Camp de Tarragona: une la alta velocidad de
     const todos = findRoutes(grafo, SOROLLA, 'barcelona-sants', undefined, null, null)
     expect(todos[1].length_km).toBe(1009.7)
     expect(findRoutes(grafo, NORD, 'castello-de-la-plana').map((r) => r.length_km)).toEqual([73.7])
-    // y de Madrid a Barcelona hay ya un segundo camino, por Cuenca, València y la costa
+    // y de Madrid a Barcelona hay ya otros dos caminos por València y la costa: por Cuenca y por Albacete
     const aBarcelona = findRoutes(grafo, 'madrid-puerta-de-atocha', 'barcelona-sants')
-    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 755.1])
+    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 755.1, 864.8])
   })
 
   test('la ficha del último tramo dice que es de ancho estándar; la de un tramo de ancho ibérico no dice nada', async ({ page }) => {

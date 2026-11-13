@@ -39,6 +39,7 @@ class Settings(BaseSettings):
         "lav-madrid-valencia",
         "baipas-zaragoza",
         "baipas-lleida",
+        "lav-albacete-alicante",
         "valencia-castello-tarragona",
     ]
 

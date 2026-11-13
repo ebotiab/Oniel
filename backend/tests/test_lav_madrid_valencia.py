@@ -4,7 +4,7 @@ de Velasco, que comparte con la de Sevilla, a València-Joaquín Sorolla."""
 from __future__ import annotations
 
 import pytest
-from conftest import DATA_DIR, LAV_VALENCIA_SPEC, SOURCES
+from conftest import DATA_DIR, LAV_ALICANTE_SPEC, LAV_VALENCIA_SPEC, SOURCES
 
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip
 from oniel.gtfs.trips import (
@@ -24,7 +24,7 @@ SHAPES = {
     # Madrid – Valencia, pare o no en Cuenca y en Requena-Utiel
     ("bif-torrejon-de-velasco", "valencia-joaquin-sorolla"): 189,
     # Madrid – Albacete, Alicante y Murcia: dejan la línea en la bifurcación de Albacete
-    ("bif-albacete", "bif-torrejon-de-velasco"): 215,
+    ("bif-albacete", "bif-torrejon-de-velasco"): 235,
     # Avant de Requena-Utiel a Valencia
     ("requena-utiel", "valencia-joaquin-sorolla"): 61,
     # Valencia – Sevilla, por el enlace de la bifurcación Blancales
@@ -42,7 +42,8 @@ def valencia() -> BuiltNetwork:
 
 @pytest.fixture(scope="module")
 def lines(built: BuiltNetwork, valencia: BuiltNetwork) -> list[LoadedLine]:
-    return [loaded_line(built), loaded_line(valencia)]
+    alicante = build_network(load_network_spec(LAV_ALICANTE_SPEC), DATA_DIR)
+    return [loaded_line(built), loaded_line(valencia), loaded_line(alicante)]
 
 
 def _stops(trip: GtfsTrip) -> list[str]:
@@ -105,11 +106,10 @@ def test_the_line_leaves_the_seville_line_at_torrejon_and_ends_in_valencia(
     assert [p.source_id for p in valencia.line.part_spans] == ["osm-relation-11146316"]
     assert not valencia.line.gaps_km and not valencia.line.joins_km
     assert all(n.offset_m < 60 for n in valencia.nodes)
-    # lo que sigue sin cargar: el enlace con la línea de Sevilla y el ramal de Albacete; la
-    # línea de Castelló ya está cargada y no sale a trazos
+    # lo que sigue sin cargar: el enlace con la línea de Sevilla. De la bifurcación de Albacete
+    # y de València-Joaquín Sorolla ya no sale nada a trazos: sus líneas están cargadas
     assert {c.node_id for c in valencia.spec.connections} == {
         "bif-blancales",
-        "bif-albacete",
     }
 
 
@@ -181,7 +181,7 @@ def test_trains_of_valencia_and_of_alicante_share_the_line_as_far_as_the_albacet
     los que recorren la línea sin parar en ninguna de las dos. Los de Albacete y Alicante la
     dejan en la bifurcación de Albacete; los Avant de Requena-Utiel solo llegan a Valencia."""
     trips = select_trips_for_spec(feed, valencia.spec)
-    assert len(trips) == 469
+    assert len(trips) == 489
     products: dict[str, int] = {}
     rules: dict[str, int] = {}
     shapes: dict[tuple[str, str], int] = {}
@@ -196,11 +196,13 @@ def test_trains_of_valencia_and_of_alicante_share_the_line_as_far_as_the_albacet
         short = _short(passes)
         ends = sorted({short[0].split(":")[0], short[-1].split(":")[1]})
         shapes[(ends[0], ends[1])] = shapes.get((ends[0], ends[1]), 0) + 1
-    assert products == {"AVE": 299, "AVLO": 61, "AVANT": 85, "ALVIA": 24}
+    assert products == {"AVE": 319, "AVLO": 61, "AVANT": 85, "ALVIA": 24}
     assert rules == {
         "madrid-valencia-sin-parada": 62,
         "madrid-albacete-sin-parada": 31,
         "madrid-alicante-sin-parada": 27,
+        # los de Madrid a Murcia sin parada hasta Elche AV, que no paran en ninguna línea cargada
+        "madrid-elche-sin-parada": 20,
     }
     # entre dos estaciones siempre hay un PAET o una bifurcación: ningún paso es publicado
     assert kinds == {"estimado"}
@@ -214,9 +216,10 @@ def test_trains_of_valencia_and_of_alicante_share_the_line_as_far_as_the_albacet
 def test_a_train_from_chamartin_to_alicante_crosses_the_line_without_stopping(
     feed: GtfsFeed, ouigo_feed: GtfsFeed, valencia: BuiltNetwork, lines: list[LoadedLine]
 ) -> None:
-    """Madrid-Chamartín y Alicante están fuera de la red cargada, pero de las dos se sabe cuánta
-    vía hay hasta la línea (36 km y 238 km): el paso por los ocho tramos que van de la
-    bifurcación de Torrejón de Velasco a la de Albacete es estimado, no indeterminado."""
+    """Madrid-Chamartín está fuera de la red cargada, pero se sabe cuánta vía hay hasta la línea
+    (36 km), y a Alicante se llega por la línea de Albacete a Alicante, que está cargada (238 km
+    desde la bifurcación): el paso por los ocho tramos que van de la bifurcación de Torrejón de
+    Velasco a la de Albacete es estimado, no indeterminado."""
     nonstop = [t for t in select_trips_for_spec(feed, valencia.spec) if "03208" not in _stops(t)]
     direct = [t for t in nonstop if {"17000", "60911"} <= set(_stops(t)) and len(_stops(t)) == 2]
     assert len(direct) == 27
@@ -228,6 +231,7 @@ def test_a_train_from_chamartin_to_alicante_crosses_the_line_without_stopping(
     assert "recorre la línea sin parar en ella" in basis
     assert "36 km antes de Bifurcación Torrejón de Velasco" in basis
     assert "238 km después de Bifurcación Albacete" in basis
+    assert "está en la línea de alta velocidad Albacete – Alicante" in basis
     assert "línea recta" not in basis
     # los de Ouigo a Albacete y Murcia, igual
     ouigo = select_trips_for_spec(ouigo_feed, valencia.spec)

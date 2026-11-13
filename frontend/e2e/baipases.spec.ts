@@ -19,8 +19,8 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto('/')
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
-    // diez líneas, con los kilómetros de los dos baipases sumados
-    await expect(page.getByTestId('ficha-red')).toContainText(/^11 líneas · 2\.872 km/)
+    // doce líneas, con los kilómetros de los dos baipases sumados
+    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 3\.109 km/)
     const cataluna = red.getByRole('region', { name: 'Cataluña' })
     await expect(cataluna.locator('.zona-cabecera')).toHaveText(/^›Cataluña1 línea$/)
     await expect(cataluna.locator('.fila-linea')).toHaveText([/Madrid – Barcelona por Zaragoza627 km$/])
@@ -99,9 +99,9 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto('/recorridos/madrid-puerta-de-atocha/barcelona-sants')
     const recorridos = page.getByTestId('recorrido')
     // el de la línea, uno solo aunque haya cuatro maneras de pasar por Zaragoza y Lleida, y el que baja por València y la costa
-    await expect(recorridos).toHaveCount(2)
+    await expect(recorridos).toHaveCount(3)
     await expect(recorridos.nth(1)).toContainText('755,1 km')
-    await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Dos recorridos, del más corto al más largo\. Hay 29 trenes directos en este sentido/)
+    await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Tres recorridos, del más corto al más largo\. Hay 29 trenes directos en este sentido/)
     const unico = recorridos.first()
     await expect(unico.getByRole('button', { name: 'Por la alta velocidad' })).toBeVisible()
     await expect(unico).toContainText('620,1 km · 2 h 5 min sin paradas')
@@ -119,7 +119,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     // a Lleida se llega rodeando Zaragoza y entrando por su ramal
     await page.goto('/recorridos/madrid-puerta-de-atocha/lleida-pirineus')
     // también a Lleida hay un segundo recorrido, que sube desde València por Camp de Tarragona
-    await expect(recorridos).toHaveCount(2)
+    await expect(recorridos).toHaveCount(3)
     await expect(recorridos.first()).toContainText('441,6 km')
     await expect(recorridos.first().getByTestId('recorrido-baipases')).toHaveText(
       'Rodea Zaragoza por su baipás; el tren que para en Zaragoza-Delicias recorre 4,9 km más.',
@@ -135,7 +135,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto(`/recorridos/madrid-puerta-de-atocha/barcelona-sants/c~${BAIPAS_ZARAGOZA}`)
     const recorridos = page.getByTestId('recorrido')
     // el de siempre, cortado; el más corto que no lo está, por Zaragoza-Delicias, 4,9 km más, y el de València
-    await expect(recorridos).toHaveCount(3)
+    await expect(recorridos).toHaveCount(4)
     await expect(recorridos.nth(1)).toContainText('El más corto que no está cortado')
     await expect(recorridos.nth(2)).toContainText('755,1 km')
     await expect(recorridos.nth(0)).toContainText('620,1 km')
