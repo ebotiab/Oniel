@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { abrirZonas } from './navegar.ts'
 
 // La red se carga por partes: al arrancar solo el índice; el detalle de cada línea, al abrirla o al
 // acercar el mapa. Vale igual con la instantánea estática (/data/…) que con la API (/api/lines…).
@@ -30,7 +31,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 3\.146 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.213 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -58,6 +59,7 @@ test.describe('Carga de la red por partes', () => {
     await page.goto('/')
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
+    await abrirZonas(page)
     await red.getByRole('button', { name: /Madrid – Sevilla/ }).click()
     await expect(page.getByTestId('esquema')).toBeVisible()
     await expect(page.getByTestId('esquema-rotulo-trenes').or(page.getByTestId('esquema-tramo-1')).first()).toBeVisible()
@@ -65,12 +67,14 @@ test.describe('Carga de la red por partes', () => {
 
     // una segunda línea pide su detalle; volver a la primera no la pide otra vez
     await page.getByTestId('volver-red').click()
+    await abrirZonas(page)
     await red.getByRole('button', { name: /Manzanares – Ciudad Real/ }).click()
     await expect(page.getByRole('heading', { name: /Manzanares – Ciudad Real/ })).toBeVisible()
     // (al encuadrarla, el mapa queda cerca y puede pedir también las vecinas)
     await expect.poll(() => pedidas.lineas).toContain(MZCR)
     const antes = pedidas.lineas.filter((l) => l === LAV).length
     await page.getByTestId('volver-red').click()
+    await abrirZonas(page)
     await red.getByRole('button', { name: /Madrid – Sevilla/ }).click()
     await expect(page.getByTestId('esquema')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar

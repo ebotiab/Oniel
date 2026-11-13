@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { abrirZonas } from './navegar.ts'
 
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
@@ -19,10 +20,11 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto('/')
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
-    // doce líneas, con los kilómetros de los dos baipases sumados
-    await expect(page.getByTestId('ficha-red')).toContainText(/^12 líneas · 3\.146 km/)
+    // trece líneas, con los kilómetros de los dos baipases sumados
+    await expect(page.getByTestId('ficha-red')).toContainText(/^13 líneas · 3\.213 km/)
     const cataluna = red.getByRole('region', { name: 'Cataluña' })
-    await expect(cataluna.locator('.zona-cabecera')).toHaveText(/^›Cataluña1 línea$/)
+    await expect(cataluna.locator('.zona-cabecera')).toHaveText(/^›Cataluña1 línea/)
+    await abrirZonas(page)
     await expect(cataluna.locator('.fila-linea')).toHaveText([/Madrid – Barcelona por Zaragoza627 km$/])
     const baipases = cataluna.getByRole('list', { name: 'Baipases de Madrid – Barcelona por Zaragoza' }).getByRole('button')
     await expect(baipases).toHaveText([/^Baipás de Zaragoza21 km$/, /^Baipás de Lleida14 km$/])
@@ -33,6 +35,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await expect(baipases).toHaveCount(2)
     await filtro.fill('')
     // cada baipás tiene su ficha de línea
+    await abrirZonas(page)
     await page.getByTestId('linea-baipas-zaragoza').click()
     await expect(page).toHaveURL(/\/linea\/baipas-zaragoza$/)
     await expect(page.getByRole('heading', { name: 'Baipás de Zaragoza' })).toBeVisible()

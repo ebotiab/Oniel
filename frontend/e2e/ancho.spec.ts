@@ -10,12 +10,17 @@ const red = composeNetwork(leer<NetworkIndexOut>('../public/data/index.json'), {
 
 const RIOFRIO_LOJA = 'lav-antequera-granada:bif-riofrio:loja'
 const ANTEQUERA_ARCHIDONA = 'lav-antequera-granada:antequera-av:bif-archidona'
-const MIXTOS = [RIOFRIO_LOJA, 'lav-antequera-granada:loja:bif-tocon', 'lav-antequera-granada:bif-la-chana:granada']
+const MIXTOS = [
+  RIOFRIO_LOJA,
+  'lav-antequera-granada:loja:bif-tocon',
+  'lav-antequera-granada:bif-la-chana:granada',
+  'lav-monforte-murcia:bif-el-regueron:murcia-del-carmen',
+]
 
 test.describe('Ancho de vía: el tramo de ancho mixto lo dice', () => {
-  test('solo el paso por Loja y la entrada a Granada traen el ancho mixto', () => {
-    // en la alta velocidad a Granada; la línea de València a Camp de Tarragona tiene los suyos (e2e/mediterraneo.spec.ts)
-    const conAncho = red.segments.filter((s) => s.attributes?.gauge && s.line_id === 'lav-antequera-granada').map((s) => s.id)
+  test('solo el paso por Loja, la entrada a Granada y la de Murcia traen el ancho mixto en la alta velocidad', () => {
+    // la línea de València a Camp de Tarragona tiene los suyos (e2e/mediterraneo.spec.ts)
+    const conAncho = red.segments.filter((s) => s.attributes?.gauge && s.line_id !== 'valencia-castello-tarragona').map((s) => s.id)
     expect(conAncho.sort()).toEqual([...MIXTOS].sort())
     for (const id of MIXTOS) expect(red.segments.find((s) => s.id === id)?.attributes?.gauge?.value).toBe('mixto')
   })

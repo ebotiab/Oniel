@@ -24,7 +24,7 @@ test.describe('Tramos sin otro camino', () => {
     await page.goto('/')
     await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
     await page.goto('/sin-otro-camino')
-    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(8)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(9)
     await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 83 trenes no tendrían otro camino')
@@ -108,12 +108,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 40 de los 151 tramos con trenes, en 8 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 48 de los 159 tramos con trenes, en 9 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(8)
+    await expect(lineas).toHaveCount(9)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
@@ -135,6 +135,9 @@ test.describe('Tramos sin otro camino', () => {
     // y los siete de la de Albacete a Alicante que quedan al sur de Albacete
     await expect(linea('Albacete – Alicante')).toContainText('7 de sus 9 tramos')
     await expect(linea('Albacete – Alicante')).toContainText('de 36 a 56 trenes')
+    // y los ocho de la de Monforte del Cid a Murcia: a Murcia solo llega esa línea
+    await expect(linea('Monforte del Cid – Murcia')).toContainText('Toda la línea, 8 tramos')
+    await expect(linea('Monforte del Cid – Murcia')).toContainText('de 6 a 36 trenes')
     // los dos que llevan a Sevilla desde la bifurcación de Málaga
     await expect(linea('Madrid – Sevilla')).toContainText('2 de sus 13 tramos')
     await expect(linea('Madrid – Sevilla')).toContainText('de 81 a 83 trenes')

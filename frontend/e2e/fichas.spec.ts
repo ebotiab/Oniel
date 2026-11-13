@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { irA } from './navegar.ts'
+import { abrirZonas, irA } from './navegar.ts'
 
 const TRAMO = 'lav-madrid-sevilla:urda:ciudad-real'
 
@@ -68,6 +68,7 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
     await page.goto('/')
     await abrirHoja(page)
     await expect(page).toHaveURL(/\/$/)
+    await abrirZonas(page)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     // el enlace abre esa misma línea

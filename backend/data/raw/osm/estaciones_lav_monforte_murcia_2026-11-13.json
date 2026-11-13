@@ -1,0 +1,1056 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T15:43:47Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 304200046,
+  "lat": 38.2245536,
+  "lon": -0.7811325,
+  "tags": {
+    "name": "Crevillent",
+    "name:ca": "Crevillent",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "1",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 304201017,
+  "lat": 38.2692173,
+  "lon": -0.7064731,
+  "tags": {
+    "name": "Elx-Carrús",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "1",
+    "train": "yes",
+    "wikidata": "Q8779712",
+    "wikipedia": "ca:Estació d'Elx-Carrús"
+  }
+},
+{
+  "type": "node",
+  "id": 314620948,
+  "lat": 38.2720720,
+  "lon": -0.6952150,
+  "tags": {
+    "name": "Elx-Parc",
+    "name:ca": "Elx-Parc",
+    "name:es": "Elche-Parque",
+    "name:gl": "Elx-Parque",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "1",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 567374480,
+  "lat": 38.1671438,
+  "lon": -0.8379896,
+  "tags": {
+    "name": "San Isidro-Albatera-Catral",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 567374483,
+  "lat": 38.1228385,
+  "lon": -0.8741430,
+  "tags": {
+    "name": "Callosa de Segura",
+    "name:ca": "Callosa de Segura",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "1",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1427907777,
+  "lat": 38.4073100,
+  "lon": -0.7775800,
+  "tags": {
+    "name": "Novelda-Aspe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "1",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1496253152,
+  "lat": 38.2690283,
+  "lon": -0.7063699,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Renfe - Carrús",
+    "network": "Autobusos Urbans d'Elx",
+    "network:short": "AUE",
+    "network:wikidata": "Q5712413",
+    "operator": "Avanza",
+    "operator:wikidata": "Q56316715",
+    "public_transport": "platform",
+    "ref": "88",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2400545326,
+  "lat": 38.4072636,
+  "lon": -0.7775541,
+  "tags": {
+    "addr:housenumber": "1",
+    "addr:street": "Barrio La Estación",
+    "name": "Novelda-Aspe",
+    "name:ca": "Novelda-Asp",
+    "name:es": "Novelda-Aspe",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://wwwrenfe.com",
+    "wikidata": "Q5846817",
+    "wikipedia": "ca:Estació de Novelda-Asp"
+  }
+},
+{
+  "type": "node",
+  "id": 2400553427,
+  "lat": 38.4412712,
+  "lon": -0.8164405,
+  "tags": {
+    "name": "Monòver",
+    "operator": "Adif",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 5342775859,
+  "lat": 38.2786537,
+  "lon": -0.6555410,
+  "tags": {
+    "name": "Gabinete de Circulación Elx Mercaderíes",
+    "network": "ADIF",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 9865275308,
+  "lat": 37.9741553,
+  "lon": -1.1296650,
+  "tags": {
+    "name": "Murcia del Carmen",
+    "public_transport": "stop_position",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9865275309,
+  "lat": 37.9741865,
+  "lon": -1.1296589,
+  "tags": {
+    "public_transport": "stop_position",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10167520824,
+  "lat": 38.1228239,
+  "lon": -0.8741078,
+  "tags": {
+    "name": "Callosa de Segura",
+    "name:ca": "Callosa de Segura",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360286,
+  "lat": 38.0469230,
+  "lon": -0.9952079,
+  "tags": {
+    "name": "Beniel",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360287,
+  "lat": 38.0470140,
+  "lon": -0.9952890,
+  "tags": {
+    "name": "Beniel",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "2",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360288,
+  "lat": 38.0470698,
+  "lon": -0.9953263,
+  "tags": {
+    "name": "Beniel",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "4",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360295,
+  "lat": 38.0782749,
+  "lon": -0.9436356,
+  "tags": {
+    "name": "Orihuela - Miguel Hernández",
+    "name:ca": "Oriola - Miguel Hernández",
+    "name:es": "Orihuela - Miguel Hernández",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "2",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360296,
+  "lat": 38.0782127,
+  "lon": -0.9435888,
+  "tags": {
+    "name": "Orihuela - Miguel Hernández",
+    "name:ca": "Oriola - Miguel Hernández",
+    "name:es": "Orihuela - Miguel Hernández",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360297,
+  "lat": 38.0783041,
+  "lon": -0.9436719,
+  "tags": {
+    "name": "Orihuela - Miguel Hernández",
+    "name:ca": "Oriola - Miguel Hernández",
+    "name:es": "Orihuela - Miguel Hernández",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "4",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360327,
+  "lat": 38.1672463,
+  "lon": -0.8383492,
+  "tags": {
+    "name": "San Isidro-Albatera-Catral",
+    "name:es": "San Isidro-Albatera-Catral",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360330,
+  "lat": 38.2245532,
+  "lon": -0.7810758,
+  "tags": {
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779676",
+    "wikimedia_commons": "File:Crevillent_estació.JPG",
+    "wikipedia": "es:Estación de Crevillente"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360331,
+  "lat": 38.2245171,
+  "lon": -0.7811127,
+  "tags": {
+    "name": "Crevillent",
+    "name:ca": "Crevillent",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360342,
+  "lat": 38.2692887,
+  "lon": -0.7065431,
+  "tags": {
+    "name": "Elx-Carrús",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "2",
+    "train": "yes",
+    "wikidata": "Q8779712",
+    "wikipedia": "ca:Estació d'Elx-Carrús"
+  }
+},
+{
+  "type": "node",
+  "id": 11372360343,
+  "lat": 38.2721554,
+  "lon": -0.6952297,
+  "tags": {
+    "name": "Elx-Parc",
+    "name:ca": "Elx-Parc",
+    "name:es": "Elche-Parque",
+    "name:gl": "Elx-Parque",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "2",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11393157285,
+  "lat": 38.1370147,
+  "lon": -0.8750933,
+  "tags": {
+    "name": "Callosa de Segura - Cox",
+    "name:ca": "Callosa de Segura - Coix",
+    "name:es": "Callosa de Segura - Cox",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11393157286,
+  "lat": 38.1371284,
+  "lon": -0.8752328,
+  "tags": {
+    "name": "Callosa de Segura - Cox",
+    "name:ca": "Callosa de Segura - Coix",
+    "name:es": "Callosa de Segura - Cox",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11393157292,
+  "lat": 38.2460438,
+  "lon": -0.7667427,
+  "tags": {
+    "name": "Elche / Elx AV",
+    "name:ca": "Elx AV",
+    "name:es": "Elche AV",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11393157293,
+  "lat": 38.2461654,
+  "lon": -0.7669050,
+  "tags": {
+    "name": "Elche / Elx AV",
+    "name:ca": "Elx AV",
+    "name:es": "Elche AV",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11408615823,
+  "lat": 38.4078017,
+  "lon": -0.7782269,
+  "tags": {
+    "name": "Novelda-Aspe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "5",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11408615824,
+  "lat": 38.4077688,
+  "lon": -0.7782546,
+  "tags": {
+    "name": "Novelda-Aspe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11408615825,
+  "lat": 38.4072723,
+  "lon": -0.7776113,
+  "tags": {
+    "name": "Novelda-Aspe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "2",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12971865263,
+  "lat": 38.2690377,
+  "lon": -0.7062979,
+  "tags": {
+    "name": "Elx Carrús",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8779712",
+    "wikipedia": "ca:Estació d'Elx-Carrús"
+  }
+},
+{
+  "type": "node",
+  "id": 13017334754,
+  "lat": 37.9745063,
+  "lon": -1.1305891,
+  "tags": {
+    "name": "Murcia del Carmen",
+    "operator": "Adif AV",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "website": "https://www.adif.es/w/61200-murcia-carmen",
+    "wikidata": "Q3325607"
+  }
+},
+{
+  "type": "way",
+  "id": 28047491,
+  "center": {
+    "lat": 37.9747836,
+    "lon": -1.1315330
+  },
+  "tags": {
+    "building": "train_station",
+    "operator": "Adif AV",
+    "train": "yes",
+    "website": "https://www.adif.es/w/61200-murcia-carmen"
+  }
+},
+{
+  "type": "way",
+  "id": 58220199,
+  "center": {
+    "lat": 38.0778375,
+    "lon": -0.9445379
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Orihuela Miguel Hernández",
+    "name:ca": "Oriola - Miguel Hernández",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5558514"
+  }
+},
+{
+  "type": "way",
+  "id": 79816692,
+  "center": {
+    "lat": 38.2717948,
+    "lon": -0.6951017
+  },
+  "tags": {
+    "building": "train_station",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "name": "Estació Elx-Parc",
+    "name:ca": "Estació Elx-Parc",
+    "name:es": "Estación Elche-Parque",
+    "name:gl": "Estación Elx-Parque",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3325458",
+    "wikipedia": "ca:Estació d'Elx-Parc"
+  }
+},
+{
+  "type": "way",
+  "id": 107667760,
+  "center": {
+    "lat": 38.2245769,
+    "lon": -0.7811774
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 107667764,
+  "center": {
+    "lat": 38.2245074,
+    "lon": -0.7815637
+  },
+  "tags": {
+    "building": "train_station",
+    "image": "https://commons.wikimedia.org/wiki/File:Crevillent_estació.JPG",
+    "name": "Estació de Crevillent",
+    "name:ca": "Estació de Crevillent",
+    "name:es": "Estación de Crevillente",
+    "wikidata": "Q8779676",
+    "wikimedia_commons": "File:Crevillent_estació.JPG",
+    "wikipedia": "es:Estación de Crevillente"
+  }
+},
+{
+  "type": "way",
+  "id": 231715996,
+  "center": {
+    "lat": 38.4077401,
+    "lon": -0.7781600
+  },
+  "tags": {
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 231715998,
+  "center": {
+    "lat": 38.4075477,
+    "lon": -0.7781125
+  },
+  "tags": {
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 231716933,
+  "center": {
+    "lat": 38.4403640,
+    "lon": -0.8166816
+  },
+  "tags": {
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 231716937,
+  "center": {
+    "lat": 38.4408325,
+    "lon": -0.8165166
+  },
+  "tags": {
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 262530351,
+  "center": {
+    "lat": 38.0471656,
+    "lon": -0.9954680
+  },
+  "tags": {
+    "building": "train_station",
+    "name": "Beniel",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "way",
+  "id": 447971286,
+  "center": {
+    "lat": 38.0471975,
+    "lon": -0.9950082
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 447971287,
+  "center": {
+    "lat": 38.0470761,
+    "lon": -0.9948268
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 447971288,
+  "center": {
+    "lat": 38.0472895,
+    "lon": -0.9950109
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 448188709,
+  "center": {
+    "lat": 38.1673368,
+    "lon": -0.8379279
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 448188710,
+  "center": {
+    "lat": 38.1674254,
+    "lon": -0.8381395
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 448188711,
+  "center": {
+    "lat": 38.1672536,
+    "lon": -0.8378719
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 473731696,
+  "center": {
+    "lat": 38.2468566,
+    "lon": -0.7655372
+  },
+  "tags": {
+    "area": "yes",
+    "lit": "yes",
+    "name": "Andén Sur",
+    "public_transport": "platform",
+    "railway": "platform",
+    "ref": "1-2-3",
+    "shelter": "yes",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 473731697,
+  "center": {
+    "lat": 38.2470644,
+    "lon": -0.7657770
+  },
+  "tags": {
+    "area": "yes",
+    "lit": "yes",
+    "name": "Andén Norte",
+    "public_transport": "platform",
+    "railway": "platform",
+    "ref": "4-5-6",
+    "shelter": "yes",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 473732487,
+  "center": {
+    "lat": 38.2453819,
+    "lon": -0.7667555
+  },
+  "tags": {
+    "building": "yes",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "layer": "1",
+    "name": "Elche / Elx AV",
+    "name:ca": "Elx AV",
+    "name:es": "Elche AV",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "start_date": "2021-02-01",
+    "train": "yes",
+    "wikidata": "Q3394796"
+  }
+},
+{
+  "type": "way",
+  "id": 491621368,
+  "center": {
+    "lat": 38.1365223,
+    "lon": -0.8758451
+  },
+  "tags": {
+    "bridge": "yes",
+    "ele": "1",
+    "layer": "1",
+    "name": "Callosa de Segura-Cox",
+    "operator": "Renfe",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q115796505",
+    "wikipedia": "es:Estación de Callosa de Segura-Cox"
+  }
+},
+{
+  "type": "way",
+  "id": 553494404,
+  "center": {
+    "lat": 38.4413021,
+    "lon": -0.8166338
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Monòver",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 554011952,
+  "center": {
+    "lat": 38.2785724,
+    "lon": -0.6554414
+  },
+  "tags": {
+    "area": "yes",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 770888424,
+  "center": {
+    "lat": 38.4064144,
+    "lon": -0.6950746
+  },
+  "tags": {
+    "area": "yes",
+    "note": "Andén sin servicio de pasajeros.",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 770888425,
+  "center": {
+    "lat": 38.4065146,
+    "lon": -0.6950533
+  },
+  "tags": {
+    "area": "yes",
+    "note": "Andén sin servicio de pasajeros.",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 835064745,
+  "center": {
+    "lat": 38.0468787,
+    "lon": -0.9950473
+  },
+  "tags": {
+    "building": "train_station"
+  }
+},
+{
+  "type": "way",
+  "id": 835064746,
+  "center": {
+    "lat": 38.0470318,
+    "lon": -0.9951832
+  },
+  "tags": {
+    "building": "train_station",
+    "layer": "1"
+  }
+},
+{
+  "type": "way",
+  "id": 912197962,
+  "center": {
+    "lat": 37.9740525,
+    "lon": -1.1296777
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 912197963,
+  "center": {
+    "lat": 37.9742252,
+    "lon": -1.1296948
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 1120660259,
+  "center": {
+    "lat": 37.9747602,
+    "lon": -1.1308396
+  },
+  "tags": {
+    "building": "train_station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1120660260,
+  "center": {
+    "lat": 37.9745168,
+    "lon": -1.1299233
+  },
+  "tags": {
+    "building": "train_station",
+    "building:levels": "2",
+    "building:levels:underground": "1",
+    "height": "9"
+  }
+},
+{
+  "type": "way",
+  "id": 1212033141,
+  "center": {
+    "lat": 37.9745377,
+    "lon": -1.1300069
+  },
+  "tags": {
+    "building": "train_station",
+    "building:part": "roof",
+    "height": "13.47",
+    "layer": "1",
+    "min_height": "11.01"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352944,
+  "center": {
+    "lat": 38.0781984,
+    "lon": -0.9435651
+  },
+  "tags": {
+    "public_transport": "platform",
+    "railway": "platform",
+    "ref": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352945,
+  "center": {
+    "lat": 38.0782863,
+    "lon": -0.9436628
+  },
+  "tags": {
+    "public_transport": "platform",
+    "railway": "platform",
+    "ref": "2"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352946,
+  "center": {
+    "lat": 38.0783201,
+    "lon": -0.9437004
+  },
+  "tags": {
+    "public_transport": "platform",
+    "railway": "platform",
+    "ref": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352949,
+  "center": {
+    "lat": 38.1224852,
+    "lon": -0.8742965
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352950,
+  "center": {
+    "lat": 38.1225039,
+    "lon": -0.8744317
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352951,
+  "center": {
+    "lat": 38.1226687,
+    "lon": -0.8744051
+  },
+  "tags": {
+    "building": "train_station",
+    "name": "Callosa de Segura",
+    "name:ca": "Callosa de Segura",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5845916"
+  }
+},
+{
+  "type": "way",
+  "id": 1226352952,
+  "center": {
+    "lat": 38.2244759,
+    "lon": -0.7811095
+  },
+  "tags": {
+    "area": "yes",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 1228525625,
+  "center": {
+    "lat": 38.1370256,
+    "lon": -0.8754449
+  },
+  "tags": {
+    "layer": "1",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 1228527629,
+  "center": {
+    "lat": 38.1368559,
+    "lon": -0.8752091
+  },
+  "tags": {
+    "layer": "1",
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+},
+{
+  "type": "way",
+  "id": 1230216667,
+  "center": {
+    "lat": 38.4077125,
+    "lon": -0.7782151
+  },
+  "tags": {
+    "public_transport": "platform",
+    "railway": "platform"
+  }
+}
+
+  ]
+}
