@@ -24,7 +24,7 @@ test.describe('Tramos sin otro camino', () => {
     await page.goto('/')
     await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
     await page.goto('/sin-otro-camino')
-    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(7)
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(8)
     await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 83 trenes no tendrían otro camino')
@@ -108,22 +108,25 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 38 de los 149 tramos con trenes, en 7 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 40 de los 151 tramos con trenes, en 8 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(7)
+    await expect(lineas).toHaveCount(8)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
     await expect(lineas.nth(0)).toContainText('Madrid – Barcelona por Zaragoza')
     await expect(lineas.nth(0)).toContainText('3 de sus 20 tramos')
     await expect(lineas.nth(0)).toContainText('108 trenes')
-    // la alta velocidad de Madrid a Valencia no figura: en sus últimos tramos los AVE de Castelló sí tienen otro camino.
+    // los últimos tramos de la alta velocidad de Madrid a Valencia no figuran: los AVE de Castelló sí tienen otro camino.
     // De la línea de València a Camp de Tarragona, el primer tramo y los dieciséis de Castelló a Camp de Tarragona:
     // dar la vuelta por Madrid mide más del doble y no cuenta
-    await expect(linea('Madrid – Valencia por Cuenca')).toHaveCount(0)
+    // de la alta velocidad de Madrid a Valencia, los dos primeros, de Madrid-Chamartín a la bifurcación de Torrejón de
+    // Velasco: a Chamartín solo llega esta línea
+    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('2 de sus 14 tramos')
+    await expect(linea('Madrid – Valencia por Cuenca')).toContainText('74 trenes')
     await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('17 de sus 35 tramos')
     await expect(linea('Valencia – Camp de Tarragona por Castellón')).toContainText('de 19 a 54 trenes')
     // los tres de Linares-Baeza a Moreda, con sus dos trenes de Almería

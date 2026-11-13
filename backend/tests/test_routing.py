@@ -86,7 +86,7 @@ def graph(network: Red) -> Graph:
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
     # los dos baipases, los nueve tramos de la línea de Albacete a Alicante y los 35 de la de
     # Valencia a Camp de Tarragona
-    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9 + 35
+    assert len(graph.edges) == len(network.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 35
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
     assert {e.line_id for e in graph.edges_at(MANZANARES)} == {CONV, MZCR}
@@ -155,7 +155,7 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
     assert [r.length_km for r in find_routes(graph, MADRID, CIUDAD_REAL, max_ratio=None)] == [
         170.8,
         260.5,
-        557.9,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
+        558.0,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
         613.5,
         704.6,  # lo mismo al revés: por Alcázar a Albacete y vuelta por Cuenca
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
@@ -504,7 +504,7 @@ def test_a_closed_station_stretch_is_saved_by_its_bypass_and_the_other_way_round
         detour, ring, by_albacete = found.detours
         assert found.omitted == 6 and by_albacete.route.length_km == 765.1
         assert (ring.route.from_node_id, ring.route.to_node_id) == (MADRID, "camp-de-tarragona")
-        assert ring.route.length_km == 655.4
+        assert ring.route.length_km == 655.3
         assert (detour.route.length_km, detour.closed_line_length_km) == (20.7, 25.6)
         assert detour.route.line_ids == ["baipas-zaragoza"]
         assert [leg.line_name for leg in detour.route.legs] == ["Baipás de Zaragoza"]

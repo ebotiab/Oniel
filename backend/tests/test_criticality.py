@@ -241,7 +241,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         by_operator |= detail["counts_by_operator"]
     # los dos baipases, los nueve de la línea de Albacete a Alicante y los 35 de la de Valencia a
     # Camp de Tarragona
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 12 + 2 + 9 + 35
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 35
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -255,7 +255,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
     none = {k: n for k, n in without.items() if n == _of(exported.segments, k).trains}
-    assert (len(none), len(without)) == (38, 105)
+    assert (len(none), len(without)) == (40, 107)
     apart = (f"{BCN}:", f"{LAV_VALENCIA}:", f"{LAV_ALICANTE}:", f"{MEDITERRANEO}:")
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 83,
@@ -281,20 +281,26 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     for segment_id in ALBACETE_SEGMENTS:
         assert _of(exported.segments, segment_id).trains == 13
     trunk = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
-    assert [s.trains for s in trunk[:8]] == [84] + [86] * 7
-    assert all(s.without_alternative == 0 for s in trunk[:8])
+    # los dos primeros tramos son el túnel y el acceso desde Madrid-Chamartín: 74 trenes, los que
+    # salen de Chamartín; los 10 que faltan hasta 84 entran por la bifurcación de Torrejón de
+    # Velasco desde Madrid-Puerta de Atocha
+    assert [s.trains for s in trunk[:10]] == [74, 74, 84] + [86] * 7
+    assert all(s.without_alternative == 0 for s in trunk[2:10])
     # La línea de Valencia a Camp de Tarragona cierra un anillo con la de Madrid a Valencia y la de
     # Madrid a Barcelona, pero dar la vuelta entera no cuenta: de la bifurcación de Albacete a
-    # València solo tienen otro camino los 4 AVE de Madrid a Castelló (434 km frente a 742 por
-    # Zaragoza y la costa); los de Madrid a València (361 km frente a 815), no
+    # València solo tienen otro camino los 4 AVE de Madrid a Castelló; los de Madrid a València,
+    # no. Y a Madrid-Chamartín no llega ninguna otra línea cargada: sus dos tramos, sin otro camino
     valencia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
-    assert [(s.trains, s.without_alternative) for s in valencia[8:]] == [
+    assert [(s.trains, s.without_alternative) for s in valencia[10:]] == [
         (42, 38),
         (42, 38),
         (52, 48),
         (52, 48),
     ]
-    assert not any(s.startswith(f"{LAV_VALENCIA}:") for s in none)
+    assert {s: n for s, n in none.items() if s.startswith(f"{LAV_VALENCIA}:")} == {
+        f"{LAV_VALENCIA}:madrid-chamartin:paso-bajo-atocha": 74,
+        f"{LAV_VALENCIA}:paso-bajo-atocha:bif-torrejon-de-velasco": 74,
+    }
     # y en la de Albacete a Alicante, los siete que van de Albacete a Alicante: 42 trenes hasta
     # la bifurcación de Murcia, 36 de allí a Monforte del Cid (los 6 de Madrid a Murcia que no
     # entran en Alicante ya han salido) y 56 de Monforte del Cid a Alicante, con los 20 Avant de

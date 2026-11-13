@@ -14,7 +14,7 @@ Reglas, en lenguaje llano:
   la asignación puede traer la distancia real desde la salida hasta la parada por la otra línea;
   entonces el reparto la usa en vez de la línea recta, con el mismo margen del 30 %.
 * Si la parada está fuera de la red cargada pero una fuente dice cuántos kilómetros de vía hay
-  hasta ella desde la salida (de la bifurcación de Torrejón de Velasco a Madrid-Chamartín), el
+  hasta ella desde la salida (de la bifurcación de Albacete a Elche AV), el
   reparto usa esa distancia en vez de la línea recta, con el mismo margen del 30 %.
 * Si las dos paradas están fuera de la línea y a una de ellas, al menos, se llega por otra línea
   cargada o por un camino de longitud conocida, el tren cruza la línea sin parar: entra por un

@@ -2101,7 +2101,7 @@
               "from_name": "Bifurcación Torrejón de Velasco",
               "to_node_id": "valencia-joaquin-sorolla",
               "to_name": "València-Joaquín Sorolla",
-              "length_km": 361.0,
+              "length_km": 360.9,
               "time_min": 73,
               "single_track_km": 0.0
             },
@@ -2307,7 +2307,7 @@
               "from_name": "Bifurcación Albacete",
               "to_node_id": "valencia-joaquin-sorolla",
               "to_name": "València-Joaquín Sorolla",
-              "length_km": 149.0,
+              "length_km": 148.9,
               "time_min": 30,
               "single_track_km": 0.0
             },
@@ -2593,7 +2593,7 @@
               "from_name": "Bifurcación Torrejón de Velasco",
               "to_node_id": "valencia-joaquin-sorolla",
               "to_name": "València-Joaquín Sorolla",
-              "length_km": 361.0,
+              "length_km": 360.9,
               "time_min": 73,
               "single_track_km": 0.0
             },
@@ -2799,7 +2799,7 @@
               "from_name": "Bifurcación Albacete",
               "to_node_id": "valencia-joaquin-sorolla",
               "to_name": "València-Joaquín Sorolla",
-              "length_km": 149.0,
+              "length_km": 148.9,
               "time_min": 30,
               "single_track_km": 0.0
             },
@@ -3041,7 +3041,7 @@
           "from_name": "Lleida-Pirineus",
           "to_node_id": "madrid-puerta-de-atocha",
           "to_name": "Madrid-Puerta de Atocha",
-          "length_km": 736.1,
+          "length_km": 736.0,
           "time_min": 179,
           "single_track_km": 0.0,
           "line_ids": [
@@ -3080,7 +3080,7 @@
               "from_name": "València-Joaquín Sorolla",
               "to_node_id": "bif-torrejon-de-velasco",
               "to_name": "Bifurcación Torrejón de Velasco",
-              "length_km": 361.0,
+              "length_km": 360.9,
               "time_min": 73,
               "single_track_km": 0.0
             },
@@ -3264,7 +3264,7 @@
               "from_name": "València-Joaquín Sorolla",
               "to_node_id": "bif-albacete",
               "to_name": "Bifurcación Albacete",
-              "length_km": 149.0,
+              "length_km": 148.9,
               "time_min": 30,
               "single_track_km": 0.0
             },
@@ -4485,7 +4485,7 @@
               "from_name": "Madrid-Puerta de Atocha",
               "to_node_id": "camp-de-tarragona",
               "to_name": "Camp de Tarragona",
-              "length_km": 655.4,
+              "length_km": 655.3,
               "time_min": 162,
               "single_track_km": 0.0,
               "line_ids": [
@@ -4512,7 +4512,7 @@
                   "from_name": "Bifurcación Torrejón de Velasco",
                   "to_node_id": "valencia-joaquin-sorolla",
                   "to_name": "València-Joaquín Sorolla",
-                  "length_km": 361.0,
+                  "length_km": 360.9,
                   "time_min": 73,
                   "single_track_km": 0.0
                 },
@@ -4702,7 +4702,7 @@
                   "from_name": "Bifurcación Albacete",
                   "to_node_id": "valencia-joaquin-sorolla",
                   "to_name": "València-Joaquín Sorolla",
-                  "length_km": 149.0,
+                  "length_km": 148.9,
                   "time_min": 30,
                   "single_track_km": 0.0
                 },

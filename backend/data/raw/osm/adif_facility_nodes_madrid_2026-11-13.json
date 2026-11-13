@@ -1,0 +1,124 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T12:07:50Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 5248861970,
+  "lat": 40.1945731,
+  "lon": -3.7500580,
+  "tags": {
+    "name": "Bifurcación Torrejón de Velasco",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7499028216,
+  "lat": 40.4056837,
+  "lon": -3.6900187,
+  "tags": {
+    "iata": "XOC",
+    "name": "Madrid-Puerta de Atocha-Almudena Grandes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "MPA",
+    "ref": "60000",
+    "ref:EU:PLC": "ES60000",
+    "train": "yes",
+    "uic_ref": "7160000",
+    "website": "https://www.adif.es/w/60000-madrid-pta-de-atocha",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8326246961,
+  "lat": 40.3889298,
+  "lon": -3.6777157,
+  "tags": {
+    "addr:city": "Madrid",
+    "addr:housenumber": "84",
+    "addr:postcode": "28053",
+    "addr:street": "Calle de Méndez Álvaro",
+    "email": "logistica.gerenciacentro@adif.es",
+    "name": "Estación de Mercancías Madrid - Abroñigal",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 9821007500,
+  "lat": 40.4720571,
+  "lon": -3.6822622,
+  "tags": {
+    "addr:city": "Madrid",
+    "addr:postcode": "28036",
+    "addr:street": "Calle de Agustín de Foxá",
+    "name": "Madrid-Chamartín-Clara Campoamor",
+    "nohousenumber": "yes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "MCC",
+    "ref": "17000",
+    "ref:EU:PLC": "ES17000",
+    "train": "yes",
+    "uic_ref": "7117000",
+    "url": "https://www.crtm.es/tu-transporte-publico/cercanias-renfe/estaciones/5_18",
+    "website": "https://www.adif.es/-/17000-madrid-chamart%C3%ADn",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11071803105,
+  "lat": 40.3855771,
+  "lon": -3.6775536,
+  "tags": {
+    "name": "Bifurcación Planetario",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 11961609153,
+  "lat": 40.3375843,
+  "lon": -3.6215531,
+  "tags": {
+    "name": "Vallecas-Alta Velocidad-aguja km 12,300",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 11961609154,
+  "lat": 40.3061689,
+  "lon": -3.6583785,
+  "tags": {
+    "name": "Los Gavilanes-aguja km 13,400",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+}
+
+  ]
+}
