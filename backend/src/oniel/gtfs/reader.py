@@ -54,6 +54,10 @@ class GtfsFeed:
     service_dates: dict[str, set[dt.date]]
     feed_start: dt.date
     feed_end: dt.date
+    #: Viajes que trae el fichero, antes de juntar los que repiten un tren el mismo día.
+    trips_in_file: int = 0
+    #: Números de tren que el fichero trae en más de un viaje algún día.
+    merged_train_numbers: int = 0
 
     def stop_ids_of(self, trip: GtfsTrip) -> set[str]:
         return {s.stop_id for s in trip.stop_times}
@@ -124,7 +128,11 @@ def stop_name(name: str) -> str:
 
 
 def read_feed(path: Path, *, stop_id_prefix: str | None = None) -> GtfsFeed:
-    """Lee un GTFS. Con ``stop_id_prefix`` se quita ese prefijo de los ``stop_id`` que lo llevan."""
+    """Lee un GTFS y deja un viaje por número de tren y día (``oniel.gtfs.variants``).
+
+    Con ``stop_id_prefix`` se quita ese prefijo de los ``stop_id`` que lo llevan.
+    """
+    from oniel.gtfs.variants import merge_same_day_trips
 
     def stop_id(value: str) -> str:
         return value.removeprefix(stop_id_prefix) if stop_id_prefix else value
@@ -174,14 +182,17 @@ def read_feed(path: Path, *, stop_id_prefix: str | None = None) -> GtfsFeed:
         )
     service_dates = expand_calendar(calendar, calendar_dates)
     all_dates = {d for ds in service_dates.values() for d in ds}
-    return GtfsFeed(
+    feed = GtfsFeed(
         agency_name=agency[0]["agency_name"] if agency else "",
         stops=stops,
         trips=trips,
         service_dates=service_dates,
         feed_start=min(all_dates),
         feed_end=max(all_dates),
+        trips_in_file=len(trips),
     )
+    feed.merged_train_numbers = merge_same_day_trips(feed)
+    return feed
 
 
 def select_corridor_trips(

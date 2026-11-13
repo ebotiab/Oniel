@@ -221,13 +221,6 @@
       "consecutive_stop_ids": ["50500", "03100"],
       "from_stop_id": "50500",
       "to_stop_id": "03100"
-    },
-    {
-      "id": "linares-baeza-mengibar",
-      "description": "Media Distancia entre Linares-Baeza y Mengíbar-Artichuela, sin más paradas. Solo tienen una parada en esta línea (Linares-Baeza), así que no pasan el filtro de corredor, pero la recorren entre Linares-Baeza y Espelúy, donde toman la línea de Jaén. Por esta línea se resuelven entre sus dos paradas, saliendo por Espelúy.",
-      "consecutive_stop_ids": ["50300", "03001"],
-      "from_stop_id": "50300",
-      "to_stop_id": "03001"
     }
   ]
 }

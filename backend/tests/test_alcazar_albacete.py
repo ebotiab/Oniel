@@ -144,14 +144,14 @@ def test_sources_of_the_line_are_registered(albacete_spec: NetworkSpec) -> None:
 def test_the_filter_selects_the_trains_that_run_along_the_line(
     feed: GtfsFeed, albacete_spec: NetworkSpec, albacete: BuiltNetwork
 ) -> None:
-    """Entran 149 viajes: Media Distancia, Regional Exprés y el Alvia de Barcelona a Córdoba.
+    """Entran 142 viajes: Media Distancia, Regional Exprés y el Alvia de Barcelona a Córdoba.
     Todos recorren la línea entera. Quedan fuera los trenes que solo la tocan en Albacete: los de
     alta velocidad, que llegan por Cuenca, y los de Albacete a Valencia, Murcia y Cartagena."""
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat) for n in albacete.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in albacete.segments]
     trips = select_trips_for_spec(feed, albacete_spec)
-    assert len(trips) == 149
-    assert Counter(t.product for t in trips) == {"MD": 112, "REG.EXP.": 29, "ALVIA": 8}
+    assert len(trips) == 142
+    assert Counter(t.product for t in trips) == {"MD": 105, "REG.EXP.": 29, "ALVIA": 8}
     by_segment = dict.fromkeys((s.id for s in albacete.segments), 0)
     kinds: Counter[str] = Counter()
     for trip in trips:
@@ -162,9 +162,9 @@ def test_the_filter_selects_the_trains_that_run_along_the_line(
         for p in passes:
             by_segment[p.segment_id] += 1
             kinds[p.kind] += 1
-    assert set(by_segment.values()) == {149}
+    assert set(by_segment.values()) == {142}
     # no todos paran en todas las estaciones: Minaya y La Gineta tienen pocos trenes
-    assert kinds == {"publicado": 537, "estimado": 506}
+    assert kinds == {"publicado": 516, "estimado": 478}
     # ningún tren de alta velocidad: en Albacete paran, pero no en las estaciones intermedias
     selected = {t.trip_id for t in trips}
     through_albacete = {
