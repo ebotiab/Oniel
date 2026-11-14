@@ -35,7 +35,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^17 líneas · 3\.743 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^18 líneas · 3\.921 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -54,7 +54,7 @@ test.describe('Carga de la red por partes', () => {
     // que traen muchos hitos y un esbozo propio, y los de la línea de València a Camp de Tarragona:
     // hoy pesan 61 KB.
     expect(bytes({ annotations, interruptions })).toBeLessThan(70_000)
-    // Con diecinueve entradas, diecisiete líneas y dos baipases, la red del índice (293 KB) pesa ya el doble que el detalle
+    // Con veinte entradas, dieciocho líneas y dos baipases, la red del índice (303 KB) pesa ya el doble que el detalle
     // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
     // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más
     // grandes juntas (285 KB); sigue pesando menos que las tres más grandes: la convencional de Córdoba, la
@@ -64,6 +64,9 @@ test.describe('Carga de la red por partes', () => {
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {
+    // abre tres veces una línea desde la lista, y cada vez hay que desplegar antes las zonas: en el
+    // móvil del CI ronda el minuto (44 s con trece líneas), así que lleva el triple de margen
+    test.slow()
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await abrirHoja(page)

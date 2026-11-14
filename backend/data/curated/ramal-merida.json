@@ -3,7 +3,7 @@
     "id": "ramal-merida",
     "name": "Línea convencional Aljucén – Mérida",
     "short_name": "520",
-    "sort_order": 18,
+    "sort_order": 23,
     "zone": "extremadura",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

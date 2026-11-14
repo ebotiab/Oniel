@@ -42,6 +42,8 @@ test.describe('Navegar por el mapa', () => {
     // La red entera, de Badajoz a Barcelona, se ve al abrir en las dos pantallas: en escritorio, a la
     // derecha del panel; en el móvil, entre la cabecera y la hoja plegada (desde que la caja de la que
     // el mapa no sale deja alejarlo lo bastante, `IBERIA_BOUNDS`; antes no cabía a lo ancho).
+    // El encuadre es la península entera (`SPAIN_BOUNDS`): en escritorio cabe y se comprueba más abajo;
+    // en el móvil no cabe a lo ancho (Fisterra y el cabo de Creus quedan fuera), pero sí toda la red.
     const movil = testInfo.project.name === 'movil'
     const lienzo = await page.locator('.maplibregl-canvas').boundingBox()
     const cabecera = await page.locator('.cabecera').boundingBox()
@@ -59,6 +61,17 @@ test.describe('Navegar por el mapa', () => {
       expect(p.y, `${p.id}: bajo la cabecera`).toBeGreaterThan(cabecera!.y + cabecera!.height - lienzo!.y)
       expect(p.y, `${p.id}: ${movil ? 'sobre la hoja' : 'dentro del lienzo'}`).toBeLessThan(abajo)
     }
+    if (movil) return
+    // en escritorio, además, las cuatro esquinas de la península caben a la derecha del panel
+    const esquinas = await page.evaluate(
+      (caja) => [caja[0], caja[1]].map((c) => ({ ...(globalThis as unknown as ConMapa).__onielMap!.project(c) })),
+      SPAIN_BOUNDS,
+    )
+    const [suroeste, nordeste] = esquinas
+    expect(suroeste.x, 'Fisterra: a la derecha del panel').toBeGreaterThan(izquierda)
+    expect(nordeste.x, 'cabo de Creus: dentro del lienzo').toBeLessThan(lienzo!.width)
+    expect(nordeste.y, 'Estaca de Bares: bajo la cabecera').toBeGreaterThan(cabecera!.y + cabecera!.height - lienzo!.y)
+    expect(suroeste.y, 'Tarifa: dentro del lienzo').toBeLessThan(abajo)
   })
 
   test('el mapa no sale de la península ni de sus vecinos', async ({ page }) => {

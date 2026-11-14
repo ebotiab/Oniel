@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 13 de noviembre de 2026 al cargar la línea de alta velocidad Madrid – Segovia – Valladolid: la comprobación de que ese día no había ninguna interrupción anunciada en ella. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-13",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-13 17:23",
+   "resumen": "Dos avisos: uno de Cantabria y el País Vasco, por la caída de un árbol en la estación de Gama, de la línea de ancho métrico Santander-Bilbao, y el de Andalucía, Castilla-La Mancha y Madrid sobre la línea de alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre. Ninguno nombra la alta velocidad de Madrid a Segovia y Valladolid, y no hay avisos de Castilla y León.",
+   "que_aporta": "Que el 13 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción en la línea de alta velocidad Madrid – Segovia – Valladolid."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-13",
+   "resumen": "Doce avisos de obras y restablecimientos. Los que tocan Madrid o Castilla y León son de otras líneas: las obras entre Miranda de Ebro y Logroño, las de la línea convencional de Madrid a Zaragoza entre Guadalajara y Plasencia de Jalón, las de Murcia-Almería, las de Huércal-Viator a Almería, la autopista ferroviaria Algeciras-Zaragoza (ya registrada en la línea convencional) y las de Cercedilla a Cotos, en Cercanías de Madrid. Ninguno afecta a la línea de alta velocidad de Madrid a Valladolid.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en la línea de alta velocidad Madrid – Segovia – Valladolid. El de Miranda de Ebro a Logroño afecta a trenes que la recorren, fuera de ella."
+  }
+ ]
+}

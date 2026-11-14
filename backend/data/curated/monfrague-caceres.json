@@ -3,7 +3,7 @@
     "id": "monfrague-caceres",
     "name": "Línea convencional Monfragüe – Cañaveral – Cáceres",
     "short_name": "500",
-    "sort_order": 19,
+    "sort_order": 24,
     "zone": "extremadura",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

@@ -42,6 +42,7 @@ class Settings(BaseSettings):
         "lav-albacete-alicante",
         "lav-monforte-murcia",
         "valencia-castello-tarragona",
+        "lav-madrid-valladolid",
         "madrid-plasencia",
         "lav-plasencia-badajoz",
         "ramal-merida",

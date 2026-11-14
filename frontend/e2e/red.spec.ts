@@ -30,11 +30,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^17 líneas · 3\.743 km\s*120 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^18 líneas · 3\.921 km\s*122 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
-    // las zonas van de norte a sur, y solo las que tienen alguna línea; con diecisiete líneas (más de doce)
+    // las zonas van de norte a sur, y solo las que tienen alguna línea; con dieciocho líneas (más de doce)
     // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
     await expect(red.locator('.zona-cabecera')).toHaveText([
+      /^›Castilla y León1 líneaValladolid, Segovia$/,
       /^›Cataluña1 líneaBarcelona, Lleida$/,
       /^›Comunidad Valenciana y Murcia4 líneasValencia, Alicante, Murcia, Elche$/,
       /^›Madrid y Castilla-La Mancha2 líneasCiudad Real, Albacete$/,
@@ -45,6 +46,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await expect(red.locator('.fila-linea')).toHaveCount(0)
     // desplegadas, cada zona enseña sus líneas
     await abrirZonas(page)
+    await expect(red.getByRole('region', { name: 'Castilla y León' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Valladolid por Segovia179 km$/])
     await expect(red.getByRole('region', { name: 'Cataluña' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Barcelona por Zaragoza627 km$/])
     await expect(red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' }).locator('.fila-linea')).toHaveText([
       /^Alta velocidad: Madrid – Valencia por Cuenca397 km$/,
@@ -141,12 +143,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('ficha-red')).toContainText(/^77 líneas · /)
-    // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con diecisiete que con setenta y siete
+    await expect(page.getByTestId('ficha-red')).toContainText(/^78 líneas · /)
+    // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con dieciocho que con setenta y ocho
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     const lista = page.getByTestId('lista-lineas')
-    // con más de doce líneas la lista es un índice de zonas: cinco renglones, ninguna línea a la vista
-    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
+    // con más de doce líneas la lista es un índice de zonas: un renglón por zona, ninguna línea a la vista
+    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Castilla y León1 línea/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     // plegar no esconde un corte
     await expect(page.getByTestId('zona-andalucia').locator('.zona-detalle')).toContainText('3 líneas con un tramo sin circulación')
