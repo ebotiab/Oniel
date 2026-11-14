@@ -206,7 +206,7 @@ export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Pr
                         )}
                       </button>
                       {baipases.length > 0 && (
-                        <ul className="baipases-linea" aria-label={`Baipases de ${lineShortLabel(l)}`}>
+                        <ul className="baipases-linea" aria-label={`${baipases.every((b) => b.bypass_of) ? 'Baipases' : baipases.some((b) => b.bypass_of) ? 'Baipases y enlaces' : 'Enlaces'} de ${lineShortLabel(l)}`}>
                           {baipases.map((b) => (
                             <li key={b.id}>
                               <button type="button" className="fila-baipas" onClick={() => onPick(b.id)} data-testid={`linea-${b.id}`} {...resaltar([b.id])}>

@@ -160,6 +160,21 @@ def bypasses_of(line: LoadedLine, others: Sequence[LoadedLine]) -> list[Bypass]:
     return sorted(found, key=lambda b: b.km_from)
 
 
+def link_far_node(line: LoadedLine, others: Sequence[LoadedLine]) -> str | None:
+    """Si la línea es un enlace, el nodo por el que se une a la línea de la que no cuelga.
+
+    Un enlace va de un nodo de la línea de la que cuelga (``link_of``) a un nodo que no es suyo.
+    Si la línea no es un enlace, o no se puede saber cuál es ese nodo, ``None``.
+    """
+    parent_id = line.spec.line.link_of
+    parent = next((o for o in others if o.line_id == parent_id), None)
+    if parent is None or len(line.nodes) < 2:
+        return None
+    ends = sorted(line.nodes.values(), key=lambda n: n.km)
+    far = [n.id for n in (ends[0], ends[-1]) if n.id not in parent.nodes]
+    return far[0] if len(far) == 1 else None
+
+
 def calls_for_trip(
     trip: GtfsTrip,
     feed: GtfsFeed,

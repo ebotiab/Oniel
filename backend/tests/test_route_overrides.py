@@ -27,6 +27,7 @@ from conftest import (
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
+    LINK_MONFORTE_SPEC,
     MADRID_PLASENCIA_SPEC,
     MEDITERRANEO_SPEC,
     MONFRAGUE_CACERES_SPEC,
@@ -648,6 +649,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-zamora-sin-parada": 115,
             "madrid-ourense-sin-parada": 6,
         },
+        # el enlace de Monforte del Cid tampoco: le basta su filtro
+        LINK_MONFORTE_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

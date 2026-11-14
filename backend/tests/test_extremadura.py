@@ -317,9 +317,10 @@ def test_parts_are_joined_where_two_relations_do_not_share_a_node(
         lav.node("bif-granja-las-encinas").km, abs=0.01
     )
     assert not nets[MERIDA].line.joins_km and not nets[OLD].line.joins_km
-    # el ramal de Mérida empieza por un extracto de vías, sin relación
+    # el ramal de Mérida empieza por un extracto de vías, sin relación: las que llevan ref=510
     link, to_merida = nets[MERIDA].spec.line.geometry_source.parts
-    assert (link.relation_id, to_merida.relation_id) == (None, 6759901)
+    assert (link.relation_id, link.way_ref) == (None, "510")
+    assert (to_merida.relation_id, to_merida.way_ref) == (6759901, None)
     assert nets[MERIDA].line.part_spans[0].km_to == pytest.approx(
         nets[MERIDA].node("aljucen").km, abs=0.01
     )

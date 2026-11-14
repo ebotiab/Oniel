@@ -241,6 +241,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 677 + 120  # la de Monforte del Cid a Murcia
     passes += 4223 + 2107  # la de Valencia a Camp de Tarragona
     passes += 3409  # la de Madrid a Valladolid, todos estimados
+    passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral
     passes += (2051 + 582) + (2310 + 134) + 344 + (26 + 26)

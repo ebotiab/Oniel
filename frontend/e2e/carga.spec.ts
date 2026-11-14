@@ -35,7 +35,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^18 líneas · 3\.921 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^18 líneas · 3\.923 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -54,7 +54,7 @@ test.describe('Carga de la red por partes', () => {
     // que traen muchos hitos y un esbozo propio, y los de la línea de València a Camp de Tarragona:
     // hoy pesan 61 KB.
     expect(bytes({ annotations, interruptions })).toBeLessThan(70_000)
-    // Con veinte entradas, dieciocho líneas y dos baipases, la red del índice (303 KB) pesa ya el doble que el detalle
+    // Con veintiuna entradas (dieciocho líneas, dos baipases y un enlace), la red del índice (305 KB) pesa ya el doble que el detalle
     // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
     // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más
     // grandes juntas (285 KB); sigue pesando menos que las tres más grandes: la convencional de Córdoba, la

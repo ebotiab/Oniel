@@ -19,6 +19,7 @@
         {
           "source_id": "osm-vias-enlace-aljucen",
           "file": "raw/osm/vias_enlace_aljucen_granja_las_encinas_2026-11-13.json",
+          "way_ref": "510",
           "from": [
             -6.417012,
             38.9439081

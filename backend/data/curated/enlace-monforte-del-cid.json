@@ -1,0 +1,81 @@
+{
+  "line": {
+    "id": "enlace-monforte-del-cid",
+    "name": "Enlace de Monforte del Cid",
+    "short_name": "048",
+    "sort_order": 16,
+    "zone": "levante",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 100,
+    "tracks": 1,
+    "opened_on": "2021-02-01",
+    "status": "disponible",
+    "link_of": "lav-monforte-murcia",
+    "description": "Vía corta que une la línea de alta velocidad de Albacete a Alicante con la de Monforte del Cid a Murcia. La toman los trenes que salen de Alicante hacia Elche, Orihuela y Murcia, y los de Madrid a Murcia que paran antes en Alicante: así no tienen que retroceder hasta la bifurcación de Murcia.\n\nSale de la línea de Alicante en el puesto de Monforte del Cid y se une a la de Murcia en la bifurcación Vinalopó. Tiene una sola vía y se recorre a 100 km/h. Para Adif es una línea aparte, la 048.\n\nSus primeros metros corren pegados a la vía de Alicante, dentro del puesto de Monforte del Cid. Oniel lo mide desde el centro del puesto: 2,1 km de los 2,6 km de vía que tiene.",
+    "geometry_source": {
+      "source_id": "osm-relation-18342974",
+      "parts": [
+        {
+          "source_id": "osm-relation-18342974",
+          "file": "raw/osm/vias_enlace_monforte_vinalopo_2026-11-13.json",
+          "way_ref": "048",
+          "trim": true,
+          "from": [-0.703974, 38.405564],
+          "to": [-0.7148912, 38.394347]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"},
+    {"id": "ouigo", "name": "Ouigo España", "role": "operador", "source_id": "ouigo-gtfs-nap"}
+  ],
+  "nodes": [
+    {"id": "monforte-del-cid-av", "name": "Monforte del Cid", "kind": "paet", "rank": "secundario", "shared": true, "position": {"lon": -0.703974, "lat": 38.405564}},
+    {"id": "bif-vinalopo", "name": "Bifurcación Vinalopó", "kind": "bifurcacion", "shared": true, "position": {"lon": -0.7148912, "lat": 38.394347}}
+  ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "ertms_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 no dibuja el enlace aparte: junto a la bifurcación de Murcia rotula lo de la línea 046, a la que el enlace da acceso. Símbolos «ERTMS N2» y «ASFA - AV», los mismos que lleva la línea de Alicante en ese punto. Las vías del enlace en OSM (ref=048) llevan railway:etcs=2."},
+    {"attribute": "bloqueo", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 no dibuja el enlace aparte: junto a la bifurcación de Murcia rotula lo de la línea 046, a la que el enlace da acceso. Trazo rosa y rótulo «BCA», como en las dos líneas que une."},
+    {"attribute": "mando", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "60911": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
+    "03309": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
+    "60600": {"exits": ["monforte-del-cid-av"], "via": {"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}},
+    "03208": {"exits": ["monforte-del-cid-av"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}]},
+    "60000": {"exits": ["monforte-del-cid-av"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]},
+    "17000": {"exits": ["monforte-del-cid-av"], "via": [{"line": "lav-albacete-alicante", "node": "monforte-del-cid-av"}, {"line": "lav-madrid-valencia", "node": "bif-albacete"}]},
+    "92102": {"exits": ["monforte-del-cid-av"]},
+    "08004": {"exits": ["monforte-del-cid-av"]},
+    "10600": {"exits": ["monforte-del-cid-av"]},
+    "11014": {"exits": ["monforte-del-cid-av"]},
+    "14100": {"exits": ["monforte-del-cid-av"]},
+    "14114": {"exits": ["monforte-del-cid-av"]},
+    "14202": {"exits": ["monforte-del-cid-av"]},
+    "14213": {"exits": ["monforte-del-cid-av"]},
+    "14223": {"exits": ["monforte-del-cid-av"]},
+    "15100": {"exits": ["monforte-del-cid-av"]},
+    "15122": {"exits": ["monforte-del-cid-av"]},
+    "15203": {"exits": ["monforte-del-cid-av"]},
+    "15211": {"exits": ["monforte-del-cid-av"]},
+    "15410": {"exits": ["monforte-del-cid-av"]},
+    "30200": {"exits": ["monforte-del-cid-av"]},
+    "22100": {"exits": ["monforte-del-cid-av"]},
+    "03410": {"exits": ["bif-vinalopo"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
+    "03412": {"exits": ["bif-vinalopo"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
+    "62002": {"exits": ["bif-vinalopo"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
+    "62001": {"exits": ["bif-vinalopo"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}},
+    "61200": {"exits": ["bif-vinalopo"], "via": {"line": "lav-monforte-murcia", "node": "bif-vinalopo"}}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Alicante-Terminal y en Elche Alta Velocidad o en Callosa de Segura-Cox, estaciones a las que solo se llega por la línea de alta velocidad de Murcia: los Avant de Alicante a Murcia y los trenes de Madrid a Murcia que paran en Alicante. De Alicante a esas estaciones no hay otro camino de alta velocidad que este enlace.",
+    "required_stop_ids": ["60911"],
+    "any_of_stop_ids": ["03410", "03412"]
+  }
+}

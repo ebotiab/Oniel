@@ -119,11 +119,11 @@ class OperatorSpec(BaseModel):
 
 
 class GeometryPart(BaseModel):
-    """Trozo de línea tomado de una relación OSM: el camino más corto entre dos puntos.
+    """Trozo de línea tomado de un fichero de OSM: el camino más corto entre dos puntos.
 
-    Sin ``relation_id``, el camino se busca por todas las vías del fichero: sirve para un trecho
-    corto que ninguna relación de OSM recoge entero y que se descarga como un extracto de vías
-    (el enlace de Aljucén a la bifurcación Granja-Las Encinas).
+    Las vías son las de una relación (``relation_id``) o, si el fichero no trae ninguna, las que
+    llevan una misma etiqueta ``ref`` (``way_ref``; el enlace de Monforte del Cid son las vías con
+    ``ref=048``).
     """
 
     model_config = ConfigDict(populate_by_name=True)
@@ -131,8 +131,18 @@ class GeometryPart(BaseModel):
     source_id: str
     file: str
     relation_id: int | None = None
+    way_ref: str | None = None
+    #: La parte empieza y acaba justo a la altura de ``from`` y de ``to``, y no en el vértice de
+    #: OSM más cercano a cada uno: para un trazado corto, en el que esos metros se notan.
+    trim: bool = False
     from_point: tuple[float, float] = Field(alias="from")
     to_point: tuple[float, float] = Field(alias="to")
+
+    @model_validator(mode="after")
+    def _one_of(self) -> GeometryPart:
+        if (self.relation_id is None) == (self.way_ref is None):
+            raise ValueError("una parte de la geometría lleva relation_id o way_ref")
+        return self
 
 
 class GeometrySource(BaseModel):
@@ -256,6 +266,11 @@ class LineSpec(BaseModel):
     #: eligen con un filtro propio: son los de aquella línea que no paran ni salen de ella entre
     #: los dos nodos (``oniel.sim.passes.Bypass``).
     bypass_of: str | None = None
+    #: Id de la línea de la que esta cuelga por ser un enlace: una vía corta que une un nodo de
+    #: aquella con un nodo de otra línea (el de Monforte del Cid une la línea de Murcia con la de
+    #: Alicante). El visor la lista bajo aquella y el comparador la cuenta como parte suya, pero,
+    #: a diferencia de un baipás, elige sus trenes con su propio filtro y sus asignaciones.
+    link_of: str | None = None
 
 
 class CorridorFilter(BaseModel):
@@ -359,6 +374,10 @@ class NetworkSpec(BaseModel):
                         f"la sección de «{t.attribute}» {t.from_node}–{t.to_node} apunta a un"
                         f" nodo desconocido {ref}"
                     )
+        if self.line.bypass_of is not None and self.line.link_of is not None:
+            raise ValueError(
+                f"la línea {self.line.id} se declara baipás y enlace a la vez: es una cosa o la otra"
+            )
         if self.line.bypass_of is not None:
             if self.line.bypass_of == self.line.id:
                 raise ValueError(f"la línea {self.line.id} se declara baipás de sí misma")
@@ -368,6 +387,8 @@ class NetworkSpec(BaseModel):
                     f" {self.line.bypass_of} que no paran entre sus dos extremos, y no lleva"
                     " stop_mappings ni route_overrides"
                 )
+        if self.line.link_of == self.line.id:
+            raise ValueError(f"la línea {self.line.id} se declara enlace de sí misma")
         rule_ids = [r.id for r in self.route_overrides]
         if len(set(rule_ids)) != len(rule_ids):
             raise ValueError("ids de regla de recorrido repetidos en route_overrides")
