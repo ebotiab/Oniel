@@ -74,6 +74,10 @@ class Graph:
     #: cuenta como parte de su línea: pasar a él o volver de él no es cambiar de línea, y dos
     #: caminos que solo se distinguen por ir por él o por lo que rodea son el mismo recorrido.
     bypass_of: dict[str, str] = field(default_factory=dict)
+    #: Los enlaces: el id de cada línea que lo es y el de la línea de la que cuelga. Un enlace
+    #: también cuenta como parte de su línea, pero no une dos nodos de ella: va de uno de sus nodos
+    #: a un nodo de otra línea, y con las dos forma un triángulo (``link_sides``).
+    link_of: dict[str, str] = field(default_factory=dict)
     _adjacent: dict[str, list[Edge]] = field(default_factory=dict, compare=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -88,13 +92,65 @@ class Graph:
         return next((e for e in self.edges if e.id == edge_id), None)
 
     def line_key(self, edge: Edge) -> str:
-        """La línea por la que cuenta un tramo: la suya o, si es de un baipás, la que este rodea.
+        """La línea por la que cuenta un tramo: la suya o, si es de un baipás o de un enlace, la
+        línea de la que cuelga.
 
         Un enlace esbozado cuenta como una línea propia.
         """
         if edge.line_id is None:
             return edge.id
-        return self.bypass_of.get(edge.line_id, edge.line_id)
+        return self.bypass_of.get(edge.line_id) or self.link_of.get(edge.line_id, edge.line_id)
+
+    def link_sides(self) -> dict[str, tuple[str, int]]:
+        """De cada tramo que es lado del triángulo de un enlace, de qué enlace y qué lado.
+
+        Un enlace cierra un triángulo con las dos líneas que une: sus lados son el enlace y el
+        trecho de cada línea desde un extremo del enlace hasta el nodo en el que las dos se
+        juntan. El de Monforte del Cid va de la línea de Alicante a la de Murcia, que se separan
+        en la bifurcación de Murcia: los lados son el enlace, el tramo de Monforte del Cid a la
+        bifurcación de Murcia y el de esta a la bifurcación Vinalopó. Las vías de un triángulo así
+        no dejan doblar sus esquinas: de un lado a otro solo se pasa invirtiendo la marcha, y un
+        recorrido no lo hace (``_walk``).
+        """
+        sides: dict[str, tuple[str, int]] = {}
+        for line_id, parent in self.link_of.items():
+            own = self.line_km.get(line_id, {})
+            on_parent = self.line_km.get(parent)
+            if len(own) < 2 or on_parent is None:
+                continue
+            ends = (min(own, key=lambda n: own[n]), max(own, key=lambda n: own[n]))
+            joins = [n for n in ends if n in on_parent]
+            away = [n for n in ends if n not in on_parent]
+            if len(joins) != 1 or len(away) != 1:
+                continue
+            join, far = joins[0], away[0]
+            best: tuple[float, str, str] | None = None
+            for other, km in sorted(self.line_km.items()):
+                if other in (line_id, parent) or far not in km:
+                    continue
+                if other in self.bypass_of or other in self.link_of:
+                    continue
+                for apex in sorted(km):
+                    if apex in on_parent and apex not in (far, join):
+                        around = abs(km[apex] - km[far]) + abs(on_parent[apex] - on_parent[join])
+                        if best is None or around < best[0]:
+                            best = (around, other, apex)
+            if best is None:
+                continue
+            _, other, apex = best
+            for edge in self.edges:
+                if edge.line_id == line_id:
+                    sides[edge.id] = (line_id, 0)
+            for index, (side, a, b) in enumerate(((other, far, apex), (parent, apex, join)), 1):
+                km = self.line_km[side]
+                lo, hi = sorted((km[a], km[b]))
+                for edge in self.edges:
+                    if edge.line_id != side or edge.a not in km or edge.b not in km:
+                        continue
+                    near, beyond = sorted((km[edge.a], km[edge.b]))
+                    if lo - KM_TOLERANCE <= near and beyond <= hi + KM_TOLERANCE:
+                        sides[edge.id] = (line_id, index)
+        return sides
 
     def bypass_spans(self) -> list[tuple[str, str, str]]:
         """Por cada baipás, la línea de la que lo es y los dos nodos de esta que une."""
@@ -139,7 +195,9 @@ class Graph:
                     tracks=None,
                 )
             )
-        return Graph(self.nodes, tuple(edges), self.line_names, self.line_km, self.bypass_of)
+        return Graph(
+            self.nodes, tuple(edges), self.line_names, self.line_km, self.bypass_of, self.link_of
+        )
 
 
 class LineLike(Protocol):
@@ -151,6 +209,8 @@ class LineLike(Protocol):
     def name(self) -> str: ...
     @property
     def bypass_of(self) -> str | None: ...
+    @property
+    def link_of(self) -> str | None: ...
 
 
 class NodeLike(Protocol):
@@ -222,6 +282,7 @@ def build_graph(
         {line.id: line.name for line in lines},
         line_km,
         {line.id: line.bypass_of for line in lines if line.bypass_of is not None},
+        {line.id: line.link_of for line in lines if line.link_of is not None},
     )
 
 
@@ -290,10 +351,12 @@ def _walk(
 
     Un camino termina al llegar a una meta; solo atraviesa los nodos que ``may_pass`` admite y no
     cambia de línea más de ``max_changes`` veces. Cada enlace esbozado cuenta como una línea, y un
-    baipás, como parte de la suya.
+    baipás o un enlace cargado, como parte de la suya. Tampoco pasa de un lado a otro del
+    triángulo de un enlace (``Graph.link_sides``): sería invertir la marcha.
     """
     path: list[_Step] = []
     visited = {start}
+    sides = graph.link_sides()
 
     def visit(node_id: str, changes: int) -> Iterator[list[_Step]]:
         for edge in graph.edges_at(node_id):
@@ -301,6 +364,10 @@ def _walk(
             if nxt in visited or not edge_ok(edge):
                 continue
             previous = path[-1][0] if path else None
+            if previous is not None and previous.id in sides and edge.id in sides:
+                (link, side), (other_link, other_side) = sides[previous.id], sides[edge.id]
+                if link == other_link and side != other_side:
+                    continue
             changed = previous is not None and graph.line_key(previous) != graph.line_key(edge)
             total = changes + (1 if changed else 0)
             if max_changes is not None and total > max_changes:
@@ -529,7 +596,8 @@ def find_routes(
     ``max_changes`` veces (``None``, sin tope) y no dan un rodeo de más de ``max_ratio`` veces
     respecto a otro más corto, medido donde se apartan de él (``_strays``; ``None``, sin descartar
     ninguno por largo). Un baipás es parte de su línea: de los caminos que solo se distinguen por
-    ir por él o por la estación que rodea queda el más corto, y cuenta como un recorrido.
+    ir por él o por la estación que rodea queda el más corto, y cuenta como un recorrido. Un
+    enlace también es parte de su línea, y ningún camino dobla una esquina de su triángulo.
     """
     for node_id in (from_node_id, to_node_id):
         if node_id not in graph.nodes:

@@ -25,6 +25,7 @@ Si al terminar has aprendido algo que no estaba, va a `docs/datos.md` como un bl
    - **Una línea o dos.** Si por una parte del recorrido circula un operador y por otra no, son dos.
    - **Prolongación.** La línea crece sin cambiar de id; por el origen cambian los kilómetros de todos sus nodos.
    - **Baipás.** Otro camino entre dos nodos de una línea cargada: `bypass_of`, sin paradas ni filtro.
+   - **Enlace.** Una vía corta entre un nodo de una línea y un nodo de otra: `link_of` con la línea de la que cuelga, y su propio filtro y sus asignaciones. Los `via` de las dos líneas vecinas pasan a empezar por él.
 
 ## Orden de trabajo y puntos de control
 

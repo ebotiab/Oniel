@@ -42,6 +42,7 @@ class Settings(BaseSettings):
         "lav-albacete-alicante",
         "lav-monforte-murcia",
         "valencia-castello-tarragona",
+        "enlace-monforte-del-cid",
         "lav-madrid-valladolid",
     ]
 

@@ -56,6 +56,19 @@ export interface Graph {
    * se distinguen por ir por él o por lo que rodea son el mismo recorrido.
    */
   bypassOf: Map<string, string>
+  /**
+   * Los enlaces: el id de cada línea que lo es y el de la línea de la que cuelga. Un enlace también
+   * cuenta como parte de su línea, pero no une dos nodos de ella: va de uno de sus nodos a un nodo
+   * de otra línea, y con las dos forma un triángulo.
+   */
+  linkOf: Map<string, string>
+  /**
+   * De cada tramo que es lado del triángulo de un enlace, de qué enlace y qué lado: el enlace (0) y
+   * el trecho de cada una de las dos líneas desde un extremo del enlace hasta el nodo en el que se
+   * juntan. Las vías de un triángulo así no dejan doblar sus esquinas: de un lado a otro solo se
+   * pasa invirtiendo la marcha, y un recorrido no lo hace.
+   */
+  linkSides: Map<string, readonly [string, number]>
   adjacent: Map<string, Edge[]>
 }
 
@@ -82,6 +95,7 @@ function makeGraph(
   lineNames: Graph['lineNames'],
   lineKm: Graph['lineKm'],
   bypassOf: Graph['bypassOf'],
+  linkOf: Graph['linkOf'],
 ): Graph {
   const adjacent = new Map<string, Edge[]>()
   for (const edge of edges) {
@@ -91,7 +105,49 @@ function makeGraph(
       else adjacent.set(end, [edge])
     }
   }
-  return { nodes, edges, lineNames, lineKm, bypassOf, adjacent }
+  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, linkSides: linkSides(edges, lineKm, bypassOf, linkOf), adjacent }
+}
+
+/** Los lados del triángulo de cada enlace, con la misma regla que el servidor (`Graph.link_sides`). */
+function linkSides(edges: Edge[], lineKm: Graph['lineKm'], bypassOf: Graph['bypassOf'], linkOf: Graph['linkOf']): Graph['linkSides'] {
+  const sides = new Map<string, readonly [string, number]>()
+  for (const [lineId, parent] of linkOf) {
+    const own = lineKm.get(lineId)
+    const onParent = lineKm.get(parent)
+    if (!own || own.size < 2 || !onParent) continue
+    const ids = [...own.keys()]
+    const ends = [ids.reduce((x, y) => (own.get(y)! < own.get(x)! ? y : x)), ids.reduce((x, y) => (own.get(y)! > own.get(x)! ? y : x))]
+    const joins = ends.filter((n) => onParent.has(n))
+    const away = ends.filter((n) => !onParent.has(n))
+    if (joins.length !== 1 || away.length !== 1) continue
+    const [join, far] = [joins[0]!, away[0]!]
+    let best: { around: number; other: string; apex: string } | null = null
+    for (const other of [...lineKm.keys()].sort()) {
+      const km = lineKm.get(other)!
+      if (other === lineId || other === parent || !km.has(far) || bypassOf.has(other) || linkOf.has(other)) continue
+      for (const apex of [...km.keys()].sort()) {
+        if (!onParent.has(apex) || apex === far || apex === join) continue
+        const around = Math.abs(km.get(apex)! - km.get(far)!) + Math.abs(onParent.get(apex)! - onParent.get(join)!)
+        if (best === null || around < best.around) best = { around, other, apex }
+      }
+    }
+    if (best === null) continue
+    for (const edge of edges) if (edge.line_id === lineId) sides.set(edge.id, [lineId, 0])
+    const others: [string, string, string][] = [
+      [best.other, far, best.apex],
+      [parent, best.apex, join],
+    ]
+    others.forEach(([side, a, b], i) => {
+      const km = lineKm.get(side)!
+      const [lo, hi] = [Math.min(km.get(a)!, km.get(b)!), Math.max(km.get(a)!, km.get(b)!)]
+      for (const edge of edges) {
+        if (edge.line_id !== side || !km.has(edge.a) || !km.has(edge.b)) continue
+        const [near, beyond] = [Math.min(km.get(edge.a)!, km.get(edge.b)!), Math.max(km.get(edge.a)!, km.get(edge.b)!)]
+        if (lo - KM_TOLERANCE <= near && beyond <= hi + KM_TOLERANCE) sides.set(edge.id, [lineId, i + 1])
+      }
+    })
+  }
+  return sides
 }
 
 /** Grafo de la red disponible. `nodes` trae cada nodo una vez por línea, con su km en ella. */
@@ -116,7 +172,8 @@ export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; se
       tracks: s.tracks,
     }))
   const bypassOf = new Map(network.lines.flatMap((l) => (l.bypass_of ? [[l.id, l.bypass_of] as const] : [])))
-  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf)
+  const linkOf = new Map(network.lines.flatMap((l) => (l.link_of ? [[l.id, l.link_of] as const] : [])))
+  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf)
 }
 
 /** El grafo con las modificaciones del escenario: cierres, velocidades y enlaces. */
@@ -135,14 +192,15 @@ export function applyScenario(graph: Graph, scenario: Scenario): Graph {
     if (link.from_node_id === link.to_node_id) throw new ScenarioError('Un enlace tiene que unir dos nodos distintos')
     edges.push({ id: linkId(link), line_id: null, a: link.from_node_id, b: link.to_node_id, length_km: link.length_km, speed_kmh: link.speed_kmh, tracks: null })
   }
-  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf)
+  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf)
 }
 
 /**
- * La línea por la que cuenta un tramo: la suya o, si es de un baipás, la que este rodea. Un enlace
- * esbozado cuenta como una línea propia.
+ * La línea por la que cuenta un tramo: la suya o, si es de un baipás o de un enlace, la línea de la
+ * que cuelga. Un enlace esbozado cuenta como una línea propia.
  */
-const lineKey = (graph: Graph, edge: Edge) => (edge.line_id === null ? edge.id : (graph.bypassOf.get(edge.line_id) ?? edge.line_id))
+const lineKey = (graph: Graph, edge: Edge) =>
+  edge.line_id === null ? edge.id : (graph.bypassOf.get(edge.line_id) ?? graph.linkOf.get(edge.line_id) ?? edge.line_id)
 
 /** Por cada baipás, la línea de la que lo es y los dos nodos de esta que une. */
 function bypassSpans(graph: Graph): { parent: string; a: string; b: string }[] {
@@ -164,7 +222,8 @@ function bypassSpans(graph: Graph): { parent: string; a: string; b: string }[] {
 /**
  * Caminos simples desde `start` hasta un nodo meta, en profundidad. Un camino termina al llegar a
  * una meta; solo atraviesa los nodos que `mayPass` admite y no cambia de línea más de `maxChanges`
- * veces. Cada enlace esbozado cuenta como una línea, y un baipás, como parte de la suya.
+ * veces. Cada enlace esbozado cuenta como una línea, y un baipás o un enlace cargado, como parte de
+ * la suya. Tampoco pasa de un lado a otro del triángulo de un enlace: sería invertir la marcha.
  */
 function walk(
   graph: Graph,
@@ -182,6 +241,8 @@ function walk(
       const next = edge.a === node ? edge.b : edge.a
       if (visited.has(next) || !edgeOk(edge)) continue
       const previous = path.at(-1)?.[0]
+      const [from, to] = [previous && graph.linkSides.get(previous.id), graph.linkSides.get(edge.id)]
+      if (from && to && from[0] === to[0] && from[1] !== to[1]) continue
       const total = changes + (previous !== undefined && lineKey(graph, previous) !== lineKey(graph, edge) ? 1 : 0)
       if (maxChanges !== null && total > maxChanges) continue
       path.push([edge, next])

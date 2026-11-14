@@ -13,6 +13,7 @@ from oniel.gtfs.trips import (
     bypasses_of,
     calls_for_trip,
     calls_on_line,
+    link_far_node,
     route_for_trip,
     select_trips_for_spec,
     via_legs,
@@ -314,6 +315,26 @@ def validate_all(
             )
         else:
             resolved = parent
+    far_node = None
+    if spec.line.link_of is not None:
+        parent = next((o for o in others if o.line_id == spec.line.link_of), None)
+        ends = [net.nodes[0].spec.id, net.nodes[-1].spec.id]
+        if parent is None:
+            problems.append(
+                f"es un enlace de {spec.line.link_of}, que no está entre las líneas cargadas"
+            )
+        elif len([e for e in ends if e in parent.nodes]) != 1:
+            problems.append(
+                f"es un enlace de {parent.line_id}: uno de sus dos extremos, y solo uno, tiene que"
+                f" ser un nodo suyo ({' y '.join(ends)})"
+            )
+        else:
+            far_node = link_far_node(own, others)
+            if not any(far_node in o.nodes for o in others if o is not parent):
+                problems.append(
+                    f"es un enlace de {parent.line_id}, pero {far_node} no es un nodo de ninguna"
+                    " otra línea cargada"
+                )
     beside = [o for o in (own, *others) if o is not resolved]
     bypasses = bypasses_of(resolved, beside)
     own_ids = {s.id for s in net.segments}
@@ -329,7 +350,9 @@ def validate_all(
             trip, feed, resolved.spec, nodes=resolved.nodes, others=beside, route=route
         )
         line_calls = calls_on_line(calls, route)
-        passes, resolution = resolve_passes(line_calls, resolved.nodes, resolved.segments, bypasses)
+        passes, resolution = resolve_passes(
+            line_calls, resolved.nodes, resolved.segments, bypasses, far_node
+        )
         passes = [p for p in passes if p.segment_id in own_ids]
         if resolved is not own and not passes:
             continue

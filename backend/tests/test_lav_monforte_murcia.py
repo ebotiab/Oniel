@@ -130,12 +130,11 @@ def test_it_shares_the_junction_with_the_alicante_line(
         "san-isidro-albatera-catral-av": "paet",
         "bif-el-regueron": "bifurcacion",
     }
-    # con la línea cargada, de la bifurcación de Murcia ya no sale nada a trazos; de Monforte del
-    # Cid sale el enlace por el que llegan los trenes de Alicante, que se une en Vinalopó
-    assert all(c.node_id != "bif-murcia" for c in branch.spec.connections)
-    link = next(c for c in branch.spec.connections if c.id == "enlace-monforte-vinalopo")
-    vinalopo = line.node("bif-vinalopo")
-    assert haversine_km(link.sketch[-1], (vinalopo.lon, vinalopo.lat)) < 0.05
+    # con la línea y el enlace de Monforte del Cid cargados, ni de la bifurcación de Murcia ni de
+    # Monforte del Cid sale ya nada a trazos
+    assert all(
+        c.node_id not in ("bif-murcia", "monforte-del-cid-av") for c in branch.spec.connections
+    )
     # lo que sigue desde Murcia queda a trazos: Cartagena, Lorca y Águilas, y Albacete por Cieza
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "conv-murcia-cartagena": "bif-el-regueron",
@@ -341,7 +340,10 @@ def test_the_neighbouring_lines_reach_murcia_through_this_one() -> None:
     branch = load_network_spec(LAV_ALICANTE_SPEC)
     for stop_id in ("03410", "03412", "62002", "62001", "61200"):
         mapping = branch.stop_mappings[stop_id]
-        assert [(leg.line, leg.node) for leg in mapping.via] == [(LINE, "bif-vinalopo")]
+        assert [(leg.line, leg.node) for leg in mapping.via] == [
+            ("enlace-monforte-del-cid", "monforte-del-cid-av"),
+            (LINE, "bif-vinalopo"),
+        ]
     trunk = load_network_spec(LAV_VALENCIA_SPEC)
     for stop_id in ("03410", "62002", "61200"):
         mapping = trunk.stop_mappings[stop_id]

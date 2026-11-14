@@ -104,6 +104,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Alta velocidad Madrid – Segovia – Valladolid (Adif 080) | `lav-madrid-valladolid` | 178,6 km | 6 (1 compartido) | 5 | 761 de Renfe (232 Avant, 220 AVE, 168 Alvia, 75 Intercity y 66 AVLO) y 8 de Ouigo |
 | Baipás de Zaragoza (Adif 050; cuelga de la alta velocidad de Barcelona) | `baipas-zaragoza` | 20,7 km | 2 (los 2 compartidos) | 1 | 97 de Renfe (AVE) y 10 de Ouigo: los de la línea de Barcelona que no paran en Zaragoza |
 | Baipás de Lleida (Adif 050; cuelga de la misma línea) | `baipas-lleida` | 14,3 km | 2 (los 2 compartidos) | 1 | 224 de Renfe (169 AVE y 55 AVE internacionales) y 25 de Ouigo: los que no paran en Lleida |
+| Enlace de Monforte del Cid (Adif 048; cuelga de la alta velocidad de Monforte del Cid a Murcia) | `enlace-monforte-del-cid` | 2,1 km | 2 (los 2 compartidos) | 1 (de vía única) | 91 de Renfe (72 Avant, 12 AVE y 7 AVLO) y 5 de Ouigo: los que paran en Alicante y siguen a Elche, Orihuela o Murcia, o vienen de allí |
 
 En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases son líneas cortas que cuelgan de la alta velocidad de Barcelona y no cuentan como líneas en el visor (véase «Los baipases de Zaragoza y de Lleida»). Son 3.392,0 km de red, 100 estaciones y 2.849 viajes distintos (2.780 de Renfe y 69 de Ouigo), porque un viaje que recorre varias líneas cuenta en cada una y se guarda una sola vez:
 
@@ -173,9 +174,9 @@ En la de Albacete a Alicante:
 | Bifurcación Murcia – Monforte del Cid | 30 | 6 | 36 |
 | Monforte del Cid – Alicante-Terminal | 50 | 6 | 56 |
 
-En Albacete acaban dos trenes de Madrid; en la bifurcación de Murcia salen los 6 de Madrid a Murcia que no entran en Alicante (4 de Renfe y 2 de Ouigo), y por Monforte del Cid entran los 20 Avant de Alicante a Murcia.
+En Albacete acaban dos trenes de Madrid; en la bifurcación de Murcia salen los 6 de Madrid a Murcia que no entran en Alicante (4 de Renfe y 2 de Ouigo), y por Monforte del Cid entran los 20 Avant de Alicante a Murcia, que llegan por el enlace.
 
-En la de Monforte del Cid a Murcia, el primer tramo, de la bifurcación de Murcia a la de Vinalopó, lleva solo los 6 trenes de Madrid que no entran en Alicante (4 de Renfe y 2 de Ouigo). En Vinalopó se suman los que vienen de Alicante por el enlace de Monforte del Cid, y los siete tramos que siguen hasta Murcia del Carmen llevan 30 de Renfe y 6 de Ouigo, 36 en total: los 20 Avant de Alicante a Murcia y los 16 de Madrid.
+En la de Monforte del Cid a Murcia, el primer tramo, de la bifurcación de Murcia a la de Vinalopó, lleva solo los 6 trenes de Madrid que no entran en Alicante (4 de Renfe y 2 de Ouigo). En Vinalopó se suman los 30 que vienen de Alicante por el enlace de Monforte del Cid (26 de Renfe y 4 de Ouigo: los 20 Avant y 10 de Madrid que paran en Alicante), que son los que lleva el único tramo del enlace, y los siete tramos que siguen hasta Murcia del Carmen llevan 30 de Renfe y 6 de Ouigo, 36 en total: los 20 Avant de Alicante a Murcia y los 16 de Madrid.
 
 En la de València a Camp de Tarragona todos son de Renfe, y cambian donde entran o salen trenes:
 
@@ -582,7 +583,7 @@ Verificación:
 
 **Nodos.** Tres estaciones, las dos bifurcaciones y, como nodos secundarios, los cuatro PAET y un puesto de banalización, el de Las Chozas. De los cinco puestos de banalización de la tabla solo se carga ese, porque es el nodo más cercano a La Encina, donde cambia la señalización (véase abajo). No se han cargado el cambiador de ancho de Albacete ni las bifurcaciones de La Oliva y de Aguaverde, junto a La Encina, por las que la línea enlazará con Valencia por Xàtiva: la tabla las da como futuras, así que no son ni nodo ni conexión a trazos.
 
-**La bifurcación de Murcia y Monforte del Cid.** La línea de alta velocidad a Elche, Orihuela y Murcia, que se cargó después (véase «Cómo se construyó la línea de alta velocidad Monforte del Cid–Murcia»), sale de esta por dos sitios, 3,3 km uno de otro. Los trenes que vienen de Madrid y no entran en Alicante la toman en la bifurcación de Murcia (PK 461,356). Los que salen de Alicante, por un enlace que se une a esta línea en el PAET de Monforte del Cid (PK 465,247 en la tabla). Por eso las paradas de esa línea (Elche AV, Callosa de Segura-Cox, Orihuela, Beniel y Murcia) son salidas por Monforte del Cid, que es por donde pasa la mayoría, y dos reglas de recorrido las cambian a la bifurcación de Murcia para los trenes que van de Madrid-Chamartín o de Albacete a Elche AV sin pasar por Alicante. Desde que la línea de Murcia está cargada, unas y otras llevan `via` hacia ella: las generales, por la bifurcación Vinalopó, donde el enlace de Monforte se une a esa línea (el enlace sigue a trazos y el reparto suma la línea recta entre los dos nodos, 1,6 km), y las de las reglas, por la propia bifurcación de Murcia. Ya no hace falta el `track_km` que llevaba Elche AV.
+**La bifurcación de Murcia y Monforte del Cid.** La línea de alta velocidad a Elche, Orihuela y Murcia, que se cargó después (véase «Cómo se construyó la línea de alta velocidad Monforte del Cid–Murcia»), sale de esta por dos sitios, 3,3 km uno de otro. Los trenes que vienen de Madrid y no entran en Alicante la toman en la bifurcación de Murcia (PK 461,356). Los que salen de Alicante, por un enlace que se une a esta línea en el PAET de Monforte del Cid (PK 465,247 en la tabla). Por eso las paradas de esa línea (Elche AV, Callosa de Segura-Cox, Orihuela, Beniel y Murcia) son salidas por Monforte del Cid, que es por donde pasa la mayoría, y dos reglas de recorrido las cambian a la bifurcación de Murcia para los trenes que van de Madrid-Chamartín o de Albacete a Elche AV sin pasar por Alicante. Desde que la línea de Murcia está cargada, unas y otras llevan `via` hacia ella: las generales, por la bifurcación Vinalopó, donde el enlace de Monforte se une a esa línea (desde que el enlace está cargado, el `via` empieza por él y el reparto ya no suma ninguna línea recta), y las de las reglas, por la propia bifurcación de Murcia. Ya no hace falta el `track_km` que llevaba Elche AV.
 
 **Operadores.** Renfe y Ouigo, con sus horarios cargados, e Iryo, que no los publica: Albacete y Alicante figuran entre los destinos de su web (`raw/operadores/consultas_2026-11-12.json`), así que el visor avisa en esta línea de que faltan sus trenes.
 
@@ -603,6 +604,30 @@ Verificación:
 **Señalización.** El mapa 4 dibuja el trazo de BCA en toda la línea, sin decir nada del mando. La protección cambia: entre la bifurcación y Albacete, el símbolo de «ERTMS N1» con el de «ASFA - AV»; entre La Encina y Villena A.V., y otra vez junto a la bifurcación de Murcia, el de «ERTMS N2». Entre Albacete y La Encina no dibuja ningún símbolo y no dice dónde cambia, así que esos tres tramos, de Albacete a Las Chozas, llevan `sin_dato_publicado`. Wikipedia dice que de Albacete a Alicante solo hay nivel 2 y las vías de OSM llevan `railway:etcs=2` en toda la relación, también donde el mapa dibuja nivel 1: se declara lo que dibuja el mapa.
 
 **Interrupciones.** El 13 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en esta línea (`raw/interrupciones/consultas_2026-11-13_albacete_alicante.json`).
+
+## Cómo se cargó el enlace de Monforte del Cid
+
+Es la vía por la que los trenes que salen de Alicante entran en la línea de alta velocidad de Murcia: deja la línea de Albacete a Alicante en el puesto de Monforte del Cid y se une a la de Murcia en la bifurcación Vinalopó. Sin él, de Alicante a Murcia el comparador retrocedía hasta la bifurcación de Murcia (92,2 km); con él da 88,4 km, el camino del tren.
+
+**Qué es para Oniel.** Un enlace entre dos líneas (`link_of: lav-monforte-murcia`), decidido el 13 de noviembre de 2026 (`docs/diseno.md`, «Enlaces entre líneas»). No es una línea más de la lista, porque mide 2 km, ni un baipás, porque sus extremos no son dos nodos de la misma línea. Cuelga de la línea de Murcia, que es a la que da acceso: en la lista va bajo ella y el comparador lo cuenta como parte suya. Lo que lo distingue de un baipás en los datos es que elige sus trenes él mismo.
+
+**Trazado.** Las seis vías con `ref=048` («Bifurcación Vinalopó - Monforte del Cid Alta Velocidad») de `raw/osm/vias_enlace_monforte_vinalopo_2026-11-13.json`, que ya estaba guardado y registrado en la fuente `osm-relation-18342974`. El fichero no trae relación: la parte de la geometría las elige por su etiqueta (`way_ref`). Miden 2,6 km, pero los primeros 500 m corren pegados a la vía de Alicante dentro del puesto de Monforte del Cid, cuyo nodo está en el centro del puesto (PK 464,649). El trazado se corta a la altura de ese nodo (`trim`), a 19 m de él, y el enlace mide 2,1 km: así la distancia de Alicante a Vinalopó es la que recorre el tren, sin contar dos veces esos 500 m. La descripción de la línea lo dice.
+
+**Nodos.** Los dos son de otras líneas (`shared`): Monforte del Cid, de la de Alicante, y la bifurcación Vinalopó, de la de Murcia. No lleva puntos kilométricos: ninguna fuente da los de la línea 048.
+
+**Vía, velocidad y señalización.** Vía única, ancho estándar, 25 kV y 100 km/h, de las etiquetas de sus vías. El mapa 4 de la Declaración sobre la Red no dibuja el enlace aparte: junto a la bifurcación de Murcia rotula «ERTMS N2», «ASFA - AV» y «BCA», lo mismo que llevan las dos líneas que une, y las vías de OSM llevan `railway:etcs=2`. Se declara `ertms_n2_asfa` y `bca`, con el mando sin dato publicado, y la nota de cada sección dice que el mapa no lo distingue.
+
+**Trenes.** El filtro pide parar en Alicante-Terminal y en Elche Alta Velocidad o en Callosa de Segura-Cox, a las que solo se llega por la línea de Murcia: 91 viajes de Renfe (los 72 Avant de Alicante a Murcia, 12 AVE y 7 AVLO de Madrid que paran en Alicante) y 5 de Ouigo. Son los de la línea de Murcia menos los 20 de Renfe y los 2 de Ouigo que la toman en la bifurcación de Murcia. Ningún tren para en el enlace: Alicante y las paradas del norte son salidas por Monforte del Cid, y las de la línea de Murcia, por Vinalopó, unas y otras con `via`. Todos los pasos son estimados, y su explicación empieza por el motivo: «Viene de Alicante/Alacant-Terminal: por eso va por aquí.» o «Va a Alicante/Alacant-Terminal: …», con el nombre de la parada como lo da el horario. El día de referencia lleva 30 trenes (26 de Renfe y 4 de Ouigo).
+
+**Lo que cambia en las líneas vecinas.** La de Alicante pierde la conexión a trazos `enlace-monforte-vinalopo`, y sus `via` hacia las paradas de la línea de Murcia empiezan por el enlace. En la de Murcia, los `via` hacia Alicante y el norte, lo mismo. Los recuentos de trenes por tramo de las dos no cambian.
+
+**El triángulo.** El enlace, el tramo de Monforte del Cid a la bifurcación de Murcia y el de esta a Vinalopó forman un triángulo, y las vías no dejan doblar ninguna de sus esquinas sin invertir la marcha. El grafo de recorridos no pasa de un lado a otro (`docs/simulacion.md`, «Límites»): por eso de Madrid a Murcia sigue habiendo los mismos recorridos, y ninguno de los tres lados tiene como alternativa los otros dos. El enlace entra en «Tramos sin alternativa» con sus 30 trenes.
+
+**Un tren que pasa dos veces por el mismo tramo.** Los de Madrid a Murcia que paran en Alicante entran en la estación y vuelven a salir por el enlace: recorren dos veces el tramo de Monforte del Cid a Alicante, y sus tramos, que antes eran dos trozos sueltos, ahora se bifurcan en Monforte del Cid. El análisis de «Tramos sin alternativa» agrupa los trenes por su recorrido y, para uno que se bifurca, se quedaba en el propio tramo: esos 10 trenes habrían figurado sin otro camino en diez tramos de las líneas de Valencia y de Alicante que sí lo tienen. Cuando la bifurcación la causa un enlace, el recorrido se toma sin el enlace (`oniel.analysis.criticality.corridor`), y las cifras de las demás líneas quedan como estaban.
+
+**Interrupciones.** El 13 de noviembre de 2026 no había ninguna anunciada en las dos líneas que une (véanse sus apartados).
+
+**El enlace de Blancales a Yeles,** de la línea de Valencia a la de Sevilla, está en el mismo caso y sigue a trazos: se cargaría igual, colgado de la línea de Valencia.
 
 ## Cómo se construyó la línea de alta velocidad Monforte del Cid–Murcia
 
@@ -635,7 +660,7 @@ Verificación:
 
 **La bifurcación El Reguerón.** Es el punto en que la vía de la línea 046 se une a la de Cartagena, y Oniel lo sitúa donde las vías de OSM se juntan (km 60,6 de la línea), que es donde empieza el ancho mixto. La tabla de Wikipedia da a esa bifurcación el PK 516,266, que cae 5,7 km antes, y trae además un «El Reguerón» en el 520,265; el nodo de OSM con ese nombre está 3 km después. Con tres posiciones distintas, el nodo no guarda punto kilométrico y es secundario: está para que el tramo de ancho mixto empiece donde empieza.
 
-**La bifurcación Vinalopó y el enlace de Monforte del Cid.** Los trenes que salen de Alicante no pasan por la bifurcación de Murcia: dejan la línea de Alicante en Monforte del Cid por un enlace de 2,6 km y una sola vía (la línea 048 de Adif en OSM, `raw/osm/vias_enlace_monforte_vinalopo_2026-11-13.json`) y se unen a esta en la bifurcación Vinalopó, a 2,6 km de su origen. El enlace no se ha cargado: queda a trazos desde Monforte del Cid, como el de Blancales a Yeles. Cargarlo pide decidir antes cómo enseña el visor un enlace entre dos líneas, que no es ni una línea más ni un baipás; queda propuesto como tarea aparte.
+**La bifurcación Vinalopó y el enlace de Monforte del Cid.** Los trenes que salen de Alicante no pasan por la bifurcación de Murcia: dejan la línea de Alicante en Monforte del Cid por un enlace de 2,6 km y una sola vía (la línea 048 de Adif en OSM, `raw/osm/vias_enlace_monforte_vinalopo_2026-11-13.json`) y se unen a esta en la bifurcación Vinalopó, a 2,6 km de su origen. El enlace se cargó después, como una línea corta que cuelga de esta (véase «Cómo se cargó el enlace de Monforte del Cid»).
 
 **Operadores.** Renfe y Ouigo, con sus horarios cargados. Iryo no se declara: Elche, Orihuela y Murcia no figuran entre los destinos de su web.
 
@@ -645,7 +670,7 @@ Verificación:
 
 **Lo que cambia en las líneas vecinas.**
 
-- En la de Albacete a Alicante, las cinco paradas de esta línea llevan `via` hacia ella y sobra el `track_km` de Elche AV. Su conexión a trazos pasa de la bifurcación de Murcia a Monforte del Cid y es ahora solo el enlace.
+- En la de Albacete a Alicante, las cinco paradas de esta línea llevan `via` hacia ella y sobra el `track_km` de Elche AV. Su conexión a trazos pasó de la bifurcación de Murcia a Monforte del Cid y era solo el enlace, hasta que el enlace se cargó.
 - En la de Valencia, Elche AV, Orihuela y Murcia llevan `via` de dos trechos. Las dos ganan la regla del AVE de Madrid-Puerta de Atocha a Murcia: con el fichero del 12 de noviembre, dos viajes más cada una. Con el de las pruebas no cambia ningún recuento suyo.
 - La cobertura cuenta dos números de tren más (561), por ese mismo AVE.
 - Las fichas de las estaciones de las líneas vecinas enseñan Murcia, Elche y Orihuela entre sus destinos directos.
@@ -1166,6 +1191,8 @@ Con la decimotercera (Valencia – Castellón – Camp de Tarragona, 266,6 km y 
 
 Con la decimocuarta (alta velocidad Madrid – Segovia – Valladolid, 178,6 km y cinco tramos), medido el 13 de noviembre de 2026 sobre las trece anteriores y los dos baipases (3.392 km, 181 nodos distintos y 165 tramos): `index.json` pasa de 305,9 a 315,6 KB (de 47,5 a 49,1 KB comprimido) y `lines/lav-madrid-valladolid.json` pesa 34,3 KB (9,0 KB comprimido).
 
+Con el enlace de Monforte del Cid (2,1 km y un tramo), medido el 13 de noviembre de 2026 sobre las catorce líneas y los dos baipases (3.394 km y 166 tramos): `index.json` pasa de 323,2 a 325,7 KB (de 50,2 a 50,6 KB comprimido) y `lines/enlace-monforte-del-cid.json` pesa 5,8 KB (1,8 KB comprimido).
+
 ## Atributos de tramo
 
 Lo que cambia a lo largo de una línea se declara de nodo a nodo, por secciones, con un único mecanismo que lo reparte a los tramos, comprueba su cobertura y lo lleva hasta la ficha. Lo usan el número de vías (`tracks`) desde #20, la protección del tren, el bloqueo y el mando (véase «Señalización y protección del tren») y, solo donde la vía es de ancho mixto, el ancho (`gauge`, con el valor `mixto`: el paso por Loja y la entrada a Granada de la línea de Antequera a Granada, que la ficha enseña a la vista desde #136, y la entrada a Murcia desde El Reguerón; donde no varía, el ancho es el `gauge_mm` de la línea y no se repite en cada tramo); una electrificación parcial entrará igual, sin columna, migración ni reparto propios.
@@ -1255,6 +1282,7 @@ Los valores `ertms_n1` y `ertms_n2` están admitidos para las líneas que vengan
 | | Albacete-Los Llanos – Las Chozas | sin dato publicado | BCA | sin dato publicado |
 | | Las Chozas – Alicante-Terminal | ERTMS de nivel 2 y ASFA (`ertms_n2_asfa`) | BCA | sin dato publicado |
 | Alta velocidad Monforte del Cid – Murcia (comprobado el 13 de noviembre) | Bifurcación Murcia – Murcia del Carmen | ERTMS de nivel 2 y ASFA (`ertms_n2_asfa`) | BCA | sin dato publicado |
+| Enlace de Monforte del Cid (comprobado el 13 de noviembre) | Monforte del Cid – Bifurcación Vinalopó | ERTMS de nivel 2 y ASFA (`ertms_n2_asfa`) | BCA | sin dato publicado |
 
 El bloqueo de vía única cae justo en los tramos que Oniel ya tenía como vía única por otras fuentes; una prueba lo comprueba.
 
@@ -1283,7 +1311,7 @@ Pensado para añadir líneas, operadores y medios de transporte sin rehacer la a
 - `sources`: procedencia, licencia, fecha, cobertura y checksum.
 - `operators`: operadores y administradores de infraestructura. De un operador de trenes, `timetable` dice si sus horarios están cargados o no los publica.
 - `line_operators`: qué operadores de trenes circulan por cada línea, tengan o no horarios cargados.
-- `lines`: una línea por fila, con `mode` (`ferrocarril` hoy; mañana `metro`, `autobús`…), administrador, ancho, electrificación, orden de importación (`sort_order`), zona (`zone_id`), la línea de la que es baipás si lo es (`bypass_of`) y geometría completa.
+- `lines`: una línea por fila, con `mode` (`ferrocarril` hoy; mañana `metro`, `autobús`…), administrador, ancho, electrificación, orden de importación (`sort_order`), zona (`zone_id`), la línea de la que es baipás si lo es (`bypass_of`), la línea de la que cuelga si es un enlace entre dos líneas (`link_of`) y geometría completa.
 - `zones`: las zonas en las que el visor agrupa las líneas, con su nombre, su orden y sus ciudades (véase «Zonas»).
 - `nodes` + `line_nodes`: los nodos son independientes de la línea; `line_nodes` da su kilómetro y orden en cada línea, así un nodo puede pertenecer a varias líneas (Madrid-Puerta de Atocha y Córdoba lo hacen). `rank` distingue los nodos principales de los secundarios, que el visor atenúa y oculta en el esquema compacto.
 - `segments`: tramos entre nodos consecutivos con geometría, velocidad máxima y habitual, número de vías (`tracks`, el mismo valor que su atributo) y la fuente de su geometría.
@@ -1364,6 +1392,13 @@ Lo aprendido al añadir la de alta velocidad de Monforte del Cid a Murcia:
 - **Dos paradas seguidas que son salidas por nodos distintos cuentan como un cruce.** Si un tren para en dos estaciones de fuera a las que se llega por líneas cargadas y cada una sale por un nodo, el reparto le da paso por los tramos que hay entre los dos. La asignación general tiene que mandar todas las paradas de un mismo lado al mismo nodo, el de la mayoría, y las reglas de recorrido, cambiar la de los demás.
 - **Cuando las fuentes no coinciden en dónde cambia algo,** se declara la que da el cambio en un nodo y la nota de la sección recoge las otras (aquí, dónde empieza la vía única).
 - **Un PK que no cuadra no se guarda.** Si la fuente da a una instalación un punto kilométrico que cae a kilómetros de donde está en el trazado (El Reguerón), el nodo se sitúa con coordenadas y sin `reference_pk_km`, y se dice por qué.
+
+Lo aprendido al cargar el enlace de Monforte del Cid:
+
+- **Un enlace entre dos líneas tampoco es una línea más, ni un baipás.** Si lo que se añade es una vía corta que va de un nodo de una línea a un nodo de otra, se declara con `link_of` y la línea de la que cuelga. A diferencia de un baipás, lleva su filtro y sus asignaciones: sus trenes son los que paran a un lado y a otro.
+- **Las líneas vecinas tienen que medir por él.** Los `via` que antes saltaban de un nodo a otro en línea recta empiezan ahora por el enlace. Los recuentos por tramo no cambian; las horas estimadas de paso, unos segundos.
+- **Un fichero de vías sueltas vale como trazado.** Si el fichero crudo no trae relación, la parte de la geometría elige las vías por su etiqueta (`way_ref`). En un trazado tan corto, el vértice de OSM más cercano al nodo puede quedar a 160 m: `trim` corta el trazado a la altura exacta de los dos puntos.
+- **El enlace cierra un triángulo.** Con las dos líneas que une forma tres lados, y un tren no pasa de uno a otro sin invertir la marcha. El grafo de recorridos lo sabe (`link_sides`): sin esa regla, cada lado habría tenido como «otro camino» la vuelta por los otros dos.
 
 Lo aprendido al cargar los baipases de Zaragoza y de Lleida:
 

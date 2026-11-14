@@ -27,6 +27,10 @@ Reglas, en lenguaje llano:
   entre ellos, como los que rodean Zaragoza y Lleida) y el tren no para ni sale de la línea entre
   esos dos nodos, va por el baipás: no pasa por los tramos que quedan entre ellos, pasa por los
   del baipás y el reparto del tiempo usa los kilómetros de ese camino.
+* Si la línea es un **enlace** (una vía corta entre un nodo de una línea y un nodo de otra, como
+  el de Monforte del Cid), el tren la cruza entre una parada de cada lado, y la explicación del
+  paso empieza por la parada del lado de la otra línea, que es el motivo por el que va por él:
+  «Viene de Alicante-Terminal: por eso va por aquí.»
 """
 
 from __future__ import annotations
@@ -186,11 +190,14 @@ def resolve_passes(
     nodes: Mapping[str, LineNode],
     segments: Sequence[LineSegment],
     bypasses: Sequence[Bypass] = (),
+    link_far_node: str | None = None,
 ) -> tuple[list[SegmentPass], Literal["completa", "parcial"]]:
     """Calcula el paso del servicio por cada tramo que recorre.
 
     Con ``bypasses``, el resultado lleva también los pasos por los tramos de los baipases que el
-    tren toma, que son de otra línea: van detrás de los de esta.
+    tren toma, que son de otra línea: van detrás de los de esta. ``link_far_node`` es, si la línea
+    es un enlace, el nodo por el que se une a la línea de la que no cuelga: la parada por la que
+    el tren entra o sale por él abre la explicación del paso.
     """
     ordered = sorted(segments, key=lambda s: s.km_from)
     calls = sorted(calls, key=lambda c: c.seq)
@@ -225,7 +232,7 @@ def resolve_passes(
         b = anchors[j]
         assert b is not None
         unknown_between = j > i + 1
-        for p in _leg_passes(a, b, ordered, unknown_between, bypasses):
+        for p in _leg_passes(a, b, ordered, unknown_between, bypasses, link_far_node):
             passes.setdefault(p.segment_id, p)
         i = j
     own = [passes.pop(s.id) for s in ordered if s.id in passes]
@@ -279,6 +286,7 @@ def _leg_passes(
     segments: Sequence[LineSegment],
     unknown_between: bool,
     bypasses: Sequence[Bypass] = (),
+    link_far_node: str | None = None,
 ) -> list[SegmentPass]:
     lo, hi = min(a.km, b.km), max(a.km, b.km)
     if hi - lo < KM_TOLERANCE:
@@ -359,6 +367,13 @@ def _leg_passes(
             for p in bp.pieces
         )
     done_a, done_b = (0.0, on_line_km) if km_increasing else (on_line_km, 0.0)
+    # En un enlace, la parada del lado de la otra línea es el motivo de que el tren vaya por él.
+    why_link = ""
+    if link_far_node is not None:
+        if a.exit_node is not None and a.exit_node.id == link_far_node:
+            why_link = f"Viene de {a.call.stop_name}: por eso va por aquí."
+        elif b.exit_node is not None and b.exit_node.id == link_far_node:
+            why_link = f"Va a {b.call.stop_name}: por eso va por aquí."
 
     passes = []
     for segment_id, done_lo, done_hi, same_direction, note in stretches:
@@ -393,7 +408,7 @@ def _leg_passes(
                 enter_margin_s=0.0 if enter_pub else margin,
                 exit_margin_s=0.0 if exit_pub else margin,
                 km_increasing=km_increasing if same_direction else not km_increasing,
-                basis=f"{note} {basis}" if note else basis,
+                basis=f"{note or why_link} {basis}" if note or why_link else basis,
             )
         )
     return passes

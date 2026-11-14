@@ -49,6 +49,7 @@ LAV_ALICANTE = "lav-albacete-alicante"
 LAV_MURCIA = "lav-monforte-murcia"
 MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
+LINK = "enlace-monforte-del-cid"
 MADRID, CORDOBA, SEVILLA = "madrid-puerta-de-atocha", "cordoba", "sevilla-santa-justa"
 ADAMUZ_CORDOBA = f"{LAV}:adamuz:cordoba"
 CORDOBA_BIF_MALAGA = f"{LAV}:cordoba:bif-malaga"
@@ -203,6 +204,37 @@ def test_corridor_keeps_only_the_stretch_joined_to_the_segment(graph: Graph) -> 
     assert (start, path[-1].id) == (MADRID, f"{LAV}:urda:ciudad-real")
 
 
+def test_corridor_of_a_train_that_leaves_a_terminus_by_a_link_stops_at_the_station(
+    graph: Graph,
+) -> None:
+    """Un tren de Madrid a Murcia que para en Alicante entra en la estación y vuelve a salir por
+    el enlace de Monforte del Cid: pasa dos veces por el tramo de Monforte del Cid a Alicante y
+    sus tramos se bifurcan en Monforte del Cid. Su recorrido se toma sin el enlace, como antes de
+    cargarlo: hasta Alicante por un lado y, por el otro, desde la bifurcación Vinalopó."""
+    link = f"{LINK}:monforte-del-cid-av:bif-vinalopo"
+    to_alicante = [
+        f"{LAV_ALICANTE}:villena-av:bif-murcia",
+        f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av",
+        f"{LAV_ALICANTE}:monforte-del-cid-av:alicante-terminal",
+    ]
+    to_murcia = [
+        f"{LAV_MURCIA}:bif-vinalopo:elche-av",
+        f"{LAV_MURCIA}:elche-av:san-isidro-albatera-catral-av",
+    ]
+    train = [*to_alicante, link, *to_murcia]
+    start, path = corridor(graph, train, to_alicante[0])
+    assert (start, [e.id for e in path]) == ("villena-av", to_alicante)
+    start, path = corridor(graph, train, to_murcia[1])
+    assert (start, [e.id for e in path]) == ("bif-vinalopo", to_murcia)
+    # el propio enlace no tiene un trecho sin bifurcaciones: se queda en su tramo
+    start, path = corridor(graph, train, link)
+    assert (start, [e.id for e in path]) == ("monforte-del-cid-av", [link])
+    # un Avant de Alicante a Murcia no se bifurca: su recorrido va entero por el enlace
+    avant = [to_alicante[2], link, *to_murcia]
+    start, path = corridor(graph, avant, link)
+    assert (start, [e.id for e in path]) == ("alicante-terminal", avant)
+
+
 def test_corridor_falls_back_to_the_segment_when_the_stretch_branches(graph: Graph) -> None:
     # tres tramos que salen de Córdoba no forman un camino
     branching = [ADAMUZ_CORDOBA, CORDOBA_BIF_MALAGA, f"{CONV}:rabanales:cordoba"]
@@ -261,6 +293,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         LAV_ALICANTE,
         LAV_MURCIA,
         MEDITERRANEO,
+        LINK,
         LAV_VALLADOLID,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -275,7 +308,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # los dos baipases, los nueve de la línea de Albacete a Alicante, los ocho de la de Monforte
     # del Cid a Murcia y los 35 de la de Valencia a Camp de Tarragona
     # Monforte del Cid a Murcia
-    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5
+    assert len(exported.segments) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -289,7 +322,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         s.segment_id: s.without_alternative for s in exported.segments if s.without_alternative
     }
     none = {k: n for k, n in without.items() if n == _of(exported.segments, k).trains}
-    assert (len(none), len(without)) == (53, 120)
+    assert (len(none), len(without)) == (54, 121)
     apart = (
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
@@ -297,6 +330,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{LAV_MURCIA}:",
         f"{MEDITERRANEO}:",
         f"{LAV_VALLADOLID}:",
+        f"{LINK}:",
     )
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 83,
@@ -363,12 +397,17 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     ]
     # a Murcia solo llega la alta velocidad de Monforte del Cid: ninguno de sus ocho tramos tiene
     # otro camino. Por el primero solo pasan los 6 trenes de Madrid que no entran en Alicante; en
-    # la bifurcación Vinalopó se suman los que vienen de Alicante por el enlace, que no está
-    # cargado, y son 36 hasta Murcia
+    # la bifurcación Vinalopó se suman los 30 que vienen de Alicante por el enlace de Monforte
+    # del Cid, y son 36 hasta Murcia
     murcia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_MURCIA}:")]
     assert [(s.trains, s.without_alternative) for s in murcia] == [(6, 6)] + [(36, 36)] * 7
     assert murcia[0].by_operator == {"ouigo": 2, "renfe": 4}
     assert all(s.by_operator == {"ouigo": 6, "renfe": 30} for s in murcia[1:])
+    # el enlace tampoco tiene otro camino: los otros dos lados de su triángulo obligarían a
+    # invertir la marcha en la bifurcación de Murcia
+    link = _of(exported.segments, f"{LINK}:monforte-del-cid-av:bif-vinalopo")
+    assert (link.trains, link.without_alternative) == (30, 30)
+    assert link.by_operator == {"ouigo": 4, "renfe": 26}
     # De la alta velocidad de Barcelona solo quedan los tres tramos de Camp de Tarragona a
     # Barcelona-Sants, fuera del anillo, con sus 108 trenes
     # la de Madrid a Valladolid entera: es la única cargada al norte de Madrid. 122 trenes hasta

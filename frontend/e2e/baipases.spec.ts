@@ -21,7 +21,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
     // catorce líneas, con los kilómetros de los dos baipases sumados
-    await expect(page.getByTestId('ficha-red')).toContainText(/^14 líneas · 3\.392 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^14 líneas · 3\.394 km/)
     const cataluna = red.getByRole('region', { name: 'Cataluña' })
     await expect(cataluna.locator('.zona-cabecera')).toHaveText(/^›Cataluña1 línea/)
     await abrirZonas(page)

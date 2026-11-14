@@ -68,30 +68,42 @@ def corridor(graph: Graph, segment_ids: Iterable[str], through: str) -> tuple[st
 
     De los tramos del tren se toman los que están unidos al tramo pedido (un tren que sale de las
     líneas cargadas y vuelve a entrar tiene dos trozos sueltos). Si forman un camino sin
-    bifurcaciones, ese es el recorrido, del extremo que va antes en la red al otro. Si no, el
-    recorrido se queda en el propio tramo.
+    bifurcaciones, ese es el recorrido, del extremo que va antes en la red al otro. Si se bifurcan
+    por un enlace entre dos líneas, se prueba sin los tramos del enlace. Si no, el recorrido se
+    queda en el propio tramo.
     """
     asked = graph.edge(through)
     if asked is None:
         raise ValueError(f"No hay ningún tramo con id {through}")
     own = {e.id: e for e in graph.edges if e.id in set(segment_ids)}
     own[asked.id] = asked
-    # Los tramos unidos al pedido.
-    joined: dict[str, Edge] = {asked.id: asked}
-    frontier = [asked]
-    while frontier:
-        edge = frontier.pop()
-        for other in own.values():
-            if other.id not in joined and {other.a, other.b} & {edge.a, edge.b}:
-                joined[other.id] = other
-                frontier.append(other)
-    degree: Counter[str] = Counter()
-    for edge in joined.values():
-        degree[edge.a] += 1
-        degree[edge.b] += 1
     order = {node_id: i for i, node_id in enumerate(graph.nodes)}
-    ends = sorted((n for n, d in degree.items() if d == 1), key=lambda n: order[n])
-    if len(ends) != 2 or any(d > 2 for d in degree.values()):
+
+    def joined_to_asked(edges: dict[str, Edge]) -> tuple[dict[str, Edge], list[str], bool]:
+        """Los tramos unidos al pedido, sus dos extremos y si forman un camino sin bifurcaciones."""
+        joined: dict[str, Edge] = {asked.id: asked}
+        frontier = [asked]
+        while frontier:
+            edge = frontier.pop()
+            for other in edges.values():
+                if other.id not in joined and {other.a, other.b} & {edge.a, edge.b}:
+                    joined[other.id] = other
+                    frontier.append(other)
+        degree: Counter[str] = Counter()
+        for edge in joined.values():
+            degree[edge.a] += 1
+            degree[edge.b] += 1
+        ends = sorted((n for n, d in degree.items() if d == 1), key=lambda n: order[n])
+        return joined, ends, len(ends) == 2 and all(d <= 2 for d in degree.values())
+
+    joined, ends, simple = joined_to_asked(own)
+    if not simple and asked.line_id not in graph.link_of:
+        # Un tren que entra en una estación término y sale de ella por un enlace (los de Madrid a
+        # Murcia que paran en Alicante) pasa dos veces por el mismo tramo, y sus tramos se
+        # bifurcan donde empieza el enlace. Su recorrido se toma sin el enlace: hasta la estación.
+        without_links = {i: e for i, e in own.items() if e.line_id not in graph.link_of}
+        joined, ends, simple = joined_to_asked(without_links)
+    if not simple:
         start = min((asked.a, asked.b), key=lambda n: order[n])
         return start, [asked]
     path: list[Edge] = []
