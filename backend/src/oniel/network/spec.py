@@ -83,6 +83,11 @@ class StopMapping(BaseModel):
     #: por los puntos kilométricos de la línea). El reparto del tiempo los usa en vez de la línea
     #: recta, y un tren que cruza la línea sin parar puede fijarse con ellos.
     track_km: float | None = Field(default=None, gt=0)
+    #: Solo con dos ``exits`` o más: la parada queda a un lado de la línea, y el tren que para en
+    #: ella deja la línea por la salida más cercana a su parada anterior y vuelve por la más
+    #: cercana a la siguiente, sin recorrer los tramos que hay entre las dos (Mérida, a la que se
+    #: entra por la bifurcación Granja-Las Encinas y de la que se sale hacia Garrovilla-Las Vegas).
+    aside: bool = False
 
     @field_validator("via", mode="before")
     @classmethod
@@ -102,6 +107,8 @@ class StopMapping(BaseModel):
                 "«track_km» solo tiene sentido en una parada que es salida de la línea y no"
                 " lleva «via»"
             )
+        if self.aside and len(self.exits) < 2:
+            raise ValueError("«aside» solo tiene sentido en una parada con dos salidas o más")
         lines = [v.line for v in self.via]
         if any(a == b for a, b in zip(lines, lines[1:], strict=False)):
             raise ValueError("«via» repite la misma línea en dos trechos seguidos")

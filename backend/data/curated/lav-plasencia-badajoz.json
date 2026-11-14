@@ -160,10 +160,10 @@
     "30000": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
     "18000": {"exits": ["arroyo-de-la-herrera"], "via": [{"line": "madrid-plasencia", "node": "bif-el-chaparral"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
     "17000": {"exits": ["arroyo-de-la-herrera"]},
-    "37500": {"exits": ["bif-granja-las-encinas", "garrovilla-las-vegas"], "via": {"line": "ramal-merida", "node": "aljucen"}},
-    "35301": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"]},
-    "35302": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"]},
-    "35303": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"]},
+    "37500": {"exits": ["bif-granja-las-encinas", "garrovilla-las-vegas"], "via": {"line": "ramal-merida", "node": "aljucen"}, "aside": true},
+    "35301": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},
+    "35302": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},
+    "35303": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},
     "35402": {"exits": ["caceres"]},
     "35405": {"exits": ["caceres"]},
     "35406": {"exits": ["caceres"]},
@@ -217,90 +217,6 @@
     "min_node_stops": 1
   },
   "route_overrides": [
-    {
-      "id": "plasencia-caceres-por-la-linea-antigua",
-      "description": "Regionales que salen de Plasencia y paran en Mirabel, Casas de Millán y Cañaveral: vuelven hacia Monfragüe y siguen a Cáceres por el trazado antiguo. De esta línea solo recorren el trecho de Plasencia a la bifurcación San Esteban; el paso de la bifurcación Casa de la Torre a Cáceres no se les cuenta.",
-      "consecutive_stop_ids": [
-        "30002",
-        "35301"
-      ],
-      "from_stop_id": "30002",
-      "to_stop_id": "35301",
-      "stop_mappings": {
-        "35301": {
-          "exits": [
-            "bif-san-esteban"
-          ],
-          "via": [
-            {
-              "line": "madrid-plasencia",
-              "node": "bif-san-esteban"
-            },
-            {
-              "line": "monfrague-caceres",
-              "node": "monfrague"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "merida-hacia-badajoz-garrovilla",
-      "description": "Trenes que van de Mérida hacia Badajoz, o al revés, con Garrovilla-Las Vegas como parada siguiente: salen de Mérida por Aljucén y entran en esta línea junto a Garrovilla-Las Vegas, no por la bifurcación Granja-Las Encinas. Sin la regla, Mérida se tomaría como salida por esa bifurcación y el tren contaría en la curva que une las dos, por la que solo pasan los que no entran en Mérida.",
-      "consecutive_stop_ids": [
-        "37500",
-        "37611"
-      ],
-      "stop_mappings": {
-        "37500": {
-          "exits": [
-            "garrovilla-las-vegas"
-          ],
-          "via": {
-            "line": "ramal-merida",
-            "node": "aljucen"
-          }
-        }
-      }
-    },
-    {
-      "id": "merida-hacia-badajoz-montijo",
-      "description": "Trenes que van de Mérida hacia Badajoz, o al revés, con Montijo como parada siguiente: salen de Mérida por Aljucén y entran en esta línea junto a Garrovilla-Las Vegas, no por la bifurcación Granja-Las Encinas. Sin la regla, Mérida se tomaría como salida por esa bifurcación y el tren contaría en la curva que une las dos, por la que solo pasan los que no entran en Mérida.",
-      "consecutive_stop_ids": [
-        "37500",
-        "37603"
-      ],
-      "stop_mappings": {
-        "37500": {
-          "exits": [
-            "garrovilla-las-vegas"
-          ],
-          "via": {
-            "line": "ramal-merida",
-            "node": "aljucen"
-          }
-        }
-      }
-    },
-    {
-      "id": "merida-hacia-badajoz-badajoz",
-      "description": "Trenes que van de Mérida hacia Badajoz, o al revés, con Badajoz como parada siguiente: salen de Mérida por Aljucén y entran en esta línea junto a Garrovilla-Las Vegas, no por la bifurcación Granja-Las Encinas. Sin la regla, Mérida se tomaría como salida por esa bifurcación y el tren contaría en la curva que une las dos, por la que solo pasan los que no entran en Mérida.",
-      "consecutive_stop_ids": [
-        "37500",
-        "37606"
-      ],
-      "stop_mappings": {
-        "37500": {
-          "exits": [
-            "garrovilla-las-vegas"
-          ],
-          "via": {
-            "line": "ramal-merida",
-            "node": "aljucen"
-          }
-        }
-      }
-    },
     {
       "id": "desde-plasencia-tras-navalmoral",
       "description": "Trenes de Madrid que entran en Plasencia: llegan por la línea convencional hasta la bifurcación San Esteban, no por el enlace de Arroyo de la Herrera, así que esta línea se resuelve desde Plasencia.",

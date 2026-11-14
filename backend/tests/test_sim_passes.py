@@ -442,3 +442,158 @@ def test_a_sourced_track_distance_anchors_a_train_that_crosses_without_stopping(
     assert "recorre la línea sin parar en ella" in passes[0].basis
     assert "Parada Y está fuera de la red cargada" in passes[0].basis
     assert "Parada X está fuera" not in passes[0].basis
+
+
+# Parada «a un lado» de la línea de juguete: se llega a ella saliendo por Puertollano (a 13 km)
+# y se vuelve a la línea por Adamuz (a 10 km); entre los dos nodos el tren no pisa la línea.
+ASIDE_EXITS = ("puertollano", "adamuz")
+ASIDE_DISTANCES = {
+    "puertollano": ExitDistance(13.0, "13 km por el ramal hasta Parada L"),
+    "adamuz": ExitDistance(10.0, "10 km por el ramal hasta Parada L"),
+}
+
+
+def _beside(seq: int, arr: int, dep: int, aside: bool = True, name: str = "Parada L") -> StopCall:
+    return StopCall(
+        seq,
+        name,
+        name,
+        arr,
+        dep,
+        exit_node_ids=ASIDE_EXITS,
+        aside=aside,
+        exit_distances=ASIDE_DISTANCES,
+    )
+
+
+def test_a_stop_beside_the_line_is_left_by_one_exit_and_rejoined_by_the_other() -> None:
+    """Ciudad Real 8:00 → Parada L 8:30/8:35 → Córdoba 9:05.
+
+    Al llegar, el tren sale por Puertollano, la salida más cercana a Ciudad Real: 39 km de línea
+    y 13 km de ramal, así que deja la línea a los 30 × 39 / 52 = 22,5 min (8:22:30). Al irse,
+    vuelve por Adamuz, la más cercana a Córdoba: 10 km de ramal y 25,8 km de línea, así que entra
+    a los 30 × 10 / 35,8 = 8,4 min (8:43:23). Los dos tramos de entre las salidas no los pisa.
+    """
+    calls = [
+        call(1, "60000", "Madrid", hm(7, 0), hm(7, 0), node="madrid"),
+        call(2, "37200", "Ciudad Real", hm(7, 55), hm(8, 0), node="ciudad-real"),
+        _beside(3, hm(8, 30), hm(8, 35)),
+        call(4, "50500", "Córdoba", hm(9, 5), hm(9, 5), node="cordoba"),
+    ]
+    passes, resolution = resolve_passes(calls, NODES, SEGMENTS)
+    p = by_id(passes)
+    assert resolution == "completa"
+    assert set(p) == {"madrid-cr", "cr-pu", "ad-co"}  # ni «pu-vi» ni «vi-ad»
+    assert all(x.km_increasing for x in p.values())
+    cr_pu, ad_co = p["cr-pu"], p["ad-co"]
+    assert cr_pu.kind == ad_co.kind == "estimado"
+    assert cr_pu.enter_s == hm(8, 0) and cr_pu.enter_margin_s == 0
+    assert cr_pu.exit_s == pytest.approx(hm(8, 0) + 30 * 60 * 39 / 52, abs=1)
+    assert "sale de esta línea por puertollano" in cr_pu.basis
+    assert "13 km por el ramal hasta Parada L" in cr_pu.basis
+    assert ad_co.enter_s == pytest.approx(hm(8, 35) + 30 * 60 * 10 / 35.8, abs=1)
+    assert ad_co.exit_s == hm(9, 5) and ad_co.exit_margin_s == 0
+    assert "10 km por el ramal hasta Parada L" in ad_co.basis
+    assert "puertollano" not in ad_co.basis
+
+    # en sentido contrario sale por Adamuz y vuelve por Puertollano
+    back = [
+        call(1, "50500", "Córdoba", hm(8, 0), hm(8, 0), node="cordoba"),
+        _beside(2, hm(8, 30), hm(8, 35)),
+        call(3, "37200", "Ciudad Real", hm(9, 5), hm(9, 10), node="ciudad-real"),
+        call(4, "60000", "Madrid", hm(10, 0), hm(10, 0), node="madrid"),
+    ]
+    passes, resolution = resolve_passes(back, NODES, SEGMENTS)
+    q = by_id(passes)
+    assert resolution == "completa"
+    assert set(q) == {"madrid-cr", "cr-pu", "ad-co"}
+    assert all(x.km_increasing is False for x in q.values())
+    assert q["ad-co"].enter_s == hm(8, 0)
+    assert q["ad-co"].exit_s == pytest.approx(hm(8, 0) + 30 * 60 * 25.8 / 35.8, abs=1)
+    assert "sale de esta línea por adamuz" in q["ad-co"].basis
+    assert q["cr-pu"].enter_s == pytest.approx(hm(8, 35) + 30 * 60 * 13 / 52, abs=1)
+    assert q["cr-pu"].exit_s == hm(9, 5)
+    assert "adamuz" not in q["cr-pu"].basis
+
+
+def test_a_train_that_starts_or_ends_beside_the_line_uses_the_exit_nearest_its_neighbour() -> None:
+    """Con parada de la línea a un solo lado, esa decide la salida para llegar y para irse."""
+    cordoba = call(2, "50500", "Córdoba", hm(9, 5), hm(9, 5), node="cordoba")
+    ciudad_real = call(2, "37200", "Ciudad Real", hm(9, 5), hm(9, 5), node="ciudad-real")
+    # empieza en la parada: hacia Córdoba entra por Adamuz; hacia Ciudad Real, por Puertollano
+    p = by_id(resolve_passes([_beside(1, hm(8, 35), hm(8, 35)), cordoba], NODES, SEGMENTS)[0])
+    assert set(p) == {"ad-co"} and p["ad-co"].km_increasing is True
+    assert p["ad-co"].enter_s == pytest.approx(hm(8, 35) + 30 * 60 * 10 / 35.8, abs=1)
+    p = by_id(resolve_passes([_beside(1, hm(8, 35), hm(8, 35)), ciudad_real], NODES, SEGMENTS)[0])
+    assert set(p) == {"cr-pu"} and p["cr-pu"].km_increasing is False
+    assert p["cr-pu"].enter_s == pytest.approx(hm(8, 35) + 30 * 60 * 13 / 52, abs=1)
+
+    # acaba en la parada: desde Córdoba sale por Adamuz; desde Ciudad Real, por Puertollano
+    start = call(1, "50500", "Córdoba", hm(8, 0), hm(8, 0), node="cordoba")
+    passes, resolution = resolve_passes([start, _beside(2, hm(8, 30), hm(8, 30))], NODES, SEGMENTS)
+    p = by_id(passes)
+    assert resolution == "completa"
+    assert set(p) == {"ad-co"} and p["ad-co"].km_increasing is False
+    assert p["ad-co"].exit_s == pytest.approx(hm(8, 0) + 30 * 60 * 25.8 / 35.8, abs=1)
+    start = call(1, "37200", "Ciudad Real", hm(8, 0), hm(8, 0), node="ciudad-real")
+    p = by_id(resolve_passes([start, _beside(2, hm(8, 30), hm(8, 30))], NODES, SEGMENTS)[0])
+    assert set(p) == {"cr-pu"} and p["cr-pu"].km_increasing is True
+    assert p["cr-pu"].exit_s == pytest.approx(hm(8, 0) + 30 * 60 * 39 / 52, abs=1)
+
+
+def test_between_two_stops_beside_the_line_there_is_no_pass() -> None:
+    """Ciudad Real → Parada L → Parada M → Córdoba, las dos paradas del mismo lado: el tren sale
+    por Puertollano antes de la primera y no vuelve hasta Adamuz, después de la segunda."""
+    for stops in (
+        ["Ciudad Real", "Parada L", "Parada M", "Córdoba"],
+        ["Córdoba", "Parada M", "Parada L", "Ciudad Real"],
+    ):
+        times = [(hm(8, 0), hm(8, 0)), (hm(8, 30), hm(8, 32)), (hm(8, 45), hm(8, 47))]
+        times.append((hm(9, 17), hm(9, 17)))
+        calls = []
+        for seq, (name, (arr, dep)) in enumerate(zip(stops, times, strict=True), start=1):
+            if name.startswith("Parada"):
+                calls.append(_beside(seq, arr, dep, name=name))
+            else:
+                node = "ciudad-real" if name == "Ciudad Real" else "cordoba"
+                calls.append(call(seq, node, name, arr, dep, node=node))
+        passes, resolution = resolve_passes(calls, NODES, SEGMENTS)
+        p = by_id(passes)
+        assert resolution == "completa"
+        assert set(p) == {"cr-pu", "ad-co"}
+        assert {x.kind for x in p.values()} == {"estimado"}
+        forward = stops[0] == "Ciudad Real"
+        assert all(x.km_increasing is forward for x in p.values())
+        # cada paso se reparte con su parada vecina: el de llegada, con la primera; el otro, con
+        # la última
+        first, last = ("cr-pu", "ad-co") if forward else ("ad-co", "cr-pu")
+        assert f"El reparto entre {stops[0]} (08:00) y {stops[1]} (08:30)" in p[first].basis
+        assert f"El reparto entre {stops[2]} (08:47) y {stops[3]} (09:17)" in p[last].basis
+
+    # un tren que solo para en las dos paradas «a un lado» no pisa la línea
+    only = [_beside(1, hm(8, 0), hm(8, 0)), _beside(2, hm(8, 15), hm(8, 15), name="Parada M")]
+    assert resolve_passes(only, NODES, SEGMENTS) == ([], "completa")
+
+
+def test_without_aside_a_stop_with_two_exits_keeps_one_anchor() -> None:
+    """La misma parada sin «aside»: se ancla en una sola salida (la primera que queda por delante)
+    y el tren cuenta en todos los tramos entre Ciudad Real y Córdoba, como antes."""
+    for stops in (("ciudad-real", "cordoba"), ("cordoba", "ciudad-real")):
+        calls = [
+            call(1, stops[0], stops[0], hm(8, 0), hm(8, 0), node=stops[0]),
+            _beside(2, hm(8, 30), hm(8, 35), aside=False),
+            call(3, stops[1], stops[1], hm(9, 5), hm(9, 5), node=stops[1]),
+        ]
+        passes, resolution = resolve_passes(calls, NODES, SEGMENTS)
+        assert resolution == "completa"
+        assert [x.segment_id for x in passes] == ["cr-pu", "pu-vi", "vi-ad", "ad-co"]
+    # y una parada con una sola salida no cambia aunque se marque
+    single = [
+        call(1, "50500", "Córdoba", hm(9, 0), hm(9, 0), node="cordoba"),
+        StopCall(2, "x", "Parada X", hm(10, 0), hm(10, 0), exit_node_ids=("bif-malaga",)),
+    ]
+    marked = [
+        single[0],
+        StopCall(2, "x", "Parada X", hm(10, 0), hm(10, 0), None, None, None, ("bif-malaga",), True),
+    ]
+    assert resolve_passes(marked, NODES, SEGMENTS) == resolve_passes(single, NODES, SEGMENTS)
