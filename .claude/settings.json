@@ -1,0 +1,10 @@
+{
+  "enabledPlugins": {
+    "supabase@claude-plugins-official": false,
+    "postgres-best-practices@supabase-agent-skills": false,
+    "pinecone@claude-plugins-official": false,
+    "n8n-skills@n8n-io": false,
+    "pydantic-ai@claude-plugins-official": false,
+    "temporal@temporal-marketplace": false
+  }
+}
