@@ -255,6 +255,7 @@ Ninguna es obligatoria para desarrollar. Los ejemplos están en `backend/.env.ex
 - [docs/diseno.md](docs/diseno.md): decisiones de diseño.
 - [docs/despliegue.md](docs/despliegue.md): Vercel, Render, Logfire y la base de datos local.
 - [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): tareas pendientes, ordenadas, y principios de arquitectura.
+- [docs/historial.md](docs/historial.md): lo ya hecho, PR a PR.
 - [CLAUDE.md](CLAUDE.md): convenciones del proyecto.
 
 ## Licencias de los datos
