@@ -5,6 +5,7 @@
 
 import type { AlternativeRoute, LineSummary, SegmentAlternatives, SegmentTrainGroup } from '../data/types.ts'
 import { formatDuracion } from './recorridos.ts'
+import { parentOf } from './state.ts'
 
 const lista = new Intl.ListFormat('es', { style: 'long', type: 'conjunction' })
 
@@ -94,6 +95,8 @@ export function conAlternativa(segments: SegmentAlternatives[]): SegmentAlternat
 export interface LineaSinAlternativa {
   line: LineSummary
   tramos: SegmentAlternatives[]
+  /** Los tramos de la línea, más los de sus baipases y enlaces que estén en `tramos`. */
+  total: number
   /** Los trenes del tramo que más deja sin otro camino y los del que menos. */
   max: number
   min: number
@@ -101,25 +104,30 @@ export interface LineaSinAlternativa {
 
 /**
  * Los tramos sin otro camino, agrupados por línea: de la línea cuyo tramo deja a más trenes sin él a la que
- * menos. Con decenas de líneas la lista sigue teniendo un renglón por línea, no uno por tramo.
+ * menos. Con decenas de líneas la lista sigue teniendo un renglón por línea, no uno por tramo. Los de un
+ * baipás o de un enlace van con los de la línea de la que cuelga, detrás de los suyos.
  */
 export function sinAlternativaPorLinea(segments: SegmentAlternatives[], network: { lines: LineSummary[]; segments: { id: string; line_id: string; seq: number }[] }): LineaSinAlternativa[] {
   const tramo = new Map(network.segments.map((s) => [s.id, s]))
   const porLinea = new Map<string, SegmentAlternatives[]>()
   for (const s of segments) {
-    const lineId = tramo.get(s.segment_id)?.line_id
-    if (!lineId || !ninguno(s)) continue
+    const propia = tramo.get(s.segment_id)?.line_id
+    if (!propia || !ninguno(s)) continue
+    const madre = parentOf(network.lines.find((l) => l.id === propia) ?? {})
+    const lineId = madre && network.lines.some((l) => l.id === madre) ? madre : propia
     porLinea.set(lineId, [...(porLinea.get(lineId) ?? []), s])
   }
   return [...porLinea.entries()]
     .flatMap(([lineId, tramos]) => {
+      const orden = (id: string) => (tramo.get(id)?.seq ?? 0) + (tramo.get(id)?.line_id === lineId ? 0 : 1000)
       const line = network.lines.find((l) => l.id === lineId)
       if (!line) return []
       const cuantos = tramos.map((s) => s.without_alternative)
       return [
         {
           line,
-          tramos: tramos.sort((a, b) => (tramo.get(a.segment_id)?.seq ?? 0) - (tramo.get(b.segment_id)?.seq ?? 0)),
+          tramos: tramos.sort((a, b) => orden(a.segment_id) - orden(b.segment_id)),
+          total: line.segment_count + tramos.filter((s) => tramo.get(s.segment_id)?.line_id !== lineId).length,
           max: Math.max(...cuantos),
           min: Math.min(...cuantos),
         },

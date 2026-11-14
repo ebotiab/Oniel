@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { abrirZonas } from './navegar.ts'
 
+
 // En un navegador sin WebGL2 MapLibre no puede crear el mapa. El visor lo explica en el hueco del mapa
 // y todo lo que no depende de él sigue funcionando. La prueba quita WebGL al navegador anulando
 // `getContext` antes de que cargue la página.

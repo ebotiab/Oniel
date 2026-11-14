@@ -125,17 +125,25 @@ export function formatCount(n: number): string {
 }
 
 /**
- * Las líneas que se cuentan y se listan como tales. Un baipás (el de Zaragoza, el de Lleida) es parte
- * de la línea de la que sale: va colgado de ella y no suma en el recuento de líneas.
+ * La línea de la que cuelga otra: la de un baipás (el de Zaragoza, el de Lleida) es la que rodea, y la
+ * de un enlace entre dos líneas (el de Monforte del Cid), la que su especificación declara.
  */
-export function mainLines<L extends Pick<LineSummary, 'id' | 'bypass_of'>>(lines: L[]): L[] {
-  const ids = new Set(lines.map((l) => l.id))
-  return lines.filter((l) => !l.bypass_of || !ids.has(l.bypass_of))
+export function parentOf(line: Pick<LineSummary, 'bypass_of' | 'link_of'>): string | null {
+  return line.bypass_of ?? line.link_of ?? null
 }
 
-/** Los baipases de una línea, en el orden en que se recorren desde su origen. */
-export function bypassesOf<L extends Pick<LineSummary, 'id' | 'bypass_of' | 'sort_order'>>(lines: L[], lineId: string): L[] {
-  return lines.filter((l) => l.bypass_of === lineId).sort((a, b) => a.sort_order - b.sort_order)
+/**
+ * Las líneas que se cuentan y se listan como tales. Un baipás o un enlace es parte de la línea de la
+ * que cuelga: va bajo ella y no suma en el recuento de líneas.
+ */
+export function mainLines<L extends Pick<LineSummary, 'id' | 'bypass_of' | 'link_of'>>(lines: L[]): L[] {
+  const ids = new Set(lines.map((l) => l.id))
+  return lines.filter((l) => !ids.has(parentOf(l) ?? ''))
+}
+
+/** Los baipases y los enlaces que cuelgan de una línea, en el orden en que se recorren desde su origen. */
+export function bypassesOf<L extends Pick<LineSummary, 'id' | 'bypass_of' | 'link_of' | 'sort_order'>>(lines: L[], lineId: string): L[] {
+  return lines.filter((l) => parentOf(l) === lineId).sort((a, b) => a.sort_order - b.sort_order)
 }
 
 /** «3 líneas · 976 km»: el recuento de la red, igual de largo con tres líneas que con cien. */

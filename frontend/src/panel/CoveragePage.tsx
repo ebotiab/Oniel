@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import type { AnnotationOut, CoverageOut, NetworkOut, Source } from '../data/types'
 import type { ApiStatus } from '../data/api'
-import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, routePath } from '../app/state'
+import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, parentOf, routePath } from '../app/state'
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { formatDateLong, lugar } from '../app/annotations'
 import { agruparFuentes } from '../app/fuentes'
@@ -171,7 +171,7 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
                   </h3>
                   <ul className="cobertura-lineas">
                     {lineas.flatMap((l) => [l, ...bypassesOf(coverage.lines, l.id)]).map((l) => (
-                      <li key={l.id} className={l.bypass_of ? 'cobertura-baipas' : undefined}>
+                      <li key={l.id} className={parentOf(l) ? 'cobertura-baipas' : undefined}>
                         <Enlace href={routePath({ selection: null, simulacion: false, linea: l.id })} onGo={() => onPickLine(l.id)} testId={`cobertura-linea-${l.id}`}>
                           {lineLabel(l)}
                         </Enlace>

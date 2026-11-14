@@ -3,7 +3,7 @@
     "id": "lav-valladolid-leon",
     "name": "Línea de alta velocidad Valladolid – Palencia – León",
     "short_name": "080 y 084",
-    "sort_order": 21,
+    "sort_order": 25,
     "zone": "castilla-y-leon",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

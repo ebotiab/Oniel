@@ -1,0 +1,24 @@
+{
+  "descripcion": "Registro de las consultas hechas el 13 de noviembre de 2026 al cargar las líneas de Extremadura (Madrid – Plasencia, Plasencia – Cáceres – Badajoz, el ramal de Mérida y Monfragüe – Cáceres): la comprobación de que ese día no había ninguna interrupción vigente en ellas. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+  "consultado_el": "2026-11-13",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-13 14:15",
+      "resumen": "La página, con la hora de las 14:15, traía una sola incidencia: la circulación suspendida en la línea de alta velocidad Madrid – Andalucía desde el 28 de octubre. No nombraba ninguna línea ni estación entre Madrid y Badajoz por Talavera de la Reina, Plasencia, Cáceres y Mérida.",
+      "que_aporta": "Ninguna incidencia de tráfico en las líneas de Extremadura ese día."
+    },
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Avisos",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "fecha_de_la_pagina": "2026-11-13",
+      "resumen": "El listado de avisos traía doce: obras en Ribadesella, Miranda de Ebro – Logroño, la autopista ferroviaria Algeciras – Zaragoza, Redondela – O Porriño, Murcia – Almería, Huércal-Viator – Almería, Xàtiva – Alcoi, Guadalajara – Plasencia de Jalón, Parets del Vallès – La Garriga, Zaragoza – Teruel – Sagunt y Cercedilla – Cotos, y el restablecimiento de Loriguilla-Reva – Buñol. Ninguno era de Extremadura ni tocaba la línea de Madrid a Talavera de la Reina, Plasencia, Cáceres, Mérida y Badajoz.",
+      "que_aporta": "Ningún aviso de obras con corte de servicio en las líneas de Extremadura ese día."
+    }
+  ]
+}

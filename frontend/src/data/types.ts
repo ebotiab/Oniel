@@ -67,6 +67,8 @@ export interface LineSummary {
   source_id: string | null
   /** Si la línea es un baipás, el id de la línea de la que lo es: el visor la cuelga de ella. */
   bypass_of?: string | null
+  /** Si la línea es un enlace entre dos líneas, el id de la línea de la que cuelga en la lista. */
+  link_of?: string | null
   node_count: number
   segment_count: number
 }

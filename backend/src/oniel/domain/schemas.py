@@ -65,6 +65,8 @@ class LineSummary(BaseModel):
     source_id: str | None = None
     #: Si la línea es un baipás, el id de la línea de la que lo es (``LineSpec.bypass_of``).
     bypass_of: str | None = None
+    #: Si la línea es un enlace, el id de la línea de la que cuelga (``LineSpec.link_of``).
+    link_of: str | None = None
     node_count: int
     segment_count: int
 

@@ -4,7 +4,7 @@
 
 import type { LineSummary, NetworkOut, NodeKind } from '../data/types'
 import { conceptos, terminos } from '../panel/glosario'
-import { formatKm, lineKind, lineLabel } from './state'
+import { formatKm, lineKind, lineLabel, parentOf } from './state'
 
 export type SearchTarget = { type: 'nodo'; id: string } | { type: 'linea'; id: string } | { type: 'glosario'; id: string | null }
 
@@ -59,10 +59,10 @@ function lineEntry(line: LineSummary): SearchEntry {
     key: `linea:${line.id}`,
     target: { type: 'linea', id: line.id },
     name: lineLabel(line),
-    detail: `${line.bypass_of ? 'Baipás' : 'Línea'} ${lineKind(line) === 'alta velocidad' ? 'de alta velocidad' : 'convencional'} · ${formatKm(line.length_km)} km`,
+    detail: `${line.bypass_of ? 'Baipás' : line.link_of ? 'Enlace' : 'Línea'} ${lineKind(line) === 'alta velocidad' ? 'de alta velocidad' : 'convencional'} · ${formatKm(line.length_km)} km`,
     adifCode: null,
-    // Un baipás cuelga de su línea: se encuentra por su nombre, detrás de las líneas, y no se ofrece sin escribir.
-    weight: line.bypass_of ? 1 : 0,
+    // Un baipás o un enlace cuelga de su línea: se encuentra por su nombre, detrás de las líneas, y no se ofrece sin escribir.
+    weight: parentOf(line) ? 1 : 0,
     words: text.split(' '),
     text,
   }

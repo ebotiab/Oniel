@@ -1,0 +1,140 @@
+{
+  "line": {
+    "id": "ramal-merida",
+    "name": "Línea convencional Aljucén – Mérida",
+    "short_name": "520",
+    "sort_order": 23,
+    "zone": "extremadura",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 120,
+    "tracks": 1,
+    "status": "disponible",
+    "description": "El camino por el que los trenes entran en Mérida, que queda a un lado de la línea nueva: un enlace corto desde la bifurcación Granja-Las Encinas hasta Aljucén y, desde allí, la vía de la línea convencional de Ciudad Real a Badajoz.\n\nLos trenes de Cáceres a Badajoz que paran en Mérida entran por aquí, cambian de sentido en la estación y vuelven a salir por Aljucén hacia La Garrovilla, donde recuperan la línea nueva. Ese último trecho, de Aljucén a La Garrovilla, no está cargado y se dibuja a trazos.\n\nPara Adif no es una línea aparte: es un trecho de su línea 520, de Ciudad Real a Badajoz, y el enlace de Aljucén.",
+    "geometry_source": {
+      "source_id": "osm-relation-6759901",
+      "parts": [
+        {
+          "source_id": "osm-vias-enlace-aljucen",
+          "file": "raw/osm/vias_enlace_aljucen_granja_las_encinas_2026-11-13.json",
+          "way_ref": "510",
+          "from": [
+            -6.417012,
+            38.9439081
+          ],
+          "to": [
+            -6.4041086,
+            38.9356355
+          ]
+        },
+        {
+          "source_id": "osm-relation-6759901",
+          "file": "raw/osm/relation_6759901_md_alcazar_badajoz_2026-11-10.json",
+          "relation_id": 6759901,
+          "from": [
+            -6.4041086,
+            38.9356355
+          ],
+          "to": [
+            -6.3430521,
+            38.9215856
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-madrid-extremadura"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "bif-granja-las-encinas", "name": "Bifurcación Granja-Las Encinas", "kind": "bifurcacion", "shared": true, "position": {"lon": -6.417012, "lat": 38.9439081}},
+    {"id": "aljucen", "name": "Aljucén", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.4041086, "lat": 38.9356355}, "description": "Punto en el que el enlace que baja de la línea de alta velocidad se une a la línea convencional de Ciudad Real a Badajoz, junto a la estación de Aljucén, que no tiene servicio de viajeros. Hacia el oeste, esa línea sigue a La Garrovilla y Badajoz."},
+    {"id": "merida", "name": "Mérida", "kind": "estacion", "adif_code": "37500", "position": {"lon": -6.3430521, "lat": 38.9215856}, "description": "La estación de Mérida. No está sobre la línea nueva: los trenes de Cáceres y de Badajoz entran por Aljucén y salen por donde han venido. De aquí salen también las líneas de Zafra y Sevilla y de Ciudad Real, que no están cargadas."}
+  ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrado de «ASFA - Convencional» y triángulo de GSM-R junto a Mérida."},
+    {"attribute": "bloqueo", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU ctc» y trazo naranja entre Aljucén y Mérida, y trazo naranja en el enlace que baja de Peñas Blancas."},
+    {"attribute": "mando", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
+  ],
+  "connections": [
+    {"id": "aljucen-la-garrovilla", "node_id": "aljucen", "name": "Línea convencional Aljucén–La Garrovilla", "towards": "Montijo y Badajoz, por la bifurcación La Isla", "status": "no_cargada", "sketch": [[-6.4041086, 38.9356355], [-6.416, 38.9357], [-6.4285, 38.925], [-6.4459, 38.9172], [-6.4596, 38.9162], [-6.4725, 38.9157]]},
+    {"id": "merida-zafra-sevilla", "node_id": "merida", "name": "Línea Mérida–Los Rosales", "towards": "Almendralejo, Zafra y Sevilla", "status": "no_cargada", "sketch": [[-6.3430521, 38.9215856], [-6.3644, 38.9173], [-6.383, 38.8869], [-6.3998, 38.6847], [-6.352, 38.5644], [-6.4051, 38.4136]]},
+    {"id": "merida-ciudad-real", "node_id": "merida", "name": "Línea convencional Ciudad Real–Badajoz", "towards": "Don Benito, Villanueva de la Serena, Cabeza del Buey, Puertollano y Ciudad Real", "status": "no_cargada", "sketch": [[-6.3430521, 38.9215856], [-6.3187, 38.905], [-6.1288, 38.8967], [-5.8629, 38.967], [-5.7965, 38.9689]]}
+  ],
+  "stop_mappings": {
+    "37500": {"node": "merida"},
+    "35400": {"exits": ["bif-granja-las-encinas"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-granja-las-encinas"}},
+    "30002": {"exits": ["bif-granja-las-encinas"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-granja-las-encinas"}},
+    "35001": {"exits": ["bif-granja-las-encinas"]},
+    "35002": {"exits": ["bif-granja-las-encinas"]},
+    "35012": {"exits": ["bif-granja-las-encinas"]},
+    "35005": {"exits": ["bif-granja-las-encinas"]},
+    "35105": {"exits": ["bif-granja-las-encinas"]},
+    "35109": {"exits": ["bif-granja-las-encinas"]},
+    "35200": {"exits": ["bif-granja-las-encinas"]},
+    "35203": {"exits": ["bif-granja-las-encinas"]},
+    "35206": {"exits": ["bif-granja-las-encinas"]},
+    "35207": {"exits": ["bif-granja-las-encinas"]},
+    "30000": {"exits": ["bif-granja-las-encinas"]},
+    "35301": {"exits": ["bif-granja-las-encinas"]},
+    "35302": {"exits": ["bif-granja-las-encinas"]},
+    "35303": {"exits": ["bif-granja-las-encinas"]},
+    "18000": {"exits": ["bif-granja-las-encinas"]},
+    "17000": {"exits": ["bif-granja-las-encinas"]},
+    "37611": {"exits": ["aljucen"], "via": {"line": "lav-plasencia-badajoz", "node": "garrovilla-las-vegas"}},
+    "37603": {"exits": ["aljucen"], "via": {"line": "lav-plasencia-badajoz", "node": "garrovilla-las-vegas"}},
+    "37608": {"exits": ["aljucen"], "via": {"line": "lav-plasencia-badajoz", "node": "garrovilla-las-vegas"}},
+    "37604": {"exits": ["aljucen"], "via": {"line": "lav-plasencia-badajoz", "node": "garrovilla-las-vegas"}},
+    "37606": {"exits": ["aljucen"], "via": {"line": "lav-plasencia-badajoz", "node": "garrovilla-las-vegas"}},
+    "40002": {"exits": ["merida"]},
+    "40004": {"exits": ["merida"]},
+    "40005": {"exits": ["merida"]},
+    "40006": {"exits": ["merida"]},
+    "40008": {"exits": ["merida"]},
+    "40100": {"exits": ["merida"]},
+    "40105": {"exits": ["merida"]},
+    "40107": {"exits": ["merida"]},
+    "40108": {"exits": ["merida"]},
+    "40113": {"exits": ["merida"]},
+    "40115": {"exits": ["merida"]},
+    "40119": {"exits": ["merida"]},
+    "40122": {"exits": ["merida"]},
+    "50700": {"exits": ["merida"]},
+    "51003": {"exits": ["merida"]},
+    "37410": {"exits": ["merida"]},
+    "37409": {"exits": ["merida"]},
+    "37407": {"exits": ["merida"]},
+    "37406": {"exits": ["merida"]},
+    "37404": {"exits": ["merida"]},
+    "37402": {"exits": ["merida"]},
+    "37400": {"exits": ["merida"]},
+    "37311": {"exits": ["merida"]},
+    "37308": {"exits": ["merida"]},
+    "37305": {"exits": ["merida"]},
+    "37302": {"exits": ["merida"]},
+    "37300": {"exits": ["merida"]},
+    "37200": {"exits": ["merida"]},
+    "94004": {"exits": ["merida"]},
+    "94002": {"exits": ["merida"]},
+    "50100": {"exits": ["merida"]},
+    "60400": {"exits": ["merida"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Mérida y, además, en Cáceres, Plasencia, Badajoz o alguna de las estaciones entre La Garrovilla y Badajoz: los que entran en Mérida o salen de ella por Aljucén. Quedan fuera los que solo van de Mérida hacia Zafra o hacia Ciudad Real.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [
+      "30002",
+      "35400",
+      "37611",
+      "37603",
+      "37608",
+      "37604",
+      "37606"
+    ],
+    "min_node_stops": 1
+  }
+}

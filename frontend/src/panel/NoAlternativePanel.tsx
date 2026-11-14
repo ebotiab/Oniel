@@ -92,9 +92,9 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
           )}
           {lineas.length > 0 && (
             <ol className="sin-camino-lineas" data-testid="lista-sin-alternativa">
-              {lineas.map(({ line, tramos, min, max }) => {
+              {lineas.map(({ line, tramos, total, min, max }) => {
                 const abiertaEsta = abierta === line.id
-                const entera = tramos.length === line.segment_count
+                const entera = tramos.length === total
                 return (
                   <li key={line.id} className={abiertaEsta ? 'abierta' : undefined} data-testid={`sin-camino-linea-${line.id}`}>
                     <button
@@ -114,7 +114,7 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
                       </span>
                       <span className="cuantos datos">{rangoTrenes(min, max)}</span>
                       <span className="suave">
-                        {entera ? `Toda la línea, ${tramos.length} tramos` : tramos.length === 1 ? `1 de sus ${line.segment_count} tramos` : `${tramos.length} de sus ${line.segment_count} tramos`}
+                        {entera ? `Toda la línea, ${tramos.length} tramos` : tramos.length === 1 ? `1 de sus ${total} tramos` : `${tramos.length} de sus ${total} tramos`}
                       </span>
                       <span className="suave sin-camino-ver">{abiertaEsta ? 'Ocultar' : 'Ver los tramos'}</span>
                     </button>

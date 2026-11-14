@@ -21,6 +21,11 @@ LAV_MALAGA_SPEC = DATA_DIR / "curated" / "lav-cordoba-malaga.json"
 LAV_GRANADA_SPEC = DATA_DIR / "curated" / "lav-antequera-granada.json"
 BCN_SPEC = DATA_DIR / "curated" / "lav-madrid-barcelona.json"
 LAV_VALENCIA_SPEC = DATA_DIR / "curated" / "lav-madrid-valencia.json"
+MADRID_PLASENCIA_SPEC = DATA_DIR / "curated" / "madrid-plasencia.json"
+LAV_BADAJOZ_SPEC = DATA_DIR / "curated" / "lav-plasencia-badajoz.json"
+RAMAL_MERIDA_SPEC = DATA_DIR / "curated" / "ramal-merida.json"
+MONFRAGUE_CACERES_SPEC = DATA_DIR / "curated" / "monfrague-caceres.json"
+LAV_LEON_SPEC = DATA_DIR / "curated" / "lav-valladolid-leon.json"
 #: Los dos baipases de la alta velocidad de Barcelona: líneas cortas que cuelgan de ella.
 BYPASS_ZARAGOZA_SPEC = DATA_DIR / "curated" / "baipas-zaragoza.json"
 BYPASS_LLEIDA_SPEC = DATA_DIR / "curated" / "baipas-lleida.json"
@@ -28,7 +33,7 @@ LAV_ALICANTE_SPEC = DATA_DIR / "curated" / "lav-albacete-alicante.json"
 LAV_MURCIA_SPEC = DATA_DIR / "curated" / "lav-monforte-murcia.json"
 MEDITERRANEO_SPEC = DATA_DIR / "curated" / "valencia-castello-tarragona.json"
 LAV_VALLADOLID_SPEC = DATA_DIR / "curated" / "lav-madrid-valladolid.json"
-LAV_LEON_SPEC = DATA_DIR / "curated" / "lav-valladolid-leon.json"
+LINK_MONFORTE_SPEC = DATA_DIR / "curated" / "enlace-monforte-del-cid.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -47,6 +52,11 @@ SPECS = [
     LAV_MURCIA_SPEC,
     MEDITERRANEO_SPEC,
     LAV_VALLADOLID_SPEC,
+    LINK_MONFORTE_SPEC,
+    MADRID_PLASENCIA_SPEC,
+    LAV_BADAJOZ_SPEC,
+    RAMAL_MERIDA_SPEC,
+    MONFRAGUE_CACERES_SPEC,
     LAV_LEON_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"

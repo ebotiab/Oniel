@@ -31,7 +31,9 @@ test.describe('Destinos directos de una estación', () => {
     // el resto, a un toque
     await page.getByTestId('destinos-ver-todos').click()
     await expect(filas).toHaveCount(57)
-    await expect(filas.filter({ hasText: 'Badajoz' })).toContainText('MD · a las 16:48')
+    // a Badajoz van dos: desde que las líneas de Extremadura están cargadas cuenta también el
+    // Regional Exprés de las 11:58, además del MD de las 16:48
+    await expect(filas.filter({ hasText: 'Badajoz' })).toHaveText('BadajozMD y Regional Exprés · de 11:58 a 16:482 trenes')
     await expect(page.getByTestId('destinos-ver-todos')).toHaveText('Ver solo los más frecuentes')
     // un destino de la red lleva a su ficha
     await page.getByTestId('destino-puertollano').click()
