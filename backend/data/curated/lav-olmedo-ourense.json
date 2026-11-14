@@ -1,0 +1,621 @@
+{
+  "line": {
+    "id": "lav-olmedo-ourense",
+    "name": "Línea de alta velocidad Olmedo – Zamora – Ourense",
+    "short_name": "982 y 822",
+    "sort_order": 25,
+    "zone": "galicia",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 2,
+    "opened_on": "2021-12-21",
+    "reference_length_km": 328.649,
+    "pk_origin_km": 133.884,
+    "status": "disponible",
+    "description": "Es el camino de Madrid a Galicia: sale de la línea de alta velocidad de Madrid a Valladolid cerca de Olmedo y llega a Ourense por Medina del Campo, Zamora y Sanabria.\n\nSe abrió por partes: de Olmedo a Zamora en diciembre de 2015, de Zamora a Pedralba de la Pradería, ya en Sanabria, en octubre de 2020, y el resto hasta Ourense en diciembre de 2021. Entre Sanabria y Ourense cruza la montaña por una sucesión de túneles y viaductos.\n\nNo es de vía doble en todo el recorrido. Hay una sola vía de Medina del Campo a Coreses, poco antes de Zamora, a la salida de Zamora, de Pedralba de la Pradería a Vilavella y en la llegada a Ourense. En esos trechos los trenes de un sentido y de otro se cruzan en los puntos preparados para ello.\n\nLos últimos kilómetros, de Taboadela a Ourense, van por la vía de la línea antigua, a la que se añadió un tercer carril para que puedan usarla los trenes de alta velocidad. Está en obras una variante que la sustituirá.\n\nLa recorren los trenes de Madrid a Galicia. En Ourense unos terminan y otros siguen hacia Santiago de Compostela y A Coruña, hacia Vigo o hacia Lugo por líneas que todavía no están cargadas. Los trenes de Madrid a Salamanca usan solo el primer trecho, hasta Medina del Campo.",
+    "geometry_source": {
+      "source_id": "osm-relation-4777980",
+      "parts": [
+        {
+          "source_id": "osm-relation-4777980",
+          "file": "raw/osm/relation_4777980_lav_olmedo_zamora_galicia_2026-11-14.json",
+          "relation_id": 4777980,
+          "from": [
+            -4.6802476,
+            41.2731733
+          ],
+          "to": [
+            -5.7447669,
+            41.5139161
+          ]
+        },
+        {
+          "source_id": "osm-relation-11109438",
+          "file": "raw/osm/relation_11109438_linea_zamora_a_coruna_2026-11-14.json",
+          "relation_id": 11109438,
+          "from": [
+            -5.7447669,
+            41.5139161
+          ],
+          "to": [
+            -5.7699913,
+            41.5159911
+          ]
+        },
+        {
+          "source_id": "osm-relation-4777980",
+          "file": "raw/osm/relation_4777980_lav_olmedo_zamora_galicia_2026-11-14.json",
+          "relation_id": 4777980,
+          "from": [
+            -5.7699913,
+            41.5159911
+          ],
+          "to": [
+            -7.8292649,
+            42.2609322
+          ]
+        },
+        {
+          "source_id": "osm-relation-11109438",
+          "file": "raw/osm/relation_11109438_linea_zamora_a_coruna_2026-11-14.json",
+          "relation_id": 11109438,
+          "from": [
+            -7.8292649,
+            42.2609322
+          ],
+          "to": [
+            -7.8731297,
+            42.3507481
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-olmedo-zamora-galicia"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-medina",
+      "name": "Bifurcación Medina",
+      "kind": "bifurcacion",
+      "shared": true,
+      "position": {
+        "lon": -4.6802476,
+        "lat": 41.2731733
+      },
+      "reference_pk_km": 133.884
+    },
+    {
+      "id": "medina-del-campo-av",
+      "name": "Medina del Campo Alta Velocidad",
+      "kind": "estacion",
+      "adif_code": "08240",
+      "position": {
+        "lon": -4.9229851,
+        "lat": 41.2913315
+      },
+      "reference_pk_km": 155.458,
+      "description": "Estación solo de alta velocidad, a las afueras de Medina del Campo; la de la línea convencional es otra. Justo después sale el enlace por el que los trenes de Madrid a Salamanca dejan esta línea, y empieza la vía única hasta Coreses."
+    },
+    {
+      "id": "toro-av",
+      "name": "Toro",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 69.508
+      },
+      "reference_pk_km": 203.392,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) en el trecho de vía única entre Medina del Campo y Zamora: aquí un tren puede apartarse para cruzarse con otro. No tiene servicio de viajeros."
+    },
+    {
+      "id": "coreses",
+      "name": "Coreses",
+      "kind": "pb",
+      "rank": "secundario",
+      "position": {
+        "km": 89.255
+      },
+      "reference_pk_km": 223.24,
+      "description": "Puesto de banalización unos nueve kilómetros antes de Zamora. Aquí acaba la vía única que viene de Medina del Campo y empieza la vía doble hasta Zamora. No tiene servicio de viajeros."
+    },
+    {
+      "id": "zamora",
+      "name": "Zamora",
+      "kind": "estacion",
+      "adif_code": "30200",
+      "position": {
+        "lon": -5.7397823,
+        "lat": 41.5160013
+      },
+      "reference_pk_km": 232.463,
+      "description": "La estación de Zamora, que comparten la alta velocidad y la línea convencional de Medina del Campo a Ourense. La alta velocidad llegó en diciembre de 2015."
+    },
+    {
+      "id": "bif-los-conforcos",
+      "name": "Bifurcación Los Conforcos",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "km": 109.485
+      },
+      "reference_pk_km": 243.448,
+      "description": "Punto al noroeste de Zamora donde acaba la vía única de la salida de la ciudad y vuelve la vía doble. No tiene servicio de viajeros."
+    },
+    {
+      "id": "tabara",
+      "name": "Tábara",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 141.186
+      },
+      "reference_pk_km": 275.07,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) entre Zamora y Sanabria. No tiene servicio de viajeros."
+    },
+    {
+      "id": "sanabria-av",
+      "name": "Sanabria Alta Velocidad",
+      "kind": "estacion",
+      "adif_code": "08247",
+      "position": {
+        "lon": -6.5629119,
+        "lat": 42.0447688
+      },
+      "reference_pk_km": 333.588,
+      "description": "Estación solo de alta velocidad, en Otero de Sanabria, a unos cinco kilómetros de Puebla de Sanabria. Abrió en 2020, con el trecho de Zamora a Pedralba de la Pradería."
+    },
+    {
+      "id": "pedralba",
+      "name": "Pedralba de la Pradería",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "km": 209.406
+      },
+      "reference_pk_km": 343.784,
+      "description": "Punto donde la línea se une con la convencional de Zamora a Ourense. Entre 2020 y 2021 la alta velocidad acababa aquí y los trenes seguían por la línea antigua. Desde aquí hasta Vilavella hay una sola vía."
+    },
+    {
+      "id": "vilavella",
+      "name": "Vilavella",
+      "kind": "pb",
+      "rank": "secundario",
+      "position": {
+        "km": 240.168
+      },
+      "reference_pk_km": 375.059,
+      "description": "Puesto de banalización al otro lado de los túneles de A Canda, ya en Galicia. Aquí acaba la vía única que viene de Pedralba de la Pradería y vuelve la vía doble. No tiene servicio de viajeros."
+    },
+    {
+      "id": "a-gudina-porta-de-galicia",
+      "name": "A Gudiña-Porta de Galicia",
+      "kind": "estacion",
+      "adif_code": "08251",
+      "position": {
+        "lon": -7.1343698,
+        "lat": 42.063765
+      },
+      "reference_pk_km": 382.613,
+      "description": "Estación solo de alta velocidad, la primera de Galicia viniendo de Madrid. Abrió en diciembre de 2021, con el último trecho de la línea."
+    },
+    {
+      "id": "meaman",
+      "name": "Meamán",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 295.97
+      },
+      "reference_pk_km": 429.854,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) entre A Gudiña y Ourense. No tiene servicio de viajeros."
+    },
+    {
+      "id": "taboadela",
+      "name": "Taboadela",
+      "kind": "bifurcacion",
+      "position": {
+        "km": 312.1
+      },
+      "reference_pk_km": 446.098,
+      "description": "Donde acaba la vía nueva de alta velocidad, unos dieciséis kilómetros antes de Ourense. Desde aquí los trenes siguen por la vía de la línea convencional, única y con tres carriles para que sirva a los dos anchos. Hay además un cambiador de ancho para los trenes que continúan por vías de ancho ibérico."
+    },
+    {
+      "id": "ourense",
+      "name": "Ourense",
+      "kind": "estacion",
+      "adif_code": "22100",
+      "position": {
+        "lon": -7.872551,
+        "lat": 42.350692
+      },
+      "reference_pk_km": 462.533,
+      "description": "La estación de Ourense, donde acaba esta línea. De aquí salen la línea de alta velocidad a Santiago de Compostela y A Coruña y las líneas convencionales a Vigo y a Monforte de Lemos y Lugo, que todavía no están cargadas."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "medina-del-campo-av",
+      "to_node": "coreses",
+      "value": 1,
+      "source_id": "wikipedia-lav-olmedo-zamora-galicia",
+      "checked_on": "2026-11-14",
+      "note": "La tabla de puntos kilométricos dice que en Medina del Campo AV empieza la vía única (67,782 km) y que en el PB de Coreses empieza la vía doble. En la relación 4777980 de OSM, passenger_lines=1 desde 1,6 km después de la estación (pasado el enlace de Salamanca) hasta Coreses. El mapa 4 de la Declaración sobre la Red dibuja el trecho con el trazo de vía única a 25 kV y 1.435 mm."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "zamora",
+      "to_node": "bif-los-conforcos",
+      "value": 1,
+      "source_id": "wikipedia-lav-olmedo-zamora-galicia",
+      "checked_on": "2026-11-14",
+      "note": "La tabla da la transición de vía doble a única en el PK 232,909, a la salida de Zamora, y el inicio de la vía doble en la bifurcación Los Conforcos (243,448). OSM coincide: passenger_lines=1 entre los kilómetros 98,8 y 109,5 del trazado. Los primeros 2,4 km, hasta la bifurcación Valorio, llevan en OSM gauge=1435;1668; Valorio no es nodo y el ancho mixto de ese trecho no se declara."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "pedralba",
+      "to_node": "vilavella",
+      "value": 1,
+      "source_id": "osm-relation-4777980",
+      "checked_on": "2026-11-14",
+      "note": "En OSM, passenger_lines=1 entre los kilómetros 209,4 y 240,2 del trazado (30,8 km). La tabla de Wikipedia dice que la vía única empieza tras 96,296 km de vía doble desde Los Conforcos (PK 339,7) y dura 35,315 km, hasta el PBA de Vilavella (375,059); la nota del inicio la pone en la fila de Sanabria AV. El mapa 4 dibuja todo el trecho de Sanabria AV a Taboadela con el trazo de vía doble: es un esquema y no recoge esta vía única. Se declara desde Pedralba, que es donde cambian las vías de OSM. Las 25 vías con railway=construction de la relación están todas en este trecho, junto a la vía en servicio: una segunda vía en obras."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "taboadela",
+      "to_node": "ourense",
+      "value": 1,
+      "source_id": "osm-relation-11109438",
+      "checked_on": "2026-11-14",
+      "note": "En OSM, passenger_lines=1 desde el PB de Taboadela hasta la estación de Ourense. El mapa 4 dibuja el trecho con el trazo de vía única con tercer carril a 25 kV. Wikipedia: la vía convencional adaptada al triple hilo a lo largo de 17 km."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "taboadela",
+      "to_node": "ourense",
+      "value": "mixto",
+      "source_id": "osm-relation-11109438",
+      "checked_on": "2026-11-14",
+      "note": "En OSM, gauge=1435;1668 desde el final de la vía nueva en Taboadela (kilómetro 312,8 del trazado) hasta la entrada a la estación de Ourense, por la vía de la línea 822. El mapa 4 lo dibuja como vía única con tercer carril."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-medina",
+      "to_node": "ourense",
+      "value": "ertms_n2_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: el símbolo rojo de «ERTMS N2» con el de «ASFA - AV» junto a la línea entre Medina del Campo AV y Zamora, a los dos lados de Sanabria AV y antes de Taboadela. Entre la bifurcación Medina y Medina del Campo AV y junto a Ourense el símbolo de ERTMS N2 va con el cuadrado de «ASFA - Convencional»; el valor es el mismo. Las vías de OSM dicen railway:etcs=2 en casi todo el trazado."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-medina",
+      "to_node": "taboadela",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: rótulo «BCA» y trazo rosa a lo largo de la línea, de la bifurcación Medina a Taboadela AV."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "taboadela",
+      "to_node": "ourense",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: entre Taboadela AV y Ourense el trazo que acompaña a la vía de tercer carril es naranja, el de «BAU ctc» en la leyenda de vía única; el rótulo «BAU ctc» más cercano está junto a Ourense. Leído por el color."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-medina",
+      "to_node": "taboadela",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "taboadela",
+      "to_node": "ourense",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: trazo naranja de «BAU ctc» entre Taboadela AV y Ourense."
+    }
+  ],
+  "connections": [
+    {
+      "id": "enlace-medina-salamanca",
+      "node_id": "medina-del-campo-av",
+      "name": "Enlace a la línea de Salamanca",
+      "towards": "Salamanca",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.9229851,
+          41.2913315
+        ],
+        [
+          -5.64899,
+          40.972235
+        ]
+      ]
+    },
+    {
+      "id": "conv-zamora-medina-del-campo",
+      "node_id": "zamora",
+      "name": "Línea convencional Medina del Campo–Zamora",
+      "towards": "Toro y Medina del Campo",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.7397823,
+          41.5160013
+        ],
+        [
+          -5.384953,
+          41.512201
+        ],
+        [
+          -4.909923,
+          41.317617
+        ]
+      ]
+    },
+    {
+      "id": "conv-zamora-ourense",
+      "node_id": "zamora",
+      "name": "Línea convencional Zamora–Ourense",
+      "towards": "Puebla de Sanabria",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.7397823,
+          41.5160013
+        ],
+        [
+          -5.9718457,
+          41.6817198
+        ],
+        [
+          -6.626848,
+          42.045763
+        ]
+      ]
+    },
+    {
+      "id": "lav-ourense-santiago",
+      "node_id": "ourense",
+      "name": "LAV Ourense–Santiago de Compostela",
+      "towards": "Santiago de Compostela y A Coruña",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -7.872551,
+          42.350692
+        ],
+        [
+          -8.544697,
+          42.870842
+        ]
+      ]
+    },
+    {
+      "id": "conv-ourense-vigo",
+      "node_id": "ourense",
+      "name": "Línea convencional Ourense–Vigo",
+      "towards": "Ribadavia y Vigo",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -7.872551,
+          42.350692
+        ],
+        [
+          -8.139261,
+          42.2931
+        ],
+        [
+          -8.7146089,
+          42.2392656
+        ]
+      ]
+    },
+    {
+      "id": "conv-ourense-monforte",
+      "node_id": "ourense",
+      "name": "Línea convencional Ourense–Monforte de Lemos",
+      "towards": "Monforte de Lemos y Lugo",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -7.872551,
+          42.350692
+        ],
+        [
+          -7.503589,
+          42.529682
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "08240": {
+      "node": "medina-del-campo-av"
+    },
+    "30200": {
+      "node": "zamora"
+    },
+    "08247": {
+      "node": "sanabria-av"
+    },
+    "08251": {
+      "node": "a-gudina-porta-de-galicia"
+    },
+    "22100": {
+      "node": "ourense"
+    },
+    "17000": {
+      "exits": [
+        "bif-medina"
+      ],
+      "via": {
+        "line": "lav-madrid-valladolid",
+        "node": "bif-medina"
+      }
+    },
+    "08004": {
+      "exits": [
+        "bif-medina"
+      ],
+      "via": {
+        "line": "lav-madrid-valladolid",
+        "node": "bif-medina"
+      }
+    },
+    "03208": {
+      "exits": [
+        "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "60600": {
+      "exits": [
+        "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "60911": {
+      "exits": [
+        "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "30100": {
+      "exits": [
+        "medina-del-campo-av"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "31412": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20305": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20309": {
+      "exits": [
+        "ourense"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Medina del Campo AV, en Sanabria AV o en A Gudiña-Porta de Galicia, a las que solo se llega por esta línea. Los que la recorren sin parar en ninguna de las tres entran por las reglas de recorrido: los que van de Madrid-Chamartín a Zamora o a Ourense sin paradas intermedias. Zamora y Ourense no están en el filtro porque paran en ellas los trenes de las líneas convencionales, que no recorren esta.",
+    "any_of_stop_ids": [
+      "08240",
+      "08247",
+      "08251"
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "madrid-zamora-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y Zamora sin paradas intermedias: recorren la línea desde la bifurcación Medina sin parar en Medina del Campo AV.",
+      "consecutive_stop_ids": [
+        "17000",
+        "30200"
+      ],
+      "from_stop_id": "17000"
+    },
+    {
+      "id": "madrid-ourense-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y Ourense sin paradas intermedias: recorren la línea entera sin parar en ella.",
+      "consecutive_stop_ids": [
+        "17000",
+        "22100"
+      ],
+      "from_stop_id": "17000"
+    }
+  ]
+}

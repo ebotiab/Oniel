@@ -281,14 +281,38 @@
     },
     {
       "id": "wikipedia-lav-olmedo-zamora-galicia",
-      "name": "Artículo «Línea de alta velocidad Olmedo-Zamora-Orense-Santiago de Compostela» de Wikipedia en español (puntos kilométricos desde la bifurcación Medina)",
+      "name": "Artículo «Línea de alta velocidad Olmedo-Zamora-Orense-Santiago de Compostela» de Wikipedia en español (puntos kilométricos, instalaciones, vía única y doble, velocidades, fechas de apertura)",
       "publisher": "Colaboradores de Wikipedia",
       "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Olmedo-Zamora-Orense-Santiago_de_Compostela",
       "license": "CC BY-SA 4.0",
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
-      "retrieved_on": "2026-11-13",
-      "coverage": "Kilómetros de vía desde la bifurcación Medina (PK 133,884) hasta las paradas de la línea de Galicia, que no está cargada: Medina del Campo AV (155,458), Zamora (232,463), Sanabria AV (333,588), A Gudiña-Porta de Galicia (382,613) y Ourense (462,533). Los puntos kilométricos siguen la numeración de la línea de Madrid a Valladolid.",
-      "notes": "Revisión del 15 de octubre de 2025 (oldid 169994798), consultada por la API de Wikipedia el 13 de noviembre de 2026. Solo se usa para repartir el tiempo de los trenes que dejan la línea Madrid–Valladolid en la bifurcación Medina (track_km de sus asignaciones de parada): la línea de Galicia no está cargada y esta fuente no sustituye a la verificación que tocará hacer al cargarla. La tabla da una «futura bifurcación Valladolid» en el PK 144,473, que no se ha cargado."
+      "retrieved_on": "2026-11-14",
+      "coverage": "Puntos kilométricos, que continúan la numeración de la línea de Madrid a Valladolid: bifurcación Medina (133,884), Medina del Campo AV (155,458), semi-PAET de Toro AV (203,392), PB de Coreses (223,240), Zamora (232,463), bifurcación Los Conforcos (243,448), PAET de Tábara (275,070), Sanabria AV (333,588), unión con la línea convencional en Pedralba de la Pradería (343,784, en el esquema de la línea), PBA de Vilavella (375,059), A Gudiña-Porta de Galicia (382,613), PAET de Meamán (429,854), PB de Taboadela (445,698), bifurcación del cambiador de Taboadela (446,098) y Ourense (462,533); trechos de vía única y de vía doble; aperturas de Olmedo a Zamora (15 de diciembre de 2015), de Zamora a Pedralba de la Pradería (26 de octubre de 2020) y de Pedralba a Ourense (diciembre de 2021); ancho estándar de Olmedo a Ourense, con los 17 km de Taboadela a Ourense por la vía convencional adaptada con tercer carril; cuadro de velocidades máximas (300 km/h en casi toda la línea).",
+      "notes": "Fuente de verificación, no de geometría; revisión del 15 de octubre de 2025 (oldid 169994798), consultada por la API de Wikipedia el 13 y el 14 de noviembre de 2026. Los puntos kilométricos de las cinco estaciones quedan a menos de 0,5 km del kilómetro medido sobre el trazado de OSM desde la bifurcación Medina (Medina del Campo AV, 0,09 km; Zamora, 0,20; Sanabria AV, 0,28; A Gudiña, 0,47; Ourense, 0,43), y los cambios de velocidad de las vías de OSM caen donde los da el cuadro. La tabla trae además el desvío de la base de Olmedo, los puestos de Siete Iglesias de Trabancos, Otero de Bodas, Ubilleiros y Leria, las bifurcaciones Valorio y de la base de La Hiniesta y el cambiador de Taboadela, que no se han cargado como nodos. La «futura bifurcación Valladolid» (144,473) y los futuros puestos de Nava del Rey y de Montamarta figuran como futuros y no se han cargado. La unión con la línea convencional en Pedralba de la Pradería no está en la tabla: su PK sale del esquema de la línea del mismo artículo. Sobre la vía única de Pedralba a Vilavella la tabla no cuadra consigo misma (la nota está en la fila de Sanabria AV, pero las longitudes que da la sitúan desde el PK 339,7): Oniel la declara donde cambian las vías de OSM. El artículo da la apertura del último trecho el 20 de diciembre de 2021 en la ficha y el 21 en el texto; Oniel guarda el 21. Dice que en 2024 se aprobó un baipás cerca de Olmedo, con dos noticias de prensa como referencia, y que la variante de Ourense está en obras; Oniel no los ha registrado como proyectos sin su fuente oficial. De los artículos de las estaciones se tomó el código de Medina del Campo AV (oldid 161232118), Sanabria AV (175422959), A Gudiña-Porta de Galicia (175653719), Zamora (172576423) y Ourense (170200644), que coinciden con las paradas del GTFS de Renfe. El artículo no da el número de línea de Adif."
+    },
+    {
+      "id": "osm-relation-4777980",
+      "name": "Trazado de la línea de alta velocidad Olmedo–Zamora–Ourense (relación OSM 4777980, vía de ancho estándar a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/4777980",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-14",
+      "coverage": "Dos trechos de la línea: de la bifurcación Medina a la salida de Zamora (98,9 km) y de la bifurcación Valorio al final de la vía nueva en Taboadela (212,2 km); velocidad máxima y número de vías por tramo. La relación sigue de Ourense a Santiago de Compostela y A Coruña; ese trecho no se usa.",
+      "notes": "Descargado por la API Overpass el 14 de noviembre de 2026 del servidor overpass.openstreetmap.fr, porque overpass-api.de respondía 406 y 502. La relación es de infraestructura («LAV Olmedo-Zamora-Galicia», operator=Adif) y trae las dos vías (766 vías, 25 de ellas en construcción, que el trazado no usa), pero no es de una pieza: le faltan la salida de Zamora hasta la bifurcación Valorio (2,4 km) y la llegada a Ourense desde Taboadela (14,7 km), que van por vías de la línea convencional y se toman de la relación 11109438. Los cuatro empalmes son nodos de OSM que están en las dos relaciones. Empieza en el mismo punto que la bifurcación Medina de la línea de Madrid a Valladolid. Sus vías llevan ref=982 entre Olmedo y Taboadela, de donde sale el número de línea que enseña Oniel; no se ha contrastado con la Declaración sobre la Red. La etiqueta passenger_lines dice dónde hay una vía y dónde dos, y se contrastó con Wikipedia y con el mapa 4 de la Declaración sobre la Red. Las coordenadas de Medina del Campo AV, Zamora, Sanabria AV, A Gudiña-Porta de Galicia y Ourense son las de sus estaciones en OSM (raw/osm/instalaciones_olmedo_zamora_ourense_2026-11-14.json, descargado el mismo día); sus códigos coinciden con las paradas del GTFS de Renfe. La parada de Medina del Campo AV del GTFS trae las coordenadas de la estación convencional, a 1,1 km: no se usan.",
+      "file": "raw/osm/relation_4777980_lav_olmedo_zamora_galicia_2026-11-14.json"
+    },
+    {
+      "id": "osm-relation-11109438",
+      "name": "Vías de la línea convencional Zamora–A Coruña que usa la alta velocidad a la salida de Zamora y en la llegada a Ourense (relación OSM 11109438)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/11109438",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-14",
+      "coverage": "Los dos trechos que faltan en la relación 4777980: la salida de Zamora hasta la bifurcación Valorio (2,4 km) y de Taboadela a la estación de Ourense (14,7 km), de vía única y ancho mixto; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 14 de noviembre de 2026 del servidor overpass.openstreetmap.fr. La relación es de infraestructura («Liña Zamora-A Coruña», operator=Adif) y es de una pieza de Zamora a Santiago de Compostela; de ella solo se usan los dos trechos por los que pasan los trenes de alta velocidad. En los dos las vías llevan gauge=1435;1668 y 25 kV; entre Taboadela y Ourense, ref=822 y velocidades de 50 a 90 km/h. Los últimos 0,8 km, dentro de la estación de Ourense, están etiquetados con ancho ibérico y 3 kV: el trazado acaba en la parada de la relación, que no es la vía de topera de ancho estándar.",
+      "file": "raw/osm/relation_11109438_linea_zamora_a_coruna_2026-11-14.json"
     },
     {
       "id": "osm-relation-11351146",
@@ -504,9 +528,9 @@
       "url": "https://www.adif.es/viajeros/estado-de-la-red",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-13",
+      "retrieved_on": "2026-11-14",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {

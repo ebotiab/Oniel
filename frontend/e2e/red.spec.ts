@@ -30,11 +30,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^18 líneas · 3\.923 km\s*122 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^19 líneas · 4\.252 km\s*127 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
-    // las zonas van de norte a sur, y solo las que tienen alguna línea; con dieciocho líneas (más de doce)
+    // las zonas van de norte a sur, y solo las que tienen alguna línea; con diecinueve líneas (más de doce)
     // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
     await expect(red.locator('.zona-cabecera')).toHaveText([
+      /^›Galicia1 líneaOurense$/,
       /^›Castilla y León1 líneaValladolid, Segovia$/,
       /^›Cataluña1 líneaBarcelona, Lleida$/,
       /^›Comunidad Valenciana y Murcia4 líneasValencia, Alicante, Murcia, Elche$/,
@@ -46,6 +47,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await expect(red.locator('.fila-linea')).toHaveCount(0)
     // desplegadas, cada zona enseña sus líneas
     await abrirZonas(page)
+    await expect(red.getByRole('region', { name: 'Galicia' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Olmedo – Ourense por Zamora328 km$/])
     await expect(red.getByRole('region', { name: 'Castilla y León' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Valladolid por Segovia179 km$/])
     await expect(red.getByRole('region', { name: 'Cataluña' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Barcelona por Zaragoza627 km$/])
     await expect(red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' }).locator('.fila-linea')).toHaveText([

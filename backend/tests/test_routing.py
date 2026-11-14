@@ -91,12 +91,12 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # los dos de después de la línea de Valencia, los baipases de Zaragoza y de Lleida; los nueve
     # siguientes, la línea de Albacete a Alicante; los ocho de después, la de Monforte del Cid a
     # Murcia; los 35, la de Valencia a Camp de Tarragona; los 5, la de Madrid a
-    # Valladolid; los 13, 14, 2 y 4 del final, las cuatro
-    # líneas de Extremadura
+    # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 del final, las
+    # cuatro líneas de Extremadura
     assert (
         len(graph.edges)
         == len(network.segments)
-        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4)
+        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4)
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
@@ -262,6 +262,27 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     # el trecho que va entero por el enlace es del enlace
     (only_link,) = find_routes(graph, "monforte-del-cid-av", "bif-vinalopo")
     assert only_link.line_ids == ["enlace-monforte-del-cid"] and only_link.length_km == 2.1
+
+
+def test_ourense_and_zamora_are_reached_from_madrid(graph: Graph) -> None:
+    """El camino a Galicia: de Madrid-Chamartín por la línea de Valladolid hasta la bifurcación
+    Medina y, desde allí, por la de Olmedo a Ourense. No hay otro en las líneas cargadas."""
+    lines = ["lav-madrid-valladolid", "lav-olmedo-ourense"]
+    to_ourense = find_routes(graph, "madrid-chamartin", "ourense")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_ourense] == [(461.4, 104, lines)]
+    to_zamora = find_routes(graph, "madrid-chamartin", "zamora")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_zamora] == [(231.5, 49, lines)]
+    assert [(leg.from_node_id, leg.to_node_id) for leg in to_ourense[0].legs] == [
+        ("madrid-chamartin", "bif-medina"),
+        ("bif-medina", "ourense"),
+    ]
+    # los trenes de Ourense a Alicante: por Chamartín, sin pasar por Atocha
+    to_alicante = find_routes(graph, "ourense", "alicante-terminal")
+    assert "madrid-chamartin" in to_alicante[0].node_ids
+    assert "madrid-puerta-de-atocha" not in to_alicante[0].node_ids
+    assert graph.edges_at("bif-medina") and {
+        e.line_id for e in graph.edges_at("bif-medina")
+    } == set(lines)
 
 
 def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:

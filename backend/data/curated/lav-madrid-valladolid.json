@@ -15,7 +15,7 @@
     "reference_length_km": 178.559,
     "pk_origin_km": 0.75,
     "status": "disponible",
-    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora, Ourense y Galicia, que todavía no está cargada. En Valladolid la línea continúa hacia Palencia, León y Burgos, también sin cargar: de los trenes que siguen por esas líneas Oniel cuenta el paso por esta, hasta la bifurcación o hasta Valladolid.\n\nAlgunos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la línea de alta velocidad de Valencia.",
+    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora y Ourense, por la que siguen los trenes de Galicia. En Valladolid la línea continúa hacia Palencia, León y Burgos, por líneas que todavía no están cargadas: de los trenes que siguen por ellas Oniel cuenta el paso por esta, hasta Valladolid.\n\nAlgunos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la línea de alta velocidad de Valencia.",
     "geometry_source": {
       "source_id": "osm-relation-4777557",
       "parts": [
@@ -111,7 +111,7 @@
         "km": 133.134
       },
       "reference_pk_km": 133.884,
-      "description": "Punto cercano a Olmedo (Valladolid) donde sale de esta línea la de alta velocidad a Medina del Campo, Zamora, Ourense y Galicia. Los trenes de Madrid a Galicia y a Salamanca dejan aquí la línea. Menos de un kilómetro antes está el puesto de adelantamiento de Olmedo, que no se ha cargado como nodo."
+      "description": "Punto cercano a Olmedo (Valladolid) donde sale de esta línea la de alta velocidad a Medina del Campo, Zamora y Ourense. Los trenes de Madrid a Galicia y a Salamanca dejan aquí la línea de Valladolid. Menos de un kilómetro antes está el puesto de adelantamiento de Olmedo, que no se ha cargado como nodo."
     },
     {
       "id": "valladolid-campo-grande",
@@ -156,27 +156,6 @@
     }
   ],
   "connections": [
-    {
-      "id": "lav-olmedo-zamora-galicia",
-      "node_id": "bif-medina",
-      "name": "LAV Olmedo–Zamora–Galicia",
-      "towards": "Medina del Campo, Zamora, Ourense y Galicia",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.6802476,
-          41.2731733
-        ],
-        [
-          -4.9229851,
-          41.2913315
-        ],
-        [
-          -5.739675,
-          41.515892
-        ]
-      ]
-    },
     {
       "id": "lav-valladolid-palencia-leon",
       "node_id": "valladolid-campo-grande",
@@ -234,31 +213,46 @@
       "exits": [
         "bif-medina"
       ],
-      "track_km": 21.574
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "bif-medina"
+      }
     },
     "30200": {
       "exits": [
         "bif-medina"
       ],
-      "track_km": 98.579
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "bif-medina"
+      }
     },
     "08247": {
       "exits": [
         "bif-medina"
       ],
-      "track_km": 199.704
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "bif-medina"
+      }
     },
     "08251": {
       "exits": [
         "bif-medina"
       ],
-      "track_km": 248.729
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "bif-medina"
+      }
     },
     "22100": {
       "exits": [
         "bif-medina"
       ],
-      "track_km": 328.649
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "bif-medina"
+      }
     },
     "30100": {
       "exits": [
