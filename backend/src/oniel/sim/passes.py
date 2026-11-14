@@ -251,7 +251,8 @@ def resolve_passes(
         b = anchors[j]
         assert b is not None
         unknown_between = j > i + 1
-        if calls[i].aside and calls[j].aside and not a.on_line and not b.on_line:
+        same_side = set(calls[i].exit_node_ids) & set(calls[j].exit_node_ids)
+        if calls[i].aside and calls[j].aside and same_side and not a.on_line and not b.on_line:
             # dos paradas seguidas del mismo lado de la línea: entre ellas el tren no la pisa
             i = j
             continue
