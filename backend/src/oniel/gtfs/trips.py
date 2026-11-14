@@ -222,6 +222,7 @@ def calls_for_trip(
                 lat=stop.lat if stop else None,
                 node_id=mapping.node if mapping else None,
                 exit_node_ids=tuple(mapping.exits) if mapping else (),
+                aside=mapping.aside if mapping else False,
                 exit_distances=distances,
                 exit_note=note,
             )

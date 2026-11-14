@@ -226,9 +226,9 @@ async def test_a_new_file_keeps_the_previous_dataset(
         await _count(conn, "services", NEWER_ID)
         == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409
     )
-    # (los 260 de la convencional son los de los trenes de la línea de Extremadura entre
+    # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
-    passes = (3996 + 121) + (1968 + 260 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+    passes = (3996 + 121) + (1968 + 267 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     passes += (1250 + 68) + 498  # las dos líneas de alta velocidad a Málaga y a Granada
     # la alta velocidad de Barcelona, todos estimados: 6.851 en la línea y 97 y 224 en los
     # baipases de Zaragoza y de Lleida. Eran 7.590 cuando el tren que no para figuraba por la
@@ -244,7 +244,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral
-    passes += (2051 + 582) + (2310 + 134) + 344 + (26 + 26)
+    passes += (2051 + 582) + (2247 + 134) + 344 + (26 + 26)
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 

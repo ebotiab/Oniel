@@ -34,9 +34,10 @@ def test_conventional_filter_selects_the_trains_that_use_the_line(
     products = Counter(t.product for t in trips)
     # Los trenes de la línea de Extremadura entran por una regla de recorrido, de Madrid-Atocha
     # Cercanías a la bifurcación Planetario: 92 Media Distancia, 64 de Proximidad a Illescas, 55
-    # Alvia, 26 Regional Exprés y 23 Regional, 260 en total
+    # Alvia, 26 Regional Exprés y 30 Regional, 267 en total. De los Regional, 7 no paran en
+    # Leganés y entran por la regla de los que tienen Fuenlabrada como primera parada
     assert products["MD"] == 290 + 92 and products["PROXIMDAD"] == 98 + 64
-    assert (products["REG.EXP."], products["REGIONAL"]) == (14 + 26, 23)
+    assert (products["REG.EXP."], products["REGIONAL"]) == (14 + 26, 30)
     # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 2 Alvia y 20 Intercity Madrid-Atocha
     # Cercanías–Andalucía por las reglas de recorrido (van por esta línea hasta Manzanares)
     assert products["ALVIA"] == 8 + 2 + 55 and products["Intercity"] == 20

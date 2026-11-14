@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import type { Map as MapLibreMap } from 'maplibre-gl'
 
-import { IBERIA_BOUNDS, SPAIN_BOUNDS } from '../src/map/bounds.ts'
+import { IBERIA_BOUNDS, IBERIA_BOUNDS_MOVIL, SPAIN_BOUNDS } from '../src/map/bounds.ts'
 import { abrirZonas } from './navegar.ts'
 
 // El visor expone el mapa en window.__onielMap en desarrollo, que es como lo arranca Playwright.
@@ -39,11 +39,10 @@ test.describe('Navegar por el mapa', () => {
       expect(n.lat, `${n.id}: latitud`).toBeGreaterThan(sur)
       expect(n.lat, `${n.id}: latitud`).toBeLessThan(norte)
     }
-    // La red entera, de Badajoz a Barcelona, se ve al abrir en las dos pantallas: en escritorio, a la
-    // derecha del panel; en el móvil, entre la cabecera y la hoja plegada (desde que la caja de la que
-    // el mapa no sale deja alejarlo lo bastante, `IBERIA_BOUNDS`; antes no cabía a lo ancho).
-    // El encuadre es la península entera (`SPAIN_BOUNDS`): en escritorio cabe y se comprueba más abajo;
-    // en el móvil no cabe a lo ancho (Fisterra y el cabo de Creus quedan fuera), pero sí toda la red.
+    // La red entera se ve al abrir en las dos pantallas: en escritorio, a la derecha del panel; en el
+    // móvil, entre la cabecera y la hoja plegada. El encuadre es la península entera (`SPAIN_BOUNDS`)
+    // y cabe en las dos, de Fisterra al cabo de Creus: en el móvil, desde que tiene su propia caja,
+    // más alta, y un zoom mínimo más bajo (`IBERIA_BOUNDS_MOVIL`); se comprueba más abajo.
     const movil = testInfo.project.name === 'movil'
     const lienzo = await page.locator('.maplibregl-canvas').boundingBox()
     const cabecera = await page.locator('.cabecera').boundingBox()
@@ -61,20 +60,19 @@ test.describe('Navegar por el mapa', () => {
       expect(p.y, `${p.id}: bajo la cabecera`).toBeGreaterThan(cabecera!.y + cabecera!.height - lienzo!.y)
       expect(p.y, `${p.id}: ${movil ? 'sobre la hoja' : 'dentro del lienzo'}`).toBeLessThan(abajo)
     }
-    if (movil) return
-    // en escritorio, además, las cuatro esquinas de la península caben a la derecha del panel
+    // además, las cuatro esquinas de la península caben en ese mismo hueco
     const esquinas = await page.evaluate(
       (caja) => [caja[0], caja[1]].map((c) => ({ ...(globalThis as unknown as ConMapa).__onielMap!.project(c) })),
       SPAIN_BOUNDS,
     )
     const [suroeste, nordeste] = esquinas
-    expect(suroeste.x, 'Fisterra: a la derecha del panel').toBeGreaterThan(izquierda)
+    expect(suroeste.x, `Fisterra: ${movil ? 'dentro del lienzo' : 'a la derecha del panel'}`).toBeGreaterThan(izquierda)
     expect(nordeste.x, 'cabo de Creus: dentro del lienzo').toBeLessThan(lienzo!.width)
     expect(nordeste.y, 'Estaca de Bares: bajo la cabecera').toBeGreaterThan(cabecera!.y + cabecera!.height - lienzo!.y)
-    expect(suroeste.y, 'Tarifa: dentro del lienzo').toBeLessThan(abajo)
+    expect(suroeste.y, `Tarifa: ${movil ? 'sobre la hoja' : 'dentro del lienzo'}`).toBeLessThan(abajo)
   })
 
-  test('el mapa no sale de la península ni de sus vecinos', async ({ page }) => {
+  test('el mapa no sale de la península ni de sus vecinos', async ({ page }, testInfo) => {
     await mapaListo(page)
     const vistas = await page.evaluate(() => {
       const map = (globalThis as unknown as ConMapa).__onielMap!
@@ -87,7 +85,8 @@ test.describe('Navegar por el mapa', () => {
       const alejado = encuadre()
       return { alemania, eeuu, alejado }
     })
-    const [[oeste, sur], [este, norte]] = IBERIA_BOUNDS
+    // el móvil tiene su propia caja, más alta y más estrecha por el oeste
+    const [[oeste, sur], [este, norte]] = testInfo.project.name === 'movil' ? IBERIA_BOUNDS_MOVIL : IBERIA_BOUNDS
     const holgura = 1e-6
     for (const [nombre, [[w, s], [e, n]]] of Object.entries(vistas)) {
       expect(w, `${nombre}: borde oeste`).toBeGreaterThanOrEqual(oeste - holgura)

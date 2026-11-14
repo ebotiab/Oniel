@@ -17,7 +17,7 @@ import { CAPAS_CON_TRAZO, dibujoDe } from '../app/annotationLayers'
 import type { AnnotationOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
-import { IBERIA_BOUNDS, SPAIN_BOUNDS } from './bounds'
+import { IBERIA_BOUNDS, IBERIA_BOUNDS_MOVIL, SPAIN_BOUNDS } from './bounds'
 import { CAPAS_DE_VIA, LAYER, OPACIDAD_RECORRIDOS, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeLineas, opacidadDeVia, type Trazo } from './layers'
 import baseStyle from './style/oniel-base.json'
 
@@ -166,8 +166,9 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
         },
         // El mapa no sale de la península y sus vecinos: el lienzo entero se queda dentro de la caja,
         // así que el zoom mínimo efectivo depende de la pantalla (docs/diseno.md, «Encuadre»).
-        maxBounds: IBERIA_BOUNDS,
-        minZoom: 4.5,
+        // en el móvil la caja es más alta y el zoom mínimo más bajo, para que quepa la península a lo ancho
+        maxBounds: padding.left === 0 ? IBERIA_BOUNDS_MOVIL : IBERIA_BOUNDS,
+        minZoom: padding.left === 0 ? 4.1 : 4.5,
         maxZoom: 15,
         // Siempre con el norte arriba y sin inclinar, como una hoja de mapa.
         dragRotate: false,
@@ -216,6 +217,16 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // La caja y el zoom mínimo dependen de si el panel va a la izquierda (escritorio) o abajo (móvil):
+  // si la ventana pasa de un caso al otro con el mapa ya creado, se cambian con él.
+  const movil = padding.left === 0
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+    map.setMinZoom(movil ? 4.1 : 4.5)
+    map.setMaxBounds(movil ? IBERIA_BOUNDS_MOVIL : IBERIA_BOUNDS)
+  }, [movil])
 
   // Cargar la red cuando llegue
   useEffect(() => {
