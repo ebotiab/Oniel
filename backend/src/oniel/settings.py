@@ -43,6 +43,7 @@ class Settings(BaseSettings):
         "lav-monforte-murcia",
         "valencia-castello-tarragona",
         "lav-madrid-valladolid",
+        "lav-valladolid-leon",
     ]
 
 

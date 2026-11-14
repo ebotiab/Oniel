@@ -28,6 +28,7 @@ LAV_ALICANTE_SPEC = DATA_DIR / "curated" / "lav-albacete-alicante.json"
 LAV_MURCIA_SPEC = DATA_DIR / "curated" / "lav-monforte-murcia.json"
 MEDITERRANEO_SPEC = DATA_DIR / "curated" / "valencia-castello-tarragona.json"
 LAV_VALLADOLID_SPEC = DATA_DIR / "curated" / "lav-madrid-valladolid.json"
+LAV_LEON_SPEC = DATA_DIR / "curated" / "lav-valladolid-leon.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -46,6 +47,7 @@ SPECS = [
     LAV_MURCIA_SPEC,
     MEDITERRANEO_SPEC,
     LAV_VALLADOLID_SPEC,
+    LAV_LEON_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los
