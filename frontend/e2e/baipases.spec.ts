@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { abrirZonas } from './navegar.ts'
 
+
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
 const BAIPAS_ZARAGOZA = 'baipas-zaragoza:bif-moncasi:bif-canal-imperial'
@@ -20,8 +21,8 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await page.goto('/')
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
-    // catorce líneas, con los kilómetros de los dos baipases sumados
-    await expect(page.getByTestId('ficha-red')).toContainText(/^14 líneas · 3\.394 km/)
+    // dieciocho líneas, con los kilómetros de los dos baipases sumados
+    await expect(page.getByTestId('ficha-red')).toContainText(/^18 líneas · 3\.923 km/)
     const cataluna = red.getByRole('region', { name: 'Cataluña' })
     await expect(cataluna.locator('.zona-cabecera')).toHaveText(/^›Cataluña1 línea/)
     await abrirZonas(page)

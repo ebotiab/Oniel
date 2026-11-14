@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { abrirZonas } from './navegar.ts'
 
+
 const LINEA = 'linares-baeza-moreda-granada'
 
 /** En el móvil la ficha vive en la hoja inferior: hay que ampliarla para verla entera. */

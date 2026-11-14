@@ -39,21 +39,39 @@ test.describe('Navegar por el mapa', () => {
       expect(n.lat, `${n.id}: latitud`).toBeGreaterThan(sur)
       expect(n.lat, `${n.id}: latitud`).toBeLessThan(norte)
     }
-    // En el móvil la red no cabe entera a lo ancho: el mapa no puede alejarse más sin salirse de la
-    // península, y Sevilla y Barcelona quedan justo fuera. En escritorio se ve toda, fuera del panel.
-    test.skip(testInfo.project.name === 'movil', 'en el móvil la red no cabe entera a lo ancho')
-    const panel = await page.getByTestId('vista-red').boundingBox()
+    // La red entera, de Badajoz a Barcelona, se ve al abrir en las dos pantallas: en escritorio, a la
+    // derecha del panel; en el móvil, entre la cabecera y la hoja plegada (desde que la caja de la que
+    // el mapa no sale deja alejarlo lo bastante, `IBERIA_BOUNDS`; antes no cabía a lo ancho).
+    // El encuadre es la península entera (`SPAIN_BOUNDS`): en escritorio cabe y se comprueba más abajo;
+    // en el móvil no cabe a lo ancho (Fisterra y el cabo de Creus quedan fuera), pero sí toda la red.
+    const movil = testInfo.project.name === 'movil'
     const lienzo = await page.locator('.maplibregl-canvas').boundingBox()
+    const cabecera = await page.locator('.cabecera').boundingBox()
+    const panel = await page.getByTestId('vista-red').boundingBox()
+    const asa = movil ? await page.getByRole('button', { name: 'Ampliar el panel' }).boundingBox() : null
+    const izquierda = movil ? 0 : panel!.x + panel!.width - lienzo!.x
+    const abajo = movil ? asa!.y - lienzo!.y : lienzo!.height
     const puntos = await page.evaluate(
       (nodos) => nodos.map((n) => ({ id: n.id, ...(globalThis as unknown as ConMapa).__onielMap!.project([n.lon, n.lat]) })),
       indice.nodes,
     )
     for (const p of puntos) {
-      expect(p.x, `${p.id}: a la derecha del panel`).toBeGreaterThan(panel!.x + panel!.width - lienzo!.x)
+      expect(p.x, `${p.id}: ${movil ? 'dentro del lienzo' : 'a la derecha del panel'}`).toBeGreaterThan(izquierda)
       expect(p.x, `${p.id}: dentro del lienzo`).toBeLessThan(lienzo!.width)
-      expect(p.y, `${p.id}: dentro del lienzo`).toBeGreaterThan(0)
-      expect(p.y, `${p.id}: dentro del lienzo`).toBeLessThan(lienzo!.height)
+      expect(p.y, `${p.id}: bajo la cabecera`).toBeGreaterThan(cabecera!.y + cabecera!.height - lienzo!.y)
+      expect(p.y, `${p.id}: ${movil ? 'sobre la hoja' : 'dentro del lienzo'}`).toBeLessThan(abajo)
     }
+    if (movil) return
+    // en escritorio, además, las cuatro esquinas de la península caben a la derecha del panel
+    const esquinas = await page.evaluate(
+      (caja) => [caja[0], caja[1]].map((c) => ({ ...(globalThis as unknown as ConMapa).__onielMap!.project(c) })),
+      SPAIN_BOUNDS,
+    )
+    const [suroeste, nordeste] = esquinas
+    expect(suroeste.x, 'Fisterra: a la derecha del panel').toBeGreaterThan(izquierda)
+    expect(nordeste.x, 'cabo de Creus: dentro del lienzo').toBeLessThan(lienzo!.width)
+    expect(nordeste.y, 'Estaca de Bares: bajo la cabecera').toBeGreaterThan(cabecera!.y + cabecera!.height - lienzo!.y)
+    expect(suroeste.y, 'Tarifa: dentro del lienzo').toBeLessThan(abajo)
   })
 
   test('el mapa no sale de la península ni de sus vecinos', async ({ page }) => {
@@ -131,15 +149,17 @@ async function encuadre(page: Page) {
 }
 
 /**
- * El encuadre enseña la vía única de punta a punta: Despeñaperros, al norte, y Granada, al sur, donde
- * acaba la línea de Moreda. No llega al norte de la península: en el móvil el lienzo sigue por detrás
- * de la hoja y alcanza Madrid, pero no los Pirineos.
+ * El encuadre enseña la vía única de punta a punta: de Badajoz, al oeste, a la entrada a Murcia, al
+ * este, y del paso por Loja, al sur, a la línea de Madrid a Plasencia, al norte. No es el de la red
+ * entera: Tarragona y Barcelona, de vía doble, quedan fuera por el este. Hacia el norte no se acota:
+ * en el móvil el lienzo es alto, sigue por detrás de la hoja y, con seis grados de vía única a lo
+ * ancho, pasa de los Pirineos.
  */
 async function encuadraLaViaUnica(page: Page) {
   await expect
     .poll(async () => {
       const [[oeste, sur], [este, norte]] = await encuadre(page)
-      return oeste < -3.61 && este > -3.5 && sur < 37.18 && norte > 38.4 && norte < 42.5
+      return oeste < -6.98 && este > -0.95 && sur < 37.12 && norte > 40.25 && este < 1
     })
     .toBe(true)
 }

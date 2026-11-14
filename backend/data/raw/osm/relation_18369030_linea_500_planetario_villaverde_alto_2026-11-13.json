@@ -1,0 +1,3129 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T12:30:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 254908724,
+  "lat": 40.3691589,
+  "lon": -3.6782144
+},
+{
+  "type": "node",
+  "id": 254908725,
+  "lat": 40.3675237,
+  "lon": -3.6780172
+},
+{
+  "type": "node",
+  "id": 254908726,
+  "lat": 40.3664547,
+  "lon": -3.6781548
+},
+{
+  "type": "node",
+  "id": 254908727,
+  "lat": 40.3628415,
+  "lon": -3.6790339
+},
+{
+  "type": "node",
+  "id": 254908728,
+  "lat": 40.3614169,
+  "lon": -3.6796747
+},
+{
+  "type": "node",
+  "id": 254908729,
+  "lat": 40.3603897,
+  "lon": -3.6804542
+},
+{
+  "type": "node",
+  "id": 254908730,
+  "lat": 40.3590243,
+  "lon": -3.6817512
+},
+{
+  "type": "node",
+  "id": 254908731,
+  "lat": 40.3573747,
+  "lon": -3.6831824
+},
+{
+  "type": "node",
+  "id": 254908732,
+  "lat": 40.3562505,
+  "lon": -3.6837150
+},
+{
+  "type": "node",
+  "id": 254908734,
+  "lat": 40.3535442,
+  "lon": -3.6840285
+},
+{
+  "type": "node",
+  "id": 254908736,
+  "lat": 40.3513177,
+  "lon": -3.6840186
+},
+{
+  "type": "node",
+  "id": 254908737,
+  "lat": 40.3500886,
+  "lon": -3.6842486
+},
+{
+  "type": "node",
+  "id": 254908738,
+  "lat": 40.3493131,
+  "lon": -3.6846644
+},
+{
+  "type": "node",
+  "id": 254908740,
+  "lat": 40.3482556,
+  "lon": -3.6857811
+},
+{
+  "type": "node",
+  "id": 254908741,
+  "lat": 40.3476589,
+  "lon": -3.6868254
+},
+{
+  "type": "node",
+  "id": 254908742,
+  "lat": 40.3472770,
+  "lon": -3.6876572
+},
+{
+  "type": "node",
+  "id": 254908743,
+  "lat": 40.3469373,
+  "lon": -3.6887877
+},
+{
+  "type": "node",
+  "id": 254908744,
+  "lat": 40.3458158,
+  "lon": -3.6931921
+},
+{
+  "type": "node",
+  "id": 254908745,
+  "lat": 40.3451515,
+  "lon": -3.6959484
+},
+{
+  "type": "node",
+  "id": 254908746,
+  "lat": 40.3449291,
+  "lon": -3.6965321
+},
+{
+  "type": "node",
+  "id": 254908747,
+  "lat": 40.3446020,
+  "lon": -3.6970900
+},
+{
+  "type": "node",
+  "id": 254908748,
+  "lat": 40.3419460,
+  "lon": -3.7003859
+},
+{
+  "type": "node",
+  "id": 254908749,
+  "lat": 40.3412231,
+  "lon": -3.7018810
+},
+{
+  "type": "node",
+  "id": 254908750,
+  "lat": 40.3410121,
+  "lon": -3.7028680
+},
+{
+  "type": "node",
+  "id": 254908751,
+  "lat": 40.3409293,
+  "lon": -3.7046630
+},
+{
+  "type": "node",
+  "id": 255938903,
+  "lat": 40.3622736,
+  "lon": -3.6792721
+},
+{
+  "type": "node",
+  "id": 255938904,
+  "lat": 40.3619000,
+  "lon": -3.6794346
+},
+{
+  "type": "node",
+  "id": 255939648,
+  "lat": 40.3609053,
+  "lon": -3.6800033
+},
+{
+  "type": "node",
+  "id": 256342200,
+  "lat": 40.3709550,
+  "lon": -3.6789613
+},
+{
+  "type": "node",
+  "id": 306172450,
+  "lat": 40.3414938,
+  "lon": -3.7152819,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "double_slip",
+    "ref": "T9"
+  }
+},
+{
+  "type": "node",
+  "id": 306172451,
+  "lat": 40.3414121,
+  "lon": -3.7146971,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "double_slip",
+    "ref": "T13"
+  }
+},
+{
+  "type": "node",
+  "id": 316019919,
+  "lat": 40.3410131,
+  "lon": -3.7068679
+},
+{
+  "type": "node",
+  "id": 316024057,
+  "lat": 40.3466103,
+  "lon": -3.6900604
+},
+{
+  "type": "node",
+  "id": 318939424,
+  "lat": 40.3592249,
+  "lon": -3.6815519
+},
+{
+  "type": "node",
+  "id": 318939471,
+  "lat": 40.3600804,
+  "lon": -3.6807238
+},
+{
+  "type": "node",
+  "id": 318941269,
+  "lat": 40.3585515,
+  "lon": -3.6822042
+},
+{
+  "type": "node",
+  "id": 449137401,
+  "lat": 40.3455701,
+  "lon": -3.6943005
+},
+{
+  "type": "node",
+  "id": 514262243,
+  "lat": 40.3459137,
+  "lon": -3.6927722
+},
+{
+  "type": "node",
+  "id": 514262263,
+  "lat": 40.3436927,
+  "lon": -3.6982315
+},
+{
+  "type": "node",
+  "id": 514262269,
+  "lat": 40.3424432,
+  "lon": -3.6997250
+},
+{
+  "type": "node",
+  "id": 514262272,
+  "lat": 40.3416708,
+  "lon": -3.7008322
+},
+{
+  "type": "node",
+  "id": 600456631,
+  "lat": 40.3565537,
+  "lon": -3.6836017
+},
+{
+  "type": "node",
+  "id": 1107477358,
+  "lat": 40.3700024,
+  "lon": -3.6785292
+},
+{
+  "type": "node",
+  "id": 1107477366,
+  "lat": 40.3749254,
+  "lon": -3.6812851
+},
+{
+  "type": "node",
+  "id": 1141218782,
+  "lat": 40.3650548,
+  "lon": -3.6783844
+},
+{
+  "type": "node",
+  "id": 1141218918,
+  "lat": 40.3671149,
+  "lon": -3.6780387
+},
+{
+  "type": "node",
+  "id": 1141219333,
+  "lat": 40.3638274,
+  "lon": -3.6786536
+},
+{
+  "type": "node",
+  "id": 1152845557,
+  "lat": 40.3765227,
+  "lon": -3.6821819
+},
+{
+  "type": "node",
+  "id": 1152845561,
+  "lat": 40.3664606,
+  "lon": -3.6782230
+},
+{
+  "type": "node",
+  "id": 1152845592,
+  "lat": 40.3675233,
+  "lon": -3.6780835
+},
+{
+  "type": "node",
+  "id": 1152845596,
+  "lat": 40.3761185,
+  "lon": -3.6820153
+},
+{
+  "type": "node",
+  "id": 1152845598,
+  "lat": 40.3822081,
+  "lon": -3.6820227
+},
+{
+  "type": "node",
+  "id": 1152845629,
+  "lat": 40.3755710,
+  "lon": -3.6816985
+},
+{
+  "type": "node",
+  "id": 1152845630,
+  "lat": 40.3794218,
+  "lon": -3.6828378
+},
+{
+  "type": "node",
+  "id": 1152845634,
+  "lat": 40.3671180,
+  "lon": -3.6780943
+},
+{
+  "type": "node",
+  "id": 1152845639,
+  "lat": 40.3756010,
+  "lon": -3.6817797
+},
+{
+  "type": "node",
+  "id": 1152845662,
+  "lat": 40.3749779,
+  "lon": -3.6813702
+},
+{
+  "type": "node",
+  "id": 1152845665,
+  "lat": 40.3638336,
+  "lon": -3.6786955
+},
+{
+  "type": "node",
+  "id": 1152845688,
+  "lat": 40.3694025,
+  "lon": -3.6783459
+},
+{
+  "type": "node",
+  "id": 1152845690,
+  "lat": 40.3814222,
+  "lon": -3.6825168
+},
+{
+  "type": "node",
+  "id": 1152845693,
+  "lat": 40.3802008,
+  "lon": -3.6829169
+},
+{
+  "type": "node",
+  "id": 1152845695,
+  "lat": 40.3684626,
+  "lon": -3.6781158
+},
+{
+  "type": "node",
+  "id": 1152845717,
+  "lat": 40.3771223,
+  "lon": -3.6823959
+},
+{
+  "type": "node",
+  "id": 1152845733,
+  "lat": 40.3650628,
+  "lon": -3.6784483
+},
+{
+  "type": "node",
+  "id": 1152845734,
+  "lat": 40.3771268,
+  "lon": -3.6823481
+},
+{
+  "type": "node",
+  "id": 1152845743,
+  "lat": 40.3705231,
+  "lon": -3.6788153,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "5"
+  }
+},
+{
+  "type": "node",
+  "id": 1152845769,
+  "lat": 40.3680687,
+  "lon": -3.6780294
+},
+{
+  "type": "node",
+  "id": 1152845772,
+  "lat": 40.3622801,
+  "lon": -3.6793193
+},
+{
+  "type": "node",
+  "id": 1152845773,
+  "lat": 40.3824604,
+  "lon": -3.6817058
+},
+{
+  "type": "node",
+  "id": 1152845787,
+  "lat": 40.3802333,
+  "lon": -3.6828692
+},
+{
+  "type": "node",
+  "id": 1152845793,
+  "lat": 40.3709663,
+  "lon": -3.6790177
+},
+{
+  "type": "node",
+  "id": 1152845808,
+  "lat": 40.3699627,
+  "lon": -3.6785691
+},
+{
+  "type": "node",
+  "id": 1152845810,
+  "lat": 40.3765143,
+  "lon": -3.6822278
+},
+{
+  "type": "node",
+  "id": 1152845813,
+  "lat": 40.3794207,
+  "lon": -3.6828809,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 1152845815,
+  "lat": 40.3628576,
+  "lon": -3.6790866
+},
+{
+  "type": "node",
+  "id": 1152845817,
+  "lat": 40.3811313,
+  "lon": -3.6827097
+},
+{
+  "type": "node",
+  "id": 1152845821,
+  "lat": 40.3703838,
+  "lon": -3.6786997
+},
+{
+  "type": "node",
+  "id": 1152858182,
+  "lat": 40.3573986,
+  "lon": -3.6832172
+},
+{
+  "type": "node",
+  "id": 1152858183,
+  "lat": 40.3601120,
+  "lon": -3.6807688
+},
+{
+  "type": "node",
+  "id": 1152858184,
+  "lat": 40.3609192,
+  "lon": -3.6800520
+},
+{
+  "type": "node",
+  "id": 1152858186,
+  "lat": 40.3551691,
+  "lon": -3.6840225
+},
+{
+  "type": "node",
+  "id": 1152858188,
+  "lat": 40.3551675,
+  "lon": -3.6839765
+},
+{
+  "type": "node",
+  "id": 1152858191,
+  "lat": 40.3614269,
+  "lon": -3.6797154
+},
+{
+  "type": "node",
+  "id": 1152858193,
+  "lat": 40.3592708,
+  "lon": -3.6815785
+},
+{
+  "type": "node",
+  "id": 1152858194,
+  "lat": 40.3568830,
+  "lon": -3.6835117
+},
+{
+  "type": "node",
+  "id": 1152858196,
+  "lat": 40.3590468,
+  "lon": -3.6817865
+},
+{
+  "type": "node",
+  "id": 1152858197,
+  "lat": 40.3582489,
+  "lon": -3.6825467
+},
+{
+  "type": "node",
+  "id": 1152858198,
+  "lat": 40.3535401,
+  "lon": -3.6840736
+},
+{
+  "type": "node",
+  "id": 1152858200,
+  "lat": 40.3582361,
+  "lon": -3.6824938
+},
+{
+  "type": "node",
+  "id": 1152858202,
+  "lat": 40.3604069,
+  "lon": -3.6805096
+},
+{
+  "type": "node",
+  "id": 1152858203,
+  "lat": 40.3556931,
+  "lon": -3.6839253
+},
+{
+  "type": "node",
+  "id": 1152858205,
+  "lat": 40.3619056,
+  "lon": -3.6794800
+},
+{
+  "type": "node",
+  "id": 1152895088,
+  "lat": 40.3524358,
+  "lon": -3.6840682
+},
+{
+  "type": "node",
+  "id": 1152895151,
+  "lat": 40.3513104,
+  "lon": -3.6840762
+},
+{
+  "type": "node",
+  "id": 1152895153,
+  "lat": 40.3500898,
+  "lon": -3.6843130
+},
+{
+  "type": "node",
+  "id": 1152895169,
+  "lat": 40.3524325,
+  "lon": -3.6840245
+},
+{
+  "type": "node",
+  "id": 1156232660,
+  "lat": 40.3479681,
+  "lon": -3.6863570
+},
+{
+  "type": "node",
+  "id": 1156232689,
+  "lat": 40.3466525,
+  "lon": -3.6900902
+},
+{
+  "type": "node",
+  "id": 1156232690,
+  "lat": 40.3412678,
+  "lon": -3.7018866
+},
+{
+  "type": "node",
+  "id": 1156232694,
+  "lat": 40.3451888,
+  "lon": -3.6959535
+},
+{
+  "type": "node",
+  "id": 1156232702,
+  "lat": 40.3458362,
+  "lon": -3.6932008
+},
+{
+  "type": "node",
+  "id": 1156232706,
+  "lat": 40.3449598,
+  "lon": -3.6965651
+},
+{
+  "type": "node",
+  "id": 1156232710,
+  "lat": 40.3459358,
+  "lon": -3.6927910
+},
+{
+  "type": "node",
+  "id": 1156232716,
+  "lat": 40.3473332,
+  "lon": -3.6876702
+},
+{
+  "type": "node",
+  "id": 1156232717,
+  "lat": 40.3469869,
+  "lon": -3.6888426
+},
+{
+  "type": "node",
+  "id": 1156232719,
+  "lat": 40.3424658,
+  "lon": -3.6997784
+},
+{
+  "type": "node",
+  "id": 1156232721,
+  "lat": 40.3410025,
+  "lon": -3.7093300
+},
+{
+  "type": "node",
+  "id": 1156232723,
+  "lat": 40.3456099,
+  "lon": -3.6943013
+},
+{
+  "type": "node",
+  "id": 1156232729,
+  "lat": 40.3419751,
+  "lon": -3.7004167
+},
+{
+  "type": "node",
+  "id": 1156232730,
+  "lat": 40.3417033,
+  "lon": -3.7008647
+},
+{
+  "type": "node",
+  "id": 1156232737,
+  "lat": 40.3493432,
+  "lon": -3.6847065
+},
+{
+  "type": "node",
+  "id": 1156232749,
+  "lat": 40.3416074,
+  "lon": -3.7161369,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "default",
+    "ref": "5"
+  }
+},
+{
+  "type": "node",
+  "id": 1156232753,
+  "lat": 40.3412077,
+  "lon": -3.7133935,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "default",
+    "ref": "15"
+  }
+},
+{
+  "type": "node",
+  "id": 1156232763,
+  "lat": 40.3410640,
+  "lon": -3.7073842,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "double_slip",
+    "ref": "T12"
+  }
+},
+{
+  "type": "node",
+  "id": 1156232767,
+  "lat": 40.3410466,
+  "lon": -3.7068604
+},
+{
+  "type": "node",
+  "id": 1156232768,
+  "lat": 40.3437087,
+  "lon": -3.6982817
+},
+{
+  "type": "node",
+  "id": 1156232769,
+  "lat": 40.3410484,
+  "lon": -3.7077809,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "double_slip",
+    "ref": "T14"
+  }
+},
+{
+  "type": "node",
+  "id": 1156232777,
+  "lat": 40.3409765,
+  "lon": -3.7046573
+},
+{
+  "type": "node",
+  "id": 1156232786,
+  "lat": 40.3446287,
+  "lon": -3.6971283
+},
+{
+  "type": "node",
+  "id": 1156232787,
+  "lat": 40.3486045,
+  "lon": -3.6854166
+},
+{
+  "type": "node",
+  "id": 1156232793,
+  "lat": 40.3410572,
+  "lon": -3.7028763
+},
+{
+  "type": "node",
+  "id": 1794190083,
+  "lat": 40.3457852,
+  "lon": -3.6934489,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 2045341572,
+  "lat": 40.3677781,
+  "lon": -3.6780714
+},
+{
+  "type": "node",
+  "id": 2045341573,
+  "lat": 40.3678019,
+  "lon": -3.6780217
+},
+{
+  "type": "node",
+  "id": 2045341577,
+  "lat": 40.3680286,
+  "lon": -3.6780738
+},
+{
+  "type": "node",
+  "id": 2045341581,
+  "lat": 40.3682378,
+  "lon": -3.6781001
+},
+{
+  "type": "node",
+  "id": 2045341582,
+  "lat": 40.3683067,
+  "lon": -3.6780492
+},
+{
+  "type": "node",
+  "id": 2045341587,
+  "lat": 40.3686035,
+  "lon": -3.6780944
+},
+{
+  "type": "node",
+  "id": 2045341593,
+  "lat": 40.3687093,
+  "lon": -3.6781610
+},
+{
+  "type": "node",
+  "id": 2045341605,
+  "lat": 40.3689185,
+  "lon": -3.6781593
+},
+{
+  "type": "node",
+  "id": 2045341608,
+  "lat": 40.3689504,
+  "lon": -3.6782127
+},
+{
+  "type": "node",
+  "id": 2045341640,
+  "lat": 40.3693286,
+  "lon": -3.6782653
+},
+{
+  "type": "node",
+  "id": 2045341655,
+  "lat": 40.3696467,
+  "lon": -3.6783853
+},
+{
+  "type": "node",
+  "id": 2045341663,
+  "lat": 40.3698252,
+  "lon": -3.6784552
+},
+{
+  "type": "node",
+  "id": 2045341665,
+  "lat": 40.3698859,
+  "lon": -3.6785339
+},
+{
+  "type": "node",
+  "id": 2045341692,
+  "lat": 40.3701524,
+  "lon": -3.6786470
+},
+{
+  "type": "node",
+  "id": 2045341708,
+  "lat": 40.3706345,
+  "lon": -3.6788137
+},
+{
+  "type": "node",
+  "id": 2045341724,
+  "lat": 40.3711012,
+  "lon": -3.6790333
+},
+{
+  "type": "node",
+  "id": 2045341746,
+  "lat": 40.3714465,
+  "lon": -3.6791949
+},
+{
+  "type": "node",
+  "id": 2045341761,
+  "lat": 40.3719300,
+  "lon": -3.6794890
+},
+{
+  "type": "node",
+  "id": 2045341765,
+  "lat": 40.3720664,
+  "lon": -3.6795041
+},
+{
+  "type": "node",
+  "id": 2045341780,
+  "lat": 40.3723870,
+  "lon": -3.6797343
+},
+{
+  "type": "node",
+  "id": 2045341806,
+  "lat": 40.3728218,
+  "lon": -3.6799319
+},
+{
+  "type": "node",
+  "id": 2045341808,
+  "lat": 40.3728634,
+  "lon": -3.6800074
+},
+{
+  "type": "node",
+  "id": 2045341816,
+  "lat": 40.3730801,
+  "lon": -3.6800949
+},
+{
+  "type": "node",
+  "id": 2045341824,
+  "lat": 40.3736336,
+  "lon": -3.6804475
+},
+{
+  "type": "node",
+  "id": 2045341834,
+  "lat": 40.3737542,
+  "lon": -3.6805799
+},
+{
+  "type": "node",
+  "id": 2045341837,
+  "lat": 40.3739461,
+  "lon": -3.6806497
+},
+{
+  "type": "node",
+  "id": 2045341838,
+  "lat": 40.3740092,
+  "lon": -3.6807452
+},
+{
+  "type": "node",
+  "id": 2045341856,
+  "lat": 40.3742704,
+  "lon": -3.6808618
+},
+{
+  "type": "node",
+  "id": 2045341858,
+  "lat": 40.3743061,
+  "lon": -3.6809415
+},
+{
+  "type": "node",
+  "id": 2045341868,
+  "lat": 40.3745478,
+  "lon": -3.6810442
+},
+{
+  "type": "node",
+  "id": 2045341872,
+  "lat": 40.3746174,
+  "lon": -3.6811417
+},
+{
+  "type": "node",
+  "id": 2045341888,
+  "lat": 40.3750218,
+  "lon": -3.6813459
+},
+{
+  "type": "node",
+  "id": 2045341895,
+  "lat": 40.3753818,
+  "lon": -3.6815773
+},
+{
+  "type": "node",
+  "id": 2045341973,
+  "lat": 40.3788730,
+  "lon": -3.6827408
+},
+{
+  "type": "node",
+  "id": 2045341977,
+  "lat": 40.3789067,
+  "lon": -3.6827985
+},
+{
+  "type": "node",
+  "id": 2045341989,
+  "lat": 40.3791957,
+  "lon": -3.6828489
+},
+{
+  "type": "node",
+  "id": 2045341998,
+  "lat": 40.3797543,
+  "lon": -3.6828669
+},
+{
+  "type": "node",
+  "id": 2045342024,
+  "lat": 40.3798448,
+  "lon": -3.6829153
+},
+{
+  "type": "node",
+  "id": 2045342046,
+  "lat": 40.3804832,
+  "lon": -3.6828368
+},
+{
+  "type": "node",
+  "id": 2045342058,
+  "lat": 40.3806867,
+  "lon": -3.6828504
+},
+{
+  "type": "node",
+  "id": 2045342064,
+  "lat": 40.3808410,
+  "lon": -3.6827589
+},
+{
+  "type": "node",
+  "id": 2045342068,
+  "lat": 40.3811092,
+  "lon": -3.6826671
+},
+{
+  "type": "node",
+  "id": 2045342088,
+  "lat": 40.3816006,
+  "lon": -3.6824790
+},
+{
+  "type": "node",
+  "id": 2045342099,
+  "lat": 40.3817246,
+  "lon": -3.6823381
+},
+{
+  "type": "node",
+  "id": 2045342105,
+  "lat": 40.3818679,
+  "lon": -3.6822914
+},
+{
+  "type": "node",
+  "id": 2045342113,
+  "lat": 40.3820168,
+  "lon": -3.6821243
+},
+{
+  "type": "node",
+  "id": 2045342129,
+  "lat": 40.3822382,
+  "lon": -3.6819290
+},
+{
+  "type": "node",
+  "id": 2045342137,
+  "lat": 40.3825277,
+  "lon": -3.6816841
+},
+{
+  "type": "node",
+  "id": 2045342150,
+  "lat": 40.3828287,
+  "lon": -3.6813011
+},
+{
+  "type": "node",
+  "id": 2045342152,
+  "lat": 40.3828314,
+  "lon": -3.6812246
+},
+{
+  "type": "node",
+  "id": 2045342164,
+  "lat": 40.3830447,
+  "lon": -3.6809865
+},
+{
+  "type": "node",
+  "id": 2045342166,
+  "lat": 40.3830970,
+  "lon": -3.6808375
+},
+{
+  "type": "node",
+  "id": 2045342172,
+  "lat": 40.3832065,
+  "lon": -3.6807392
+},
+{
+  "type": "node",
+  "id": 2045342177,
+  "lat": 40.3833635,
+  "lon": -3.6804249
+},
+{
+  "type": "node",
+  "id": 2045342190,
+  "lat": 40.3835751,
+  "lon": -3.6801733
+},
+{
+  "type": "node",
+  "id": 2045342196,
+  "lat": 40.3836238,
+  "lon": -3.6800227
+},
+{
+  "type": "node",
+  "id": 2045342212,
+  "lat": 40.3838137,
+  "lon": -3.6797994
+},
+{
+  "type": "node",
+  "id": 2045342214,
+  "lat": 40.3839541,
+  "lon": -3.6795287
+},
+{
+  "type": "node",
+  "id": 2045342230,
+  "lat": 40.3841677,
+  "lon": -3.6791951
+},
+{
+  "type": "node",
+  "id": 2045342233,
+  "lat": 40.3841923,
+  "lon": -3.6792320
+},
+{
+  "type": "node",
+  "id": 2045342235,
+  "lat": 40.3844025,
+  "lon": -3.6788722
+},
+{
+  "type": "node",
+  "id": 2045342245,
+  "lat": 40.3844281,
+  "lon": -3.6789159
+},
+{
+  "type": "node",
+  "id": 2045395476,
+  "lat": 40.3555859,
+  "lon": -3.6839022
+},
+{
+  "type": "node",
+  "id": 2045395485,
+  "lat": 40.3557753,
+  "lon": -3.6838527
+},
+{
+  "type": "node",
+  "id": 2045395502,
+  "lat": 40.3560110,
+  "lon": -3.6837939
+},
+{
+  "type": "node",
+  "id": 2045395509,
+  "lat": 40.3562505,
+  "lon": -3.6837639
+},
+{
+  "type": "node",
+  "id": 2045395533,
+  "lat": 40.3569866,
+  "lon": -3.6833994
+},
+{
+  "type": "node",
+  "id": 2045395552,
+  "lat": 40.3577245,
+  "lon": -3.6829277
+},
+{
+  "type": "node",
+  "id": 2045395553,
+  "lat": 40.3577563,
+  "lon": -3.6829597
+},
+{
+  "type": "node",
+  "id": 2045395565,
+  "lat": 40.3580534,
+  "lon": -3.6826560
+},
+{
+  "type": "node",
+  "id": 2045395573,
+  "lat": 40.3583571,
+  "lon": -3.6823808
+},
+{
+  "type": "node",
+  "id": 2045395587,
+  "lat": 40.3586688,
+  "lon": -3.6820867
+},
+{
+  "type": "node",
+  "id": 2045395615,
+  "lat": 40.3611538,
+  "lon": -3.6798250
+},
+{
+  "type": "node",
+  "id": 2045395616,
+  "lat": 40.3611630,
+  "lon": -3.6798722
+},
+{
+  "type": "node",
+  "id": 2045395621,
+  "lat": 40.3616607,
+  "lon": -3.6795430
+},
+{
+  "type": "node",
+  "id": 2045395622,
+  "lat": 40.3616679,
+  "lon": -3.6795942
+},
+{
+  "type": "node",
+  "id": 2045395627,
+  "lat": 40.3625603,
+  "lon": -3.6791530
+},
+{
+  "type": "node",
+  "id": 2045395632,
+  "lat": 40.3633451,
+  "lon": -3.6788792
+},
+{
+  "type": "node",
+  "id": 2069297096,
+  "lat": 40.3415428,
+  "lon": -3.7156819,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "default",
+    "ref": "7"
+  }
+},
+{
+  "type": "node",
+  "id": 2069297163,
+  "lat": 40.3763176,
+  "lon": -3.6821576
+},
+{
+  "type": "node",
+  "id": 2069297164,
+  "lat": 40.3763512,
+  "lon": -3.6821238
+},
+{
+  "type": "node",
+  "id": 2069297165,
+  "lat": 40.3768147,
+  "lon": -3.6823297
+},
+{
+  "type": "node",
+  "id": 2069297166,
+  "lat": 40.3768218,
+  "lon": -3.6822810
+},
+{
+  "type": "node",
+  "id": 2069297167,
+  "lat": 40.3777800,
+  "lon": -3.6824925
+},
+{
+  "type": "node",
+  "id": 2069297168,
+  "lat": 40.3777985,
+  "lon": -3.6825468
+},
+{
+  "type": "node",
+  "id": 2069297169,
+  "lat": 40.3782819,
+  "lon": -3.6826573
+},
+{
+  "type": "node",
+  "id": 2069297170,
+  "lat": 40.3845664,
+  "lon": -3.6787335
+},
+{
+  "type": "node",
+  "id": 2076341389,
+  "lat": 40.3849337,
+  "lon": -3.6782348
+},
+{
+  "type": "node",
+  "id": 2076341400,
+  "lat": 40.3856450,
+  "lon": -3.6775792,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 2077193652,
+  "lat": 40.3849584,
+  "lon": -3.6782764
+},
+{
+  "type": "node",
+  "id": 2077193654,
+  "lat": 40.3852669,
+  "lon": -3.6779545
+},
+{
+  "type": "node",
+  "id": 2077193668,
+  "lat": 40.3786389,
+  "lon": -3.6827396
+},
+{
+  "type": "node",
+  "id": 2077193672,
+  "lat": 40.3782891,
+  "lon": -3.6826063
+},
+{
+  "type": "node",
+  "id": 2093165646,
+  "lat": 40.3759370,
+  "lon": -3.6819654
+},
+{
+  "type": "node",
+  "id": 2609596308,
+  "lat": 40.3411778,
+  "lon": -3.7128039,
+  "tags": {
+    "name": "Villaverde Alto - Vía 3",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4512923923,
+  "lat": 40.3548268,
+  "lon": -3.6840060
+},
+{
+  "type": "node",
+  "id": 4512923924,
+  "lat": 40.3548309,
+  "lon": -3.6840570
+},
+{
+  "type": "node",
+  "id": 4856377429,
+  "lat": 40.3412568,
+  "lon": -3.7138087
+},
+{
+  "type": "node",
+  "id": 6181494479,
+  "lat": 40.3534342,
+  "lon": -3.6840281,
+  "tags": {
+    "name": "Villaverde Bajo",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6181494480,
+  "lat": 40.3523268,
+  "lon": -3.6840690,
+  "tags": {
+    "name": "Villaverde Bajo",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6464781604,
+  "lat": 40.3422307,
+  "lon": -3.7000725
+},
+{
+  "type": "node",
+  "id": 6464781605,
+  "lat": 40.3421959,
+  "lon": -3.7000376
+},
+{
+  "type": "node",
+  "id": 6464781606,
+  "lat": 40.3415008,
+  "lon": -3.7013090
+},
+{
+  "type": "node",
+  "id": 6464781607,
+  "lat": 40.3414661,
+  "lon": -3.7012714
+},
+{
+  "type": "node",
+  "id": 6464781608,
+  "lat": 40.3411267,
+  "lon": -3.7024221
+},
+{
+  "type": "node",
+  "id": 6464781609,
+  "lat": 40.3410838,
+  "lon": -3.7024033
+},
+{
+  "type": "node",
+  "id": 6464781610,
+  "lat": 40.3410000,
+  "lon": -3.7035728
+},
+{
+  "type": "node",
+  "id": 6464781611,
+  "lat": 40.3409550,
+  "lon": -3.7035647
+},
+{
+  "type": "node",
+  "id": 6464781612,
+  "lat": 40.3409744,
+  "lon": -3.7042111
+},
+{
+  "type": "node",
+  "id": 6464781613,
+  "lat": 40.3409243,
+  "lon": -3.7042138
+},
+{
+  "type": "node",
+  "id": 6834209635,
+  "lat": 40.3520335,
+  "lon": -3.6840711
+},
+{
+  "type": "node",
+  "id": 6834209636,
+  "lat": 40.3520349,
+  "lon": -3.6840224
+},
+{
+  "type": "node",
+  "id": 7973573882,
+  "lat": 40.3633313,
+  "lon": -3.6788321
+},
+{
+  "type": "node",
+  "id": 9556438928,
+  "lat": 40.3753593,
+  "lon": -3.6816208
+},
+{
+  "type": "node",
+  "id": 9735808343,
+  "lat": 40.3506008,
+  "lon": -3.6841813
+},
+{
+  "type": "node",
+  "id": 9735808344,
+  "lat": 40.3505874,
+  "lon": -3.6841202
+},
+{
+  "type": "node",
+  "id": 9735808345,
+  "lat": 40.3496397,
+  "lon": -3.6844469
+},
+{
+  "type": "node",
+  "id": 9735808346,
+  "lat": 40.3496459,
+  "lon": -3.6845073
+},
+{
+  "type": "node",
+  "id": 9735808347,
+  "lat": 40.3489725,
+  "lon": -3.6849574
+},
+{
+  "type": "node",
+  "id": 9735808348,
+  "lat": 40.3489962,
+  "lon": -3.6850044
+},
+{
+  "type": "node",
+  "id": 9735808349,
+  "lat": 40.3485676,
+  "lon": -3.6853756
+},
+{
+  "type": "node",
+  "id": 9735808350,
+  "lat": 40.3476984,
+  "lon": -3.6868595
+},
+{
+  "type": "node",
+  "id": 9735808351,
+  "lat": 40.3479370,
+  "lon": -3.6863035
+},
+{
+  "type": "node",
+  "id": 9735808352,
+  "lat": 40.3482931,
+  "lon": -3.6858256
+},
+{
+  "type": "node",
+  "id": 9896096005,
+  "lat": 40.3409824,
+  "lon": -3.7060591,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "default",
+    "ref": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 9896096006,
+  "lat": 40.3410421,
+  "lon": -3.7067179,
+  "tags": {
+    "operator": "Adif",
+    "railway": "switch",
+    "railway:switch": "default",
+    "ref": "8"
+  }
+},
+{
+  "type": "node",
+  "id": 9896096015,
+  "lat": 40.3413025,
+  "lon": -3.7140682
+},
+{
+  "type": "node",
+  "id": 9896096016,
+  "lat": 40.3410097,
+  "lon": -3.7097375
+},
+{
+  "type": "node",
+  "id": 9896102217,
+  "lat": 40.3410214,
+  "lon": -3.7100543
+},
+{
+  "type": "node",
+  "id": 13195620626,
+  "lat": 40.3527502,
+  "lon": -3.6840697,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "7"
+  }
+},
+{
+  "type": "node",
+  "id": 13195620627,
+  "lat": 40.3465797,
+  "lon": -3.6903646,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "8"
+  }
+},
+{
+  "type": "node",
+  "id": 13195620628,
+  "lat": 40.3420583,
+  "lon": -3.7003046,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "9"
+  }
+},
+{
+  "type": "node",
+  "id": 13195620682,
+  "lat": 40.3613789,
+  "lon": -3.6797439,
+  "tags": {
+    "railway": "milestone",
+    "railway:position": "6"
+  }
+},
+{
+  "type": "node",
+  "id": 14124042091,
+  "lat": 40.3412018,
+  "lon": -3.7132813,
+  "tags": {
+    "railway": "signal",
+    "railway:signal:direction": "backward",
+    "railway:signal:height": "dwarf",
+    "railway:signal:main": "ES-RCF:FF",
+    "railway:signal:main:form": "light",
+    "railway:signal:main:function": "exit",
+    "railway:signal:main:shape": "ES-Adif:2+2",
+    "railway:signal:main:states": "ES-RCF:FF1A;ES-RCF:FF3A;ES-RCF:FF5A;ES-RCF:FF7A;ES-RCF:FF8B",
+    "railway:signal:position": "right",
+    "railway:signal:route": "ES-RCF:FI3D",
+    "railway:signal:route:form": "light",
+    "ref": "S2/3",
+    "wikimedia_commons": "File:Señal S2-3 de Villaverde Alto.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 14130085939,
+  "lat": 40.3410054,
+  "lon": -3.7095508
+},
+{
+  "type": "node",
+  "id": 14130085940,
+  "lat": 40.3410329,
+  "lon": -3.7084480,
+  "tags": {
+    "railway": "signal",
+    "railway:signal:direction": "forward",
+    "railway:signal:height": "dwarf",
+    "railway:signal:main": "ES-RCF:FF",
+    "railway:signal:main:form": "light",
+    "railway:signal:main:function": "exit",
+    "railway:signal:main:shape": "ES-Adif:2+2",
+    "railway:signal:main:states": "ES-RCF:FF1A;ES-RCF:FF3C;ES-RCF:FF5A;ES-RCF:FF7A;ES-RCF:FF8B",
+    "railway:signal:position": "right",
+    "railway:signal:route": "ES-RCF:FI3D",
+    "railway:signal:route:form": "light",
+    "ref": "S1/3"
+  }
+},
+{
+  "type": "node",
+  "id": 14324991037,
+  "lat": 40.3554645,
+  "lon": -3.6839270
+},
+{
+  "type": "node",
+  "id": 14324991038,
+  "lat": 40.3555790,
+  "lon": -3.6839534
+},
+{
+  "type": "node",
+  "id": 14324991039,
+  "lat": 40.3554216,
+  "lon": -3.6839840
+},
+{
+  "type": "node",
+  "id": 14324991043,
+  "lat": 40.3560865,
+  "lon": -3.6838152
+},
+{
+  "type": "node",
+  "id": 14324991044,
+  "lat": 40.3560963,
+  "lon": -3.6837707
+},
+{
+  "type": "way",
+  "id": 23626990,
+  "nodes": [
+    255938904,
+    255938903
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 23626993,
+  "nodes": [
+    255939648,
+    2045395615,
+    254908728,
+    2045395621,
+    255938904
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "embankment": "yes",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 23627076,
+  "nodes": [
+    254908729,
+    255939648
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 23627077,
+  "nodes": [
+    318939471,
+    254908729
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "embankment": "yes",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 28741778,
+  "nodes": [
+    316019919,
+    9896096005,
+    254908751,
+    6464781613,
+    6464781611,
+    254908750,
+    6464781609,
+    254908749,
+    6464781607,
+    514262272,
+    254908748,
+    6464781605,
+    514262269,
+    514262263,
+    254908747,
+    254908746,
+    254908745,
+    449137401,
+    254908744,
+    514262243,
+    316024057,
+    254908743
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-2",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 29003312,
+  "nodes": [
+    1152858188,
+    14324991037,
+    2045395476,
+    2045395485,
+    2045395502,
+    14324991044,
+    254908732,
+    600456631,
+    2045395533,
+    254908731,
+    2045395552,
+    2045395565,
+    1152858200,
+    2045395573,
+    318941269,
+    2045395587,
+    254908730,
+    318939424
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 29003347,
+  "nodes": [
+    318939424,
+    318939471
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "2",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 48690318,
+  "nodes": [
+    1141219333,
+    1141218782,
+    254908726,
+    1141218918
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 98644821,
+  "nodes": [
+    255938903,
+    2045395627,
+    254908727,
+    7973573882,
+    1141219333
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "fixme": "layer?",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99719761,
+  "nodes": [
+    1152858183,
+    1152858193
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "2",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99719764,
+  "nodes": [
+    1152858202,
+    1152858183
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "embankment": "yes",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99719768,
+  "nodes": [
+    1152845772,
+    1152858205
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99719771,
+  "nodes": [
+    1152845665,
+    2045395632,
+    1152845815,
+    1152845772
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99719774,
+  "nodes": [
+    1152858184,
+    1152858202
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99719776,
+  "nodes": [
+    1152858205,
+    2045395622,
+    1152858191,
+    13195620682,
+    2045395616,
+    1152858184
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "embankment": "yes",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99723740,
+  "nodes": [
+    1152858198,
+    13195620626,
+    1152895088,
+    6181494480,
+    6834209635
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "7",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "railway:track_ref": "1",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99723756,
+  "nodes": [
+    1152858193,
+    1152858196,
+    1152858197,
+    2045395553,
+    1152858182,
+    1152858194,
+    2045395509,
+    14324991043,
+    1152858203,
+    14324991038,
+    14324991039,
+    1152858186
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99723776,
+  "nodes": [
+    1152858186,
+    4512923924,
+    1152858198
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "7",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99723803,
+  "nodes": [
+    6834209636,
+    1152895169,
+    6181494479,
+    254908734
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "7",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "railway:track_ref": "2",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 99723820,
+  "nodes": [
+    254908734,
+    4512923923,
+    1152858188
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "7",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 100001665,
+  "nodes": [
+    1156232717,
+    1156232689,
+    13195620627,
+    1156232710,
+    1156232702,
+    1794190083,
+    1156232723,
+    1156232694,
+    1156232706,
+    1156232786,
+    1156232768,
+    1156232719,
+    6464781604,
+    13195620628,
+    1156232729,
+    1156232730,
+    6464781606,
+    1156232690,
+    6464781608,
+    1156232793,
+    6464781610,
+    6464781612,
+    1156232777,
+    9896096006,
+    1156232767
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-2",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 101793687,
+  "nodes": [
+    1152845634,
+    1152845561,
+    1152845733,
+    1152845665
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "6",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 101793720,
+  "nodes": [
+    2045342233,
+    2045342212,
+    2045342190,
+    2045342172,
+    2045342164,
+    2045342150,
+    2045342137,
+    1152845598,
+    2045342105,
+    2045342088,
+    1152845817,
+    2045342058,
+    1152845693
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "embankment": "yes",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "75",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 197482507,
+  "nodes": [
+    1152845787,
+    2045342046,
+    2045342064,
+    2045342068,
+    1152845690,
+    2045342099,
+    2045342113,
+    2045342129,
+    1152845773,
+    2045342152,
+    2045342166,
+    2045342177,
+    2045342196,
+    2045342214,
+    2045342230
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "embankment": "yes",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "75",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 659687429,
+  "nodes": [
+    1156232767,
+    1156232763
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "name": "Estación Villavede Alto",
+    "network": "Cercanías de Madrid",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 659695061,
+  "nodes": [
+    306172451,
+    9896096015,
+    4856377429,
+    1156232753,
+    14124042091,
+    2609596308,
+    9896102217,
+    9896096016,
+    14130085939,
+    1156232721,
+    14130085940,
+    1156232769
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "railway": "rail",
+    "railway:track_ref": "3",
+    "service": "siding",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 729509352,
+  "nodes": [
+    254908736,
+    6834209636
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "7",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 729509353,
+  "nodes": [
+    6834209635,
+    1152895151
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-1",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "7",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1037387887,
+  "nodes": [
+    1141218918,
+    254908725,
+    2045341573,
+    1152845769,
+    2045341582,
+    2045341587,
+    2045341605,
+    254908724,
+    2045341640,
+    2045341655,
+    2045341663,
+    1107477358,
+    1152845821,
+    2045341708,
+    256342200,
+    2045341724,
+    2045341746,
+    2045341765,
+    2045341806,
+    2045341816,
+    2045341824,
+    2045341837,
+    2045341856,
+    2045341868,
+    1107477366,
+    2045341888,
+    2045341895
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1037387888,
+  "nodes": [
+    9556438928,
+    1152845662,
+    2045341872,
+    2045341858,
+    2045341838,
+    2045341834,
+    2045341808,
+    2045341780,
+    2045341761,
+    1152845793,
+    1152845743,
+    2045341692,
+    1152845808,
+    2045341665,
+    1152845688,
+    2045341608,
+    2045341593,
+    1152845695,
+    2045341581,
+    2045341577,
+    2045341572,
+    1152845592,
+    1152845634
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1051086535,
+  "nodes": [
+    1152845693,
+    2045342024,
+    1152845813,
+    2045341989,
+    2045341977,
+    2077193668,
+    2069297169,
+    2069297168,
+    1152845717,
+    2069297165,
+    1152845810,
+    2069297163,
+    2093165646,
+    1152845639,
+    9556438928
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "75",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1051086536,
+  "nodes": [
+    2045341895,
+    1152845629,
+    1152845596,
+    2069297164,
+    1152845557,
+    2069297166,
+    1152845734,
+    2069297167,
+    2077193672,
+    2045341973,
+    1152845630,
+    2045341998,
+    1152845787
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "75",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1051086537,
+  "nodes": [
+    2045342230,
+    2045342235,
+    2076341389
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "75",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1051086538,
+  "nodes": [
+    2076341400,
+    2077193654,
+    2077193652,
+    2069297170,
+    2045342245,
+    2045342233
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "maxspeed": "75",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo imagery",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1158658585,
+  "nodes": [
+    254908743,
+    254908742,
+    254908741,
+    9735808351,
+    254908740,
+    9735808349,
+    9735808347,
+    254908738,
+    9735808345,
+    254908737,
+    9735808344,
+    254908736
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-2",
+    "maxspeed": "65",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "source": "yahoo_maps",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1158658586,
+  "nodes": [
+    1152895151,
+    9735808343,
+    1152895153,
+    9735808346,
+    1156232737,
+    9735808348,
+    1156232787,
+    9735808352,
+    1156232660,
+    9735808350,
+    1156232716,
+    1156232717
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "layer": "-2",
+    "maxspeed": "65",
+    "name": "Línea Madrid-Valencia de Alcántara",
+    "network": "Cercanías",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "ref": "500",
+    "tunnel": "yes",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1339956721,
+  "nodes": [
+    1156232769,
+    1156232763
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "railway": "rail",
+    "service": "crossover",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1339956722,
+  "nodes": [
+    1156232769,
+    316019919
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "name": "Estación Villavede Alto",
+    "network": "Cercanías de Madrid",
+    "railway": "rail",
+    "railway:bidirectional": "regular",
+    "railway:etcs": "1",
+    "railway:preferred_direction": "forward",
+    "source": "yahoo_maps",
+    "usage": "main",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "way",
+  "id": 1553068658,
+  "nodes": [
+    1156232749,
+    2069297096,
+    306172450,
+    306172451
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "0",
+    "gauge": "1668",
+    "railway": "rail",
+    "service": "siding",
+    "voltage": "3000"
+  }
+},
+{
+  "type": "relation",
+  "id": 18369030,
+  "members": [
+    {
+      "type": "way",
+      "ref": 1553068658,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 659695061,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1339956721,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 659687429,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 100001665,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 100001665,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1339956722,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 28741778,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 28741778,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1158658585,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 729509352,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99723803,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99723820,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 29003312,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 29003347,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 23627077,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 23627076,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 23626993,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 23626990,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 98644821,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 48690318,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1037387887,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1051086536,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 197482507,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1051086537,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1158658586,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 729509353,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99723740,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99723776,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99723756,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99719761,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99719764,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99719774,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99719776,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99719768,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 99719771,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 101793687,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1037387888,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1051086535,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 101793720,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1051086538,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "name": "Línea 500 Madrid-Valencia de Alcántara",
+    "ref": "500",
+    "route": "railway",
+    "type": "route"
+  }
+}
+
+  ]
+}

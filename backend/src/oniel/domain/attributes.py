@@ -39,6 +39,7 @@ PROTECCION_TREN = "proteccion_tren"
 BLOQUEO = "bloqueo"
 MANDO = "mando"
 MAX_SPEED = "max_speed_kmh"
+ELECTRIFICATION = "electrification"
 
 #: La fuente consultada no da el dato para ese tramo. Es un valor declarado, con su fuente y su
 #: fecha como cualquier otro: dice que se miró y no estaba, que no es lo mismo que no haber mirado.
@@ -86,6 +87,13 @@ ATTRIBUTE_RULES: dict[str, AttributeRule] = {
     # Zaragoza-Delicias y a Lleida-Pirineus): la sección manda sobre lo que diga la geometría.
     # Es opcional; donde no se declara vale la velocidad de las vías de la fuente de geometría.
     MAX_SPEED: AttributeRule(value_type=int, sourced=True),
+    # Electrificación de un tramo cuando no es la de su línea (de Madrid a Humanes, en la línea
+    # convencional de Extremadura, hay catenaria a 3 kV; el resto está sin electrificar). Es
+    # opcional: donde no se declara vale el texto de ``line.electrification``, que el visor
+    # enseña tal cual. El valor es una clave que el visor traduce con esas mismas palabras
+    # (``sin_electrificar``, ``3kv_cc``, ``25kv_ca``) o el propio texto (la línea de València a
+    # Tarragona declara «25 kV 50 Hz» en su último tramo): la lista no es cerrada.
+    ELECTRIFICATION: AttributeRule(value_type=str, sourced=True),
     # Mando: desde dónde se gobiernan las señales y los desvíos del tramo. ``sin_ctc`` es un
     # tramo cuyo bloqueo el mapa rotula sin «ctc», cuando la leyenda distingue los dos casos:
     # la fuente dice que no hay control de tráfico centralizado, que no es lo mismo que callar.

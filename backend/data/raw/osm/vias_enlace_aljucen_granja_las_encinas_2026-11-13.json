@@ -1,0 +1,487 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-13T12:34:34Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 444088880,
+  "lat": 38.9375210,
+  "lon": -6.4146054
+},
+{
+  "type": "node",
+  "id": 444088881,
+  "lat": 38.9379778,
+  "lon": -6.4153260
+},
+{
+  "type": "node",
+  "id": 444088882,
+  "lat": 38.9382282,
+  "lon": -6.4156111
+},
+{
+  "type": "node",
+  "id": 1672594686,
+  "lat": 38.9373074,
+  "lon": -6.4140791
+},
+{
+  "type": "node",
+  "id": 1672594709,
+  "lat": 38.9371884,
+  "lon": -6.4136661
+},
+{
+  "type": "node",
+  "id": 1672594719,
+  "lat": 38.9366510,
+  "lon": -6.4102872,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 1672594720,
+  "lat": 38.9366083,
+  "lon": -6.4100161,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 1672594724,
+  "lat": 38.9371080,
+  "lon": -6.4132728
+},
+{
+  "type": "node",
+  "id": 1672594738,
+  "lat": 38.9369569,
+  "lon": -6.4122767
+},
+{
+  "type": "node",
+  "id": 1672594792,
+  "lat": 38.9370693,
+  "lon": -6.4129736
+},
+{
+  "type": "node",
+  "id": 1672606210,
+  "lat": 38.9360147,
+  "lon": -6.4062113
+},
+{
+  "type": "node",
+  "id": 1672606240,
+  "lat": 38.9359212,
+  "lon": -6.4056211
+},
+{
+  "type": "node",
+  "id": 1672606248,
+  "lat": 38.9356355,
+  "lon": -6.4041086,
+  "tags": {
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 2367334338,
+  "lat": 38.9378010,
+  "lon": -6.4150787
+},
+{
+  "type": "node",
+  "id": 5481366958,
+  "lat": 38.9439081,
+  "lon": -6.4170120,
+  "tags": {
+    "name": "Bifurcación Granja-Las Encinas",
+    "operator": "Adif",
+    "railway": "switch"
+  }
+},
+{
+  "type": "node",
+  "id": 6597523713,
+  "lat": 38.9374079,
+  "lon": -6.4143553
+},
+{
+  "type": "node",
+  "id": 6597523714,
+  "lat": 38.9376770,
+  "lon": -6.4148837
+},
+{
+  "type": "node",
+  "id": 6597523715,
+  "lat": 38.9381262,
+  "lon": -6.4154975
+},
+{
+  "type": "node",
+  "id": 7042360736,
+  "lat": 38.9365453,
+  "lon": -6.4096139
+},
+{
+  "type": "node",
+  "id": 10047924506,
+  "lat": 38.9395684,
+  "lon": -6.4168142
+},
+{
+  "type": "node",
+  "id": 10047924507,
+  "lat": 38.9402250,
+  "lon": -6.4172750
+},
+{
+  "type": "node",
+  "id": 10047924508,
+  "lat": 38.9409649,
+  "lon": -6.4175874
+},
+{
+  "type": "node",
+  "id": 10047924509,
+  "lat": 38.9412660,
+  "lon": -6.4176510
+},
+{
+  "type": "node",
+  "id": 10047924510,
+  "lat": 38.9417562,
+  "lon": -6.4177093
+},
+{
+  "type": "node",
+  "id": 10047924511,
+  "lat": 38.9423505,
+  "lon": -6.4176613
+},
+{
+  "type": "node",
+  "id": 10047924512,
+  "lat": 38.9427674,
+  "lon": -6.4175619
+},
+{
+  "type": "node",
+  "id": 10047924513,
+  "lat": 38.9433656,
+  "lon": -6.4173142
+},
+{
+  "type": "node",
+  "id": 10047924514,
+  "lat": 38.9421852,
+  "lon": -6.4176846
+},
+{
+  "type": "node",
+  "id": 10047924515,
+  "lat": 38.9430698,
+  "lon": -6.4174576
+},
+{
+  "type": "node",
+  "id": 11078622763,
+  "lat": 38.9399520,
+  "lon": -6.4171065
+},
+{
+  "type": "node",
+  "id": 11078622764,
+  "lat": 38.9389938,
+  "lon": -6.4163270
+},
+{
+  "type": "node",
+  "id": 11078622768,
+  "lat": 38.9388193,
+  "lon": -6.4161721
+},
+{
+  "type": "node",
+  "id": 11078622770,
+  "lat": 38.9393109,
+  "lon": -6.4165992
+},
+{
+  "type": "node",
+  "id": 11078622771,
+  "lat": 38.9405140,
+  "lon": -6.4174217
+},
+{
+  "type": "node",
+  "id": 11078622774,
+  "lat": 38.9425875,
+  "lon": -6.4176190
+},
+{
+  "type": "node",
+  "id": 11078622775,
+  "lat": 38.9420287,
+  "lon": -6.4177042
+},
+{
+  "type": "node",
+  "id": 12400664188,
+  "lat": 38.9386546,
+  "lon": -6.4160232
+},
+{
+  "type": "node",
+  "id": 12718175273,
+  "lat": 38.9384317,
+  "lon": -6.4158376
+},
+{
+  "type": "node",
+  "id": 13163055830,
+  "lat": 38.9358338,
+  "lon": -6.4051783
+},
+{
+  "type": "node",
+  "id": 13163055831,
+  "lat": 38.9415342,
+  "lon": -6.4176956
+},
+{
+  "type": "node",
+  "id": 13844360132,
+  "lat": 38.9413963,
+  "lon": -6.4176793
+},
+{
+  "type": "node",
+  "id": 13844360133,
+  "lat": 38.9411152,
+  "lon": -6.4176256
+},
+{
+  "type": "node",
+  "id": 13844360134,
+  "lat": 38.9407396,
+  "lon": -6.4175130
+},
+{
+  "type": "node",
+  "id": 13844360135,
+  "lat": 38.9397612,
+  "lon": -6.4169624
+},
+{
+  "type": "way",
+  "id": 154778108,
+  "nodes": [
+    6597523715,
+    444088881,
+    2367334338,
+    6597523714,
+    444088880,
+    6597523713,
+    1672594686,
+    1672594709,
+    1672594724,
+    1672594792
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "fixme": "Denominación anterior a la apertura de la LAV, comprobar",
+    "frequency": "50",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Aljucén-Bifurcación Granja-Las Encinas",
+    "official_name": "Aljucén a Bifurcación Granja-Las Encinas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:asfa": "yes",
+    "ref": "510",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 154781147,
+  "nodes": [
+    1672594792,
+    1672594738,
+    1672594719,
+    1672594720,
+    7042360736
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "fixme": "Denominación anterior a la apertura de la LAV, comprobar",
+    "frequency": "50",
+    "gauge": "1668",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "Línea Aljucén-Bifurcación Granja-Las Encinas",
+    "official_name": "Aljucén a Bifurcación Granja-Las Encinas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:asfa": "yes",
+    "ref": "510",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 154781150,
+  "nodes": [
+    7042360736,
+    1672606210,
+    1672606240,
+    13163055830,
+    1672606248
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "fixme": "Denominación anterior a la apertura de la LAV, comprobar",
+    "frequency": "50",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Aljucén-Bifurcación Granja-Las Encinas",
+    "official_name": "Aljucén a Bifurcación Granja-Las Encinas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:asfa": "yes",
+    "ref": "510",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 702547252,
+  "nodes": [
+    444088882,
+    6597523715
+  ],
+  "tags": {
+    "bridge": "yes",
+    "electrified": "contact_line",
+    "fixme": "Denominación anterior a la apertura de la LAV, comprobar",
+    "frequency": "50",
+    "gauge": "1668",
+    "layer": "1",
+    "maxspeed": "100",
+    "name": "Línea Aljucén-Bifurcación Granja-Las Encinas",
+    "official_name": "Aljucén a Bifurcación Granja-Las Encinas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:asfa": "yes",
+    "ref": "510",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1097348110,
+  "nodes": [
+    12718175273,
+    12400664188,
+    11078622768,
+    11078622764,
+    11078622770,
+    10047924506,
+    13844360135,
+    11078622763,
+    10047924507,
+    11078622771,
+    13844360134,
+    10047924508,
+    13844360133,
+    10047924509,
+    13844360132,
+    13163055831,
+    10047924510,
+    11078622775,
+    10047924514,
+    10047924511,
+    11078622774,
+    10047924512,
+    10047924515,
+    10047924513,
+    5481366958
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1668",
+    "maxspeed": "120",
+    "name": "Línea Aljucén-Bifurcación Granja-Las Encinas",
+    "official_name": "Aljucén a Bifurcación Granja-Las Encinas",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "ref": "510",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1373645655,
+  "nodes": [
+    12718175273,
+    444088882
+  ],
+  "tags": {
+    "electrified": "contact_line",
+    "fixme": "Denominación anterior a la apertura de la LAV, comprobar",
+    "frequency": "50",
+    "gauge": "1668",
+    "maxspeed": "100",
+    "name": "Línea Aljucén-Bifurcación Granja-Las Encinas",
+    "official_name": "Aljucén a Bifurcación Granja-Las Encinas",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "passenger_lines": "1",
+    "railway": "rail",
+    "railway:asfa": "yes",
+    "ref": "510",
+    "usage": "main",
+    "voltage": "25000"
+  }
+}
+
+  ]
+}

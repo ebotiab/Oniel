@@ -46,12 +46,24 @@ LAV_MURCIA = "lav-monforte-murcia"
 MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
 LINK_MONFORTE = "enlace-monforte-del-cid"
+#: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
+#: de Plasencia a Badajoz, el ramal de Mérida y el trazado antiguo de Monfragüe a Cáceres.
+MADRID_PLASENCIA, LAV_BADAJOZ, RAMAL_MERIDA, MONFRAGUE_CACERES = (
+    "madrid-plasencia",
+    "lav-plasencia-badajoz",
+    "ramal-merida",
+    "monfrague-caceres",
+)
+EXTREMADURA = [MADRID_PLASENCIA, LAV_BADAJOZ, RAMAL_MERIDA, MONFRAGUE_CACERES]
 RULES = {
     "atocha-cercanias-ciudad-real-por-manzanares": 20,
     "atocha-cercanias-cordoba-por-manzanares": 2,
 }
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
+#: Y la de los trenes de la línea de Extremadura, que solo la recorren de Madrid-Atocha Cercanías
+#: a la bifurcación Planetario.
+EXTREMADURA_RULES = {"atocha-cercanias-leganes-linea-de-extremadura": 260}
 #: La alta velocidad Madrid – Sevilla tiene además las de los AVE que no paran en Madrid: los de
 #: Barcelona entran por la bifurcación Los Gavilanes y los de Valencia, por la de Yeles.
 #: Los directos de Madrid a Málaga, en la alta velocidad de Sevilla y en la de Málaga.
@@ -197,9 +209,15 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # De los 253 de la línea de Valencia a Camp de Tarragona, 181 no pasan por ninguna otra: los
     # otros 72 siguen por la alta velocidad de Barcelona o por la de Valencia, o son el Alvia de
     # Barcelona a Córdoba, que ya contaba en la convencional.
+    # Las cuatro líneas de Extremadura traen 267, 330, 198 y 13 viajes, que son 425 distintos:
+    # casi todos recorren más de una. De ellos, 409 no estaban; los otros 16 son los Media
+    # Distancia de Alcázar de San Juan a Badajoz por Ciudad Real, que ya recorren la convencional
+    # y la de Manzanares y aquí entran por Mérida. Otros 260 de los 425 salen de Madrid-Atocha
+    # Cercanías y cuentan también en el primer tramo de la convencional por una regla de
+    # recorrido (432 + 260 = 692), sin sumar viajes: son los mismos.
     # Con la de Madrid a Valladolid entran 661: sus 761 viajes menos los 100 que cruzan Madrid y
     # siguen a Levante, que ya estaban en la de Valencia.
-    trips = 317 + 432 - 22 + 26 + 15 + 37 + 571 - 16 + 8 + 13 + 465 + 92 + 181 + 661
+    trips = 317 + 432 - 22 + 26 + 15 + 37 + 571 - 16 + 8 + 13 + 465 + 92 + 181 + 661 + 425 - 16
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
     # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
     # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
@@ -211,6 +229,29 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         "castello-tarragona-por-la-feredat": 4,
         "l-aldea-tarragona-por-la-feredat": 2,
     }
+    assert gtfs1["lines"][MADRID_PLASENCIA]["trips"] == 267
+    assert gtfs1["lines"][MADRID_PLASENCIA]["passes"] == {"estimado": 2051, "publicado": 582}
+    assert gtfs1["lines"][MADRID_PLASENCIA]["route_overrides"] == {
+        "a-plasencia-desde-navalmoral": 37,
+        "a-plasencia-desde-monfrague": 59,
+    }
+    assert gtfs1["lines"][LAV_BADAJOZ]["trips"] == 330
+    assert gtfs1["lines"][LAV_BADAJOZ]["passes"] == {"estimado": 2310, "publicado": 134}
+    assert gtfs1["lines"][LAV_BADAJOZ]["route_overrides"] == {
+        "plasencia-caceres-por-la-linea-antigua": 13,
+        "merida-hacia-badajoz-garrovilla": 50,
+        "merida-hacia-badajoz-montijo": 41,
+        "merida-hacia-badajoz-badajoz": 37,
+        "desde-plasencia-tras-navalmoral": 37,
+        "desde-plasencia-tras-monfrague": 46,
+    }
+    # a Mérida se entra por una bifurcación o por Aljucén, que no son estaciones: todo estimado
+    assert gtfs1["lines"][RAMAL_MERIDA]["trips"] == 198
+    assert gtfs1["lines"][RAMAL_MERIDA]["passes"] == {"estimado": 344}
+    assert gtfs1["lines"][MONFRAGUE_CACERES]["trips"] == 13
+    assert gtfs1["lines"][MONFRAGUE_CACERES]["passes"] == {"estimado": 26, "publicado": 26}
+    assert gtfs1["lines"][RAMAL_MERIDA]["route_overrides"] == {}
+    assert gtfs1["lines"][MONFRAGUE_CACERES]["route_overrides"] == {}
     assert gtfs1["lines"][LAV_VALENCIA]["route_overrides"] == {
         "madrid-valencia-sin-parada": 62,
         "madrid-albacete-sin-parada": 31,
@@ -279,12 +320,14 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # se importaban por las líneas de Málaga y de Granada y 16 son nuevos (4 Avant Sevilla – Córdoba,
     # 8 AVE Barcelona – Sevilla y 4 AVE Valencia – Sevilla).
     assert gtfs1["lines"][LAV]["trips"] == 317 + 47 + 13
-    assert gtfs1["lines"][CONV]["trips"] == 390 + 42
+    assert gtfs1["lines"][CONV]["trips"] == 390 + 42 + 260
     assert gtfs1["lines"][MZCR]["trips"] == 124 + 22
     assert gtfs1["lines"][JAEN]["trips"] == 123
     assert gtfs1["lines"][LAV]["route_overrides"] == RULES | AWAY_RULES | MALAGA_RULES
     assert gtfs1["lines"][MZCR]["route_overrides"] == RULES
-    assert gtfs1["lines"][CONV]["route_overrides"] == RULES | JAEN_RULES
+    assert gtfs1["lines"][CONV]["route_overrides"] == RULES | JAEN_RULES | EXTREMADURA_RULES
+    # los 260 de la línea de Extremadura solo cuentan en el primer tramo, con paso estimado
+    assert gtfs1["lines"][CONV]["passes"] == {"estimado": 1968 + 260, "publicado": 523}
     assert gtfs1["lines"][JAEN]["route_overrides"] == {}
     # en la de Jaén solo los 20 trenes que paran en Mengíbar-Artichuela y en Jaén tienen pasos
     # publicados; los demás entran o salen por Espelúy sin parar en la estación
@@ -332,6 +375,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert ouigo1["lines"][LBMG]["trips"] == 0
     assert ouigo1["lines"][ALBACETE]["trips"] == 0
     assert ouigo1["lines"][MEDITERRANEO]["trips"] == 0
+    assert all(ouigo1["lines"][line]["trips"] == 0 for line in EXTREMADURA)
     # los 16 de Málaga siguen por la línea de Córdoba a Málaga sin parar hasta Málaga: 8 tramos
     assert ouigo1["lines"][LAV_MALAGA]["trips"] == 16 and ouigo1["lines"][LAV_GRANADA]["trips"] == 0
     assert ouigo1["lines"][LAV_MALAGA]["passes"] == {"estimado": 16 * 8}
@@ -353,13 +397,25 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert (ouigo1["feed_start"], ouigo1["feed_end"]) == ("2026-06-26", "2026-12-12")
     c = imported["counts"]
     # catorce líneas, los dos baipases y el enlace de Monforte del Cid, que son líneas cortas de
-    # un tramo
-    assert c["lines"] == 14 + 2 + 1
-    assert c["segments"] == 13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1
+    # un tramo, y las cuatro de Extremadura
+    assert c["lines"] == 14 + 2 + 1 + 4
+    # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
+    # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
+    # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
+    # los de las cuatro líneas de Extremadura
+    assert c["segments"] == (
+        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4
+    )
     assert c["services"] == trips + 47 + 22
-    renfe_passes = (3996 + 121) + (1968 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+    # (los 260 de la convencional son los de los trenes de la línea de Extremadura entre
+    # Madrid-Atocha Cercanías y la bifurcación Planetario)
+    renfe_passes = (
+        (3996 + 121) + (1968 + 260 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+    )
     renfe_passes += (1250 + 68) + 498 + 6851 + 97 + 224 + 5048 + 1979 + (677 + 120) + (4223 + 2107)
-    renfe_passes += 3409
+    # Extremadura: Madrid – Plasencia, Plasencia – Badajoz, el ramal de Mérida y el trazado antiguo
+    renfe_passes += (2051 + 582) + (2310 + 134) + 344 + (26 + 26)
+    renfe_passes += 3409  # la de Madrid a Valladolid, todos estimados
     renfe_passes += 91  # el enlace de Monforte del Cid
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
@@ -462,8 +518,9 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "bif-los-gavilanes",
         "bif-torrejon-de-velasco",
     ]
+    # los 13, 14, 2 y 4 del final son los tramos de las cuatro líneas de Extremadura
     assert len(data["segment_features"]["features"]) == (
-        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1
+        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -479,6 +536,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     ]
     assert sum(1 for f in data["node_features"]["features"] if f["id"] == "cordoba") == 1
     single = [s for s in data["segments"] if s["tracks"] == 1]
+    # también las cuatro líneas de Extremadura tienen vía única: enteros el ramal de Mérida y el
+    # trazado antiguo, la convencional desde Humanes y 10 de los 14 tramos de la línea nueva
     assert {s["line_id"] for s in single} == {
         CONV,
         MZCR,
@@ -487,7 +546,14 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_GRANADA,
         LAV_MURCIA,
         LINK_MONFORTE,
+        *EXTREMADURA,
     }
+    assert [sum(1 for s in single if s["line_id"] == line) for line in EXTREMADURA] == [
+        10,
+        10,
+        2,
+        4,
+    ]
     # en la de Monforte del Cid a Murcia, los tres tramos que van de Orihuela a Murcia
     assert [s["id"].split(":")[1] for s in single if s["line_id"] == LAV_MURCIA] == [
         "orihuela-miguel-hernandez",
@@ -523,7 +589,14 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         MEDITERRANEO,
         LINK_MONFORTE,
         LAV_VALLADOLID,
+        *EXTREMADURA,
     ]
+    # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
+    # que queda a trazos es el enlace por el que los trenes evitan Plasencia
+    assert "conv-madrid-extremadura" not in connections
+    assert connections["enlace-el-chaparral-arroyo-de-la-herrera"] == "bif-el-chaparral"
+    planetario = sorted(n["line_id"] for n in data["nodes"] if n["id"] == "bif-planetario")
+    assert planetario == [CONV, MADRID_PLASENCIA]
     # la conexión a trazos de Linares-Baeza hacia Almería también desaparece: la línea cargada
     # llega a Moreda, y de allí sale a trazos lo que falta hasta Guadix y Almería
     assert "conv-linares-almeria" not in connections
@@ -567,16 +640,31 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # el número de vías y los tres de señalización, en los 94 tramos
     gauge = {r["segment_id"] for r in rows if r["attribute"] == "gauge"}
     speed = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "max_speed_kmh"}
-    power = {r["segment_id"] for r in rows if r["attribute"] == "electrification"}
-    assert len(rows) - len(gauge) - len(speed) - len(power) == 4 * (
-        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1
+    wire = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "electrification"}
+    # los 35 son los tramos de la línea de Valencia a Camp de Tarragona; los 5, la de Madrid a
+    # Valladolid; los 13, 14, 2 y 4 del
+    # final, los de las cuatro líneas de Extremadura
+    assert len(rows) - len(gauge) - len(speed) - len(wire) == 4 * (
+        13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4
     )
-    # la velocidad declarada, solo donde OpenStreetMap no la trae: tres tramos de la alta
-    # velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de Lleida
+    # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
+    # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
+    # Lleida, y el de la convencional de Extremadura que entra en Navalmoral de la Mata por la
+    # plataforma de la línea nueva
     assert speed == {
         f"{BCN}:bif-huesca:bif-canal-imperial": 220,
         f"{BCN}:bif-les-torres-de-sanui:lleida-pirineus": 140,
         f"{BCN}:lleida-pirineus:bif-artesa-de-lleida": 220,
+        f"{MADRID_PLASENCIA}:oropesa-de-toledo:navalmoral-de-la-mata": 155,
+    }
+    # la electrificación, solo donde no es la de su línea: el último tramo de la línea de
+    # Valencia a Camp de Tarragona, que va a 25 kV en una línea de 3 kV, y la salida de Madrid de
+    # la convencional de Extremadura, con catenaria a 3 kV hasta Humanes
+    assert wire == {
+        f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona": "25 kV 50 Hz",
+        f"{MADRID_PLASENCIA}:bif-planetario:leganes": "3kv_cc",
+        f"{MADRID_PLASENCIA}:leganes:fuenlabrada": "3kv_cc",
+        f"{MADRID_PLASENCIA}:fuenlabrada:humanes": "3kv_cc",
     }
     # el ancho, solo donde no es el de su línea: el mixto del paso por Loja, de la entrada a
     # Granada y de la de Murcia, y en la línea de Valencia a Camp de Tarragona, el mixto de
@@ -593,8 +681,6 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     assert len(coast) == 19 and sorted(coast.values()) == ["estandar"] + ["mixto"] * 18
     assert coast[f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona"] == "estandar"
     assert f"{MEDITERRANEO}:valencia-estacio-del-nord:valencia-joaquin-sorolla" not in coast
-    # y la electrificación, solo en ese último tramo, que va a 25 kV en una línea de 3 kV
-    assert power == {f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona"}
     attributes = {
         "tracks",
         "proteccion_tren",
@@ -634,6 +720,17 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         # la fuente no dice el mando de la alta velocidad: el hueco viaja como valor
         "mando": {"value": "sin_dato_publicado", **dr},
     }
+    # la catenaria de la salida de Madrid hacia Extremadura viaja como un atributo más, con su
+    # fuente; el tramo siguiente no lo lleva y vale la electrificación de la línea
+    wired = by_id[f"{MADRID_PLASENCIA}:fuenlabrada:humanes"]["attributes"]
+    assert wired["electrification"] == {
+        "value": "3kv_cc",
+        "source_id": "wikipedia-linea-500",
+        "checked_on": "2026-11-13",
+    }
+    assert wired["tracks"]["value"] == 2
+    bare = by_id[f"{MADRID_PLASENCIA}:humanes:illescas"]["attributes"]
+    assert "electrification" not in bare and bare["tracks"]["value"] == 1
     # lo mismo en el detalle de la línea y en la ficha del tramo
     detail = (await client.get(f"/api/lines/{MZCR}")).json()
     assert [s["attributes"]["tracks"]["value"] for s in detail["segments"]] == [1, 1, 1]
@@ -722,7 +819,20 @@ async def test_projects_are_served_with_their_status_milestones_and_sketch(
 ) -> None:
     projects = (await client.get("/api/annotations", params={"kind": "proyecto"})).json()
     by_id = {p["id"]: p for p in projects}
-    assert len(by_id) == 7
+    # cinco, los dos de la línea de Valencia a Camp de Tarragona y los dos de la alta velocidad
+    # de Madrid a Extremadura: de Madrid a Oropesa, en estudio, y de Talayuela a Plasencia, en
+    # obras
+    assert len(by_id) == 5 + 2 + 2
+    study, works = by_id["proyecto-lav-madrid-oropesa"], by_id["proyecto-lav-talayuela-plasencia"]
+    assert (study["status"], works["status"]) == ("en_estudio", "en_obras")
+    for project in (study, works):
+        # esbozos propios, sin tramos de la red ni fecha de inicio
+        assert project["geometry"]["type"] == "LineString" and project["segment_ids"] == []
+        assert project["line_id"] is None and project["start_date"] is None
+        assert project["checked_on"] == "2026-11-13"
+    # el tramo en obras acaba en la bifurcación San Esteban, donde empieza la línea en servicio
+    assert works["geometry"]["coordinates"][-1] == [-6.14904, 39.97464]
+    assert len(study["milestones"]) == 8 and len(works["milestones"]) == 10
     mora = by_id["proyecto-lav-mora-alcazar"]
     assert mora["status"] == "sin_ejecutar" and mora["start_date"] is None
     # un esbozo propio, sin tramos de la red, que arranca en la alta velocidad y acaba en Alcázar
@@ -971,12 +1081,17 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y Málaga-María Zambrano, al prolongar la línea de Córdoba a Málaga
     # y la de Madrid a Valencia, 3: Cuenca-Fernando Zóbel, Requena-Utiel y València-Joaquín Sorolla
     # y la de Albacete a Alicante, 2: Villena Alta Velocidad y Alicante-Terminal
+    # y las cuatro de Extremadura, 22: las 11 de Leganés a Monfragüe; 7 en la línea nueva
+    # (Plasencia, Cáceres, Garrovilla-Las Vegas, Montijo, Montijo-El Molino, Guadiana y Badajoz);
+    # Mérida, y Mirabel, Casas de Millán y Cañaveral en el trazado antiguo
     # y Madrid-Chamartín, la cabecera de la línea de Valencia desde que se cargó su túnel
     # y la de Monforte del Cid a Murcia, 5: Elche Alta Velocidad, Callosa de Segura-Cox,
     # Orihuela-Miguel Hernández, Beniel y Murcia del Carmen
     # y la de Valencia a Camp de Tarragona, 32, de València-Estació del Nord a Cambrils
     # y la de Madrid a Valladolid, 2: Segovia-Guiomar y Valladolid-Campo Grande
-    assert cov["station_count"] == 6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 1 + 5 + 32 + 2
+    assert cov["station_count"] == (
+        6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 11 + 7 + 1 + 3 + 1 + 5 + 32 + 2
+    )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
     # y 4 más con los que recorren la alta velocidad Madrid – Sevilla sin parar en Madrid ni pasar
@@ -989,7 +1104,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Tortosa y los Media Distancia de Teruel, que no pasan por ninguna otra línea
     # y 117 más con la línea de Madrid a Valladolid: los suyos de ese día, menos los que siguen a
     # Levante, que ya contaban
-    assert cov["service_count"] == 619 + 117
+    # y 61 más ese mismo viernes con las cuatro líneas de Extremadura: los trenes de Madrid a
+    # Illescas, Talavera de la Reina, Cáceres y Badajoz y los regionales de Extremadura
+    assert cov["service_count"] == 619 + 117 + 61
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -1007,7 +1124,25 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "adif-mapa-red",
         "adif-estado-de-la-red",
         "adif-aviso-obras-autopista-ferroviaria",
+        # las de Extremadura: geometría, verificación y las de sus dos proyectos
+        "osm-relation-18369030",
+        "osm-relation-11717892",
+        "osm-relation-8117446",
+        "osm-relation-6759679",
+        "osm-relation-6759731",
+        "osm-vias-enlace-aljucen",
+        "wikipedia-linea-500",
+        "wikipedia-lav-madrid-extremadura",
+        "boe-a-2007-21008",
+        "mitma-nota-talavera-oropesa-2024-12",
     }
+    # 72 fuentes antes de Extremadura (con la relación de OSM de la línea de Albacete a
+    # Alicante, la del trazado de Madrid-Chamartín a Torrejón de Velasco y la de la línea de
+    # Monforte del Cid a Murcia), 10 de la línea de Valencia a Camp de Tarragona y de sus
+    # proyectos y 31 de Extremadura: 6 de geometría, 2 artículos de Wikipedia y 23 notas y
+    # anuncios oficiales de la línea nueva y de sus proyectos. Y 3 de la línea de Madrid a
+    # Valladolid: su relación de OSM y los artículos de Wikipedia de la línea y de la de Galicia
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1018,7 +1153,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea de alta velocidad Albacete – Alicante" in cov["notice"]
     assert "la línea de alta velocidad Monforte del Cid – Murcia" in cov["notice"]
     assert "la línea convencional Valencia – Castellón – Camp de Tarragona" in cov["notice"]
-    assert "y la línea de alta velocidad Madrid – Segovia – Valladolid" in cov["notice"]
+    assert "la línea de alta velocidad Madrid – Segovia – Valladolid" in cov["notice"]
+    assert "la línea convencional Madrid – Talavera de la Reina – Plasencia" in cov["notice"]
+    assert "la línea de alta velocidad Plasencia – Cáceres – Badajoz" in cov["notice"]
+    assert "la línea convencional Aljucén – Mérida" in cov["notice"]
+    assert "y la línea convencional Monfragüe – Cañaveral – Cáceres" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
         LAV,
         CONV,
@@ -1037,6 +1176,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         MEDITERRANEO,
         LINK_MONFORTE,
         LAV_VALLADOLID,
+        *EXTREMADURA,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1083,6 +1223,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         # por la línea de la costa solo circula Renfe
         MEDITERRANEO: ["renfe"],
         LAV_VALLADOLID: ["ouigo", "renfe"],
+        # en Extremadura solo circula Renfe
+        **dict.fromkeys(EXTREMADURA, ["renfe"]),
     }
     assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
     assert "No están los trenes de Iryo, que no publica sus horarios" in cov["notice"]
@@ -1254,16 +1396,24 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     # Málaga es ya una estación de la red; fuera de ella, el destino lleva el nombre de la parada
     assert by_node["malaga-maria-zambrano"]["trains"] == 9
     outside = {d["name"]: d["trains"] for d in dest if d["node_id"] is None}
-    assert "Málaga María Zambrano" not in outside and outside["Badajoz"] == 1
+    assert "Málaga María Zambrano" not in outside
+    # Badajoz también lo es, con las líneas de Extremadura. Y son 2 trenes, no 1: al Media
+    # Distancia que viene de Alcázar de San Juan se suma el Regional Exprés que sale de Ciudad
+    # Real, que no recorría ninguna línea cargada y ahora entra por la de Plasencia a Badajoz
+    assert "Badajoz" not in outside and by_node["badajoz"]["trains"] == 2
+    assert outside["Villanueva de la Serena"] == 2
     # 4 de los destinos que antes quedaban fuera de la red son ahora estaciones cargadas: Puente
     # Genil-Herrera, Antequera-Santa Ana, Antequera AV y Granada
     # y otros 4 por los AVE de Barcelona a Sevilla, que paran en Ciudad Real: Zaragoza-Delicias,
     # Lleida-Pirineus, Camp de Tarragona y Barcelona-Sants
     # y 2 más con la línea de Madrid a Valencia: Cuenca-Fernando Zóbel y València-Joaquín Sorolla
-    # y 1 más con la de Albacete a Alicante: Alicante-Terminal, adonde llegan dos Media Distancia
+    # y 1 más con la de Albacete a Alicante: Alicante-Terminal, adonde llegan dos Media Distancia;
+    # y 5 más con las de Extremadura, del camino de Ciudad Real a Badajoz: Mérida,
+    # Garrovilla-Las Vegas, Montijo, Montijo-El Molino y Badajoz
     # y 1 más: Madrid-Chamartín, que ya era un destino y ahora es una estación de la red
-    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 1
+    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5 + 1
     assert by_node["alicante-terminal"]["trains"] == 2
+    assert {"merida", "garrovilla-las-vegas", "montijo", "montijo-el-molino"} <= set(by_node)
     assert by_node["valencia-joaquin-sorolla"]["trains"] == 1
     assert {"zaragoza-delicias", "barcelona-sants"} <= set(by_node)
     assert {"antequera-santa-ana", "granada"} <= set(by_node)
@@ -1638,8 +1788,10 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
 
     node = (await client.get("/api/nodes/ciudad-real/history")).json()
     assert node["id"] == "ciudad-real"
+    # 62 y los 2 Regional Exprés de Ciudad Real a Badajoz, uno por sentido, que no recorrían
+    # ninguna línea cargada hasta que entraron las de Extremadura
     assert [(p["operator_id"], p["date"], p["trains"]) for p in node["points"]] == [
-        ("renfe", "2026-11-13", 62),
+        ("renfe", "2026-11-13", 62 + 2),
         ("ouigo", "2026-07-17", 0),  # Ouigo no para en Ciudad Real: cero, que también es un dato
     ]
     assert node["points"][0]["products"][:2] == [
@@ -1649,7 +1801,7 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
     assert node["points"][1]["products"] == []
     # y los mismos que «Trenes que paran aquí»
     calls = (await client.get("/api/nodes/ciudad-real/services")).json()["calls"]
-    assert len(calls) == 62
+    assert len(calls) == 62 + 2
     madrid = (await client.get("/api/nodes/madrid-puerta-de-atocha/history")).json()["points"]
     calls = (await client.get("/api/nodes/madrid-puerta-de-atocha/services")).json()["calls"]
     assert madrid[0]["trains"] == sum(c["operator_id"] == "renfe" for c in calls)
@@ -1778,11 +1930,16 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         MEDITERRANEO,
         LINK_MONFORTE,
         LAV_VALLADOLID,
+        *EXTREMADURA,
     ]
     assert out["missing_operator_ids"] == ["iryo"]
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
-    assert len(by_id) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1
+    # los 8 son los tramos de la línea de Monforte del Cid a Murcia; los 35, los de la de
+    # Valencia a Camp de Tarragona; los 5, la de Madrid a
+    # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
+    # Extremadura
+    assert len(by_id) == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
@@ -1860,6 +2017,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         MEDITERRANEO,
         LINK_MONFORTE,
         LAV_VALLADOLID,
+        *EXTREMADURA,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]
@@ -1891,11 +2049,11 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
 
     assert size(index, set(index) - notes) < size(network, set(network) - notes) / 5
     # y tienen su propio tope: cuando no quepan, su detalle tendrá que pedirse aparte. Subió de
-    # 40 a 45 KB con la interrupción de Álora (43 KB); lo siguiente es retirar el alias
+    # 40 a 45 KB con la interrupción de Álora (43 KB) y de 45 a 70 KB, el mismo tope que
+    # comprueba el visor, con los cuatro proyectos de la línea de Valencia a Camp de Tarragona
+    # y de la alta velocidad de Madrid a Extremadura (64 KB); lo siguiente es retirar el alias
     # `interruptions`, que repite las interrupciones
-    # Con los dos proyectos de la línea de Valencia a Camp de Tarragona son 51 KB: el tope sube
-    # a 55 KB y el aviso sigue en pie
-    assert size(index, notes) < 55_000
+    assert size(index, notes) < 70_000
     # una línea que deja de estar cargada no deja su fichero en la instantánea
     (tmp_path / "lines" / "retirada.json").write_text("{}", encoding="utf-8")
     async with connect(dsn) as conn:

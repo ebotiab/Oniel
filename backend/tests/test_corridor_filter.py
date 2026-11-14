@@ -32,10 +32,14 @@ def test_conventional_filter_selects_the_trains_that_use_the_line(
 ) -> None:
     trips = select_trips_for_spec(feed, conv_spec)
     products = Counter(t.product for t in trips)
-    assert products["MD"] == 290 and products["PROXIMDAD"] > 50
+    # Los trenes de la línea de Extremadura entran por una regla de recorrido, de Madrid-Atocha
+    # Cercanías a la bifurcación Planetario: 92 Media Distancia, 64 de Proximidad a Illescas, 55
+    # Alvia, 26 Regional Exprés y 23 Regional, 260 en total
+    assert products["MD"] == 290 + 92 and products["PROXIMDAD"] == 98 + 64
+    assert (products["REG.EXP."], products["REGIONAL"]) == (14 + 26, 23)
     # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 2 Alvia y 20 Intercity Madrid-Atocha
     # Cercanías–Andalucía por las reglas de recorrido (van por esta línea hasta Manzanares)
-    assert products["ALVIA"] == 8 + 2 and products["Intercity"] == 20
+    assert products["ALVIA"] == 8 + 2 + 55 and products["Intercity"] == 20
     assert "AVE" not in products and "AVLO" not in products
     names = {
         _stop_names(feed, t.trip_id)[0] + " → " + _stop_names(feed, t.trip_id)[-1] for t in trips

@@ -215,17 +215,21 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         # entrada a Granada y de la entrada a Murcia desde El Reguerón y, en la línea de Valencia
         # a Camp de Tarragona, el mixto hasta Castelló (18 tramos) y el estándar del último, que
         # además va a otra tensión
-        coast = line["line"] == "valencia-castello-tarragona"
         other = {
             "lav-antequera-granada": 3,
             "lav-monforte-murcia": 1,
             "valencia-castello-tarragona": 19,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
-        assert covered.pop("electrification", None) == (1 if coast else None)
-        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona
-        barcelona = line["line"] == "lav-madrid-barcelona"
-        assert covered.pop("max_speed_kmh", None) == (3 if barcelona else None)
+        # la electrificación solo se declara donde no es la de la línea: ese último tramo de la
+        # línea de Valencia a Camp de Tarragona y, en la convencional de Extremadura, de la
+        # bifurcación Planetario a Humanes, tres tramos con catenaria en una línea sin electrificar
+        wired = {"valencia-castello-tarragona": 1, "madrid-plasencia": 3}
+        assert covered.pop("electrification", None) == wired.get(line["line"])
+        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona y
+        # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata
+        declared_speed = {"lav-madrid-barcelona": 3, "madrid-plasencia": 1}
+        assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
         )

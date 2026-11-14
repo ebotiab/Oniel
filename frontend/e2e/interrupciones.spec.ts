@@ -3,6 +3,7 @@ import type { FeatureCollection } from 'geojson'
 import type { GeoJSONSource, Map as MapLibreMap } from 'maplibre-gl'
 import { abrirZonas } from './navegar.ts'
 
+
 // «Hoy» es el 10 de noviembre de 2026, el día en que se comprobaron las dos interrupciones
 // iniciales (obras entre Almuradiel y Alcolea de Córdoba; alta velocidad entre La Sagra y Córdoba):
 // ambas estaban vigentes. Con el reloj fijo, las pruebas no dependen del día en que se ejecutan ni

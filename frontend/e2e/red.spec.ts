@@ -30,11 +30,18 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^14 líneas · 3\.394 km\s*100 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^18 líneas · 3\.923 km\s*122 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
-    // las zonas van de norte a sur, y solo las que tienen alguna línea; con trece líneas empiezan plegadas:
-    // la lista es un índice de zonas, y cada una dice sus ciudades con estación cargada
-    await expect(red.locator('.zona-cabecera')).toHaveText([/^›Castilla y León1 línea/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Andalucía6 líneas/])
+    // las zonas van de norte a sur, y solo las que tienen alguna línea; con dieciocho líneas (más de doce)
+    // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
+    await expect(red.locator('.zona-cabecera')).toHaveText([
+      /^›Castilla y León1 líneaValladolid, Segovia$/,
+      /^›Cataluña1 líneaBarcelona, Lleida$/,
+      /^›Comunidad Valenciana y Murcia4 líneasValencia, Alicante, Murcia, Elche$/,
+      /^›Madrid y Castilla-La Mancha2 líneasCiudad Real, Albacete$/,
+      /^›Extremadura4 líneasCáceres, Mérida, Badajoz, Plasencia$/,
+      /^›Andalucía6 líneasSevilla, Córdoba, Málaga, Granada, Jaén3 líneas con un tramo sin circulación$/,
+    ])
     for (const cabecera of await red.locator('.zona-cabecera').all()) await expect(cabecera).toHaveAttribute('aria-expanded', 'false')
     await expect(red.locator('.fila-linea')).toHaveCount(0)
     // desplegadas, cada zona enseña sus líneas
@@ -51,6 +58,7 @@ test.describe('Elegir línea sin pestañas', () => {
       /^Línea convencional: Alcázar de San Juan – Albacete131 km$/,
       /^Línea convencional: Manzanares – Ciudad Real64 km$/,
     ])
+    await expect(red.getByRole('region', { name: 'Extremadura' }).locator('.fila-linea')).toHaveCount(4)
     // dentro de la zona, primero la alta velocidad y, en cada tipo, de la más larga a la más corta;
     // el tramo sin circulación va bajo el nombre
     await expect(red.getByRole('region', { name: 'Andalucía' }).locator('.fila-linea')).toHaveText([
@@ -63,8 +71,9 @@ test.describe('Elegir línea sin pestañas', () => {
     ])
     // el tipo de vía ya no agrupa: lo dice la muestra de cada fila, con su clave sobre las zonas
     await expect(page.getByTestId('clave-lineas')).toHaveText('Alta velocidadLínea convencional')
-    // una zona se pliega y dice entonces sus ciudades con estación cargada y la señal de sus líneas
+    // una zona abierta ya no dice sus ciudades; al plegarla vuelve a decirlas, con la señal de sus líneas
     const andalucia = red.getByRole('region', { name: 'Andalucía' })
+    await expect(andalucia.locator('.zona-detalle')).toHaveCount(0)
     await andalucia.locator('.zona-cabecera').click()
     await expect(andalucia.locator('.fila-linea')).toHaveCount(0)
     await expect(andalucia.locator('.zona-detalle')).toHaveText('Sevilla, Córdoba, Málaga, Granada, Jaén3 líneas con un tramo sin circulación')
@@ -134,12 +143,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('ficha-red')).toContainText(/^74 líneas · /)
-    // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con doce que con setenta y dos
+    await expect(page.getByTestId('ficha-red')).toContainText(/^78 líneas · /)
+    // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con dieciocho que con setenta y ocho
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     const lista = page.getByTestId('lista-lineas')
     // con más de doce líneas la lista es un índice de zonas: un renglón por zona, ninguna línea a la vista
-    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Castilla y León1 línea/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Andalucía66 líneas/])
+    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Castilla y León1 línea/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     // plegar no esconde un corte
     await expect(page.getByTestId('zona-andalucia').locator('.zona-detalle')).toContainText('3 líneas con un tramo sin circulación')
@@ -170,6 +179,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')
     await abrirZonas(page)
     // una línea se resalta con sus baipases, que son parte de ella
+    await abrirZonas(page)
     await page.getByTestId('linea-lav-madrid-barcelona').hover()
     await expect(mapa).toHaveAttribute('data-lineas-resaltadas', 'lav-madrid-barcelona|baipas-zaragoza|baipas-lleida')
     await page.getByTestId('zona-madrid-castilla-la-mancha').locator('.zona-cabecera').hover()
@@ -177,6 +187,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await page.getByTestId('ficha-red').hover()
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')
     // al elegir una línea no queda nada resaltado, ni al volver a la red
+    await abrirZonas(page)
     await page.getByTestId('linea-espeluy-jaen').click()
     await expect(page).toHaveURL(/\/linea\/espeluy-jaen$/)
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')

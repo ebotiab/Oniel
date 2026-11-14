@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { abrirZona } from './navegar.ts'
 
+
 // La red se carga por partes: al arrancar solo el índice; el detalle de cada línea, al abrirla o al
 // acercar el mapa. Vale igual con la instantánea estática (/data/…) que con la API (/api/lines…).
 
@@ -34,7 +35,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^14 líneas · 3\.394 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^18 líneas · 3\.923 km/)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -47,14 +48,19 @@ test.describe('Carga de la red por partes', () => {
     // geometría: la red mantiene su tope y ellas tienen el suyo. Cuando no quepan, su detalle se pedirá aparte.
     const { annotations, interruptions, ...red } = JSON.parse(indice.toString('utf-8')) as Record<string, unknown>
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
-    // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 18 KB de media).
+    // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 15 KB de media).
     expect(bytes(red)).toBeLessThan(20_000 * (red.lines as unknown[]).length)
-    expect(bytes({ annotations, interruptions })).toBeLessThan(55_000)
-    // Con diez líneas la red del índice (161 KB) pesa ya algo más que el detalle de la línea más
-    // grande (148 KB): lo que la acota es el tope por línea de arriba. Sigue pesando menos que las
-    // dos líneas más grandes juntas, la convencional de Córdoba y la alta velocidad de Barcelona.
-    const otra = await (await request.get('/data/lines/lav-madrid-barcelona.json')).body()
-    expect(bytes(red)).toBeLessThan(linea.byteLength + otra.byteLength)
+    // El de las anotaciones subió de 45 a 70 KB con los proyectos de la alta velocidad de Extremadura,
+    // que traen muchos hitos y un esbozo propio, y los de la línea de València a Camp de Tarragona:
+    // hoy pesan 61 KB.
+    expect(bytes({ annotations, interruptions })).toBeLessThan(70_000)
+    // Con veintiuna entradas (dieciocho líneas, dos baipases y un enlace), la red del índice (305 KB) pesa ya el doble que el detalle
+    // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
+    // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más
+    // grandes juntas (285 KB); sigue pesando menos que las tres más grandes: la convencional de Córdoba, la
+    // alta velocidad de Barcelona y la de València a Camp de Tarragona.
+    const otras = await Promise.all(['lav-madrid-barcelona', 'valencia-castello-tarragona'].map(async (id) => (await request.get(`/data/lines/${id}.json`)).body()))
+    expect(bytes(red)).toBeLessThan(linea.byteLength + otras[0].byteLength + otras[1].byteLength)
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {

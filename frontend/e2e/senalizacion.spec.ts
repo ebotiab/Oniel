@@ -26,7 +26,7 @@ async function abrirDetalle(page: Page, tramo: string) {
 
 test.describe('Señalización: protección del tren, bloqueo y mando de cada tramo', () => {
   test('todos los tramos de la instantánea traen los tres, con la fuente y la fecha', () => {
-    expect(red.segments).toHaveLength(166)
+    expect(red.segments).toHaveLength(199)
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
         expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE })
@@ -37,7 +37,13 @@ test.describe('Señalización: protección del tren, bloqueo y mando de cada tra
       // cada valor tiene su texto en la ficha: ninguno sale con la clave cruda
       for (const f of filas) expect(f.atributo.formato(f.valor!.value)).not.toMatch(/_|^[a-z]/)
       const comprobado = s.attributes?.bloqueo?.checked_on
-      expect(attributeSources(filas)).toEqual([{ sourceId: FUENTE, checkedOn: comprobado, etiquetas: ['Protección del tren', 'Bloqueo', 'Mando'] }])
+      // la electrificación va también bajo «Más detalle»: la de la línea no se cita aparte, y los
+      // tramos que traen la suya (de Madrid a Humanes, camino de Extremadura) citan además su fuente
+      const propia = s.attributes?.electrification
+      expect(attributeSources(filas)).toEqual([
+        ...(propia ? [{ sourceId: propia.source_id, checkedOn: propia.checked_on, etiquetas: ['Electrificación'] }] : []),
+        { sourceId: FUENTE, checkedOn: comprobado, etiquetas: ['Protección del tren', 'Bloqueo', 'Mando'] },
+      ])
     }
   })
 
