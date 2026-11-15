@@ -94,7 +94,7 @@
     "92102": {"exits": ["bif-torrejon-de-velasco"]},
     "08004": {"exits": ["madrid-chamartin"], "via": {"line": "lav-madrid-valladolid", "node": "madrid-chamartin"}},
     "10600": {"exits": ["madrid-chamartin"], "via": {"line": "lav-madrid-valladolid", "node": "madrid-chamartin"}},
-    "11014": {"exits": ["madrid-chamartin"]},
+    "11014": {"exits": ["madrid-chamartin"], "via": [{"line": "lav-madrid-valladolid", "node": "madrid-chamartin"}, {"line": "lav-valladolid-leon", "node": "valladolid-campo-grande"}, {"line": "lav-venta-de-banos-burgos", "node": "bif-venta-de-banos"}]},
     "14100": {"exits": ["madrid-chamartin"], "via": [{"line": "lav-madrid-valladolid", "node": "madrid-chamartin"}, {"line": "lav-valladolid-leon", "node": "valladolid-campo-grande"}]},
     "14114": {"exits": ["madrid-chamartin"]},
     "14202": {"exits": ["madrid-chamartin"]},

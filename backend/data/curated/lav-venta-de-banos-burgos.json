@@ -1,0 +1,511 @@
+{
+  "line": {
+    "id": "lav-venta-de-banos-burgos",
+    "name": "Línea de alta velocidad Venta de Baños – Burgos",
+    "short_name": "080",
+    "sort_order": 26,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 1,
+    "opened_on": "2022-07-22",
+    "reference_length_km": 86.463,
+    "pk_origin_km": 217.578,
+    "status": "disponible",
+    "description": "Lleva la alta velocidad desde Venta de Baños, cerca de Palencia, hasta Burgos. Es el camino de los trenes de Madrid a Burgos y al País Vasco.\n\nSe abrió a los viajeros el 22 de julio de 2022. Por ella van los AVE de Burgos a Madrid, Valencia y Murcia; los Alvia e Intercity de Madrid a Vitoria, Bilbao, San Sebastián, Irún y Logroño, y los Alvia que unen Barcelona y el País Vasco con León y Galicia, que llegan desde Palencia por un ramal corto, sin pasar por Venta de Baños.\n\nEn Burgos, los trenes que siguen hacia Miranda de Ebro, Vitoria y el País Vasco cambian de ancho de vía al salir de la estación y continúan por la línea convencional, que no está cargada. La alta velocidad de Burgos a Vitoria es un proyecto con varios tramos ya licitados.\n\nLa plataforma se construyó para dos vías, pero desde poco después de Venta de Baños hasta Burgos solo hay una. Los trenes de un sentido y de otro pueden cruzarse en los dos apartaderos del camino, Río Arlanzón y Estépar. En los últimos kilómetros, por la variante que rodea Burgos, la línea usa una de las vías de la línea convencional, adaptada al ancho de la alta velocidad.",
+    "geometry_source": {
+      "source_id": "osm-relation-4777557",
+      "parts": [
+        {
+          "source_id": "osm-relation-4777557",
+          "file": "raw/osm/relation_4777557_lav_madrid_valladolid_burgos_2026-11-13.json",
+          "relation_id": 4777557,
+          "from": [
+            -4.4877585,
+            41.9242256
+          ],
+          "to": [
+            -3.6609406,
+            42.3723919
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-venta-de-banos-burgos-vitoria"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-venta-de-banos",
+      "name": "Bifurcación Venta de Baños",
+      "kind": "bifurcacion",
+      "shared": true,
+      "position": {
+        "lon": -4.4877585,
+        "lat": 41.9242256
+      },
+      "reference_pk_km": 217.578
+    },
+    {
+      "id": "bif-soto-de-cerrato",
+      "name": "Bifurcación Soto de Cerrato",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.4360807,
+        "lat": 41.9450869
+      },
+      "reference_pk_km": 222.674,
+      "description": "Punto cercano a Soto de Cerrato (Palencia) donde se une a la línea un ramal de 4,5 km que llega de la línea de Palencia y León. Por él van a Burgos los trenes de León y Galicia sin pasar por Venta de Baños. Unos cientos de metros después, la línea se queda en una sola vía hasta Burgos."
+    },
+    {
+      "id": "rio-arlanzon",
+      "name": "Río Arlanzón",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 39.987
+      },
+      "reference_pk_km": 257.565,
+      "description": "Apartadero entre Venta de Baños y Burgos: junto a la vía general tiene una vía de apartado en la que un tren puede esperar a que pase otro. En esta línea de una sola vía es uno de los puntos donde pueden cruzarse los trenes de un sentido y de otro. No tiene servicio de viajeros."
+    },
+    {
+      "id": "estepar",
+      "name": "Estépar",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 64.8
+      },
+      "reference_pk_km": 282.378,
+      "description": "Apartadero cercano a Estépar (Burgos), con una vía de apartado junto a la general, como el de Río Arlanzón. Permite que se crucen los trenes de un sentido y de otro. No tiene servicio de viajeros."
+    },
+    {
+      "id": "burgos-rosa-manzano",
+      "name": "Burgos-Rosa Manzano",
+      "kind": "estacion",
+      "adif_code": "11014",
+      "position": {
+        "lon": -3.6663219,
+        "lat": 42.3711651
+      },
+      "reference_pk_km": 304.041,
+      "description": "La estación de Burgos, al norte de la ciudad, donde acaba esta línea. Se abrió en 2008 en la variante que sacó el tren del centro de Burgos, y los trenes de alta velocidad llegan a ella desde julio de 2022. Justo al salir de la estación está el cambiador de ancho por el que los trenes que siguen a Miranda de Ebro, Vitoria, Bilbao y San Sebastián pasan a la línea convencional, que no está cargada."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "bif-venta-de-banos",
+      "to_node": "bif-soto-de-cerrato",
+      "value": 2,
+      "source_id": "wikipedia-lav-venta-de-banos-burgos-vitoria",
+      "checked_on": "2026-11-15",
+      "note": "Tabla de puntos kilométricos: vía doble entre la bifurcación Venta de Baños AV (217,578) y la bifurcación La Vega (223,000, «inicio vía única: 81,654 km; hasta aquí: 5,422 km de vía doble»). La Vega queda a 0,3 km de la bifurcación Soto de Cerrato (222,674) y no es nodo: la vía única se declara desde Soto de Cerrato. En OSM la segunda vía de la relación 4777557 acaba en el desvío 4932732118, a unos 0,5 km del de Soto de Cerrato."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-venta-de-banos",
+      "to_node": "burgos-rosa-manzano",
+      "value": "ertms_n2_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: entre Venta de Baños y Burgos, junto al rótulo BCA de la línea, los símbolos «ERTMS N2» (el trébol rojo de la leyenda), «ASFA - AV» (cuadrado amarillo) y «GSMR» (triángulo negro). Coincide con Wikipedia (ERTMS de nivel 2) y con las vías de OSM (railway:etcs=2)."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-venta-de-banos",
+      "to_node": "burgos-rosa-manzano",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: rótulo «BCA» y trazo rosa discontinuo a lo largo de la línea, de la bifurcación Venta de Baños a Burgos Rosa Manzano por Quintanilleja."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-venta-de-banos",
+      "to_node": "burgos-rosa-manzano",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    }
+  ],
+  "connections": [
+    {
+      "id": "ramal-soto-de-cerrato-cerrato",
+      "node_id": "bif-soto-de-cerrato",
+      "name": "Ramal Soto de Cerrato – Cerrato",
+      "towards": "Palencia y León, sin pasar por Venta de Baños",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.4360807,
+          41.9450869
+        ],
+        [
+          -4.45525,
+          41.94424
+        ],
+        [
+          -4.46831,
+          41.95098
+        ],
+        [
+          -4.47718,
+          41.96199
+        ],
+        [
+          -4.4820799,
+          41.9680494
+        ]
+      ]
+    },
+    {
+      "id": "conv-burgos-miranda-vitoria",
+      "node_id": "burgos-rosa-manzano",
+      "name": "Línea convencional Madrid–Irún",
+      "towards": "Briviesca, Miranda de Ebro, Vitoria y el País Vasco",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -3.6663219,
+          42.3711651
+        ],
+        [
+          -3.5,
+          42.45
+        ],
+        [
+          -3.3236,
+          42.5497
+        ],
+        [
+          -2.9465,
+          42.6858
+        ],
+        [
+          -2.6731,
+          42.8415
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "11014": {
+      "node": "burgos-rosa-manzano"
+    },
+    "10600": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "bif-venta-de-banos"
+      }
+    },
+    "17000": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "08004": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "03216": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "03410": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
+      ]
+    },
+    "61200": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
+      ]
+    },
+    "62002": {
+      "exits": [
+        "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
+      ]
+    },
+    "14100": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "bif-cerrato"
+      }
+    },
+    "15100": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "bif-cerrato"
+      }
+    },
+    "20100": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11500": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11600": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "13106": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "13200": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "81002": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "81100": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Burgos-Rosa Manzano y en Valladolid-Campo Grande o en Palencia, y en ninguna de las paradas que delatan a los trenes que van por la línea convencional: Venta de Baños, Villaquirán y Briviesca, y Zaragoza, por la que pasan los Intercity de Zaragoza a Valladolid y Salamanca. Los Alvia de Barcelona a León y Galicia, que también paran en Zaragoza, entran por una regla de recorrido.",
+    "required_stop_ids": [
+      "11014"
+    ],
+    "any_of_stop_ids": [
+      "10600",
+      "14100"
+    ],
+    "exclude_stop_ids": [
+      "04040",
+      "11000",
+      "11009",
+      "11109"
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "palencia-burgos-miranda",
+      "description": "Trenes que van de Palencia a Burgos y siguen a Miranda de Ebro: los Alvia que unen Galicia y León con Barcelona y el País Vasco. Llegan por el ramal de Soto de Cerrato. Los de Barcelona paran en Zaragoza, que el filtro excluye, y entran por esta regla; se cuentan solo de Palencia a Miranda de Ebro.",
+      "consecutive_stop_ids": [
+        "14100",
+        "11014",
+        "11200"
+      ],
+      "from_stop_id": "14100",
+      "to_stop_id": "11200"
+    }
+  ]
+}
