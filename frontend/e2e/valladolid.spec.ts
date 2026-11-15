@@ -19,7 +19,7 @@ test.describe('La línea de alta velocidad Madrid – Segovia – Valladolid', (
     await expect(esquema).toContainText('Valladolid-Campo Grande')
   })
 
-  test('el buscador lleva a Valladolid y su ficha nombra los destinos del norte sin prometer sus líneas', async ({ page }) => {
+  test('el buscador lleva a Valladolid y su ficha nombra los destinos del norte', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
@@ -31,9 +31,9 @@ test.describe('La línea de alta velocidad Madrid – Segovia – Valladolid', (
     await expect(page).toHaveURL(/\/nodo\/valladolid-campo-grande$/)
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Valladolid-Campo Grande' })).toBeVisible()
-    // las líneas que siguen hacia el norte no están cargadas, y la ficha lo dice
-    await expect(ficha).toContainText('que todavía no están cargadas')
-    // destinos directos del día de referencia: los de la red, y León o Palencia, que se nombran sin enlace
+    // aquí empieza la línea de Palencia y León, y la ficha lo dice
+    await expect(ficha).toContainText('empieza la de alta velocidad a Palencia y León')
+    // destinos directos del día de referencia: los de la red, con León y Palencia entre ellos
     await expect(ficha).toContainText('Madrid-Chamartín')
     await expect(ficha).toContainText('Segovia-Guiomar')
     await expect(ficha).toContainText('León')

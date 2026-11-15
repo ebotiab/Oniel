@@ -108,18 +108,21 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 83 de los 198 tramos con trenes, en 14 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 91 de los 206 tramos con trenes, en 15 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(14)
+    await expect(lineas).toHaveCount(15)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
     await expect(linea('Madrid – Barcelona por Zaragoza')).toContainText('3 de sus 20 tramos')
     await expect(linea('Madrid – Barcelona por Zaragoza')).toContainText('108 trenes')
-    // delante va la de Madrid a Valladolid entera: es la única cargada al norte de Madrid y la que más trenes lleva
+    // delante va la de Madrid a Valladolid entera: al norte de Madrid no hay otro camino, y es la que más trenes lleva.
+    // La de Valladolid a León, que la continúa, también figura entera
+    await expect(linea('Valladolid – León por Palencia')).toContainText('Toda la línea, 8 tramos')
+    await expect(linea('Valladolid – León por Palencia')).toContainText('de 26 a 53 trenes')
     await expect(lineas.nth(0)).toContainText('Madrid – Valladolid por Segovia')
     await expect(lineas.nth(0)).toContainText('Toda la línea, 5 tramos')
     await expect(lineas.nth(0)).toContainText('de 81 a 122 trenes')

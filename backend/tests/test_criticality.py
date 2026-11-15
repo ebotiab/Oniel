@@ -49,6 +49,7 @@ LAV_ALICANTE = "lav-albacete-alicante"
 LAV_MURCIA = "lav-monforte-murcia"
 MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
+LAV_LEON = "lav-valladolid-leon"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -307,6 +308,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         LAV_BADAJOZ,
         RAMAL_MERIDA,
         MONFRAGUE_CACERES,
+        LAV_LEON,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -324,7 +326,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # cuatro de Extremadura
     assert (
         len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -342,7 +344,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # 54 y 121 sin Extremadura, con el enlace de Monforte del Cid. Con sus cuatro líneas, 29 tramos más sin otro camino para ningún
     # tren, y otros 4 en los que se queda sin él una parte: tres junto a sus bifurcaciones y el de
     # la convencional de Madrid-Puerta de Atocha a la bifurcación Planetario
-    assert (len(none), len(without)) == (54 + 29, 121 + 29 + 4)
+    # y los ocho de la línea de Valladolid a León, la única cargada al norte de Valladolid
+    assert (len(none), len(without)) == (54 + 29 + 8, 121 + 29 + 4 + 8)
     extremadura_lines = (
         f"{MADRID_PLASENCIA}:",
         f"{LAV_BADAJOZ}:",
@@ -350,6 +353,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{MONFRAGUE_CACERES}:",
     )
     apart = (
+        f"{LAV_LEON}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
@@ -520,6 +524,21 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         (111, 111),
         (81, 81),
     ]
+    # y la de Valladolid a León, que la continúa: 53 trenes hasta la bifurcación Venta de Baños,
+    # donde salen los 20 de Burgos; 35 de la bifurcación Cerrato a Palencia, con los 2 que llegan
+    # de Burgos, y 26 de Palencia a León
+    leon = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_LEON}:")]
+    assert [(s.trains, s.without_alternative) for s in leon] == [
+        (53, 53),
+        (53, 53),
+        (33, 33),
+        (35, 35),
+        (26, 26),
+        (26, 26),
+        (26, 26),
+        (26, 26),
+    ]
+    assert all(set(s.by_operator) == {"renfe"} for s in leon)
     # tampoco en la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
     # Madrid: quince de sus veinte tramos no tienen otro camino cargado
     barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]

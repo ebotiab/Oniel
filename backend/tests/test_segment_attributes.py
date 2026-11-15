@@ -255,9 +255,14 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
             for attribute in SIGNALLING:
                 value = segment.attributes[attribute]
                 assert value.value in (ATTRIBUTE_RULES[attribute].values or ())
-                # la prolongación a Málaga se leyó en el mapa un día después que el resto
+                # la prolongación a Málaga se leyó en el mapa un día después que el resto, y la
+                # línea de Valladolid a León, dos
                 assert value.source_id == DR
-                assert value.checked_on in (dt.date(2026, 11, 12), dt.date(2026, 11, 13))
+                assert value.checked_on in (
+                    dt.date(2026, 11, 12),
+                    dt.date(2026, 11, 13),
+                    dt.date(2026, 11, 14),
+                )
 
 
 def test_the_signalling_is_what_the_network_statement_map_says() -> None:

@@ -15,7 +15,7 @@
     "reference_length_km": 178.559,
     "pk_origin_km": 0.75,
     "status": "disponible",
-    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora, Ourense y Galicia, que todavía no está cargada. En Valladolid la línea continúa hacia Palencia, León y Burgos, también sin cargar: de los trenes que siguen por esas líneas Oniel cuenta el paso por esta, hasta la bifurcación o hasta Valladolid.\n\nAlgunos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la línea de alta velocidad de Valencia.",
+    "description": "Sale de Madrid-Chamartín hacia el norte, cruza la sierra de Guadarrama por un túnel de 28 km y llega a Valladolid por Segovia.\n\nSe abrió el 23 de diciembre de 2007 y fue el primer trecho de la alta velocidad hacia el norte y el noroeste. Por ella salen de Madrid los trenes a Castilla y León, Galicia, Asturias, Cantabria y el País Vasco.\n\nCerca de Olmedo, en la bifurcación Medina, sale la línea de alta velocidad a Zamora, Ourense y Galicia, que todavía no está cargada: de los trenes que siguen por ella Oniel cuenta el paso por esta hasta la bifurcación. En Valladolid la línea continúa hacia Palencia y León por la línea de alta velocidad Valladolid – Palencia – León, de la que sale a su vez la de Burgos.\n\nAlgunos trenes no acaban en Madrid-Chamartín: cruzan Madrid por un túnel y siguen a Valencia, Alicante o Murcia por la línea de alta velocidad de Valencia.",
     "geometry_source": {
       "source_id": "osm-relation-4777557",
       "parts": [
@@ -123,7 +123,7 @@
         "lat": 41.6421265
       },
       "reference_pk_km": 179.309,
-      "description": "La estación de Valladolid, donde acaba esta línea. La comparten la alta velocidad y la línea convencional de Madrid a Irún. De aquí siguen hacia Palencia, León y Burgos las líneas de alta velocidad del norte, que todavía no están cargadas."
+      "description": "La estación de Valladolid, donde acaba esta línea y empieza la de alta velocidad a Palencia y León. La comparten la alta velocidad y la línea convencional de Madrid a Irún."
     }
   ],
   "attribute_sections": [
@@ -174,27 +174,6 @@
         [
           -5.739675,
           41.515892
-        ]
-      ]
-    },
-    {
-      "id": "lav-valladolid-palencia-leon",
-      "node_id": "valladolid-campo-grande",
-      "name": "LAV Valladolid–Palencia–León",
-      "towards": "Palencia, León y Burgos",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.7269507,
-          41.6421265
-        ],
-        [
-          -4.495844,
-          41.91736
-        ],
-        [
-          -4.534135,
-          42.015711
         ]
       ]
     },
@@ -308,12 +287,20 @@
     "14100": {
       "exits": [
         "valladolid-campo-grande"
-      ]
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "valladolid-campo-grande"
+      }
     },
     "15100": {
       "exits": [
         "valladolid-campo-grande"
-      ]
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "valladolid-campo-grande"
+      }
     },
     "11014": {
       "exits": [

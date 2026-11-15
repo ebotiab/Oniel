@@ -149,7 +149,7 @@ async function encuadre(page: Page) {
 
 /**
  * El encuadre enseña la vía única de punta a punta: de Badajoz, al oeste, a la entrada a Murcia, al
- * este, y del paso por Loja, al sur, a la línea de Madrid a Plasencia, al norte. No es el de la red
+ * este, y del paso por Loja, al sur, a las puertas de León, al norte. No es el de la red
  * entera: Tarragona y Barcelona, de vía doble, quedan fuera por el este. Hacia el norte no se acota:
  * en el móvil el lienzo es alto, sigue por detrás de la hoja y, con seis grados de vía única a lo
  * ancho, pasa de los Pirineos.
@@ -158,7 +158,7 @@ async function encuadraLaViaUnica(page: Page) {
   await expect
     .poll(async () => {
       const [[oeste, sur], [este, norte]] = await encuadre(page)
-      return oeste < -6.98 && este > -0.95 && sur < 37.12 && norte > 40.25 && este < 1
+      return oeste < -6.98 && este > -0.95 && sur < 37.12 && norte > 42.53 && este < 1
     })
     .toBe(true)
 }
