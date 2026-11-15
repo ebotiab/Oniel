@@ -197,7 +197,9 @@ def test_sources_and_operators_are_registered(spec: NetworkSpec) -> None:
         "ramal_soto_de_cerrato_2026-11-15.json",
     ):
         assert (DATA_DIR / "raw" / "osm" / name).exists()
-    assert sources["osm-ramal-soto-de-cerrato"].file == "raw/osm/ramal_soto_de_cerrato_2026-11-15.json"
+    assert (
+        sources["osm-ramal-soto-de-cerrato"].file == "raw/osm/ramal_soto_de_cerrato_2026-11-15.json"
+    )
     assert spec.line.verification_source_id == WIKIPEDIA and WIKIPEDIA in sources
     for section in spec.attribute_sections:
         assert section.source_id in sources
@@ -226,9 +228,7 @@ def test_the_filter_takes_the_high_speed_trains_to_burgos(
     # que van por la convencional: los de Zaragoza a Valladolid y los de Madrid-Príncipe Pío a
     # Irún, que siguen a Briviesca
     direct = [
-        t
-        for t in feed.trips.values()
-        if _pairs(t) & {(VALLADOLID, BURGOS), (PALENCIA, BURGOS)}
+        t for t in feed.trips.values() if _pairs(t) & {(VALLADOLID, BURGOS), (PALENCIA, BURGOS)}
     ]
     for trip in direct:
         if not EXCLUDED & set(_stops(trip)):
@@ -294,7 +294,9 @@ def test_stops_on_each_side_leave_by_the_right_node(spec: NetworkSpec) -> None:
     # Cerrato; las de Galicia, sin camino cargado
     for stop_id in (PALENCIA, LEON):
         assert sm[stop_id].exits == ["bif-soto-de-cerrato"]
-        assert [(v.line, v.node) for v in sm[stop_id].via] == [("lav-valladolid-leon", "bif-cerrato")]
+        assert [(v.line, v.node) for v in sm[stop_id].via] == [
+            ("lav-valladolid-leon", "bif-cerrato")
+        ]
     for stop_id in ("20200", "22100", "31400", "08223"):
         assert sm[stop_id].exits == ["bif-soto-de-cerrato"] and not sm[stop_id].via
     # y al revés: Burgos, desde la línea de Madrid y desde las de Levante

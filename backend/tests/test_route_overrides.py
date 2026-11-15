@@ -21,10 +21,12 @@ from conftest import (
     JAEN_SPEC,
     LAV_ALICANTE_SPEC,
     LAV_BADAJOZ_SPEC,
+    LAV_BURGOS_SPEC,
     LAV_GRANADA_SPEC,
     LAV_LEON_SPEC,
     LAV_MALAGA_SPEC,
     LAV_MURCIA_SPEC,
+    LAV_OURENSE_SPEC,
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
@@ -661,6 +663,12 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-zamora-sin-parada": 115,
             "madrid-ourense-sin-parada": 6,
         },
+        # los que recorren la de Olmedo a Ourense sin parar en sus estaciones propias: los
+        # mismos que la de Valladolid recoge con las reglas del mismo nombre
+        LAV_OURENSE_SPEC.name: {
+            "madrid-zamora-sin-parada": 115,
+            "madrid-ourense-sin-parada": 6,
+        },
         # el enlace de Monforte del Cid tampoco: le basta su filtro
         LINK_MONFORTE_SPEC.name: {},
         # los que llegan de Burgos a Palencia camino de León y los de Madrid a León sin paradas
@@ -668,6 +676,9 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "burgos-palencia-leon": 6,
             "madrid-leon-sin-parada": 4,
         },
+        # los mismos seis, en la de Burgos: de Palencia a Burgos, por el ramal de Soto de Cerrato,
+        # y a Miranda de Ebro
+        LAV_BURGOS_SPEC.name: {"palencia-burgos-miranda": 6},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

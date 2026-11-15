@@ -3,7 +3,7 @@
     "id": "lav-venta-de-banos-burgos",
     "name": "Línea de alta velocidad Venta de Baños – Burgos",
     "short_name": "080",
-    "sort_order": 26,
+    "sort_order": 27,
     "zone": "castilla-y-leon",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
