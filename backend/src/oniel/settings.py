@@ -49,6 +49,7 @@ class Settings(BaseSettings):
         "ramal-merida",
         "monfrague-caceres",
         "lav-valladolid-leon",
+        "leon-oviedo-gijon",
     ]
 
 

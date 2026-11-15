@@ -314,6 +314,64 @@
       "notes": "Revisión del 15 de octubre de 2025 (oldid 169994798), consultada por la API de Wikipedia el 13 de noviembre de 2026. Solo se usa para repartir el tiempo de los trenes que dejan la línea Madrid–Valladolid en la bifurcación Medina (track_km de sus asignaciones de parada): la línea de Galicia no está cargada y esta fuente no sustituye a la verificación que tocará hacer al cargarla. La tabla da una «futura bifurcación Valladolid» en el PK 144,473, que no se ha cargado."
     },
     {
+      "id": "osm-relation-18343947",
+      "name": "Trazado de la línea convencional Venta de Baños–Gijón (relación OSM 18343947, línea 130 de Adif, ancho ibérico a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18343947",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "De la relación se usan dos trechos: los 21,9 km de León a la bifurcación Pajares, donde empieza la variante, y los 60,9 km de Pola de Lena a Gijón-Sanz Crespo, por Mieres, Oviedo y Villabona de Asturias; velocidad máxima por tramo. Con los 49,8 km de la relación 5549743 forman la línea de León a Gijón (132,6 km). De la misma relación sale el dibujo a trazos de la vía antigua del puerto de Pajares, que no se carga (87,3 km entre la bifurcación y Pola de Lena).",
+      "notes": "Descargado por la API de OpenStreetMap (api.openstreetmap.org, relation/18343947/full.json) el 15 de noviembre de 2026, porque ese día overpass-api.de respondía 406; el formato es el mismo. La relación es de infraestructura («Línea Venta de Baños-Gijón», ref=130, 664 vías) y va de Venta de Baños a Gijón por el puerto de Pajares: no incluye la variante. Entre León y la bifurcación Pajares y entre Pola de Lena y Gijón es de una pieza: se traza el camino más corto por el grafo de vías. Comparte con la relación 5549743 tres nodos: dos al sur, uno por vía, donde empieza la variante (se usa -5.6430799, 42.7723208, el de la vía por la que sigue el trazado), y uno al norte de la estación de Pola de Lena (-5.8307523, 43.1617015), donde se corta. Sus vías llevan gauge=1668 y voltage=3000 en los dos trechos usados. A la salida de León, 1,8 km de vías no traen velocidad, y otros tres trozos cortos entre Pola de Lena y Mieres; ningún tramo queda sin ella. El trazado empieza a 61 m del nodo de la estación de León, en el extremo de las vías de la relación, y acaba en el punto de parada de Gijón.",
+      "file": "raw/osm/relation_18343947_linea_130_venta_de_banos_gijon_2026-11-15.json"
+    },
+    {
+      "id": "osm-relation-5549743",
+      "name": "Trazado de la variante de Pajares (relación OSM 5549743, «LAV Variante de Pajares», La Robla–Pola de Lena)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/5549743",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Los 49,8 km de la variante entre la bifurcación Pajares y el nodo que comparte con la línea 130 al norte de la estación de Pola de Lena; velocidad máxima por tramo, ancho y tensión de cada vía.",
+      "notes": "Descargado por la API de OpenStreetMap (relation/5549743/full.json) el 15 de noviembre de 2026. Relación de infraestructura con 96 vías, las dos vías de la variante; casi todas llevan ref=984 y el nombre «Línea de Alta Velocidad La Robla - Pola de Lena», y las dos últimas, ya en la estación de Pola de Lena, ref=130. Es de una pieza. Las vías por las que va el trazado llevan gauge=1435;1668 desde la bifurcación hasta el cambiador de Campomanes (43,3 km) y gauge=1668 desde allí; voltage=25000 entre 1,9 km después de la bifurcación y 1,2 km después del cambiador, y voltage=3000 en los dos extremos; todas, railway:etcs=2. La velocidad máxima es de 200 km/h en el túnel de Pajares y hasta Campomanes, y de 160 km/h en los primeros 11 km. Wikipedia da 49,7 km para la variante y sitúa su final en el PK 49,746, que es la unión con la vía antigua, 0,3 km antes de la estación.",
+      "file": "raw/osm/relation_5549743_variante_de_pajares_2026-11-15.json"
+    },
+    {
+      "id": "osm-instalaciones-leon-gijon",
+      "name": "Estaciones e instalaciones de la línea León–Gijón en OpenStreetMap",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Coordenadas de la bifurcación Pajares (nodo 12716736746, «Bifurcación Pajares / La Robla»), de La Robla AV (14185618393), del cambiador de Campomanes (9311157924) y de las estaciones de Pola de Lena (4586092222), Oviedo (4586092220) y Villabona de Asturias (8040089876).",
+      "notes": "Nodos con etiqueta railway de catorce recuadros pequeños a lo largo de la línea, pedidos uno a uno a la API de OpenStreetMap (map.json?bbox=…) el 15 de noviembre de 2026 y reunidos en un fichero. Las coordenadas de Ujo, Mieres-Puente, Llamaquique, Calzada de Asturias y Gijón-Sanz Crespo son las de sus puntos de parada en la relación 18343947 (nodos 493413689, 493413092, 30547241, 3692365687 y 3246986211). Los códigos de las estaciones son los de sus paradas en el GTFS de Renfe; Villabona de Asturias no tiene parada en él y va sin código. El nodo de la bifurcación Pajares de la especificación es el punto de la vía que comparten las dos relaciones, a 110 m del nodo de OSM que la nombra.",
+      "file": "raw/osm/instalaciones_leon_gijon_2026-11-15.json"
+    },
+    {
+      "id": "wikipedia-variante-de-pajares",
+      "name": "Artículo «Variante de Pajares» de Wikipedia en español (puntos kilométricos, ancho de cada vía, longitud, fecha de inauguración)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/Variante_de_Pajares",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Esquema de la variante con sus puntos kilométricos: inicio (0,0), La Robla (2,849), túneles de Pajares (del 9,669 al 34,317; 24,6 km), Campomanes (43,388) y unión con la línea convencional en Pola de Lena (49,746); longitud de 49,7 km; vía oriental de ancho ibérico y occidental de ancho mixto de La Robla a Campomanes, con un cambiador de ancho y un PAET en Campomanes; 34 km menos que por el puerto entre La Robla y Pola de Lena; inauguración el 29 de noviembre de 2023.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 12 de febrero de 2025 (oldid 165350071), consultada por la API de Wikipedia el 15 de noviembre de 2026. Los puntos kilométricos de La Robla AV y de Campomanes AV se contrastan con el kilómetro medido en el trazado de OSM desde la bifurcación Pajares, que es el PK 0 de la variante. El artículo no da el número de línea de Adif: el 984 es el de las etiquetas de las vías de OSM. Dice que los trenes pueden circular a 275 km/h en gran parte del trayecto; las vías de OSM traen 200 km/h como máxima, que es lo que se usa. El artículo «Línea de alta velocidad León-Asturias» (revisión del 10 de julio de 2025, oldid 168391735) añade que el tramo de León a La Robla, de 21 km, está en obras para ponerle tercer carril y 25 kV, y que el único operador es Renfe; dice también que los trenes circulan en ancho estándar hasta el cambiador de Campomanes, lo que no cuadra con el mapa 4 de la Declaración sobre la Red, que dibuja de León a La Robla una vía doble de ancho ibérico a 3 kV."
+    },
+    {
+      "id": "wikipedia-linea-130",
+      "name": "Artículos «Línea Venta de Baños-Gijón» y de las estaciones de León a Gijón de Wikipedia en español (puntos kilométricos, vías, electrificación)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Venta_de_Ba%C3%B1os-Gij%C3%B3n",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Línea 130 de la Red Ferroviaria de Interés General: ancho ibérico, 3 kV de corriente continua, vía doble salvo de La Robla a Pola de Lena (el puerto de Pajares, de vía única, abierto el 15 de agosto de 1884), bloqueo automático con control de tráfico centralizado; estación de Gijón-Sanz Crespo, provisional desde 2011, en el PK 170,773. Puntos kilométricos, con origen en León, de los artículos de cada estación: La Robla (25,033), Campomanes (102,211), Pola de Lena (108,119), Ujo (115,189), Mieres-Puente (120,275), Llamaquique (138,172), Oviedo (139,138), Villabona de Asturias (151,917) y Calzada de Asturias (168,759).",
+      "notes": "Fuente de verificación, no de geometría, consultada por la API de Wikipedia el 15 de noviembre de 2026. Revisiones: línea (28 de agosto de 2024, oldid 162133310), La Robla (172949418), Campomanes (159883055), Pola de Lena (161459603), Ujo (163474124), Mieres-Puente (172451311), Llamaquique (165156221), Oviedo (173818962), Villabona de Asturias (161986895) y Calzada de Asturias (159883429). Los puntos kilométricos cuentan desde León por el puerto de Pajares y por los trazados antiguos de Asturias: desde Pola de Lena, donde la línea de Oniel retoma esa numeración (pk_restarts), el trazado actual se queda hasta 1,4 km por detrás de ellos. La Robla y Campomanes no son nodos: sus estaciones están en la vía del puerto. El artículo de la línea dice que entre Ablaña y la bifurcación de Tudela-Veguín la vía doble son dos líneas de vía única, la 130 y la 132."
+    },
+    {
       "id": "osm-relation-11351146",
       "name": "Trazado de la línea convencional Espeluy–Jaén (relación OSM 11351146, línea 402 de Adif, ancho ibérico, vía única electrificada a 3 kV)",
       "publisher": "Colaboradores de OpenStreetMap",

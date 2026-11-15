@@ -15,7 +15,7 @@
     "reference_length_km": 166.141,
     "pk_origin_km": 179.309,
     "status": "disponible",
-    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos, que todavía no está cargada. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional, y en León, los de Asturias y los de Ponferrada y Galicia: de todos ellos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
+    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos, que todavía no está cargada. En León los trenes de Asturias cambian de ancho de vía y siguen por la línea de León a Gijón, que cruza la cordillera por la variante de Pajares. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional, y en León, los de Ponferrada y Galicia: de estos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
     "geometry_source": {
       "source_id": "osm-relation-5546933",
       "parts": [
@@ -166,7 +166,7 @@
         "lat": 42.5951002
       },
       "reference_pk_km": 345.45,
-      "description": "La estación de León, donde acaba esta línea. De aquí siguen los trenes de Asturias, por la variante de Pajares, y los de Ponferrada y Galicia, por la línea convencional: ninguna de las dos está cargada."
+      "description": "La estación de León, donde acaba la línea de alta velocidad que viene de Valladolid y empieza la de Oviedo y Gijón, por la variante de Pajares. Los trenes de Madrid a Asturias cambian aquí de ancho de vía. De León salen también los trenes de Ponferrada y Galicia, por una línea convencional que no está cargada."
     }
   ],
   "attribute_sections": [
@@ -269,27 +269,6 @@
         [
           -4.233899,
           42.785362
-        ]
-      ]
-    },
-    {
-      "id": "lav-leon-asturias",
-      "node_id": "leon",
-      "name": "Línea de León a Asturias (variante de Pajares)",
-      "towards": "Pola de Lena, Oviedo y Gijón",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -5.5819405,
-          42.5951002
-        ],
-        [
-          -5.626255,
-          42.804454
-        ],
-        [
-          -5.8310263,
-          43.15872
         ]
       ]
     },
@@ -537,22 +516,38 @@
     "15122": {
       "exits": [
         "leon"
-      ]
+      ],
+      "via": {
+        "line": "leon-oviedo-gijon",
+        "node": "leon"
+      }
     },
     "15203": {
       "exits": [
         "leon"
-      ]
+      ],
+      "via": {
+        "line": "leon-oviedo-gijon",
+        "node": "leon"
+      }
     },
     "15211": {
       "exits": [
         "leon"
-      ]
+      ],
+      "via": {
+        "line": "leon-oviedo-gijon",
+        "node": "leon"
+      }
     },
     "15410": {
       "exits": [
         "leon"
-      ]
+      ],
+      "via": {
+        "line": "leon-oviedo-gijon",
+        "node": "leon"
+      }
     },
     "16403": {
       "exits": [

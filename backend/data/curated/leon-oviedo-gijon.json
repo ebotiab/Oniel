@@ -1,0 +1,702 @@
+{
+  "line": {
+    "id": "leon-oviedo-gijon",
+    "name": "Línea León – Oviedo – Gijón por la variante de Pajares",
+    "short_name": "130 y 984",
+    "sort_order": 26,
+    "zone": "cantabrico",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 200,
+    "tracks": 2,
+    "status": "disponible",
+    "pk_restarts": [
+      {
+        "node": "bif-pajares",
+        "pk_km": -0.4
+      },
+      {
+        "node": "pola-de-lena",
+        "pk_km": 108.119
+      }
+    ],
+    "description": "Une León con Oviedo y Gijón. Cruza la cordillera Cantábrica por la variante de Pajares, un trazado nuevo cuyo túnel principal mide casi 25 km.\n\nLa variante se inauguró el 29 de noviembre de 2023. Hasta entonces todos los trenes subían el puerto de Pajares por una vía única de 1884, llena de curvas y túneles, que sigue en servicio: por ella van hoy los trenes regionales, que paran en los pueblos del puerto. La variante acorta el camino entre La Robla y Pola de Lena en 34 km.\n\nPor esta línea van los trenes de Madrid a Oviedo y Gijón, algunos de ellos desde Alicante, y los que siguen de Oviedo a Avilés. Llegan a León por la línea de alta velocidad, que es de ancho estándar, y allí cambian de ancho: de León a Gijón circulan por vía de ancho ibérico.\n\nLa línea tiene tres partes. De León a la bifurcación Pajares, cerca de La Robla, es la línea convencional de siempre. De allí a Pola de Lena, la variante: de sus dos vías, una es de ancho ibérico y la otra tiene tres carriles, para trenes de los dos anchos, hasta el cambiador de Campomanes. Y de Pola de Lena a Gijón vuelve a ser la línea convencional, que comparte con los trenes de cercanías de Asturias.\n\nLos regionales de León a Gijón dejan esta línea en la bifurcación Pajares y vuelven a ella en Pola de Lena: entre las dos van por el puerto, que Oniel dibuja a trazos porque no está cargado.",
+    "geometry_source": {
+      "source_id": "osm-relation-18343947",
+      "parts": [
+        {
+          "source_id": "osm-relation-18343947",
+          "file": "raw/osm/relation_18343947_linea_130_venta_de_banos_gijon_2026-11-15.json",
+          "relation_id": 18343947,
+          "from": [
+            -5.5819405,
+            42.5951002
+          ],
+          "to": [
+            -5.6430799,
+            42.7723208
+          ]
+        },
+        {
+          "source_id": "osm-relation-5549743",
+          "file": "raw/osm/relation_5549743_variante_de_pajares_2026-11-15.json",
+          "relation_id": 5549743,
+          "from": [
+            -5.6430799,
+            42.7723208
+          ],
+          "to": [
+            -5.8307523,
+            43.1617015
+          ]
+        },
+        {
+          "source_id": "osm-relation-18343947",
+          "file": "raw/osm/relation_18343947_linea_130_venta_de_banos_gijon_2026-11-15.json",
+          "relation_id": 18343947,
+          "from": [
+            -5.8307523,
+            43.1617015
+          ],
+          "to": [
+            -5.6762251,
+            43.5375667
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-variante-de-pajares"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "leon",
+      "name": "León",
+      "kind": "estacion",
+      "adif_code": "15100",
+      "shared": true,
+      "position": {
+        "lon": -5.5819405,
+        "lat": 42.5951002
+      }
+    },
+    {
+      "id": "bif-pajares",
+      "name": "Bifurcación Pajares",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -5.6430799,
+        "lat": 42.7723208
+      },
+      "description": "Punto poco antes de La Robla (León) donde empieza la variante de Pajares. A la izquierda sigue esta línea, hacia el túnel; a la derecha, la vía antigua que sube el puerto de Pajares por La Robla y Busdongo, por la que van los trenes regionales y que no está cargada."
+    },
+    {
+      "id": "la-robla-av",
+      "name": "La Robla AV",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.6379035,
+        "lat": 42.80107
+      },
+      "reference_pk_km": 2.849,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) de la variante, junto a La Robla: unas vías de apartado donde un tren puede detenerse para que otro lo adelante. No es una estación de viajeros; la de La Robla está en la vía antigua."
+    },
+    {
+      "id": "campomanes-av",
+      "name": "Campomanes AV",
+      "kind": "paet",
+      "position": {
+        "lon": -5.8215952,
+        "lat": 43.1093614
+      },
+      "reference_pk_km": 43.388,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) en Campomanes (Asturias), pasado el túnel de Pajares, con un cambiador de ancho. Hasta aquí llega la vía de tres carriles de la variante; desde aquí las dos vías son de ancho ibérico. No es una estación de viajeros."
+    },
+    {
+      "id": "pola-de-lena",
+      "name": "Pola de Lena",
+      "kind": "estacion",
+      "adif_code": "15122",
+      "position": {
+        "lon": -5.8311261,
+        "lat": 43.1586493
+      },
+      "description": "La primera estación de Asturias viniendo de León. Justo antes de ella la variante se une a la vía antigua que baja del puerto de Pajares: aquí vuelven a esta línea los trenes regionales."
+    },
+    {
+      "id": "ujo",
+      "name": "Ujo",
+      "kind": "estacion",
+      "adif_code": "15200",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.792441,
+        "lat": 43.2060953
+      },
+      "reference_pk_km": 115.189
+    },
+    {
+      "id": "mieres-puente",
+      "name": "Mieres-Puente",
+      "kind": "estacion",
+      "adif_code": "15203",
+      "position": {
+        "lon": -5.782387,
+        "lat": 43.2502366
+      },
+      "reference_pk_km": 120.275
+    },
+    {
+      "id": "llamaquique",
+      "name": "Llamaquique",
+      "kind": "estacion",
+      "adif_code": "15218",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.8573383,
+        "lat": 43.358803
+      },
+      "reference_pk_km": 138.172,
+      "description": "Estación del centro de Oviedo, a un kilómetro de la principal. Paran en ella los trenes regionales y los de cercanías."
+    },
+    {
+      "id": "oviedo",
+      "name": "Oviedo",
+      "kind": "estacion",
+      "adif_code": "15211",
+      "position": {
+        "lon": -5.8548667,
+        "lat": 43.3663632
+      },
+      "reference_pk_km": 139.138,
+      "description": "La estación principal de Oviedo. Además de esta línea, llegan a ella las de vía estrecha de Asturias y la de cercanías a Avilés, que no están cargadas."
+    },
+    {
+      "id": "villabona-de-asturias",
+      "name": "Villabona de Asturias",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.8263369,
+        "lat": 43.4615126
+      },
+      "reference_pk_km": 151.917,
+      "description": "Estación entre Oviedo y Gijón de la que sale el ramal a Avilés y San Juan de Nieva, que no está cargado. Por él siguen los trenes de Madrid a Avilés; en el horario cargado ninguno para aquí."
+    },
+    {
+      "id": "calzada-de-asturias",
+      "name": "Calzada de Asturias",
+      "kind": "estacion",
+      "adif_code": "15401",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.6977914,
+        "lat": 43.5352453
+      },
+      "reference_pk_km": 168.759
+    },
+    {
+      "id": "gijon-sanz-crespo",
+      "name": "Gijón-Sanz Crespo",
+      "kind": "estacion",
+      "adif_code": "15410",
+      "position": {
+        "lon": -5.6762251,
+        "lat": 43.5375667
+      },
+      "reference_pk_km": 170.773,
+      "description": "La estación de Gijón, donde acaba la línea. Es una estación provisional, en servicio desde 2011."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "gauge",
+      "from_node": "bif-pajares",
+      "to_node": "campomanes-av",
+      "value": "mixto",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: de la bifurcación a La Robla AV dibuja «Doble, con 3er carril, a 25 KV 50 HZ a 1.668 mm»; de La Robla AV a Campomanes AV, dos vías únicas, una «a 25 KV 50 HZ a 1.668 mm» y otra «con 3er carril, a 25 KV 50 HZ a 1.435 mm». Es decir, el tercer carril está en una sola de las dos vías entre La Robla AV y Campomanes AV. Coincide con Wikipedia (vía oriental de ancho ibérico y occidental de ancho mixto de La Robla a Campomanes) y con las vías de OSM por las que va el trazado (gauge=1435;1668 desde la bifurcación hasta el cambiador de Campomanes)."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "bif-pajares",
+      "to_node": "pola-de-lena",
+      "value": "25kv_ca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: 25 kV desde el trecho de tercer carril que empieza junto a La Robla hasta Pola de Lena («Doble a 25 KV 50 HZ a 1.668 mm» de Campomanes AV a Pola de Lena); a 3 kV de León a La Robla y de Pola de Lena a Gijón. Las vías de OSM sitúan los cambios de tensión dentro de la variante: 1,9 km después de la bifurcación Pajares y 1,2 km después del cambiador de Campomanes, desde donde llevan voltage=3000 hasta Pola de Lena. Se declara lo que dibuja el mapa, que cambia en nodos."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "leon",
+      "to_node": "bif-pajares",
+      "value": 160,
+      "source_id": "wikipedia-linea-130",
+      "checked_on": "2026-11-15",
+      "note": "Las vías de OSM traen 160 km/h en casi todo el tramo, pero el desvío de la bifurcación, de 100 m, lleva maxspeed=250 y el tramo saldría con esa máxima. Wikipedia da 160 km/h para la línea 130 entre Venta de Baños y La Robla."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "leon",
+      "to_node": "bif-pajares",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: círculos de «Tren tierra y ASFA conv.» junto a la línea entre León y La Robla."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-pajares",
+      "to_node": "pola-de-lena",
+      "value": "ertms_n2_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: junto a la variante, tres grupos con el trébol rojo de «ERTMS N2», el cuadrado de «ASFA - Convencional» y el triángulo de GSM-R (a la altura de Pola de Lena, de Campomanes AV y de La Robla AV). El ASFA que dibuja es el convencional y no el de alta velocidad; el valor es el mismo que en las líneas con «ASFA - AV», porque la ficha no los distingue. Las vías de OSM de la variante llevan railway:etcs=2."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "pola-de-lena",
+      "to_node": "gijon-sanz-crespo",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: círculos de «Tren tierra y ASFA conv.» a lo largo de la línea entre Pola de Lena, Oviedo y Gijón."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "leon",
+      "to_node": "gijon-sanz-crespo",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: trazo marrón rotulado «BAB ctc» junto a La Robla, a lo largo de la variante, entre Pola de Lena y Oviedo y entre Oviedo y Gijón. El «BAU ctc» naranja que hay junto a la variante es el de la vía antigua del puerto de Pajares."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "leon",
+      "to_node": "gijon-sanz-crespo",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-15",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en los cuatro rótulos de la línea."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-rampa-de-pajares",
+      "node_id": "bif-pajares",
+      "name": "Línea antigua por el puerto de Pajares",
+      "towards": "La Robla, Busdongo, Puente de los Fierros y Pola de Lena",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.64308,
+          42.77232
+        ],
+        [
+          -5.62415,
+          42.81784
+        ],
+        [
+          -5.67765,
+          42.85644
+        ],
+        [
+          -5.63758,
+          42.88157
+        ],
+        [
+          -5.66371,
+          42.96236
+        ],
+        [
+          -5.76633,
+          42.99611
+        ],
+        [
+          -5.77096,
+          43.03866
+        ],
+        [
+          -5.71792,
+          43.06233
+        ],
+        [
+          -5.72375,
+          43.0833
+        ],
+        [
+          -5.76163,
+          43.08662
+        ],
+        [
+          -5.7579,
+          43.1022
+        ],
+        [
+          -5.78279,
+          43.09766
+        ],
+        [
+          -5.79963,
+          43.11702
+        ],
+        [
+          -5.7598,
+          43.08049
+        ],
+        [
+          -5.7715,
+          43.06574
+        ],
+        [
+          -5.81551,
+          43.10762
+        ],
+        [
+          -5.83075,
+          43.1617
+        ]
+      ]
+    },
+    {
+      "id": "conv-villabona-san-juan-de-nieva",
+      "node_id": "villabona-de-asturias",
+      "name": "Línea Villabona de Asturias–San Juan de Nieva",
+      "towards": "Avilés y San Juan de Nieva",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.8263369,
+          43.4615126
+        ],
+        [
+          -5.87,
+          43.5
+        ],
+        [
+          -5.9228329,
+          43.561339
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "15100": {
+      "node": "leon"
+    },
+    "15122": {
+      "node": "pola-de-lena"
+    },
+    "15200": {
+      "node": "ujo"
+    },
+    "15203": {
+      "node": "mieres-puente"
+    },
+    "15218": {
+      "node": "llamaquique"
+    },
+    "15211": {
+      "node": "oviedo"
+    },
+    "15401": {
+      "node": "calzada-de-asturias"
+    },
+    "15410": {
+      "node": "gijon-sanz-crespo"
+    },
+    "15106": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15108": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15109": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15112": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15113": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15116": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15118": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "15120": {
+      "exits": [
+        "bif-pajares",
+        "pola-de-lena"
+      ],
+      "aside": true
+    },
+    "16403": {
+      "exits": [
+        "villabona-de-asturias"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        }
+      ]
+    },
+    "10600": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        }
+      ]
+    },
+    "08004": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "17000": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "03208": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "60600": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "03309": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "60911": {
+      "exits": [
+        "leon"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "leon"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "15015": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15012": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15009": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15008": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15007": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15004": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15003": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15001": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "11000": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "10605": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "10604": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "10603": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "10602": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "10610": {
+      "exits": [
+        "leon"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos o más estaciones de la línea. Así entran los trenes de Madrid a Oviedo, Gijón y Avilés y los regionales de León a Gijón, y quedan fuera los de vía estrecha, que de esta línea solo tocan Oviedo.",
+    "min_node_stops": 2
+  },
+  "route_overrides": []
+}

@@ -370,21 +370,61 @@
     "15122": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "leon-oviedo-gijon",
+          "node": "leon"
+        }
       ]
     },
     "15203": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "leon-oviedo-gijon",
+          "node": "leon"
+        }
       ]
     },
     "15211": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "leon-oviedo-gijon",
+          "node": "leon"
+        }
       ]
     },
     "15410": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "leon-oviedo-gijon",
+          "node": "leon"
+        }
       ]
     },
     "16403": {
