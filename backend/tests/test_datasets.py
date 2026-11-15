@@ -243,6 +243,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 3409  # la de Madrid a Valladolid, todos estimados
     passes += 2154  # la de Valladolid a León, todos estimados
     passes += 2130  # la de Olmedo a Ourense, todos estimados
+    passes += 514  # la de Venta de Baños a Burgos, todos estimados
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral

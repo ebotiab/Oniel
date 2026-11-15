@@ -1,0 +1,77 @@
+{
+ "descripcion": "Registro de las consultas hechas el 15 de noviembre de 2026 para el proyecto de la línea de alta velocidad Burgos – Vitoria de backend/data/curated/anotaciones.json, al cargar la línea de Venta de Baños a Burgos. Los anuncios del BOE se guardan enteros en raw/proyectos/boe/; aquí queda, con palabras propias, qué se buscó, qué no se encontró y de dónde salen los puntos del esbozo.",
+ "consultado_el": "2026-11-15",
+ "consultas": [
+  {
+   "source_id": "wikipedia-lav-venta-de-banos-burgos-vitoria",
+   "editor": "Colaboradores de Wikipedia",
+   "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Venta_de_Ba%C3%B1os-Burgos-Vitoria",
+   "fecha_de_la_pagina": "2026-09-25",
+   "resumen": "El artículo (oldid 175525205) enumera nueve subtramos entre la variante de Burgos y Iruña de Oca y da a cada uno un estado: dos en obras, uno con las obras adjudicadas, uno con las obras licitadas, dos en expropiaciones y dos con el proyecto adjudicado, con referencias al BOE y a la Plataforma de Contratación del Sector Público.",
+   "que_aporta": "Los identificadores de los anuncios del BOE, que se leyeron directamente. Los estados de «en obras» y de obras adjudicadas no se registran: los anuncios del BOE leídos son licitaciones y Oniel no ha leído una fuente oficial que diga que esas obras empezaron."
+  }
+ ],
+ "busquedas_en_el_boe": {
+  "buscador": "https://www.boe.es/buscar/anboe.php",
+  "consultas_por_titulo": [
+   "Burgos-Vitoria (113 resultados, de 1996 a septiembre de 2026; leídos los títulos de todos)"
+  ],
+  "encontrado": [
+   "Información pública del estudio informativo (BOE-B-2018-1272) y su aprobación definitiva (BOE-B-2022-601).",
+   "Licitación de la conexión con la integración del ferrocarril en Vitoria-Gasteiz, fase II (BOE-B-2021-50396).",
+   "Licitaciones de la plataforma de los subtramos Pancorbo – Ameyugo (BOE-B-2025-6932), Variante de Burgos – Valle de las Navas (BOE-B-2026-3142), Manzanos – La Puebla de Arganzón (BOE-B-2026-3141) y Piérnigas – Pancorbo (BOE-B-2026-5435).",
+   "Licitaciones de asistencias técnicas y de un laboratorio de ensayos para esas obras, correcciones de errores y anuncios de expropiaciones, que no se guardan (los de expropiaciones traen nombres de particulares)."
+  ],
+  "no_encontrado": [
+   "La adjudicación o la formalización de las obras de plataforma de los cuatro subtramos y de la conexión con Vitoria.",
+   "Licitaciones de obras de los demás subtramos.",
+   "Una fuente oficial que diga que alguna de esas obras ha empezado o cuándo se prevé terminar."
+  ]
+ },
+ "esbozos": {
+  "fuente_de_las_coordenadas": "osm-nominatim-lugares",
+  "nota": "El esbozo une con rectas la estación de Burgos-Rosa Manzano y los lugares que nombran los anuncios de licitación del BOE, situados con Nominatim el 15 de noviembre de 2026. No es el trazado del proyecto.",
+  "proyecto-lav-burgos-vitoria": [
+   {
+    "lugar": "Burgos-Rosa Manzano (nodo de la línea de Venta de Baños a Burgos)",
+    "lon": -3.6663219,
+    "lat": 42.3711651
+   },
+   {
+    "lugar": "Valle de las Navas (municipio; relación OSM 339608)",
+    "lon": -3.5827528,
+    "lat": 42.4828548
+   },
+   {
+    "lugar": "Piérnigas (relación OSM 340370)",
+    "lon": -3.4131187,
+    "lat": 42.5901504
+   },
+   {
+    "lugar": "Pancorbo (municipio; relación OSM 345056)",
+    "lon": -3.1109887,
+    "lat": 42.6353553
+   },
+   {
+    "lugar": "Ameyugo (municipio; relación OSM 343546)",
+    "lon": -3.0611514,
+    "lat": 42.6560702
+   },
+   {
+    "lugar": "Manzanos (núcleo; nodo OSM 1203859395)",
+    "lon": -2.8764334,
+    "lat": 42.7418215
+   },
+   {
+    "lugar": "La Puebla de Arganzón (municipio; relación OSM 344774)",
+    "lon": -2.8186727,
+    "lat": 42.7741642
+   },
+   {
+    "lugar": "Vitoria-Gasteiz (municipio; relación OSM 344337)",
+    "lon": -2.66145,
+    "lat": 42.8505845
+   }
+  ]
+ }
+}

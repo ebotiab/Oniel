@@ -51,6 +51,7 @@ MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
 LAV_LEON = "lav-valladolid-leon"
 LAV_OURENSE = "lav-olmedo-ourense"
+LAV_BURGOS = "lav-venta-de-banos-burgos"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -311,6 +312,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         MONFRAGUE_CACERES,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -325,11 +327,11 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # línea de Albacete a Alicante; los ocho de después, la de Monforte del Cid a Murcia; los 35,
     # la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
-    # cuatro de Extremadura; los 8, la de Valladolid a León, y los 13 del final, la de Olmedo a
-    # Ourense
+    # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
+    # 4 del final, la de Venta de Baños a Burgos
     assert (
         len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -349,7 +351,12 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # la convencional de Madrid-Puerta de Atocha a la bifurcación Planetario
     # y los ocho de la línea de Valladolid a León, la única cargada al norte de Valladolid
     # y los trece de la de Olmedo a Ourense, el único camino cargado a Zamora y a Galicia
-    assert (len(none), len(without)) == (54 + 29 + 8 + 13, 121 + 29 + 4 + 8 + 13)
+    # y los cuatro de la de Venta de Baños a Burgos, el único camino cargado a Burgos
+    assert (len(none), len(without)) == (54 + 29 + 8 + 13 + 4, 121 + 29 + 4 + 8 + 13 + 4)
+    # la de Burgos, entera: los 20 que dejan la línea de León en Venta de Baños y, desde Soto de
+    # Cerrato, 22 con los 2 que llegan de Palencia por el ramal
+    burgos = {k: n for k, n in none.items() if k.startswith(f"{LAV_BURGOS}:")}
+    assert len(burgos) == 4 and sorted(set(burgos.values())) == [20, 22]
     # la de Olmedo a Ourense, entera: 30 trenes hasta Medina del Campo AV y 22 en los demás
     ourense = {k: n for k, n in none.items() if k.startswith(f"{LAV_OURENSE}:")}
     assert len(ourense) == 13 and sorted(set(ourense.values())) == [22, 30]
@@ -362,6 +369,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     apart = (
         f"{LAV_LEON}:",
         f"{LAV_OURENSE}:",
+        f"{LAV_BURGOS}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",

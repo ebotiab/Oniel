@@ -147,8 +147,8 @@ def test_nodes_stations_and_junctions(line: BuiltNetwork) -> None:
     }
     assert line.node("bif-venta-de-banos").spec.kind == "bifurcacion"
     assert line.node("bif-venta-de-banos").spec.rank == "principal"
+    # la línea de Burgos ya está cargada: deja de salir a trazos de la bifurcación
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "lav-venta-de-banos-burgos": "bif-venta-de-banos",
         "conv-palencia-santander": "palencia",
         "lav-leon-asturias": "leon",
         "conv-leon-galicia": "leon",
@@ -362,6 +362,15 @@ def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> Non
         assert spec.stop_mappings[stop_id].exits == ["palencia"]
     for stop_id in ("15122", "15211", "15410", "20100", "20200", "22100", "31400"):
         assert spec.stop_mappings[stop_id].exits == ["leon"]
+    # Burgos es ya una estación cargada: los de Madrid llegan a ella por la bifurcación Venta de
+    # Baños y los que vienen de Palencia, por el ramal que se une a la línea de Burgos en Soto de
+    # Cerrato
+    assert [(v.line, v.node) for v in spec.stop_mappings[BURGOS].via] == [
+        ("lav-venta-de-banos-burgos", "bif-venta-de-banos")
+    ]
     rule = next(r for r in spec.route_overrides if r.id == "burgos-palencia-leon")
     assert rule.from_stop_id == BURGOS
     assert rule.stop_mappings[BURGOS].exits == ["bif-cerrato"]
+    assert [(v.line, v.node) for v in rule.stop_mappings[BURGOS].via] == [
+        ("lav-venta-de-banos-burgos", "bif-soto-de-cerrato")
+    ]

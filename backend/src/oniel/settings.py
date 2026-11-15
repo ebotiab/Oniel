@@ -50,6 +50,7 @@ class Settings(BaseSettings):
         "ramal-merida",
         "monfrague-caceres",
         "lav-valladolid-leon",
+        "lav-venta-de-banos-burgos",
     ]
 
 

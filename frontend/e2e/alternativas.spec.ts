@@ -108,12 +108,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 104 de los 219 tramos con trenes, en 16 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 108 de los 223 tramos con trenes, en 17 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(16)
+    await expect(lineas).toHaveCount(17)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
@@ -129,6 +129,9 @@ test.describe('Tramos sin otro camino', () => {
     // la de Olmedo a Ourense, entera: a Zamora y a Galicia solo llega ella
     await expect(linea('Olmedo – Ourense por Zamora')).toContainText('Toda la línea, 13 tramos')
     await expect(linea('Olmedo – Ourense por Zamora')).toContainText('de 22 a 30 trenes')
+    // y la de Venta de Baños a Burgos, entera: a Burgos solo llega ella
+    await expect(linea('Venta de Baños – Burgos')).toContainText('Toda la línea, 4 tramos')
+    await expect(linea('Venta de Baños – Burgos')).toContainText('de 20 a 22 trenes')
     // los últimos tramos de la alta velocidad de Madrid a Valencia no figuran: los AVE de Castelló sí tienen otro camino.
     // De la línea de València a Camp de Tarragona, el primer tramo y los dieciséis de Castelló a Camp de Tarragona:
     // dar la vuelta por Madrid mide más del doble y no cuenta
