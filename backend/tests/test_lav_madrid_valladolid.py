@@ -31,15 +31,8 @@ LINE = "lav-madrid-valladolid"
 RELATION = "osm-relation-4777557"
 MAP = "adif-declaracion-red-2026-mapas"
 CHAMARTIN, SEGOVIA, VALLADOLID = "17000", "08004", "10600"
-#: Paradas de la línea de alta velocidad de Olmedo a Galicia de las que una fuente da los
-#: kilómetros de vía desde la bifurcación Medina.
-GALICIA_LINE_KM = {
-    "08240": 21.574,
-    "30200": 98.579,
-    "08247": 199.704,
-    "08251": 248.729,
-    "22100": 328.649,
-}
+#: Estaciones de la línea de alta velocidad de Olmedo a Ourense, que sale de la bifurcación Medina.
+GALICIA_LINE = ("08240", "30200", "08247", "08251", "22100")
 #: Estaciones de la línea convencional de Madrid a Irún a un lado y a otro de Valladolid: un tren
 #: que para en alguna no llega a Valladolid por la alta velocidad.
 CONVENTIONAL = {"10500", "10504", "11000", "10605", "10200"}
@@ -124,12 +117,11 @@ def test_nodes_are_ready_for_the_lines_that_follow(line: BuiltNetwork) -> None:
         "valladolid-campo-grande": VALLADOLID,
     }
     # la bifurcación de la que sale la línea de Galicia y la estación de Valladolid son nodos
-    # principales: de la bifurcación colgará la línea de Galicia, que hoy sale a trazos; de
-    # Valladolid sale ya la de Palencia y León, y por eso no queda conexión a trazos hacia ella
+    # principales. De la bifurcación sale ya la línea de Olmedo a Ourense y de Valladolid, la de
+    # Palencia y León: no queda conexión a trazos hacia ninguna de las dos
     assert line.node("bif-medina").spec.kind == "bifurcacion"
     assert line.node("bif-medina").spec.rank == "principal"
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "lav-olmedo-zamora-galicia": "bif-medina",
         "conv-valladolid-medina-del-campo": "valladolid-campo-grande",
     }
     assert all(n.offset_m < 250 for n in line.nodes)
@@ -323,11 +315,12 @@ def test_each_train_counts_on_the_segments_it_runs(
 
 
 def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> None:
-    """Las paradas de la línea de Galicia son salidas por la bifurcación Medina, con los kilómetros
-    de vía que da la fuente; las del norte, por Valladolid."""
-    for stop_id, km in GALICIA_LINE_KM.items():
+    """Las paradas de la línea de Galicia son salidas por la bifurcación Medina y siguen por esa
+    línea, ya cargada; las del norte, por Valladolid."""
+    for stop_id in GALICIA_LINE:
         mapping = spec.stop_mappings[stop_id]
-        assert mapping.exits == ["bif-medina"] and mapping.track_km == km
+        assert mapping.exits == ["bif-medina"] and mapping.track_km is None
+        assert [(v.line, v.node) for v in mapping.via] == [("lav-olmedo-ourense", "bif-medina")]
     for stop_id in ("30100", "31400", "31412", "08223"):
         assert spec.stop_mappings[stop_id].exits == ["bif-medina"]
     for stop_id in ("14100", "15100", "11014", "15410", "14223", "11600", "13200"):

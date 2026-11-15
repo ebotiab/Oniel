@@ -44,6 +44,7 @@ class Settings(BaseSettings):
         "valencia-castello-tarragona",
         "enlace-monforte-del-cid",
         "lav-madrid-valladolid",
+        "lav-olmedo-ourense",
         "madrid-plasencia",
         "lav-plasencia-badajoz",
         "ramal-merida",

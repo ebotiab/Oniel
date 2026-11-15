@@ -25,6 +25,7 @@ from conftest import (
     LAV_LEON_SPEC,
     LAV_MALAGA_SPEC,
     LAV_MURCIA_SPEC,
+    LAV_OURENSE_SPEC,
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
@@ -658,6 +659,12 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-valladolid-sin-parada": 188,
             "madrid-leon-sin-parada": 4,
             "madrid-medina-sin-parada": 14,
+            "madrid-zamora-sin-parada": 115,
+            "madrid-ourense-sin-parada": 6,
+        },
+        # los que recorren la de Olmedo a Ourense sin parar en sus estaciones propias: los
+        # mismos que la de Valladolid recoge con las reglas del mismo nombre
+        LAV_OURENSE_SPEC.name: {
             "madrid-zamora-sin-parada": 115,
             "madrid-ourense-sin-parada": 6,
         },

@@ -3,7 +3,7 @@
     "id": "leon-oviedo-gijon",
     "name": "Línea León – Oviedo – Gijón por la variante de Pajares",
     "short_name": "130 y 984",
-    "sort_order": 26,
+    "sort_order": 27,
     "zone": "cantabrico",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

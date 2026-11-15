@@ -114,12 +114,16 @@ test.describe('Las líneas de Extremadura', () => {
     await expect(page.getByTestId('tramo-atributo-electrification')).toHaveText('25 kV 50 Hz')
   })
 
-  test('Badajoz, la estación más al oeste, cabe en el encuadre de toda la red', async ({ request }) => {
+  test('Badajoz, la estación más al oeste de Extremadura, cabe en el encuadre de toda la red', async ({ request }) => {
     const indice = (await (await request.get('/data/index.json')).json()) as { nodes: { id: string; lon: number; lat: number }[] }
     const badajoz = indice.nodes.find((n) => n.id === 'badajoz')!
     const [[oeste, sur], [este, norte]] = SPAIN_BOUNDS
-    // ningún nodo queda más al oeste, y la caja lo contiene con margen
-    expect(Math.min(...indice.nodes.map((n) => n.lon))).toBe(badajoz.lon)
+    // era el nodo más al oeste hasta que se cargó la línea de Olmedo a Ourense: ahora lo es Ourense.
+    // La caja contiene a los dos con margen
+    const ourense = indice.nodes.find((n) => n.id === 'ourense')!
+    expect(Math.min(...indice.nodes.map((n) => n.lon))).toBe(ourense.lon)
+    expect(ourense.lon).toBeLessThan(badajoz.lon)
+    expect(ourense.lon - oeste).toBeGreaterThan(0.1)
     expect(badajoz.lon - oeste).toBeGreaterThan(0.1)
     for (const n of indice.nodes) {
       expect(n.lon, `${n.id}: longitud`).toBeGreaterThan(oeste)
