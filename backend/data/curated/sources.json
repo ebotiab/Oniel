@@ -264,8 +264,8 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "Los 178,6 km de la relación entre los andenes de Madrid-Chamartín y la estación de Valladolid-Campo Grande, por Segovia-Guiomar; velocidad máxima por tramo. La relación sigue hasta Burgos: de ese trecho se usan los 38,4 km entre Valladolid-Campo Grande y la bifurcación Venta de Baños, para la línea de Valladolid a León; lo que queda hasta Burgos no se usa.",
-      "notes": "Descargado por la API Overpass (overpass-api.de) el 13 de noviembre de 2026. La relación es de infraestructura («Línea de Alta Velocidad Madrid–Valladolid-Burgos», ref=080, operator=Adif), trae las dos vías (334 vías) y es de una pieza entre Madrid y Valladolid: se traza el camino más corto por el grafo de vías, sin huecos. Sus vías llevan railway:etcs=2; la velocidad máxima más repetida es 300 km/h y coincide con el cuadro de velocidades de Wikipedia. El trazado acaba en el vértice de la vía más cercano a la estación de Valladolid-Campo Grande: con la parada de la relación como final, el camino más corto pasaba de largo la estación y volvía por la otra vía, 3,3 km de más. Comparte dos nodos con la relación 4777980 («LAV Olmedo-Zamora-Galicia»), en el kilómetro 133,13 del trazado: ahí está la bifurcación Medina. El número de línea de Adif (080) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. Las coordenadas de Madrid-Chamartín, Segovia-Guiomar, Valladolid-Campo Grande y el PAET de Garcillán son las de sus nodos en OSM (raw/osm/adif_facility_nodes_madrid_valladolid_2026-11-13.json, descargado el mismo día); los códigos de estación de esos nodos (17000, 08004 y 10600) coinciden con las paradas del GTFS de Renfe. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
+      "coverage": "Los 178,6 km de la relación entre los andenes de Madrid-Chamartín y la estación de Valladolid-Campo Grande, por Segovia-Guiomar; velocidad máxima por tramo. La relación sigue hasta Burgos: de ese trecho se usan los 38,4 km entre Valladolid-Campo Grande y la bifurcación Venta de Baños, para la línea de Valladolid a León, y los 86,4 km de la bifurcación a la estación de Burgos-Rosa Manzano, para la línea de Venta de Baños a Burgos.",
+      "notes": "Descargado por la API Overpass (overpass-api.de) el 13 de noviembre de 2026. La relación es de infraestructura («Línea de Alta Velocidad Madrid–Valladolid-Burgos», ref=080, operator=Adif), trae las dos vías (334 vías) y es de una pieza entre Madrid y Valladolid: se traza el camino más corto por el grafo de vías, sin huecos. Sus vías llevan railway:etcs=2; la velocidad máxima más repetida es 300 km/h y coincide con el cuadro de velocidades de Wikipedia. El trazado acaba en el vértice de la vía más cercano a la estación de Valladolid-Campo Grande: con la parada de la relación como final, el camino más corto pasaba de largo la estación y volvía por la otra vía, 3,3 km de más. Comparte dos nodos con la relación 4777980 («LAV Olmedo-Zamora-Galicia»), en el kilómetro 133,13 del trazado: ahí está la bifurcación Medina. El número de línea de Adif (080) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. Las coordenadas de Madrid-Chamartín, Segovia-Guiomar, Valladolid-Campo Grande y el PAET de Garcillán son las de sus nodos en OSM (raw/osm/adif_facility_nodes_madrid_valladolid_2026-11-13.json, descargado el mismo día); los códigos de estación de esos nodos (17000, 08004 y 10600) coinciden con las paradas del GTFS de Renfe. La longitud y los puntos kilométricos se contrastaron con Wikipedia. Entre la bifurcación Venta de Baños y Burgos la relación trae una sola vía desde el desvío 4932732118, poco después de la bifurcación Soto de Cerrato (desvío 4932732113, donde se le une el ramal de Palencia, que no es de la relación), y sigue más allá de la estación hasta el cambiador de ancho: la línea de Burgos se corta a la altura del nodo de la estación (trim). La estación de Burgos-Rosa Manzano se sitúa con su nodo en OSM (raw/osm/estacion_burgos_rosa_manzano_2026-11-15.json, nodo 13021298528, ref=11014, descargado por la API de OpenStreetMap el 15 de noviembre de 2026), cuyo código coincide con la parada del GTFS de Renfe.",
       "file": "raw/osm/relation_4777557_lav_madrid_valladolid_burgos_2026-11-13.json"
     },
     {
@@ -301,6 +301,29 @@
       "retrieved_on": "2026-11-14",
       "coverage": "Puntos kilométricos, que continúan los de la línea de Madrid a Valladolid: Valladolid-Campo Grande (179,309), bifurcación Canal del Duero (186,283), bifurcación Las Pajareras (187,360), puesto de banalización de Dueñas (208,447), bifurcación Venta de Baños AV, hacia Burgos (217,578), bifurcación Cerrato, donde se incorpora el ramal de Burgos (222,699), bifurcación Cerrato AV (223,530), cambiador de Villamuriel (224,754), Palencia (230,627), bifurcación Las Barreras (259,999), base de mantenimiento de Villada (276,537), bifurcación Las Arenas (297,591), bifurcación Vilecha (338,245), cambiadores de Vilecha (339,527) y de Clasificación (343,879) y León (345,450); longitud de 166,141 km; tramos de vía única (8,051, 36,469 y 40,654 km) y de vía doble (36,170, 37,592 y 7,205 km); ancho estándar a 25 kV; cuadro de velocidades máximas con ERTMS de nivel 2 (300 km/h entre los PK 186,621 y 217,578 y entre el 237,946 y el 338,900); inauguración el 29 de septiembre de 2015 y servicio de viajeros desde el día 30; servicios que la recorren.",
       "notes": "Fuente de verificación, no de geometría; revisión del 10 de diciembre de 2024 (oldid 164052852), consultada por la API de Wikipedia el 14 de noviembre de 2026. La tabla de puntos kilométricos cita la Consigna A 2920 de Adif y el cuadro de velocidades, el Aviso 47. Los puntos kilométricos de los nodos quedan a menos de 0,2 km del kilómetro medido en el trazado de OSM desde Valladolid-Campo Grande, que lleva el PK 179,309 (pk_origin_km). No se han cargado como nodos el puesto de banalización de Dueñas, la bifurcación Canal del Duero (el acceso a los talleres de Valladolid), los cambiadores de ancho ni los puestos de cantonamiento de Becerril y Luengos. Villada figura en una tabla como PAET y en la de puntos kilométricos como base de mantenimiento y «futuro PAET»: no se ha cargado. De las dos bifurcaciones de Cerrato se ha cargado la del PK 223,530, donde empieza la vía única; el ramal de Burgos se incorpora 0,8 km antes. Dice que la línea lleva ASFA digital y ERTMS de nivel 2, lo mismo que dibuja el mapa 4 de la Declaración sobre la Red. Dice además que en 2024 empezaron a licitarse los contratos para duplicar la vía entre las bifurcaciones Las Arenas y Vilecha (41,5 km), con una noticia de Vía Libre como referencia. El artículo no da el número de línea de Adif: el 084 es el de las etiquetas de OSM entre Venta de Baños y León, y el 080, el de la relación 4777557 entre Valladolid y Venta de Baños."
+    },
+    {
+      "id": "wikipedia-lav-venta-de-banos-burgos-vitoria",
+      "name": "Artículo «Línea de alta velocidad Venta de Baños-Burgos-Vitoria» de Wikipedia en español (puntos kilométricos, instalaciones, vía única y doble, fecha de apertura, tramos hacia Vitoria)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Venta_de_Ba%C3%B1os-Burgos-Vitoria",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Puntos kilométricos, que continúan los de la línea 080 desde Madrid: bifurcación Venta de Baños AV (217,578), bifurcación Soto de Cerrato AV, donde se incorpora el ramal de Palencia (222,674), bifurcación La Vega, donde empieza la vía única (223,000), puestos de cantonamiento de Torquemada (240,736), Villaquirán (270,206) y Villalbilla (293,291), semi-PAET de Río Arlanzón (257,565) y de Estépar (282,378), Burgos Rosa Manzano (304,041) y cambiador de Burgos (304,654); ramal de 4,485 km de vía única entre la bifurcación Cerrato de la línea de León (PK 222,651 de esa línea) y la bifurcación Soto de Cerrato; vía doble solo entre la bifurcación Venta de Baños y La Vega (5,422 km); ERTMS de nivel 2; inauguración el 21 de julio de 2022 y servicio desde el 22; variante de Burgos con una vía adaptada al ancho estándar; tramos de la alta velocidad de Burgos a Vitoria y su estado.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 25 de septiembre de 2026 (oldid 175525205), consultada por la API de Wikipedia el 15 de noviembre de 2026. El artículo dice que el tramo se inauguró el 21 de julio de 2022 y que la estación de Burgos Rosa Manzano tuvo servicio de alta velocidad desde el 22, con una nota de prensa de Renfe de ese día: se guarda el 22, como en las demás líneas, la fecha del servicio de viajeros. Los puntos kilométricos de los nodos quedan a menos de 0,3 km del kilómetro medido en el trazado de OSM desde la bifurcación Venta de Baños, que lleva el PK 217,578 (pk_origin_km). No se han cargado como nodos la bifurcación La Vega (a 0,3 km de Soto de Cerrato), los puestos de cantonamiento ni el cambiador de Burgos. La bifurcación Cerrato del ramal es la que la línea de León sitúa en el PK 222,699 según el artículo de esa línea; aquí figura con el 222,651. La tabla de los tramos de Burgos a Vitoria cita anuncios del BOE, que se leen directamente."
+    },
+    {
+      "id": "osm-ramal-soto-de-cerrato",
+      "name": "Vías del ramal entre las bifurcaciones Cerrato y Soto de Cerrato (OpenStreetMap, ref=170)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/165188468",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Las tres vías del ramal de vía única que une la línea de León, junto a la bifurcación Cerrato, con la de Burgos en la bifurcación Soto de Cerrato, y los dos desvíos de la línea de Burgos junto a esa bifurcación. Sirven para situar la bifurcación Soto de Cerrato y para el esbozo del ramal, que no se carga.",
+      "notes": "Descargado por la API de OpenStreetMap (ways.json y nodes.json) el 15 de noviembre de 2026; el fichero junta las vías 502928576, 165188466 y 165188468 con sus nodos y los desvíos 4932732113 y 4932732118. Ninguna relación de infraestructura recoge el ramal: sus vías llevan ref=170, gauge=1435, voltage=25000, railway:etcs=2 y maxspeed=160. Se une a la relación 4777557 en el desvío 4932732113, que es el nodo de la bifurcación Soto de Cerrato.",
+      "file": "raw/osm/ramal_soto_de_cerrato_2026-11-15.json"
     },
     {
       "id": "wikipedia-lav-olmedo-zamora-galicia",
@@ -1484,7 +1507,7 @@
       "license_url": "https://www.openstreetmap.org/copyright",
       "retrieved_on": "2026-11-12",
       "coverage": "Coordenadas de los municipios y lugares por los que pasan los esbozos de los proyectos.",
-      "notes": "Cada esbozo une con rectas el punto de la red cargada del que sale el proyecto y los lugares que nombra su fuente; no es el trazado del proyecto.",
+      "notes": "Cada esbozo une con rectas el punto de la red cargada del que sale el proyecto y los lugares que nombra su fuente; no es el trazado del proyecto. Los lugares del esbozo de la alta velocidad Burgos – Vitoria se consultaron el 15 de noviembre de 2026 y están en raw/proyectos/consultas_2026-11-15_lav_burgos_vitoria.json.",
       "file": "raw/proyectos/consultas_2026-11-12.json"
     },
     {
@@ -1497,6 +1520,90 @@
       "retrieved_on": "2026-11-08",
       "coverage": "Fondo cartográfico del visor en todo el mundo.",
       "notes": "Servicio gratuito sin clave de API."
+    },
+    {
+      "id": "boe-b-2025-6932",
+      "name": "BOE-B-2025-6932: Licitación de la plataforma del subtramo Pancorbo – Ameyugo de la alta velocidad Burgos – Vitoria",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2025-6932",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Licitación, por Adif Alta Velocidad, de las obras de plataforma del subtramo Pancorbo – Ameyugo de la línea de alta velocidad Burgos – Vitoria.",
+      "notes": "Publicado en el BOE el 2025-02-26; anuncio enviado el 21 de febrero de 2025; procedimiento abierto, con una duración del contrato de 52 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción de la plataforma de la Línea de Alta Velocidad de la conexión Madrid-País Vasco-Frontera Francesa. Tramo: Burgos-Vitoria. Subtramo: Pancorbo-Ameyugo. Expediente: 3.25/20830.0015.» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2025-6932_2026-11-15.xml"
+    },
+    {
+      "id": "boe-b-2026-3141",
+      "name": "BOE-B-2026-3141: Licitación de la plataforma del subtramo Manzanos – La Puebla de Arganzón de la alta velocidad Burgos – Vitoria",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-3141",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Licitación, por Adif Alta Velocidad, de las obras de plataforma del subtramo Manzanos – La Puebla de Arganzón de la línea de alta velocidad Burgos – Vitoria.",
+      "notes": "Publicado en el BOE el 2026-02-05; anuncio enviado el 2 de febrero de 2026; procedimiento abierto, con una duración del contrato de 48 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción de plataforma de la línea de alta velocidad de la conexión Madrid - País Vasco - frontera francesa. Tramo: Burgos-Vitoria. Subtramo: Manzanos - La Puebla de Arganzón. Expediente: 3.25/20830.0277.» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2026-3141_2026-11-15.xml"
+    },
+    {
+      "id": "boe-b-2026-3142",
+      "name": "BOE-B-2026-3142: Licitación de la plataforma del subtramo Variante Ferroviaria de Burgos – Valle de las Navas de la alta velocidad Burgos – Vitoria",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-3142",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Licitación, por Adif Alta Velocidad, de las obras de plataforma del subtramo Variante Ferroviaria de Burgos – Valle de las Navas de la línea de alta velocidad Burgos – Vitoria.",
+      "notes": "Publicado en el BOE el 2026-02-05; anuncio enviado el 2 de febrero de 2026; procedimiento abierto, con una duración del contrato de 42 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción de la plataforma de la Línea de Alta Velocidad de la conexión Madrid-País Vasco-Frontera Francesa. Tramo: Burgos-Vitoria. Subtramo: Variante Ferroviaria de Burgos-Valle de las Navas. Expediente: 3.25/20830.0278.» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2026-3142_2026-11-15.xml"
+    },
+    {
+      "id": "boe-b-2026-5435",
+      "name": "BOE-B-2026-5435: Licitación de la plataforma del subtramo Piérnigas – Pancorbo de la alta velocidad Burgos – Vitoria",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-5435",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Licitación, por Adif Alta Velocidad, de las obras de plataforma del subtramo Piérnigas – Pancorbo de la línea de alta velocidad Burgos – Vitoria.",
+      "notes": "Publicado en el BOE el 2026-02-23; anuncio enviado el 18 de febrero de 2026; procedimiento abierto, con una duración del contrato de 39 meses. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción de plataforma de la Línea de Alta Velocidad de la conexión Madrid - País Vasco - Frontera Francesa. Tramo: Burgos - Vitoria. Subtramo: Piérnigas - Pancorbo. Expediente: 3.25/20830.0280.» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2026-5435_2026-11-15.xml"
+    },
+    {
+      "id": "boe-b-2018-1272",
+      "name": "BOE-B-2018-1272: Información pública del estudio informativo de la línea de alta velocidad Burgos – Vitoria",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2018-1272",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Información pública del estudio informativo de la línea de alta velocidad Burgos – Vitoria, aprobado provisionalmente el 8 de enero de 2018.",
+      "notes": "Publicado en el BOE el 2018-01-10. Título oficial: «Anuncio de la Subdirección General de Planificación Ferroviaria por el que se somete a información pública el \"Estudio Informativo del Proyecto de la Línea de Alta Velocidad Burgos-Vitoria\".» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2018-1272_2026-11-15.xml"
+    },
+    {
+      "id": "boe-b-2021-50396",
+      "name": "BOE-B-2021-50396: Licitación de la plataforma de la conexión de la alta velocidad Burgos – Vitoria con la integración del ferrocarril en Vitoria-Gasteiz (fase II)",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2021-50396",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Licitación, por Adif Alta Velocidad, de las obras de plataforma de la conexión de la línea Burgos – Vitoria con la integración del ferrocarril en Vitoria-Gasteiz, fase II.",
+      "notes": "Publicado en el BOE el 2021-12-14. Título oficial: «Anuncio de licitación de: ADIF Alta Velocidad - Consejo de Administración. Objeto: Obras de ejecución del proyecto de construcción de plataforma de la conexión de la Línea de Alta Velocidad Burgos-Vitoria con la Integración del Ferrocarril en la ciudad de Vitoria-Gasteiz. Fase II. Expediente: 3.21/20830.0219.» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2021-50396_2026-11-15.xml"
+    },
+    {
+      "id": "boe-b-2022-601",
+      "name": "BOE-B-2022-601: Aprobación definitiva del estudio informativo de la línea de alta velocidad Burgos – Vitoria",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2022-601",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-15",
+      "coverage": "Aprobación definitiva del estudio informativo, el 29 de diciembre de 2021, con la autorización del Consejo de Ministros del día 28; declaración de impacto ambiental del 11 de junio de 2021; alternativas elegidas: «Oeste 2» entre Burgos y Pancorbo y «Variante de Miranda 2» entre Pancorbo y Vitoria.",
+      "notes": "Publicado en el BOE el 2022-01-08. Título oficial: «Anuncio de la Subdirección General de Planificación Ferroviaria sobre la aprobación del expediente de información pública y audiencia y la aprobación definitiva del \"Estudio Informativo del Proyecto de la Línea de Alta Velocidad Burgos-Vitoria\".» Descargado con xml.php el 15 de noviembre de 2026.",
+      "file": "raw/proyectos/boe/BOE-B-2022-601_2026-11-15.xml"
     }
   ]
 }

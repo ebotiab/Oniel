@@ -261,6 +261,8 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 value = segment.attributes[attribute]
                 assert value.value in (ATTRIBUTE_RULES[attribute].values or ())
                 # la prolongación a Málaga se leyó en el mapa un día después que el resto, y las
+                # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de Venta de Baños a
+                # Burgos, tres
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres
                 assert value.source_id == DR
                 assert value.checked_on in (

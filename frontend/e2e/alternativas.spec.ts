@@ -108,12 +108,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 115 de los 230 tramos con trenes, en 17 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 119 de los 234 tramos con trenes, en 18 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(17)
+    await expect(lineas).toHaveCount(18)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
@@ -129,6 +129,9 @@ test.describe('Tramos sin otro camino', () => {
     // la de Olmedo a Ourense, entera: a Zamora y a Galicia solo llega ella
     await expect(linea('Olmedo – Ourense por Zamora')).toContainText('Toda la línea, 13 tramos')
     await expect(linea('Olmedo – Ourense por Zamora')).toContainText('de 22 a 30 trenes')
+    // y la de Venta de Baños a Burgos, entera: a Burgos solo llega ella
+    await expect(linea('Venta de Baños – Burgos')).toContainText('Toda la línea, 4 tramos')
+    await expect(linea('Venta de Baños – Burgos')).toContainText('de 20 a 22 trenes')
     // y la de León a Gijón, entera: la vía antigua del puerto de Pajares no está cargada
     await expect(linea('León – Gijón por Oviedo')).toContainText('Toda la línea, 11 tramos')
     await expect(linea('León – Gijón por Oviedo')).toContainText('de 14 a 16 trenes')

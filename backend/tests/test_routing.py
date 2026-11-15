@@ -92,12 +92,12 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # siguientes, la línea de Albacete a Alicante; los ocho de después, la de Monforte del Cid a
     # Murcia; los 35, la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 siguientes, las
-    # cuatro líneas de Extremadura; los 8 siguientes, la de Valladolid a León, y los 11 del final,
-    # la de León a Gijón
+    # cuatro líneas de Extremadura; los 8 de después, la de Valladolid a León; los 4 siguientes,
+    # la de Venta de Baños a Burgos, y los 11 del final, la de León a Gijón
     assert (
         len(graph.edges)
         == len(network.segments)
-        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4 + 8 + 11)
+        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4 + 8 + 4 + 11)
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
@@ -263,6 +263,22 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     # el trecho que va entero por el enlace es del enlace
     (only_link,) = find_routes(graph, "monforte-del-cid-av", "bif-vinalopo")
     assert only_link.line_ids == ["enlace-monforte-del-cid"] and only_link.length_km == 2.1
+
+
+def test_burgos_is_reached_from_madrid_through_venta_de_banos(graph: Graph) -> None:
+    """De Madrid-Chamartín por las líneas de Valladolid y de León hasta la bifurcación Venta de
+    Baños y, desde allí, por la de Burgos. El ramal de Soto de Cerrato no está cargado: de León a
+    Burgos el único camino que se conoce pasa por la bifurcación."""
+    lines = ["lav-madrid-valladolid", "lav-valladolid-leon", "lav-venta-de-banos-burgos"]
+    to_burgos = find_routes(graph, "madrid-chamartin", "burgos-rosa-manzano")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_burgos] == [(303.2, 64, lines)]
+    from_valladolid = find_routes(graph, "valladolid-campo-grande", "burgos-rosa-manzano")
+    # la fuente da 124,732 km de Valladolid-Campo Grande a Burgos Rosa Manzano
+    assert [r.length_km for r in from_valladolid] == [124.7]
+    assert {e.line_id for e in graph.edges_at("bif-venta-de-banos")} == {
+        "lav-valladolid-leon",
+        "lav-venta-de-banos-burgos",
+    }
 
 
 def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:

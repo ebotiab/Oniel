@@ -21,6 +21,7 @@ from conftest import (
     JAEN_SPEC,
     LAV_ALICANTE_SPEC,
     LAV_BADAJOZ_SPEC,
+    LAV_BURGOS_SPEC,
     LAV_GRANADA_SPEC,
     LAV_LEON_SPEC,
     LAV_MALAGA_SPEC,
@@ -676,6 +677,9 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "burgos-palencia-leon": 6,
             "madrid-leon-sin-parada": 4,
         },
+        # los mismos seis, en la de Burgos: de Palencia a Burgos, por el ramal de Soto de Cerrato,
+        # y a Miranda de Ebro
+        LAV_BURGOS_SPEC.name: {"palencia-burgos-miranda": 6},
         # la de León a Gijón no tiene reglas: ningún tren la cruza sin parar en ella
         LEON_GIJON_SPEC.name: {},
     }

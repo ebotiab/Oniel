@@ -3,7 +3,7 @@
     "id": "leon-oviedo-gijon",
     "name": "Línea convencional León – Oviedo – Gijón",
     "short_name": "130 y 984",
-    "sort_order": 27,
+    "sort_order": 28,
     "zone": "cantabrico",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

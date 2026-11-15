@@ -15,7 +15,7 @@
     "reference_length_km": 166.141,
     "pk_origin_km": 179.309,
     "status": "disponible",
-    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos, que todavía no está cargada. En León los trenes de Asturias cambian de ancho de vía y siguen por la línea de León a Gijón, que cruza la cordillera por la variante de Pajares. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional, y en León, los de Ponferrada y Galicia: de estos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
+    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos. En León los trenes de Asturias cambian de ancho de vía y siguen por la línea de León a Gijón, que cruza la cordillera por la variante de Pajares. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional, y en León, los de Ponferrada y Galicia: de estos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
     "geometry_source": {
       "source_id": "osm-relation-5546933",
       "parts": [
@@ -95,7 +95,7 @@
         "lat": 41.9242256
       },
       "reference_pk_km": 217.578,
-      "description": "Punto cercano a Venta de Baños (Palencia) donde la alta velocidad se divide: a la izquierda sigue esta línea, hacia Palencia y León, y a la derecha sale la de Burgos y el País Vasco, que todavía no está cargada. No hay estación: los trenes de Madrid a Burgos dejan aquí la línea."
+      "description": "Punto cercano a Venta de Baños (Palencia) donde la alta velocidad se divide: a la izquierda sigue la línea de Palencia y León, y a la derecha sale la de Burgos, por la que siguen los trenes de Madrid a Burgos y al País Vasco. No hay estación."
     },
     {
       "id": "bif-cerrato",
@@ -107,7 +107,7 @@
         "lat": 41.9680494
       },
       "reference_pk_km": 223.53,
-      "description": "Punto donde la línea pasa de dos vías a una, poco antes de Palencia. Algo menos de un kilómetro antes se le une el ramal que viene de Burgos, por el que llegan los trenes de Barcelona y el País Vasco a Palencia, León y Galicia sin pasar por Valladolid."
+      "description": "Punto donde la línea pasa de dos vías a una, poco antes de Palencia. Algo menos de un kilómetro antes se le une el ramal que viene de la línea de Burgos, desde la bifurcación Soto de Cerrato, por el que llegan los trenes de Barcelona y el País Vasco a Palencia, León y Galicia sin pasar por Valladolid ni por Venta de Baños."
     },
     {
       "id": "palencia",
@@ -226,31 +226,6 @@
     }
   ],
   "connections": [
-    {
-      "id": "lav-venta-de-banos-burgos",
-      "node_id": "bif-venta-de-banos",
-      "name": "LAV Venta de Baños–Burgos",
-      "towards": "Burgos, Vitoria y el País Vasco",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.4877585,
-          41.9242256
-        ],
-        [
-          -4.36,
-          41.99
-        ],
-        [
-          -4.05,
-          42.13
-        ],
-        [
-          -3.666308,
-          42.371197
-        ]
-      ]
-    },
     {
       "id": "conv-palencia-santander",
       "node_id": "palencia",
@@ -642,7 +617,11 @@
     "11014": {
       "exits": [
         "bif-venta-de-banos"
-      ]
+      ],
+      "via": {
+        "line": "lav-venta-de-banos-burgos",
+        "node": "bif-venta-de-banos"
+      }
     },
     "11200": {
       "exits": [
@@ -738,7 +717,11 @@
         "11014": {
           "exits": [
             "bif-cerrato"
-          ]
+          ],
+          "via": {
+            "line": "lav-venta-de-banos-burgos",
+            "node": "bif-soto-de-cerrato"
+          }
         }
       }
     },

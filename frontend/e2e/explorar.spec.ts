@@ -11,7 +11,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('ficha-red')).toContainText(/^21 líneas · 4\.550 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^22 líneas · 4\.637 km/)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await abrirZonas(page)
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(21)
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(22)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()

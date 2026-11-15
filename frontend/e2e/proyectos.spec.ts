@@ -17,6 +17,7 @@ const MORA_ALCAZAR = 'proyecto-lav-mora-alcazar'
 const LOJA = 'proyecto-variante-de-loja'
 const OROPESA = 'proyecto-lav-madrid-oropesa'
 const TALAYUELA = 'proyecto-lav-talayuela-plasencia'
+const BURGOS_VITORIA = 'proyecto-lav-burgos-vitoria'
 const TUNELES = 'proyecto-galibo-tuneles-venta-de-cardenas-montoro'
 const TRAMO_CON_OBRAS = 'convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches'
 
@@ -34,6 +35,7 @@ test.describe('Proyectos: datos y registro de capas', () => {
       'proyecto-conexion-lav-cordoba-jaen',
       'proyecto-duplicacion-antequera-granada',
       TUNELES,
+      BURGOS_VITORIA,
       OROPESA,
       MORA_ALCAZAR,
       TALAYUELA,
@@ -45,8 +47,9 @@ test.describe('Proyectos: datos y registro de capas', () => {
       expect(a.milestones!.length, a.id).toBeGreaterThan(0)
       // la fuente de cada hito es una de las del proyecto, y tiene dónde consultarse
       for (const h of a.milestones!) expect(a.sources.find((s) => s.id === h.source_id)?.url, `${a.id} ${h.date}`).toBeTruthy()
-      // los de Extremadura y los de la línea de València a Camp de Tarragona se comprobaron al cargarlas, un día después
-      expect(['2026-11-12', '2026-11-13'], a.id).toContain(a.checked_on)
+      // los de Extremadura y los de la línea de València a Camp de Tarragona se comprobaron al cargarlas, un día después,
+      // y el de Burgos a Vitoria, al cargar la línea de Burgos, tres días después
+      expect(['2026-11-12', '2026-11-13', '2026-11-15'], a.id).toContain(a.checked_on)
     }
   })
 
@@ -132,7 +135,7 @@ test.describe('Proyectos: la vista', () => {
   test('la página de cobertura enumera los proyectos, con su estado, y lleva a la ficha de cada uno', async ({ page }) => {
     await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
-    await expect(lista.getByRole('listitem')).toHaveCount(9)
+    await expect(lista.getByRole('listitem')).toHaveCount(10)
     await expect(lista.getByRole('listitem').filter({ hasText: 'Variante de Loja' })).toContainText('en obras')
     await lista.getByTestId('proyecto-enlace').filter({ hasText: 'Variante de Loja' }).click()
     await expect(page).toHaveURL(/\/proyecto\//)
@@ -148,9 +151,10 @@ test.describe('Proyectos: la vista', () => {
       const data = (await (map.getSource('oniel-annotations') as unknown as { getData: () => Promise<GeoJSON.FeatureCollection> }).getData()).features
       return Object.fromEntries(data.map((f) => [String(f.properties!.oniel_id), String(f.properties!.dibujo)]))
     })
-    // solo los cuatro que no cuelgan de una vía cargada; el que está en obras va a trazos
+    // solo los cinco que no cuelgan de una vía cargada; el que está en obras va a trazos
     expect(dibujos).toEqual({
       'proyecto-conexion-lav-cordoba-jaen': 'puntos',
+      [BURGOS_VITORIA]: 'puntos',
       [OROPESA]: 'puntos',
       [MORA_ALCAZAR]: 'puntos',
       [TALAYUELA]: 'trazos',

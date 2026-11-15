@@ -51,6 +51,7 @@ MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
 LAV_LEON = "lav-valladolid-leon"
 LAV_OURENSE = "lav-olmedo-ourense"
+LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
@@ -312,6 +313,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         MONFRAGUE_CACERES,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
         LEON_GIJON,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -328,10 +330,10 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
     # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
-    # 11 del final, la de León a Gijón
+    # 4 siguientes, la de Venta de Baños a Burgos, y los 11 del final, la de León a Gijón
     assert (
         len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 11
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -351,8 +353,16 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # la convencional de Madrid-Puerta de Atocha a la bifurcación Planetario
     # y los ocho de la línea de Valladolid a León, la única cargada al norte de Valladolid
     # y los trece de la de Olmedo a Ourense, el único camino cargado a Zamora y a Galicia
+    # y los cuatro de la de Venta de Baños a Burgos, el único camino cargado a Burgos
+    # la de Burgos, entera: los 20 que dejan la línea de León en Venta de Baños y, desde Soto de
+    # Cerrato, 22 con los 2 que llegan de Palencia por el ramal
+    burgos = {k: n for k, n in none.items() if k.startswith(f"{LAV_BURGOS}:")}
+    assert len(burgos) == 4 and sorted(set(burgos.values())) == [20, 22]
     # y los once de la de León a Gijón, la única cargada al norte de León
-    assert (len(none), len(without)) == (54 + 29 + 8 + 13 + 11, 121 + 29 + 4 + 8 + 13 + 11)
+    assert (len(none), len(without)) == (
+        54 + 29 + 8 + 13 + 4 + 11,
+        121 + 29 + 4 + 8 + 13 + 4 + 11,
+    )
     # la de León a Gijón, entera: 16 trenes donde van también los regionales y 14 en la variante
     # y de Villabona de Asturias a Gijón
     gijon = {k: n for k, n in none.items() if k.startswith(f"{LEON_GIJON}:")}
@@ -370,6 +380,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     apart = (
         f"{LAV_LEON}:",
         f"{LAV_OURENSE}:",
+        f"{LAV_BURGOS}:",
         f"{LEON_GIJON}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",

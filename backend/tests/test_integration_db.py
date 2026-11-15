@@ -47,6 +47,7 @@ MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
 LAV_LEON = "lav-valladolid-leon"
 LAV_OURENSE = "lav-olmedo-ourense"
+LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
@@ -418,8 +419,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     c = imported["counts"]
     # catorce líneas, los dos baipases y el enlace de Monforte del Cid, que son líneas cortas de
     # un tramo, y las cuatro de Extremadura
-    # la de Valladolid a León, la de Olmedo a Ourense y la de León a Gijón
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1
+    # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
+    # a Gijón
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -447,6 +449,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 4
         + 8
         + 13
+        + 4
         + 11  # la de León a Gijón
     )
     assert c["services"] == trips + 47 + 22
@@ -462,6 +465,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 91  # el enlace de Monforte del Cid
     renfe_passes += 2154  # la de Valladolid a León, todos estimados
     renfe_passes += 2130  # la de Olmedo a Ourense, todos estimados
+    renfe_passes += 514  # la de Venta de Baños a Burgos, todos estimados
     renfe_passes += 1311 + 125  # la de León a Gijón
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
@@ -588,6 +592,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 4
         + 8
         + 13
+        + 4
         + 11  # la de León a Gijón
     )
     assert data["connection_features"]["features"]
@@ -617,7 +622,10 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         *EXTREMADURA,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
     }
+    # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
+    assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
     # en la de Olmedo a Ourense, de Medina del Campo AV a Coreses, la salida de Zamora, de Pedralba
     # a Vilavella y la llegada a Ourense
     assert sum(1 for s in single if s["line_id"] == LAV_OURENSE) == 5
@@ -673,6 +681,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         *EXTREMADURA,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
         LEON_GIJON,
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
@@ -751,6 +760,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 4
         + 8
         + 13
+        + 4
         + 11  # la de León a Gijón
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
@@ -936,8 +946,12 @@ async def test_projects_are_served_with_their_status_milestones_and_sketch(
     by_id = {p["id"]: p for p in projects}
     # cinco, los dos de la línea de Valencia a Camp de Tarragona y los dos de la alta velocidad
     # de Madrid a Extremadura: de Madrid a Oropesa, en estudio, y de Talayuela a Plasencia, en
-    # obras
-    assert len(by_id) == 5 + 2 + 2
+    # obras; y la alta velocidad de Burgos a Vitoria, licitada
+    assert len(by_id) == 5 + 2 + 2 + 1
+    burgos_vitoria = by_id["proyecto-lav-burgos-vitoria"]
+    assert burgos_vitoria["status"] == "licitado"
+    assert burgos_vitoria["geometry"]["coordinates"][0] == [-3.6663219, 42.3711651]
+    assert len(burgos_vitoria["milestones"]) == 8
     study, works = by_id["proyecto-lav-madrid-oropesa"], by_id["proyecto-lav-talayuela-plasencia"]
     assert (study["status"], works["status"]) == ("en_estudio", "en_obras")
     for project in (study, works):
@@ -1207,10 +1221,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y la de Valladolid a León, 2: Palencia y León
     # y la de Olmedo a Ourense, 5: Medina del Campo AV, Zamora, Sanabria AV, A Gudiña-Porta de
     # Galicia y Ourense
+    # y la de Venta de Baños a Burgos, 1: Burgos-Rosa Manzano
     # y la de León a Gijón, 8: Pola de Lena, Ujo, Mieres-Puente, Llamaquique, Oviedo, Villabona
     # de Asturias, Calzada de Asturias y Gijón-Sanz Crespo
     assert cov["station_count"] == (
-        6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 11 + 7 + 1 + 3 + 1 + 5 + 32 + 2 + 2 + 5 + 8
+        6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 11 + 7 + 1 + 3 + 1 + 5 + 32 + 2 + 2 + 5 + 1 + 8
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
@@ -1269,9 +1284,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Y 2 de la de Valladolid a León: la relación de OSM de Venta de Baños a León y su artículo
     # Y 2 de la de Olmedo a Ourense: la relación de OSM de la línea y la de la línea convencional
     # de Zamora a A Coruña, de la que salen la salida de Zamora y la llegada a Ourense
+    # Y 9 de la de Venta de Baños a Burgos: el artículo de Wikipedia de la línea, las vías del ramal
+    # de Soto de Cerrato en OSM y los 7 anuncios del BOE del proyecto de Burgos a Vitoria
     # Y 5 de la de León a Gijón: las dos relaciones de OSM, el fichero de sus instalaciones y los
     # artículos de Wikipedia de la variante de Pajares y de la línea 130
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 5
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1289,6 +1306,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional Monfragüe – Cañaveral – Cáceres" in cov["notice"]
     assert "la línea de alta velocidad Valladolid – Palencia – León" in cov["notice"]
     assert "la línea de alta velocidad Olmedo – Zamora – Ourense" in cov["notice"]
+    assert "la línea de alta velocidad Venta de Baños – Burgos" in cov["notice"]
     assert "y la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
         LAV,
@@ -1311,6 +1329,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         *EXTREMADURA,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
         LEON_GIJON,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
@@ -1363,6 +1382,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         # los trenes de Ouigo acaban en Valladolid
         LAV_LEON: ["renfe"],
         LAV_OURENSE: ["renfe"],
+        LAV_BURGOS: ["renfe"],
         LEON_GIJON: ["renfe"],
     }
     assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
@@ -2072,6 +2092,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         *EXTREMADURA,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
         LEON_GIJON,
     ]
     assert out["missing_operator_ids"] == ["iryo"]
@@ -2083,7 +2104,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # Extremadura
     assert (
         len(by_id)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 11
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11
     )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
@@ -2165,6 +2186,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         *EXTREMADURA,
         LAV_LEON,
         LAV_OURENSE,
+        LAV_BURGOS,
         LEON_GIJON,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
