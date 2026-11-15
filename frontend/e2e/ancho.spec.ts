@@ -16,10 +16,12 @@ const MIXTOS = [
   'lav-antequera-granada:bif-la-chana:granada',
   'lav-monforte-murcia:bif-el-regueron:murcia-del-carmen',
   'lav-olmedo-ourense:taboadela:ourense',
+  'leon-oviedo-gijon:bif-pajares:la-robla-av',
+  'leon-oviedo-gijon:la-robla-av:campomanes-av',
 ]
 
 test.describe('Ancho de vía: el tramo de ancho mixto lo dice', () => {
-  test('solo el paso por Loja, la entrada a Granada, la de Murcia y la llegada a Ourense traen el ancho mixto en la alta velocidad', () => {
+  test('solo el paso por Loja, la entrada a Granada, la de Murcia, la llegada a Ourense y la variante de Pajares traen el ancho mixto fuera de la línea de València', () => {
     // la línea de València a Camp de Tarragona tiene los suyos (e2e/mediterraneo.spec.ts)
     const conAncho = red.segments.filter((s) => s.attributes?.gauge && s.line_id !== 'valencia-castello-tarragona').map((s) => s.id)
     expect(conAncho.sort()).toEqual([...MIXTOS].sort())

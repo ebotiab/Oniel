@@ -218,13 +218,15 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # los directos de Madrid a Málaga, que entran por una regla de recorrido; 465 de la línea
     # de Valencia y 409 de las cuatro líneas de Extremadura (425 menos los 16 Media Distancia de
     # Alcázar de San Juan a Badajoz por Ciudad Real, que ya estaban en la convencional)
+    # los 33 del final, los de la línea de León a Gijón que no estaban en otra: los 25 regionales
+    # que suben el puerto de Pajares y 8 Media Distancia de León a Gijón
     assert (
         await _count(conn, "services", FEED_DATASET_ID)
-        == 727 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66
+        == 727 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33
     )
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66
+        == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -243,6 +245,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 3409  # la de Madrid a Valladolid, todos estimados
     passes += 2154  # la de Valladolid a León, todos estimados
     passes += 2130  # la de Olmedo a Ourense, todos estimados
+    passes += 1311 + 125  # la de León a Gijón
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral
@@ -509,10 +512,10 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     # 409 del final, los de las cuatro líneas de Extremadura
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66
+        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66
+        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33
     )
 
 
@@ -546,8 +549,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     # los 409 del final son los de las cuatro líneas de Extremadura que no estaban en otra
     assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66,
-        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66,
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33,
+        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33,
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -588,7 +591,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
     assert await conn.fetchval("SELECT count(*) FROM services") == (
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]

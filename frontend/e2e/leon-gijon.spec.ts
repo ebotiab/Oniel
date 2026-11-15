@@ -1,0 +1,85 @@
+import { expect, test } from '@playwright/test'
+
+/** El campo del buscador: en escritorio está a la vista; en el móvil lo despliega la lupa. */
+async function abrirBuscador(page: import('@playwright/test').Page) {
+  const lupa = page.getByTestId('buscador-abrir')
+  if (await lupa.isVisible()) await lupa.click()
+  return page.getByRole('combobox', { name: 'Buscar una estación o una línea' })
+}
+
+test.describe('La línea León – Oviedo – Gijón por la variante de Pajares', () => {
+  test('la línea tiene su ficha, con la variante y las estaciones de Asturias en el esquema', async ({ page }) => {
+    await page.goto('/linea/leon-oviedo-gijon')
+    await expect(page.getByRole('heading', { name: 'Línea convencional León – Oviedo – Gijón' })).toBeVisible()
+    await expect(page.locator('body')).toContainText('Cruza la cordillera Cantábrica por la variante de Pajares')
+    const esquema = page.getByTestId('esquema')
+    await expect(esquema).toContainText('León')
+    await expect(esquema).toContainText('Bif. Pajares')
+    await expect(esquema).toContainText('Campomanes AV')
+    await expect(esquema).toContainText('Pola de Lena')
+    await expect(esquema).toContainText('Oviedo')
+    await expect(esquema).toContainText('Gijón-Sanz Crespo')
+  })
+
+  test('el buscador lleva a Oviedo y a Gijón', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByTestId('vista-red')).toBeVisible()
+    const campo = await abrirBuscador(page)
+    await campo.fill('oviedo')
+    const primero = page.getByRole('option').first()
+    await expect(primero).toContainText('Oviedo')
+    await expect(primero).toContainText('Estación')
+    await campo.press('Enter')
+    await expect(page).toHaveURL(/\/nodo\/oviedo$/)
+    const ficha = page.getByTestId('detalle-nodo')
+    await expect(ficha.getByRole('heading', { name: 'Oviedo' })).toBeVisible()
+    await expect(ficha).toContainText('Gijón-Sanz Crespo')
+    await expect(ficha).toContainText('Madrid-Chamartín')
+    await page.goto('/')
+    await expect(page.getByTestId('vista-red')).toBeVisible()
+    const otro = await abrirBuscador(page)
+    await otro.fill('gijón')
+    await expect(page.getByRole('option').first()).toContainText('Gijón-Sanz Crespo')
+    await otro.press('Enter')
+    await expect(page).toHaveURL(/\/nodo\/gijon-sanz-crespo$/)
+  })
+
+  test('la ficha de los tramos de la variante dice su ancho y su electrificación', async ({ page }) => {
+    await page.goto('/tramo/leon-oviedo-gijon:la-robla-av:campomanes-av')
+    const ficha = page.getByTestId('detalle-tramo')
+    await expect(ficha).toBeVisible()
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    if (await asa.isVisible()) await asa.click()
+    await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
+    await expect(page.getByTestId('tramo-atributo-gauge')).toHaveText('Mixto: caben trenes de los dos anchos')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Solo Renfe Viajeros')
+    await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de nivel 2 y ASFA')
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    await expect(page.getByTestId('mas-detalle')).toContainText('25 kV 50 Hz')
+    await expect(page.getByTestId('atributos-fuente')).toContainText(/Ancho de vía, electrificación, protección del tren, bloqueo y mando: Adif Alta Velocidad; Adif, comprobado el 15 de noviembre de 2026/)
+  })
+
+  test('fuera de la variante el tramo es de ancho ibérico, a 3 kV, y no enseña la fila del ancho', async ({ page }) => {
+    await page.goto('/tramo/leon-oviedo-gijon:mieres-puente:llamaquique')
+    await expect(page.getByTestId('detalle-tramo')).toBeVisible()
+    await expect(page.getByTestId('tramo-atributo-gauge')).toHaveCount(0)
+    await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ASFA')
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    if (await asa.isVisible()) await asa.click()
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    await expect(page.getByTestId('mas-detalle')).toContainText('3 kV CC')
+  })
+
+  test('el comparador encuentra Madrid – Oviedo y Madrid – Gijón', async ({ page }) => {
+    await page.goto('/recorridos/madrid-chamartin/oviedo')
+    const recorridos = page.getByTestId('recorrido')
+    await expect(recorridos.first()).toBeVisible()
+    await expect(recorridos.first()).toContainText('445,5 km')
+    await expect(recorridos.first()).toContainText('Recorre tres líneas')
+    await expect(recorridos.first().getByTestId('recorrido-trenes')).toContainText(/\d+ trenes directos en el horario del /)
+    await page.goto('/recorridos/madrid-chamartin/gijon-sanz-crespo')
+    await expect(recorridos.first()).toBeVisible()
+    await expect(recorridos.first()).toContainText('477,1 km')
+    await expect(recorridos.first().getByTestId('recorrido-trenes')).toContainText(/\d+ trenes directos en el horario del /)
+  })
+})

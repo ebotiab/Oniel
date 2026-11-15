@@ -17,7 +17,7 @@ test.describe('El enlace de Monforte del Cid', () => {
     await page.goto('/')
     await abrirPanel(page)
     const red = page.getByTestId('vista-red')
-    await expect(page.getByTestId('ficha-red')).toContainText(/^20 líneas · 4\.418 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^21 líneas · 4\.550 km/)
     const levante = red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' })
     await expect(levante.locator('.zona-cabecera')).toHaveText(/^›Comunidad Valenciana y Murcia4 líneas/)
     await abrirZonas(page)

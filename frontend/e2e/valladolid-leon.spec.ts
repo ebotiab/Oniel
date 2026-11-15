@@ -31,8 +31,9 @@ test.describe('La línea de alta velocidad Valladolid – Palencia – León', (
     await expect(page).toHaveURL(/\/nodo\/leon$/)
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'León' })).toBeVisible()
-    // las líneas que siguen a Asturias y a Galicia no están cargadas, y la ficha lo dice
-    await expect(ficha).toContainText('ninguna de las dos está cargada')
+    // de León sigue la línea de Oviedo y Gijón; la de Galicia no está cargada, y la ficha lo dice
+    await expect(ficha).toContainText('empieza la de Oviedo y Gijón')
+    await expect(ficha).toContainText('por una línea convencional que no está cargada')
     await expect(ficha).toContainText('Palencia')
     await expect(ficha).toContainText('Valladolid-Campo Grande')
     await expect(ficha).toContainText('Madrid-Chamartín')

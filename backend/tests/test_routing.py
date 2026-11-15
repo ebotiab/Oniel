@@ -92,11 +92,12 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # siguientes, la línea de Albacete a Alicante; los ocho de después, la de Monforte del Cid a
     # Murcia; los 35, la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 siguientes, las
-    # cuatro líneas de Extremadura, y los 8 del final, la de Valladolid a León
+    # cuatro líneas de Extremadura; los 8 siguientes, la de Valladolid a León, y los 11 del final,
+    # la de León a Gijón
     assert (
         len(graph.edges)
         == len(network.segments)
-        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4 + 8)
+        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4 + 8 + 11)
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
@@ -262,6 +263,25 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     # el trecho que va entero por el enlace es del enlace
     (only_link,) = find_routes(graph, "monforte-del-cid-av", "bif-vinalopo")
     assert only_link.line_ids == ["enlace-monforte-del-cid"] and only_link.length_km == 2.1
+
+
+def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:
+    """El camino a Asturias: de Madrid-Chamartín a Valladolid, de allí a León y, desde León, por
+    la línea de Oviedo y Gijón. La vía antigua del puerto de Pajares no está cargada: hay un solo
+    camino."""
+    lines = ["lav-madrid-valladolid", "lav-valladolid-leon", "leon-oviedo-gijon"]
+    to_oviedo = find_routes(graph, "madrid-chamartin", "oviedo")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_oviedo] == [(445.5, 118, lines)]
+    to_gijon = find_routes(graph, "madrid-chamartin", "gijon-sanz-crespo")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_gijon] == [(477.1, 134, lines)]
+    assert [(leg.from_node_id, leg.to_node_id) for leg in to_gijon[0].legs] == [
+        ("madrid-chamartin", "valladolid-campo-grande"),
+        ("valladolid-campo-grande", "leon"),
+        ("leon", "gijon-sanz-crespo"),
+    ]
+    from_leon = find_routes(graph, "leon", "oviedo")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in from_leon] == [(100.9, 41, lines[2:])]
+    assert {e.line_id for e in graph.edges_at("leon")} == set(lines[1:])
 
 
 def test_ourense_and_zamora_are_reached_from_madrid(graph: Graph) -> None:

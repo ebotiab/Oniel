@@ -150,7 +150,6 @@ def test_nodes_stations_and_junctions(line: BuiltNetwork) -> None:
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "lav-venta-de-banos-burgos": "bif-venta-de-banos",
         "conv-palencia-santander": "palencia",
-        "lav-leon-asturias": "leon",
         "conv-leon-galicia": "leon",
     }
     assert all(n.offset_m < 100 for n in line.nodes)
