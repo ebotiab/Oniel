@@ -211,6 +211,15 @@
       }
     },
     {
+      "id": "atocha-cercanias-fuenlabrada-linea-de-extremadura",
+      "description": "Lo mismo para los trenes de esa línea que no paran en Leganés: su primera parada tras Madrid-Atocha Cercanías es Fuenlabrada (un regional de Talavera de la Reina).",
+      "consecutive_stop_ids": ["18000", "35002"],
+      "to_stop_id": "35002",
+      "stop_mappings": {
+        "35002": {"exits": ["bif-planetario"], "via": {"line": "madrid-plasencia", "node": "bif-planetario"}}
+      }
+    },
+    {
       "id": "atocha-cercanias-ciudad-real-por-manzanares",
       "description": "Intercity y Alvia Madrid-Atocha Cercanías – Andalucía con horarios válidos del 8 al 15 de noviembre de 2026, los publicados por Renfe tras la interrupción de la alta velocidad en Urda. Con parada en Ciudad Real: tardan 2 h 50 entre Madrid y Ciudad Real, compatible solo con ir por esta línea hasta Manzanares y seguir por la línea Manzanares – Ciudad Real, y 1 h 15 entre Ciudad Real y Córdoba, solo posible por la alta velocidad. Por esta línea se resuelven entre Madrid y Ciudad Real, saliendo por Manzanares.",
       "consecutive_stop_ids": ["18000", "37200", "50500"],

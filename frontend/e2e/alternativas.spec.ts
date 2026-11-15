@@ -162,8 +162,9 @@ test.describe('Tramos sin otro camino', () => {
     // en la alta velocidad de Plasencia a Badajoz, la entrada a Plasencia y todo lo que hay de la
     // bifurcación Casa de la Torre a Badajoz; entre San Esteban y Casa de la Torre está el trazado antiguo,
     // que es otro camino para una parte de los trenes
+    // (el que menos lleva, con 8, es la curva junto a Mérida: solo pasan por ella los que no entran en la ciudad)
     await expect(linea('Plasencia – Badajoz por Cáceres')).toContainText('11 de sus 14 tramos')
-    await expect(linea('Plasencia – Badajoz por Cáceres')).toContainText('de 14 a 24 trenes')
+    await expect(linea('Plasencia – Badajoz por Cáceres')).toContainText('de 8 a 24 trenes')
     // y la línea de Aljucén a Mérida, que acaba en la estación
     await expect(linea('Aljucén – Mérida')).toContainText('Toda la línea, 2 tramos')
     await expect(linea('Aljucén – Mérida')).toContainText('de 16 a 24 trenes')

@@ -28,3 +28,15 @@ export const IBERIA_BOUNDS: Caja = [
   [-18, 30.5],
   [6, 48.5],
 ]
+
+/**
+ * La caja para pantallas altas y estrechas (el móvil). Para que la península entera quepa a lo
+ * ancho, el mapa tiene que alejarse más, y como todo el lienzo ha de caber en la caja, hace falta
+ * mucha más latitud de la que ocupa la península: de 28 a 52, con la península hacia el centro.
+ * A cambio, el oeste se queda en −12,6, porque en el móvil no hay panel que tape la izquierda:
+ * así Canarias, que está al oeste de −13,4, sigue fuera.
+ */
+export const IBERIA_BOUNDS_MOVIL: Caja = [
+  [-12.6, 28],
+  [6.5, 52],
+]

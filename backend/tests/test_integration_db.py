@@ -62,9 +62,13 @@ RULES = {
 }
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
-#: Y la de los trenes de la línea de Extremadura, que solo la recorren de Madrid-Atocha Cercanías
-#: a la bifurcación Planetario.
-EXTREMADURA_RULES = {"atocha-cercanias-leganes-linea-de-extremadura": 260}
+#: Y las de los trenes de la línea de Extremadura, que solo la recorren de Madrid-Atocha Cercanías
+#: a la bifurcación Planetario: 260 con Leganés como primera parada y 7 regionales de Talavera de
+#: la Reina que no paran allí y tienen Fuenlabrada.
+EXTREMADURA_RULES = {
+    "atocha-cercanias-leganes-linea-de-extremadura": 260,
+    "atocha-cercanias-fuenlabrada-linea-de-extremadura": 7,
+}
 #: La alta velocidad Madrid – Sevilla tiene además las de los AVE que no paran en Madrid: los de
 #: Barcelona entran por la bifurcación Los Gavilanes y los de Valencia, por la de Yeles.
 #: Los directos de Madrid a Málaga, en la alta velocidad de Sevilla y en la de Málaga.
@@ -213,9 +217,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # Las cuatro líneas de Extremadura traen 267, 330, 198 y 13 viajes, que son 425 distintos:
     # casi todos recorren más de una. De ellos, 409 no estaban; los otros 16 son los Media
     # Distancia de Alcázar de San Juan a Badajoz por Ciudad Real, que ya recorren la convencional
-    # y la de Manzanares y aquí entran por Mérida. Otros 260 de los 425 salen de Madrid-Atocha
-    # Cercanías y cuentan también en el primer tramo de la convencional por una regla de
-    # recorrido (432 + 260 = 692), sin sumar viajes: son los mismos.
+    # y la de Manzanares y aquí entran por Mérida. Otros 267 de los 425 salen de Madrid-Atocha
+    # Cercanías y cuentan también en el primer tramo de la convencional por dos reglas de
+    # recorrido (432 + 267 = 699), sin sumar viajes: son los mismos.
     # Con la de Madrid a Valladolid entran 661: sus 761 viajes menos los 100 que cruzan Madrid y
     # siguen a Levante, que ya estaban en la de Valencia.
     # Con la de Valladolid a León entran 66, los Media Distancia que empiezan o acaban en
@@ -241,14 +245,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         "a-plasencia-desde-monfrague": 59,
     }
     assert gtfs1["lines"][LAV_BADAJOZ]["trips"] == 330
-    assert gtfs1["lines"][LAV_BADAJOZ]["passes"] == {"estimado": 2310, "publicado": 134}
+    # 2.310 estimados cuando los que entran en Mérida contaban también en la curva de la
+    # bifurcación Granja-Las Encinas a Garrovilla-Las Vegas: salen los 76 que pasaban por Cáceres
+    # y entran los 13 regionales de Cañaveral en la llegada a Cáceres (2.310 − 76 + 13 = 2.247)
+    assert gtfs1["lines"][LAV_BADAJOZ]["passes"] == {"estimado": 2247, "publicado": 134}
     assert gtfs1["lines"][LAV_BADAJOZ]["route_overrides"] == {
-        "plasencia-caceres-por-la-linea-antigua": 13,
-        "merida-hacia-badajoz-garrovilla": 50,
-        "merida-hacia-badajoz-montijo": 41,
-        "merida-hacia-badajoz-badajoz": 37,
         "desde-plasencia-tras-navalmoral": 37,
-        "desde-plasencia-tras-monfrague": 46,
+        "desde-plasencia-tras-monfrague": 59,
     }
     # a Mérida se entra por una bifurcación o por Aljucén, que no son estaciones: todo estimado
     assert gtfs1["lines"][RAMAL_MERIDA]["trips"] == 198
@@ -331,14 +334,14 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # se importaban por las líneas de Málaga y de Granada y 16 son nuevos (4 Avant Sevilla – Córdoba,
     # 8 AVE Barcelona – Sevilla y 4 AVE Valencia – Sevilla).
     assert gtfs1["lines"][LAV]["trips"] == 317 + 47 + 13
-    assert gtfs1["lines"][CONV]["trips"] == 390 + 42 + 260
+    assert gtfs1["lines"][CONV]["trips"] == 390 + 42 + 267
     assert gtfs1["lines"][MZCR]["trips"] == 124 + 22
     assert gtfs1["lines"][JAEN]["trips"] == 123
     assert gtfs1["lines"][LAV]["route_overrides"] == RULES | AWAY_RULES | MALAGA_RULES
     assert gtfs1["lines"][MZCR]["route_overrides"] == RULES
     assert gtfs1["lines"][CONV]["route_overrides"] == RULES | JAEN_RULES | EXTREMADURA_RULES
-    # los 260 de la línea de Extremadura solo cuentan en el primer tramo, con paso estimado
-    assert gtfs1["lines"][CONV]["passes"] == {"estimado": 1968 + 260, "publicado": 523}
+    # los 267 de la línea de Extremadura solo cuentan en el primer tramo, con paso estimado
+    assert gtfs1["lines"][CONV]["passes"] == {"estimado": 1968 + 267, "publicado": 523}
     assert gtfs1["lines"][JAEN]["route_overrides"] == {}
     # en la de Jaén solo los 20 trenes que paran en Mengíbar-Artichuela y en Jaén tienen pasos
     # publicados; los demás entran o salen por Espelúy sin parar en la estación
@@ -419,14 +422,14 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         13 + 25 + 3 + 2 + 6 + 7 + 8 + 8 + 20 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8
     )
     assert c["services"] == trips + 47 + 22
-    # (los 260 de la convencional son los de los trenes de la línea de Extremadura entre
+    # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
     renfe_passes = (
-        (3996 + 121) + (1968 + 260 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+        (3996 + 121) + (1968 + 267 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     )
     renfe_passes += (1250 + 68) + 498 + 6851 + 97 + 224 + 5048 + 1979 + (677 + 120) + (4223 + 2107)
     # Extremadura: Madrid – Plasencia, Plasencia – Badajoz, el ramal de Mérida y el trazado antiguo
-    renfe_passes += (2051 + 582) + (2310 + 134) + 344 + (26 + 26)
+    renfe_passes += (2051 + 582) + (2247 + 134) + 344 + (26 + 26)
     renfe_passes += 3409  # la de Madrid a Valladolid, todos estimados
     renfe_passes += 91  # el enlace de Monforte del Cid
     renfe_passes += 2154  # la de Valladolid a León, todos estimados

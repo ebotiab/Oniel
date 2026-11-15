@@ -464,11 +464,13 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     }
     lav_badajoz = {s: n for s, n in extremadura.items() if s.startswith(extremadura_lines[1])}
     assert lav_badajoz.pop(f"{LAV_BADAJOZ}:plasencia:bif-san-esteban") == 14
-    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-casa-de-la-torre:caceres") == 20
-    # de Cáceres a Badajoz, nueve tramos: 16 trenes en el de la bifurcación Granja-Las Encinas a
-    # Garrovilla-Las Vegas, por el que no pasan los 8 que solo van entre Mérida y Badajoz, y 24
-    # en cada uno de los otros ocho
-    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-granja-las-encinas:garrovilla-las-vegas") == 16
+    # la entrada a Cáceres: los 20 de la línea nueva y los 2 regionales que llegan por Cañaveral
+    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-casa-de-la-torre:caceres") == 20 + 2
+    # de Cáceres a Badajoz, nueve tramos: 8 trenes en el de la bifurcación Granja-Las Encinas a
+    # Garrovilla-Las Vegas, por el que solo pasan los que van de Cáceres a Badajoz sin entrar en
+    # Mérida (los 16 que entran salen por la bifurcación y vuelven por Garrovilla-Las Vegas), y
+    # 24 en cada uno de los otros ocho
+    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-granja-las-encinas:garrovilla-las-vegas") == 8
     assert len(lav_badajoz) == 8 and set(lav_badajoz.values()) == {24}
     assert f"{LAV_BADAJOZ}:caceres:bif-la-aldihuela" in lav_badajoz
     assert f"{LAV_BADAJOZ}:bif-san-nicolas:badajoz" in lav_badajoz
@@ -483,12 +485,14 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert (new_line.trains, new_line.without_alternative) == (20, 0)
     # en los tramos cortos junto a las bifurcaciones solo lo tienen los trenes cuyo recorrido
     # sigue más allá: 8 de los 20 de Monfragüe a El Chaparral (los de Madrid que no entran en
-    # Plasencia), 2 de los 12 de San Esteban a Arroyo de la Herrera y 6 de los 20 de El Palmeral
-    # a Casa de la Torre
+    # Plasencia), 2 de los 12 de San Esteban a Arroyo de la Herrera y 10 de los 20 de El Palmeral
+    # a Casa de la Torre. De esos 10, 4 son los de Madrid que entran en Mérida: su recorrido es
+    # seguido de Arroyo de la Herrera a Mérida (133,5 km) desde que no cuentan además en la curva
+    # de Granja-Las Encinas a Garrovilla-Las Vegas
     in_part = {
         f"{MADRID_PLASENCIA}:monfrague:bif-el-chaparral": (20, 12),
         f"{LAV_BADAJOZ}:bif-san-esteban:arroyo-de-la-herrera": (12, 10),
-        f"{LAV_BADAJOZ}:bif-el-palmeral:bif-casa-de-la-torre": (20, 14),
+        f"{LAV_BADAJOZ}:bif-el-palmeral:bif-casa-de-la-torre": (20, 10),
     }
     for segment_id, expected in in_part.items():
         some = _of(exported.segments, segment_id)
@@ -501,13 +505,13 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{MONFRAGUE_CACERES}:casas-de-millan:canaveral": 2,
         f"{MONFRAGUE_CACERES}:canaveral:bif-casa-de-la-torre": 2,
     }
-    # De los 34 de la salida de Madrid, 33 cuentan también en el primer tramo de la convencional
-    # de Andalucía, de Madrid-Puerta de Atocha a la bifurcación Planetario, por una regla de
-    # recorrido que pide Leganés como parada siguiente: el Regional 17703 no para en Leganés y
-    # no la casa. Con los 41 que ya llevaba el tramo son 74. Esos 33 no tienen otro camino: la
+    # Los 34 de la salida de Madrid cuentan también en el primer tramo de la convencional de
+    # Andalucía, de Madrid-Puerta de Atocha a la bifurcación Planetario, por dos reglas de
+    # recorrido: 33 tienen Leganés como parada siguiente y el Regional 17703, que no para allí,
+    # Fuenlabrada. Con los 41 que ya llevaba el tramo son 75. Esos 34 no tienen otro camino: la
     # vuelta por Córdoba para volver a la bifurcación Planetario no cuenta. Los otros 41, sí
     shared = _of(exported.segments, f"{CONV}:madrid-puerta-de-atocha:bif-planetario")
-    assert (shared.trains, shared.without_alternative) == (41 + 33, 33)
+    assert (shared.trains, shared.without_alternative) == (41 + 34, 34)
     # De la alta velocidad de Barcelona solo quedan los tres tramos de Camp de Tarragona a
     # Barcelona-Sants, fuera del anillo, con sus 108 trenes
     # la de Madrid a Valladolid entera: es la única cargada al norte de Madrid. 122 trenes hasta

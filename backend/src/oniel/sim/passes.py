@@ -132,6 +132,11 @@ class StopCall:
     exit_node_ids: tuple[
         str, ...
     ] = ()  # la parada está fuera; el tren entra o sale por uno de estos
+    #: La parada queda a un lado de la línea y tiene dos salidas: el tren deja la línea por la más
+    #: cercana a su parada anterior y vuelve a ella por la más cercana a la siguiente, sin pasar
+    #: por los tramos que quedan entre las dos (Mérida, entre la bifurcación Granja-Las Encinas y
+    #: Garrovilla-Las Vegas).
+    aside: bool = False
     #: Distancia conocida desde cada nodo de salida hasta la parada (por otra línea cargada, o
     #: por vía según una fuente); si falta, se usa la línea recta.
     exit_distances: Mapping[str, ExitDistance] = field(default_factory=dict)
@@ -212,6 +217,20 @@ def resolve_passes(
         elif call.exit_node_ids:
             anchors[i] = _anchor_for(call, nodes, direction, prev_km=last_km)
 
+    # Una parada «a un lado» se ancla dos veces: al llegar, en la salida más cercana a la parada
+    # anterior de la línea; al salir, en la más cercana a la siguiente.
+    depart: list[_Anchor | None] = list(anchors)
+    on_line_km = [a.km if a is not None and a.on_line else None for a in anchors]
+    for i, call in enumerate(calls):
+        if not call.aside or anchors[i] is None:
+            continue
+        before = next((k for k in reversed(on_line_km[:i]) if k is not None), None)
+        after = next((k for k in on_line_km[i + 1 :] if k is not None), None)
+        if before is None and after is None:
+            continue
+        anchors[i] = _nearest_exit(call, nodes, before if before is not None else after)
+        depart[i] = _nearest_exit(call, nodes, after if after is not None else before)
+
     resolution: Literal["completa", "parcial"] = "completa"
     if any(a is None for a in anchors):
         resolution = "parcial"
@@ -219,7 +238,7 @@ def resolve_passes(
     passes: dict[str, SegmentPass] = {}
     i = 0
     while i < len(anchors) - 1:
-        a = anchors[i]
+        a = depart[i]
         if a is None:
             i += 1
             continue
@@ -232,6 +251,11 @@ def resolve_passes(
         b = anchors[j]
         assert b is not None
         unknown_between = j > i + 1
+        same_side = set(calls[i].exit_node_ids) & set(calls[j].exit_node_ids)
+        if calls[i].aside and calls[j].aside and same_side and not a.on_line and not b.on_line:
+            # dos paradas seguidas del mismo lado de la línea: entre ellas el tren no la pisa
+            i = j
+            continue
         for p in _leg_passes(a, b, ordered, unknown_between, bypasses, link_far_node):
             passes.setdefault(p.segment_id, p)
         i = j
@@ -265,6 +289,23 @@ def _anchor_for(
             if ahead:
                 chosen = cand
                 break
+    known = call.exit_distances.get(chosen.id)
+    if known is not None:
+        return _Anchor(call, chosen.km, False, known.km, chosen, known.how)
+    extra = 0.0
+    if call.lon is not None and call.lat is not None:
+        extra = haversine_km((call.lon, call.lat), (chosen.lon, chosen.lat))
+    return _Anchor(call, chosen.km, False, extra, chosen)
+
+
+def _nearest_exit(
+    call: StopCall, nodes: Mapping[str, LineNode], km: float | None
+) -> _Anchor | None:
+    """El ancla de una parada exterior en la salida más cercana a ``km``."""
+    candidates = [nodes[e] for e in call.exit_node_ids if e in nodes]
+    if not candidates or km is None:
+        return None
+    chosen = min(candidates, key=lambda n: abs(n.km - km))
     known = call.exit_distances.get(chosen.id)
     if known is not None:
         return _Anchor(call, chosen.km, False, known.km, chosen, known.how)
