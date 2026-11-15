@@ -91,12 +91,12 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # los dos de después de la línea de Valencia, los baipases de Zaragoza y de Lleida; los nueve
     # siguientes, la línea de Albacete a Alicante; los ocho de después, la de Monforte del Cid a
     # Murcia; los 35, la de Valencia a Camp de Tarragona; los 5, la de Madrid a
-    # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 del final, las
-    # cuatro líneas de Extremadura
+    # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 siguientes, las
+    # cuatro líneas de Extremadura, y los 8 del final, la de Valladolid a León
     assert (
         len(graph.edges)
         == len(network.segments)
-        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4)
+        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4 + 8)
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})

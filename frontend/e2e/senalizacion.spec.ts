@@ -26,12 +26,11 @@ async function abrirDetalle(page: Page, tramo: string) {
 
 test.describe('Señalización: protección del tren, bloqueo y mando de cada tramo', () => {
   test('todos los tramos de la instantánea traen los tres, con la fuente y la fecha', () => {
-    expect(red.segments).toHaveLength(212)
+    expect(red.segments).toHaveLength(220)
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
         expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE })
-        // la prolongación a Málaga se leyó en el mapa un día después que el resto, y la línea de
-        // Olmedo a Ourense, dos
+        // la prolongación a Málaga se leyó en el mapa un día después que el resto
         expect(['2026-11-12', '2026-11-13', '2026-11-14']).toContain(s.attributes?.[clave]?.checked_on)
       }
       const filas = attributeRows(s, red.lines.find((l) => l.id === s.line_id), 'detalle')

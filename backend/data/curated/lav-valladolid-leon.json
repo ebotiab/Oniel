@@ -1,0 +1,760 @@
+{
+  "line": {
+    "id": "lav-valladolid-leon",
+    "name": "Línea de alta velocidad Valladolid – Palencia – León",
+    "short_name": "080 y 084",
+    "sort_order": 25,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 2,
+    "opened_on": "2015-09-30",
+    "reference_length_km": 166.141,
+    "pk_origin_km": 179.309,
+    "status": "disponible",
+    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos, que todavía no está cargada. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional, y en León, los de Asturias y los de Ponferrada y Galicia: de todos ellos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
+    "geometry_source": {
+      "source_id": "osm-relation-5546933",
+      "parts": [
+        {
+          "source_id": "osm-relation-4777557",
+          "file": "raw/osm/relation_4777557_lav_madrid_valladolid_burgos_2026-11-13.json",
+          "relation_id": 4777557,
+          "from": [
+            -4.7268214,
+            41.6420148
+          ],
+          "to": [
+            -4.4877585,
+            41.9242256
+          ]
+        },
+        {
+          "source_id": "osm-relation-5546933",
+          "file": "raw/osm/relation_5546933_lav_venta_de_banos_leon_2026-11-14.json",
+          "relation_id": 5546933,
+          "from": [
+            -4.4877585,
+            41.9242256
+          ],
+          "to": [
+            -5.5812196,
+            42.595189
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-valladolid-leon"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "valladolid-campo-grande",
+      "name": "Valladolid-Campo Grande",
+      "kind": "estacion",
+      "adif_code": "10600",
+      "shared": true,
+      "position": {
+        "lon": -4.7269507,
+        "lat": 41.6421265
+      }
+    },
+    {
+      "id": "bif-las-pajareras",
+      "name": "Bifurcación Las Pajareras",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "km": 8.051
+      },
+      "reference_pk_km": 187.36,
+      "description": "Punto al norte de Valladolid donde la línea pasa de una vía a dos. Hasta aquí comparte el pasillo de la línea convencional, en el que una de las vías se adaptó al ancho estándar."
+    },
+    {
+      "id": "bif-venta-de-banos",
+      "name": "Bifurcación Venta de Baños",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.4877585,
+        "lat": 41.9242256
+      },
+      "reference_pk_km": 217.578,
+      "description": "Punto cercano a Venta de Baños (Palencia) donde la alta velocidad se divide: a la izquierda sigue esta línea, hacia Palencia y León, y a la derecha sale la de Burgos y el País Vasco, que todavía no está cargada. No hay estación: los trenes de Madrid a Burgos dejan aquí la línea."
+    },
+    {
+      "id": "bif-cerrato",
+      "name": "Bifurcación Cerrato",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.4820799,
+        "lat": 41.9680494
+      },
+      "reference_pk_km": 223.53,
+      "description": "Punto donde la línea pasa de dos vías a una, poco antes de Palencia. Algo menos de un kilómetro antes se le une el ramal que viene de Burgos, por el que llegan los trenes de Barcelona y el País Vasco a Palencia, León y Galicia sin pasar por Valladolid."
+    },
+    {
+      "id": "palencia",
+      "name": "Palencia",
+      "kind": "estacion",
+      "adif_code": "14100",
+      "position": {
+        "lon": -4.5338617,
+        "lat": 42.0157277
+      },
+      "reference_pk_km": 230.627,
+      "description": "La estación de Palencia, la única intermedia de la línea. La comparten la alta velocidad y las líneas convencionales. Aquí dejan la alta velocidad los trenes de Santander: poco antes de la estación cambian de ancho de vía y siguen por la línea convencional de Palencia a Santander, que no está cargada."
+    },
+    {
+      "id": "bif-las-barreras",
+      "name": "Bifurcación Las Barreras",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "km": 80.69
+      },
+      "reference_pk_km": 259.999,
+      "description": "Punto entre Palencia y León donde la línea pasa de una vía a dos. El trecho de vía doble que empieza aquí, de unos 38 km, permite que se crucen los trenes de un sentido y de otro."
+    },
+    {
+      "id": "bif-las-arenas",
+      "name": "Bifurcación Las Arenas",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.1452172,
+        "lat": 42.3953686
+      },
+      "reference_pk_km": 297.591,
+      "description": "Punto cercano a Bercianos del Real Camino (León) donde la línea vuelve a quedarse en una sola vía, hasta las puertas de León."
+    },
+    {
+      "id": "bif-vilecha",
+      "name": "Bifurcación Vilecha",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.5676335,
+        "lat": 42.5332466
+      },
+      "reference_pk_km": 338.245,
+      "description": "Punto a unos siete kilómetros de León donde la línea pasa de una vía a dos. De aquí sale además el acceso al cambiador de ancho de Vilecha, por el que un tren puede pasar a la línea convencional sin entrar en la estación de León."
+    },
+    {
+      "id": "leon",
+      "name": "León",
+      "kind": "estacion",
+      "adif_code": "15100",
+      "position": {
+        "lon": -5.5819405,
+        "lat": 42.5951002
+      },
+      "reference_pk_km": 345.45,
+      "description": "La estación de León, donde acaba esta línea. De aquí siguen los trenes de Asturias, por la variante de Pajares, y los de Ponferrada y Galicia, por la línea convencional: ninguna de las dos está cargada."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "valladolid-campo-grande",
+      "to_node": "bif-las-pajareras",
+      "value": 1,
+      "source_id": "wikipedia-lav-valladolid-leon",
+      "checked_on": "2026-11-14",
+      "note": "La tabla de puntos kilométricos da 8,051 km de vía única de ancho estándar entre Valladolid-Campo Grande y la bifurcación Las Pajareras (una de las vías del pasillo convencional, adaptada). El artículo dice además que dentro de la estación hay 1,638 km de vía doble en la salida norte, que no se declaran aparte: no hay nodo en ese punto."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-cerrato",
+      "to_node": "bif-las-barreras",
+      "value": 1,
+      "source_id": "wikipedia-lav-valladolid-leon",
+      "checked_on": "2026-11-14",
+      "note": "Tabla de puntos kilométricos: «inicio vía única: 36,469 km» en la bifurcación Cerrato AV (223,530) e «inicio vía doble» en la bifurcación Las Barreras (259,999). En la relación 5546933 de OSM la segunda vía acaba en esos dos puntos."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-las-arenas",
+      "to_node": "bif-vilecha",
+      "value": 1,
+      "source_id": "wikipedia-lav-valladolid-leon",
+      "checked_on": "2026-11-14",
+      "note": "Tabla de puntos kilométricos: «inicio vía única: 40,654 km» en la bifurcación Las Arenas (297,591) e «inicio vía doble: 7,205 km» en la bifurcación Vilecha (338,245). El artículo dice que en 2024 se licitaron contratos para duplicar la vía en este trecho."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "valladolid-campo-grande",
+      "to_node": "leon",
+      "value": "ertms_n2_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: símbolos «ERTMS N2» (el trébol rojo de la leyenda) y «ASFA - AV» junto a la línea, al lado de la bifurcación Venta de Baños y junto a León. Coincide con Wikipedia (ASFA digital y ERTMS de nivel 2) y con las vías de OSM (railway:etcs=2)."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "valladolid-campo-grande",
+      "to_node": "leon",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: rótulo «BCA» y trazo rosa a lo largo de la línea, a la salida de Valladolid, junto a Venta de Baños, junto a Palencia y junto a León."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "valladolid-campo-grande",
+      "to_node": "leon",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-14",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    }
+  ],
+  "connections": [
+    {
+      "id": "lav-venta-de-banos-burgos",
+      "node_id": "bif-venta-de-banos",
+      "name": "LAV Venta de Baños–Burgos",
+      "towards": "Burgos, Vitoria y el País Vasco",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.4877585,
+          41.9242256
+        ],
+        [
+          -4.36,
+          41.99
+        ],
+        [
+          -4.05,
+          42.13
+        ],
+        [
+          -3.666308,
+          42.371197
+        ]
+      ]
+    },
+    {
+      "id": "conv-palencia-santander",
+      "node_id": "palencia",
+      "name": "Línea convencional Palencia–Santander",
+      "towards": "Aguilar de Campoo, Reinosa y Santander",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.5338617,
+          42.0157277
+        ],
+        [
+          -4.402433,
+          42.2649
+        ],
+        [
+          -4.233899,
+          42.785362
+        ]
+      ]
+    },
+    {
+      "id": "lav-leon-asturias",
+      "node_id": "leon",
+      "name": "Línea de León a Asturias (variante de Pajares)",
+      "towards": "Pola de Lena, Oviedo y Gijón",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.5819405,
+          42.5951002
+        ],
+        [
+          -5.626255,
+          42.804454
+        ],
+        [
+          -5.8310263,
+          43.15872
+        ]
+      ]
+    },
+    {
+      "id": "conv-leon-galicia",
+      "node_id": "leon",
+      "name": "Línea convencional León–A Coruña",
+      "towards": "Astorga, Ponferrada y Galicia",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.5819405,
+          42.5951002
+        ],
+        [
+          -5.88756,
+          42.4335
+        ],
+        [
+          -6.047212,
+          42.459489
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "10600": {
+      "node": "valladolid-campo-grande"
+    },
+    "14100": {
+      "node": "palencia"
+    },
+    "15100": {
+      "node": "leon"
+    },
+    "17000": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": {
+        "line": "lav-madrid-valladolid",
+        "node": "valladolid-campo-grande"
+      }
+    },
+    "08004": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": {
+        "line": "lav-madrid-valladolid",
+        "node": "valladolid-campo-grande"
+      }
+    },
+    "03208": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "03213": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "03216": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "03309": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "60600": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "60911": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "03410": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
+      ]
+    },
+    "61200": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
+      ]
+    },
+    "62002": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        },
+        {
+          "line": "lav-monforte-murcia",
+          "node": "bif-murcia"
+        }
+      ]
+    },
+    "14114": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "14202": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "14213": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "14223": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "15122": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15203": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15211": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "15410": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "16403": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20005": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20100": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20102": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20104": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20109": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20113": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "leon"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "11500": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "11600": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "13106": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "13200": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "81002": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    },
+    "81100": {
+      "exits": [
+        "bif-venta-de-banos"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos de las tres estaciones de la línea (Valladolid, Palencia y León) y en ninguna estación intermedia de las líneas convencionales que van a su lado: entre dos de ellas, sin paradas, solo se va por la alta velocidad. Entran además los que van de Valladolid a Burgos sin paradas, que recorren la línea hasta la bifurcación Venta de Baños. Quedan fuera los que paran en Zaragoza: son los Intercity de Zaragoza a Valladolid y Salamanca, que van por la línea convencional; los Alvia de Barcelona a León y Galicia, que también paran en Zaragoza, entran por una regla de recorrido.",
+    "min_node_stops": 2,
+    "exclude_stop_ids": [
+      "10610",
+      "10602",
+      "10603",
+      "10604",
+      "10605",
+      "11000",
+      "15001",
+      "15003",
+      "15004",
+      "15006",
+      "15007",
+      "15008",
+      "15009",
+      "15012",
+      "15014",
+      "15015",
+      "04040"
+    ],
+    "consecutive_stop_ids": [
+      [
+        "10600",
+        "11014"
+      ]
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "burgos-palencia-leon",
+      "description": "Trenes que llegan de Burgos a Palencia y siguen a León (los Alvia de Barcelona y del País Vasco a León y Galicia): entran en la línea por el ramal de Burgos, junto a la bifurcación Cerrato, sin pasar por Valladolid ni por la bifurcación Venta de Baños.",
+      "consecutive_stop_ids": [
+        "11014",
+        "14100",
+        "15100"
+      ],
+      "from_stop_id": "11014",
+      "stop_mappings": {
+        "11014": {
+          "exits": [
+            "bif-cerrato"
+          ]
+        }
+      }
+    },
+    {
+      "id": "madrid-leon-sin-parada",
+      "description": "Trenes entre Madrid-Chamartín y León sin paradas intermedias: recorren la línea entera sin parar en Valladolid ni en Palencia.",
+      "consecutive_stop_ids": [
+        "17000",
+        "15100"
+      ],
+      "from_stop_id": "17000"
+    }
+  ]
+}

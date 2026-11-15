@@ -22,8 +22,10 @@ from conftest import (
     LAV_ALICANTE_SPEC,
     LAV_BADAJOZ_SPEC,
     LAV_GRANADA_SPEC,
+    LAV_LEON_SPEC,
     LAV_MALAGA_SPEC,
     LAV_MURCIA_SPEC,
+    LAV_OURENSE_SPEC,
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
@@ -69,9 +71,13 @@ RULES = {
 MALAGA_RULES = {"madrid-malaga-sin-paradas": 13}
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
-#: Y la de los trenes de la línea de Extremadura, que la recorren de Madrid-Atocha Cercanías a la
-#: bifurcación Planetario sin parar en ninguna otra de sus estaciones.
-EXTREMADURA_RULES = {"atocha-cercanias-leganes-linea-de-extremadura": 260}
+#: Y las de los trenes de la línea de Extremadura, que solo la recorren de Madrid-Atocha Cercanías
+#: a la bifurcación Planetario: 260 con Leganés como primera parada y 7 regionales de Talavera de
+#: la Reina que no paran allí y tienen Fuenlabrada.
+EXTREMADURA_RULES = {
+    "atocha-cercanias-leganes-linea-de-extremadura": 260,
+    "atocha-cercanias-fuenlabrada-linea-de-extremadura": 7,
+}
 #: La alta velocidad Madrid – Sevilla tiene además las de los AVE que no paran en Madrid: los de
 #: Barcelona entran por la bifurcación Los Gavilanes y los de Valencia, por la de Yeles.
 AWAY_RULES = {
@@ -142,6 +148,17 @@ def test_track_km_only_goes_with_an_exit_that_has_no_via() -> None:
         {"exits": ["n"], "track_km": 0},
     ):
         with pytest.raises(ValidationError):
+            StopMapping.model_validate(wrong)
+
+
+def test_aside_needs_two_exits() -> None:
+    """«A un lado» describe una parada de la que se entra por una salida y se sale por otra: con
+    una sola salida, o en un nodo de la línea, no dice nada."""
+    two = StopMapping.model_validate({"exits": ["n", "m"], "aside": True})
+    assert two.aside is True
+    assert StopMapping.model_validate({"exits": ["n", "m"]}).aside is False
+    for wrong in ({"exits": ["n"], "aside": True}, {"node": "n", "aside": True}):
+        with pytest.raises(ValidationError, match="«aside» solo tiene sentido"):
             StopMapping.model_validate(wrong)
 
 
@@ -258,8 +275,8 @@ def test_the_diverted_trains_enter_the_three_lines(
     mzcr_trips = select_trips_for_spec(feed, mzcr_spec)
     # 317 ya entraban por el filtro; 47 no paran en Madrid y 13 van directos a Málaga
     assert len(lav_trips) == 317 + 47 + 13
-    # los 22, los 42 de Jaén y los 260 de la línea de Extremadura entran por las reglas
-    assert len(conv_trips) == 368 + 22 + 42 + 260
+    # los 22, los 42 de Jaén y los 267 de la línea de Extremadura entran por las reglas
+    assert len(conv_trips) == 368 + 22 + 42 + 267
     assert len(mzcr_trips) == 124 + 22  # no paran en la línea: también por las reglas
     for line_spec, trips in ((spec, lav_trips), (conv_spec, conv_trips), (mzcr_spec, mzcr_trips)):
         matched = [route_for_trip(line_spec, t) for t in trips]
@@ -614,21 +631,17 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-murcia-sin-parada": 0,
         },
         # Extremadura: los trenes que entran en Plasencia recorren la convencional hasta la
-        # bifurcación San Esteban y empiezan la línea nueva en la estación; 13 de ellos siguen a
-        # Cáceres por el trazado antiguo, y los que van de Mérida hacia Badajoz entran en la línea
-        # nueva junto a Garrovilla-Las Vegas. La línea de Aljucén a Mérida y el trazado antiguo no
-        # tienen reglas
+        # bifurcación San Esteban y empiezan la línea nueva en la estación. Los 13 que siguen a
+        # Cáceres por el trazado antiguo y los que entran en Mérida no necesitan regla: esas
+        # paradas quedan «a un lado» de la línea nueva. La línea de Aljucén a Mérida y el trazado
+        # antiguo no tienen reglas
         MADRID_PLASENCIA_SPEC.name: {
             "a-plasencia-desde-navalmoral": 37,
             "a-plasencia-desde-monfrague": 59,
         },
         LAV_BADAJOZ_SPEC.name: {
-            "plasencia-caceres-por-la-linea-antigua": 13,
-            "merida-hacia-badajoz-garrovilla": 50,
-            "merida-hacia-badajoz-montijo": 41,
-            "merida-hacia-badajoz-badajoz": 37,
             "desde-plasencia-tras-navalmoral": 37,
-            "desde-plasencia-tras-monfrague": 46,
+            "desde-plasencia-tras-monfrague": 59,
         },
         RAMAL_MERIDA_SPEC.name: {},
         MONFRAGUE_CACERES_SPEC.name: {},
@@ -649,8 +662,19 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-zamora-sin-parada": 115,
             "madrid-ourense-sin-parada": 6,
         },
+        # los que recorren la de Olmedo a Ourense sin parar en sus estaciones propias: los
+        # mismos que la de Valladolid recoge con las reglas del mismo nombre
+        LAV_OURENSE_SPEC.name: {
+            "madrid-zamora-sin-parada": 115,
+            "madrid-ourense-sin-parada": 6,
+        },
         # el enlace de Monforte del Cid tampoco: le basta su filtro
         LINK_MONFORTE_SPEC.name: {},
+        # los que llegan de Burgos a Palencia camino de León y los de Madrid a León sin paradas
+        LAV_LEON_SPEC.name: {
+            "burgos-palencia-leon": 6,
+            "madrid-leon-sin-parada": 4,
+        },
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin
@@ -672,7 +696,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         assert "indeterminado" not in r["gtfs"]["passes"]
     granada = reports[LBMG_SPEC.name]["gtfs"]
     assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
-    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432 + 260
+    assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432 + 267
     assert reports[SPEC.name]["gtfs"]["trips"] == 317 + 47 + 13
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
     assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571

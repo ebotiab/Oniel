@@ -116,12 +116,12 @@ def test_nodes_are_ready_for_the_lines_that_follow(line: BuiltNetwork) -> None:
         "segovia-guiomar": SEGOVIA,
         "valladolid-campo-grande": VALLADOLID,
     }
-    # la bifurcación de la que sale la línea de Galicia, ya cargada, y la estación de Valladolid
-    # son nodos principales; de Valladolid cuelgan las líneas siguientes, que hoy salen a trazos
+    # la bifurcación de la que sale la línea de Galicia y la estación de Valladolid son nodos
+    # principales. De la bifurcación sale ya la línea de Olmedo a Ourense y de Valladolid, la de
+    # Palencia y León: no queda conexión a trazos hacia ninguna de las dos
     assert line.node("bif-medina").spec.kind == "bifurcacion"
     assert line.node("bif-medina").spec.rank == "principal"
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "lav-valladolid-palencia-leon": "valladolid-campo-grande",
         "conv-valladolid-medina-del-campo": "valladolid-campo-grande",
     }
     assert all(n.offset_m < 250 for n in line.nodes)
@@ -325,4 +325,9 @@ def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> Non
         assert spec.stop_mappings[stop_id].exits == ["bif-medina"]
     for stop_id in ("14100", "15100", "11014", "15410", "14223", "11600", "13200"):
         assert spec.stop_mappings[stop_id].exits == ["valladolid-campo-grande"]
+    # Palencia y León son estaciones de la línea que sigue desde Valladolid
+    for stop_id in ("14100", "15100"):
+        assert [(v.line, v.node) for v in spec.stop_mappings[stop_id].via] == [
+            ("lav-valladolid-leon", "valladolid-campo-grande")
+        ]
     assert spec.stop_mappings[CHAMARTIN].node == "madrid-chamartin"

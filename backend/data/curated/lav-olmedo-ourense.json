@@ -3,7 +3,7 @@
     "id": "lav-olmedo-ourense",
     "name": "Línea de alta velocidad Olmedo – Zamora – Ourense",
     "short_name": "982 y 822",
-    "sort_order": 25,
+    "sort_order": 26,
     "zone": "galicia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

@@ -138,8 +138,14 @@ LAV_SINGLE = {
     "bif-san-nicolas:badajoz",
 }
 
-#: Prefijo de las tres reglas de la línea nueva para los trenes que van de Mérida hacia Badajoz.
-MERIDA_RULE = "merida-hacia-badajoz-"
+#: Paradas que quedan «a un lado» de la línea nueva, con sus dos salidas: Mérida y las tres
+#: estaciones del trazado antiguo por Cañaveral.
+ASIDE = {
+    "37500": ["bif-granja-las-encinas", "garrovilla-las-vegas"],
+    "35301": ["bif-san-esteban", "bif-casa-de-la-torre"],
+    "35302": ["bif-san-esteban", "bif-casa-de-la-torre"],
+    "35303": ["bif-san-esteban", "bif-casa-de-la-torre"],
+}
 #: El tramo de la línea nueva que une la bifurcación Granja-Las Encinas con Garrovilla-Las Vegas.
 CURVE = "bif-granja-las-encinas:garrovilla-las-vegas"
 
@@ -155,13 +161,9 @@ PRODUCTS = {
 RULES = {
     MADRID: {"a-plasencia-desde-navalmoral": 37, "a-plasencia-desde-monfrague": 59},
     LAV: {
-        "plasencia-caceres-por-la-linea-antigua": 13,
-        # los que van de Mérida hacia Badajoz, o al revés, según su parada siguiente a Mérida
-        "merida-hacia-badajoz-garrovilla": 50,
-        "merida-hacia-badajoz-montijo": 41,
-        "merida-hacia-badajoz-badajoz": 37,
         "desde-plasencia-tras-navalmoral": 37,
-        "desde-plasencia-tras-monfrague": 46,
+        # con los 13 Regional Exprés que siguen a Cáceres por Cañaveral
+        "desde-plasencia-tras-monfrague": 59,
     },
     MERIDA: {},
     OLD: {},
@@ -179,12 +181,11 @@ SHAPES = {
         ("bif-planetario", "talavera-de-la-reina"): 31,
     },
     LAV: {
-        # de Plasencia: a Mérida, a Badajoz, a Cáceres y, los 13 del trazado antiguo, solo hasta
-        # la bifurcación San Esteban
+        # de Plasencia: a Mérida, a Badajoz y a Cáceres; de estos, 13 van por el trazado antiguo
+        # y solo cuentan en la salida de Plasencia y en la entrada a Cáceres
         ("bif-granja-las-encinas", "plasencia"): 63,
         ("badajoz", "plasencia"): 18,
-        ("caceres", "plasencia"): 19,
-        ("bif-san-esteban", "plasencia"): 13,
+        ("caceres", "plasencia"): 32,
         # de Madrid sin entrar en Plasencia: se incorporan en Arroyo de la Herrera
         ("arroyo-de-la-herrera", "badajoz"): 37,
         ("arroyo-de-la-herrera", "caceres"): 39,
@@ -205,15 +206,16 @@ SHAPES = {
 #: Viajes por tramo, en el orden de la línea.
 BY_SEGMENT = {
     MADRID: [267] * 4 + [203] * 3 + [172] * 5 + [96],
-    # los 52 de Mérida a Badajoz no pasan por el tramo de Granja-Las Encinas a Garrovilla-Las Vegas
-    LAV: [113, 100] + [176] * 3 + [207] * 3 + [137] + [189] * 5,
+    # los 13 del trazado antiguo se saltan los tres tramos de San Esteban a Casa de la Torre; por
+    # el de Granja-Las Encinas a Garrovilla-Las Vegas solo pasan los 61 que no entran en Mérida
+    LAV: [113, 100, 176, 176, 189] + [207] * 3 + [61] + [189] * 5,
     MERIDA: [146, 198],
     OLD: [13] * 4,
 }
 #: Pasos de cada clase.
 KINDS = {
     MADRID: {"estimado": 2051, "publicado": 582},
-    LAV: {"estimado": 2310, "publicado": 134},
+    LAV: {"estimado": 2247, "publicado": 134},
     MERIDA: {"estimado": 344},
     OLD: {"estimado": 26, "publicado": 26},
 }
@@ -673,8 +675,7 @@ def test_trains_that_call_at_plasencia_reach_san_esteban_and_the_rest_leave_at_e
         assert r.rule is None and len(r.crossed) == 12
         assert "bif-el-chaparral:bif-san-esteban" not in r.crossed
         other = lav[r.trip.trip_id]
-        # la única regla que les puede tocar es la de la salida de Mérida hacia Badajoz
-        assert other.rule is None or other.rule.startswith(MERIDA_RULE), r.trip.train_number
+        assert other.rule is None, r.trip.train_number
         assert not {"plasencia:bif-san-esteban", "bif-san-esteban:arroyo-de-la-herrera"} & set(
             other.crossed
         )
@@ -684,7 +685,7 @@ def test_trains_that_call_at_plasencia_reach_san_esteban_and_the_rest_leave_at_e
         assert "enlaza en Bifurcación El Chaparral" in basis
     # las reglas de las dos líneas casan los mismos trenes
     assert {r.trip.trip_id for r in madrid.values() if r.rule} == {
-        r.trip.trip_id for r in lav.values() if r.rule and not r.rule.startswith(MERIDA_RULE)
+        r.trip.trip_id for r in lav.values() if r.rule
     }
     # los que no pasan de Monfragüe no llegan a la línea nueva: Proximidad a Illescas y
     # regionales a Talavera de la Reina
@@ -696,8 +697,10 @@ def test_regional_trains_by_canaveral_take_the_old_line(
     resolved: dict[str, list[Resolved]],
 ) -> None:
     """13 Regional Exprés paran en Plasencia y siguen a Cáceres por Mirabel, Casas de Millán y
-    Cañaveral: de la línea nueva solo cuentan la salida de Plasencia, y recorren entero el trazado
-    antiguo, con paso publicado entre las tres estaciones."""
+    Cañaveral, que quedan «a un lado» de la línea nueva: de ella cuentan la salida de Plasencia,
+    hasta la bifurcación San Esteban, y la entrada a Cáceres desde la bifurcación Casa de la
+    Torre, no los tres tramos de en medio. Recorren entero el trazado antiguo, con paso publicado
+    entre las tres estaciones."""
     old = resolved[OLD]
     assert len(old) == 13
     lav = {r.trip.trip_id: r for r in resolved[LAV]}
@@ -705,12 +708,20 @@ def test_regional_trains_by_canaveral_take_the_old_line(
     for r in old:
         assert {"30002", "35301", "35302", "35303", "35400"} <= set(r.stops)
         assert [p.kind for p in r.passes] == ["estimado", "publicado", "publicado", "estimado"]
-        assert lav[r.trip.trip_id].rule == "plasencia-caceres-por-la-linea-antigua"
-        assert lav[r.trip.trip_id].crossed == ["plasencia:bif-san-esteban"]
+        new = lav[r.trip.trip_id]
+        assert new.rule == "desde-plasencia-tras-monfrague"
+        assert new.crossed == ["plasencia:bif-san-esteban", "bif-casa-de-la-torre:caceres"]
+        assert {p.kind for p in new.passes} == {"estimado"}
+        # cada paso se reparte con la estación del trazado antiguo que le queda al lado: Mirabel
+        # junto a Plasencia y Cañaveral junto a Cáceres
+        leave, join = new.passes
+        assert "Plasencia" in leave.basis and "Mirabel" in leave.basis
+        assert "Cáceres" in join.basis and "Cañaveral" in join.basis
         # todos vienen de Madrid o van a Madrid, por Monfragüe
         assert madrid[r.trip.trip_id].rule == "a-plasencia-desde-monfrague"
-    on_rule = [r for r in lav.values() if r.rule == "plasencia-caceres-por-la-linea-antigua"]
-    assert {r.trip.trip_id for r in on_rule} == {r.trip.trip_id for r in old}
+    # nadie más para en esas tres estaciones
+    by_canaveral = [r for r in lav.values() if {"35301", "35302", "35303"} & set(r.stops)]
+    assert {r.trip.trip_id for r in by_canaveral} == {r.trip.trip_id for r in old}
 
 
 def test_trains_enter_merida_by_the_link_or_by_aljucen(
@@ -733,28 +744,38 @@ def test_trains_enter_merida_by_the_link_or_by_aljucen(
     assert {r.trip.trip_id for r in merida} <= {r.trip.trip_id for r in resolved[LAV]}
 
 
+def test_stops_beside_the_new_line_are_declared_with_their_two_exits(
+    nets: dict[str, BuiltNetwork],
+) -> None:
+    """Mérida y las tres estaciones del trazado antiguo quedan «a un lado» de la línea nueva: se
+    sale hacia ellas por un nodo y se vuelve por otro. Con eso no hace falta una regla de
+    recorrido por cada parada siguiente a Mérida."""
+    mappings = nets[LAV].spec.stop_mappings
+    assert {stop: m.exits for stop, m in mappings.items() if m.aside} == ASIDE
+    for line in (MADRID, MERIDA, OLD):
+        assert not any(m.aside for m in nets[line].spec.stop_mappings.values())
+    assert {o.id for o in nets[LAV].spec.route_overrides} == set(RULES[LAV])
+
+
 def test_trains_between_merida_and_badajoz_join_the_new_line_at_garrovilla(
     resolved: dict[str, list[Resolved]],
 ) -> None:
-    """Los trenes que van de Mérida hacia Badajoz, o al revés, casan una de las tres reglas de
-    recorrido, según su parada siguiente a Mérida. Los 52 que no pasan por Cáceres (los que
-    empiezan o acaban en Mérida y los que vienen de Ciudad Real, Cabeza del Buey o Villanueva de
-    la Serena) entran en la línea nueva junto a Garrovilla-Las Vegas y no cuentan en el tramo de
-    la bifurcación Granja-Las Encinas a Garrovilla-Las Vegas."""
+    """Ningún tren que para en Mérida cuenta en el tramo de la bifurcación Granja-Las Encinas a
+    Garrovilla-Las Vegas: de los 128 que van de Mérida hacia Badajoz, o al revés, 52 no pasan por
+    Cáceres (empiezan o acaban en Mérida, o vienen de Ciudad Real, Cabeza del Buey o Villanueva de
+    la Serena) y entran en la línea nueva junto a Garrovilla-Las Vegas; los otros 76 recorren
+    además la línea desde Cáceres, salen por la bifurcación Granja-Las Encinas para entrar en
+    Mérida y vuelven por Garrovilla-Las Vegas. Por la curva quedan los 61 que van de Cáceres a
+    Badajoz sin entrar en Mérida."""
     lav = resolved[LAV]
-    on_rule = [r for r in lav if r.rule and r.rule.startswith(MERIDA_RULE)]
-    assert len(on_rule) == 50 + 41 + 37
+    assert not any(CURVE in r.crossed for r in lav if "37500" in r.stops)
     by_merida = [r for r in lav if "37500" in r.stops and "37606" in r.stops]
-    assert {r.trip.trip_id for r in by_merida} == {r.trip.trip_id for r in on_rule}
-    only = [r for r in on_rule if not {"35400", "30002"} & set(r.stops)]
+    assert len(by_merida) == 128 and all(
+        r.rule is None for r in by_merida if "30002" not in r.stops
+    )
+    only = [r for r in by_merida if not {"35400", "30002"} & set(r.stops)]
     assert len(only) == 52
-    # los 50 que paran en Garrovilla-Las Vegas y 2 con Montijo como parada siguiente
-    assert Counter(r.rule for r in only) == {
-        f"{MERIDA_RULE}garrovilla": 50,
-        f"{MERIDA_RULE}montijo": 2,
-    }
     for r in only:
-        assert CURVE not in r.crossed, r.trip.train_number
         assert {r.crossed[0], r.crossed[-1]} == {
             "garrovilla-las-vegas:montijo",
             "bif-san-nicolas:badajoz",
@@ -774,7 +795,28 @@ def test_trains_between_merida_and_badajoz_join_the_new_line_at_garrovilla(
             assert min(times) > merida.departure_s, r.trip.train_number
         else:
             assert max(times) < merida.arrival_s, r.trip.train_number
-    # Los otros 76 pasan también por Cáceres: recorren la línea de Cáceres a Badajoz y siguen
-    # contando en ese tramo, aunque entran y salen de Mérida
-    through = [r for r in on_rule if r not in only]
-    assert len(through) == 76 and all(CURVE in r.crossed for r in through)
+    # Los otros 76 pasan también por Cáceres: cuentan a los dos lados de la curva, no en ella
+    through = [r for r in by_merida if r not in only]
+    assert len(through) == 76
+    for r in through:
+        assert "35400" in r.stops, r.trip.train_number
+        assert {"bif-penas-blancas:bif-granja-las-encinas", "garrovilla-las-vegas:montijo"} <= set(
+            r.crossed
+        ), r.trip.train_number
+        # el paso entre Cáceres y Mérida se explica por Granja-Las Encinas; el de Mérida hacia
+        # Badajoz, por Garrovilla-Las Vegas
+        north = next(p for p in r.passes if p.segment_id.endswith(":bif-granja-las-encinas"))
+        south = next(p for p in r.passes if p.segment_id.endswith(":garrovilla-las-vegas:montijo"))
+        assert "Mérida" in north.basis and "por Bifurcación Granja-Las Encinas" in north.basis
+        assert "Garrovilla-Las Vegas" not in north.basis, r.trip.train_number
+        assert "Mérida" in south.basis and "por Garrovilla-Las Vegas" in south.basis
+        assert "Granja-Las Encinas" not in south.basis, r.trip.train_number
+        # y los horarios cuadran con la parada: lo de un lado, antes de llegar; lo del otro, después
+        merida = next(st for st in r.trip.stop_times if st.stop_id == "37500")
+        before, after = (north, south) if north.km_increasing else (south, north)
+        assert before.exit_s is not None and before.exit_s < merida.arrival_s
+        assert after.enter_s is not None and after.enter_s > merida.departure_s
+    # por la curva, los 61 que no entran en Mérida: todos paran en Cáceres y llegan a Badajoz
+    curve = [r for r in lav if CURVE in r.crossed]
+    assert len(curve) == 61
+    assert all({"35400", "37606"} <= set(r.stops) for r in curve)

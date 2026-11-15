@@ -49,6 +49,8 @@ LAV_ALICANTE = "lav-albacete-alicante"
 LAV_MURCIA = "lav-monforte-murcia"
 MEDITERRANEO = "valencia-castello-tarragona"
 LAV_VALLADOLID = "lav-madrid-valladolid"
+LAV_LEON = "lav-valladolid-leon"
+LAV_OURENSE = "lav-olmedo-ourense"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -307,6 +309,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         LAV_BADAJOZ,
         RAMAL_MERIDA,
         MONFRAGUE_CACERES,
+        LAV_LEON,
+        LAV_OURENSE,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -324,7 +328,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # cuatro de Extremadura
     assert (
         len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -342,7 +346,8 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     # 54 y 121 sin Extremadura, con el enlace de Monforte del Cid. Con sus cuatro líneas, 29 tramos más sin otro camino para ningún
     # tren, y otros 4 en los que se queda sin él una parte: tres junto a sus bifurcaciones y el de
     # la convencional de Madrid-Puerta de Atocha a la bifurcación Planetario
-    assert (len(none), len(without)) == (54 + 29, 121 + 29 + 4)
+    # y los ocho de la línea de Valladolid a León, la única cargada al norte de Valladolid
+    assert (len(none), len(without)) == (54 + 29 + 8, 121 + 29 + 4 + 8)
     extremadura_lines = (
         f"{MADRID_PLASENCIA}:",
         f"{LAV_BADAJOZ}:",
@@ -350,6 +355,7 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{MONFRAGUE_CACERES}:",
     )
     apart = (
+        f"{LAV_LEON}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
@@ -460,11 +466,13 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     }
     lav_badajoz = {s: n for s, n in extremadura.items() if s.startswith(extremadura_lines[1])}
     assert lav_badajoz.pop(f"{LAV_BADAJOZ}:plasencia:bif-san-esteban") == 14
-    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-casa-de-la-torre:caceres") == 20
-    # de Cáceres a Badajoz, nueve tramos: 16 trenes en el de la bifurcación Granja-Las Encinas a
-    # Garrovilla-Las Vegas, por el que no pasan los 8 que solo van entre Mérida y Badajoz, y 24
-    # en cada uno de los otros ocho
-    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-granja-las-encinas:garrovilla-las-vegas") == 16
+    # la entrada a Cáceres: los 20 de la línea nueva y los 2 regionales que llegan por Cañaveral
+    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-casa-de-la-torre:caceres") == 20 + 2
+    # de Cáceres a Badajoz, nueve tramos: 8 trenes en el de la bifurcación Granja-Las Encinas a
+    # Garrovilla-Las Vegas, por el que solo pasan los que van de Cáceres a Badajoz sin entrar en
+    # Mérida (los 16 que entran salen por la bifurcación y vuelven por Garrovilla-Las Vegas), y
+    # 24 en cada uno de los otros ocho
+    assert lav_badajoz.pop(f"{LAV_BADAJOZ}:bif-granja-las-encinas:garrovilla-las-vegas") == 8
     assert len(lav_badajoz) == 8 and set(lav_badajoz.values()) == {24}
     assert f"{LAV_BADAJOZ}:caceres:bif-la-aldihuela" in lav_badajoz
     assert f"{LAV_BADAJOZ}:bif-san-nicolas:badajoz" in lav_badajoz
@@ -479,12 +487,14 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
     assert (new_line.trains, new_line.without_alternative) == (20, 0)
     # en los tramos cortos junto a las bifurcaciones solo lo tienen los trenes cuyo recorrido
     # sigue más allá: 8 de los 20 de Monfragüe a El Chaparral (los de Madrid que no entran en
-    # Plasencia), 2 de los 12 de San Esteban a Arroyo de la Herrera y 6 de los 20 de El Palmeral
-    # a Casa de la Torre
+    # Plasencia), 2 de los 12 de San Esteban a Arroyo de la Herrera y 10 de los 20 de El Palmeral
+    # a Casa de la Torre. De esos 10, 4 son los de Madrid que entran en Mérida: su recorrido es
+    # seguido de Arroyo de la Herrera a Mérida (133,5 km) desde que no cuentan además en la curva
+    # de Granja-Las Encinas a Garrovilla-Las Vegas
     in_part = {
         f"{MADRID_PLASENCIA}:monfrague:bif-el-chaparral": (20, 12),
         f"{LAV_BADAJOZ}:bif-san-esteban:arroyo-de-la-herrera": (12, 10),
-        f"{LAV_BADAJOZ}:bif-el-palmeral:bif-casa-de-la-torre": (20, 14),
+        f"{LAV_BADAJOZ}:bif-el-palmeral:bif-casa-de-la-torre": (20, 10),
     }
     for segment_id, expected in in_part.items():
         some = _of(exported.segments, segment_id)
@@ -497,13 +507,13 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         f"{MONFRAGUE_CACERES}:casas-de-millan:canaveral": 2,
         f"{MONFRAGUE_CACERES}:canaveral:bif-casa-de-la-torre": 2,
     }
-    # De los 34 de la salida de Madrid, 33 cuentan también en el primer tramo de la convencional
-    # de Andalucía, de Madrid-Puerta de Atocha a la bifurcación Planetario, por una regla de
-    # recorrido que pide Leganés como parada siguiente: el Regional 17703 no para en Leganés y
-    # no la casa. Con los 41 que ya llevaba el tramo son 74. Esos 33 no tienen otro camino: la
+    # Los 34 de la salida de Madrid cuentan también en el primer tramo de la convencional de
+    # Andalucía, de Madrid-Puerta de Atocha a la bifurcación Planetario, por dos reglas de
+    # recorrido: 33 tienen Leganés como parada siguiente y el Regional 17703, que no para allí,
+    # Fuenlabrada. Con los 41 que ya llevaba el tramo son 75. Esos 34 no tienen otro camino: la
     # vuelta por Córdoba para volver a la bifurcación Planetario no cuenta. Los otros 41, sí
     shared = _of(exported.segments, f"{CONV}:madrid-puerta-de-atocha:bif-planetario")
-    assert (shared.trains, shared.without_alternative) == (41 + 33, 33)
+    assert (shared.trains, shared.without_alternative) == (41 + 34, 34)
     # De la alta velocidad de Barcelona solo quedan los tres tramos de Camp de Tarragona a
     # Barcelona-Sants, fuera del anillo, con sus 108 trenes
     # la de Madrid a Valladolid entera: es la única cargada al norte de Madrid. 122 trenes hasta
@@ -516,6 +526,21 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         (111, 111),
         (81, 81),
     ]
+    # y la de Valladolid a León, que la continúa: 53 trenes hasta la bifurcación Venta de Baños,
+    # donde salen los 20 de Burgos; 35 de la bifurcación Cerrato a Palencia, con los 2 que llegan
+    # de Burgos, y 26 de Palencia a León
+    leon = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_LEON}:")]
+    assert [(s.trains, s.without_alternative) for s in leon] == [
+        (53, 53),
+        (53, 53),
+        (33, 33),
+        (35, 35),
+        (26, 26),
+        (26, 26),
+        (26, 26),
+        (26, 26),
+    ]
+    assert all(set(s.by_operator) == {"renfe"} for s in leon)
     # tampoco en la alta velocidad de Barcelona, que solo comparte con las demás la cabecera de
     # Madrid: quince de sus veinte tramos no tienen otro camino cargado
     barcelona = [s for s in exported.segments if s.segment_id.startswith(f"{BCN}:")]

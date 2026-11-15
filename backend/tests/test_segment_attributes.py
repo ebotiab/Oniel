@@ -212,12 +212,13 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     for line in by_line.values():
         covered = dict(line["covered_segments"])
         # el ancho solo se declara donde no es el de la línea: el mixto del paso por Loja, de la
-        # entrada a Granada y de la entrada a Murcia desde El Reguerón y, en la línea de Valencia
+        # entrada a Granada, de la entrada a Murcia desde El Reguerón y de la llegada a Ourense y, en la línea de Valencia
         # a Camp de Tarragona, el mixto hasta Castelló (18 tramos) y el estándar del último, que
         # además va a otra tensión
         other = {
             "lav-antequera-granada": 3,
             "lav-monforte-murcia": 1,
+            "lav-olmedo-ourense": 1,
             "valencia-castello-tarragona": 19,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
@@ -255,9 +256,14 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
             for attribute in SIGNALLING:
                 value = segment.attributes[attribute]
                 assert value.value in (ATTRIBUTE_RULES[attribute].values or ())
-                # la prolongación a Málaga se leyó en el mapa un día después que el resto
+                # la prolongación a Málaga se leyó en el mapa un día después que el resto, y las
+                # líneas de Valladolid a León y de Olmedo a Ourense, dos
                 assert value.source_id == DR
-                assert value.checked_on in (dt.date(2026, 11, 12), dt.date(2026, 11, 13))
+                assert value.checked_on in (
+                    dt.date(2026, 11, 12),
+                    dt.date(2026, 11, 13),
+                    dt.date(2026, 11, 14),
+                )
 
 
 def test_the_signalling_is_what_the_network_statement_map_says() -> None:

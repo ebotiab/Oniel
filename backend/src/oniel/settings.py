@@ -49,6 +49,7 @@ class Settings(BaseSettings):
         "lav-plasencia-badajoz",
         "ramal-merida",
         "monfrague-caceres",
+        "lav-valladolid-leon",
     ]
 
 
