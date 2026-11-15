@@ -30,6 +30,7 @@ from conftest import (
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
+    LEON_GIJON_SPEC,
     LINK_MONFORTE_SPEC,
     MADRID_PLASENCIA_SPEC,
     MEDITERRANEO_SPEC,
@@ -679,6 +680,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # los mismos seis, en la de Burgos: de Palencia a Burgos, por el ramal de Soto de Cerrato,
         # y a Miranda de Ebro
         LAV_BURGOS_SPEC.name: {"palencia-burgos-miranda": 6},
+        # la de León a Gijón no tiene reglas: ningún tren la cruza sin parar en ella
+        LEON_GIJON_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

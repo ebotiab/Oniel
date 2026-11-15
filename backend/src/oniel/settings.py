@@ -51,6 +51,7 @@ class Settings(BaseSettings):
         "monfrague-caceres",
         "lav-valladolid-leon",
         "lav-venta-de-banos-burgos",
+        "leon-oviedo-gijon",
     ]
 
 

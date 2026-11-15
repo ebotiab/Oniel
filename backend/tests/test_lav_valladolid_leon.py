@@ -150,7 +150,6 @@ def test_nodes_stations_and_junctions(line: BuiltNetwork) -> None:
     # la línea de Burgos ya está cargada: deja de salir a trazos de la bifurcación
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "conv-palencia-santander": "palencia",
-        "lav-leon-asturias": "leon",
         "conv-leon-galicia": "leon",
     }
     assert all(n.offset_m < 100 for n in line.nodes)

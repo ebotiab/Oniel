@@ -26,11 +26,11 @@ async function abrirDetalle(page: Page, tramo: string) {
 
 test.describe('Señalización: protección del tren, bloqueo y mando de cada tramo', () => {
   test('todos los tramos de la instantánea traen los tres, con la fuente y la fecha', () => {
-    expect(red.segments).toHaveLength(224)
+    expect(red.segments).toHaveLength(235)
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
         expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE })
-        // la prolongación a Málaga se leyó en el mapa un día después que el resto
+        // la prolongación a Málaga se leyó en el mapa un día después que el resto; la línea de León a Gijón, tres
         expect(['2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15']).toContain(s.attributes?.[clave]?.checked_on)
       }
       const filas = attributeRows(s, red.lines.find((l) => l.id === s.line_id), 'detalle')
@@ -40,9 +40,12 @@ test.describe('Señalización: protección del tren, bloqueo y mando de cada tra
       // la electrificación va también bajo «Más detalle»: la de la línea no se cita aparte, y los
       // tramos que traen la suya (de Madrid a Humanes, camino de Extremadura) citan además su fuente
       const propia = s.attributes?.electrification
+      // si la electrificación sale de la misma fuente y del mismo día que la señalización (la variante
+      // de Pajares, leída en el mismo mapa), se citan juntas
+      const junta = propia?.source_id === FUENTE && propia.checked_on === comprobado
       expect(attributeSources(filas)).toEqual([
-        ...(propia ? [{ sourceId: propia.source_id, checkedOn: propia.checked_on, etiquetas: ['Electrificación'] }] : []),
-        { sourceId: FUENTE, checkedOn: comprobado, etiquetas: ['Protección del tren', 'Bloqueo', 'Mando'] },
+        ...(propia && !junta ? [{ sourceId: propia.source_id, checkedOn: propia.checked_on, etiquetas: ['Electrificación'] }] : []),
+        { sourceId: FUENTE, checkedOn: comprobado, etiquetas: [...(junta ? ['Electrificación'] : []), 'Protección del tren', 'Bloqueo', 'Mando'] },
       ])
     }
   })

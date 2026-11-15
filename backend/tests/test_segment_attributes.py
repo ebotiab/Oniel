@@ -212,24 +212,28 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
     for line in by_line.values():
         covered = dict(line["covered_segments"])
         # el ancho solo se declara donde no es el de la línea: el mixto del paso por Loja, de la
-        # entrada a Granada, de la entrada a Murcia desde El Reguerón y de la llegada a Ourense y, en la línea de Valencia
+        # entrada a Granada, de la entrada a Murcia desde El Reguerón, de la llegada a Ourense y de
+        # la variante de Pajares hasta Campomanes y, en la línea de Valencia
         # a Camp de Tarragona, el mixto hasta Castelló (18 tramos) y el estándar del último, que
         # además va a otra tensión
         other = {
             "lav-antequera-granada": 3,
             "lav-monforte-murcia": 1,
             "lav-olmedo-ourense": 1,
+            "leon-oviedo-gijon": 2,
             "valencia-castello-tarragona": 19,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
         # la electrificación solo se declara donde no es la de la línea: ese último tramo de la
         # línea de Valencia a Camp de Tarragona y, en la convencional de Extremadura, de la
-        # bifurcación Planetario a Humanes, tres tramos con catenaria en una línea sin electrificar
-        wired = {"valencia-castello-tarragona": 1, "madrid-plasencia": 3}
+        # bifurcación Planetario a Humanes, tres tramos con catenaria en una línea sin electrificar,
+        # y los tres de la variante de Pajares, a 25 kV en una línea a 3 kV
+        wired = {"valencia-castello-tarragona": 1, "madrid-plasencia": 3, "leon-oviedo-gijon": 3}
         assert covered.pop("electrification", None) == wired.get(line["line"])
-        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona y
-        # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata
-        declared_speed = {"lav-madrid-barcelona": 3, "madrid-plasencia": 1}
+        # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona,
+        # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata,
+        # y el de León a la bifurcación Pajares
+        declared_speed = {"lav-madrid-barcelona": 3, "madrid-plasencia": 1, "leon-oviedo-gijon": 1}
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
@@ -259,6 +263,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 # la prolongación a Málaga se leyó en el mapa un día después que el resto, y las
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de Venta de Baños a
                 # Burgos, tres
+                # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres
                 assert value.source_id == DR
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),

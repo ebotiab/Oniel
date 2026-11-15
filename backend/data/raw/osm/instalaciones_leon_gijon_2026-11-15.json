@@ -1,0 +1,331 @@
+{
+ "version": 0.6,
+ "generator": "api.openstreetmap.org map.json, nodos de instalaciones",
+ "elements": [
+  {
+   "type": "node",
+   "id": 12716736746,
+   "lat": 42.773232,
+   "lon": -5.6426862,
+   "timestamp": "2025-03-31T17:37:08Z",
+   "version": 1,
+   "changeset": 164341733,
+   "user": "flierfy",
+   "uid": 445671,
+   "tags": {
+    "name": "Bifurcación Pajares / La Robla",
+    "railway": "junction"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14185618393,
+   "lat": 42.80107,
+   "lon": -5.6379035,
+   "timestamp": "2026-09-16T19:13:15Z",
+   "version": 1,
+   "changeset": 189127502,
+   "user": "gpvos",
+   "uid": 15945,
+   "tags": {
+    "name": "La Robla AV",
+    "railway": "site"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9311157924,
+   "lat": 43.1093614,
+   "lon": -5.8215952,
+   "timestamp": "2024-12-01T18:16:14Z",
+   "version": 3,
+   "changeset": 159815530,
+   "user": "ne17sg",
+   "uid": 518780,
+   "tags": {
+    "name": "Cambiador de Campomanes",
+    "railway": "gauge_conversion"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4586092222,
+   "lat": 43.1586493,
+   "lon": -5.8311261,
+   "timestamp": "2025-11-11T21:40:50Z",
+   "version": 5,
+   "changeset": 174532247,
+   "user": "Davileci",
+   "uid": 8123953,
+   "tags": {
+    "name": "Pola de Lena",
+    "operator": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846945"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8040089876,
+   "lat": 43.4615126,
+   "lon": -5.8263369,
+   "timestamp": "2022-09-12T10:23:06Z",
+   "version": 2,
+   "changeset": 126082695,
+   "user": "LMLM",
+   "uid": 569298,
+   "tags": {
+    "name": "Villabona de Asturias",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q6162530",
+    "wikipedia": "es:Villabona de Asturias"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8040194951,
+   "lat": 43.3064014,
+   "lon": -5.8557852,
+   "timestamp": "2024-11-17T22:35:41Z",
+   "version": 2,
+   "changeset": 159261946,
+   "user": "Broken Butler",
+   "uid": 8683554,
+   "tags": {
+    "name": "Soto Rei/Soto de Rey",
+    "name:es": "Soto de Rey",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847277"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13165236051,
+   "lat": 43.2766719,
+   "lon": -5.8128369,
+   "timestamp": "2026-10-03T17:36:09Z",
+   "version": 2,
+   "changeset": 189943860,
+   "user": "Davileci",
+   "uid": 8123953,
+   "tags": {
+    "name": "La Perea",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13252833306,
+   "lat": 43.2676581,
+   "lon": -5.8057777,
+   "timestamp": "2026-10-04T16:53:10Z",
+   "version": 3,
+   "changeset": 189991613,
+   "user": "Davileci",
+   "uid": 8123953,
+   "tags": {
+    "name": "Ablaña",
+    "network": "Cercanías Asturias",
+    "network:wikidata": "Q1054739",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13252833307,
+   "lat": 43.2672482,
+   "lon": -5.806375,
+   "timestamp": "2026-10-04T16:53:10Z",
+   "version": 4,
+   "changeset": 189991613,
+   "user": "Davileci",
+   "uid": 8123953,
+   "tags": {
+    "name": "Ablaña",
+    "network": "Cercanías Asturias",
+    "network:wikidata": "Q1054739",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14185547242,
+   "lat": 43.2770582,
+   "lon": -5.8122406,
+   "timestamp": "2026-10-03T17:36:09Z",
+   "version": 2,
+   "changeset": 189943860,
+   "user": "Davileci",
+   "uid": 8123953,
+   "tags": {
+    "name": "La Perea",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4586092220,
+   "lat": 43.3663632,
+   "lon": -5.8548667,
+   "timestamp": "2026-07-18T22:22:29Z",
+   "version": 10,
+   "changeset": 185981396,
+   "user": "Esperteyo",
+   "uid": 21035541,
+   "tags": {
+    "addr:city": "Oviedo / Uviéu",
+    "addr:postcode": "33003",
+    "addr:street": "Calle Uría / Cai Uría",
+    "alt_name": "Estación de tren de Oviedo",
+    "name": "Oviedo / Uviéu",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "toilets:wheelchair": "yes",
+    "train": "yes",
+    "website": "https://www.adif.es/w/15211-oviedo",
+    "wheelchair": "yes",
+    "wikidata": "Q3394520"
+   }
+  },
+  {
+   "type": "node",
+   "id": 28976223,
+   "lat": 43.528561,
+   "lon": -5.6947515,
+   "timestamp": "2026-05-19T01:23:16Z",
+   "version": 13,
+   "changeset": 182857040,
+   "user": "xoanin05",
+   "uid": 23101152,
+   "tags": {
+    "name": "Tremañes - Carreño",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18286515"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14365731958,
+   "lat": 43.5378986,
+   "lon": -5.6755136,
+   "timestamp": "2026-11-10T21:35:50Z",
+   "version": 1,
+   "changeset": 191763339,
+   "user": "Brigadeleiter",
+   "uid": 11776417,
+   "tags": {
+    "name": "Estación de Gijón/Xixón Sanz Crespo",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "website": "https://www.adif.es/w/15410-gij%C3%B3n-",
+    "wikidata": "Q5560428",
+    "wikipedia": "ast:Estación de Xixón Sanz Crespo (Renfe)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4586092221,
+   "lat": 43.2500408,
+   "lon": -5.7823864,
+   "timestamp": "2025-09-10T11:13:33Z",
+   "version": 5,
+   "changeset": 171730274,
+   "user": "Davileci",
+   "uid": 8123953,
+   "tags": {
+    "name": "Mieres del Camín",
+    "old_name": "Mieres-Puente",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846713",
+    "wikipedia": "es:Estación de Mieres-Puente"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1625248209,
+   "lat": 43.5552368,
+   "lon": -5.7177209,
+   "timestamp": "2026-05-28T12:03:46Z",
+   "version": 4,
+   "changeset": 183302339,
+   "user": "LMLM",
+   "uid": 569298,
+   "tags": {
+    "name": "Aboño/Musel",
+    "operator": "ADIF",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "ADIF",
+    "source:url": "http://www.iderail.es/2012/02/06/posicion-de-las-estaciones-de-feve-ii/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13533523655,
+   "lat": 43.5417617,
+   "lon": -5.7226053,
+   "timestamp": "2026-02-08T05:07:43Z",
+   "version": 1,
+   "changeset": 178252477,
+   "user": "UnniMan",
+   "uid": 22771198,
+   "tags": {
+    "name": "Veriña",
+    "network": "Cercanías Asturias",
+    "network:wikidata": "Q1054739",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847441"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8042352227,
+   "lat": 43.5048179,
+   "lon": -5.7819091,
+   "timestamp": "2020-10-24T15:14:05Z",
+   "version": 1,
+   "changeset": 92991330,
+   "user": "Diego Sanguinetti",
+   "uid": 309382,
+   "tags": {
+    "name": "Serín",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847229"
+   }
+  }
+ ]
+}
