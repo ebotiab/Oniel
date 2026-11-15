@@ -608,7 +608,11 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LINK_MONFORTE,
         *EXTREMADURA,
         LAV_LEON,
+        LAV_OURENSE,
     }
+    # en la de Olmedo a Ourense, de Medina del Campo AV a Coreses, la salida de Zamora, de Pedralba
+    # a Vilavella y la llegada a Ourense
+    assert sum(1 for s in single if s["line_id"] == LAV_OURENSE) == 5
     # en la de Valladolid a León, la salida de Valladolid, de Cerrato a Las Barreras por Palencia
     # y de Las Arenas a Vilecha
     assert [s["id"].split(":")[1] for s in single if s["line_id"] == LAV_LEON] == [
@@ -759,7 +763,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         f"{MADRID_PLASENCIA}:fuenlabrada:humanes": "3kv_cc",
     }
     # el ancho, solo donde no es el de su línea: el mixto del paso por Loja, de la entrada a
-    # Granada y de la de Murcia, y en la línea de Valencia a Camp de Tarragona, el mixto de
+    # Granada, de la de Murcia y de la llegada a Ourense, y en la línea de Valencia a Camp de Tarragona, el mixto de
     # València-Joaquín Sorolla a Castelló (18 tramos) y el estándar del cambiador de La Boella a
     # Camp de Tarragona
     values = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "gauge"}
@@ -768,6 +772,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         f"{LAV_GRANADA}:loja:bif-tocon",
         f"{LAV_GRANADA}:bif-la-chana:granada",
         f"{LAV_MURCIA}:bif-el-regueron:murcia-del-carmen",
+        f"{LAV_OURENSE}:taboadela:ourense",
     }
     coast = {s: v for s, v in values.items() if s.startswith(MEDITERRANEO)}
     assert len(coast) == 19 and sorted(coast.values()) == ["estandar"] + ["mixto"] * 18
@@ -1240,7 +1245,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # anuncios oficiales de la línea nueva y de sus proyectos. Y 3 de la línea de Madrid a
     # Valladolid: su relación de OSM y los artículos de Wikipedia de la línea y de la de Galicia.
     # Y 2 de la de Valladolid a León: la relación de OSM de Venta de Baños a León y su artículo
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2
+    # Y 2 de la de Olmedo a Ourense: la relación de OSM de la línea y la de la línea convencional
+    # de Zamora a A Coruña, de la que salen la salida de Zamora y la llegada a Ourense
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1256,7 +1263,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea de alta velocidad Plasencia – Cáceres – Badajoz" in cov["notice"]
     assert "la línea convencional Aljucén – Mérida" in cov["notice"]
     assert "la línea convencional Monfragüe – Cañaveral – Cáceres" in cov["notice"]
-    assert "y la línea de alta velocidad Valladolid – Palencia – León" in cov["notice"]
+    assert "la línea de alta velocidad Valladolid – Palencia – León" in cov["notice"]
+    assert "y la línea de alta velocidad Olmedo – Zamora – Ourense" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
         LAV,
         CONV,
@@ -1328,6 +1336,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         **dict.fromkeys(EXTREMADURA, ["renfe"]),
         # los trenes de Ouigo acaban en Valladolid
         LAV_LEON: ["renfe"],
+        LAV_OURENSE: ["renfe"],
     }
     assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
     assert "No están los trenes de Iryo, que no publica sus horarios" in cov["notice"]
