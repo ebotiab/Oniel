@@ -15,10 +15,11 @@ const MIXTOS = [
   'lav-antequera-granada:loja:bif-tocon',
   'lav-antequera-granada:bif-la-chana:granada',
   'lav-monforte-murcia:bif-el-regueron:murcia-del-carmen',
+  'lav-olmedo-ourense:taboadela:ourense',
 ]
 
 test.describe('Ancho de vía: el tramo de ancho mixto lo dice', () => {
-  test('solo el paso por Loja, la entrada a Granada y la de Murcia traen el ancho mixto en la alta velocidad', () => {
+  test('solo el paso por Loja, la entrada a Granada, la de Murcia y la llegada a Ourense traen el ancho mixto en la alta velocidad', () => {
     // la línea de València a Camp de Tarragona tiene los suyos (e2e/mediterraneo.spec.ts)
     const conAncho = red.segments.filter((s) => s.attributes?.gauge && s.line_id !== 'valencia-castello-tarragona').map((s) => s.id)
     expect(conAncho.sort()).toEqual([...MIXTOS].sort())
