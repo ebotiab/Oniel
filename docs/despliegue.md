@@ -44,12 +44,11 @@ El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_EN
 
 Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
 
-## API y PostgreSQL en Render
+## API en Render
 
 `render.yaml` es un Blueprint de Render con:
 
-- `oniel-postgres`: PostgreSQL 17, plan free, región Frankfurt.
-- `oniel-api`: servicio web Docker (`backend/Dockerfile`, `rootDir: backend`), plan free, `healthCheckPath: /healthz`, `DATABASE_URL` enlazada a la base y `LOGFIRE_TOKEN` marcado `sync: false` (se aporta al aprobar el primer sync).
+- `oniel-api`: servicio web Docker (`backend/Dockerfile`, `rootDir: backend`), plan free, `healthCheckPath: /healthz`, `DATABASE_URL` y `LOGFIRE_TOKEN` marcados `sync: false` (se escriben en el panel de Render; un sync posterior no los toca).
 - `oniel-importer` (cron job, comentado): Render no ofrece cron jobs gratuitos y pide un método de pago en el workspace para crearlos. Para activarlo, añade un método de pago, descomenta el bloque y haz push.
 
 Estado (8 de noviembre de 2026): Blueprint `oniel` (`exs-dbo9l3gu01pc73ekfu2g`) en el workspace "My Workspace" de la cuenta personal, creado desde el conector MCP de Render con `existingResources: create_new`, por lo que Render añadió el sufijo `-5e63` a los recursos: base `oniel-postgres-5e63` y API `oniel-api-5e63`, publicada en https://oniel-api-5e63.onrender.com. Con `autoSync` activo, cada push a `main` que cambie algo en `backend/` vuelve a desplegar la API; los que solo tocan `frontend/` o `docs/` no la despliegan, porque el servicio tiene `rootDir: backend` (comprobado el 12 de noviembre de 2026 en la lista de despliegues de Render). Los cambios del Blueprint se aplican con cada push.
@@ -57,7 +56,22 @@ Estado (8 de noviembre de 2026): Blueprint `oniel` (`exs-dbo9l3gu01pc73ekfu2g`) 
 Límites del plan gratuito, que conviene conocer:
 
 - La API se suspende tras 15 minutos sin tráfico. Medido el 9 de noviembre de 2026: despertar costaba unos 75 s (61 s de `import all` y 11 s de arranque de Python); con `--if-changed` queda el arranque de Python más lo que Render tarde en levantar el contenedor. El visor no espera a la API: pinta la instantánea estática de Vercel al instante, la sondea en segundo plano (hasta dos minutos y medio) y cambia a ella cuando responde; mientras tanto la cabecera indica «despertando el servidor…» y la simulación espera a que esté lista.
-- La base gratuita caduca a los 30 días de su creación (el 8 de diciembre de 2026). Todos los datos se regeneran con el importador a partir de los archivos del repositorio, así que no se pierde nada irrecuperable. Para una base persistente, cambia `plan: free` por `basic-256mb` en `render.yaml` (requiere método de pago) y haz push.
+- La base de datos ya no está en Render: su PostgreSQL gratuito caduca a los 30 días de crearse (el de Oniel, `oniel-postgres-5e63`, el 8 de diciembre de 2026) y se borra catorce días después. Ver «Base de datos», más abajo.
+
+### Base de datos
+
+La API se conecta a un PostgreSQL externo que no caduca, en el plan gratuito de Neon (https://neon.tech), región de Fráncfort (`aws-eu-central-1`), la misma zona que la API. Nada de lo que guarda es irrecuperable: todo se regenera con el importador a partir de los ficheros del repositorio, así que no hacen falta copias de seguridad ni migrar datos de una base a otra. Una base vacía se llena sola en el primer despliegue.
+
+Cómo se conecta:
+
+- `DATABASE_URL` se escribe a mano en el panel de Render (servicio `oniel-api-5e63`, «Environment»). No está en el repositorio ni en ningún fichero: lleva la contraseña.
+- Se usa la cadena de conexión **directa**, no la del pooler (en Neon, «Connection pooling» desactivado al copiarla; el servidor no lleva `-pooler` en el nombre). El pooler reparte las conexiones por transacción y asyncpg prepara sentencias por conexión.
+- La cadena de Neon trae `sslmode=require`, que asyncpg entiende, y `channel_binding=require`, que no: `oniel.db.pool.normalize_dsn` lo quita antes de conectar, así que se puede pegar tal cual.
+- Neon suspende la base a los cinco minutos sin actividad y la despierta en la primera conexión, en torno a un segundo. El pool cierra las conexiones que llevan dos minutos sin uso para no guardar una que la base ya cortó.
+
+Límites del plan gratuito de Neon que importan aquí: 0,5 GB de almacenamiento (la base de Oniel ocupa menos de 100 MB con 25 líneas) y un cupo mensual de horas de cómputo, que la suspensión automática mantiene lejos.
+
+Para cambiar de base (otro proveedor, o una nueva de Neon): se crea la base vacía, se pega su cadena en `DATABASE_URL` en Render y se lanza un despliegue («Manual Deploy»). El arranque aplica las migraciones e importa los datos; `uv run oniel-data obs estado` dice cuándo ha terminado.
 
 ### Cargar o refrescar los datos
 
