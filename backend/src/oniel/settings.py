@@ -14,7 +14,8 @@ BACKEND_DIR = Path(__file__).resolve().parents[2]
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="ONIEL_", env_file=".env", extra="ignore")
 
-    # Render inyecta DATABASE_URL; en local usamos el contenedor de docker-compose.
+    # En producción DATABASE_URL es la cadena de conexión de la base (docs/despliegue.md); en local
+    # usamos el contenedor de docker-compose.
     database_url: str = Field(
         default="postgresql://oniel:oniel@localhost:5433/oniel",
         validation_alias=AliasChoices("ONIEL_DATABASE_URL", "DATABASE_URL"),

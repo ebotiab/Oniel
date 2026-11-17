@@ -17,7 +17,7 @@ Interfaz, documentación, comentarios del código, nombres y mensajes de las pru
 - [docs/diseno.md](docs/diseno.md): las decisiones de diseño (tokens, tipografía, composición, encuadre, principios).
 - [docs/datos.md](docs/datos.md): fuentes y licencias, cómo se verificó cada línea, modelo de datos y el procedimiento «Añadir otra línea».
 - [docs/simulacion.md](docs/simulacion.md): método de la simulación, recorrido alternativo, caso comprobado a mano y límites conocidos.
-- [docs/despliegue.md](docs/despliegue.md): Vercel (visor), Render (API y PostgreSQL), Logfire y base de datos local.
+- [docs/despliegue.md](docs/despliegue.md): Vercel (visor), Render (API), la base de datos PostgreSQL externa, Logfire y base de datos local.
 - [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): el orden de las tareas pendientes y los principios de arquitectura; el brief de cada tarea está en su incidencia de GitHub (`gh issue view <número>`). Cada sesión nueva coge la siguiente cuyas dependencias estén cerradas.
 - `.claude/settings.json`: desactiva en este proyecto los plugins de Claude Code que Oniel no usa (Supabase, Pinecone, n8n, Pydantic AI, Temporal), para que cada sesión cargue menos. `.claude/skills/`: los procedimientos que se repiten.
 - [docs/historial.md](docs/historial.md): el registro de lo ya fusionado, PR a PR. No se lee al empezar una tarea; se busca en él cuando hace falta.
