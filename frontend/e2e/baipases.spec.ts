@@ -157,7 +157,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await abrirPanel(page)
     await page.getByTestId('boton-simular').click()
     await expect(page.getByTestId('panel-simulacion')).toBeVisible()
-    await page.getByTestId('sim-fecha').fill('2026-11-13')
+    await page.getByTestId('sim-fecha').fill('2026-11-20')
     await page.getByTestId('sim-inicio').fill('08:00')
     await page.getByTestId('sim-fin').fill('10:00')
     await page.getByTestId('sim-calcular').click()
