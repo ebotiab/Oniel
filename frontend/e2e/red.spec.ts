@@ -36,7 +36,7 @@ test.describe('Elegir línea sin pestañas', () => {
     // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
     await expect(red.locator('.zona-cabecera')).toHaveText([
       /^›Galicia1 líneaOurense$/,
-      /^›Asturias, Cantabria y País Vasco1 líneaOviedo, Gijón$/,
+      /^›Asturias, Cantabria y País Vasco2 líneasOviedo, Gijón, Vitoria$/,
       /^›Castilla y León3 líneasValladolid, León, Burgos, Segovia, Palencia$/,
       /^›Cataluña1 líneaBarcelona, Lleida$/,
       /^›Comunidad Valenciana y Murcia4 líneasValencia, Alicante, Murcia, Elche$/,
@@ -50,7 +50,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirZonas(page)
     await expect(red.getByRole('region', { name: 'Galicia' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Olmedo – Ourense por Zamora328 km$/])
     await expect(red.getByRole('region', { name: 'Castilla y León' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Valladolid por Segovia179 km$/, /^Alta velocidad: Valladolid – León por Palencia166 km$/, /^Alta velocidad: Venta de Baños – Burgos87 km$/])
-    await expect(red.getByRole('region', { name: 'Asturias, Cantabria y País Vasco' }).locator('.fila-linea')).toHaveText([/^Línea convencional: León – Gijón por Oviedo133 km$/])
+    await expect(red.getByRole('region', { name: 'Asturias, Cantabria y País Vasco' }).locator('.fila-linea')).toHaveText([/^Línea convencional: León – Gijón por Oviedo133 km$/, /^Línea convencional: Burgos – Vitoria por Miranda de Ebro117 km$/])
     await expect(red.getByRole('region', { name: 'Cataluña' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Madrid – Barcelona por Zaragoza627 km$/])
     await expect(red.getByRole('region', { name: 'Comunidad Valenciana y Murcia' }).locator('.fila-linea')).toHaveText([
       /^Alta velocidad: Madrid – Valencia por Cuenca397 km$/,
@@ -152,7 +152,7 @@ test.describe('Elegir línea sin pestañas', () => {
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     const lista = page.getByTestId('lista-lineas')
     // con más de doce líneas la lista es un índice de zonas: un renglón por zona, ninguna línea a la vista
-    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Galicia1 línea/, /^›Asturias, Cantabria y País Vasco1 línea/, /^›Castilla y León3 líneas/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
+    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Galicia1 línea/, /^›Asturias, Cantabria y País Vasco2 líneas/, /^›Castilla y León3 líneas/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     // plegar no esconde un corte
     await expect(page.getByTestId('zona-andalucia').locator('.zona-detalle')).toContainText('3 líneas con un tramo sin circulación')
