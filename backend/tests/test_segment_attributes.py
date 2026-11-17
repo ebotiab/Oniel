@@ -263,13 +263,15 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 # la prolongación a Málaga se leyó en el mapa un día después que el resto, y las
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de Venta de Baños a
                 # Burgos, tres
-                # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres
+                # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres;
+                # la de Burgos a Vitoria, cinco
                 assert value.source_id == DR
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),
                     dt.date(2026, 11, 13),
                     dt.date(2026, 11, 14),
                     dt.date(2026, 11, 15),
+                    dt.date(2026, 11, 17),
                 )
 
 

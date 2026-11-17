@@ -51,6 +51,9 @@
 | `osm-instalaciones-leon-gijon` | Coordenadas de la bifurcación Pajares, de La Robla AV, del cambiador de Campomanes y de las estaciones de León a Gijón | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-15 |
 | `wikipedia-variante-de-pajares` | PK, longitud, ancho de cada vía y fecha de inauguración de la variante de Pajares; estado del tramo de León a La Robla (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-15 |
 | `wikipedia-linea-130` | PK de las estaciones de León a Gijón, vías, electrificación y velocidad de la línea 130 (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-15 |
+| `osm-relation-18347132` | Geometría de la línea 100 Madrid–Hendaya; Oniel usa de Burgos-Rosa Manzano a Vitoria-Gasteiz | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-17 |
+| `osm-instalaciones-burgos-vitoria` | Coordenadas de las estaciones de Briviesca a Vitoria | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-17 |
+| `wikipedia-linea-100` | PK de las estaciones de Briviesca a Vitoria, vías, electrificación, bloqueo y velocidad de la línea 100 (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-17 |
 | `osm-relation-4777980` | Geometría de la línea de alta velocidad Olmedo–Zamora–Ourense, de la bifurcación Medina a Zamora y de la bifurcación Valorio a Taboadela (la relación sigue hasta A Coruña y no se usa más allá); dónde hay una vía y dónde dos; coordenadas de sus estaciones | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-14 |
 | `osm-relation-11109438` | Vías de la línea convencional Zamora–A Coruña por las que la alta velocidad sale de Zamora y llega a Ourense desde Taboadela; su ancho mixto | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-14 |
 | `wikipedia-lav-olmedo-zamora-galicia` | PK, instalaciones, trechos de vía única, velocidades y fechas de apertura de la línea de alta velocidad Olmedo–Zamora–Ourense (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-14 |
@@ -67,7 +70,7 @@
 | `adif-av-nota-baipas-merida-2024-12` | Puesta en servicio, el 3 de diciembre de 2024, de la primera fase del baipás de Mérida, que une Cáceres y Badajoz sin pasar por Mérida | Adif Alta Velocidad | Consulta pública | 2026-11-13 |
 | `adif-mapa-red` | Verificación del trazado, códigos de estación y puntos kilométricos de la línea 010 | Adif / Adif Alta Velocidad | Consulta pública | 2026-11-08 |
 | `adif-obras-autopista-ferroviaria` | Corte de la línea convencional al sur de Venta de Cárdenas por obras (información de Adif en prensa) | Adif; Europa Press / Demócrata | Consulta pública | 2026-11-08 |
-| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio; el 12 de noviembre, que no había ninguna anunciada en la línea de Valencia, y el 13, tampoco en la de Albacete a Alicante, en la de Monforte del Cid a Murcia ni en la de Madrid a Valladolid, y el 14, tampoco en la de Olmedo a Ourense, y el 15, tampoco en la de Venta de Baños a Burgos ni en la de León a Gijón | Adif | Consulta pública | 2026-11-15 |
+| `adif-estado-de-la-red` | Aviso de la interrupción de la alta velocidad Madrid–Andalucía y tramos que siguen en servicio; el 12 de noviembre, que no había ninguna anunciada en la línea de Valencia, y el 13, tampoco en la de Albacete a Alicante, en la de Monforte del Cid a Murcia ni en la de Madrid a Valladolid, y el 14, tampoco en la de Olmedo a Ourense, y el 15, tampoco en la de Venta de Baños a Burgos ni en la de León a Gijón, y el 17, tampoco en la de Burgos a Vitoria | Adif | Consulta pública | 2026-11-17 |
 | `adif-aviso-obras-autopista-ferroviaria` | Aviso de la interrupción por obras entre Córdoba y Santa Cruz de Mudela | Adif | Consulta pública | 2026-11-13 |
 | `adif-salidas-y-llegadas` | Paneles de salidas y llegadas de cinco estaciones: hasta dónde llegan los trenes a cada lado de una interrupción | Adif | Consulta pública | 2026-11-13 |
 | `renfe-nota-md-jaen-madrid-2026-09` | Inicio de las obras el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel | Renfe | Consulta pública | 2026-11-10 |
@@ -87,6 +90,7 @@
 | `mitma-nota-baipas-cordoba-jaen-2025-03`, `mitma-nota-baipas-cordoba-jaen-2026-01` | Anuncio del baipás entre la alta velocidad y la línea de Córdoba a Jaén y comienzo de su estudio informativo | Ministerio de Transportes y Movilidad Sostenible | Consulta pública | 2026-11-12 |
 | `moncloa-nota-variante-de-loja-2025-02` | Estado de los tramos de la Variante de Loja en febrero de 2025 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-12 |
 | `moncloa-nota-corredor-mediterraneo-2026-04` | Obras de la segunda vía de ancho mixto entre València y Castelló y previsión de ponerla en servicio en 2026 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-13 |
+| `moncloa-nota-y-vasca-2026-03` | Estado de las obras de la «Y» vasca y de la alta velocidad Burgos–Vitoria el 6 de marzo de 2026 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-17 |
 | `europa-press-baipas-montoro-2025-03` | Municipios por los que pasaría el baipás, según la prensa del día del anuncio | Europa Press; Forbes España | © de la agencia; se cita el dato | 2026-11-12 |
 | `osm-nominatim-lugares` | Situación de los municipios y lugares por los que pasan los esbozos de los proyectos | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
@@ -1167,6 +1171,45 @@ De los 141, 108 ya estaban en la línea de Valladolid a León. Los otros 33 son 
 **Interrupciones.** El 15 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en esta línea ni en la vía del puerto (`raw/interrupciones/consultas_2026-11-15_leon_gijon.json`). El único aviso de Asturias es de la línea de ancho métrico de Pola de Siero a Ribadesella.
 
 **Lo que no se ha registrado.** Wikipedia da por «en obras» el tramo de León a La Robla, para ponerle tercer carril y 25 kV, y dice que los estudios de un trazado nuevo de Pola de Lena a Oviedo y Gijón se archivaron en 2018. No se ha buscado todavía el anuncio oficial de esas obras ni una nota que diga en qué estado están, así que no figuran como proyecto: entrarán cuando se localice la fuente, y con ella se podrá decir de forma firme dónde cambian de ancho los trenes.
+
+## Cómo se construyó la línea Burgos–Miranda de Ebro–Vitoria
+
+Une Burgos-Rosa Manzano, donde acaba la alta velocidad de Venta de Baños, con Vitoria-Gasteiz por Miranda de Ebro. Es un trecho de la línea 100 de Adif, de Madrid a Hendaya, y el camino de todos los trenes de Madrid al País Vasco mientras no esté la alta velocidad de Burgos a Vitoria.
+
+**Qué se carga.** De Burgos-Rosa Manzano a Vitoria-Gasteiz: 117,3 km, de vía doble, ancho ibérico y 3 kV. Es una sola línea: por toda ella circula solo Renfe. El alcance se decidió al tomar la tarea (#177): lo que pide su «Hecha cuando», Vitoria en el mapa, y una línea por PR. Quedan a trazos tres ramas. En Miranda de Ebro, la de Bilbao por Orduña y Llodio (#219) y la de Haro y Logroño (#213), las dos de la línea 700, Casetas – Bilbao. En Vitoria, la continuación de la línea 100 hacia Altsasu, de donde salen la de San Sebastián e Irún (#220) y la de Pamplona (#213). La conexión a trazos `conv-burgos-miranda-vitoria` de la línea de Venta de Baños a Burgos se retira.
+
+**Burgos-Rosa Manzano es el mismo nodo.** Lo define la línea de Venta de Baños a Burgos, que va antes en `line_ids`: esta lo incorpora con `shared: true` y sus mismas coordenadas. Miranda de Ebro y Vitoria pasan a llevar `via` hacia esta línea en las de Burgos, León y Madrid, un trecho más al final del que ya tenían. Las demás paradas del norte (Bilbao, San Sebastián, Irún, Logroño) siguen como salidas sin camino cargado: un `via` exige que la parada sea un nodo de la última línea que nombra.
+
+**Geometría.** Una parte de la relación `18347132` («Línea Madrid-Hendaya», `ref=100`), descargada por la API de OpenStreetMap porque overpass-api.de no respondía. Entre Burgos y Vitoria es de una pieza: se traza el camino más corto por el grafo de vías desde el nodo de la estación de Burgos, que queda a 16 m de la vía, hasta el de Vitoria. Las coordenadas de las demás estaciones son las de sus nodos de Adif en OSM (`raw/osm/instalaciones_burgos_vitoria_2026-11-17.json`), pedidos al servidor de Overpass `overpass.private.coffee`, con base del 1 de junio de 2026; ninguna queda a más de 17 m del trazado.
+
+Verificación:
+
+1. **Puntos kilométricos.** Los de los artículos de Wikipedia de cada estación, en la numeración de la línea 100 desde Madrid: Briviesca 416,885, Pancorbo 439,575, Miranda de Ebro 458,913, Manzanos 468,482, La Puebla de Arganzón 472,683, Nanclares 479,211 y Vitoria 492,292. Esa numeración es la anterior a la variante de Burgos, de 2008: con el 373,40 que el esquema del artículo da a Burgos-Rosa Manzano, todas las estaciones quedan de 1,4 a 1,6 km por delante de su kilómetro. Es un desfase casi constante, y por eso la línea lleva como origen el 374,9 y Burgos no guarda punto kilométrico: así cada estación queda a menos de 0,15 km del suyo (Briviesca, 0,12 por detrás; Vitoria, 0,09 por delante).
+2. **Número de vías.** Vía doble en toda la línea, como dicen el artículo y la etiqueta `passenger_lines` de las vías de OSM. La única excepción son los primeros 0,66 km desde la estación de Burgos, de una sola vía en OSM: es el final del trecho de vía única que el artículo da de Quintanilleja al cambiador de ancho de Burgos. No hay nodo en el cambiador, y un tramo tan corto no se vería en el esquema: se declara la vía doble desde Burgos.
+3. **Velocidad.** La de las vías de OSM, que la traen todas: 200 km/h a la salida de Burgos, por la variante, y 160 hasta Briviesca; baja a 105 y 95 por el desfiladero de Pancorbo y a 85 a la llegada a Miranda, y vuelve a 150 entre La Puebla de Arganzón y Vitoria. El artículo da 160 km/h en la mayor parte de la línea, 200 de diseño en la variante de Burgos y 155 entre Miranda y Vitoria.
+4. **Electrificación y ancho.** 3 kV de corriente continua y 1.668 mm en toda la línea, según el artículo y las etiquetas de las vías.
+
+**Nodos.** Ocho estaciones, todas con parada en el horario de Renfe. Burgos, Miranda de Ebro y Vitoria son principales; las otras cinco, secundarias.
+
+**Zona.** «Asturias, Cantabria y País Vasco», como estaba previsto, con `sort_order: 29`.
+
+**Operadores.** Solo Renfe. Ouigo no llega a Burgos, e Iryo no se declara, por lo mismo que en las líneas de Madrid, León y Burgos.
+
+**Trenes.** El filtro pide que el viaje pare en dos estaciones de la línea. Todos los trenes que la recorren paran por lo menos en dos de Burgos, Miranda de Ebro y Vitoria, y ninguno pasa de un lado a otro de ella sin parar: se comprobó con los tres ficheros de Renfe. Quedan fuera los que solo tocan una estación y no recorren ningún tramo: los AVE de Burgos a Madrid, Valencia y Murcia, los de Bilbao a Miranda de Ebro, Logroño, Zaragoza y Barcelona, y los de Vitoria a Pamplona, Zaragoza y San Sebastián. Con el fichero de las pruebas son 182 viajes (54 Intercity, 45 Regional Exprés, 38 Alvia, 33 MD y 12 Regional). 105 ya contaban en otras líneas cargadas: los Alvia, Intercity y MD que llegan a Burgos por la alta velocidad. Los 77 nuevos son los que no tocan ninguna otra: los regionales y Regional Exprés de Miranda de Ebro a Vitoria, Altsasu, Pamplona, Castejón y San Sebastián; los de Madrid-Príncipe Pío a Vitoria e Irún, que llegan a Burgos por la línea convencional, y los Intercity de Salamanca a Zaragoza por Pamplona, que la alta velocidad de Burgos deja fuera porque paran en Zaragoza. El total de Renfe pasa de 3.288 a 3.365 viajes. No hacen falta reglas de recorrido.
+
+**Dos caminos a Burgos que el horario no separa.** Los Alvia llegan a Burgos por la alta velocidad y los trenes de Madrid-Príncipe Pío, por la línea convencional de Venta de Baños, que no está cargada. Las paradas de Valladolid, Segovia y Madrid-Chamartín llevan `via` por la alta velocidad; las de la línea convencional (Venta de Baños, Villaquirán, Ávila, Madrid-Príncipe Pío), no. Palencia y León tampoco: los Alvia de Galicia llegan a Burgos por el ramal de Soto de Cerrato, que no está cargado. Como todos los trenes paran en Burgos, esto no cambia los recuentos de esta línea.
+
+**Trenes que siguen fuera de la red cargada.** Desde Miranda de Ebro, los de Bilbao y Logroño; desde Vitoria, los de Altsasu, Pamplona, Zaragoza, Barcelona, San Sebastián e Irún. Oniel cuenta su paso por esta línea y nombra sus destinos en la ficha de cada estación.
+
+**Lo que enseña el comparador.** De Madrid-Chamartín a Vitoria-Gasteiz, 420,5 km y 1 h 56 min estimados sin paradas, por las líneas de Valladolid, León y Burgos; a Miranda de Ebro, 387,2 km y 1 h 40 min. De Burgos a Vitoria, 117,3 km.
+
+**Tramos sin otro camino.** Los siete: a Vitoria solo llega ella. Con ellos son 126 de los 241 tramos con trenes. El día de referencia (viernes 20 de noviembre de 2026) llevan 29 trenes de Burgos a Miranda de Ebro y 31 de Miranda a Vitoria.
+
+**Señalización.** El mapa 4 dibuja a lo largo de la línea el trazo marrón del bloqueo con el rótulo «BAB ctc», junto a Burgos y entre Miranda y Vitoria, y los círculos de «Tren tierra y ASFA conv.»: `asfa`, `bab` y `ctc` en los siete tramos. El rótulo «BAU ctc» que hay junto a Burgos es del trecho de vía única al sur de la estación y de la bifurcación Rubena, fuera de la línea. Coincide con Wikipedia (bloqueo automático banalizado con control de tráfico centralizado).
+
+**Interrupciones.** El 17 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en esta línea (`raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json`). El aviso de obras entre Miranda de Ebro y Logroño, algunos fines de semana hasta mediados de diciembre, es de la rama de Logroño, que queda a trazos.
+
+**Proyectos.** La alta velocidad de Burgos a Vitoria sigue en la capa de proyectos como `licitado`, con un hito nuevo, y entra la «Y» vasca, `en_obras` (véase «Proyectos registrados»).
 
 ## Límites y avisos
 

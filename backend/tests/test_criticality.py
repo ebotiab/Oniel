@@ -320,6 +320,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_OURENSE,
         LAV_BURGOS,
         LEON_GIJON,
+        "burgos-miranda-vitoria",
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -335,10 +336,11 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     # la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
     # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
-    # 4 siguientes, la de Venta de Baños a Burgos, y los 11 del final, la de León a Gijón
+    # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón, y los 7 del final,
+    # la de Burgos a Vitoria
     assert (
         len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)

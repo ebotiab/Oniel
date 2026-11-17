@@ -52,6 +52,7 @@ LAV_LEON = "lav-valladolid-leon"
 LAV_OURENSE = "lav-olmedo-ourense"
 LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
+BURGOS_VITORIA = "burgos-miranda-vitoria"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
 #: de Plasencia a Badajoz, el ramal de Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -237,6 +238,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # suben el puerto de Pajares por la vía antigua, y 8 Media Distancia de León a Gijón. Los
     # otros 108 de sus 141 viajes ya estaban en la de Valladolid a León
     trips += 33
+    # Con la de Burgos a Vitoria entran 77: los regionales de Miranda de Ebro a Vitoria, Altsasu,
+    # Pamplona y San Sebastián, los de Madrid-Príncipe Pío a Vitoria e Irún, que llegan a Burgos
+    # por la línea convencional, y los Intercity de Salamanca a Zaragoza por Pamplona. Los otros
+    # 105 de sus 182 viajes ya estaban en las líneas de alta velocidad
+    trips += 77
+    assert gtfs1["lines"][BURGOS_VITORIA]["trips"] == 182
+    assert gtfs1["lines"][BURGOS_VITORIA]["route_overrides"] == {}
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
     # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
     # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
@@ -454,6 +462,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 13
         + 4
         + 11  # la de León a Gijón
+        + 7  # la de Burgos a Vitoria
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -597,6 +606,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 13
         + 4
         + 11  # la de León a Gijón
+        + 7  # la de Burgos a Vitoria
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -686,6 +696,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_OURENSE,
         LAV_BURGOS,
         LEON_GIJON,
+        BURGOS_VITORIA,
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -765,6 +776,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 13
         + 4
         + 11  # la de León a Gijón
+        + 7  # la de Burgos a Vitoria
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -949,12 +961,15 @@ async def test_projects_are_served_with_their_status_milestones_and_sketch(
     by_id = {p["id"]: p for p in projects}
     # cinco, los dos de la línea de Valencia a Camp de Tarragona y los dos de la alta velocidad
     # de Madrid a Extremadura: de Madrid a Oropesa, en estudio, y de Talayuela a Plasencia, en
-    # obras; y la alta velocidad de Burgos a Vitoria, licitada
-    assert len(by_id) == 5 + 2 + 2 + 1
+    # obras; la alta velocidad de Burgos a Vitoria, licitada, y la «Y» vasca, en obras
+    assert len(by_id) == 5 + 2 + 2 + 1 + 1
     burgos_vitoria = by_id["proyecto-lav-burgos-vitoria"]
     assert burgos_vitoria["status"] == "licitado"
     assert burgos_vitoria["geometry"]["coordinates"][0] == [-3.6663219, 42.3711651]
-    assert len(burgos_vitoria["milestones"]) == 8
+    assert len(burgos_vitoria["milestones"]) == 9
+    y_vasca = by_id["proyecto-y-vasca"]
+    assert y_vasca["status"] == "en_obras" and y_vasca["geometry"]["type"] == "MultiLineString"
+    assert y_vasca["segment_ids"] == [] and y_vasca["start_date"] is None
     study, works = by_id["proyecto-lav-madrid-oropesa"], by_id["proyecto-lav-talayuela-plasencia"]
     assert (study["status"], works["status"]) == ("en_estudio", "en_obras")
     for project in (study, works):
@@ -1227,8 +1242,33 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y la de Venta de Baños a Burgos, 1: Burgos-Rosa Manzano
     # y la de León a Gijón, 8: Pola de Lena, Ujo, Mieres-Puente, Llamaquique, Oviedo, Villabona
     # de Asturias, Calzada de Asturias y Gijón-Sanz Crespo
+    # y la de Burgos a Vitoria, 7: Briviesca, Pancorbo, Miranda de Ebro, Manzanos, La Puebla de
+    # Arganzón, Nanclares-Langraiz y Vitoria-Gasteiz
     assert cov["station_count"] == (
-        6 + 22 + 2 + 2 + 5 + 7 + 4 + 6 + 1 + 3 + 2 + 11 + 7 + 1 + 3 + 1 + 5 + 32 + 2 + 2 + 5 + 1 + 8
+        6
+        + 22
+        + 2
+        + 2
+        + 5
+        + 7
+        + 4
+        + 6
+        + 1
+        + 3
+        + 2
+        + 11
+        + 7
+        + 1
+        + 3
+        + 1
+        + 5
+        + 32
+        + 2
+        + 2
+        + 5
+        + 1
+        + 8
+        + 7
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
@@ -1334,6 +1374,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_OURENSE,
         LAV_BURGOS,
         LEON_GIJON,
+        BURGOS_VITORIA,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -2097,6 +2138,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         LAV_OURENSE,
         LAV_BURGOS,
         LEON_GIJON,
+        BURGOS_VITORIA,
     ]
     assert out["missing_operator_ids"] == ["iryo"]
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
@@ -2193,6 +2235,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         LAV_OURENSE,
         LAV_BURGOS,
         LEON_GIJON,
+        BURGOS_VITORIA,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

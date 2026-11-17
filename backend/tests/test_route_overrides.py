@@ -13,6 +13,7 @@ import pytest
 from conftest import (
     ALBACETE_SPEC,
     BCN_SPEC,
+    BURGOS_VITORIA_SPEC,
     BYPASS_LLEIDA_SPEC,
     BYPASS_ZARAGOZA_SPEC,
     CONV_SPEC,
@@ -682,6 +683,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         LAV_BURGOS_SPEC.name: {"palencia-burgos-miranda": 6},
         # la de León a Gijón no tiene reglas: ningún tren la cruza sin parar en ella
         LEON_GIJON_SPEC.name: {},
+        # ni la de Burgos a Vitoria: todos sus trenes paran en dos de sus estaciones
+        BURGOS_VITORIA_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin
