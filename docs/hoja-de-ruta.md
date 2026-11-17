@@ -56,7 +56,27 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 **Extremadura.** Para ver qué parte del camino de Madrid a Badajoz es nueva y cuál no. Hecha (#179): la línea convencional Madrid – Talavera de la Reina – Plasencia, la de alta velocidad Plasencia – Cáceres – Badajoz, la convencional Aljucén – Mérida y la línea antigua Monfragüe – Cañaveral – Cáceres. Quedan a trazos, sin incidencia abierta, las líneas de Cáceres a Valencia de Alcántara, de Badajoz a Elvas, de Mérida a Sevilla por Zafra y de Mérida a Ciudad Real.
 
-Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: conviene que estas líneas entren de una en una, o como mucho de dos en dos en zonas distintas del mapa.
+**Completar la alta velocidad.** Lo que le falta a la red de alta velocidad en servicio, después del norte:
+
+- [#204](https://github.com/ebotiab/Oniel/issues/204) Datos: alta velocidad Barcelona – Girona – Figueres y frontera francesa. No depende de nada.
+- [#205](https://github.com/ebotiab/Oniel/issues/205) Datos: ramales cortos de alta velocidad a Toledo y a Huesca. No depende de nada.
+
+**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías:
+
+- [#206](https://github.com/ebotiab/Oniel/issues/206) Datos: línea Sevilla – Cádiz.
+- [#209](https://github.com/ebotiab/Oniel/issues/209) Datos: línea Tarragona – Barcelona por la costa. Une el Corredor Mediterráneo con Barcelona.
+- [#208](https://github.com/ebotiab/Oniel/issues/208) Datos: línea València – Xàtiva – La Encina – Alicante.
+- [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Mejor después de #204, para compartir sus nodos.
+- [#211](https://github.com/ebotiab/Oniel/issues/211) Datos: línea convencional Madrid – Ávila – Medina del Campo – Valladolid.
+- [#212](https://github.com/ebotiab/Oniel/issues/212) Datos: línea Palencia – Santander.
+- [#213](https://github.com/ebotiab/Oniel/issues/213) Datos: línea Zaragoza – Castejón – Pamplona y Logroño.
+- [#207](https://github.com/ebotiab/Oniel/issues/207) Datos: línea Sevilla – Huelva.
+
+**Cercanías.** Lo que más gente usa y lo último en entrar, porque es otro tipo de red y antes hay que decidir cómo se ve:
+
+- [#214](https://github.com/ebotiab/Oniel/issues/214) Diseño: cómo se enseña un núcleo de Cercanías sin saturar el mapa, con Madrid como piloto. De ella saldrán las incidencias de datos, un núcleo por incidencia.
+
+Las PR de datos se pisan en la instantánea y en los recuentos de las pruebas: estas líneas entran de una en una.
 
 ## Pendientes menores
 
