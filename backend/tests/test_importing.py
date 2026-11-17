@@ -1,11 +1,18 @@
-"""Huella de la importación: `import all --if-changed` se salta el trabajo si ni los datos ni el código cambiaron."""
+"""Huella de la importación: `import all --if-changed` se salta el trabajo si ni los datos ni el código cambiaron.
+
+Y lo que tarda: escribe en la base por lotes y el arranque de producción no exporta la instantánea.
+"""
 
 from __future__ import annotations
 
 import datetime as dt
+from collections import Counter
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
+import asyncpg
 import pytest
 from conftest import (
     DATA_DIR,
@@ -18,6 +25,7 @@ from conftest import (
     requires_db,
 )
 from logfire.testing import CaptureLogfire
+from typer.testing import CliRunner
 
 from oniel.importing import import_fingerprint, import_summary, run_import_all
 
@@ -60,9 +68,33 @@ def test_file_fingerprint_ignores_bytecode(tmp_path: Path) -> None:
     assert import_fingerprint(data, src, env={}) == before
 
 
+#: Lo que cuenta como una ida y vuelta a la base: cada llamada a uno de estos métodos de asyncpg.
+_ROUND_TRIPS = ("execute", "executemany", "fetch", "fetchval", "fetchrow", "copy_records_to_table")
+
+
+def _count_round_trips(monkeypatch: pytest.MonkeyPatch) -> Counter[str]:
+    """Cuenta, por método, las llamadas a la base que haga cualquier conexión desde ahora."""
+    counts: Counter[str] = Counter()
+
+    def counting(name: str) -> Any:
+        original = getattr(asyncpg.Connection, name)
+
+        async def call(self: asyncpg.Connection, *args: Any, **kwargs: Any) -> Any:
+            counts[name] += 1
+            return await original(self, *args, **kwargs)
+
+        return call
+
+    for name in _ROUND_TRIPS:
+        monkeypatch.setattr(asyncpg.Connection, name, counting(name))
+    return counts
+
+
 @requires_db
 @pytest.mark.asyncio
-async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) -> None:
+async def test_import_all_skips_when_nothing_changed(
+    capfire: CaptureLogfire, monkeypatch: pytest.MonkeyPatch
+) -> None:
     from oniel.db.migrate import drop_everything
     from oniel.db.pool import connect
     from oniel.network.spec import FeedSpec
@@ -104,9 +136,23 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
         assert second["fingerprint"] == first["fingerprint"]
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 1
         # sin --if-changed siempre se importa
+        round_trips = _count_round_trips(monkeypatch)
         third = await run(if_changed=False)
+        monkeypatch.undo()
         assert third["skipped"] is False
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 2
+        # Las filas van por lotes: una copia por tabla de servicios y una sentencia agrupada por
+        # tabla de la red. Con una sentencia por tren, por nodo y por fuente eran unas 20.000 idas
+        # y vueltas para lo mismo; agrupadas son unas 600 con 25 líneas (unas 20 por línea).
+        assert round_trips["copy_records_to_table"] == 4
+        assert sum(round_trips.values()) < 40 * len(SPECS)
+        # y guardan lo mismo: los trenes, con sus días, sus paradas y sus pasos por tramo
+        trips = first["gtfs"][0]["trips_imported"]
+        assert await conn.fetchval("SELECT count(*) FROM services") == trips
+        for table in ("service_dates", "service_stops", "service_segment_passes"):
+            assert (
+                await conn.fetchval(f"SELECT count(DISTINCT service_id) FROM {table}") == trips
+            ), table
 
     # un tramo por importación, con su resultado y sus recuentos; las consultas cuelgan de él
     runs = [
@@ -164,3 +210,37 @@ async def test_failed_import_leaves_a_failed_span(
     failed = spans[1]
     assert failed["attributes"]["outcome"] == "failed"
     assert failed["events"][0]["attributes"]["exception.type"] == "RuntimeError"
+
+
+@pytest.mark.parametrize(
+    ("args", "exports"), [([], True), (["--no-snapshot"], False), (["--if-changed"], True)]
+)
+def test_import_all_exports_the_snapshot_unless_told_not_to(
+    monkeypatch: pytest.MonkeyPatch, args: list[str], exports: bool
+) -> None:
+    import oniel.cli.main as cli
+    import oniel.importing as importing
+
+    seen: dict[str, Any] = {}
+
+    @asynccontextmanager
+    async def no_database(dsn: str) -> AsyncIterator[None]:
+        yield None
+
+    async def fake_import(conn: Any, **kwargs: Any) -> dict[str, Any]:
+        seen.update(kwargs)
+        return {"skipped": True}
+
+    monkeypatch.setattr(cli, "connect", no_database)
+    monkeypatch.setattr(importing, "run_import_all", fake_import)
+    result = CliRunner().invoke(cli.app, ["import", "all", *args])
+    assert result.exit_code == 0, result.output
+    assert seen["snapshot_dir"] == (cli.SNAPSHOT_DEFAULT if exports else None)
+    assert seen["if_changed"] is ("--if-changed" in args)
+
+
+def test_production_start_does_not_export_the_snapshot() -> None:
+    # La instantánea la sirve Vercel desde el repositorio; en el contenedor de la API no la lee
+    # nadie, y exportarla era un tercio de la importación al arrancar (docs/despliegue.md).
+    entrypoint = (DATA_DIR.parent / "docker-entrypoint.sh").read_text(encoding="utf-8")
+    assert "oniel-data import all --if-changed --no-snapshot\n" in entrypoint
