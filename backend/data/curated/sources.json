@@ -19,6 +19,12 @@
       "source_id": "renfe-gtfs-av-ld-md",
       "operator_id": "renfe",
       "retrieved_on": "2026-11-12"
+    },
+    {
+      "file": "raw/renfe/google_transit_av_ld_md_2026-11-17.zip",
+      "source_id": "renfe-gtfs-av-ld-md",
+      "operator_id": "renfe",
+      "retrieved_on": "2026-11-17"
     }
   ],
   "sources": [
@@ -29,10 +35,10 @@
       "url": "https://data.renfe.com/dataset/horarios-de-alta-velocidad-larga-distancia-y-media-distancia",
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_on": "2026-11-12",
-      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant), larga distancia (Alvia, Intercity, Euromed) y media distancia (MD, Regional Exprés, Regional, Proximidad) de toda España; Oniel importa los que recorren las líneas cargadas. Validez del fichero del 11 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
-      "notes": "Fichero google_transit.zip publicado el 12 de noviembre de 2026. Son horarios planificados: no reflejan las interrupciones registradas en interrupciones.json (la de la alta velocidad Madrid–Andalucía, desde el 28 de octubre de 2026, y la de la línea convencional por obras, desde el 6 de septiembre de 2026) ni otras alteraciones del servicio.",
-      "file": "raw/renfe/google_transit_av_ld_md_2026-11-12.zip"
+      "retrieved_on": "2026-11-17",
+      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant), larga distancia (Alvia, Intercity, Euromed) y media distancia (MD, Regional Exprés, Regional, Proximidad) de toda España; Oniel importa los que recorren las líneas cargadas. Validez del fichero del 16 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
+      "notes": "Fichero google_transit.zip publicado el 17 de noviembre de 2026. Son horarios planificados: no reflejan las interrupciones registradas en interrupciones.json (la de la alta velocidad Madrid–Andalucía, desde el 28 de octubre de 2026, y la de la línea convencional por obras, desde el 6 de septiembre de 2026) ni otras alteraciones del servicio.",
+      "file": "raw/renfe/google_transit_av_ld_md_2026-11-17.zip"
     },
     {
       "id": "ouigo-gtfs-nap",
