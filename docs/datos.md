@@ -4,7 +4,7 @@
 
 | Id | Qué aporta | Editor | Licencia | Fecha de consulta |
 |---|---|---|---|---|
-| `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-12 |
+| `renfe-gtfs-av-ld-md` | Horarios de alta velocidad, larga distancia y media distancia de Renfe (GTFS) | Renfe Viajeros, data.renfe.com | CC BY 4.0 | 2026-11-17 |
 | `ouigo-gtfs-nap` | Horarios de alta velocidad de Ouigo España (GTFS) | OUIGO España, en el Punto de Acceso Nacional del Ministerio de Transportes y Movilidad Sostenible | Licencia de datos abiertos del Ministerio (nap.transportes.gob.es/licencia-datos) | 2026-11-12 |
 | `iryo-web` | Que Iryo opera en la LAV Madrid–Sevilla, hasta Málaga en la de Córdoba a Málaga, en la de Madrid a Zaragoza y Barcelona, en la de Madrid a Valencia por Cuenca y en la de Albacete a Alicante, y no publica sus horarios en un formato abierto | Iryo; Punto de Acceso Nacional | Consulta pública; © Iryo | 2026-11-12 |
 | `osm-relation-1254828` | Geometría de la LAV Madrid–Sevilla (vías con `ref=010`, operador Adif) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-08 |
@@ -175,34 +175,38 @@ En «compartidos» se cuentan los nodos que define otra línea. Los dos baipases
 - Un viaje es aquí un tren con sus días: el fichero de Renfe trae algunos trenes en varios viajes el mismo día y Oniel los junta al leerlo (véase «Trenes repetidos en el horario de Renfe»). Las cifras de esta tabla son las del fichero del 8 de noviembre de 2026, ya juntado.
 - De los 364 viajes de Renfe de la línea de Sevilla, 47 la recorren sin parar en Madrid: esos 31, los 8 AVE de Barcelona a Sevilla, que están también en la línea de Barcelona, y 8 que no pasan por ninguna otra línea cargada (4 Avant de Sevilla a Córdoba y 4 AVE de Valencia a Sevilla).
 
-El día de referencia es el viernes 13 de noviembre de 2026. La regla toma el laborable con más servicios de los ficheros vigentes de Renfe y de Ouigo (véase «Conjuntos de datos»), y la diferencia entre el jueves 12 y el viernes 13 es de muy pocos trenes: con nueve líneas, sin la de Valencia, ganaba el jueves por uno, y con la de Valencia vuelve a ganar el viernes; ni la de Albacete a Alicante, ni la de Monforte del Cid a Murcia, ni la de Madrid a Valladolid, ni las cuatro de Extremadura, ni la de Valladolid a León, ni la de Olmedo a Ourense, ni la de Venta de Baños a Burgos, ni la de León a Gijón lo han movido. Cada línea nueva puede moverlo, y con él los recuentos por día de todas. Ese día cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
+El día de referencia es el viernes 20 de noviembre de 2026, desde que está cargado el fichero de Renfe del 17 de noviembre, que empieza el día 16; hasta entonces fue el viernes 13 (véase «El fichero del 17 de noviembre de 2026», en «Refresco de los horarios»). La regla toma el laborable con más servicios de los ficheros vigentes de Renfe y de Ouigo (véase «Conjuntos de datos»), y la diferencia entre el jueves 12 y el viernes 13 es de muy pocos trenes: con nueve líneas, sin la de Valencia, ganaba el jueves por uno, y con la de Valencia vuelve a ganar el viernes; ni la de Albacete a Alicante, ni la de Monforte del Cid a Murcia, ni la de Madrid a Valladolid, ni las cuatro de Extremadura, ni la de Valladolid a León, ni la de Olmedo a Ourense, ni la de Venta de Baños a Burgos, ni la de León a Gijón lo movieron. Cada línea nueva puede moverlo, y cada fichero de horarios nuevo también, y con él los recuentos por día de todas. El 20 de noviembre cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
 
 | Tramos de la LAV Madrid – Sevilla | Renfe | Ouigo | Total |
 |---|---|---|---|
-| Madrid-Puerta de Atocha – bifurcación Los Gavilanes | 74 | 12 | 86 |
-| Bifurcación Los Gavilanes – Torrejón de Velasco – bifurcación Yeles (2 tramos) | 82 | 12 | 94 |
-| Bifurcación Yeles – Urda – Ciudad Real (3 tramos) | 84 | 12 | 96 |
-| Ciudad Real – Córdoba (4 tramos) | 106 | 12 | 118 |
-| Córdoba – bifurcación de Málaga | 128 | 12 | 140 |
-| Bifurcación de Málaga – Majarabique | 77 | 6 | 83 |
-| Majarabique – Sevilla-Santa Justa | 75 | 6 | 81 |
+| Madrid-Puerta de Atocha – bifurcación Los Gavilanes | 76 | 12 | 88 |
+| Bifurcación Los Gavilanes – Torrejón de Velasco – bifurcación Yeles (2 tramos) | 84 | 12 | 96 |
+| Bifurcación Yeles – Urda – Ciudad Real (3 tramos) | 86 | 12 | 98 |
+| Ciudad Real – Córdoba (4 tramos) | 90 | 12 | 102 |
+| Córdoba – bifurcación de Málaga | 112 | 12 | 124 |
+| Bifurcación de Málaga – Majarabique | 69 | 6 | 75 |
+| Majarabique – Sevilla-Santa Justa | 67 | 6 | 73 |
 
-En Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid y en Yeles, los 2 de Valencia; desde Córdoba cuentan además los Avant de Sevilla.
+En Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid y en Yeles, los 2 de Valencia; desde Córdoba cuentan además los Avant de Sevilla. Entre Ciudad Real y Córdoba hay 4 trenes más que entre Madrid y Ciudad Real: los Intercity Madrid-Atocha Cercanías – Andalucía que el fichero mantiene hasta el 22 de noviembre, que llegan a Ciudad Real por la línea de Manzanares.
 
-En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 71 trenes de Renfe y 6 de Ouigo, 77 en total; el de Antequera-Santa Ana a la bifurcación Gobantes, 51 y 6, porque allí se han ido los de Granada y Algeciras, y los tres últimos, hasta Málaga, 57 y 6, con los 6 Avant de Málaga a Granada. En la de Granada todos son de Renfe: 18 entre Antequera-Santa Ana y la bifurcación Bobadilla y 24 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
+En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 63 trenes de Renfe y 6 de Ouigo, 69 en total; el de Antequera-Santa Ana a la bifurcación Gobantes, 43 y 6, porque allí se han ido los de Granada y Algeciras, y los tres últimos, hasta Málaga, 49 y 6, con los 6 Avant de Málaga a Granada. En la de Granada todos son de Renfe: 18 entre Antequera-Santa Ana y la bifurcación Bobadilla y 24 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
 
-En la de Barcelona, los veinte tramos llevan 11 trenes de Ouigo; los de Renfe cambian donde entran o salen trenes:
+En la de Barcelona los trenes cambian donde entran o salen, y los que no paran en Zaragoza o en Lleida van por su baipás (23 por el de Zaragoza, 19 de Renfe y 4 de Ouigo; 43 por el de Lleida, 32 y 11):
 
 | Tramos de la LAV Madrid – Barcelona | Renfe | Ouigo | Total |
 |---|---|---|---|
-| Madrid-Puerta de Atocha – bifurcación de Vallecas | 63 | 11 | 74 |
-| Bifurcación de Vallecas – Calatayud (4 tramos) | 71 | 11 | 82 |
-| Calatayud – cambiador de Plasencia de Jalón | 79 | 11 | 90 |
-| Cambiador de Plasencia de Jalón – bifurcación Moncasi – Zaragoza-Delicias (2 tramos) | 67 | 11 | 78 |
-| Zaragoza-Delicias – bifurcación Huesca | 66 | 11 | 77 |
-| Bifurcación Huesca – Lleida-Pirineus (5 tramos) | 62 | 11 | 73 |
-| Lleida-Pirineus – Camp de Tarragona (3 tramos) | 78 | 11 | 89 |
-| Camp de Tarragona – Barcelona-Sants (3 tramos) | 97 | 11 | 108 |
+| Madrid-Puerta de Atocha – bifurcación de Vallecas | 64 | 11 | 75 |
+| Bifurcación de Vallecas – Calatayud (4 tramos) | 72 | 11 | 83 |
+| Calatayud – cambiador de Plasencia de Jalón | 80 | 11 | 91 |
+| Cambiador de Plasencia de Jalón – bifurcación Moncasi | 68 | 11 | 79 |
+| Bifurcación Moncasi – Zaragoza-Delicias | 49 | 7 | 56 |
+| Zaragoza-Delicias – bifurcación Huesca | 48 | 7 | 55 |
+| Bifurcación Huesca – bifurcación Canal Imperial | 44 | 7 | 51 |
+| Bifurcación Canal Imperial – bifurcación Les Torres de Sanui (3 tramos) | 63 | 11 | 74 |
+| Bifurcación Les Torres de Sanui – Lleida-Pirineus | 31 | 0 | 31 |
+| Lleida-Pirineus – bifurcación Artesa de Lleida | 47 | 0 | 47 |
+| Bifurcación Artesa de Lleida – Camp de Tarragona (2 tramos) | 79 | 11 | 90 |
+| Camp de Tarragona – Barcelona-Sants (3 tramos) | 98 | 11 | 109 |
 
 Por Vallecas entran los AVE de Barcelona a Andalucía que no pasan por Atocha; en Plasencia de Jalón salen los Alvia de Madrid a Pamplona y Logroño; en la bifurcación Huesca, los de Huesca; desde Lleida se suman los Avant de Lleida a Barcelona, y de Camp de Tarragona a Barcelona, los Euromed y los demás trenes del Corredor Mediterráneo. Cada tren cuenta una vez: el GTFS de Renfe trae muchos de los de esta línea partidos en dos viajes (un AVE Madrid – Calatayud y otro Madrid – Barcelona con el mismo número y el mismo horario), y Oniel los junta (véase «Trenes repetidos en el horario de Renfe»).
 
@@ -247,7 +251,7 @@ En la de Venta de Baños a Burgos, todos de Renfe: el primer tramo, de la bifurc
 
 En las cuatro de Extremadura todos los trenes son de Renfe. En la de Madrid a Plasencia, los cuatro tramos hasta Illescas llevan 34; los tres que siguen hasta Talavera de la Reina, 24; los cinco de allí a la bifurcación El Chaparral, 20, y el último, hasta la bifurcación San Esteban, 12, los que entran en Plasencia. En la de alta velocidad, 14 entre Plasencia y la bifurcación San Esteban, 12 de allí a Arroyo de la Herrera, 20 en los dos tramos hasta la bifurcación Casa de la Torre, 22 de allí a Cáceres, porque se suman los 2 que vienen por la línea antigua de Cañaveral, 24 en los tres de Cáceres a la bifurcación Granja-Las Encinas, 8 en la curva de allí a Garrovilla-Las Vegas, por la que solo pasan los trenes que no entran en Mérida, y 24 en los cinco de Garrovilla-Las Vegas a Badajoz. En la línea de Aljucén a Mérida, 16 entre la bifurcación Granja-Las Encinas y Aljucén y 24 entre Aljucén y Mérida. En la línea antigua de Monfragüe a Cáceres, 2 en sus cuatro tramos.
 
-En las cinco líneas convencionales de Andalucía y La Mancha y en la de alta velocidad a Granada todos los trenes son también de Renfe. En el primer tramo de la convencional, de Madrid-Puerta de Atocha a la bifurcación Planetario, son 75: los 41 que siguen hacia Aranjuez y 34 de la línea de Extremadura. Los de Ouigo paran en pocas estaciones, así que su paso por cada tramo es siempre estimado. `GET /api/segment-counts` da el total por tramo (`counts`) y su reparto por operador (`by_operator`); el detalle de cada línea, `counts_by_operator`.
+En las cinco líneas convencionales de Andalucía y La Mancha y en la de alta velocidad a Granada todos los trenes son también de Renfe. En el primer tramo de la convencional, de Madrid-Puerta de Atocha a la bifurcación Planetario, son 57: los 23 que siguen hacia Aranjuez y 34 de la línea de Extremadura. Los tres tramos de la línea de Manzanares a Ciudad Real llevan 14. Los de Ouigo paran en pocas estaciones, así que su paso por cada tramo es siempre estimado. `GET /api/segment-counts` da el total por tramo (`counts`) y su reparto por operador (`by_operator`); el detalle de cada línea, `counts_by_operator`.
 
 ## Cómo se verificó la LAV Madrid–Sevilla con Adif
 
@@ -1361,13 +1365,14 @@ Los ficheros se declaran en la lista `feeds` de `backend/data/curated/sources.js
 |---|---|---|---|---|
 | `renfe-gtfs-av-ld-md-2026-11-08` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-08 | del 7 de noviembre de 2026 al 29 de septiembre de 2027 |
 | `renfe-gtfs-av-ld-md-2026-11-12` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-12 | del 11 de noviembre de 2026 al 29 de septiembre de 2027 |
+| `renfe-gtfs-av-ld-md-2026-11-17` | `renfe-gtfs-av-ld-md` | Renfe | 2026-11-17 | del 16 de noviembre de 2026 al 29 de septiembre de 2027 |
 | `ouigo-gtfs-nap-2026-11-12` | `ouigo-gtfs-nap` | Ouigo | 2026-11-12 | del 26 de junio al 12 de diciembre de 2026 |
 
 Una entrada de `feeds` admite además `product` (el nombre con el que se rotulan todos los trenes del fichero) y `stop_id_prefix` (un prefijo que se quita de sus códigos de parada); las usa el fichero de Ouigo.
 
 Cómo se decide qué se muestra:
 
-- El conjunto **vigente** de una fuente es el descargado más recientemente. De los vigentes salen el día de referencia y las cifras de la cobertura. Con varios vigentes, uno por operador, se toman los días que cubren todos a la vez, del comienzo más tardío al final más temprano (hoy, del 7 de noviembre al 12 de diciembre de 2026); el día de referencia es el laborable con más servicios de los primeros treinta de esos días, y así tiene los trenes de todos los operadores. `validate` avisa si los ficheros vigentes no coinciden en ningún día.
+- El conjunto **vigente** de una fuente es el descargado más recientemente. De los vigentes salen el día de referencia y las cifras de la cobertura. Con varios vigentes, uno por operador, se toman los días que cubren todos a la vez, del comienzo más tardío al final más temprano (hoy, del 16 de noviembre al 12 de diciembre de 2026); el día de referencia es el laborable con más servicios de los primeros treinta de esos días, y así tiene los trenes de todos los operadores. `validate` avisa si los ficheros vigentes no coinciden en ningún día.
 - El conjunto **activo** de una fuente en un día es el más reciente cuya validez incluye ese día. Los trenes de un tramo, las paradas de una estación, los recuentos y la simulación de un día leen solo los conjuntos activos ese día. `GET /api/coverage` los enumera en `datasets`.
 - Se decide por fuente, no por operador: un operador puede publicar ficheros que no se sustituyen entre sí (alta velocidad y cercanías, por ejemplo). Hoy cada operador con horarios tiene una sola fuente y da lo mismo.
 
@@ -1405,7 +1410,20 @@ Si los trenes son los mismos, el fichero se releva de todos modos cuando el carg
 
 Cada fichero pesa unos 0,7 MB en el repositorio y alarga `import all`; para retirar uno antiguo se borra de `feeds` y de `backend/data/raw/` y se vuelve a ejecutar `import all`, que retira su conjunto de la base.
 
-Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
+Por qué la PR no llega en rojo. Las pruebas de `pytest` leen siempre los dos ficheros fijos de `backend/tests/conftest.py`, así que sus recuentos no cambian con un fichero nuevo; las que abren la instantánea (`test_criticality.py`, `test_segment_attributes.py`) solo comprueban de ella lo que no depende del horario cargado. Las de Playwright sí leen la instantánea regenerada, y `validate` puede fallar con una parada sin asignar o con una regla de recorrido que ya no encaja con ningún viaje. Por eso el flujo pasa todo antes de abrir la PR. Si algo falla termina en rojo, no abre la PR y abre la incidencia «El fichero nuevo de horarios de Renfe no pasa las comprobaciones», una sola mientras siga abierta, con el enlace a la ejecución.
+
+#### El fichero del 17 de noviembre de 2026
+
+El primer fichero que no pasó las comprobaciones fue el publicado el 16 de noviembre de 2026 (#203); se cargó a mano el del día siguiente. Lo que traía:
+
+- **Otro día de referencia.** El fichero empieza el 16 de noviembre, así que el viernes 13 queda fuera de los días que cubren los ficheros vigentes y el día de referencia pasa al viernes 20. Con él cambian las cifras que enseña el visor en cuatro líneas, sin que cambie el horario: el fichero del 12 de noviembre ya daba para el 20 esos mismos trenes en los tramos que cambian.
+- **Los trenes desviados que ya no están ese día.** El 13 de noviembre circulaban, según el horario, 22 Intercity y Alvia Madrid-Atocha Cercanías – Andalucía por la convencional hasta Manzanares, la línea de Manzanares a Ciudad Real y la alta velocidad desde Ciudad Real. El 20 quedan 4, con validez hasta el 22 de noviembre. De los otros 18, la validez de 16 (Intercity de Madrid a Sevilla y a Málaga) terminó el 15 de noviembre, y 2, los de Madrid a Algeciras (09331 y 09366), figuran desde el 16 de noviembre con salida de Madrid-Puerta de Atocha y por la alta velocidad, también en los ficheros anteriores. Por eso la convencional pasa de 41 a 23 trenes entre la bifurcación Planetario y Alcázar de San Juan, la línea de Manzanares a Ciudad Real de 32 a 14, la alta velocidad de 118 a 102 entre Ciudad Real y Córdoba y sube en 2 entre Madrid y Ciudad Real (de 96 a 98 desde la bifurcación Yeles), y bajan en 8 los de Córdoba a Sevilla y los de Córdoba a Málaga. Las reglas de recorrido de esos trenes siguen: las usan los ficheros anteriores y los 4 que quedan.
+- **Un AVE más de Madrid a Barcelona** (03131, que el horario trae el viernes 20 y no el 13): 109 trenes entre Camp de Tarragona y Barcelona-Sants, 23 por el baipás de Zaragoza y 43 por el de Lleida.
+- **Otros nombres de producto.** El fichero rotula «Regional» los trenes que los anteriores rotulaban `MD`, `REG.EXP.`, `REGIONAL` y `PROXIMDAD`; «Intercity», los `ALVIA`; «AVE Euromed», los `EUROMED`, y «AVE», los `AVE INT`. Oniel enseña el producto tal como viene en `route_short_name`, así que el visor dice ahora «Regional» e «Intercity» donde decía «MD» o «ALVIA»; los ficheros anteriores conservan sus nombres en «Evolución del servicio». Es lo que dice el fichero: no se ha buscado una nota de Renfe que lo explique. Como el producto forma parte de lo que `refresh gtfs` compara, de los 16.421 trenes por día de las cuatro semanas siguientes al 17 de noviembre cambiaban 7.646: 7.639 por el nombre y 7 por un minuto en alguna hora. El fichero nuevo trae además 66 que el anterior no tenía, el 13 y el 14 de diciembre.
+
+Los horarios siguen siendo los planificados: que el fichero lleve trenes por la alta velocidad entre Madrid y Ciudad Real no dice que circulen, y la interrupción registrada entre la bifurcación La Sagra y Córdoba se revisa aparte (véase «Interrupciones del servicio»).
+
+Qué falló. Una prueba de `pytest`, la de los tramos sin otro camino de `test_criticality.py`, leía de la instantánea los recuentos del 13 de noviembre. Con cualquier fichero que moviera el día de referencia habría fallado, y volvería a hacerlo el 23 de noviembre, cuando terminan los 4 Intercity que quedan. Ahora esos recuentos se comprueban en `test_integration_db.py` con los ficheros fijos, y de la instantánea solo lo que no depende del día. Las pruebas de Playwright que citaban cifras o productos del día 13 se corrigieron a mano.
 
 El CI de esa PR. GitHub retiene los flujos de `pull_request` de una PR que abre otro flujo con su token: en la PR aparece el aviso «Approve workflows to run» y `Backend` y `Frontend` no se ejecutan como comprobaciones suyas hasta que quien la revisa lo pulsa. Para no depender de ese clic, el flujo lanza además el CI sobre la rama (`gh workflow run ci.yml --ref datos/gtfs-<fecha>`): su resultado queda en el commit y en la pestaña Actions, aunque la lista de comprobaciones de la PR no lo enseñe. Así ocurrió en la primera ejecución, el 12 de noviembre de 2026 (PR 71): el CI lanzado pasó, y al aprobar el retenido pasó también, ya dentro de la PR.
 
@@ -1461,6 +1479,7 @@ La ficha de una estación y la de un tramo dicen, dentro de «Más detalle», cu
 **Límites.**
 
 - Con los dos ficheros de Renfe de hoy, el día de referencia es el mismo (viernes 13 de noviembre de 2026; fue el jueves 12 mientras estuvo cargada la alta velocidad de Barcelona sin la de Valencia) y ese día tienen los mismos trenes en todas las estaciones y tramos. La diferencia la enseña la cuenta en los mismos días: del 11 de noviembre al 8 de diciembre, en Ciudad Real paran 1.180 trenes según el fichero del 8 de noviembre y 1.190 según el del 12, y por el tramo Ciudad Real – Puertollano de la alta velocidad pasan 1.979 y 1.987. De los 85 tramos con trenes, 77 cambian; de las 52 estaciones con trenes, 39.
+- El fichero de Renfe del 17 de noviembre de 2026 tiene otro día de referencia, el viernes 20, y ese día lleva menos trenes desviados que el 13 (véase «El fichero del 17 de noviembre de 2026»): en Ciudad Real paran 48 trenes de Renfe donde el fichero anterior daba 64 el día 13, y la ficha dice que los días son distintos. En los mismos días, del 16 de noviembre al 13 de diciembre, paran 1.212 según el fichero del 12 y 1.208 según el del 17, y por el tramo Ciudad Real – Puertollano pasan 2.281 y 2.274. La diferencia del tramo es toda del 16 de noviembre, el primer día del fichero nuevo y ya pasado cuando se descargó, que trae menos trenes que en el fichero anterior; del 17 en adelante los dos dan los mismos en ese tramo. El reparto por tipo de servicio cambia además de nombres: «Regional» e «Intercity» donde los ficheros anteriores decían «MD» y «ALVIA».
 - La cuenta en los mismos días solo mira las primeras cuatro semanas del fichero nuevo: un cambio que empiece después no aparece hasta el fichero siguiente.
 - Si los días de referencia de dos ficheros son distintos, parte de la diferencia puede venir del día de la semana y no del horario; la ficha lo dice.
 - Solo están los trenes que recorren las líneas cargadas, y no los de Iryo, como en el resto de Oniel.

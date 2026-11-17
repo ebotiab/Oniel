@@ -39,14 +39,14 @@ test.describe('Explorar la red', () => {
     await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-alcazar-de-san-juan')).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-linares-baeza')).toBeVisible()
-    // un tramo de Despeñaperros: vía única y trenes de Media Distancia
+    // un tramo de Despeñaperros: vía única y trenes regionales
     await page.getByTestId('esquema-nodo-santa-cruz-de-mudela').click()
     await expect(page.getByTestId('detalle-nodo')).toBeVisible()
     await page.getByRole('button', { name: 'Santa Cruz de Mudela – Almuradiel-Viso del Marqués' }).click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Línea convencional, vía única')
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
-    await expect(page.getByTestId('lista-servicios')).toContainText(/MD/)
+    await expect(page.getByTestId('lista-servicios')).toContainText(/Regional/)
     await expect(page).toHaveURL(/\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
   })
 
@@ -70,7 +70,7 @@ test.describe('Explorar la red', () => {
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(page.getByTestId('linea-detalle')).toHaveText(/Adif.*522.*ibérico \(1\.668 mm\).*3 kV CC/)
     for (const nodo of ['manzanares', 'daimiel', 'almagro', 'ciudad-real']) await expect(page.getByTestId(`esquema-nodo-${nodo}`)).toBeVisible()
-    // Daimiel – Almagro: vía única, con los Media Distancia y los Intercity y Alvia que la cruzan sin parar
+    // Daimiel – Almagro: vía única, con los regionales y los Intercity que la cruzan sin parar
     // se toca sobre la vía: el centro del grupo cae entre la barra de trenes y su cifra, que con
     // una barra corta (38 trenes frente a los 140 del tramo con más) deja un hueco sin dibujo
     await page.getByTestId('esquema-tramo-2').click({ position: { x: 14, y: 12 } })
@@ -78,10 +78,9 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
     await expect(page).toHaveURL(/\/tramo\/manzanares-ciudad-real:daimiel:almagro/)
     const lista = page.getByTestId('lista-servicios')
-    await expect(lista).toContainText(/MD \d{5}/)
-    await expect(lista).toContainText(/ALVIA \d{5}/)
-    // el Intercity 10270 se explica con kilómetros por las líneas, no en línea recta
-    const intercity = lista.locator('li', { hasText: 'Intercity 10270' }).first()
+    await expect(lista).toContainText(/Regional \d{5}/)
+    // el Intercity 10080 se explica con kilómetros por las líneas, no en línea recta
+    const intercity = lista.locator('li', { hasText: 'Intercity 10080' }).first()
     await expect(intercity).toContainText('Madrid-Atocha → Sevilla-Santa Justa')
     const porque = intercity.locator('.senal')
     await expect(porque).toHaveText('estimado')

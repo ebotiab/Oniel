@@ -283,10 +283,15 @@ def test_a_way_round_of_more_than_twice_the_journey_is_not_another_way(graph: Gr
     assert other_way(short, round_about, None) is round_about[0]
 
 
-def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
+def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     lines: list[LineSummary],
 ) -> None:
-    """La instantánea, con los trenes del día de referencia (13 de noviembre de 2026)."""
+    """La instantánea, sea cual sea su día de referencia: lo que no depende del horario cargado.
+
+    El día de referencia se mueve con cada fichero de horarios nuevo, y con él los trenes de cada
+    tramo. Los recuentos se comprueban con los ficheros fijos de ``conftest.py``, en
+    ``test_integration_db.py``, con :func:`assert_alternatives_of_13_november_2026`.
+    """
     exported = AlternativesOut.model_validate(_read("alternatives.json"))
     assert exported.scope_note == SCOPE_NOTE and "líneas que Oniel tiene cargadas" in SCOPE_NOTE
     assert exported.line_ids == [
@@ -339,6 +344,13 @@ def test_snapshot_says_which_segments_leave_their_trains_without_alternative(
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
         assert s.with_alternative + s.without_alternative == s.trains
+
+
+def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
+    """Qué tramos dejan a sus trenes sin otro camino, con los trenes del 13 de noviembre de 2026.
+
+    Son los de los ficheros fijos de ``conftest.py``: no cambian cuando se carga un horario nuevo.
+    """
     # no queda otro camino hacia Sevilla, adonde Oniel solo llega por la alta velocidad, ni en
     # el ramal de Jaén, que acaba en una estación término
     # Un camino de más del doble que el recorrido del tren no cuenta como otro camino. «Sin otro

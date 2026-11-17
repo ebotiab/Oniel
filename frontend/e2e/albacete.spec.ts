@@ -36,7 +36,7 @@ test.describe('La línea de Alcázar de San Juan a Albacete', () => {
     await expect(ficha).toContainText('hacia Andalucía y hacia Levante')
     // Albacete está entre los seis destinos con más trenes, que son los que se ven de entrada
     await expect(ficha).toContainText('Albacete-Los Llanos')
-    await expect(ficha).toContainText('MD, Regional Exprés y ALVIA')
+    await expect(ficha).toContainText('Regional e Intercity')
   })
 
   test('la línea tiene su ficha, con Alcázar como enlace y sus estaciones en el esquema', async ({ page }) => {

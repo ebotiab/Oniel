@@ -28,6 +28,9 @@ from conftest import (
     database_url_for_tests,
     requires_db,
 )
+from test_criticality import assert_alternatives_of_13_november_2026
+
+from oniel.domain.schemas import AlternativesOut
 
 LAV, CONV, MZCR, JAEN, LBMG, ALBACETE = (
     "lav-madrid-sevilla",
@@ -2128,6 +2131,8 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     )
     assert top["alternative"]["line_ids"] == [CONV, LAV]
     assert (top["alternative"]["extra_km"], top["alternative"]["extra_min"]) == (97.0, 106)
+    # qué tramos dejan a sus trenes sin otro camino, uno por uno
+    assert_alternatives_of_13_november_2026(AlternativesOut.model_validate(out))
     # otro día, otros trenes
     sunday = (await client.get("/api/alternatives", params={"date": "2026-11-15"})).json()
     assert sunday["date"] == "2026-11-15"
