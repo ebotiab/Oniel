@@ -63,7 +63,7 @@ test.describe('El enlace de Monforte del Cid', () => {
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Alta velocidad, vía única')
     await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de nivel 2 y ASFA')
     // 30 trenes el día de referencia: los 20 Avant de Alicante a Murcia y 10 de Madrid que paran en Alicante
-    await expect(ficha).toContainText('30 el viernes, 13 de noviembre de 2026')
+    await expect(ficha).toContainText('30 el viernes, 20 de noviembre de 2026')
     const lista = page.getByTestId('lista-servicios')
     await expect(lista.locator('li')).toHaveCount(30)
     // todos con paso estimado, y la explicación empieza por el motivo, según el sentido, con el nombre

@@ -52,7 +52,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await abrirHoja(page)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-operadores')).toHaveText('Solo Renfe Viajeros')
-    await expect(page.getByTestId('lista-servicios')).toContainText(/MD \d+ Granada → Almería/)
+    await expect(page.getByTestId('lista-servicios')).toContainText(/Regional \d+ Granada → Almería/)
     // con la alta velocidad de Antequera cargada, Granada está unida por los dos lados: el otro
     // camino existe, dando la vuelta por Linares-Baeza, Córdoba y Antequera
     await expect(page.getByTestId('tramo-alternativa')).toContainText(

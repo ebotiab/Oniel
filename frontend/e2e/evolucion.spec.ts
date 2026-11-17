@@ -177,9 +177,10 @@ test.describe('Evolución del servicio de un horario al siguiente', () => {
     await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     await page.getByTestId('mas-detalle').locator('summary').click()
-    // dos horarios van en un renglón; con tres o más, en una lista
+    // dos horarios van en un renglón; con tres o más, en una lista, y cada uno puede llevar detrás
+    // la cuenta en los mismos días que el anterior
     const horario = String.raw`[Hh]orario del \d+ \w+ \d{4}: \d+ trenes el \d+ \w+`
-    const texto = new RegExp(`^Renfe Viajeros(\\. ${horario} · ${horario}|(\\s*${horario}){3,})$`)
+    const texto = new RegExp(`^Renfe Viajeros(\\. ${horario} · ${horario}|(\\s*${horario}( Del .*?\\)\\.)?){3,})$`)
     await expect(page.getByTestId('evolucion-renfe')).toHaveText(texto)
     await page.goto(`/tramo/${TRAMO}`)
     await expect(page.getByTestId('evolucion-renfe')).toHaveText(texto)
