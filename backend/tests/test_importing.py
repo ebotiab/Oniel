@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import datetime as dt
 from collections import Counter
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator, Iterator
+from contextlib import asynccontextmanager, contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -72,8 +72,9 @@ def test_file_fingerprint_ignores_bytecode(tmp_path: Path) -> None:
 _ROUND_TRIPS = ("execute", "executemany", "fetch", "fetchval", "fetchrow", "copy_records_to_table")
 
 
-def _count_round_trips(monkeypatch: pytest.MonkeyPatch) -> Counter[str]:
-    """Cuenta, por método, las llamadas a la base que haga cualquier conexión desde ahora."""
+@contextmanager
+def _count_round_trips() -> Iterator[Counter[str]]:
+    """Cuenta, por método, las llamadas a la base que haga cualquier conexión dentro del bloque."""
     counts: Counter[str] = Counter()
 
     def counting(name: str) -> Any:
@@ -85,16 +86,15 @@ def _count_round_trips(monkeypatch: pytest.MonkeyPatch) -> Counter[str]:
 
         return call
 
-    for name in _ROUND_TRIPS:
-        monkeypatch.setattr(asyncpg.Connection, name, counting(name))
-    return counts
+    with pytest.MonkeyPatch.context() as patch:
+        for name in _ROUND_TRIPS:
+            patch.setattr(asyncpg.Connection, name, counting(name))
+        yield counts
 
 
 @requires_db
 @pytest.mark.asyncio
-async def test_import_all_skips_when_nothing_changed(
-    capfire: CaptureLogfire, monkeypatch: pytest.MonkeyPatch
-) -> None:
+async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) -> None:
     from oniel.db.migrate import drop_everything
     from oniel.db.pool import connect
     from oniel.network.spec import FeedSpec
@@ -136,9 +136,8 @@ async def test_import_all_skips_when_nothing_changed(
         assert second["fingerprint"] == first["fingerprint"]
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 1
         # sin --if-changed siempre se importa
-        round_trips = _count_round_trips(monkeypatch)
-        third = await run(if_changed=False)
-        monkeypatch.undo()
+        with _count_round_trips() as round_trips:
+            third = await run(if_changed=False)
         assert third["skipped"] is False
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 2
         # Las filas van por lotes: una copia por tabla de servicios y una sentencia agrupada por
