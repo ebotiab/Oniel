@@ -28,26 +28,31 @@ def _sha256(path: Path) -> str | None:
 async def upsert_sources(
     conn: asyncpg.Connection, sources: list[SourceSpec], data_dir: Path
 ) -> int:
-    for s in sources:
-        await conn.execute(
-            """
-            INSERT INTO sources (id, name, publisher, url, license, license_url, retrieved_on, coverage, notes, checksum_sha256)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-            ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, publisher=EXCLUDED.publisher, url=EXCLUDED.url,
-              license=EXCLUDED.license, license_url=EXCLUDED.license_url, retrieved_on=EXCLUDED.retrieved_on,
-              coverage=EXCLUDED.coverage, notes=EXCLUDED.notes, checksum_sha256=EXCLUDED.checksum_sha256, updated_at=now()
-            """,
-            s.id,
-            s.name,
-            s.publisher,
-            s.url,
-            s.license,
-            s.license_url,
-            dt.date.fromisoformat(s.retrieved_on) if s.retrieved_on else None,
-            s.coverage,
-            s.notes,
-            _sha256(data_dir / s.file) if s.file else None,
-        )
+    # Una sola ida y vuelta para todas las filas: el registro se repasa con cada línea.
+    await conn.executemany(
+        """
+        INSERT INTO sources (id, name, publisher, url, license, license_url, retrieved_on, coverage, notes, checksum_sha256)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, publisher=EXCLUDED.publisher, url=EXCLUDED.url,
+          license=EXCLUDED.license, license_url=EXCLUDED.license_url, retrieved_on=EXCLUDED.retrieved_on,
+          coverage=EXCLUDED.coverage, notes=EXCLUDED.notes, checksum_sha256=EXCLUDED.checksum_sha256, updated_at=now()
+        """,
+        [
+            (
+                s.id,
+                s.name,
+                s.publisher,
+                s.url,
+                s.license,
+                s.license_url,
+                dt.date.fromisoformat(s.retrieved_on) if s.retrieved_on else None,
+                s.coverage,
+                s.notes,
+                _sha256(data_dir / s.file) if s.file else None,
+            )
+            for s in sources
+        ],
+    )
     return len(sources)
 
 
@@ -56,18 +61,14 @@ ZONES_FILE = Path("curated") / "zonas.json"
 
 
 async def upsert_zones(conn: asyncpg.Connection, zones: list[ZoneSpec]) -> int:
-    for z in zones:
-        await conn.execute(
-            """
-            INSERT INTO zones (id, name, sort_order, cities) VALUES ($1,$2,$3,$4)
-            ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, sort_order=EXCLUDED.sort_order,
-              cities=EXCLUDED.cities
-            """,
-            z.id,
-            z.name,
-            z.sort_order,
-            z.cities,
-        )
+    await conn.executemany(
+        """
+        INSERT INTO zones (id, name, sort_order, cities) VALUES ($1,$2,$3,$4)
+        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, sort_order=EXCLUDED.sort_order,
+          cities=EXCLUDED.cities
+        """,
+        [(z.id, z.name, z.sort_order, z.cities) for z in zones],
+    )
     return len(zones)
 
 
@@ -86,19 +87,23 @@ async def import_network(
         async with conn.transaction():
             await upsert_sources(conn, sources, data_dir)
             await upsert_zones(conn, zones)
-            for op in spec.operators:
-                await conn.execute(
-                    """
-                    INSERT INTO operators (id, name, role, source_id, timetable) VALUES ($1,$2,$3,$4,$5)
-                    ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, role=EXCLUDED.role,
-                      source_id=EXCLUDED.source_id, timetable=EXCLUDED.timetable
-                    """,
-                    op.id,
-                    op.name,
-                    op.role,
-                    op.source_id,
-                    op.timetable if op.role == "operador" else None,
-                )
+            await conn.executemany(
+                """
+                INSERT INTO operators (id, name, role, source_id, timetable) VALUES ($1,$2,$3,$4,$5)
+                ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, role=EXCLUDED.role,
+                  source_id=EXCLUDED.source_id, timetable=EXCLUDED.timetable
+                """,
+                [
+                    (
+                        op.id,
+                        op.name,
+                        op.role,
+                        op.source_id,
+                        op.timetable if op.role == "operador" else None,
+                    )
+                    for op in spec.operators
+                ],
+            )
             await _upsert_line(conn, net)
             # Los operadores de trenes de la especificación son los que circulan por la línea.
             await conn.execute("DELETE FROM line_operators WHERE line_id = $1", spec.line.id)
@@ -169,63 +174,72 @@ async def _replace_nodes_and_segments(conn: asyncpg.Connection, net: BuiltNetwor
     source_id = net.spec.line.verification_source_id or net.spec.line.geometry_source.source_id
     await conn.execute("DELETE FROM segments WHERE line_id = $1", line_id)
     await conn.execute("DELETE FROM line_nodes WHERE line_id = $1", line_id)
-    for seq, n in enumerate(net.nodes, start=1):
-        # Un nodo compartido lo define otra línea: si ya existe no se toca; si aún no, se crea
-        # con lo que trae esta especificación y la línea propietaria lo completará al importarse.
-        conflict = (
-            "DO NOTHING"
-            if n.spec.shared
-            else """DO UPDATE SET name=EXCLUDED.name, kind=EXCLUDED.kind, rank=EXCLUDED.rank, lon=EXCLUDED.lon,
+    # Un nodo compartido lo define otra línea: si ya existe no se toca; si aún no, se crea
+    # con lo que trae esta especificación y la línea propietaria lo completará al importarse.
+    # Las filas van agrupadas, una ida y vuelta por sentencia y no una por nodo o por tramo.
+    conflicts = {
+        True: "DO NOTHING",
+        False: """DO UPDATE SET name=EXCLUDED.name, kind=EXCLUDED.kind, rank=EXCLUDED.rank, lon=EXCLUDED.lon,
               lat=EXCLUDED.lat, adif_code=EXCLUDED.adif_code, description=EXCLUDED.description,
-              details=EXCLUDED.details, source_id=EXCLUDED.source_id"""
-        )
-        await conn.execute(
+              details=EXCLUDED.details, source_id=EXCLUDED.source_id""",
+    }
+    for shared, conflict in conflicts.items():
+        await conn.executemany(
             f"""
             INSERT INTO nodes (id, name, kind, rank, lon, lat, adif_code, description, details, source_id)
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
             ON CONFLICT (id) {conflict}
             """,
-            n.spec.id,
-            n.spec.name,
-            n.spec.kind,
-            n.spec.rank,
-            round(n.lon, 6),
-            round(n.lat, 6),
-            n.spec.adif_code,
-            n.spec.description,
-            n.spec.details,
-            source_id,
+            [
+                (
+                    n.spec.id,
+                    n.spec.name,
+                    n.spec.kind,
+                    n.spec.rank,
+                    round(n.lon, 6),
+                    round(n.lat, 6),
+                    n.spec.adif_code,
+                    n.spec.description,
+                    n.spec.details,
+                    source_id,
+                )
+                for n in net.nodes
+                if bool(n.spec.shared) is shared
+            ],
         )
-        await conn.execute(
-            "INSERT INTO line_nodes (line_id, node_id, seq, km, reference_pk_km) VALUES ($1,$2,$3,$4,$5)",
-            line_id,
-            n.spec.id,
-            seq,
-            round(n.km, 3),
-            n.spec.reference_pk_km,
-        )
-    for s in net.segments:
-        await conn.execute(
-            """
-            INSERT INTO segments (id, line_id, seq, from_node_id, to_node_id, km_from, km_to, length_km, max_speed_kmh,
-                                  typical_speed_kmh, tracks, status, geometry, source_id)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
-            """,
-            s.id,
-            line_id,
-            s.seq,
-            s.from_node.spec.id,
-            s.to_node.spec.id,
-            round(s.km_from, 3),
-            round(s.km_to, 3),
-            round(s.length_km, 3),
-            s.max_speed_kmh,
-            s.typical_speed_kmh,
-            s.tracks,
-            net.spec.line.status,
-            {"type": "LineString", "coordinates": round_coords(s.coords)},
-            s.source_id,
-        )
+    await conn.executemany(
+        "INSERT INTO line_nodes (line_id, node_id, seq, km, reference_pk_km) VALUES ($1,$2,$3,$4,$5)",
+        [
+            (line_id, n.spec.id, seq, round(n.km, 3), n.spec.reference_pk_km)
+            for seq, n in enumerate(net.nodes, start=1)
+        ],
+    )
+    await conn.executemany(
+        """
+        INSERT INTO segments (id, line_id, seq, from_node_id, to_node_id, km_from, km_to, length_km, max_speed_kmh,
+                              typical_speed_kmh, tracks, status, geometry, source_id)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+        """,
+        [
+            (
+                s.id,
+                line_id,
+                s.seq,
+                s.from_node.spec.id,
+                s.to_node.spec.id,
+                round(s.km_from, 3),
+                round(s.km_to, 3),
+                round(s.length_km, 3),
+                s.max_speed_kmh,
+                s.typical_speed_kmh,
+                s.tracks,
+                net.spec.line.status,
+                {"type": "LineString", "coordinates": round_coords(s.coords)},
+                s.source_id,
+            )
+            for s in net.segments
+        ],
+    )
     # Las filas anteriores se han ido con sus tramos (ON DELETE CASCADE).
     await conn.executemany(
         """
@@ -302,19 +316,16 @@ async def _upsert_stop_mappings(conn: asyncpg.Connection, net: BuiltNetwork) -> 
     # La tabla es común a todas las líneas y sirve para listar los trenes que paran en un nodo.
     # Si una parada ya está asignada a un nodo por otra línea, una asignación «de salida» no la
     # degrada: una estación compartida sigue siendo estación.
-    for stop_id, m in net.spec.stop_mappings.items():
-        await conn.execute(
-            """
-            INSERT INTO stop_mappings (stop_id, node_id, exit_node_ids) VALUES ($1,$2,$3)
-            ON CONFLICT (stop_id) DO UPDATE SET
-              node_id = COALESCE(EXCLUDED.node_id, stop_mappings.node_id),
-              exit_node_ids = CASE WHEN COALESCE(EXCLUDED.node_id, stop_mappings.node_id) IS NULL
-                                   THEN EXCLUDED.exit_node_ids ELSE '{}'::text[] END
-            """,
-            stop_id,
-            m.node,
-            m.exits,
-        )
+    await conn.executemany(
+        """
+        INSERT INTO stop_mappings (stop_id, node_id, exit_node_ids) VALUES ($1,$2,$3)
+        ON CONFLICT (stop_id) DO UPDATE SET
+          node_id = COALESCE(EXCLUDED.node_id, stop_mappings.node_id),
+          exit_node_ids = CASE WHEN COALESCE(EXCLUDED.node_id, stop_mappings.node_id) IS NULL
+                               THEN EXCLUDED.exit_node_ids ELSE '{}'::text[] END
+        """,
+        [(stop_id, m.node, m.exits) for stop_id, m in net.spec.stop_mappings.items()],
+    )
 
 
 def network_as_json(net: BuiltNetwork) -> dict[str, Any]:

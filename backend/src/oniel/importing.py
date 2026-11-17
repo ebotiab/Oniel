@@ -1,7 +1,7 @@
 """Importación completa y repetible, con una huella para saltarla cuando nada ha cambiado.
 
 En Render (plan gratuito) la API se suspende sin tráfico y cada despertar ejecuta `import all`,
-que allí tarda alrededor de un minuto. La huella identifica lo que esa importación cargaría: el
+que allí tarda minutos (docs/despliegue.md, «Cargar o refrescar los datos»). La huella identifica lo que esa importación cargaría: el
 commit desplegado (``RENDER_GIT_COMMIT``) o, fuera de Render, un hash de ``data/`` y ``src/oniel/``.
 Si coincide con la última importación registrada, ``--if-changed`` deja la base como está.
 """

@@ -12,7 +12,7 @@ import datetime as dt
 import hashlib
 import re
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
@@ -21,7 +21,7 @@ import asyncpg
 import logfire
 
 from oniel.db.pool import fetch_int
-from oniel.gtfs.reader import GtfsTrip, read_feed
+from oniel.gtfs.reader import GtfsFeed, GtfsTrip, read_feed
 from oniel.gtfs.trips import (
     LoadedLine,
     bypasses_of,
@@ -253,25 +253,18 @@ async def import_gtfs(
                 valid_to=feed.feed_end,
             )
             await conn.execute("DELETE FROM services WHERE dataset_id = $1", dataset_id)
-            for plan in plans.values():
-                dates = sorted(feed.service_dates.get(plan.trip.service_id, set()))
-                if not dates:
-                    continue
-                await _insert_service(conn, plan, dates, dataset_id, operator_id, run_id)
+            await _insert_services(conn, plans.values(), feed, dataset_id, operator_id, run_id)
             # Nombre y coordenadas de las paradas asignadas: los pone un fichero con sus propios
             # códigos, no uno que toma prestados los de Adif quitando un prefijo.
-            for spec in [] if stop_id_prefix else specs:
-                for stop_id in spec.stop_mappings:
-                    stop = feed.stops.get(stop_id)
-                    if stop:
-                        await conn.execute(
-                            "UPDATE stop_mappings SET stop_name=$2, lon=$3, lat=$4, source_id=$5 WHERE stop_id=$1",
-                            stop_id,
-                            stop.name,
-                            stop.lon,
-                            stop.lat,
-                            source_id,
-                        )
+            await conn.executemany(
+                "UPDATE stop_mappings SET stop_name=$2, lon=$3, lat=$4, source_id=$5 WHERE stop_id=$1",
+                [
+                    (stop_id, stop.name, stop.lon, stop.lat, source_id)
+                    for spec in ([] if stop_id_prefix else specs)
+                    for stop_id in spec.stop_mappings
+                    if (stop := feed.stops.get(stop_id))
+                ],
+            )
             all_kinds: Counter[str] = Counter()
             for plan in plans.values():
                 all_kinds.update(p.kind for p in plan.passes)
@@ -303,50 +296,51 @@ async def import_gtfs(
         return stats
 
 
-async def _insert_service(
+async def _insert_services(
     conn: asyncpg.Connection,
-    plan: _TripPlan,
-    dates: list[dt.date],
+    plans: Iterable[_TripPlan],
+    feed: GtfsFeed,
     dataset_id: str,
     operator_id: str,
     run_id: int,
 ) -> None:
-    trip, calls = plan.trip, plan.calls
-    first, last = calls[0], calls[-1]
-    await conn.execute(
-        """
-        INSERT INTO services (dataset_id, id, operator_id, train_number, product, origin_stop_id, origin_name,
-                              destination_stop_id, destination_name, valid_from, valid_to, gtfs_route_id,
-                              gtfs_service_id, resolution, import_run_id)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
-        """,
-        dataset_id,
-        trip.trip_id,
-        operator_id,
-        trip.train_number,
-        trip.product or "tren",
-        first.stop_id,
-        first.stop_name,
-        last.stop_id,
-        last.stop_name,
-        dates[0],
-        dates[-1],
-        trip.route_id,
-        trip.service_id,
-        plan.resolution,
-        run_id,
-    )
-    await conn.executemany(
-        "INSERT INTO service_dates (dataset_id, service_id, service_date) VALUES ($1, $2, $3)",
-        [(dataset_id, trip.trip_id, d) for d in dates],
-    )
-    await conn.executemany(
-        """
-        INSERT INTO service_stops (dataset_id, service_id, seq, stop_id, stop_name, arrival_s, departure_s,
-                                   pickup_type, drop_off_type)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
-        """,
-        [
+    """Guarda los trenes de un fichero con una copia por tabla, no con varias sentencias por tren.
+
+    Un fichero de Renfe trae unos 4.000 trenes: sentencia a sentencia eran unas 14.000 idas y
+    vueltas a la base, que es lo que más tardaba de la importación en producción. Un tren sin
+    ningún día de circulación no se guarda.
+    """
+    services: list[tuple[Any, ...]] = []
+    service_dates: list[tuple[Any, ...]] = []
+    stops: list[tuple[Any, ...]] = []
+    passes: list[tuple[Any, ...]] = []
+    for plan in plans:
+        dates = sorted(feed.service_dates.get(plan.trip.service_id, set()))
+        if not dates:
+            continue
+        trip, calls = plan.trip, plan.calls
+        first, last = calls[0], calls[-1]
+        services.append(
+            (
+                dataset_id,
+                trip.trip_id,
+                operator_id,
+                trip.train_number,
+                trip.product or "tren",
+                first.stop_id,
+                first.stop_name,
+                last.stop_id,
+                last.stop_name,
+                dates[0],
+                dates[-1],
+                trip.route_id,
+                trip.service_id,
+                plan.resolution,
+                run_id,
+            )
+        )
+        service_dates.extend((dataset_id, trip.trip_id, d) for d in dates)
+        stops.extend(
             (
                 dataset_id,
                 trip.trip_id,
@@ -359,15 +353,8 @@ async def _insert_service(
                 st.drop_off_type,
             )
             for c, st in zip(calls, trip.stop_times, strict=True)
-        ],
-    )
-    await conn.executemany(
-        """
-        INSERT INTO service_segment_passes (dataset_id, service_id, segment_id, kind, enter_s, exit_s,
-                                            enter_margin_s, exit_margin_s, km_increasing, basis)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-        """,
-        [
+        )
+        passes.extend(
             (
                 dataset_id,
                 trip.trip_id,
@@ -381,5 +368,62 @@ async def _insert_service(
                 p.basis,
             )
             for p in plan.passes
+        )
+    # Los servicios primero: las otras tres tablas cuelgan de ellos.
+    await conn.copy_records_to_table(
+        "services",
+        records=services,
+        columns=[
+            "dataset_id",
+            "id",
+            "operator_id",
+            "train_number",
+            "product",
+            "origin_stop_id",
+            "origin_name",
+            "destination_stop_id",
+            "destination_name",
+            "valid_from",
+            "valid_to",
+            "gtfs_route_id",
+            "gtfs_service_id",
+            "resolution",
+            "import_run_id",
+        ],
+    )
+    await conn.copy_records_to_table(
+        "service_dates",
+        records=service_dates,
+        columns=["dataset_id", "service_id", "service_date"],
+    )
+    await conn.copy_records_to_table(
+        "service_stops",
+        records=stops,
+        columns=[
+            "dataset_id",
+            "service_id",
+            "seq",
+            "stop_id",
+            "stop_name",
+            "arrival_s",
+            "departure_s",
+            "pickup_type",
+            "drop_off_type",
+        ],
+    )
+    await conn.copy_records_to_table(
+        "service_segment_passes",
+        records=passes,
+        columns=[
+            "dataset_id",
+            "service_id",
+            "segment_id",
+            "kind",
+            "enter_s",
+            "exit_s",
+            "enter_margin_s",
+            "exit_margin_s",
+            "km_increasing",
+            "basis",
         ],
     )
