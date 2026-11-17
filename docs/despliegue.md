@@ -75,7 +75,7 @@ Para cambiar de base (otro proveedor, o una nueva de Neon): se crea la base vac�
 
 ### Cargar o refrescar los datos
 
-Sin cron job, la API carga los datos ella misma: con `ONIEL_IMPORT_ON_START=1` (fijado en `render.yaml`), `backend/docker-entrypoint.sh` ejecuta `oniel-data import all --if-changed` antes de arrancar el servidor. En Render la importación tarda alrededor de un minuto (en local, unos 5 segundos), así que solo se hace cuando cambia el commit desplegado (`RENDER_GIT_COMMIT`; fuera de Render, un hash de `data/` y `src/oniel/`): la huella de la última importación queda en la tabla `import_state` y los arranques tras una suspensión la encuentran igual y se la saltan. Si la base se recrea (la gratuita caduca a los 30 días), la tabla no existe y se importa de nuevo. Si más adelante se activa el cron job, basta con quitar esa variable.
+Sin cron job, la API carga los datos ella misma: con `ONIEL_IMPORT_ON_START=1` (fijado en `render.yaml`), `backend/docker-entrypoint.sh` ejecuta `oniel-data import all --if-changed --no-snapshot` antes de arrancar el servidor. En Render la importación tarda minutos (en local, unos 15 segundos), así que solo se hace cuando cambia el commit desplegado (`RENDER_GIT_COMMIT`; fuera de Render, un hash de `data/` y `src/oniel/`): la huella de la última importación queda en la tabla `import_state` y los arranques tras una suspensión la encuentran igual y se la saltan. Si la base se recrea (la gratuita caduca a los 30 días), la tabla no existe y se importa de nuevo. Si más adelante se activa el cron job, basta con quitar esa variable.
 
 También puede lanzarse desde cualquier máquina con `uv` y acceso a la base. La URL externa (External Database URL) está en el panel de la base en Render; no la guardes en el repositorio.
 
@@ -84,6 +84,17 @@ cd backend && ONIEL_DATABASE_URL='<External Database URL>' uv run oniel-data imp
 ```
 
 La importación es repetible: crea el esquema si falta, sustituye los servicios de la fuente dentro de una transacción y registra la ejecución en `import_runs`. También regenera la instantánea estática de `frontend/public/data`, que conviene subir junto con los cambios.
+
+**Cuánto tarda y por qué importa.** Render da por fallido («Timed Out») un despliegue que no responde en unos 15 minutos, y la API no responde hasta que la importación termina. El 15 de noviembre de 2026, con 25 líneas y tres ficheros de horarios, tardó 474 s en producción (commit `0f4f589`): unos 35 s las 25 redes, 129 s y 136 s los dos ficheros de Renfe, 4 s el de Ouigo y 166 s la exportación de la instantánea. Desde el 17 de noviembre de 2026 hace menos trabajo, con el mismo resultado en la base:
+
+- **El arranque de producción no exporta la instantánea** (`--no-snapshot`). La instantánea que ve el visitante la sirve Vercel desde `frontend/public/data` del repositorio; la que exportaba el contenedor de la API se quedaba en su disco y no la leía nadie. Eran 2.600 consultas, un tercio del tiempo. En local y en el CI `import all` la sigue exportando, que es como se regenera.
+- **Las filas van por lotes.** Los trenes de un fichero se guardan con una copia por tabla (`copy_records_to_table` en `services`, `service_dates`, `service_stops` y `service_segment_passes`) en vez de cuatro sentencias por tren, y las fuentes, los nodos, los tramos y las paradas de cada línea, con una sentencia agrupada por tabla (`executemany`). Un fichero de Renfe pasa de unas 14.000 idas y vueltas a la base a 62, y las 25 redes, de 5.700 a 520. Con la base fuera de Render (véase «Base de datos») cada ida y vuelta cuesta más que antes, así que esto es lo que más pesa.
+
+Medido en local el 17 de noviembre de 2026, la misma importación: de 69 s a 37 s con la instantánea, y 16 s sin ella (3 s las redes, 6 s cada fichero de Renfe); la instantánea exportada es idéntica byte a byte. Lo que queda es sobre todo cálculo (trazar cada línea y resolver el paso de cada tren por cada tramo), que en el plan gratuito de Render va varias veces más lento que en local. La duración real de cada importación está en Logfire: `uv run oniel-data obs estado` la enseña, y los tramos `import network`, `import gtfs` y `export snapshot` dicen en qué se fue.
+
+Los dos ficheros de Renfe se importan a propósito: el segundo no sustituye al primero, porque la ficha de una estación o de un tramo compara los trenes de un horario con los del siguiente (`docs/datos.md`, «Evolución del servicio»), y la API responde esa comparación desde la base. Cada fichero más de Renfe añade lo que tarde en resolverse; retirar uno antiguo de `feeds` lo quita.
+
+Una prueba (`tests/test_importing.py`) cuenta las idas y vueltas de una importación completa y falla si alguien vuelve a escribir fila a fila.
 
 `ONIEL_CORS_ORIGINS` debe incluir el dominio del visor (`["https://oniel.vercel.app"]` por defecto); los dominios de vista previa `*.vercel.app` se aceptan por expresión regular.
 
@@ -96,7 +107,7 @@ La importación es repetible: crea el esquema si falta, sustituye los servicios 
 - **Ajuste del repositorio.** Para que un flujo pueda abrir una PR hace falta marcar Settings → Actions → General → Workflow permissions → «Allow GitHub Actions to create and approve pull requests». Sin él, el paso «Abrir la PR» falla con «GitHub Actions is not permitted to create or approve pull requests». El flujo no aprueba ninguna PR.
 - **El CI de esa PR.** GitHub retiene los flujos de `pull_request` cuando la PR la abre otro flujo con su token: hay que pulsar «Approve workflows to run» en la PR para que `Backend` y `Frontend` se ejecuten como comprobaciones suyas. Además, `ci.yml` admite `workflow_dispatch` y el refresco lo lanza sobre la rama; ese resultado queda en el commit y en la pestaña Actions, no en la lista de comprobaciones de la PR.
 - **Base de datos.** El flujo importa en un PostgreSQL de servicio que desaparece al terminar, igual que el CI. No toca la base de Render.
-- **Lo que crece.** Cada fichero de Renfe declarado alarga `import all` (unos 6 s en local; bastante más en el plan gratuito de Render, donde solo se ejecuta cuando cambia el commit desplegado). El flujo abre una PR cuando cambian los trenes o, como tarde, cada cuatro semanas; conviene retirar de vez en cuando los ficheros antiguos que no se quieran comparar.
+- **Lo que crece.** Cada fichero de Renfe declarado alarga `import all` (unos 6 s en local; varias veces más en el plan gratuito de Render, donde solo se ejecuta cuando cambia el commit desplegado; véase «Cargar o refrescar los datos»). El flujo abre una PR cuando cambian los trenes o, como tarde, cada cuatro semanas; conviene retirar de vez en cuando los ficheros antiguos que no se quieran comparar.
 
 ## Logfire
 
@@ -216,7 +227,7 @@ El plan personal no deja comprobar más a menudo que cada 10 minutos, y la venta
 
 Logfire no sondea servicios, y en el plan gratuito de Render la API se suspende sin tráfico: que no lleguen trazas no significa que esté caída, así que no hay alerta de «sin señal». Lo que sí delata un fallo es un arranque que no termina. Las tres alertas están creadas en el proyecto desde el 12 de noviembre de 2026, con el canal «Correo», comprobación cada 10 minutos y aviso en «First match after no matches» (avisa cuando la consulta empieza a dar filas, no en cada comprobación). Sus consultas, probadas antes con `oniel-data obs consulta`, son las de abajo; si se cambian en Logfire, se cambian aquí.
 
-**1. «Oniel: la API no arranca».** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación tarda unos dos en Render. Ventana: últimos 30 minutos.
+**1. «Oniel: la API no arranca».** Cada arranque del contenedor (tras un despliegue o al despertar) deja primero `import all started` y, cuando la API está lista, `api started`. Avisa si pasan diez minutos sin lo segundo; la importación debería tardar bastante menos (véase «Cargar o refrescar los datos»). Ventana: últimos 30 minutos.
 
 ```sql
 SELECT service_version AS version,
@@ -274,7 +285,7 @@ La primera y la tercera se disparan a la vez cuando una importación se cuelga; 
 
 - **Versión.** En Render la versión del servicio (`service_version`) es el commit desplegado, que Render da en `RENDER_GIT_COMMIT`; en local es la del paquete (`0.1.0`). Las trazas anteriores al 12 de noviembre de 2026 llevan todas `0.1.0`. `/healthz` devuelve también el commit.
 - **Arranque.** La API deja una traza `api started` cada vez que arranca: tras un despliegue y cada vez que Render la despierta.
-- **Importación.** Cada `oniel-data import all` es un tramo `import all` del que cuelgan los de cada línea, las anotaciones, cada fichero de horarios y la exportación, con `outcome` (`completed`, `skipped` cuando `--if-changed` no encuentra cambios, o `failed` con su excepción), la huella y los recuentos (líneas, ficheros de horarios, viajes). Como un tramo solo se envía al terminar, al empezar deja además un aviso `import all started`: uno sin tramo posterior es una importación en curso o interrumpida. La exportación de la instantánea es un tramo `export snapshot`.
+- **Importación.** Cada `oniel-data import all` es un tramo `import all` del que cuelgan los de cada línea, las anotaciones, cada fichero de horarios y la exportación, con `outcome` (`completed`, `skipped` cuando `--if-changed` no encuentra cambios, o `failed` con su excepción), la huella y los recuentos (líneas, ficheros de horarios, viajes). Como un tramo solo se envía al terminar, al empezar deja además un aviso `import all started`: uno sin tramo posterior es una importación en curso o interrumpida. La exportación de la instantánea es un tramo `export snapshot`, que en producción no aparece: el arranque usa `--no-snapshot` y el tramo `import all` lleva `snapshot_exported = false`.
 
 ### Consultar el estado: `oniel-data obs`
 

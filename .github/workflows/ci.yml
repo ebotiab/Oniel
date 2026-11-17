@@ -64,7 +64,9 @@ jobs:
     needs: cambios
     if: needs.cambios.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # pytest ronda los 9-11 minutos y `validate` pasa de 3 con tres ficheros de Renfe: con 15 el
+    # trabajo se cancelaba a medias de `validate` según el día que tuviera el ejecutor.
+    timeout-minutes: 25
     defaults:
       run:
         working-directory: backend

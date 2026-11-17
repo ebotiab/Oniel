@@ -210,7 +210,7 @@ cd backend && uv run oniel-data --help
 
 | Comando | Qué hace |
 |---|---|
-| `import all` | Migra, importa la red, las anotaciones y los horarios, y exporta la instantánea. Con `--if-changed` se salta si datos y código no cambiaron |
+| `import all` | Migra, importa la red, las anotaciones y los horarios, y exporta la instantánea. Con `--if-changed` se salta si datos y código no cambiaron; con `--no-snapshot` no exporta la instantánea (así arranca la API en producción) |
 | `validate` | Comprueba las líneas, los horarios y las anotaciones sin base de datos (`--spec` para una sola línea) |
 | `import network` | Construye cada línea desde el trazado original y su especificación, y la carga |
 | `import annotations` | Carga las anotaciones de red (interrupciones y proyectos); la red tiene que estar importada |

@@ -209,6 +209,13 @@ def import_all_cmd(
             help="Saltar la importación si los datos y el código no han cambiado desde la última",
         ),
     ] = False,
+    snapshot: Annotated[
+        bool,
+        typer.Option(
+            help="Exportar al final la instantánea estática del visor; el arranque de la API "
+            "en producción lo evita con --no-snapshot, porque allí nadie la lee",
+        ),
+    ] = True,
 ) -> None:
     """Migra, importa la red, las anotaciones y cada fichero de horarios declarado y exporta la instantánea."""
     from oniel.importing import run_import_all
@@ -221,7 +228,7 @@ def import_all_cmd(
                 sources=SOURCES_DEFAULT,
                 feeds=_declared_feeds(),
                 data_dir=settings.data_dir,
-                snapshot_dir=SNAPSHOT_DEFAULT,
+                snapshot_dir=SNAPSHOT_DEFAULT if snapshot else None,
                 annotations=ANNOTATIONS_DEFAULT,
                 if_changed=if_changed,
             )
