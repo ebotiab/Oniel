@@ -79,8 +79,7 @@
   "connections": [
     {"id": "valencia-nord-sur", "node_id": "valencia-estacio-del-nord", "name": "Líneas convencionales al sur de València", "towards": "Xàtiva, Alacant y Albacete", "status": "no_cargada", "sketch": [[-0.3771908, 39.4669126], [-0.4, 39.4], [-0.45, 39.2], [-0.5245402, 38.992148]]},
     {"id": "sagunt-teruel", "node_id": "sagunt", "name": "Línea de Sagunt a Teruel y Zaragoza", "towards": "Segorbe, Teruel y Zaragoza", "status": "no_cargada", "sketch": [[-0.2714149, 39.6756707], [-0.4823544, 39.8471755], [-1.110284, 40.341029]]},
-    {"id": "ramal-de-tortosa", "node_id": "l-aldea-amposta-tortosa", "name": "Ramal de Tortosa", "towards": "Tortosa", "status": "no_cargada", "sketch": [[0.6145466, 40.7535866], [0.5558561, 40.7590832], [0.5230136, 40.807333]]},
-    {"id": "convencional-tarragona-costa", "node_id": "bif-la-feredat", "name": "Línea convencional por Tarragona y la costa", "towards": "Vila-seca, Tarragona, Sant Vicenç de Calders y Barcelona", "status": "no_cargada", "sketch": [[1.1267256, 41.121723], [1.15037877, 41.1128193], [1.25322776, 41.1115636], [1.37341488, 41.1366479]]}
+    {"id": "ramal-de-tortosa", "node_id": "l-aldea-amposta-tortosa", "name": "Ramal de Tortosa", "towards": "Tortosa", "status": "no_cargada", "sketch": [[0.6145466, 40.7535866], [0.5558561, 40.7590832], [0.5230136, 40.807333]]}
   ],
   "stop_mappings": {
     "65000": {"node": "valencia-estacio-del-nord"},
@@ -163,12 +162,12 @@
     "04040": {"exits": ["sagunt"]},
     "65400": {"exits": ["l-aldea-amposta-tortosa"]},
     "65401": {"exits": ["l-aldea-amposta-tortosa"]},
-    "71401": {"exits": ["bif-la-feredat"]},
-    "71500": {"exits": ["bif-la-feredat"]},
-    "71502": {"exits": ["bif-la-feredat"]},
-    "71503": {"exits": ["bif-la-feredat"]},
-    "71600": {"exits": ["bif-la-feredat"]},
-    "71700": {"exits": ["bif-la-feredat"]},
+    "71401": {"exits": ["bif-la-feredat"], "via": {"line": "tarragona-barcelona", "node": "bif-la-feredat"}},
+    "71500": {"exits": ["bif-la-feredat"], "via": {"line": "tarragona-barcelona", "node": "bif-la-feredat"}},
+    "71502": {"exits": ["bif-la-feredat"], "via": {"line": "tarragona-barcelona", "node": "bif-la-feredat"}},
+    "71503": {"exits": ["bif-la-feredat"], "via": {"line": "tarragona-barcelona", "node": "bif-la-feredat"}},
+    "71600": {"exits": ["bif-la-feredat"], "via": {"line": "tarragona-barcelona", "node": "bif-la-feredat"}},
+    "71700": {"exits": ["bif-la-feredat"], "via": {"line": "tarragona-barcelona", "node": "bif-la-feredat"}},
     "71802": {"exits": ["bif-la-feredat"]},
     "79400": {"exits": ["bif-la-feredat"]},
     "71801": {"exits": ["camp-de-tarragona"], "via": {"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}},
@@ -182,7 +181,7 @@
     "min_node_stops": 2
   },
   "route_overrides": [
-    {"id": "cambrils-vila-seca-por-la-feredat", "description": "Regionales de Tortosa y València a Barcelona por Tarragona ciudad: dejan la línea en la bifurcación La Feredat, camino de Vila-seca. Barcelona-Sants es para ellos una parada de la línea de la costa, no de la alta velocidad, así que la regla resuelve el viaje solo hasta Vila-seca.", "consecutive_stop_ids": ["65422", "71401"], "to_stop_id": "71401"},
+    {"id": "cambrils-vila-seca-por-la-feredat", "description": "Regionales de Tortosa y València a Barcelona por Tarragona ciudad: dejan la línea en la bifurcación La Feredat, camino de Vila-seca. Barcelona-Sants es para ellos una parada de la línea de Tarragona a Barcelona por la costa, que sigue desde Vila-seca, y no de la alta velocidad, así que la regla resuelve el viaje en esta línea solo hasta Vila-seca.", "consecutive_stop_ids": ["65422", "71401"], "to_stop_id": "71401"},
     {"id": "castello-tarragona-por-la-feredat", "description": "Intercity de València a Barcelona por Tarragona ciudad, sin parada entre Castelló y Tarragona: dejan la línea en la bifurcación La Feredat y siguen por la costa.", "consecutive_stop_ids": ["65300", "71500"], "to_stop_id": "71500"},
     {"id": "l-aldea-tarragona-por-la-feredat", "description": "Intercity de Barcelona a València por Tarragona ciudad, sin parada entre Tarragona y L'Aldea-Amposta-Tortosa: entran en la línea por la bifurcación La Feredat.", "consecutive_stop_ids": ["65402", "71500"], "to_stop_id": "71500"}
   ]

@@ -61,6 +61,7 @@ class Settings(BaseSettings):
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
         "barcelona-girona-portbou",
+        "tarragona-barcelona",
     ]
 
 

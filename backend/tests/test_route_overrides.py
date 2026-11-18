@@ -46,6 +46,7 @@ from conftest import (
     SEVILLA_CADIZ_SPEC,
     SPEC,
     SPECS,
+    TARRAGONA_BARCELONA_SPEC,
     TOLEDO_SPEC,
 )
 from pydantic import ValidationError
@@ -710,6 +711,9 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         HUESCA_SPEC.name: {},
         # la de Barcelona a Portbou tampoco: ningún tren pasa de ella a otra línea
         BARCELONA_PORTBOU_SPEC.name: {},
+        # los regionales de Lleida por Valls, que dejan la línea de la costa de Tarragona en Sant
+        # Vicenç de Calders camino de Roda de Mar
+        TARRAGONA_BARCELONA_SPEC.name: {"lleida-por-valls": 8},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

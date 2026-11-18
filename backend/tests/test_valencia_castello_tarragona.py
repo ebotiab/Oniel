@@ -152,7 +152,6 @@ def test_both_ends_are_nodes_that_other_lines_define(coast: BuiltNetwork) -> Non
         "valencia-nord-sur": NORD,
         "sagunt-teruel": "sagunt",
         "ramal-de-tortosa": "l-aldea-amposta-tortosa",
-        "convencional-tarragona-costa": FEREDAT,
     }
 
 
