@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { lineasDeLista } from './instantanea.ts'
+
 /** El campo del buscador: en escritorio está a la vista; en el móvil lo despliega la lupa. */
 async function abrirBuscador(page: Page) {
   const lupa = page.getByTestId('buscador-abrir')
@@ -45,7 +47,8 @@ test.describe('Buscar una estación o una línea', () => {
     await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
     await campo.focus()
-    await expect(page.getByRole('option')).toHaveCount(26)
+    // todas las líneas de la lista y, al final, el glosario
+    await expect(page.getByRole('option')).toHaveCount(lineasDeLista.length + 1)
     await expect(page.getByRole('option').last()).toContainText('Glosario')
     await campo.press('ArrowDown')
     await campo.press('ArrowDown')

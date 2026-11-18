@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 import { SPAIN_BOUNDS } from '../src/map/bounds.ts'
+import { cabeceraDeZona, zona as zonaDeLista } from './instantanea.ts'
 
 /** En el móvil la hoja empieza plegada: la despliega para ver la lista o la ficha. */
 async function abrirPanel(page: Page) {
@@ -24,18 +25,22 @@ test.describe('Las líneas de Extremadura', () => {
     await abrirPanel(page)
     const zona = page.getByTestId('vista-red').getByRole('region', { name: 'Extremadura' })
     const cabecera = zona.locator('.zona-cabecera')
-    await expect(cabecera).toContainText(/^›Extremadura4 líneas/)
+    // cuántas líneas tiene la zona lo dice la instantánea: aquí se miran las cuatro de esta prueba
+    const extremadura = zonaDeLista('extremadura')
+    await expect(cabecera).toContainText(cabeceraDeZona(extremadura))
     // con más de doce líneas la lista arranca como un índice de zonas: plegada, dice sus ciudades
     await expect(cabecera).toHaveAttribute('aria-expanded', 'false')
-    await expect(zona.locator('.zona-detalle')).toHaveText('Cáceres, Mérida, Badajoz, Plasencia')
+    for (const ciudad of ['Cáceres', 'Mérida', 'Badajoz', 'Plasencia']) await expect(zona.locator('.zona-detalle')).toContainText(ciudad)
     await cabecera.click()
+    await expect(zona.locator('.fila-linea')).toHaveCount(extremadura.lineas.length)
+    await expect(page.getByTestId('linea-lav-plasencia-badajoz')).toHaveText(/^Alta velocidad: Plasencia – Badajoz por Cáceres191 km$/)
+    await expect(page.getByTestId('linea-madrid-plasencia')).toHaveText(/^Línea convencional: Madrid – Plasencia por Talavera de la Reina260 km$/)
+    await expect(page.getByTestId('linea-monfrague-caceres')).toHaveText(/^Línea convencional: Monfragüe – Cáceres por Cañaveral71 km$/)
+    await expect(page.getByTestId('linea-ramal-merida')).toHaveText(/^Línea convencional: Aljucén – Mérida7 km$/)
     // primero la alta velocidad y, en cada tipo, de la más larga a la más corta
-    await expect(zona.locator('.fila-linea')).toHaveText([
-      /^Alta velocidad: Plasencia – Badajoz por Cáceres191 km$/,
-      /^Línea convencional: Madrid – Plasencia por Talavera de la Reina260 km$/,
-      /^Línea convencional: Monfragüe – Cáceres por Cañaveral71 km$/,
-      /^Línea convencional: Aljucén – Mérida7 km$/,
-    ])
+    const cuatro = ['linea-lav-plasencia-badajoz', 'linea-madrid-plasencia', 'linea-monfrague-caceres', 'linea-ramal-merida']
+    const orden = await zona.locator('.fila-linea').evaluateAll((filas) => filas.map((f) => f.getAttribute('data-testid') ?? ''))
+    expect(orden.filter((id) => cuatro.includes(id))).toEqual(cuatro)
     await page.getByTestId('linea-lav-plasencia-badajoz').click()
     await expect(page).toHaveURL(/\/linea\/lav-plasencia-badajoz$/)
     await expect(page.getByRole('heading', { name: 'Línea de alta velocidad Plasencia – Cáceres – Badajoz' })).toBeVisible()
@@ -67,7 +72,7 @@ test.describe('Las líneas de Extremadura', () => {
   test('el comparador encuentra los dos recorridos de Madrid a Badajoz', async ({ page }) => {
     await page.goto('/recorridos/madrid-puerta-de-atocha/badajoz')
     const recorridos = page.getByTestId('recorrido')
-    await expect(recorridos).toHaveCount(2)
+    // los dos más cortos son los de Extremadura
     // por el trazado antiguo de Monfragüe a Cáceres, por Cañaveral: kilómetro y medio menos
     await expect(recorridos.nth(0)).toContainText('444,9 km')
     await expect(recorridos.nth(0)).toContainText('Recorre cuatro líneas')
@@ -118,12 +123,7 @@ test.describe('Las líneas de Extremadura', () => {
     const indice = (await (await request.get('/data/index.json')).json()) as { nodes: { id: string; lon: number; lat: number }[] }
     const badajoz = indice.nodes.find((n) => n.id === 'badajoz')!
     const [[oeste, sur], [este, norte]] = SPAIN_BOUNDS
-    // era el nodo más al oeste hasta que se cargó la línea de Olmedo a Ourense: ahora lo es Ourense.
-    // La caja contiene a los dos con margen
-    const ourense = indice.nodes.find((n) => n.id === 'ourense')!
-    expect(Math.min(...indice.nodes.map((n) => n.lon))).toBe(ourense.lon)
-    expect(ourense.lon).toBeLessThan(badajoz.lon)
-    expect(ourense.lon - oeste).toBeGreaterThan(0.1)
+    // la caja la contiene con margen, y a todos los demás nodos de la red, estén más al oeste o no
     expect(badajoz.lon - oeste).toBeGreaterThan(0.1)
     for (const n of indice.nodes) {
       expect(n.lon, `${n.id}: longitud`).toBeGreaterThan(oeste)

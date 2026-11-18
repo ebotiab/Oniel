@@ -21,9 +21,12 @@ const MIXTOS = [
 ]
 
 test.describe('Ancho de vía: el tramo de ancho mixto lo dice', () => {
-  test('solo el paso por Loja, la entrada a Granada, la de Murcia, la llegada a Ourense y la variante de Pajares traen el ancho mixto fuera de la línea de València', () => {
-    // la línea de València a Camp de Tarragona tiene los suyos (e2e/mediterraneo.spec.ts)
-    const conAncho = red.segments.filter((s) => s.attributes?.gauge && s.line_id !== 'valencia-castello-tarragona').map((s) => s.id)
+  test('en sus líneas, solo el paso por Loja, la entrada a Granada, la de Murcia, la llegada a Ourense y la variante de Pajares traen el ancho mixto', () => {
+    // se mira línea a línea, y solo en las de estos tramos: otra línea con ancho mixto lo comprueba en su
+    // prueba (la de València a Camp de Tarragona, en e2e/mediterraneo.spec.ts)
+    const lineas = new Set(MIXTOS.map((id) => id.split(':')[0]))
+    expect(lineas.size).toBe(4)
+    const conAncho = red.segments.filter((s) => s.attributes?.gauge && lineas.has(s.line_id)).map((s) => s.id)
     expect(conAncho.sort()).toEqual([...MIXTOS].sort())
     for (const id of MIXTOS) expect(red.segments.find((s) => s.id === id)?.attributes?.gauge?.value).toBe('mixto')
   })

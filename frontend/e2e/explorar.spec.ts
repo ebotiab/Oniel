@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 
-import { abrirZonas, irA } from './navegar.ts'
+import { FICHA_RED, lineasDeLista, zonas } from './instantanea.ts'
+import { abrirLinea, abrirZonas, irA } from './navegar.ts'
 
 test.describe('Explorar la red', () => {
   test('se abre con el mapa y la vista de la red', async ({ page }) => {
@@ -11,7 +12,7 @@ test.describe('Explorar la red', () => {
     // el lienzo del mapa se ha creado
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     // la vista de la red dice cuánta hay cargada con un recuento, sin enumerar las líneas
-    await expect(page.getByTestId('ficha-red')).toContainText(/^25 líneas · 4\.997 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(FICHA_RED)
   })
 
   test('seleccionar un tramo en el esquema muestra sus datos y sus trenes', async ({ page }) => {
@@ -34,8 +35,7 @@ test.describe('Explorar la red', () => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
-    await abrirZonas(page)
-    await page.getByTestId('linea-convencional-madrid-alcazar-cordoba').click()
+    await abrirLinea(page, 'convencional-madrid-alcazar-cordoba')
     await expect(page.getByRole('heading', { name: /Línea convencional Madrid – Alcázar de San Juan – Córdoba/ })).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-alcazar-de-san-juan')).toBeVisible()
     await expect(page.getByTestId('esquema-nodo-linares-baeza')).toBeVisible()
@@ -55,13 +55,13 @@ test.describe('Explorar la red', () => {
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
     if (movil) await asa.click()
-    // la lista es un índice de sus seis zonas, también en la hoja del móvil, y ya no hay pestañas:
-    // con más de doce líneas arranca plegada, y al abrir las zonas salen las dieciocho líneas
-    await expect(page.getByTestId('lista-lineas').locator('.zona-cabecera')).toHaveCount(8)
+    // la lista es un índice de zonas, también en la hoja del móvil, y ya no hay pestañas:
+    // con más de doce líneas arranca plegada, y al abrir las zonas salen todas las líneas
+    await expect(page.getByTestId('lista-lineas').locator('.zona-cabecera')).toHaveCount(zonas.length)
     await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await abrirZonas(page)
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(25)
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(lineasDeLista.length)
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()

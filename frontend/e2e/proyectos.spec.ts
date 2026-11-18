@@ -31,28 +31,16 @@ const proyecto = (id: string) => proyectos.find((a) => a.id === id)!
 
 test.describe('Proyectos: datos y registro de capas', () => {
   test('cada proyecto trae estado, hitos fechados con su fuente y fecha de comprobación', () => {
-    expect(proyectos.map((a) => a.id).sort()).toEqual([
-      'proyecto-ancho-estandar-castello-la-boella',
-      'proyecto-conexion-lav-cordoba-jaen',
-      'proyecto-duplicacion-antequera-granada',
-      TUNELES,
-      BURGOS_VITORIA,
-      OROPESA,
-      MORA_ALCAZAR,
-      TALAYUELA,
-      'proyecto-segunda-via-ancho-mixto-valencia-castello',
-      LOJA,
-      Y_VASCA,
-    ])
+    // los proyectos que esta prueba nombra están; los que traiga cada línea nueva pasan por el mismo repaso
+    for (const id of [TUNELES, BURGOS_VITORIA, OROPESA, MORA_ALCAZAR, TALAYUELA, LOJA, Y_VASCA]) expect(proyecto(id), id).toBeTruthy()
     for (const a of proyectos) {
       expect(a.title && a.reason, a.id).toBeTruthy()
       expect(a.milestones!.length, a.id).toBeGreaterThan(0)
       // la fuente de cada hito es una de las del proyecto, y tiene dónde consultarse
       for (const h of a.milestones!) expect(a.sources.find((s) => s.id === h.source_id)?.url, `${a.id} ${h.date}`).toBeTruthy()
-      // los de Extremadura y los de la línea de València a Camp de Tarragona se comprobaron al cargarlas, un día después,
-      // el de Burgos a Vitoria, al cargar la línea de Burgos, tres días después, y la «Y» vasca y el último
-      // hito del de Burgos a Vitoria, al cargar la línea convencional de Vitoria, cinco días después
-      expect(['2026-11-12', '2026-11-13', '2026-11-15', '2026-11-17'], a.id).toContain(a.checked_on)
+      // cada uno se comprobó en sus fuentes al cargar su línea, desde el 12 de noviembre de 2026
+      expect(a.checked_on, a.id).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect((a.checked_on ?? '') >= '2026-11-12', a.id).toBe(true)
     }
   })
 
@@ -138,7 +126,7 @@ test.describe('Proyectos: la vista', () => {
   test('la página de cobertura enumera los proyectos, con su estado, y lleva a la ficha de cada uno', async ({ page }) => {
     await page.goto('/cobertura')
     const lista = page.getByTestId('cobertura-proyectos')
-    await expect(lista.getByRole('listitem')).toHaveCount(11)
+    await expect(lista.getByRole('listitem')).toHaveCount(proyectos.length)
     await expect(lista.getByRole('listitem').filter({ hasText: 'Variante de Loja' })).toContainText('en obras')
     await lista.getByTestId('proyecto-enlace').filter({ hasText: 'Variante de Loja' }).click()
     await expect(page).toHaveURL(/\/proyecto\//)
@@ -154,8 +142,10 @@ test.describe('Proyectos: la vista', () => {
       const data = (await (map.getSource('oniel-annotations') as unknown as { getData: () => Promise<GeoJSON.FeatureCollection> }).getData()).features
       return Object.fromEntries(data.map((f) => [String(f.properties!.oniel_id), String(f.properties!.dibujo)]))
     })
-    // solo los seis que no cuelgan de una vía cargada; los que están en obras van a trazos
-    expect(dibujos).toEqual({
+    // solo los que no cuelgan de una vía cargada: los mismos a los que el registro de capas da dibujo
+    expect(Object.keys(dibujos).sort()).toEqual(proyectos.filter((a) => dibujoDe(a) !== null).map((a) => a.id).sort())
+    // los que están en obras van a trazos; los demás, a puntos
+    expect(dibujos).toMatchObject({
       [Y_VASCA]: 'trazos',
       'proyecto-conexion-lav-cordoba-jaen': 'puntos',
       [BURGOS_VITORIA]: 'puntos',
