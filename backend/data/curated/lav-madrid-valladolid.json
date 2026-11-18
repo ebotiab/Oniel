@@ -380,11 +380,39 @@
     "11200": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
       ]
     },
     "11208": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
       ]
     },
     "11400": {

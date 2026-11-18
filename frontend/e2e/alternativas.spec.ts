@@ -12,22 +12,42 @@ async function abrirPanel(page: Page) {
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
 test.describe('Tramos sin otro camino', () => {
-  test('si la API todavía no tiene el análisis, el visor usa la instantánea', async ({ page }) => {
+  test('con la API en marcha, la vista lee la instantánea y no espera al cálculo del servidor', async ({ page }) => {
     test.skip(estatico, 'sin API el visor ya lee la instantánea')
-    // una API anterior a este apartado: el visor se publica antes de que el servidor se despliegue
     let pedidas = 0
     await page.route('**/api/alternatives*', (route) => {
       pedidas++
-      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+      return route.continue()
     })
     // se espera a que el visor hable ya con la API: antes de eso leería la instantánea de todos modos
     await page.goto('/')
     await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
     await page.goto('/sin-otro-camino')
-    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(18)
-    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(19)
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 75 trenes no tendrían otro camino')
+    expect(pedidas).toBe(0)
+  })
+
+  test('si la instantánea es de otro día, el análisis se pide al servidor; y si este no lo tiene, vale la instantánea', async ({ page }) => {
+    test.skip(estatico, 'sin API el visor ya lee la instantánea')
+    // una instantánea de otro día: el visor publicado va por delante de la API desplegada
+    await page.route('**/data/alternatives.json', async (route) => {
+      const respuesta = await route.fetch()
+      const datos = (await respuesta.json()) as { date: string }
+      return route.fulfill({ response: respuesta, json: { ...datos, date: '2000-01-01' } })
+    })
+    // y una API anterior a este apartado, que no tiene la ruta
+    let pedidas = 0
+    await page.route('**/api/alternatives*', (route) => {
+      pedidas++
+      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+    })
+    await page.goto('/')
+    await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
+    await page.goto('/sin-otro-camino')
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(19)
+    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     expect(pedidas).toBeGreaterThan(0)
   })
 
@@ -114,12 +134,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 119 de los 234 tramos con trenes, en 18 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 126 de los 241 tramos con trenes, en 19 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(18)
+    await expect(lineas).toHaveCount(19)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
@@ -128,6 +148,8 @@ test.describe('Tramos sin otro camino', () => {
     // delante va la de Madrid a Valladolid entera: al norte de Madrid no hay otro camino, y es la que más trenes lleva.
     // La de Valladolid a León, que la continúa, también figura entera
     await expect(linea('Valladolid – León por Palencia')).toContainText('Toda la línea, 8 tramos')
+    // y la de Burgos a Vitoria, el único camino cargado al País Vasco
+    await expect(linea('Burgos – Vitoria por Miranda de Ebro')).toContainText('Toda la línea, 7 tramos')
     await expect(linea('Valladolid – León por Palencia')).toContainText('de 26 a 53 trenes')
     await expect(lineas.nth(0)).toContainText('Madrid – Valladolid por Segovia')
     await expect(lineas.nth(0)).toContainText('Toda la línea, 5 tramos')

@@ -1,0 +1,282 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-06-01T08:52:28Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 29568804,
+  "lat": 42.8413030,
+  "lon": -2.6726970,
+  "tags": {
+    "name": "Vitoria-Gasteiz",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11208",
+    "ref:EU:PLC": "ES11208",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111208",
+    "website": "https://www.adif.es/w/11208-vitoria-gasteiz",
+    "wheelchair": "yes",
+    "wikidata": "Q3381144",
+    "wikipedia": "es:Estación de Vitoria"
+  }
+},
+{
+  "type": "node",
+  "id": 1536500006,
+  "lat": 42.5837127,
+  "lon": -2.8491348,
+  "tags": {
+    "name": "Haro",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "81002",
+    "ref:EU:PLC": "ES81002",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7181002",
+    "wheelchair": "yes",
+    "wikidata": "Q5846354",
+    "wikimedia_commons": "File:Haro - Estación de Adif 3.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 1791352316,
+  "lat": 42.8516484,
+  "lon": -2.7419310,
+  "tags": {
+    "alt_name": "Vitoria Mercancías",
+    "name": "Vitoria - Jundiz",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "11221",
+    "ref:EU:PLC": "ES11221",
+    "train": "yes",
+    "uic_ref": "7111221",
+    "wikidata": "Q92546756"
+  }
+},
+{
+  "type": "node",
+  "id": 1920075087,
+  "lat": 42.6302053,
+  "lon": -3.1128184,
+  "tags": {
+    "name": "Pancorbo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11111",
+    "ref:EU:PLC": "ES11111",
+    "train": "yes",
+    "uic_ref": "7111111",
+    "website": "https://www.adif.es/w/11111-pancorbo",
+    "wikidata": "Q5846875",
+    "wikipedia": "es:Estación de Pancorbo"
+  }
+},
+{
+  "type": "node",
+  "id": 2046477536,
+  "lat": 42.7652223,
+  "lon": -2.8302344,
+  "tags": {
+    "addr:city": "La Puebla de Arganzón",
+    "addr:postcode": "09294",
+    "name": "La Puebla de Arganzón",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "11204",
+    "ref:EU:PLC": "ES11204",
+    "train": "yes",
+    "uic_ref": "7111204",
+    "wikidata": "Q5645033",
+    "wikipedia": "es:Estación de La Puebla de Arganzón"
+  }
+},
+{
+  "type": "node",
+  "id": 2046477540,
+  "lat": 42.7427360,
+  "lon": -2.8673352,
+  "tags": {
+    "name": "Manzanos",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11203",
+    "ref:EU:PLC": "ES11203",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111203",
+    "wikidata": "Q3381098",
+    "wikipedia": "es:Estación de Manzanos"
+  }
+},
+{
+  "type": "node",
+  "id": 2046477543,
+  "lat": 42.8160304,
+  "lon": -2.8048540,
+  "tags": {
+    "name": "Nanclares-Langraiz",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11205",
+    "ref:EU:PLC": "ES11205",
+    "train": "yes",
+    "uic_ref": "7111205",
+    "website": "https://www.adif.es/w/11205-nanclares/langraiz",
+    "wikidata": "Q3381365"
+  }
+},
+{
+  "type": "node",
+  "id": 2089043141,
+  "lat": 42.6208102,
+  "lon": -2.8466913,
+  "tags": {
+    "name": "San Felices",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "81001",
+    "ref:EU:PLC": "ES81001",
+    "train": "yes",
+    "uic_ref": "7181001"
+  }
+},
+{
+  "type": "node",
+  "id": 3923774420,
+  "lat": 42.6918228,
+  "lon": -2.9404391,
+  "tags": {
+    "name": "Miranda de Ebro Clasificación",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "11220",
+    "ref:EU:PLC": "ES11220",
+    "uic_ref": "7111220"
+  }
+},
+{
+  "type": "node",
+  "id": 8057319954,
+  "lat": 42.3731995,
+  "lon": -3.6573959,
+  "tags": {
+    "name": "Bifurcación Gamonal",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 9144790787,
+  "lat": 42.5427319,
+  "lon": -3.3190808,
+  "tags": {
+    "name": "Briviesca",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11109",
+    "ref:EU:PLC": "ES11109",
+    "train": "yes",
+    "uic_ref": "7111109",
+    "website": "https://www.adif.es/-/11109-briviesca",
+    "wikidata": "Q5574099",
+    "wikipedia": "es:Estación de Briviesca"
+  }
+},
+{
+  "type": "node",
+  "id": 13021298528,
+  "lat": 42.3711651,
+  "lon": -3.6663219,
+  "tags": {
+    "name": "Burgos - Rosa Manzano",
+    "old_name": "Burgos Rosa de Lima",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11014",
+    "ref:EU:PLC": "ES11014",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111014",
+    "website": "https://www.adif.es/w/11014-burgos-r.-manzano",
+    "wheelchair": "limited",
+    "wikidata": "Q3394788",
+    "wikipedia": "es:Estación de Burgos Rosa Manzano"
+  }
+},
+{
+  "type": "node",
+  "id": 13653602041,
+  "lat": 42.6907987,
+  "lon": -2.9411390,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11200",
+    "ref:EU:PLC": "ES11200",
+    "train": "yes",
+    "uic_ref": "7111200",
+    "website": "https://www.adif.es/w/11200-miranda-de-ebro",
+    "wikidata": "Q3327097",
+    "wikipedia": "es:Estación de Miranda de Ebro"
+  }
+}
+
+  ]
+}

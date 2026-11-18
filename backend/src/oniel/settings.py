@@ -55,6 +55,7 @@ class Settings(BaseSettings):
         "lav-valladolid-leon",
         "lav-venta-de-banos-burgos",
         "leon-oviedo-gijon",
+        "burgos-miranda-vitoria",
     ]
 
 

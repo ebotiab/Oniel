@@ -125,7 +125,6 @@ def test_nodes_station_junctions_and_passing_loops(line: BuiltNetwork) -> None:
     }
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "ramal-soto-de-cerrato-cerrato": "bif-soto-de-cerrato",
-        "conv-burgos-miranda-vitoria": "burgos-rosa-manzano",
     }
     assert all(n.offset_m < 50 for n in line.nodes)
 
@@ -280,7 +279,14 @@ def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNe
 def test_stops_on_each_side_leave_by_the_right_node(spec: NetworkSpec) -> None:
     sm = spec.stop_mappings
     assert sm[BURGOS].node == "burgos-rosa-manzano"
-    for stop_id in (MIRANDA, "11208", "11511", "11600", "13200", "81100"):
+    # hacia el País Vasco, Bilbao y Logroño, por la línea convencional de Burgos a Vitoria, que
+    # tiene por nodos Miranda y Vitoria; las demás paradas quedan fuera de la red cargada
+    for stop_id in (MIRANDA, "11208"):
+        assert sm[stop_id].exits == ["burgos-rosa-manzano"]
+        assert [(v.line, v.node) for v in sm[stop_id].via] == [
+            ("burgos-miranda-vitoria", "burgos-rosa-manzano")
+        ]
+    for stop_id in ("11511", "11600", "13200", "81100"):
         assert sm[stop_id].exits == ["burgos-rosa-manzano"] and not sm[stop_id].via
     # hacia Valladolid y Madrid, por la bifurcación Venta de Baños y la línea de León
     assert [(v.line, v.node) for v in sm[VALLADOLID].via] == [

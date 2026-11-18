@@ -638,9 +638,9 @@
       "url": "https://www.adif.es/viajeros/estado-de-la-red",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-15",
+      "retrieved_on": "2026-11-17",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
@@ -1610,6 +1610,53 @@
       "coverage": "Aprobación definitiva del estudio informativo, el 29 de diciembre de 2021, con la autorización del Consejo de Ministros del día 28; declaración de impacto ambiental del 11 de junio de 2021; alternativas elegidas: «Oeste 2» entre Burgos y Pancorbo y «Variante de Miranda 2» entre Pancorbo y Vitoria.",
       "notes": "Publicado en el BOE el 2022-01-08. Título oficial: «Anuncio de la Subdirección General de Planificación Ferroviaria sobre la aprobación del expediente de información pública y audiencia y la aprobación definitiva del \"Estudio Informativo del Proyecto de la Línea de Alta Velocidad Burgos-Vitoria\".» Descargado con xml.php el 15 de noviembre de 2026.",
       "file": "raw/proyectos/boe/BOE-B-2022-601_2026-11-15.xml"
+    },
+    {
+      "id": "osm-relation-18347132",
+      "name": "Trazado de la línea convencional Madrid–Hendaya (relación OSM 18347132, línea 100 de Adif, ancho ibérico a 3 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18347132",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-17",
+      "coverage": "De la relación se usan los 117,3 km de Burgos-Rosa Manzano a Vitoria-Gasteiz, por Briviesca, Pancorbo y Miranda de Ebro; velocidad máxima por tramo.",
+      "notes": "Descargado por la API de OpenStreetMap (api.openstreetmap.org, relation/18347132/full.json) el 17 de noviembre de 2026, porque overpass-api.de no respondía; el formato es el mismo. La relación es de infraestructura («Línea Madrid-Hendaya», ref=100, 815 vías) y va de Madrid a Hendaya. Entre Burgos y Vitoria es de una pieza: se traza el camino más corto por el grafo de vías, desde el nodo de la estación de Burgos (a 16 m de la vía) hasta el de Vitoria (a 5 m). Sus vías llevan gauge=1668, voltage=3000 y passenger_lines=2 en todo el trecho, salvo los primeros 0,66 km desde la estación de Burgos, de una sola vía (el trecho de vía única que llega hasta el cambiador de ancho). Todas traen velocidad.",
+      "file": "raw/osm/relation_18347132_linea_100_madrid_hendaya_2026-11-17.json"
+    },
+    {
+      "id": "osm-instalaciones-burgos-vitoria",
+      "name": "Estaciones e instalaciones de la línea Burgos–Miranda de Ebro–Vitoria en OpenStreetMap",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-17",
+      "coverage": "Coordenadas de las estaciones de Briviesca (nodo 9144790787), Pancorbo (1920075087), Miranda de Ebro (13653602041), Manzanos (2046477540), La Puebla de Arganzón (2046477536), Nanclares-Langraiz (2046477543) y Vitoria-Gasteiz (29568804), y de la bifurcación Gamonal, Haro y las playas de vías de Miranda y de Jundiz.",
+      "notes": "Nodos de Adif con etiqueta railway (station, halt, junction, yard) del recuadro 42,33–42,87 N × 3,70–2,62 O, pedidos el 17 de noviembre de 2026 al servidor público de Overpass overpass.private.coffee, porque overpass-api.de no respondía; la base de ese servidor era del 1 de junio de 2026. Los códigos de las estaciones (etiqueta ref) son los de sus paradas en el GTFS de Renfe.",
+      "file": "raw/osm/instalaciones_burgos_vitoria_2026-11-17.json"
+    },
+    {
+      "id": "wikipedia-linea-100",
+      "name": "Artículos «Línea Madrid-Hendaya» y de las estaciones de Burgos a Vitoria de Wikipedia en español (puntos kilométricos, vías, electrificación, bloqueo)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Madrid-Hendaya",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-17",
+      "coverage": "Línea 100 de la Red Ferroviaria de Interés General, de Madrid a Hendaya: ancho ibérico, 3 kV de corriente continua, vía doble salvo dos trechos (uno de ellos de Quintanilleja al cambiador de ancho de Burgos), bloqueo automático banalizado con control de tráfico centralizado, 160 km/h en la mayor parte y 155 km/h de Miranda de Ebro a Vitoria. Puntos kilométricos de los artículos de cada estación: Briviesca (416,885), Pancorbo (439,575), Miranda de Ebro (458,913), Manzanos (468,482), La Puebla de Arganzón (472,683), Nanclares (479,211) y Vitoria (492,292).",
+      "notes": "Fuente de verificación, no de geometría, consultada por la API de Wikipedia el 17 de noviembre de 2026. Revisiones: línea (27 de agosto de 2026, oldid 175069082), Briviesca (176095393), Pancorbo (164170824), Miranda de Ebro (174027815), Manzanos (158329615), La Puebla de Arganzón (158329500), Nanclares (158334850), Vitoria (167761487) y Burgos Rosa Manzano (174984863, sin punto kilométrico). El esquema del artículo de la línea pone Burgos-Rosa Manzano en el 373,40, pero no cuadra con el trazado: todos los demás puntos kilométricos quedan 1,4 a 1,6 km por delante del kilómetro que les toca contando desde Burgos con ese origen, porque la numeración es la anterior a la variante de Burgos de 2008. La línea de Oniel lleva como origen 374,9, el que deja a todas las estaciones a menos de 0,15 km de su punto kilométrico, y Burgos no guarda punto kilométrico."
+    },
+    {
+      "id": "moncloa-nota-y-vasca-2026-03",
+      "name": "Nota de prensa del Ministerio de Transportes y Movilidad Sostenible sobre la «Y» vasca y la alta velocidad Burgos – Vitoria",
+      "publisher": "Ministerio de Transportes y Movilidad Sostenible; La Moncloa",
+      "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/060326-puente-movilidad-euskadi.aspx",
+      "license": "Consulta pública; © Gobierno de España",
+      "license_url": "https://www.lamoncloa.gob.es/Paginas/avisolegal.aspx",
+      "retrieved_on": "2026-11-17",
+      "coverage": "Estado de la «Y» vasca el 6 de marzo de 2026 (montaje de vía en marcha, 15 tramos del ramal de Vitoria a Bilbao terminados y cuatro en obras, tres del nudo de Bergara) y de la alta velocidad Burgos – Vitoria (cuatro tramos en marcha, obras de plataforma licitadas o en ejecución en el 60 % del recorrido).",
+      "notes": "Publicada el 6 de marzo de 2026 en la web de La Moncloa y leída en el navegador el 17 de noviembre de 2026. No da fecha de puesta en servicio de ninguna de las dos líneas. Lo que decía, resumido, en el registro de consultas.",
+      "file": "raw/proyectos/consultas_2026-11-17_y_vasca.json"
     },
     {
       "id": "osm-relation-1941090",

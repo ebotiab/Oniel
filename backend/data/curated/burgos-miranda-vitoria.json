@@ -1,0 +1,788 @@
+{
+  "line": {
+    "id": "burgos-miranda-vitoria",
+    "name": "Línea convencional Burgos – Miranda de Ebro – Vitoria",
+    "short_name": "100",
+    "sort_order": 29,
+    "zone": "cantabrico",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 2,
+    "pk_origin_km": 374.9,
+    "status": "disponible",
+    "description": "Une Burgos con Vitoria por Miranda de Ebro. Es el camino de los trenes de Madrid al País Vasco mientras no esté la alta velocidad entre Burgos y Vitoria.\n\nEs un trecho de la línea de Madrid a Hendaya, abierta en 1862. Por ella van los Alvia de Madrid a Vitoria, San Sebastián e Irún, a Bilbao y a Logroño, que llegan a Burgos por la alta velocidad y cambian allí de ancho de vía; los Alvia e Intercity que unen Barcelona, Zaragoza y Pamplona con Burgos, León, Galicia y Salamanca, y los trenes de media distancia y regionales de Madrid-Príncipe Pío a Vitoria, San Sebastián e Irún por Ávila y Valladolid. En Briviesca y Pancorbo solo paran algunos de estos últimos.\n\nSale de Burgos hacia el noreste, cruza el desfiladero de Pancorbo y llega a Miranda de Ebro, donde se cruza con la línea de Casetas (Zaragoza) a Bilbao por Logroño: por el norte sale la rama de Bilbao, y por el sureste la de Haro, Logroño y Zaragoza. De Miranda a Vitoria la acompaña el río Zadorra, y entre las dos ciudades circulan además los trenes regionales que siguen a Altsasu y Pamplona.\n\nEn Vitoria la línea sigue hacia Altsasu, San Sebastián e Irún, y en Altsasu sale la de Pamplona: esos trechos, como las dos ramas de Miranda, no están cargados y se dibujan a trazos.",
+    "geometry_source": {
+      "source_id": "osm-relation-18347132",
+      "parts": [
+        {
+          "source_id": "osm-relation-18347132",
+          "file": "raw/osm/relation_18347132_linea_100_madrid_hendaya_2026-11-17.json",
+          "relation_id": 18347132,
+          "from": [
+            -3.6663219,
+            42.3711651
+          ],
+          "to": [
+            -2.672697,
+            42.841303
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-100"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "burgos-rosa-manzano",
+      "name": "Burgos-Rosa Manzano",
+      "kind": "estacion",
+      "shared": true,
+      "adif_code": "11014",
+      "position": {
+        "lon": -3.6663219,
+        "lat": 42.3711651
+      }
+    },
+    {
+      "id": "briviesca",
+      "name": "Briviesca",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "11109",
+      "position": {
+        "lon": -3.3190808,
+        "lat": 42.5427319
+      },
+      "reference_pk_km": 416.885
+    },
+    {
+      "id": "pancorbo",
+      "name": "Pancorbo",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "11111",
+      "position": {
+        "lon": -3.1128184,
+        "lat": 42.6302053
+      },
+      "reference_pk_km": 439.575,
+      "description": "Estación junto al desfiladero de Pancorbo, por el que la línea cruza los montes Obarenes entre Burgos y Miranda de Ebro. Paran en ella unos pocos trenes regionales."
+    },
+    {
+      "id": "miranda-de-ebro",
+      "name": "Miranda de Ebro",
+      "kind": "estacion",
+      "adif_code": "11200",
+      "position": {
+        "lon": -2.941139,
+        "lat": 42.6907987
+      },
+      "reference_pk_km": 458.913,
+      "description": "Nudo ferroviario donde la línea de Madrid a Hendaya se cruza con la de Casetas a Bilbao por Logroño. De aquí salen hacia el norte los trenes de Bilbao, por Orduña y Llodio, y hacia el sureste los de Haro, Logroño y Zaragoza; esas dos ramas no están cargadas."
+    },
+    {
+      "id": "manzanos",
+      "name": "Manzanos",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "11203",
+      "position": {
+        "lon": -2.8673352,
+        "lat": 42.742736
+      },
+      "reference_pk_km": 468.482
+    },
+    {
+      "id": "la-puebla-de-arganzon",
+      "name": "La Puebla de Arganzón",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "11204",
+      "position": {
+        "lon": -2.8302344,
+        "lat": 42.7652223
+      },
+      "reference_pk_km": 472.683
+    },
+    {
+      "id": "nanclares-langraiz",
+      "name": "Nanclares-Langraiz",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "11205",
+      "position": {
+        "lon": -2.804854,
+        "lat": 42.8160304
+      },
+      "reference_pk_km": 479.211
+    },
+    {
+      "id": "vitoria-gasteiz",
+      "name": "Vitoria-Gasteiz",
+      "kind": "estacion",
+      "adif_code": "11208",
+      "position": {
+        "lon": -2.672697,
+        "lat": 42.841303
+      },
+      "reference_pk_km": 492.292,
+      "description": "La estación de Vitoria, donde acaba esta línea. Los trenes siguen hacia Altsasu, desde donde unos van a San Sebastián e Irún y otros a Pamplona y Zaragoza, por vías que no están cargadas."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "vitoria-gasteiz",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-17",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea entre Burgos y Miranda de Ebro y entre Miranda de Ebro y Vitoria; ningún símbolo de ERTMS."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "vitoria-gasteiz",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-17",
+      "note": "Mapa 4: trazo marrón discontinuo a lo largo de la línea de Burgos Rosa Manzano a Miranda y de Miranda a Vitoria, con el rótulo «BAB ctc» junto a Burgos y entre Miranda y Vitoria. El rótulo «BAU ctc» que hay junto a Burgos es del trecho de vía única de Quintanilleja al cambiador de Burgos y de la bifurcación Rubena, que quedan fuera de la línea. Coincide con Wikipedia (bloqueo automático de vía doble banalizada con CTC)."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "vitoria-gasteiz",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-17",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-miranda-bilbao",
+      "node_id": "miranda-de-ebro",
+      "name": "Línea Casetas – Bilbao",
+      "towards": "Orduña, Llodio y Bilbao",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -2.941139,
+          42.6907987
+        ],
+        [
+          -3.009915,
+          42.994926
+        ],
+        [
+          -2.9511243,
+          43.0438897
+        ],
+        [
+          -2.9606511,
+          43.1423514
+        ],
+        [
+          -2.9285592,
+          43.2601304
+        ]
+      ]
+    },
+    {
+      "id": "conv-miranda-logrono",
+      "node_id": "miranda-de-ebro",
+      "name": "Línea Casetas – Bilbao",
+      "towards": "Haro, Logroño, Castejón y Zaragoza",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -2.941139,
+          42.6907987
+        ],
+        [
+          -2.849396,
+          42.583635
+        ],
+        [
+          -2.442193,
+          42.457459
+        ]
+      ]
+    },
+    {
+      "id": "conv-vitoria-altsasu",
+      "node_id": "vitoria-gasteiz",
+      "name": "Línea Madrid – Hendaya",
+      "towards": "Altsasu, San Sebastián e Irún, y Pamplona",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -2.672697,
+          42.841303
+        ],
+        [
+          -2.514668,
+          42.848723
+        ],
+        [
+          -2.38921,
+          42.84643
+        ],
+        [
+          -2.306807,
+          42.869599
+        ],
+        [
+          -2.181237,
+          42.894847
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "11014": {
+      "node": "burgos-rosa-manzano"
+    },
+    "11109": {
+      "node": "briviesca"
+    },
+    "11111": {
+      "node": "pancorbo"
+    },
+    "11200": {
+      "node": "miranda-de-ebro"
+    },
+    "11203": {
+      "node": "manzanos"
+    },
+    "11204": {
+      "node": "la-puebla-de-arganzon"
+    },
+    "11205": {
+      "node": "nanclares-langraiz"
+    },
+    "11208": {
+      "node": "vitoria-gasteiz"
+    },
+    "10600": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        }
+      ]
+    },
+    "17000": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "08004": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "14100": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10000": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10200": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10203": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10204": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10205": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10206": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10207": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10208": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10209": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10300": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10302": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10400": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10409": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10500": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10501": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10502": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10503": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "10504": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11000": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11004": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11006": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "11009": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20100": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "30100": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "32002": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "32003": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "32004": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "burgos-rosa-manzano"
+      ]
+    },
+    "13106": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "13200": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "81002": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "81100": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "04040": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "04104": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11210": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11212": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11213": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11300": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11305": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11306": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11402": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11404": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11405": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11500": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11501": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11503": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11504": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11507": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11515": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11516": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11600": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "70800": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "70801": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "70806": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "70807": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "71100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "71801": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80001": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80003": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80005": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80108": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80109": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80114": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "80115": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81200": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81203": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81205": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81206": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81207": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81208": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81209": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "81210": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos o más estaciones de la línea. Así entran todos los trenes que la recorren, porque todos paran por lo menos en dos de Burgos, Miranda de Ebro y Vitoria, y quedan fuera los que solo tocan una de ellas: los AVE de Burgos a Madrid, Valencia y Murcia, los de Bilbao a Miranda de Ebro, Logroño, Zaragoza y Barcelona y los de Vitoria a Pamplona, Zaragoza y San Sebastián, que no recorren ningún tramo de la línea.",
+    "min_node_stops": 2
+  },
+  "route_overrides": []
+}
