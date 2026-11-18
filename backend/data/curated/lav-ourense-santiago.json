@@ -1,0 +1,483 @@
+{
+  "line": {
+    "id": "lav-ourense-santiago",
+    "name": "Línea de alta velocidad Ourense – Santiago de Compostela",
+    "short_name": "082 y 822",
+    "sort_order": 30,
+    "zone": "galicia",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 300,
+    "tracks": 2,
+    "opened_on": "2011-12-10",
+    "reference_length_km": 88.28,
+    "status": "disponible",
+    "description": "Une Ourense con Santiago de Compostela en poco más de media hora. Es la continuación del camino de Madrid a Galicia: por ella siguen hacia Santiago, A Coruña y Vigo los trenes que llegan a Ourense desde Madrid.\n\nSe abrió en diciembre de 2011, diez años antes que el resto de la línea de Madrid. No tiene estaciones intermedias: entre Ourense y Santiago hay 88 kilómetros de túneles y viaductos sin ninguna parada. La línea antigua, por O Carballiño y Lalín, sigue en servicio para los trenes regionales y no está cargada.\n\nLa vía es de ancho ibérico, el de la red convencional, y no de ancho estándar como el resto de la alta velocidad. Por eso solo llegan a Santiago desde Madrid los trenes capaces de cambiar de ancho, que lo hacen en Taboadela, antes de Ourense.\n\nLos trenes salen de la estación de Ourense por la vía de la línea antigua, de vía única, durante un kilómetro, hasta la bifurcación Coto da Torre, donde empieza la vía nueva. Llegan a Santiago por la bifurcación A Grandeira, donde vuelven a juntarse las dos líneas.\n\nLa recorren los trenes de Madrid a Santiago, A Coruña y Vigo y los Avant de Ourense a Santiago y A Coruña. Algunos trenes de Madrid a Vigo no entran en Santiago: junto a la bifurcación A Grandeira toman un enlace corto que los lleva a la línea de Vigo sin pasar por la estación.",
+    "geometry_source": {
+      "source_id": "osm-relation-4777980",
+      "parts": [
+        {
+          "source_id": "osm-relation-11109438",
+          "file": "raw/osm/relation_11109438_linea_zamora_a_coruna_2026-11-14.json",
+          "relation_id": 11109438,
+          "from": [
+            -7.872551,
+            42.350692
+          ],
+          "to": [
+            -7.8823136,
+            42.3560561
+          ]
+        },
+        {
+          "source_id": "osm-relation-4777980",
+          "file": "raw/osm/relation_4777980_lav_olmedo_zamora_galicia_2026-11-14.json",
+          "relation_id": 4777980,
+          "from": [
+            -7.8823136,
+            42.3560561
+          ],
+          "to": [
+            -8.5451964,
+            42.8704417
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-ourense-santiago"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ourense",
+      "name": "Ourense",
+      "kind": "estacion",
+      "adif_code": "22100",
+      "shared": true,
+      "position": {
+        "lon": -7.872551,
+        "lat": 42.350692
+      },
+      "reference_pk_km": 0.0
+    },
+    {
+      "id": "bif-coto-da-torre",
+      "name": "Bifurcación Coto da Torre",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -7.883657,
+        "lat": 42.356114
+      },
+      "reference_pk_km": 1.041,
+      "description": "Bifurcación (el punto donde una vía se separa de otra) a un kilómetro de la estación de Ourense. Aquí la vía nueva a Santiago, de vía doble, se separa de la línea antigua, que sigue por O Carballiño y Lalín. Hasta aquí los trenes vienen de la estación por la vía única de la línea antigua."
+    },
+    {
+      "id": "bif-a-grandeira",
+      "name": "Bifurcación A Grandeira",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.5334143,
+        "lat": 42.8574666
+      },
+      "reference_pk_km": 85.041,
+      "description": "Bifurcación a tres kilómetros de la estación de Santiago de Compostela, donde la vía nueva de Ourense se junta con la línea antigua de Lalín. Poco después sale un enlace corto hacia la línea de Vigo, por el que algunos trenes de Madrid a Vigo evitan entrar en la estación de Santiago."
+    },
+    {
+      "id": "santiago",
+      "name": "Santiago de Compostela",
+      "kind": "estacion",
+      "adif_code": "31400",
+      "position": {
+        "lon": -8.5451964,
+        "lat": 42.8704417
+      },
+      "reference_pk_km": 88.28,
+      "description": "La estación de Santiago de Compostela-Daniel Castelao. En ella se juntan la línea de Ourense, por la que llegan los trenes de Madrid, y la de A Coruña a Vigo. Las vías de Ourense y las de Vigo entran por el mismo lado: un tren de Ourense a Vigo que para aquí tiene que cambiar de sentido."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "ourense",
+      "to_node": "bif-coto-da-torre",
+      "value": 1,
+      "source_id": "wikipedia-lav-ourense-santiago",
+      "checked_on": "2026-11-18",
+      "note": "La tabla de puntos kilométricos del tramo Orense-Santiago da el inicio de la vía doble en la bifurcación Coto da Torre (PK 1,041): de la estación de Ourense a la bifurcación los trenes van por la vía de la línea convencional 822."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "ourense",
+      "to_node": "bif-coto-da-torre",
+      "value": "3kv_cc",
+      "source_id": "osm-relation-11109438",
+      "checked_on": "2026-11-18",
+      "note": "En OSM, voltage=3000 en las vías de la estación de Ourense a la bifurcación Coto da Torre, la tensión de la red convencional de Ourense. La relación 4777980 etiqueta también a 3 kV los primeros 2,3 km de la vía nueva, pasada la bifurcación, y a 25 kV el resto: el cambio de tensión no cae en un nodo y se declara hasta la bifurcación. El mapa 4 de la Declaración sobre la Red, que es un esquema, dibuja toda la línea a 25 kV."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "ourense",
+      "to_node": "santiago",
+      "value": "ertms_n1_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: junto a la línea, entre Ourense y Santiago, el trébol morado oscuro de «ERTMS N1», el cuadrado amarillo de «ASFA - AV» y el triángulo de GSM-R."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "ourense",
+      "to_node": "santiago",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: rótulo «BCA» y trazo de puntos rosa a lo largo de la línea, de Ourense a Santiago de Compostela-Daniel Castelao. El mapa es un esquema y no distingue el kilómetro de vía convencional de la salida de Ourense ni la llegada a Santiago desde la bifurcación A Grandeira."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "ourense",
+      "to_node": "santiago",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-ourense-santiago",
+      "node_id": "bif-a-grandeira",
+      "name": "Línea convencional Ourense–Santiago por Lalín",
+      "towards": "Lalín y O Carballiño",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -8.5334143,
+          42.8574666
+        ],
+        [
+          -8.14286,
+          42.632437
+        ],
+        [
+          -8.068658,
+          42.431524
+        ],
+        [
+          -7.883657,
+          42.356114
+        ]
+      ]
+    },
+    {
+      "id": "enlace-conxo",
+      "node_id": "bif-a-grandeira",
+      "name": "Enlace de Conxo a la línea de Vigo",
+      "towards": "Vilagarcía de Arousa y Vigo",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -8.5413464,
+          42.8548111
+        ],
+        [
+          -8.5523223,
+          42.8567629
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "04040": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "04104": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "08004": {
+      "exits": [
+        "ourense"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        }
+      ]
+    },
+    "08223": {
+      "exits": [
+        "santiago"
+      ],
+      "via": {
+        "line": "eje-atlantico",
+        "node": "santiago"
+      }
+    },
+    "08240": {
+      "exits": [
+        "ourense"
+      ],
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "ourense"
+      }
+    },
+    "08247": {
+      "exits": [
+        "ourense"
+      ],
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "ourense"
+      }
+    },
+    "08251": {
+      "exits": [
+        "ourense"
+      ],
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "ourense"
+      }
+    },
+    "11014": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "17000": {
+      "exits": [
+        "ourense"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        }
+      ]
+    },
+    "20100": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "22100": {
+      "node": "ourense"
+    },
+    "23004": {
+      "exits": [
+        "santiago"
+      ],
+      "via": {
+        "line": "eje-atlantico",
+        "node": "santiago"
+      }
+    },
+    "23008": {
+      "exits": [
+        "santiago"
+      ],
+      "via": {
+        "line": "eje-atlantico",
+        "node": "santiago"
+      }
+    },
+    "30200": {
+      "exits": [
+        "ourense"
+      ],
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "ourense"
+      }
+    },
+    "31400": {
+      "node": "santiago"
+    },
+    "31412": {
+      "exits": [
+        "santiago"
+      ],
+      "via": {
+        "line": "eje-atlantico",
+        "node": "santiago"
+      }
+    },
+    "71801": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "80100": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "80108": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "81200": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "ourense"
+      ]
+    },
+    "99117": {
+      "node": "ourense"
+    },
+    "99143": {
+      "exits": [
+        "santiago"
+      ],
+      "via": {
+        "line": "eje-atlantico",
+        "node": "santiago"
+      }
+    },
+    "99159": {
+      "node": "santiago"
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Ourense y en Santiago de Compostela y en ninguna estación de la línea antigua (A Friela-Maside, O Carballiño, O Irixo y Lalín), por la que van los regionales que sí paran en ellas. Los trenes de Madrid a Vigo que no paran en Santiago entran por una regla de recorrido.",
+    "required_stop_ids": [
+      "22100",
+      "31400"
+    ],
+    "exclude_stop_ids": [
+      "31303",
+      "31304",
+      "31306",
+      "31308"
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "ourense-vilagarcia-sin-santiago",
+      "description": "Trenes entre Ourense y Vilagarcía de Arousa sin parada en Santiago: recorren la línea hasta la bifurcación A Grandeira y toman el enlace de Conxo, que no está cargado, hacia la línea de Vigo. Sus 52 a 57 minutos entre las dos paradas no dan para entrar en Santiago y cambiar de sentido.",
+      "consecutive_stop_ids": [
+        "22100",
+        "23008"
+      ],
+      "stop_mappings": {
+        "23008": {
+          "exits": [
+            "bif-a-grandeira"
+          ],
+          "via": {
+            "line": "eje-atlantico",
+            "node": "bif-rio-sar"
+          }
+        },
+        "23004": {
+          "exits": [
+            "bif-a-grandeira"
+          ],
+          "via": {
+            "line": "eje-atlantico",
+            "node": "bif-rio-sar"
+          }
+        },
+        "08223": {
+          "exits": [
+            "bif-a-grandeira"
+          ],
+          "via": {
+            "line": "eje-atlantico",
+            "node": "bif-rio-sar"
+          }
+        }
+      }
+    }
+  ]
+}

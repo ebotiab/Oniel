@@ -241,26 +241,92 @@
     "31400": {
       "exits": [
         "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        }
       ]
     },
     "31412": {
       "exits": [
         "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "08223": {
       "exits": [
         "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "23004": {
       "exits": [
         "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "23008": {
       "exits": [
         "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina"
+        },
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "20300": {

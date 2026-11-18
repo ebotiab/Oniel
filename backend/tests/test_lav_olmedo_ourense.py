@@ -156,12 +156,11 @@ def test_nodes_stations_and_what_hangs_from_them(line: BuiltNetwork) -> None:
     }
     assert all(n.offset_m < 250 for n in line.nodes)
     # lo que sale de la línea y no está cargado: el enlace de Salamanca, las líneas convencionales
-    # de Zamora y las tres que siguen desde Ourense
+    # de Zamora y las dos convencionales que siguen desde Ourense; la de Santiago ya está cargada
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "enlace-medina-salamanca": "medina-del-campo-av",
         "conv-zamora-medina-del-campo": "zamora",
         "conv-zamora-ourense": "zamora",
-        "lav-ourense-santiago": "ourense",
         "conv-ourense-vigo": "ourense",
         "conv-ourense-monforte": "ourense",
     }
@@ -364,12 +363,24 @@ def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNe
 
 def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> None:
     """Madrid y Segovia, por la bifurcación Medina; Salamanca, por Medina del Campo AV, donde sale
-    su enlace; Santiago, A Coruña, Vigo y Lugo, por Ourense."""
+    su enlace; Santiago, A Coruña, Vigo y Lugo, por Ourense. Santiago sigue por la línea de alta
+    velocidad de Ourense a Santiago, y A Coruña, Vilagarcía, Pontevedra y Vigo, además, por la
+    de A Coruña a Vigo; la línea de Lugo no está cargada."""
     assert spec.stop_mappings[SALAMANCA].exits == ["medina-del-campo-av"]
     assert not spec.stop_mappings[SALAMANCA].via
-    for stop_id in ("31400", "31412", "08223", "23004", "23008", "20300", "20305", "20309"):
+    for stop_id in ("20300", "20305", "20309"):
         mapping = spec.stop_mappings[stop_id]
         assert mapping.exits == ["ourense"] and not mapping.via
+    santiago = spec.stop_mappings["31400"]
+    assert santiago.exits == ["ourense"]
+    assert [(v.line, v.node) for v in santiago.via] == [("lav-ourense-santiago", "ourense")]
+    for stop_id in ("31412", "08223", "23004", "23008"):
+        mapping = spec.stop_mappings[stop_id]
+        assert mapping.exits == ["ourense"]
+        assert [(v.line, v.node) for v in mapping.via] == [
+            ("lav-ourense-santiago", "ourense"),
+            ("eje-atlantico", "santiago"),
+        ]
     assert {s: m.node for s, m in spec.stop_mappings.items() if m.node} == {
         MEDINA: "medina-del-campo-av",
         ZAMORA: "zamora",
