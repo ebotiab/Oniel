@@ -32,6 +32,7 @@ dev = [
     "pyright>=1.1.414",
     "pytest>=9.2.0",
     "pytest-asyncio>=1.4.1.post1",
+    "pytest-cov>=7.1.0",
     "ruff>=0.17.4",
 ]
 
@@ -42,6 +43,16 @@ testpaths = ["tests"]
 # El plugin de pytest de Logfire se activa solo con CI=true y LOGFIRE_TOKEN: aquí, nunca.
 addopts = "--no-logfire"
 filterwarnings = ["error::DeprecationWarning:oniel.*"]
+
+# Cobertura (pytest-cov): solo se mide con `pytest --cov`, como hace el CI. Es un informe para ver
+# qué módulos no tienen pruebas, sin umbral que haga fallar nada.
+[tool.coverage.run]
+source = ["oniel"]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+sort = "cover"
 
 [tool.ruff]
 line-length = 100
