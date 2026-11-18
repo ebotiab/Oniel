@@ -50,9 +50,10 @@ test.describe('Cobertura y fuentes, como página', () => {
       'Proyectos',
       'Pendiente de cargar',
       'Fuentes y licencias',
+      'Cómo citar Oniel',
     ])
     // cada entrada lleva a su apartado
-    await indice.last().click()
+    await indice.filter({ hasText: 'Fuentes y licencias' }).click()
     await expect(page.getByRole('heading', { name: 'Fuentes y licencias' })).toBeInViewport()
   })
 
