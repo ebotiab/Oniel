@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 al cargar los ramales de alta velocidad La Sagra – Toledo y Zaragoza – Huesca: la comprobación de que ese día no había ninguna interrupción anunciada en ellos. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-18 10:51 (hora que da la página)",
+   "resumen": "Tres avisos. Dos de Madrid y Castilla y León: los trenes de la línea C8a de cercanías recuperan su frecuencia tras una incidencia en El Escorial, y se restablece la circulación por una vía entre Robledo de Chavela y Zarzalejo, en la línea convencional de Madrid a Ávila, tras el descarrilamiento de una locomotora de mercancías. El tercero es el de la alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre; dice que el servicio se mantiene en los tramos de Madrid a Toledo y de Málaga a Sevilla.",
+   "que_aporta": "Que el 18 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción en el ramal de Toledo ni en la línea de Huesca, y que, según Adif, los trenes de Madrid a Toledo siguen circulando, como ya recoge la anotación de la línea Madrid – Sevilla, que empieza en la bifurcación La Sagra."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-18 10:52 (leída a esa hora)",
+   "resumen": "Catorce avisos de obras y restablecimientos. Los de Aragón son los de las obras entre Miranda de Ebro y Logroño, las de la autopista ferroviaria de Algeciras a Zaragoza (cortes entre Córdoba y Santa Cruz de Mudela y de Algeciras a Córdoba), las de la línea convencional de Madrid a Zaragoza entre Guadalajara y Plasencia de Jalón y las de la línea de Zaragoza a Teruel y Sagunt. Ninguno nombra Toledo, La Sagra, Tardienta ni Huesca.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en el ramal de Toledo ni en la línea de Zaragoza a Huesca."
+  }
+ ]
+}

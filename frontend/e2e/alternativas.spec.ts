@@ -177,17 +177,23 @@ test.describe('Tramos sin otro camino', () => {
     await resto.locator('summary').click()
     const otros = page.getByTestId('lista-con-alternativa').locator('li')
     await expect(otros).toHaveCount(con)
-    // el que más trenes lleva: por él pasan también los que no paran en Madrid
-    await expect(otros.first()).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
-    await expect(otros.first()).toContainText('158 trenes')
-    // de ellos, los Avant que solo recorren ese tramo no lo tienen: la fila lo dice
-    await expect(otros.first()).toContainText('22 sin él')
-    await expect(otros.first()).toContainText('+340 km · +3 h 2 min')
+    // el que más trenes lleva, desde que está cargado el ramal de Toledo: el último de la línea de Sevilla antes
+    // de La Sagra, por el que pasan también los Avant de Toledo, que no tienen otro camino
+    await expect(otros.first()).toContainText('Bifurcación Yeles – Bifurcación La Sagra')
+    await expect(otros.first()).toContainText('162 trenes')
+    await expect(otros.first()).toContainText('30 sin él')
+    await expect(otros.first()).toContainText('+90 km · +1 h 8 min')
+    // de Córdoba a la bifurcación de Málaga pasan también los que no paran en Madrid; los Avant que solo recorren
+    // ese tramo no tienen otro camino: la fila lo dice
+    const cordoba = otros.filter({ hasText: 'Córdoba – Bifurcación Málaga-Alta Velocidad' })
+    await expect(cordoba).toContainText('158 trenes')
+    await expect(cordoba).toContainText('22 sin él')
+    await expect(cordoba).toContainText('+340 km · +3 h 2 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(vista).not.toContainText('Moreda – Bifurcación Almería')
     // cada fila lleva a la ficha de su tramo
-    await otros.first().getByRole('button').click()
+    await cordoba.getByRole('button').click()
     await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
   })

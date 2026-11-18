@@ -55,6 +55,9 @@ test.describe('Destinos directos de una estación', () => {
     // un destino con trenes de un solo operador también lo nombra
     await page.getByTestId('destinos-ver-todos').click()
     await expect(filas.filter({ hasText: 'Badajoz' })).toContainText('· Renfe Viajeros')
+    // y los de Toledo, solo de Renfe, desde que está cargado su ramal
+    await expect(filas.filter({ hasText: /^Toledo/ })).toContainText('15 trenes')
+    await expect(filas.filter({ hasText: /^Toledo/ })).toContainText('· Renfe Viajeros')
   })
 
   test('el comparador de recorridos cuenta los mismos trenes directos que la ficha', async ({ page }) => {
