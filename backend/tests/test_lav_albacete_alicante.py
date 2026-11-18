@@ -145,12 +145,10 @@ def test_it_shares_the_junction_and_albacete_station(line: BuiltNetwork) -> None
     assert [c.id for c in conventional.connections] == ["conv-albacete-levante"]
     trunk_spec = load_network_spec(LAV_VALENCIA_SPEC)
     assert all(c.node_id != "bif-albacete" for c in trunk_spec.connections)
-    # lo que queda a trazos: la convencional de La Encina a Alicante. El enlace de Monforte del
-    # Cid con la línea de Murcia ya está cargado, y el de alta velocidad hacia Valencia por Xàtiva
-    # figura en la fuente como futuro: no es un nodo ni una conexión
-    assert {c.id: c.node_id for c in line.spec.connections} == {
-        "conv-alicante-la-encina": "alicante-terminal",
-    }
+    # ya no queda nada a trazos: la convencional de La Encina a Alicante está cargada (#208). El
+    # enlace de Monforte del Cid con la línea de Murcia también, y el de alta velocidad hacia
+    # Valencia por Xàtiva figura en la fuente como futuro: no es un nodo ni una conexión
+    assert line.spec.connections == []
     murcia = load_network_spec(LAV_MURCIA_SPEC)
     theirs = next(n for n in murcia.nodes if n.id == "bif-murcia")
     # la bifurcación de Murcia la define esta línea, por su punto kilométrico; la de Murcia la

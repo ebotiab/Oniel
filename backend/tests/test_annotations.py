@@ -15,6 +15,7 @@ from conftest import (
     MEDITERRANEO_SPEC,
     SOURCES,
     SPEC,
+    VALENCIA_ALICANTE_SPEC,
 )
 from pydantic import ValidationError
 from typer.testing import CliRunner
@@ -34,7 +35,15 @@ ANNOTATIONS = DATA_DIR / "curated" / "anotaciones.json"
 CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
 JAEN_SPEC = DATA_DIR / "curated" / "espeluy-jaen.json"
 #: Las líneas de las que cuelgan las anotaciones registradas.
-SPECS = [SPEC, CONV_SPEC, JAEN_SPEC, LAV_MALAGA_SPEC, LAV_GRANADA_SPEC, MEDITERRANEO_SPEC]
+SPECS = [
+    SPEC,
+    CONV_SPEC,
+    JAEN_SPEC,
+    LAV_MALAGA_SPEC,
+    LAV_GRANADA_SPEC,
+    MEDITERRANEO_SPEC,
+    VALENCIA_ALICANTE_SPEC,
+]
 
 #: Una línea de juguete, con sus nodos en el orden del kilometraje.
 LINE_NODES = {"linea": ["a", "b", "c", "d"]}

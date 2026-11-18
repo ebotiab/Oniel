@@ -337,11 +337,7 @@
         }
       ]
     },
-    "60911": {
-      "exits": [
-        "barcelona-sants"
-      ]
-    },
+    "60911": {"exits": ["barcelona-sants"], "via": [{"line": "lav-madrid-barcelona", "node": "barcelona-sants"}, {"line": "valencia-castello-tarragona", "node": "camp-de-tarragona"}, {"line": "valencia-xativa-alicante", "node": "valencia-estacio-del-nord"}]},
     "87374": {
       "exits": [
         "limite-seccion-internacional"

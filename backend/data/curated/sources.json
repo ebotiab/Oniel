@@ -684,7 +684,7 @@
       "license_url": "https://www.adif.es/aviso-legal",
       "retrieved_on": "2026-11-18",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó otra vez al cargar la línea de València a Alicante por Xàtiva: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-18_valencia_alicante.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
@@ -1174,9 +1174,9 @@
       "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/220426-puente-corredor-mediterraneo.aspx",
       "license": "Consulta pública; © Gobierno de España",
       "license_url": "https://www.lamoncloa.gob.es/Paginas/avisolegal.aspx",
-      "retrieved_on": "2026-11-13",
-      "coverage": "Que en 2025 se ejecutaron obras de adaptación a ancho mixto, vía y electrificación entre Castellón y Valencia, y que el Ministerio prevé para 2026 la puesta en servicio de la segunda vía de ancho mixto entre València y Castelló.",
-      "notes": "Publicada el 22 de abril de 2026 en la web de La Moncloa. Es un balance de todo el corredor: del tramo de Castelló a Tarragona no dice nada, ni da fecha para el cambio de ancho. Lo que decía ese día está resumido en el registro de consultas.",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Que en 2025 se ejecutaron obras de adaptación a ancho mixto, vía y electrificación entre Castellón y Valencia, y que el Ministerio prevé para 2026 la puesta en servicio de la segunda vía de ancho mixto entre València y Castelló. También, que en 2025 se ejecutaron 108,24 millones de euros en el cambio a ancho estándar, la renovación de vía y la electrificación del tramo La Encina – Xàtiva – València.",
+      "notes": "Publicada el 22 de abril de 2026 en la web de La Moncloa. Es un balance de todo el corredor: del tramo de Castelló a Tarragona no dice nada, ni da fecha para el cambio de ancho. Lo que decía ese día está resumido en el registro de consultas. Se volvió a leer el 18 de noviembre de 2026 para el proyecto de la alta velocidad de València a La Encina (raw/proyectos/consultas_2026-11-18_valencia_alicante.json): entre las previsiones para 2026 no nombra ese tramo.",
       "file": "raw/proyectos/consultas_2026-11-13.json"
     },
     {
@@ -1853,6 +1853,111 @@
       "coverage": "Coordenadas de las estaciones de Toledo (nodo 254453384), Tardienta (4338239783) y Huesca (8051540821), de Zaragoza-Miraflores y de la bifurcación Huesca (8060137209, ref=86144).",
       "notes": "Elementos con railway=station, halt, junction u otras instalaciones de cinco recuadros pequeños alrededor de cada lugar, pedidos el 18 de noviembre de 2026 a la API de OpenStreetMap (map.json), porque los servidores públicos de Overpass no respondían. Los códigos de las estaciones (etiqueta ref) son los de sus paradas en el GTFS de Renfe.",
       "file": "raw/osm/instalaciones_toledo_huesca_2026-11-18.json"
+    },
+    {
+      "id": "osm-relation-16947106",
+      "name": "Trazado de València-Estació del Nord a Alicante-Terminal por Xàtiva (relación OSM 16947106, servicio regional «València - Estació del Nord => Alacant Terminal»)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/16947106",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Los 183,1 km de vías que recorre un tren de València a Alicante: la línea 300 de Adif hasta Xàtiva, la 340 y la vía nueva de ancho ibérico entre Xàtiva y La Encina, la variante de Caudete (332) y la línea 330 hasta Alicante. Velocidad máxima, número de vías, ancho y tensión de cada vía.",
+      "notes": "Descargada el 18 de noviembre de 2026 de la API de OpenStreetMap (relation/16947106/full.json), porque los servidores públicos de Overpass no respondían. Es una relación de servicio (route=train) y no de infraestructura: se usa porque el recorrido pasa por cuatro líneas de Adif, cada una con su relación (la 300 llega hasta Madrid), y esta trae seguidas, y de una pieza, las vías que recorre el tren. Se traza por el camino más corto de su grafo de vías. Todas sus vías llevan gauge=1668 y voltage=3000. El nodo 3739611513 es el desvío en el que empieza la variante de Caudete: sitúa la bifurcación de La Encina.",
+      "file": "raw/osm/relation_16947106_servicio_valencia_alacant_2026-11-18.json"
+    },
+    {
+      "id": "osm-relation-16801769",
+      "name": "Vías del servicio regional de Alicante a València (relación OSM 16801769, «Alacant Terminal => València - Estació del Nord»)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/16801769",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "El mismo recorrido en sentido contrario. Sirve para ver dónde hay dos vías: las dos relaciones recorren vías distintas de València a Xàtiva (del km 0,6 al 56,7) y las mismas de allí a Alicante, salvo en las vías de cruce de un punto entre Xàtiva y Moixent (km 62,2 a 64,0), de Sax y de Elda-Petrer.",
+      "notes": "Descargada el 18 de noviembre de 2026 de la API de OpenStreetMap. No se usa como trazado.",
+      "file": "raw/osm/relation_16801769_servicio_alacant_valencia_2026-11-18.json"
+    },
+    {
+      "id": "osm-relation-18343079",
+      "name": "Vías en construcción de la alta velocidad entre València y el nudo de La Encina (relación OSM 18343079, «Línea de Alta Velocidad Valencia-Alicante»)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/18343079",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Las 255 vías de la relación, todas con railway=construction: la plataforma nueva entre València y Xàtiva y las dos vías entre Xàtiva y La Encina que se cambian al ancho estándar (160 llevan gauge=1435; 90 conservan el nombre de la línea 300). De ellas sale el esbozo del proyecto.",
+      "notes": "Descargada el 18 de noviembre de 2026 de la API de OpenStreetMap. No se traza: el esbozo son dieciséis puntos tomados de sus vías, de norte a sur. Que estén en obras lo dicen las notas de Adif; OSM solo da por dónde van.",
+      "file": "raw/osm/relation_18343079_lav_valencia_alicante_en_obras_2026-11-18.json"
+    },
+    {
+      "id": "wikipedia-linea-330-la-encina-alicante",
+      "name": "Artículo «Línea La Encina-Alicante» de Wikipedia en español (línea 330 de Adif: longitud, vía única, ancho, electrificación, puntos kilométricos de las estaciones, variante de Caudete)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/w/index.php?title=L%C3%ADnea_La_Encina-Alicante&oldid=168463594",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Línea 330 de Adif: 78,3 km de La Encina (PK 376,4) a Alicante-Terminal (PK 454,7), vía única, ancho ibérico, electrificada, inaugurada el 26 de mayo de 1858; PK de Caudete (383,1), Villena (396,1), Sax (407,1), Elda-Petrer (413,9), Novelda-Aspe (424,5), San Vicente Centro (447,0) y Universidad de Alicante (448,7).",
+      "notes": "Consultado por la API de Wikipedia el 18 de noviembre de 2026 (revisión 168463594, del 14 de julio de 2025). Fecha la variante de Caudete en 1993; el artículo de la estación de La Encina, en el 20 de mayo de 1992."
+    },
+    {
+      "id": "wikipedia-linea-300-la-encina-valencia",
+      "name": "Artículo «Línea Madrid-Valencia» de Wikipedia en español: tabla de estaciones de La Encina a València (línea 300 de Adif)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/w/index.php?title=L%C3%ADnea_Madrid-Valencia&oldid=168678995",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Puntos kilométricos de La Encina a València-Estació del Nord, que cuentan desde La Encina: bifurcación de la variante de Caudete (3,0), Mogente (24,3), Játiva (48,4), L'Enova-Manuel (65,0), Puebla Larga (69,0), Carcagente (73,3), Alcira (77,0), Algemesí (81,5), Benifayó (91,7), Silla (100,6), Catarroja (105,1), Masanasa (106,1), Alfafar-Benetúser (107,6) y Valencia-Norte (112,7).",
+      "notes": "Consultado por la API de Wikipedia el 18 de noviembre de 2026 (revisión 168678995, del 27 de julio de 2025). Es el mismo artículo de la fuente wikipedia-linea-300-alcazar-albacete, citado aquí con su revisión. Los PK decrecen desde València, así que no se guardan en los nodos: se contrastan a mano. El de Játiva no cuadra con los demás ni con el trazado (queda 8,4 km corto) y no se usa."
+    },
+    {
+      "id": "wikipedia-estacion-la-encina",
+      "name": "Artículo «Estación de La Encina» de Wikipedia en español (punto kilométrico, variante de Caudete, servicios)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/w/index.php?title=Estaci%C3%B3n_de_La_Encina&oldid=171437702",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "La estación está en el PK 376,4 de la línea Madrid-Valencia; de ella sale la línea de Alicante; la variante de Caudete (línea 332 de Adif, 5.900 m) se abrió el 20 de mayo de 1992 y evita que los trenes entre Alicante y València inviertan la marcha en La Encina.",
+      "notes": "Consultado por la API de Wikipedia el 18 de noviembre de 2026 (revisión 171437702, del 10 de enero de 2026)."
+    },
+    {
+      "id": "adif-nota-xativa-nudo-la-encina-2023-09",
+      "name": "Nota de prensa «Adif abre al tráfico Xàtiva-Nudo de La Encina, clave para completar el Corredor Mediterráneo en la Comunitat Valenciana»",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/puesta-servicio-nuevo-trazado-xativa-nudo-encina-corredor-mediterraneo-primera-fase",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Puesta en servicio, el 9 de septiembre de 2023, del trazado nuevo de ancho convencional entre Xàtiva y el nudo de La Encina: la circulación va por una vía única de ancho ibérico mientras se adapta al ancho estándar el trazado de vía doble. Segunda fase: cambio de ancho, electrificación a 25 kV y ERTMS de nivel 2, con ramales de conexión con la alta velocidad de Albacete a Alicante y enlace con la plataforma ya construida de Xàtiva a la alta velocidad de Madrid a Valencia.",
+      "notes": "Publicada el 9 de septiembre de 2023; se leyó en un navegador el 18 de noviembre de 2026. Da 46 km de plataforma nueva y 505 millones de euros de inversión. No da fecha para la segunda fase. La nota del Ministerio del día anterior, en la web de La Moncloa, dice lo mismo.",
+      "file": "raw/proyectos/consultas_2026-11-18_valencia_alicante.json"
+    },
+    {
+      "id": "adif-av-nota-obras-complementarias-la-encina-xativa-valencia-2025-03",
+      "name": "Nota de prensa «Adif adjudica por 15 M€ las obras para completar la conversión a alta velocidad del tramo La Encina-Xàtiva-Valencia»",
+      "publisher": "Adif Alta Velocidad",
+      "url": "https://www.adifaltavelocidad.es/w/adjudicacion-obras-complementarias-xativa-encina-corredor-mediterraneo",
+      "license": "Consulta pública; © Adif Alta Velocidad",
+      "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Estado de la conversión al ancho estándar el 3 de marzo de 2025: obras en marcha en los 122 km del trazado (41 km de vía doble del nudo de La Encina a Xàtiva, 7 km de cuatro ramales de conexión con la alta velocidad de Madrid a Alicante y 58 km de vía doble de Xàtiva a València, hasta la alta velocidad de Madrid a Valencia), con la renovación de la vía y el montaje de la catenaria de 25 kV en curso.",
+      "notes": "Publicada el 3 de marzo de 2025; se leyó en un navegador el 18 de noviembre de 2026. Los tres trechos que enumera suman 106 km y la nota da 122 en total; no lo explica. No da fecha de puesta en servicio.",
+      "file": "raw/proyectos/consultas_2026-11-18_valencia_alicante.json"
+    },
+    {
+      "id": "adif-nota-ancho-estandar-la-encina-alicante-2024-08",
+      "name": "Nota de prensa «Adif destina otros 51 M€ para la adaptación al ancho estándar del tramo La Encina-Alicante»",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/licitacion-adaptacion-ancho-estandar-encina-alicante-corredor-mediterraneo",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Licitación, el 7 de agosto de 2024, de las obras de vía y electrificación para explotar en ancho mixto, con tercer carril, los 75 km entre las conexiones con el nudo de La Encina y la entrada a la estación de Alicante; vías de apartado para trenes de 750 m en Caudete, Sax y Monforte del Cid; la catenaria sigue a 3 kV.",
+      "notes": "Publicada el 7 de agosto de 2024; se leyó en un navegador el 18 de noviembre de 2026. El Consejo de Ministros había autorizado la licitación el 23 de julio de 2024, por un valor estimado de 183,6 millones de euros (nota del Ministerio de Transportes de ese día). Oniel no ha buscado la adjudicación ni el comienzo de las obras.",
+      "file": "raw/proyectos/consultas_2026-11-18_valencia_alicante.json"
     }
   ]
 }

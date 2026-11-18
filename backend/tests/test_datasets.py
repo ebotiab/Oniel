@@ -228,6 +228,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # estaban en la línea de Valencia
     # y los 114 de la línea de Barcelona a Figueres que no estaban en otra: los Avant de Barcelona
     # a Figueres y los AVE de Barcelona a Lyon
+    # y los 426 de la línea de València a Alicante por Xàtiva que no estaban en otra: los
+    # regionales de València a Alcoi, a Alicante y a Albacete y los de Villena a Alicante
     assert (
         await _count(conn, "services", FEED_DATASET_ID)
         == 727
@@ -249,6 +251,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 136
         + 114
         + 115
+        + 426
     )
     assert (
         await _count(conn, "services", NEWER_ID)
@@ -271,6 +274,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 136
         + 114
         + 115
+        + 426
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -302,6 +306,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral
     passes += (2051 + 582) + (2247 + 134) + 344 + (26 + 26)
+    passes += 2028 + 4255  # la de València a Alicante por Xàtiva, publicados y estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -581,9 +586,10 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 136
         + 114
         + 115
+        + 426
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115
+        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115 + 426
     )
 
 
@@ -617,8 +623,42 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     # los 409 del final son los de las cuatro líneas de Extremadura que no estaban en otra
     assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115,
-        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115,
+        768
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
+        + 115
+        + 426,
+        767
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
+        + 115
+        + 426,
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -659,7 +699,24 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
     assert await conn.fetchval("SELECT count(*) FROM services") == (
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115
+        768
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
+        + 115
+        + 426
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]

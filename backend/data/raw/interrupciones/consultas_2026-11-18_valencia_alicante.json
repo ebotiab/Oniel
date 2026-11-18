@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 al cargar la línea de València a Alicante por Xàtiva: la comprobación de que ese día no había ninguna interrupción anunciada en ella. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-18 15:57 (hora que da la página; se leyó hacia las 17:40)",
+   "resumen": "Dos avisos. Uno de Castilla y León y Madrid: se restablece la circulación por una vía entre Robledo de Chavela y Zarzalejo, en la línea convencional de Madrid a Ávila. El otro es el de la alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre. Ninguno nombra València, Xàtiva, La Encina, Villena ni Alicante.",
+   "que_aporta": "Que el 18 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción en la línea de València a Alicante por Xàtiva."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-18, leída justo después del estado de la red",
+   "resumen": "Catorce avisos de obras y restablecimientos. Tres son de la Comunidad Valenciana: las obras de la línea de Xàtiva a Alcoi, con la circulación interrumpida entre las dos estaciones desde el 24 de marzo para la renovación integral de la línea y un plan de transporte por carretera; las de la línea de Zaragoza a Teruel y Sagunt, y el restablecimiento de un tramo de la línea C3 de cercanías de València. Ninguno anuncia una interrupción entre València y Xàtiva, entre Xàtiva y La Encina ni entre La Encina y Alicante.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en la línea cargada. El de Xàtiva a Alcoi es de una línea que no está cargada: afecta a los regionales de València a Alcoi más allá de Xàtiva. El aviso no dice si esos trenes circulan entre València y Xàtiva, y no se ha mirado el panel de la estación."
+  }
+ ]
+}

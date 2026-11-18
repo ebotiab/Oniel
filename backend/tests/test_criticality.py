@@ -332,6 +332,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        "valencia-xativa-alicante",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -379,6 +380,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 16
         + 7  # la de Barcelona a Figueres
         + (1 + 2)
+        + 20  # la de València a Alicante por Xàtiva
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -417,9 +419,15 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # ellos se queda sin otro camino una parte de los trenes en otros catorce: los Avant de Toledo
     # en los cuatro de la línea de Sevilla hasta La Sagra y los 2 de Albacete a Toledo, que cambian
     # de sentido en Atocha, en los diez de la bifurcación de Torrejón de Velasco a Albacete
+    # La línea de València a Alicante por Xàtiva cierra un anillo con la alta velocidad de Valencia
+    # y la de Albacete a Alicante: dejan de estar sin otro camino los siete tramos de Albacete a
+    # Alicante, el primero de la línea de Murcia y los diecisiete de la costa, 25 en total, porque
+    # sus trenes de largo recorrido tienen la vuelta por València y Xàtiva o por Madrid. De los
+    # que se quedan sin él solo en parte salen nueve, en los que ya lo tienen todos, y entran los
+    # veinte de la línea nueva
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3 + 14,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3 - 25,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3 + 14 - 9 + 20,
     )
     # la de Barcelona a Figueres, entera: a Girona y a Figueres-Vilafant solo llega ella
     figueres = {k: n for k, n in none.items() if k.startswith(f"{LAV_FIGUERES}:")}
@@ -515,11 +523,14 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # Valencia a Valladolid: su recorrido es más largo (576 km) y la vuelta por Camp de Tarragona
     # y Madrid ya no pasa del doble
     valencia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALENCIA}:")]
+    # Y desde que está cargada la línea de València a Alicante por Xàtiva lo tienen todos los que
+    # vienen de Madrid, por Albacete, Alicante y Xàtiva (273 km más): solo se quedan sin él los 10
+    # de Requena-Utiel a València
     assert [(s.trains, s.without_alternative) for s in valencia[10:]] == [
-        (42, 31),
-        (42, 31),
-        (52, 41),
-        (52, 41),
+        (42, 0),
+        (42, 0),
+        (52, 10),
+        (52, 10),
     ]
     assert {s: n for s, n in none.items() if s.startswith(f"{LAV_VALENCIA}:")} == {
         f"{LAV_VALENCIA}:madrid-chamartin:paso-bajo-atocha": 74,
@@ -534,20 +545,23 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     assert [(s.trains, s.without_alternative) for s in alicante] == [
         (44, 2),
         (44, 2),
-        (42, 42),
-        (42, 42),
-        (42, 42),
-        (42, 42),
-        (42, 42),
-        (36, 36),
-        (56, 56),
+        (42, 0),
+        (42, 0),
+        (42, 0),
+        (42, 0),
+        (42, 0),
+        (36, 0),
+        (56, 20),
     ]
+    # (desde la línea de València a Alicante por Xàtiva, los de Madrid a Alicante tienen la vuelta
+    # por València y Xàtiva, 95 km más: solo se quedan sin otro camino los 20 de Alicante a Murcia)
     # a Murcia solo llega la alta velocidad de Monforte del Cid: ninguno de sus ocho tramos tiene
     # otro camino. Por el primero solo pasan los 6 trenes de Madrid que no entran en Alicante; en
     # la bifurcación Vinalopó se suman los 30 que vienen de Alicante por el enlace de Monforte
     # del Cid, y son 36 hasta Murcia
     murcia = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_MURCIA}:")]
-    assert [(s.trains, s.without_alternative) for s in murcia] == [(6, 6)] + [(36, 36)] * 7
+    # (los 6 del primero sí lo tienen desde la línea de València a Alicante: la vuelta por València)
+    assert [(s.trains, s.without_alternative) for s in murcia] == [(6, 0)] + [(36, 36)] * 7
     assert murcia[0].by_operator == {"ouigo": 2, "renfe": 4}
     assert all(s.by_operator == {"ouigo": 6, "renfe": 30} for s in murcia[1:])
     # el enlace tampoco tiene otro camino: los otros dos lados de su triángulo obligarían a
@@ -703,12 +717,26 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # De la línea nueva, el primer tramo, porque a València-Estació del Nord solo se llega por
     # él, y los dieciséis de Castelló a Camp de Tarragona: la vuelta por Madrid mide más del doble
     # para todos sus trenes. De Joaquín Sorolla a Castelló solo la tienen los 4 AVE de Madrid
+    # Desde la línea de València a Alicante por Xàtiva ya no queda ninguno sin otro camino para
+    # todos: los 9 trenes de Barcelona y Figueres a Alicante, y en el primer tramo también los 2
+    # de Barcelona hacia Albacete, tienen la vuelta por Madrid y la alta velocidad de Albacete
     coast_none = {s: n for s, n in none.items() if s.startswith(f"{MEDITERRANEO}:")}
-    assert len(coast_none) == 17
-    assert coast_none[f"{MEDITERRANEO}:valencia-estacio-del-nord:valencia-joaquin-sorolla"] == 54
-    assert coast_none[f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona"] == 19
+    assert coast_none == {}
+    first_coast = _of(
+        exported.segments, f"{MEDITERRANEO}:valencia-estacio-del-nord:valencia-joaquin-sorolla"
+    )
+    assert (first_coast.trains, first_coast.without_alternative) == (54, 43)
+    last_coast = _of(exported.segments, f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona")
+    assert (last_coast.trains, last_coast.without_alternative) == (19, 10)
     partly = _of(exported.segments, f"{MEDITERRANEO}:almassora:castello-de-la-plana")
-    assert (partly.trains, partly.without_alternative) == (52, 48)
+    assert (partly.trains, partly.without_alternative) == (52, 39)
+    # y la línea nueva: 43 trenes de València a Xàtiva, 27 hasta la bifurcación de La Encina, 17
+    # en la variante de Caudete, 21 hasta Villena y 40 de Villena a Alicante. En ninguno se quedan
+    # todos sin otro camino: lo tienen los que vienen de Barcelona
+    xativa = [s for s in exported.segments if s.segment_id.startswith("valencia-xativa-alicante:")]
+    assert [(s.trains, s.without_alternative) for s in xativa] == (
+        [(43, 32)] * 11 + [(27, 16), (17, 8), (21, 12)] + [(40, 31)] * 6
+    )
     # un regional de València a Vinaròs (151,0 km) no tiene otro camino: los 1.026 km por Madrid
     # no cuentan
     coast = _of(exported.segments, f"{MEDITERRANEO}:castello-de-la-plana:benicassim")

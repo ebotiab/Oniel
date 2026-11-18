@@ -46,6 +46,7 @@ from conftest import (
     SPEC,
     SPECS,
     TOLEDO_SPEC,
+    VALENCIA_ALICANTE_SPEC,
 )
 from pydantic import ValidationError
 
@@ -707,6 +708,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # los dos ramales tampoco: les basta parar en Toledo, en Tardienta o en Huesca
         TOLEDO_SPEC.name: {},
         HUESCA_SPEC.name: {},
+        # ni la de València a Alicante: las paradas del lado de La Encina llevan dos salidas
+        VALENCIA_ALICANTE_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

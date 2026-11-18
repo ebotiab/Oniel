@@ -1,0 +1,69 @@
+{
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 para los dos proyectos de la línea de València a Alicante por Xàtiva de backend/data/curated/anotaciones.json: la alta velocidad entre València y el nudo de La Encina y el ancho mixto entre La Encina y Alicante. Queda, con palabras propias, qué decía cada página y de dónde salen los puntos del esbozo.",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "adif-nota-xativa-nudo-la-encina-2023-09",
+   "titulo": "Adif abre al tráfico Xàtiva-Nudo de La Encina, clave para completar el Corredor Mediterráneo en la Comunitat Valenciana",
+   "editor": "Adif",
+   "url": "https://www.adif.es/w/puesta-servicio-nuevo-trazado-xativa-nudo-encina-corredor-mediterraneo-primera-fase",
+   "fecha_de_la_pagina": "2023-09-09",
+   "resumen": "Ese día entra en servicio el trazado nuevo de ancho convencional entre Xàtiva y el nudo de La Encina. En una primera fase, la circulación por una vía única de ancho ibérico absorbe el tráfico mientras se adapta al ancho internacional el trazado de vía doble, que es la segunda fase. Se ha construido una plataforma nueva en 46 km, con dos túneles y siete viaductos, con una inversión de 505 millones de euros. La segunda fase, de más de 245 millones, renueva la vía, cambia el ancho de ibérico a estándar, pasa la electrificación de 3 kV en corriente continua a 25 kV en alterna e instala ERTMS de nivel 2. Por el sur la plataforma se conectará con la alta velocidad de Albacete a Alicante con dos ramales de vía única, de 5 y 7 km; por el norte, en 650 m, con las vías de la estación de Xàtiva y con la plataforma ya construida hasta la alta velocidad de Madrid a Valencia. No da fecha para la segunda fase.",
+   "que_aporta": "Que entre Xàtiva y La Encina se circula desde el 9 de septiembre de 2023 por una vía única de ancho ibérico, y que las dos vías anteriores están en obras para pasar al ancho estándar."
+  },
+  {
+   "source_id": null,
+   "titulo": "Raquel Sánchez: «El nuevo trazado Xàtiva-La Encina es decisivo para conectar por alta velocidad las tres capitales valencianas»",
+   "editor": "Ministerio de Transportes, Movilidad y Agenda Urbana; La Moncloa",
+   "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes/Paginas/2023/080923-alta-velocidad-valencia.aspx",
+   "fecha_de_la_pagina": "2023-09-08",
+   "resumen": "Nota del Ministerio de la víspera, con la misma nota técnica que la de Adif: puesta en servicio el sábado 9 de septiembre del trazado nuevo de ancho convencional, que absorbe todo el tráfico mientras se adapta la vía doble. Añade que el tramo nuevo mide 21,5 km y se suma al de L'Alcúdia de Crespins a Moixent, y una estimación de tiempos de viaje futuros entre València y Alicante.",
+   "que_aporta": "Nada que no esté en la nota de Adif; confirma la fecha. La estimación de tiempos de viaje no se registra: es una previsión sin fecha."
+  },
+  {
+   "source_id": "adif-av-nota-obras-complementarias-la-encina-xativa-valencia-2025-03",
+   "titulo": "Adif adjudica por 15 M€ las obras para completar la conversión a alta velocidad del tramo La Encina-Xàtiva-Valencia",
+   "editor": "Adif Alta Velocidad",
+   "url": "https://www.adifaltavelocidad.es/w/adjudicacion-obras-complementarias-xativa-encina-corredor-mediterraneo",
+   "fecha_de_la_pagina": "2025-03-03",
+   "resumen": "Adif Alta Velocidad adjudica por más de 15 millones de euros obras complementarias (accesibilidad de los túneles de La Font de la Figuera y de Cabezo de Barracas, gálibos, cerramientos y estructuras) que completan las que ya se ejecutan para implantar el ancho estándar en el tramo La Encina – Xàtiva – València, de 122 km: la vía doble del nudo de La Encina a Xàtiva (41 km), los cuatro ramales de conexión con la alta velocidad de Madrid a Alicante (7 km) y la vía doble de Xàtiva a València (58 km), hasta la conexión con la alta velocidad de Madrid a Valencia. Dice que se avanza en la renovación integral de la vía, que se monta en ancho estándar, y en el montaje de la catenaria de 25 kV, y que se desplegará ERTMS de nivel 2. Inversión total del proyecto: 245 millones de euros. No da fecha de puesta en servicio.",
+   "que_aporta": "Que el 3 de marzo de 2025 la conversión estaba en obras, y qué trechos abarca."
+  },
+  {
+   "source_id": "moncloa-nota-corredor-mediterraneo-2026-04",
+   "titulo": "Balance del Ministerio de Transportes sobre el Corredor Mediterráneo",
+   "editor": "Ministerio de Transportes y Movilidad Sostenible; La Moncloa",
+   "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/220426-puente-corredor-mediterraneo.aspx",
+   "fecha_de_la_pagina": "2026-04-22",
+   "resumen": "Entre las principales actuaciones ejecutadas en 2025 enumera «Conexión Valencia-Alicante»: cambio a ancho estándar, renovación de vía y electrificación del tramo La Encina – Xàtiva – València, con 108,24 millones de euros. En las previsiones para 2026 no nombra ese tramo.",
+   "que_aporta": "Que las obras seguían en 2025. No da fecha de puesta en servicio."
+  },
+  {
+   "source_id": "adif-nota-ancho-estandar-la-encina-alicante-2024-08",
+   "titulo": "Adif destina otros 51 M€ para la adaptación al ancho estándar del tramo La Encina-Alicante",
+   "editor": "Adif",
+   "url": "https://www.adif.es/w/licitacion-adaptacion-ancho-estandar-encina-alicante-corredor-mediterraneo",
+   "fecha_de_la_pagina": "2024-08-07",
+   "resumen": "Adif licita por 50,9 millones de euros obras de vía y electrificación para explotar en ancho mixto el tramo de La Encina a Alicante: tercer carril en vías generales y de apartado, traviesas mixtas, aparatos de vía de ancho mixto, vías de apartado para trenes de mercancías de hasta 750 m en Caudete, Sax y Monforte del Cid, adaptación de andenes, gálibos y el túnel de Elda, y adaptación de la catenaria, que sigue a 3 kV, para un cambio futuro a 25 kV. El trazado va de las conexiones con el nudo de La Encina a la entrada de la estación de Alicante, 75 km. Se suma a otros 51 millones licitados para el proyecto y la ejecución de las instalaciones de seguridad.",
+   "que_aporta": "Que las obras del tercer carril entre La Encina y Alicante se licitaron el 7 de agosto de 2024, y qué incluyen."
+  },
+  {
+   "source_id": null,
+   "titulo": "El Gobierno autoriza licitar por 183,6 millones de euros la adaptación al ancho estándar del tramo La Encina-Alicante",
+   "editor": "Ministerio de Transportes y Movilidad Sostenible",
+   "url": "https://www.transportes.gob.es/el-ministerio/sala-de-prensa/noticias/mar-23072024-1516",
+   "fecha_de_la_pagina": "2024-07-23",
+   "resumen": "El Consejo de Ministros autoriza a licitar, a través de Adif, las obras de vía y electrificación para adaptar al ancho estándar el tramo de La Encina a Alicante con tercer carril, por un valor estimado de 183,6 millones de euros sin IVA. Describe las mismas actuaciones que la nota de Adif de agosto.",
+   "que_aporta": "La fecha de la autorización. El importe no coincide con el de la nota de Adif (50,9 millones): las notas no explican la diferencia y no se registra ninguno de los dos."
+  },
+  {
+   "source_id": "osm-relation-18343079",
+   "titulo": "Relación 18343079, «Línea de Alta Velocidad Valencia-Alicante»",
+   "editor": "Colaboradores de OpenStreetMap",
+   "url": "https://www.openstreetmap.org/relation/18343079",
+   "fecha_de_la_pagina": "2026-11-18",
+   "resumen": "255 vías con railway=construction entre el sur de València y el nudo de La Encina. El esbozo del proyecto son dieciséis puntos de esas vías, de norte a sur.",
+   "que_aporta": "Por dónde va la plataforma en obras. No dice nada de su estado: eso sale de las notas de Adif."
+  }
+ ]
+}
