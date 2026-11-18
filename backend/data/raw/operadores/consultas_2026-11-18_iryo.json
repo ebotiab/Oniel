@@ -49,6 +49,14 @@
       "url": "https://nap.transportes.gob.es/contacto",
       "resumen": "A la consulta enviada el 12 de noviembre de 2026 por correo y por el formulario de contacto, y repetida el 18 de noviembre, el buzón del Punto de Acceso Nacional contestó por correo el 18 de noviembre que ha contactado varias veces con Iryo, que el operador le ha manifestado su intención de participar en el Punto de Acceso Nacional y que a esa fecha todavía no dispone de sus datos; añade que seguirá insistiendo. No da plazo ni dice si hay otro cauce oficial para obtener esos horarios.",
       "que_aporta": "Que la ausencia de Iryo en el Punto de Acceso Nacional no es un retraso de publicación: el operador no ha entregado sus horarios, aunque ha dicho que piensa hacerlo, y no hay fecha. Cuando lo haga, ese fichero sustituye a la compilación no oficial. A esa fecha ni Iryo ni el autor de la compilación habían contestado."
+    },
+    {
+      "source_id": "iryo-web",
+      "titulo": "Segunda respuesta del Punto de Acceso Nacional: no convierte ficheros y anuncia los conjuntos nuevos en su página principal",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible (Punto de Acceso Nacional de Transporte Multimodal)",
+      "url": "https://nap.transportes.gob.es/",
+      "resumen": "Preguntado el 18 de noviembre de 2026 si podría publicar los horarios de Iryo convertidos a GTFS desde otro formato y avisar cuando lo hiciera, el buzón contestó por correo ese mismo día que, como norma, no modifica ni convierte los ficheros GTFS: los valida y extrae de ellos los metadatos y lo que enseña la ficha de cada conjunto, y si encuentra errores se los traslada al proveedor para que los corrija en origen. Con Ouigo es igual: publica el fichero que le entrega el operador. Cuando publique el conjunto de Iryo lo anunciará en el panel de avisos de su página principal; prevé un canal para recibir esos avisos, pero de momento hay que consultarlos allí.",
+      "que_aporta": "Que los horarios de Iryo solo llegarán al Punto de Acceso Nacional si el propio operador entrega un GTFS: el organismo no los elaborará ni los convertirá. Para saber si ya están, hay que mirar los avisos de la página principal del Punto de Acceso Nacional, además del catálogo."
     }
   ]
 }
