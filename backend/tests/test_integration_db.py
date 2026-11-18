@@ -25,6 +25,7 @@ from conftest import (
     SOURCES,
     SPEC,
     SPECS,
+    count_round_trips,
     database_url_for_tests,
     requires_db,
 )
@@ -2490,3 +2491,200 @@ async def test_a_connection_dropped_from_a_spec_goes_away_even_on_a_shared_node(
         assert await conn.fetchval(count) == before
     # las de la otra línea que comparte el nodo y las del resto siguen en su sitio
     assert {"enlace-blancales-lav-sevilla", "sevilla-huelva"} <= ids
+
+
+# --- Lo leído de la base, guardado en memoria mientras los datos no cambien (`oniel.repo.cache`) ---
+
+#: Tablas que no salen en ninguna respuesta de la API: escribir en ellas no cambia la versión.
+STATE_TABLES = {"schema_migrations", "import_state", "import_runs", "data_version"}
+
+
+async def _data_version(conn: asyncpg.Connection) -> int:
+    from oniel.repo import cache
+
+    version = await cache.data_version(conn)
+    assert version is not None
+    return version
+
+
+async def test_every_table_the_api_reads_bumps_the_data_version(
+    imported: dict[str, Any], dsn: str
+) -> None:
+    from oniel.db.pool import connect
+
+    async with connect(dsn) as conn:
+        rows = await conn.fetch(
+            """
+            SELECT c.relname AS name,
+                   count(t.oid) FILTER (WHERE t.tgname LIKE 'data_version_%') AS triggers
+            FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace AND n.nspname = 'public'
+            LEFT JOIN pg_trigger t ON t.tgrelid = c.oid AND NOT t.tgisinternal
+            WHERE c.relkind = 'r' GROUP BY c.relname
+            """
+        )
+    triggers = {r["name"]: r["triggers"] for r in rows}
+    # una tabla nueva sin sus dos disparadores (escritura y vaciado) dejaría a la API sirviendo
+    # lo que tenía guardado después de cambiarla
+    assert {name for name, n in triggers.items() if n != 2} == STATE_TABLES
+    assert len(triggers) > len(STATE_TABLES)
+
+
+async def test_data_version_goes_up_once_per_writing_transaction(
+    imported: dict[str, Any], dsn: str
+) -> None:
+    from oniel.db.pool import connect
+
+    async with connect(dsn) as conn:
+        before = await _data_version(conn)
+        # leer no la cambia
+        await conn.fetch("SELECT * FROM lines")
+        assert await _data_version(conn) == before
+        # ni escribir en una tabla de estado
+        await conn.execute("UPDATE import_state SET updated_at = updated_at")
+        assert await _data_version(conn) == before
+        # una transacción con varias escrituras, aunque no cambien ninguna fila, es un incremento
+        async with conn.transaction():
+            await conn.execute("UPDATE lines SET name = name")
+            await conn.execute("UPDATE service_dates SET service_date = service_date WHERE false")
+            await conn.execute("DELETE FROM segments WHERE false")
+        assert await _data_version(conn) == before + 1
+        # una sentencia suelta es su propia transacción
+        await conn.execute("UPDATE nodes SET name = name")
+        assert await _data_version(conn) == before + 2
+        # y una transacción que se deshace no deja rastro
+        with pytest.raises(RuntimeError):
+            async with conn.transaction():
+                await conn.execute("UPDATE lines SET name = 'no llega'")
+                raise RuntimeError
+        assert await _data_version(conn) == before + 2
+
+
+async def test_a_request_with_everything_kept_does_not_query_the_network_again(
+    imported: dict[str, Any], dsn: str
+) -> None:
+    from oniel.db.pool import connect
+    from oniel.repo import cache, network_repo
+
+    async def read(conn: asyncpg.Connection) -> list[Any]:
+        return [
+            await network_repo.fetch_line_detail(conn, "lav-madrid-sevilla"),
+            await network_repo.fetch_line_detail(conn, "manzanares-ciudad-real"),
+            await network_repo.fetch_line_detail(conn, "no-existe"),
+            await network_repo.fetch_index(conn),
+            await network_repo.fetch_coverage(conn),
+            await network_repo.fetch_segment(conn, "lav-madrid-sevilla:bif-yeles:bif-la-sagra"),
+            await network_repo.fetch_node(conn, "ciudad-real"),
+            await network_repo.fetch_interruptions(
+                conn, segment_id="lav-madrid-sevilla:bif-yeles:bif-la-sagra"
+            ),
+        ]
+
+    cache.clear()
+    async with connect(dsn) as conn:
+        # sin petición en curso cada lectura va a la base
+        with count_round_trips() as direct_trips:
+            direct = await read(conn)
+        assert sum(direct_trips.values()) > 30
+        with cache.session(await _data_version(conn)):
+            first = await read(conn)
+            with count_round_trips() as trips:
+                again = await read(conn)
+        # la segunda vez no hace ninguna consulta, y las dos dan lo mismo que leer de la base
+        assert sum(trips.values()) == 0
+        assert first == direct and again == direct
+        assert direct[2] is None and direct[0].segments and direct[3].segment_features.features
+    cache.clear()
+
+
+async def test_kept_readings_give_the_same_as_the_filtered_queries(
+    imported: dict[str, Any], dsn: str
+) -> None:
+    """Con lo leído guardado, nodos, tramos y anotaciones se filtran en memoria: tiene que dar lo
+    mismo, y en el mismo orden, que filtrar en la consulta."""
+    from oniel.db.pool import connect
+    from oniel.repo import cache, network_repo
+
+    days = [None, dt.date(2026, 9, 1), dt.date.fromisoformat(CHECKED), dt.date(2027, 6, 1)]
+    cache.clear()
+    async with connect(dsn) as conn:
+        lines = [line.id for line in await network_repo.fetch_lines(conn)]
+        segments = [s for s, _ in await network_repo.fetch_segments(conn)]
+        cut = {s for a in await network_repo.fetch_annotations(conn) for s in a.segment_ids}
+        assert cut
+        # los tramos con alguna anotación y unos cuantos sin ninguna
+        some_segments = sorted(cut) + [s.id for s in segments[::25]]
+
+        async def read() -> list[Any]:
+            out: list[Any] = []
+            for line_id in [*lines, "no-existe"]:
+                out.append(await network_repo.fetch_nodes(conn, line_id))
+                out.append(await network_repo.fetch_segments(conn, line_id))
+                for day in days:
+                    out.append(await network_repo.fetch_annotations(conn, line_id=line_id, day=day))
+            for segment_id in [*some_segments, "no-existe"]:
+                out.append(await network_repo.fetch_segment(conn, segment_id))
+                for day in days:
+                    out.append(
+                        await network_repo.fetch_interruptions(conn, day=day, segment_id=segment_id)
+                    )
+            for kind in [None, "interrupcion", "proyecto", "sin-declarar"]:
+                for day in days:
+                    out.append(await network_repo.fetch_annotations(conn, kind=kind, day=day))
+            return out
+
+        direct = await read()
+        with cache.session(await _data_version(conn)):
+            kept = await read()
+    cache.clear()
+    assert kept == direct
+    assert sum(1 for x in direct if x) > len(lines) * 3
+
+
+async def test_api_keeps_what_it_read_until_the_data_change(
+    client: httpx.AsyncClient, dsn: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from oniel.db.pool import connect
+    from oniel.repo import network_repo
+
+    readings = 0
+    load_lines = network_repo._load_lines
+
+    async def counting(conn: asyncpg.Connection) -> Any:
+        nonlocal readings
+        readings += 1
+        return await load_lines(conn)
+
+    monkeypatch.setattr(network_repo, "_load_lines", counting)
+    line = "/api/lines/manzanares-ciudad-real"
+
+    async def name() -> list[str]:
+        detail = (await client.get(line)).json()
+        index = (await client.get("/api/lines")).json()
+        coverage = (await client.get("/api/coverage")).json()
+        return [
+            detail["line"]["short_name"],
+            next(x for x in index["lines"] if x["id"] == detail["line"]["id"])["short_name"],
+            next(x for x in coverage["lines"] if x["id"] == detail["line"]["id"])["short_name"],
+        ]
+
+    async with connect(dsn) as conn:
+        await conn.execute("UPDATE lines SET name = name")  # versión nueva: se empieza de cero
+        original = await name()
+        assert len(set(original)) == 1
+        assert readings == 1
+        # varias peticiones más, a tres rutas, y las líneas no se vuelven a leer
+        assert await name() == original and await name() == original
+        assert readings == 1
+        try:
+            # en cuanto alguien escribe, la petición siguiente lo ve
+            await conn.execute(
+                "UPDATE lines SET short_name = 'Cambiada' WHERE id = 'manzanares-ciudad-real'"
+            )
+            assert await name() == ["Cambiada"] * 3
+            assert readings == 2
+        finally:
+            await conn.execute(
+                "UPDATE lines SET short_name = $1 WHERE id = 'manzanares-ciudad-real'", original[0]
+            )
+        assert await name() == original
+        assert readings == 3

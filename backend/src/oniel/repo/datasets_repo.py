@@ -19,6 +19,7 @@ import datetime as dt
 import asyncpg
 
 from oniel.domain.schemas import DatasetOut
+from oniel.repo import cache
 
 #: Ids de los conjuntos vigentes: el más reciente de cada fuente.
 CURRENT_IDS_SQL = """
@@ -51,8 +52,12 @@ def _dataset(r: asyncpg.Record) -> DatasetOut:
 
 async def fetch_datasets(conn: asyncpg.Connection) -> list[DatasetOut]:
     """Todos los conjuntos guardados, del más antiguo al más reciente."""
-    rows = await conn.fetch("SELECT * FROM datasets ORDER BY retrieved_on, id")
-    return [_dataset(r) for r in rows]
+
+    async def load() -> list[DatasetOut]:
+        rows = await conn.fetch("SELECT * FROM datasets ORDER BY retrieved_on, id")
+        return [_dataset(r) for r in rows]
+
+    return list(await cache.remember("datasets", load))
 
 
 async def fetch_active_datasets(conn: asyncpg.Connection, date: dt.date) -> list[DatasetOut]:
@@ -73,6 +78,12 @@ async def feed_bounds(
     el periodo que cubren entre todos. El día de referencia es el laborable con más servicios de
     los primeros treinta días.
     """
+    return await cache.remember(("feed_bounds", dataset_id), lambda: _feed_bounds(conn, dataset_id))
+
+
+async def _feed_bounds(
+    conn: asyncpg.Connection, dataset_id: str | None
+) -> tuple[dt.date | None, dt.date | None, dt.date | None]:
     scope = "dataset_id = $1" if dataset_id else f"dataset_id IN {CURRENT_IDS_SQL}"
     args = [dataset_id] if dataset_id else []
     r = await conn.fetchrow(
@@ -103,6 +114,10 @@ async def feed_bounds(
 
 async def reference_dates(conn: asyncpg.Connection) -> dict[str, dt.date]:
     """Día de referencia propio de cada conjunto guardado; sin los que no tienen ningún servicio."""
+    return dict(await cache.remember("reference_dates", lambda: _reference_dates(conn)))
+
+
+async def _reference_dates(conn: asyncpg.Connection) -> dict[str, dt.date]:
     out: dict[str, dt.date] = {}
     for dataset in await fetch_datasets(conn):
         _, _, ref = await feed_bounds(conn, dataset.id)

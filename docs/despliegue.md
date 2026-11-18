@@ -100,6 +100,20 @@ Una prueba (`tests/test_importing.py`) cuenta las idas y vueltas de una importac
 
 `ONIEL_CORS_ORIGINS` debe incluir el dominio del visor (`["https://oniel.vercel.app"]` por defecto); los dominios de vista previa `*.vercel.app` se aceptan por expresión regular.
 
+### Lo que la API guarda en memoria
+
+La red y los horarios solo cambian al importar, pero cada petición volvía a leerlos: abrir una línea eran diez consultas seguidas, dos de ellas sobre los horarios de toda la red (el día de referencia y los pasos por tramo). Desde el 18 de noviembre de 2026 la API guarda en memoria lo que lee (`oniel.repo.cache`) y lo reutiliza mientras los datos sean los mismos.
+
+- **Cómo sabe que son los mismos.** La base lleva una versión de los datos, un número en la tabla `data_version` que sube una vez por cada transacción que escribe en una tabla de la red o de los horarios (migración `0014_version_de_datos`, con un disparador por sentencia en cada tabla). La API la lee al empezar cada petición: si no ha cambiado, usa lo guardado; si ha cambiado, lo tira todo y vuelve a leer. No se supone nada sobre cuándo se importa: una importación lanzada a mano con la API en marcha se ve en la petición siguiente.
+- **Qué guarda.** Las líneas, los nodos, los tramos con su geometría, las conexiones, las anotaciones, las fuentes, los operadores, el día de referencia, el índice ligero ya simplificado, la cobertura, el grafo de rutas y, por cada día pedido, los pasos por tramo y los tramos sin otro camino. Como mucho 128 entradas; al llenarse sale la que lleva más tiempo sin usarse, así que pedir muchos días distintos no hace crecer la memoria.
+- **Qué no.** Lo que depende de un tramo o de una estación y de un día (los trenes de un tramo, las paradas de una estación, la evolución del servicio) se sigue leyendo en cada petición, con sus índices.
+- **Una tabla nueva** que la API lea tiene que llevar los dos disparadores (`data_version_write` y `data_version_truncate`) en su migración; una prueba de `tests/test_integration_db.py` falla si a alguna le faltan.
+- **Fuera de una petición** (la importación, la exportación de la instantánea) no se guarda nada.
+
+Medido en local el 18 de noviembre de 2026, con 30 líneas y la API ya caliente: `/api/lines/{line_id}` pasa de 105 ms y 10 consultas a 3 ms y una (la de la versión); `/api/lines`, de 115 ms a 5 ms; `/api/coverage`, de 75 ms a 4 ms; `/api/segments/{segment_id}/services`, de 62 ms a 19 ms. La primera petición tras arrancar o tras una importación sigue pagando las lecturas. Las respuestas son idénticas byte a byte. Las consultas que quedan usan sus índices (`EXPLAIN ANALYZE`): no hizo falta ninguno nuevo. En producción la diferencia es mayor, porque allí cada consulta cuesta además el viaje a la base y, tras un rato sin tráfico, la de los pasos por tramo de toda la red tardaba más de un segundo.
+
+`/api/alternatives` es el cálculo más largo (15 s en local para un día; `docs/simulacion.md`, «Tramos sin alternativa»). El visor lee el del día de referencia de la instantánea; el de otro día se calcula la primera vez que se pide y queda guardado.
+
 ## Refresco automático del GTFS
 
 `.github/workflows/gtfs.yml` descarga cada lunes el GTFS de Renfe y, si el horario ha cambiado, abre una PR con el fichero nuevo, `sources.json` y la instantánea regenerada. Qué hace paso a paso, cómo compara y qué queda manual (Ouigo) está en `docs/datos.md`, «Refresco de los horarios». Aquí va lo que toca al despliegue.
