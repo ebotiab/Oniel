@@ -6,13 +6,11 @@ Y lo que tarda: escribe en la base por lotes y el arranque de producción no exp
 from __future__ import annotations
 
 import datetime as dt
-from collections import Counter
-from collections.abc import AsyncIterator, Iterator
-from contextlib import asynccontextmanager, contextmanager
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-import asyncpg
 import pytest
 from conftest import (
     DATA_DIR,
@@ -21,6 +19,7 @@ from conftest import (
     FEED_SOURCE_ID,
     SOURCES,
     SPECS,
+    count_round_trips,
     database_url_for_tests,
     requires_db,
 )
@@ -66,30 +65,6 @@ def test_file_fingerprint_ignores_bytecode(tmp_path: Path) -> None:
     cache.mkdir()
     (cache / "importer.cpython-313.pyc").write_bytes(b"\x00\x01")
     assert import_fingerprint(data, src, env={}) == before
-
-
-#: Lo que cuenta como una ida y vuelta a la base: cada llamada a uno de estos métodos de asyncpg.
-_ROUND_TRIPS = ("execute", "executemany", "fetch", "fetchval", "fetchrow", "copy_records_to_table")
-
-
-@contextmanager
-def _count_round_trips() -> Iterator[Counter[str]]:
-    """Cuenta, por método, las llamadas a la base que haga cualquier conexión dentro del bloque."""
-    counts: Counter[str] = Counter()
-
-    def counting(name: str) -> Any:
-        original = getattr(asyncpg.Connection, name)
-
-        async def call(self: asyncpg.Connection, *args: Any, **kwargs: Any) -> Any:
-            counts[name] += 1
-            return await original(self, *args, **kwargs)
-
-        return call
-
-    with pytest.MonkeyPatch.context() as patch:
-        for name in _ROUND_TRIPS:
-            patch.setattr(asyncpg.Connection, name, counting(name))
-        yield counts
 
 
 @requires_db
@@ -157,7 +132,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
         assert second["fingerprint"] == first["fingerprint"]
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 1
         # sin --if-changed siempre se importa
-        with _count_round_trips() as round_trips:
+        with count_round_trips() as round_trips:
             third = await run(if_changed=False)
         assert third["skipped"] is False
         assert await conn.fetchval("SELECT count(*) FROM import_runs") == 2
