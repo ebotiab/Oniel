@@ -1,8 +1,13 @@
 from __future__ import annotations
 
 import os
+from collections import Counter
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Any
 
+import asyncpg
 import pytest
 
 from oniel.gtfs.reader import GtfsFeed, read_feed
@@ -122,3 +127,27 @@ requires_db = pytest.mark.skipif(
     database_url_for_tests() is None,
     reason="define ONIEL_TEST_DATABASE_URL para las pruebas con PostgreSQL",
 )
+
+
+#: Lo que cuenta como una ida y vuelta a la base: cada llamada a uno de estos métodos de asyncpg.
+_ROUND_TRIPS = ("execute", "executemany", "fetch", "fetchval", "fetchrow", "copy_records_to_table")
+
+
+@contextmanager
+def count_round_trips() -> Iterator[Counter[str]]:
+    """Cuenta, por método, las llamadas a la base que haga cualquier conexión dentro del bloque."""
+    counts: Counter[str] = Counter()
+
+    def counting(name: str) -> Any:
+        original = getattr(asyncpg.Connection, name)
+
+        async def call(self: asyncpg.Connection, *args: Any, **kwargs: Any) -> Any:
+            counts[name] += 1
+            return await original(self, *args, **kwargs)
+
+        return call
+
+    with pytest.MonkeyPatch.context() as patch:
+        for name in _ROUND_TRIPS:
+            patch.setattr(asyncpg.Connection, name, counting(name))
+        yield counts

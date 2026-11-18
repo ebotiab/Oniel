@@ -21,7 +21,7 @@ from oniel.domain.schemas import (
     ServiceOut,
     StopOut,
 )
-from oniel.repo import datasets_repo
+from oniel.repo import cache, datasets_repo
 from oniel.repo.datasets_repo import active_ids_sql
 from oniel.sim.passes import SegmentPass
 
@@ -99,6 +99,16 @@ async def daily_counts(
     conn: asyncpg.Connection, date: dt.date, dataset_id: str | None = None
 ) -> dict[str, int]:
     """Pasos por tramo un día: de los conjuntos activos ese día o, si se da, de un conjunto concreto."""
+    return dict(
+        await cache.remember(
+            ("daily_counts", date, dataset_id), lambda: _daily_counts(conn, date, dataset_id)
+        )
+    )
+
+
+async def _daily_counts(
+    conn: asyncpg.Connection, date: dt.date, dataset_id: str | None
+) -> dict[str, int]:
     scope = "p.dataset_id = $2" if dataset_id else f"p.dataset_id IN {active_ids_sql('$1')}"
     rows = await conn.fetch(
         f"""
@@ -120,6 +130,14 @@ async def daily_counts_by_operator(
 
     Por cada tramo, la suma de sus operadores es el recuento de :func:`daily_counts`.
     """
+    return await cache.remember(
+        ("daily_counts_by_operator", date), lambda: _daily_counts_by_operator(conn, date)
+    )
+
+
+async def _daily_counts_by_operator(
+    conn: asyncpg.Connection, date: dt.date
+) -> dict[str, dict[str, int]]:
     rows = await conn.fetch(
         f"""
         SELECT p.segment_id, s.operator_id, count(*) AS n

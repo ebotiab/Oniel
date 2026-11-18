@@ -34,7 +34,7 @@ from oniel.domain.schemas import (
     ZoneOut,
 )
 from oniel.geo import simplify
-from oniel.repo import datasets_repo, services_repo
+from oniel.repo import cache, datasets_repo, services_repo
 from oniel.repo.datasets_repo import CURRENT_IDS_SQL
 from oniel.routing import Graph, build_graph
 
@@ -106,18 +106,28 @@ def _geom(value: Any) -> dict[str, Any]:
 
 
 async def fetch_sources(conn: asyncpg.Connection) -> list[Source]:
-    rows = await conn.fetch("SELECT * FROM sources ORDER BY id")
-    return [Source(**{k: r[k] for k in Source.model_fields}) for r in rows]
+    async def load() -> list[Source]:
+        rows = await conn.fetch("SELECT * FROM sources ORDER BY id")
+        return [Source(**{k: r[k] for k in Source.model_fields}) for r in rows]
+
+    return list(await cache.remember("sources", load))
 
 
 async def fetch_operators(conn: asyncpg.Connection) -> list[Operator]:
-    rows = await conn.fetch(
-        "SELECT id, name, role, source_id, timetable FROM operators ORDER BY id"
-    )
-    return [Operator(**dict(r)) for r in rows]
+    async def load() -> list[Operator]:
+        rows = await conn.fetch(
+            "SELECT id, name, role, source_id, timetable FROM operators ORDER BY id"
+        )
+        return [Operator(**dict(r)) for r in rows]
+
+    return list(await cache.remember("operators", load))
 
 
 async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
+    return list(await cache.remember("lines", lambda: _load_lines(conn)))
+
+
+async def _load_lines(conn: asyncpg.Connection) -> list[LineSummary]:
     rows = await conn.fetch(
         """
         SELECT l.*, o.id AS op_id, o.name AS op_name, o.role AS op_role,
@@ -172,6 +182,15 @@ async def fetch_lines(conn: asyncpg.Connection) -> list[LineSummary]:
 
 
 async def fetch_nodes(conn: asyncpg.Connection, line_id: str | None = None) -> list[NodeOut]:
+    """Los nodos de una línea o de todas, una vez por cada línea a la que pertenecen."""
+    if line_id is not None and not cache.active():
+        return await _load_nodes(conn, line_id)
+    # Con lo leído guardado, los de una línea salen de los de toda la red, que van en el mismo orden.
+    nodes = await cache.remember("nodes", lambda: _load_nodes(conn, None))
+    return [n for n in nodes if line_id is None or n.line_id == line_id]
+
+
+async def _load_nodes(conn: asyncpg.Connection, line_id: str | None) -> list[NodeOut]:
     rows = await conn.fetch(
         """
         SELECT n.*, ln.line_id, ln.km, ln.reference_pk_km, ln.seq
@@ -237,6 +256,16 @@ SEGMENT_SQL = """
 async def fetch_segments(
     conn: asyncpg.Connection, line_id: str | None = None
 ) -> list[tuple[SegmentOut, dict[str, Any]]]:
+    """Los tramos de una línea o de todas, cada uno con su geometría."""
+    if line_id is not None and not cache.active():
+        return await _load_segments(conn, line_id)
+    segments = await cache.remember("segments", lambda: _load_segments(conn, None))
+    return [(s, g) for s, g in segments if line_id is None or s.line_id == line_id]
+
+
+async def _load_segments(
+    conn: asyncpg.Connection, line_id: str | None
+) -> list[tuple[SegmentOut, dict[str, Any]]]:
     rows = await conn.fetch(
         SEGMENT_SQL
         + " WHERE ($1::text IS NULL OR s.line_id = $1) ORDER BY l.sort_order, s.line_id, s.seq",
@@ -246,6 +275,8 @@ async def fetch_segments(
 
 
 async def fetch_segment(conn: asyncpg.Connection, segment_id: str) -> SegmentOut | None:
+    if cache.active():
+        return next((s for s, _ in await fetch_segments(conn) if s.id == segment_id), None)
     r = await conn.fetchrow(SEGMENT_SQL + " WHERE s.id = $1", segment_id)
     return _segment(r) if r else None
 
@@ -256,6 +287,12 @@ async def fetch_node(conn: asyncpg.Connection, node_id: str) -> NodeOut | None:
 
 
 async def fetch_connections(
+    conn: asyncpg.Connection,
+) -> list[tuple[ConnectionOut, dict[str, Any] | None]]:
+    return list(await cache.remember("connections", lambda: _load_connections(conn)))
+
+
+async def _load_connections(
     conn: asyncpg.Connection,
 ) -> list[tuple[ConnectionOut, dict[str, Any] | None]]:
     rows = await conn.fetch("SELECT * FROM connections ORDER BY id")
@@ -289,6 +326,38 @@ async def fetch_annotations(
     afectan a ese tramo; ``line_id``, las de esa línea o de alguno de sus nodos. Los tramos
     afectados son los que quedan entre los dos nodos de la anotación según su orden en la línea.
     """
+    if not cache.active():
+        return await _load_annotations(
+            conn, kind=kind, day=day, segment_id=segment_id, line_id=line_id
+        )
+    # Con lo leído guardado se filtran aquí todas las registradas, con las mismas condiciones que
+    # la consulta y en su mismo orden (`tests/test_integration_db.py` compara los dos caminos).
+    everything = await cache.remember("annotations", lambda: _load_annotations(conn))
+    on_line = {n.id for n in await fetch_nodes(conn, line_id)} if line_id is not None else set()
+    return [
+        a
+        for a in everything
+        if (kind is None or a.kind == kind)
+        and (
+            day is None
+            or (
+                (a.start_date is None or a.start_date <= day)
+                and (a.ended_on is None or day < a.ended_on)
+            )
+        )
+        and (line_id is None or a.line_id == line_id or a.node_id in on_line)
+        and (segment_id is None or segment_id in a.segment_ids)
+    ]
+
+
+async def _load_annotations(
+    conn: asyncpg.Connection,
+    *,
+    kind: str | None = None,
+    day: dt.date | None = None,
+    segment_id: str | None = None,
+    line_id: str | None = None,
+) -> list[AnnotationOut]:
     rows = await conn.fetch(
         """
         SELECT a.*, fa.name AS from_name, tb.name AS to_name, n.name AS node_name,
@@ -436,6 +505,11 @@ async def fetch_index(
     conn: asyncpg.Connection, tolerance_m: float = INDEX_TOLERANCE_M
 ) -> NetworkIndexOut:
     """Índice ligero de la red: todo salvo los textos de los nodos y la geometría completa."""
+    # Entero, porque lo que cuesta es simplificar la geometría de cada tramo.
+    return await cache.remember(("index", tolerance_m), lambda: _build_index(conn, tolerance_m))
+
+
+async def _build_index(conn: asyncpg.Connection, tolerance_m: float) -> NetworkIndexOut:
     nodes = await fetch_nodes(conn)
     segments = await fetch_segments(conn)
     connections = await fetch_connections(conn)
@@ -495,11 +569,15 @@ async def fetch_line_detail(
 
 async def fetch_graph(conn: asyncpg.Connection) -> Graph:
     """Grafo de rutas de todas las líneas cargadas (``oniel.routing``)."""
-    return build_graph(
-        await fetch_lines(conn),
-        await fetch_nodes(conn),
-        [s for s, _ in await fetch_segments(conn)],
-    )
+
+    async def load() -> Graph:
+        return build_graph(
+            await fetch_lines(conn),
+            await fetch_nodes(conn),
+            [s for s, _ in await fetch_segments(conn)],
+        )
+
+    return await cache.remember("graph", load)
 
 
 async def fetch_segment_alternatives(
@@ -508,9 +586,15 @@ async def fetch_segment_alternatives(
     """Trenes por tramo de ``day`` (por defecto, el de referencia) y su alternativa en la red cargada."""
     if day is None:
         _, _, day = await feed_bounds(conn)
+    # El cálculo tarda segundos (`docs/simulacion.md`, «Tramos sin alternativa»): el de cada día se
+    # guarda mientras los datos no cambien.
+    return await cache.remember(("alternatives", day), lambda: _segment_alternatives(conn, day))
+
+
+async def _segment_alternatives(conn: asyncpg.Connection, day: dt.date | None) -> AlternativesOut:
     lines = await fetch_lines(conn)
     running = {operator_id for line in lines for operator_id in line.operator_ids}
-    graph = build_graph(lines, await fetch_nodes(conn), [s for s, _ in await fetch_segments(conn)])
+    graph = await fetch_graph(conn)
     paths = await services_repo.service_paths(conn, day) if day else []
     return AlternativesOut(
         date=day,
@@ -534,6 +618,10 @@ async def feed_bounds(
 
 
 async def fetch_coverage(conn: asyncpg.Connection) -> CoverageOut:
+    return await cache.remember("coverage", lambda: _build_coverage(conn))
+
+
+async def _build_coverage(conn: asyncpg.Connection) -> CoverageOut:
     lines = await fetch_lines(conn)
     station_count = await fetch_int(conn, "SELECT count(*) FROM nodes WHERE kind = 'estacion'")
     service_count = await fetch_int(
