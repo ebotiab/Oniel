@@ -1,0 +1,814 @@
+{
+  "line": {
+    "id": "tarragona-barcelona",
+    "name": "Línea convencional Tarragona – Vilanova i la Geltrú – Barcelona",
+    "short_name": "632, 210 y 200",
+    "sort_order": 36,
+    "zone": "cataluna",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 2,
+    "pk_restarts": [
+      {
+        "node": "vila-seca",
+        "pk_km": 94.3
+      },
+      {
+        "node": "tarragona",
+        "pk_km": 0.0
+      },
+      {
+        "node": "sant-vicenc-de-calders",
+        "pk_km": 618.144
+      }
+    ],
+    "status": "disponible",
+    "description": "Une Tarragona con Barcelona por la costa, pasando por Sant Vicenç de Calders y Vilanova i la Geltrú. Es el camino de los regionales del sur de Cataluña y de los Intercity de València que paran en Tarragona.\n\nEmpieza en la bifurcación La Feredat, en la línea de València, de donde sale un enlace de una sola vía hasta la bifurcación Vila-seca; allí se le une la línea que viene de Reus. Los Euromed y los demás trenes de València que paran en Camp de Tarragona no pasan por aquí: siguen por la alta velocidad hasta Barcelona.\n\nEn Sant Vicenç de Calders se le unen la línea de Valls, por la que llegan regionales de Lleida, y la de Vilafranca del Penedès, que va a Barcelona por el interior. Los regionales siguen desde Barcelona-Sants por el túnel de la calle Aragó hasta Passeig de Gràcia y Estació de França.\n\nOniel cuenta los regionales e Intercity del horario de Renfe. Los trenes de Rodalies de Barcelona (R2 Sud), que paran además en Calafell, Cunit, Sitges, Castelldefels o Gavà, no están en ese horario y no se cuentan.",
+    "geometry_source": {
+      "source_id": "osm-relation-5913127",
+      "parts": [
+        {
+          "source_id": "osm-relation-5913127",
+          "file": "raw/osm/relation_5913127_r16_tortosa_barcelona_2026-11-18.json",
+          "relation_id": 5913127,
+          "from": [
+            1.1267256,
+            41.121723
+          ],
+          "to": [
+            2.1400042,
+            41.3790068
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lineas-210-y-200"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-la-feredat",
+      "name": "Bifurcación La Feredat",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "shared": true,
+      "position": {
+        "lon": 1.1267256,
+        "lat": 41.121723
+      }
+    },
+    {
+      "id": "bif-vila-seca",
+      "name": "Bifurcación Vila-seca",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": 1.1422214,
+        "lat": 41.1201399
+      },
+      "description": "Aquí el enlace que viene de La Feredat se junta con la línea de Reus a Tarragona, por la que llegan los regionales de Reus, Móra la Nova, Caspe y Zaragoza, y los de Lleida por La Plana-Picamoixons."
+    },
+    {
+      "id": "vila-seca",
+      "name": "Vila-seca",
+      "kind": "estacion",
+      "adif_code": "71401",
+      "rank": "secundario",
+      "position": {
+        "lon": 1.1504424,
+        "lat": 41.1128765
+      }
+    },
+    {
+      "id": "tarragona",
+      "name": "Tarragona",
+      "kind": "estacion",
+      "adif_code": "71500",
+      "position": {
+        "lon": 1.2535366,
+        "lat": 41.1112229
+      },
+      "reference_pk_km": 103.5,
+      "description": "Estación de la ciudad, junto al mar. La de alta velocidad, Camp de Tarragona, está a unos 10 km. De aquí sale además la vía de Salou-Port Aventura, el trozo que queda en servicio de la antigua línea de la costa hacia València."
+    },
+    {
+      "id": "altafulla-tamarit",
+      "name": "Altafulla-Tamarit",
+      "kind": "estacion",
+      "adif_code": "71502",
+      "rank": "secundario",
+      "position": {
+        "lon": 1.3732969,
+        "lat": 41.1366062
+      },
+      "reference_pk_km": 10.8
+    },
+    {
+      "id": "torredembarra",
+      "name": "Torredembarra",
+      "kind": "estacion",
+      "adif_code": "71503",
+      "rank": "secundario",
+      "position": {
+        "lon": 1.4057092,
+        "lat": 41.1427922
+      },
+      "reference_pk_km": 13.6
+    },
+    {
+      "id": "sant-vicenc-de-calders",
+      "name": "Sant Vicenç de Calders",
+      "kind": "estacion",
+      "adif_code": "71600",
+      "position": {
+        "lon": 1.5257932,
+        "lat": 41.1860822
+      },
+      "reference_pk_km": 24.8,
+      "description": "Nudo de tres líneas: aquí se juntan la de la costa, la de Valls, por la que llegan regionales de Lleida, y la de Vilafranca del Penedès, que va a Barcelona por el interior. Es además el final de los trenes de Rodalies de la costa (R2 Sud)."
+    },
+    {
+      "id": "vilanova-i-la-geltru",
+      "name": "Vilanova i la Geltrú",
+      "kind": "estacion",
+      "adif_code": "71700",
+      "position": {
+        "lon": 1.7308241,
+        "lat": 41.2201812
+      },
+      "reference_pk_km": 636.0
+    },
+    {
+      "id": "barcelona-sants",
+      "name": "Barcelona-Sants",
+      "kind": "estacion",
+      "adif_code": "71801",
+      "shared": true,
+      "position": {
+        "lon": 2.1400042,
+        "lat": 41.3790068
+      }
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "bif-la-feredat",
+      "to_node": "bif-vila-seca",
+      "value": 1,
+      "source_id": "osm-relation-5913127",
+      "checked_on": "2026-11-18",
+      "note": "Las dos vías de OSM del enlace (ref=632, «Bifurcació la Feredat - Bifurcació Vila-seca») llevan passenger_lines=1. El mapa 4 de la Declaración sobre la Red no lo distingue: a esa escala, el enlace queda bajo el trazo de la línea de Reus a Tarragona."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-la-feredat",
+      "to_node": "barcelona-sants",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea entre Reus y Tarragona, entre Tarragona y Torredembarra, junto a Sant Vicenç de Calders y entre Sant Vicenç y Barcelona-Sants. No dibuja ningún símbolo de ERTMS en la línea."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-la-feredat",
+      "to_node": "barcelona-sants",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: trazo marrón discontinuo con el rótulo «BAB ctc» entre Reus y Tarragona, junto a Torredembarra, después de Sant Vicenç de Calders y junto a Gavà. La línea se dibuja con el trazo rosa de la vía doble a 3 kV de 1.668 mm."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-la-feredat",
+      "to_node": "barcelona-sants",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc», en toda la línea."
+    }
+  ],
+  "connections": [
+    {
+      "id": "reus-caspe-zaragoza",
+      "node_id": "bif-vila-seca",
+      "name": "Línea de Reus a Zaragoza por Caspe y a Lleida por La Plana-Picamoixons",
+      "towards": "Reus, Móra la Nova, Caspe, Zaragoza y Lleida",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          1.1422214,
+          41.1201399
+        ],
+        [
+          1.10008978,
+          41.1605229
+        ],
+        [
+          1.19488293,
+          41.3061987
+        ]
+      ]
+    },
+    {
+      "id": "tarragona-salou",
+      "node_id": "tarragona",
+      "name": "Ramal de Salou-Port Aventura",
+      "towards": "Salou-Port Aventura",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          1.2535366,
+          41.1112229
+        ],
+        [
+          1.2284962,
+          41.1095458
+        ],
+        [
+          1.14605195,
+          41.0884798
+        ]
+      ]
+    },
+    {
+      "id": "sant-vicenc-valls",
+      "node_id": "sant-vicenc-de-calders",
+      "name": "Línea de Sant Vicenç de Calders a Valls y La Plana-Picamoixons",
+      "towards": "Roda de Mar, Valls y Lleida",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          1.5257932,
+          41.1860822
+        ],
+        [
+          1.45520767,
+          41.1864204
+        ],
+        [
+          1.25865179,
+          41.2896079
+        ],
+        [
+          1.19488293,
+          41.3061987
+        ]
+      ]
+    },
+    {
+      "id": "sant-vicenc-vilafranca",
+      "node_id": "sant-vicenc-de-calders",
+      "name": "Línea de Sant Vicenç de Calders a Barcelona por Vilafranca del Penedès",
+      "towards": "L'Arboç, Vilafranca del Penedès y Barcelona",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          1.5257932,
+          41.1860822
+        ],
+        [
+          1.6,
+          41.27
+        ],
+        [
+          1.699,
+          41.3465
+        ]
+      ]
+    }
+  ],
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea: los regionales de Barcelona a Tarragona, Tortosa, Vinaròs y València, a Reus, Móra la Nova, Caspe y Zaragoza, a Lleida por Reus o por Valls y a Salou-Port Aventura, y los Intercity de València a Barcelona que paran en Tarragona. Quedan fuera los que solo paran en una: los de alta velocidad y los Euromed, que solo paran en Barcelona-Sants y van por Camp de Tarragona, y las lanzaderas de Tarragona a Salou-Port Aventura.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [],
+    "min_node_stops": 2
+  },
+  "stop_mappings": {
+    "71401": {
+      "node": "vila-seca"
+    },
+    "71500": {
+      "node": "tarragona"
+    },
+    "71502": {
+      "node": "altafulla-tamarit"
+    },
+    "71503": {
+      "node": "torredembarra"
+    },
+    "71600": {
+      "node": "sant-vicenc-de-calders"
+    },
+    "71700": {
+      "node": "vilanova-i-la-geltru"
+    },
+    "71801": {
+      "node": "barcelona-sants"
+    },
+    "71802": {
+      "exits": [
+        "barcelona-sants"
+      ]
+    },
+    "79400": {
+      "exits": [
+        "barcelona-sants"
+      ]
+    },
+    "65000": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65003": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65200": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65206": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65208": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65300": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65304": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65306": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65308": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65311": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65312": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65314": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65318": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65402": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65403": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65404": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65405": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65420": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65422": {
+      "exits": [
+        "bif-la-feredat"
+      ],
+      "via": {
+        "line": "valencia-castello-tarragona",
+        "node": "bif-la-feredat"
+      }
+    },
+    "65400": {
+      "exits": [
+        "bif-la-feredat"
+      ]
+    },
+    "65401": {
+      "exits": [
+        "bif-la-feredat"
+      ]
+    },
+    "65411": {
+      "exits": [
+        "tarragona"
+      ]
+    },
+    "71400": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71307": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71306": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71305": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71304": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71303": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71302": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71300": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71211": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71210": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71209": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71208": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71207": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71206": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71205": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71204": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71201": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71200": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71108": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71105": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71103": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "71100": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "70807": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "70806": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "04040": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73101": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73102": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73100": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73010": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73009": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73008": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73007": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73006": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73005": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73004": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73003": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73002": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "73001": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "bif-vila-seca"
+      ]
+    },
+    "72101": {
+      "exits": [
+        "sant-vicenc-de-calders"
+      ]
+    },
+    "76001": {
+      "exits": [
+        "sant-vicenc-de-calders"
+      ]
+    },
+    "76002": {
+      "exits": [
+        "sant-vicenc-de-calders"
+      ]
+    },
+    "76003": {
+      "exits": [
+        "sant-vicenc-de-calders"
+      ]
+    },
+    "76004": {
+      "exits": [
+        "sant-vicenc-de-calders"
+      ]
+    }
+  },
+  "route_overrides": [
+    {
+      "id": "lleida-por-valls",
+      "description": "Regionales de Lleida a Barcelona por Valls: dejan la línea en Sant Vicenç de Calders, camino de Roda de Mar. Los de Lleida y La Plana-Picamoixons por Reus la dejan en la bifurcación Vila-seca, que es la salida general de esas paradas.",
+      "consecutive_stop_ids": [
+        "72101",
+        "71600"
+      ],
+      "stop_mappings": {
+        "73100": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73010": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73009": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73008": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73007": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73006": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73005": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73004": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73003": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73002": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "73001": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        },
+        "78400": {
+          "exits": [
+            "sant-vicenc-de-calders"
+          ]
+        }
+      }
+    }
+  ]
+}

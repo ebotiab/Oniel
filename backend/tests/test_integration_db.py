@@ -58,6 +58,7 @@ LAV_SANTIAGO = "lav-ourense-santiago"
 EJE_ATLANTICO = "eje-atlantico"
 SEVILLA_CADIZ = "sevilla-cadiz"
 LAV_FIGUERES = "lav-barcelona-figueres"
+TARRAGONA_BARCELONA = "tarragona-barcelona"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
 #: de Plasencia a Badajoz, el ramal de Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -275,6 +276,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][LAV_FIGUERES]["trips"] == 208
     assert gtfs1["lines"][LAV_FIGUERES]["passes"] == {"estimado": 1094, "publicado": 208}
     assert gtfs1["lines"][LAV_FIGUERES]["route_overrides"] == {}
+    # Con la de Tarragona a Barcelona por la costa entran 63: los regionales de Reus, Móra la Nova,
+    # Caspe, Zaragoza, Lleida y Salou-Port Aventura. Los otros 28 de sus 91 viajes, los regionales e
+    # Intercity que llegan por La Feredat, ya estaban en la línea de València
+    trips += 63
+    assert gtfs1["lines"][TARRAGONA_BARCELONA]["trips"] == 91
+    assert gtfs1["lines"][TARRAGONA_BARCELONA]["passes"] == {"estimado": 209, "publicado": 394}
+    assert gtfs1["lines"][TARRAGONA_BARCELONA]["route_overrides"] == {"lleida-por-valls": 8}
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
     # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
     # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
@@ -468,8 +476,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
     # a Gijón, y la de Burgos a Vitoria
     # y las dos de Galicia, la de Sevilla a Cádiz y la de Barcelona a Figueres, y los dos ramales de
-    # Toledo y de Huesca
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2
+    # Toledo y de Huesca, y la de Tarragona a Barcelona por la costa
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -506,6 +514,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
+        + 8  # la de Tarragona a Barcelona por la costa
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -529,6 +538,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 1094 + 208  # la de Barcelona a Figueres
     # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
     renfe_passes += 4 * 132 + 132 + (11 + 11)
+    renfe_passes += 209 + 394  # la de Tarragona a Barcelona por la costa
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -663,6 +673,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
+        + 8  # la de Tarragona a Barcelona por la costa
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -695,6 +706,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         # el kilómetro de la salida de Ourense, por la vía de la línea convencional
         LAV_SANTIAGO,
         "lav-zaragoza-huesca",
+        # el enlace de La Feredat a la bifurcación Vila-seca
+        TARRAGONA_BARCELONA,
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -762,6 +775,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        TARRAGONA_BARCELONA,
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -848,6 +862,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
+        + 8  # la de Tarragona a Barcelona por la costa
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1243,7 +1258,7 @@ async def test_closure_of_an_interrupted_segment_says_so(client: httpx.AsyncClie
     # (los otros cuatro, por Moreda y Granada o por Cuenca y Albacete, son rodeos de más del
     # doble: no se listan, se cuentan)
     by_manzanares, alt = res["alternatives"]
-    assert res["omitted_alternatives"] == 6  # con las dos vueltas por Barcelona y la costa
+    assert res["omitted_alternatives"] == 8  # con las cuatro vueltas por Barcelona y la costa
     assert alt["line_ids"] == ["convencional-madrid-alcazar-cordoba"]
     assert by_manzanares["line_ids"] == [MZCR, CONV]
     assert [i["id"] for i in by_manzanares["interruptions"]] == [WORKS_CUT]
@@ -1267,7 +1282,7 @@ async def test_closure_before_the_interruptions_has_no_notes(client: httpx.Async
     res = r.json()
     assert res["interruptions"] == []
     assert not any("interrupción real" in c for c in res["caveats"])
-    assert (len(res["alternatives"]), res["omitted_alternatives"]) == (2, 6)
+    assert (len(res["alternatives"]), res["omitted_alternatives"]) == (2, 8)
     for alt in res["alternatives"]:
         assert alt["interruptions"] == [] and "no está disponible" not in alt["note"]
 
@@ -1339,6 +1354,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y la de Sevilla a Cádiz, 15: de San Bernardo a Cádiz
     # y la de Barcelona a Figueres, 2: Girona y Figueres-Vilafant
     # y los dos ramales, 3: Toledo, Tardienta y Huesca
+    # y la de Tarragona a Barcelona, 6: Vila-seca, Tarragona, Altafulla-Tamarit, Torredembarra,
+    # Sant Vicenç de Calders y Vilanova i la Geltrú
     assert cov["station_count"] == (
         6
         + 22
@@ -1368,6 +1385,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 15
         + 2
         + 3
+        + 6  # la de Tarragona a Barcelona: de Vila-seca a Vilanova i la Geltrú
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
@@ -1395,8 +1413,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Málaga de ese día y los trenes de Madrid a Sevilla y a Cádiz que no paran en Córdoba
     # y 33 más con la de Barcelona a Figueres: los Avant de Barcelona a Figueres y los AVE de
     # Barcelona a Lyon
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26
     # y 26 más con el ramal de Toledo: los Avant de Madrid a Toledo de ese día
+    # y 56 más con la de Tarragona a Barcelona: los regionales de Reus, Caspe, Zaragoza, Lleida y
+    # Salou-Port Aventura de ese día
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 56
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -1449,7 +1469,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Y 2 de la de Barcelona a Figueres: el fichero de sus estaciones en OSM y los horarios
     # abiertos de SNCF, que solo dicen qué trenes faltan
     # y una más: la compilación no oficial de los horarios de Iryo
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5
+    # Y 3 de la de Tarragona a Barcelona: la relación de OSM del R16, el fichero de sus estaciones y
+    # los artículos de Wikipedia de las líneas 210 y 200
+    assert len(cov["sources"]) == (
+        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 3
+    )
     # Y 5 de los ramales de Toledo y de Huesca: sus dos relaciones de OSM, sus dos artículos de
     # Wikipedia y el fichero de sus estaciones
     assert "línea convencional" in cov["notice"]
@@ -1477,7 +1501,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional Sevilla – Cádiz" in cov["notice"]
     assert "la línea de alta velocidad Barcelona – Girona – Figueres" in cov["notice"]
     assert "la línea de alta velocidad La Sagra – Toledo" in cov["notice"]
-    assert "y la línea de alta velocidad Zaragoza – Huesca" in cov["notice"]
+    assert "la línea de alta velocidad Zaragoza – Huesca" in cov["notice"]
+    assert "y la línea convencional Tarragona – Vilanova i la Geltrú – Barcelona" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
         LAV,
         CONV,
@@ -1508,6 +1533,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        TARRAGONA_BARCELONA,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1570,6 +1596,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_FIGUERES: ["renfe"],
         "lav-la-sagra-toledo": ["renfe"],
         "lav-zaragoza-huesca": ["renfe"],
+        TARRAGONA_BARCELONA: ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
@@ -1884,8 +1911,9 @@ async def test_closure_between_manzanares_and_ciudad_real_affects_the_diverted_t
     assert by_madrid["line_ids"] == by_cordoba["line_ids"] == [CONV, LAV]
     # la vuelta por Granada y Córdoba (689,5 km) da un rodeo de más del doble respecto al de
     # Córdoba, y la que va por Alcázar de San Juan, Albacete y Cuenca (606,9 km), respecto al de
-    # Madrid, y también la que sube a Barcelona y baja por Valencia
-    assert res["omitted_alternatives"] == 4
+    # Madrid, y también las que suben a Barcelona y bajan por Valencia, por Camp de Tarragona o por
+    # la costa de Tarragona
+    assert res["omitted_alternatives"] == 6
     assert (by_madrid["from_node_id"], by_madrid["to_node_id"]) == ("manzanares", "ciudad-real")
     assert (by_madrid["length_km"], by_madrid["closed_line_length_km"]) == (366.9, 64.4)
     assert [leg["to_name"] for leg in by_madrid["legs"]] == [
@@ -1923,7 +1951,7 @@ async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
     # se apartan de los anteriores en Linares-Baeza y recorren más del doble: no se listan. Tampoco
     # los dos que salen de la bifurcación de Torrejón de Velasco por Cuenca y Albacete y vuelven
     # por Alcázar de San Juan (709,4 y 967,0 km)
-    assert res["omitted_alternatives"] == 6  # con las dos vueltas por Barcelona y la costa
+    assert res["omitted_alternatives"] == 8  # con las cuatro vueltas por Barcelona y la costa
     assert [a["line_id"] for a in alt] == [CONV]
     assert alt[0]["from_node_id"] == "madrid-puerta-de-atocha" and alt[0]["to_node_id"] == "cordoba"
     assert alt[0]["length_km"] > alt[0]["closed_line_length_km"]
@@ -1988,7 +2016,7 @@ async def test_closure_between_urda_and_ciudad_real_finds_the_detour_through_man
     detour, whole_line = r.json()["alternatives"]
     # la vuelta por Granada hasta la bifurcación de Málaga (698,3 km) no se lista, ni las tres
     # que salen de la bifurcación de Torrejón de Velasco por Cuenca y Albacete
-    assert r.json()["omitted_alternatives"] == 7  # con las tres por Barcelona y la costa
+    assert r.json()["omitted_alternatives"] == 10  # con las seis por Barcelona y la costa
     assert detour["line_ids"] == [CONV, MZCR]
     assert (detour["from_node_id"], detour["to_node_id"]) == (
         "madrid-puerta-de-atocha",
@@ -2015,7 +2043,7 @@ async def test_closure_with_a_scenario_adds_its_other_changes(client: httpx.Asyn
     r = await client.post("/api/simulations/closure", json=body)
     assert r.status_code == 200
     assert [a["line_ids"] for a in r.json()["alternatives"]] == [[CONV]]
-    assert r.json()["omitted_alternatives"] == 5  # con las dos vueltas por Barcelona y la costa
+    assert r.json()["omitted_alternatives"] == 7  # con las cuatro vueltas por Barcelona y la costa
     r = await client.post("/api/simulations/closure", json={**body, "scenario": "c~no:existe"})
     assert r.status_code == 422 and "Escenario no válido" in r.json()["detail"]
 
@@ -2297,6 +2325,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        TARRAGONA_BARCELONA,
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -2307,10 +2336,38 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
     # Extremadura; los 7 siguientes, la de Burgos a Vitoria; los 3 y 15 de después, las de Galicia,
     # los 16 siguientes, la de Sevilla a Cádiz; los 7, la de Barcelona a Figueres, y el 1 y los 2 del
-    # final, los ramales de Toledo y de Huesca
-    assert len(by_id) == (
-        54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
-    ) + (3 + 15) + 16 + 7 + (1 + 2)
+    # final, los ramales de Toledo y de Huesca, y los 8 de la de Tarragona a Barcelona
+    assert (
+        len(by_id)
+        == (
+            54
+            + 8
+            + 8
+            + 20
+            + 2
+            + 14
+            + 2
+            + 9
+            + 8
+            + 35
+            + 5
+            + 1
+            + 13
+            + 14
+            + 2
+            + 4
+            + 8
+            + 13
+            + 4
+            + 11
+            + 7
+        )
+        + (3 + 15)
+        + 16
+        + 7
+        + (1 + 2)
+        + 8
+    )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
@@ -2404,6 +2461,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        TARRAGONA_BARCELONA,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

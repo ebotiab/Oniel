@@ -60,9 +60,8 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 - [#230](https://github.com/ebotiab/Oniel/issues/230) Datos: horarios de SNCF para los TGV de París a Barcelona. Depende de #204, ya cerrada.
 
-**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hecha: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga.
+**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hechas: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Y la línea Tarragona – Vilanova i la Geltrú – Barcelona (#209), que sale de la de València en La Feredat y llega a Barcelona-Sants por la costa; el comparador enseña València – Barcelona por ella, 345,9 km. Quedan a trazos, sin incidencia abierta, la línea de Reus a Móra la Nova, Caspe y Zaragoza, la de Valls y La Plana-Picamoixons a Lleida, el ramal de Salou-Port Aventura y la línea de Sant Vicenç de Calders a Barcelona por Vilafranca del Penedès. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga.
 
-- [#209](https://github.com/ebotiab/Oniel/issues/209) Datos: línea Tarragona – Barcelona por la costa. Une el Corredor Mediterráneo con Barcelona.
 - [#208](https://github.com/ebotiab/Oniel/issues/208) Datos: línea València – Xàtiva – La Encina – Alicante.
 - [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Comparte con la de alta velocidad (#204, ya cerrada) los nodos de Barcelona-Sants y de Girona.
 - [#211](https://github.com/ebotiab/Oniel/issues/211) Datos: línea convencional Madrid – Ávila – Medina del Campo – Valladolid.

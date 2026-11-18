@@ -40,17 +40,19 @@ test.describe('Línea de València a Camp de Tarragona: une la alta velocidad de
     expect(red.lines.find((l) => l.id === LINEA)?.gauge_mm).toBe(1668)
   })
 
-  test('de València a Barcelona hay un recorrido, por la costa; la vuelta por Madrid se descarta por larga', () => {
+  test('de València a Barcelona hay dos recorridos, por la costa de Tarragona o por Camp de Tarragona; la vuelta por Madrid se descarta por larga', () => {
     const costa = findRoutes(grafo, SOROLLA, 'barcelona-sants')
-    expect(costa.map((r) => r.length_km)).toEqual([365.4])
-    expect(costa[0].line_ids).toEqual([LINEA, 'lav-madrid-barcelona'])
-    // sin el tope de los rodeos aparece: mide 2,8 veces lo que el camino de la costa
+    expect(costa.map((r) => r.length_km)).toEqual([345.2, 365.4])
+    expect(costa[0].line_ids).toEqual([LINEA, 'tarragona-barcelona'])
+    expect(costa[1].line_ids).toEqual([LINEA, 'lav-madrid-barcelona'])
+    // sin el tope de los rodeos aparece: mide 2,9 veces lo que el camino de la costa
     const todos = findRoutes(grafo, SOROLLA, 'barcelona-sants', undefined, null, null)
-    expect(todos[1].length_km).toBe(1009.7)
+    expect(todos[2].length_km).toBe(1009.7)
     expect(findRoutes(grafo, NORD, 'castello-de-la-plana').map((r) => r.length_km)).toEqual([73.7])
-    // y de Madrid a Barcelona hay ya otros dos caminos por València y la costa: por Cuenca y por Albacete
+    // y de Madrid a Barcelona hay ya otros caminos por València, por Cuenca o por Albacete, que acaban por la
+    // alta velocidad o por la costa de Tarragona, y uno que deja la alta velocidad en Camp de Tarragona
     const aBarcelona = findRoutes(grafo, 'madrid-puerta-de-atocha', 'barcelona-sants')
-    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 755.1, 864.8])
+    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 632.0, 734.8, 755.1, 844.6, 864.8])
   })
 
   test('la ficha del último tramo dice que es de ancho estándar; la de un tramo de ancho ibérico no dice nada', async ({ page }) => {
