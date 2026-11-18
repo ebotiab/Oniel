@@ -1,0 +1,719 @@
+{
+  "line": {
+    "id": "eje-atlantico",
+    "name": "Línea de alta velocidad A Coruña – Santiago – Vigo",
+    "short_name": "822, 824 y 850",
+    "sort_order": 31,
+    "zone": "galicia",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 200,
+    "tracks": 2,
+    "opened_on": "2015-03-29",
+    "reference_length_km": 155.6,
+    "status": "disponible",
+    "description": "Es el Eje Atlántico: une A Coruña, Santiago de Compostela, Vilagarcía de Arousa, Pontevedra y Vigo, cuatro de las siete ciudades mayores de Galicia, y es la línea con más viajeros de la comunidad.\n\nAdif la llama de alta velocidad, pero es distinta de las demás: su velocidad máxima es de 200 km/h y la comparten los trenes de Madrid con los regionales que paran en los pueblos. Es de vía doble y de ancho ibérico, el de la red convencional.\n\nNo es una línea nueva de un extremo a otro, sino la línea antigua rehecha por partes entre 2003 y 2015, con variantes que acortan el recorrido. Las dos mayores son el paso de la ría de Arousa por el viaducto del Ulla, entre Padrón y Vilagarcía, y la llegada a Vigo por un túnel hasta la estación de Urzáiz. En esos dos trechos la vía antigua sigue en servicio para los trenes regionales: la de Padrón, Pontecesures y Catoira, y la de Redondela a la otra estación de Vigo, Vigo-Guixar. Ninguna de las dos está cargada.\n\nEn Santiago se junta con la línea de Ourense, por la que llegan los trenes de Madrid. Unos siguen hacia A Coruña y otros hacia Vigo.\n\nLa recorren los trenes regionales de A Coruña a Vigo, los Avant de A Coruña a Ourense y los trenes de Madrid a A Coruña y a Vigo.",
+    "geometry_source": {
+      "source_id": "osm-relation-1941090",
+      "parts": [
+        {
+          "source_id": "osm-relation-1941090",
+          "file": "raw/osm/relation_1941090_eixo_atlantico_a_coruna_vigo_2026-11-18.json",
+          "relation_id": 1941090,
+          "from": [
+            -8.4099507,
+            43.3525198
+          ],
+          "to": [
+            -8.7118996,
+            42.2349637
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-eje-atlantico"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "a-coruna",
+      "name": "A Coruña",
+      "kind": "estacion",
+      "adif_code": "31412",
+      "position": {
+        "lon": -8.4099507,
+        "lat": 43.3525198
+      },
+      "description": "La estación de A Coruña, donde empieza la línea. Es una estación término: todas las vías acaban en ella. De aquí sale también la línea de Betanzos, por la que van los trenes de Ferrol y de Lugo, que no está cargada."
+    },
+    {
+      "id": "uxes",
+      "name": "Uxes",
+      "kind": "estacion",
+      "adif_code": "31411",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.4441772,
+        "lat": 43.2975115
+      },
+      "description": "Estación de Arteixo, en las afueras de A Coruña, en la que paran algunos trenes regionales."
+    },
+    {
+      "id": "cerceda-meirama",
+      "name": "Cerceda-Meirama",
+      "kind": "estacion",
+      "adif_code": "31416",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.4466353,
+        "lat": 43.2076598
+      },
+      "description": "Estación de Cerceda, en la que paran los trenes regionales."
+    },
+    {
+      "id": "ordes",
+      "name": "Ordes",
+      "kind": "estacion",
+      "adif_code": "31415",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.4482103,
+        "lat": 43.0378623
+      },
+      "description": "Estación de Ordes, a medio camino entre A Coruña y Santiago, en la que paran algunos trenes regionales."
+    },
+    {
+      "id": "santiago",
+      "name": "Santiago de Compostela",
+      "kind": "estacion",
+      "adif_code": "31400",
+      "shared": true,
+      "position": {
+        "lon": -8.5451964,
+        "lat": 42.8704417
+      }
+    },
+    {
+      "id": "bif-rio-sar",
+      "name": "Bifurcación Río Sar",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.5523223,
+        "lat": 42.8567629
+      },
+      "description": "Bifurcación (el punto donde una vía se separa de otra) a dos kilómetros de la estación de Santiago. De aquí sale un enlace corto hacia la línea de Ourense, por el que algunos trenes de Madrid a Vigo pasan de una línea a otra sin entrar en la estación de Santiago."
+    },
+    {
+      "id": "osebe",
+      "name": "Osebe",
+      "kind": "estacion",
+      "adif_code": "23013",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.6156811,
+        "lat": 42.8252328
+      },
+      "description": "Apeadero de Osebe, en el municipio de Teo, en el que paran unos pocos trenes regionales."
+    },
+    {
+      "id": "bif-angueira",
+      "name": "Bifurcación Angueira",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.6413588,
+        "lat": 42.7949727
+      },
+      "description": "Bifurcación en la que se separan el trazado nuevo, que cruza la ría de Arousa por el viaducto del Ulla, y la vía antigua, que sigue por Padrón, Pontecesures y Catoira. Los dos vuelven a juntarse en Vilagarcía de Arousa."
+    },
+    {
+      "id": "padron-barbanza",
+      "name": "Padrón-Barbanza",
+      "kind": "estacion",
+      "adif_code": "23021",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.6566593,
+        "lat": 42.7812842
+      },
+      "description": "Estación del trazado nuevo, a las afueras de Padrón. La estación antigua de Padrón, en el pueblo, está en la vía antigua y sigue en servicio."
+    },
+    {
+      "id": "vilagarcia-de-arousa",
+      "name": "Vilagarcía de Arousa",
+      "kind": "estacion",
+      "adif_code": "23008",
+      "position": {
+        "lon": -8.762284,
+        "lat": 42.6019723
+      },
+      "description": "La estación de Vilagarcía de Arousa. Aquí vuelve a la línea la vía antigua de Padrón y Catoira, por la que llegan los trenes regionales que paran en esos pueblos."
+    },
+    {
+      "id": "portela",
+      "name": "Portela",
+      "kind": "estacion",
+      "adif_code": "23005",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.654353,
+        "lat": 42.5177
+      },
+      "description": "Apeadero de Portela, en el municipio de Barro, en el que paran unos pocos trenes regionales."
+    },
+    {
+      "id": "pontevedra-universidade",
+      "name": "Pontevedra-Universidade",
+      "kind": "estacion",
+      "adif_code": "23018",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.6303264,
+        "lat": 42.438982
+      },
+      "description": "Apeadero junto al campus de Pontevedra, a dos kilómetros de la estación, en el que paran algunos trenes regionales."
+    },
+    {
+      "id": "pontevedra",
+      "name": "Pontevedra",
+      "kind": "estacion",
+      "adif_code": "23004",
+      "position": {
+        "lon": -8.6354004,
+        "lat": 42.421679
+      },
+      "description": "La estación de Pontevedra, en la que paran todos los trenes de la línea."
+    },
+    {
+      "id": "arcade",
+      "name": "Arcade",
+      "kind": "estacion",
+      "adif_code": "23002",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.6106694,
+        "lat": 42.3404114
+      },
+      "description": "Estación de Arcade, en el municipio de Soutomaior. Justo después, hacia el sur, se separan el trazado nuevo a Vigo-Urzáiz y la vía antigua, que sigue por Redondela hasta la otra estación de Vigo, Vigo-Guixar."
+    },
+    {
+      "id": "redondela-av",
+      "name": "Redondela AV",
+      "kind": "estacion",
+      "adif_code": "08224",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.6036293,
+        "lat": 42.2845561
+      },
+      "description": "Estación del trazado nuevo en Redondela, entre dos túneles. La estación antigua de Redondela está en la otra línea, la de Vigo-Guixar."
+    },
+    {
+      "id": "vigo-urzaiz",
+      "name": "Vigo-Urzáiz",
+      "kind": "estacion",
+      "adif_code": "08223",
+      "position": {
+        "lon": -8.7118996,
+        "lat": 42.2349637
+      },
+      "description": "La estación de Vigo-Urzáiz, donde acaba la línea. Es una estación término bajo tierra, a la que se llega por un túnel de más de ocho kilómetros. La otra estación de Vigo, Vigo-Guixar, está en la línea antigua y de ella salen los trenes de Ourense y de Portugal."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "a-coruna",
+      "to_node": "vigo-urzaiz",
+      "value": "ertms_n1_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: el trébol morado oscuro de «ERTMS N1» junto a la línea entre A Coruña y Santiago, entre Vilagarcía de Arousa y Pontevedra y junto a la bifurcación Arcade, con el círculo verde de «Tren tierra y ASFA conv.» a lo largo de toda ella."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "a-coruna",
+      "to_node": "vigo-urzaiz",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: rótulo «BAB ctc» y trazo de puntos marrón entre A Coruña y Santiago, entre Santiago y Pontevedra y entre Pontevedra y Vigo-Urzáiz."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "a-coruna",
+      "to_node": "vigo-urzaiz",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: el rótulo del bloqueo es «BAB ctc» en los tres trechos de la línea."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-a-coruna-betanzos",
+      "node_id": "a-coruna",
+      "name": "Línea de A Coruña a Betanzos",
+      "towards": "Betanzos, Ferrol y Lugo",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -8.4099507,
+          43.3525198
+        ],
+        [
+          -8.368617,
+          43.317982
+        ],
+        [
+          -8.225834,
+          43.270716
+        ]
+      ]
+    },
+    {
+      "id": "conv-padron-catoira",
+      "node_id": "bif-angueira",
+      "name": "Vía antigua por Padrón y Catoira",
+      "towards": "Padrón, Pontecesures y Catoira",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -8.6413588,
+          42.7949727
+        ],
+        [
+          -8.652412,
+          42.738977
+        ],
+        [
+          -8.652153,
+          42.722949
+        ],
+        [
+          -8.725358,
+          42.672265
+        ],
+        [
+          -8.762284,
+          42.6019723
+        ]
+      ]
+    },
+    {
+      "id": "conv-arcade-vigo-guixar",
+      "node_id": "arcade",
+      "name": "Vía antigua por Redondela a Vigo-Guixar",
+      "towards": "Redondela, Vigo-Guixar y Portugal",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -8.6103019,
+          42.3382601
+        ],
+        [
+          -8.616439,
+          42.310205
+        ],
+        [
+          -8.619422,
+          42.286025
+        ],
+        [
+          -8.712074,
+          42.23926
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "04040": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "04104": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "08004": {
+      "exits": [
+        "santiago"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "santiago"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        }
+      ]
+    },
+    "08223": {
+      "node": "vigo-urzaiz"
+    },
+    "08224": {
+      "node": "redondela-av"
+    },
+    "08240": {
+      "exits": [
+        "santiago"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "santiago"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        }
+      ]
+    },
+    "08247": {
+      "exits": [
+        "santiago"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "santiago"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        }
+      ]
+    },
+    "08251": {
+      "exits": [
+        "santiago"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "santiago"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        }
+      ]
+    },
+    "11014": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "17000": {
+      "exits": [
+        "santiago"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "santiago"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "bif-medina"
+        }
+      ]
+    },
+    "20100": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "santiago"
+      ],
+      "via": {
+        "line": "lav-ourense-santiago",
+        "node": "santiago"
+      }
+    },
+    "22300": {
+      "exits": [
+        "arcade"
+      ]
+    },
+    "22308": {
+      "exits": [
+        "arcade"
+      ]
+    },
+    "23000": {
+      "exits": [
+        "arcade"
+      ]
+    },
+    "23001": {
+      "exits": [
+        "arcade"
+      ]
+    },
+    "23002": {
+      "node": "arcade"
+    },
+    "23004": {
+      "node": "pontevedra"
+    },
+    "23005": {
+      "node": "portela"
+    },
+    "23008": {
+      "node": "vilagarcia-de-arousa"
+    },
+    "23009": {
+      "exits": [
+        "bif-angueira",
+        "vilagarcia-de-arousa"
+      ],
+      "aside": true
+    },
+    "23010": {
+      "exits": [
+        "bif-angueira",
+        "vilagarcia-de-arousa"
+      ],
+      "aside": true
+    },
+    "23011": {
+      "exits": [
+        "bif-angueira",
+        "vilagarcia-de-arousa"
+      ],
+      "aside": true
+    },
+    "23013": {
+      "node": "osebe"
+    },
+    "23018": {
+      "node": "pontevedra-universidade"
+    },
+    "23021": {
+      "node": "padron-barbanza"
+    },
+    "30200": {
+      "exits": [
+        "santiago"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "santiago"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "ourense"
+        }
+      ]
+    },
+    "31400": {
+      "node": "santiago"
+    },
+    "31411": {
+      "node": "uxes"
+    },
+    "31412": {
+      "node": "a-coruna"
+    },
+    "31415": {
+      "node": "ordes"
+    },
+    "31416": {
+      "node": "cerceda-meirama"
+    },
+    "71801": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "80100": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "80108": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "81200": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "99117": {
+      "exits": [
+        "santiago"
+      ]
+    },
+    "99143": {
+      "exits": [
+        "a-coruna"
+      ],
+      "track_km": 0.1
+    },
+    "99159": {
+      "exits": [
+        "santiago"
+      ],
+      "track_km": 0.1
+    },
+    "99161": {
+      "exits": [
+        "pontevedra"
+      ],
+      "track_km": 0.1
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos o más estaciones de la línea. Así entran los regionales de A Coruña a Vigo, los Avant de A Coruña a Ourense y los trenes de Madrid, y quedan fuera los de Ferrol, Lugo y Monforte, que de esta línea solo tocan A Coruña, y los de Ourense que acaban en Santiago.",
+    "min_node_stops": 2
+  },
+  "route_overrides": [
+    {
+      "id": "ourense-vilagarcia-sin-santiago",
+      "description": "Trenes entre Ourense y Vilagarcía de Arousa sin parada en Santiago: llegan de la línea de Ourense por el enlace de Conxo, que no está cargado, y entran en esta por la bifurcación Río Sar, sin pasar por la estación de Santiago.",
+      "consecutive_stop_ids": [
+        "22100",
+        "23008"
+      ],
+      "stop_mappings": {
+        "17000": {
+          "exits": [
+            "bif-rio-sar"
+          ],
+          "via": [
+            {
+              "line": "lav-ourense-santiago",
+              "node": "bif-a-grandeira"
+            },
+            {
+              "line": "lav-olmedo-ourense",
+              "node": "ourense"
+            },
+            {
+              "line": "lav-madrid-valladolid",
+              "node": "bif-medina"
+            }
+          ]
+        },
+        "30200": {
+          "exits": [
+            "bif-rio-sar"
+          ],
+          "via": [
+            {
+              "line": "lav-ourense-santiago",
+              "node": "bif-a-grandeira"
+            },
+            {
+              "line": "lav-olmedo-ourense",
+              "node": "ourense"
+            }
+          ]
+        },
+        "22100": {
+          "exits": [
+            "bif-rio-sar"
+          ],
+          "via": {
+            "line": "lav-ourense-santiago",
+            "node": "bif-a-grandeira"
+          }
+        }
+      }
+    }
+  ]
+}

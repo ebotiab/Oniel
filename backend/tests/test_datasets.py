@@ -222,15 +222,17 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # que suben el puerto de Pajares y 8 Media Distancia de León a Gijón
     # y los 77 de la línea de Burgos a Vitoria que no estaban en otra: los regionales de Miranda de
     # Ebro y de Vitoria, los de Madrid-Príncipe Pío por la línea convencional y los Intercity de
-    # Salamanca a Zaragoza, y los 115 Avant del ramal de Toledo que no estaban en la línea de
-    # Valencia
+    # Salamanca a Zaragoza
+    # y los 293 de las dos líneas de Galicia que no estaban en otra: los Avant de Ourense a
+    # A Coruña y los regionales de A Coruña a Vigo, y los 115 Avant del ramal de Toledo que no
+    # estaban en la línea de Valencia
     assert (
         await _count(conn, "services", FEED_DATASET_ID)
-        == 727 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115
+        == 727 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115
     )
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115
+        == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -252,6 +254,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 514  # la de Venta de Baños a Burgos, todos estimados
     passes += 1311 + 125  # la de León a Gijón
     passes += 715 + 209  # la de Burgos a Vitoria
+    passes += 854  # la de Ourense a Santiago, sin estaciones intermedias: todos estimados
+    passes += 3035 + 281  # la de A Coruña a Vigo
     # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
     passes += 4 * 132 + 132 + (11 + 11)
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
@@ -520,10 +524,10 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     # 409 del final, los de las cuatro líneas de Extremadura
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115
+        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115
+        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115
     )
 
 
@@ -557,8 +561,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     # los 409 del final son los de las cuatro líneas de Extremadura que no estaban en otra
     assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115,
-        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115,
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115,
+        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115,
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -599,7 +603,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
     assert await conn.fetchval("SELECT count(*) FROM services") == (
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 115
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 115
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]

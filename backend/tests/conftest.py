@@ -37,6 +37,8 @@ LAV_MURCIA_SPEC = DATA_DIR / "curated" / "lav-monforte-murcia.json"
 MEDITERRANEO_SPEC = DATA_DIR / "curated" / "valencia-castello-tarragona.json"
 LAV_VALLADOLID_SPEC = DATA_DIR / "curated" / "lav-madrid-valladolid.json"
 LAV_OURENSE_SPEC = DATA_DIR / "curated" / "lav-olmedo-ourense.json"
+LAV_SANTIAGO_SPEC = DATA_DIR / "curated" / "lav-ourense-santiago.json"
+EJE_ATLANTICO_SPEC = DATA_DIR / "curated" / "eje-atlantico.json"
 LINK_MONFORTE_SPEC = DATA_DIR / "curated" / "enlace-monforte-del-cid.json"
 #: Los ramales cortos de alta velocidad a Toledo y a Huesca.
 TOLEDO_SPEC = DATA_DIR / "curated" / "lav-la-sagra-toledo.json"
@@ -60,6 +62,8 @@ SPECS = [
     MEDITERRANEO_SPEC,
     LAV_VALLADOLID_SPEC,
     LAV_OURENSE_SPEC,
+    LAV_SANTIAGO_SPEC,
+    EJE_ATLANTICO_SPEC,
     LINK_MONFORTE_SPEC,
     MADRID_PLASENCIA_SPEC,
     LAV_BADAJOZ_SPEC,

@@ -229,7 +229,13 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         # línea de Valencia a Camp de Tarragona y, en la convencional de Extremadura, de la
         # bifurcación Planetario a Humanes, tres tramos con catenaria en una línea sin electrificar,
         # y los tres de la variante de Pajares, a 25 kV en una línea a 3 kV
-        wired = {"valencia-castello-tarragona": 1, "madrid-plasencia": 3, "leon-oviedo-gijon": 3}
+        wired = {
+            "valencia-castello-tarragona": 1,
+            "madrid-plasencia": 3,
+            "leon-oviedo-gijon": 3,
+            # la salida de Ourense, a 3 kV
+            "lav-ourense-santiago": 1,
+        }
         assert covered.pop("electrification", None) == wired.get(line["line"])
         # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona,
         # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata,
@@ -270,7 +276,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de Venta de Baños a
                 # Burgos, tres
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres;
-                # la de Burgos a Vitoria, cinco
+                # la de Burgos a Vitoria, cinco, y las dos de Galicia, seis
                 assert value.source_id == DR
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),

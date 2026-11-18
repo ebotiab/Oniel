@@ -15,7 +15,7 @@
     "reference_length_km": 328.649,
     "pk_origin_km": 133.884,
     "status": "disponible",
-    "description": "Es el camino de Madrid a Galicia: sale de la línea de alta velocidad de Madrid a Valladolid cerca de Olmedo y llega a Ourense por Medina del Campo, Zamora y Sanabria.\n\nSe abrió por partes: de Olmedo a Zamora en diciembre de 2015, de Zamora a Pedralba de la Pradería, ya en Sanabria, en octubre de 2020, y el resto hasta Ourense en diciembre de 2021. Entre Sanabria y Ourense cruza la montaña por una sucesión de túneles y viaductos.\n\nNo es de vía doble en todo el recorrido. Hay una sola vía de Medina del Campo a Coreses, poco antes de Zamora, a la salida de Zamora, de Pedralba de la Pradería a Vilavella y en la llegada a Ourense. En esos trechos los trenes de un sentido y de otro se cruzan en los puntos preparados para ello.\n\nLos últimos kilómetros, de Taboadela a Ourense, van por la vía de la línea antigua, a la que se añadió un tercer carril para que puedan usarla los trenes de alta velocidad. Está en obras una variante que la sustituirá.\n\nLa recorren los trenes de Madrid a Galicia. En Ourense unos terminan y otros siguen hacia Santiago de Compostela y A Coruña, hacia Vigo o hacia Lugo por líneas que todavía no están cargadas. Los trenes de Madrid a Salamanca usan solo el primer trecho, hasta Medina del Campo.",
+    "description": "Es el camino de Madrid a Galicia: sale de la línea de alta velocidad de Madrid a Valladolid cerca de Olmedo y llega a Ourense por Medina del Campo, Zamora y Sanabria.\n\nSe abrió por partes: de Olmedo a Zamora en diciembre de 2015, de Zamora a Pedralba de la Pradería, ya en Sanabria, en octubre de 2020, y el resto hasta Ourense en diciembre de 2021. Entre Sanabria y Ourense cruza la montaña por una sucesión de túneles y viaductos.\n\nNo es de vía doble en todo el recorrido. Hay una sola vía de Medina del Campo a Coreses, poco antes de Zamora, a la salida de Zamora, de Pedralba de la Pradería a Vilavella y en la llegada a Ourense. En esos trechos los trenes de un sentido y de otro se cruzan en los puntos preparados para ello.\n\nLos últimos kilómetros, de Taboadela a Ourense, van por la vía de la línea antigua, a la que se añadió un tercer carril para que puedan usarla los trenes de alta velocidad. Está en obras una variante que la sustituirá.\n\nLa recorren los trenes de Madrid a Galicia. En Ourense unos terminan y otros siguen hacia Santiago de Compostela, A Coruña y Vigo por la línea de alta velocidad de Santiago, o hacia Lugo por una línea que todavía no está cargada. Los trenes de Madrid a Salamanca usan solo el primer trecho, hasta Medina del Campo.",
     "geometry_source": {
       "source_id": "osm-relation-4777980",
       "parts": [
@@ -246,7 +246,7 @@
         "lat": 42.350692
       },
       "reference_pk_km": 462.533,
-      "description": "La estación de Ourense, donde acaba esta línea. De aquí salen la línea de alta velocidad a Santiago de Compostela y A Coruña y las líneas convencionales a Vigo y a Monforte de Lemos y Lugo, que todavía no están cargadas."
+      "description": "La estación de Ourense, donde acaba esta línea. De aquí sale la línea de alta velocidad a Santiago de Compostela, por la que siguen los trenes de A Coruña y de Vigo, y las líneas convencionales a Vigo y a Monforte de Lemos y Lugo, que todavía no están cargadas."
     }
   ],
   "attribute_sections": [
@@ -402,23 +402,6 @@
       ]
     },
     {
-      "id": "lav-ourense-santiago",
-      "node_id": "ourense",
-      "name": "LAV Ourense–Santiago de Compostela",
-      "towards": "Santiago de Compostela y A Coruña",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -7.872551,
-          42.350692
-        ],
-        [
-          -8.544697,
-          42.870842
-        ]
-      ]
-    },
-    {
       "id": "conv-ourense-vigo",
       "node_id": "ourense",
       "name": "Línea convencional Ourense–Vigo",
@@ -552,26 +535,70 @@
     "31400": {
       "exits": [
         "ourense"
-      ]
+      ],
+      "via": {
+        "line": "lav-ourense-santiago",
+        "node": "ourense"
+      }
     },
     "31412": {
       "exits": [
         "ourense"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "08223": {
       "exits": [
         "ourense"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "23004": {
       "exits": [
         "ourense"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "23008": {
       "exits": [
         "ourense"
+      ],
+      "via": [
+        {
+          "line": "lav-ourense-santiago",
+          "node": "ourense"
+        },
+        {
+          "line": "eje-atlantico",
+          "node": "santiago"
+        }
       ]
     },
     "20300": {
