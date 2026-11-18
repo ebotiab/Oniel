@@ -190,9 +190,17 @@ export function fetchAlternatives(date?: string): Promise<AlternativesOut> {
   let pending = alternativesCache.get(key)
   if (!pending) {
     const estatico = () => getJson<AlternativesOut>('/data/alternatives.json')
-    // Vercel publica el visor unos minutos antes de que Render despliegue la API: si la API aún no
-    // tiene esta ruta (o falla), vale la instantánea, que lleva el mismo cálculo del día de referencia.
-    pending = api ? getJson<AlternativesOut>(`${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}`).catch(estatico) : estatico()
+    const servidor = () => getJson<AlternativesOut>(`${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}`)
+    // El servidor tarda en calcularlo, y la instantánea lleva ese mismo cálculo ya hecho para su día
+    // de referencia: si es el día pedido, vale tal cual. Solo se pide al servidor otro día, o el de
+    // una API que aún va por detrás del visor (Vercel publica unos minutos antes que Render); y si
+    // el servidor no tiene la ruta o falla, vuelve a valer la instantánea.
+    const instantaneaDelDia = async () => {
+      const datos = await estatico()
+      if (date && datos.date !== date) throw new Error('la instantánea es de otro día')
+      return datos
+    }
+    pending = api ? instantaneaDelDia().catch(() => servidor().catch(estatico)) : estatico()
     alternativesCache.set(key, pending)
     pending.catch(() => alternativesCache.delete(key))
   }

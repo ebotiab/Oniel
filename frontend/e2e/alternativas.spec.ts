@@ -12,22 +12,42 @@ async function abrirPanel(page: Page) {
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
 test.describe('Tramos sin otro camino', () => {
-  test('si la API todavía no tiene el análisis, el visor usa la instantánea', async ({ page }) => {
+  test('con la API en marcha, la vista lee la instantánea y no espera al cálculo del servidor', async ({ page }) => {
     test.skip(estatico, 'sin API el visor ya lee la instantánea')
-    // una API anterior a este apartado: el visor se publica antes de que el servidor se despliegue
     let pedidas = 0
     await page.route('**/api/alternatives*', (route) => {
       pedidas++
-      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+      return route.continue()
     })
     // se espera a que el visor hable ya con la API: antes de eso leería la instantánea de todos modos
     await page.goto('/')
     await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
     await page.goto('/sin-otro-camino')
     await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(19)
-    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 75 trenes no tendrían otro camino')
+    expect(pedidas).toBe(0)
+  })
+
+  test('si la instantánea es de otro día, el análisis se pide al servidor; y si este no lo tiene, vale la instantánea', async ({ page }) => {
+    test.skip(estatico, 'sin API el visor ya lee la instantánea')
+    // una instantánea de otro día: el visor publicado va por delante de la API desplegada
+    await page.route('**/data/alternatives.json', async (route) => {
+      const respuesta = await route.fetch()
+      const datos = (await respuesta.json()) as { date: string }
+      return route.fulfill({ response: respuesta, json: { ...datos, date: '2000-01-01' } })
+    })
+    // y una API anterior a este apartado, que no tiene la ruta
+    let pedidas = 0
+    await page.route('**/api/alternatives*', (route) => {
+      pedidas++
+      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+    })
+    await page.goto('/')
+    await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
+    await page.goto('/sin-otro-camino')
+    await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(19)
+    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
     expect(pedidas).toBeGreaterThan(0)
   })
 
