@@ -54,10 +54,11 @@ test.describe('Carga de la red por partes', () => {
     // Con veintiuna entradas (dieciocho líneas, dos baipases y un enlace), la red del índice (305 KB) pesa ya el doble que el detalle
     // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
     // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más
-    // grandes juntas (285 KB); sigue pesando menos que las tres más grandes: la convencional de Córdoba, la
-    // alta velocidad de Barcelona y la de València a Camp de Tarragona.
-    const otras = await Promise.all(['lav-madrid-barcelona', 'valencia-castello-tarragona'].map(async (id) => (await request.get(`/data/lines/${id}.json`)).body()))
-    expect(bytes(red)).toBeLessThan(linea.byteLength + otras[0].byteLength + otras[1].byteLength)
+    // grandes juntas (285 KB). Desde la línea de Sevilla a Cádiz (424 KB, con veintinueve entradas) pesa también más
+    // que las tres más grandes (414 KB): se compara con las cuatro, la convencional de Córdoba, la alta velocidad
+    // de Barcelona, la de València a Camp de Tarragona y la alta velocidad de Sevilla.
+    const otras = await Promise.all(['lav-madrid-barcelona', 'valencia-castello-tarragona', 'lav-madrid-sevilla'].map(async (id) => (await request.get(`/data/lines/${id}.json`)).body()))
+    expect(bytes(red)).toBeLessThan(linea.byteLength + otras.reduce((suma, otra) => suma + otra.byteLength, 0))
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {
