@@ -47,12 +47,13 @@ test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', (
     await expect(ficha).not.toContainText('LAV Barcelona – frontera francesa')
     await expect(ficha).toContainText('Girona')
     // las dos líneas de alta velocidad de la estación salen de la misma relación de OpenStreetMap:
-    // se cita una vez; la convencional de Portbou sale de otra, y se cita aparte
+    // se cita una vez; la convencional de Portbou y la de Tarragona por la costa salen de otras, y
+    // se citan aparte
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
     await ficha.getByTestId('mas-detalle').locator('summary').click()
     const pie = ficha.getByTestId('pie-fuente').first()
-    await expect(pie.locator('p')).toHaveCount(2)
+    await expect(pie.locator('p')).toHaveCount(3)
     await expect(pie.locator('p').filter({ hasText: '11082425' })).toHaveCount(1)
   })
 

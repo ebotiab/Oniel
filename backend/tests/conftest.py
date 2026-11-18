@@ -51,6 +51,7 @@ LINK_MONFORTE_SPEC = DATA_DIR / "curated" / "enlace-monforte-del-cid.json"
 #: Los ramales cortos de alta velocidad a Toledo y a Huesca.
 TOLEDO_SPEC = DATA_DIR / "curated" / "lav-la-sagra-toledo.json"
 HUESCA_SPEC = DATA_DIR / "curated" / "lav-zaragoza-huesca.json"
+TARRAGONA_BARCELONA_SPEC = DATA_DIR / "curated" / "tarragona-barcelona.json"
 #: La línea convencional de València a Alicante por Xàtiva y el nudo de La Encina.
 VALENCIA_ALICANTE_SPEC = DATA_DIR / "curated" / "valencia-xativa-alicante.json"
 #: Las líneas cargadas, en el orden de importación.
@@ -88,6 +89,7 @@ SPECS = [
     TOLEDO_SPEC,
     HUESCA_SPEC,
     BARCELONA_PORTBOU_SPEC,
+    TARRAGONA_BARCELONA_SPEC,
     VALENCIA_ALICANTE_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"

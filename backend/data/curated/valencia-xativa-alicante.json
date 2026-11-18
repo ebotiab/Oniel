@@ -3,7 +3,7 @@
     "id": "valencia-xativa-alicante",
     "name": "Línea convencional Valencia – Xàtiva – Alicante",
     "short_name": "300, 332 y 330",
-    "sort_order": 37,
+    "sort_order": 38,
     "zone": "levante",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
