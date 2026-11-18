@@ -73,10 +73,11 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     const trenes = page.getByTestId('lista-servicios').locator('li')
     await expect(trenes).toHaveCount(35)
     // todos con paso estimado, y la explicación empieza por el motivo
-    await expect(page.getByTestId('lista-servicios').locator('[title^="No para en Zaragoza-Delicias: por eso va por aquí. Estimado"]')).toHaveCount(35)
-    // si se cortara, sus trenes entrarían en la estación
+    await expect(page.getByTestId('lista-servicios').locator('[title^="No para en Zaragoza-Delicias: por eso va por aquí. Estimado"]')).toHaveCount(23)
+    // si se cortara, sus trenes entrarían en la estación; uno de los 23 sigue hasta Francia por la línea de
+    // Barcelona a Figueres, y su recorrido es otro
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 35 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Ese camino tiene 5 km y 6 min más.',
+      'Si este tramo se cortara, sus 23 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (22, entre Madrid-Puerta de Atocha y Barcelona-Sants), 5 km y 6 min más.',
     )
   })
 

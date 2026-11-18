@@ -1,46 +1,30 @@
 {
-  "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 para decidir si se cargan los trenes de Iryo de una compilación no oficial de sus horarios, y de la comprobación por muestreo de ese fichero. Las páginas consultadas cambian, así que aquí queda qué decía cada una ese día, resumido con palabras propias (no se reproduce el texto original).",
-  "consultado_el": "2026-11-18",
-  "consultas": [
-    {
-      "source_id": "iryo-web",
-      "titulo": "Aviso legal y condiciones de uso del portal de Iryo",
-      "editor": "Iryo (Intermodalidad de Levante, S.A.)",
-      "url": "https://iryo.eu/es/legal/aviso-legal",
-      "resumen": "Las condiciones, de agosto de 2022, reservan a Iryo los derechos sobre los contenidos del sitio, piden su autorización para reproducirlos, extraerlos o reutilizarlos y admiten el uso personal y privado. El sitio responde con un error 403 a las peticiones que no vienen de un navegador y puede pedir una comprobación de que quien navega es una persona.",
-      "que_aporta": "Que Oniel no extrae los horarios de la web de Iryo. El mismo día se pidió a Iryo autorización para mostrarlos y al Punto de Acceso Nacional que los publique; a esa fecha no había respuesta."
-    },
-    {
-      "source_id": "iryo-gtfs-no-oficial",
-      "titulo": "GTFS de Iryo elaborado por un tercero (gtfs-iryo.zip, versión 20261105)",
-      "editor": "Clément Desouche (@deryclem)",
-      "url": "https://deryclem.github.io/iryo-gtfs/gtfs-iryo.zip",
-      "resumen": "El fichero, modificado por última vez el 5 de noviembre de 2026, trae 135 viajes en 14 rutas entre 14 estaciones, con validez declarada del 5 de noviembre de 2026 al 11 de diciembre de 2027. Su fichero de licencia dice que los horarios salen de la web pública de Iryo, que la licencia CC BY 4.0 cubre solo el trabajo de compilación y conversión, que hay que citar a su autor y que el fichero no es oficial ni está vinculado a Iryo. El 11 de noviembre no declaraba licencia; el repositorio de origen ya no era accesible el día 18, pero el fichero seguía descargable. Se preguntó a su autor cómo obtiene los horarios y si tiene autorización de Iryo; a esa fecha no había respuesta.",
-      "que_aporta": "De dónde salen los trenes de Iryo que carga Oniel, con qué licencia y con qué límites."
-    },
-    {
-      "source_id": "iryo-gtfs-no-oficial",
-      "titulo": "Página de ficheros GTFS del autor de la compilación",
-      "editor": "Clément Desouche",
-      "url": "https://clementdesouche.fr/gtfs/",
-      "resumen": "El autor publica allí varios GTFS de ferrocarriles europeos y dice, en general, que los elabora a mano o los genera automáticamente a partir de fuentes públicas, y que alimentan una aplicación suya de seguimiento de trenes. De los de Trenitalia y de Italo precisa que son una conversión de los datos oficiales del punto de acceso nacional italiano y enlaza su código; del de Iryo no dice cómo se obtiene ni enlaza código: da su validez (de octubre de 2026 a diciembre de 2027) y la licencia CC BY 4.0, con la petición de citarle.",
-      "que_aporta": "Quién elabora el fichero y que no hace público el método con que obtiene los horarios de Iryo: lo único que consta es lo que dice el propio fichero, que proceden de la web pública del operador."
-    },
-    {
-      "source_id": "iryo-gtfs-no-oficial",
-      "titulo": "Coherencia del fichero y contraste con los horarios de Renfe y de Ouigo",
-      "editor": "Oniel",
-      "url": null,
-      "resumen": "Ninguna hora retrocede dentro de un viaje y ningún número de tren se repite el mismo día. El viernes 20 de noviembre de 2026 da 68 viajes. Sus tiempos de viaje encajan con los de los ficheros de Renfe y de Ouigo en los mismos trayectos: de Madrid a Barcelona entre 182 y 197 minutos (Renfe, entre 181 y 197), de Madrid a Sevilla entre 157 y 159 (Renfe, entre 156 y 161) y de Madrid a Valencia entre 114 y 116 (Ouigo, entre 114 y 116). Usa los códigos de estación de Adif, salvo el de Puertollano, que trae como 37700 (el de Adif es 37300).",
-      "que_aporta": "Que el fichero es coherente y verosímil, y la particularidad de la parada de Puertollano."
-    },
-    {
-      "source_id": "iryo-gtfs-no-oficial",
-      "titulo": "Comprobación por muestreo con el buscador de billetes de Iryo",
-      "editor": "Iryo",
-      "url": "https://iryo.eu/es/home",
-      "resumen": "Cuatro búsquedas hechas a mano en el buscador, comparando las horas de salida y de llegada con las del fichero. Madrid a Barcelona el 20 de noviembre de 2026: 15 trenes en el buscador y los mismos 15 en el fichero, con las mismas horas. Madrid a Valencia el mismo día: 7 y los mismos 7. Madrid a Sevilla el mismo día: el buscador solo ofrecía 2 trenes, los dos sin plazas, y el fichero trae 8, entre ellos esos 2; la web de Iryo avisaba ese día de servicios cancelados en el corredor sur. Madrid a Sevilla el 15 de enero de 2027: 7 trenes en el buscador y 8 en el fichero, los mismos 7 con las mismas horas y uno más, el de las 06:50.",
-      "que_aporta": "Que el fichero coincide con el buscador donde el servicio es normal (22 de 22 trenes en la muestra) y que en el corredor sur trae el horario previsto, no las cancelaciones vigentes: como los ficheros de Renfe y de Ouigo, no refleja la interrupción de la alta velocidad Madrid–Andalucía."
-    }
-  ]
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 para saber qué operadores recorren la línea de alta velocidad de Barcelona a Girona y Figueres. Las páginas y los ficheros consultados cambian, así que aquí queda qué decían ese día, resumido con palabras propias (no se reproduce el texto original).",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "iryo-web",
+   "titulo": "Destinos iryo",
+   "editor": "Iryo",
+   "url": "https://iryo.eu/es/destinos",
+   "resumen": "La página enumera trece destinos: Madrid, Barcelona, Zaragoza, Valencia, Sevilla, Málaga, Cuenca, Córdoba, Alicante, Albacete, Tarragona, Puertollano y Ciudad Real. No figuran Girona ni Figueres.",
+   "que_aporta": "Que Iryo no circula al norte de Barcelona: la línea de Barcelona a Figueres no lo declara."
+  },
+  {
+   "source_id": "ouigo-gtfs-nap",
+   "titulo": "GTFS de Ouigo España (fichero ya cargado, del 2 de julio de 2026)",
+   "editor": "Ouigo España; Ministerio de Transportes y Movilidad Sostenible",
+   "url": "https://nap.transportes.gob.es/",
+   "resumen": "El fichero trae dieciséis paradas. La única de Cataluña al norte de Camp de Tarragona es Barcelona-Sants; no trae Girona ni Figueres-Vilafant.",
+   "que_aporta": "Que Ouigo no circula al norte de Barcelona: la línea de Barcelona a Figueres no lo declara."
+  },
+  {
+   "source_id": "sncf-horarios-abiertos",
+   "titulo": "Réseau SNCF TGV, Intercités et TER (fichero GTFS «Export_OpenData_SNCF_GTFS_NewTripId.zip»)",
+   "editor": "SNCF",
+   "url": "https://transport.data.gouv.fr/datasets/horaires-sncf",
+   "resumen": "El conjunto figura en el punto de acceso nacional francés con licencia ODbL. El fichero GTFS descargado ese día (5,6 MB comprimido; versión 2026-11-18, válido del 18 de noviembre de 2026 al 30 de abril de 2027) cubre toda la red de SNCF. Una de sus rutas, «Paris - Espagne TGV», de SNCF Voyageurs, trae 55 viajes entre Paris Gare de Lyon y Barcelona-Sants con parada en Perpiñán, Figueres-Vilafant y Girona: dos trenes por sentido y día en 162 de los 163 días con servicio, y uno por sentido en el otro. Sus números de tren son 9704, 9706, 9708, 9711, 9713 y 9715. Las paradas se identifican con un código propio («StopPoint:OCETGV INOUI-71718010» para Barcelona-Sants), distinto del de los ficheros de Renfe y de Ouigo.",
+   "que_aporta": "Que SNCF Voyageurs recorre la línea de Barcelona a Figueres con trenes de París a Barcelona, unos dos por sentido y día, y que publica sus horarios en un formato abierto. Oniel no los carga todavía: el fichero es de toda Francia y sus códigos de parada tienen otro formato. La línea no declara a SNCF como operador, porque el aviso del visor para un operador sin horarios dice que no los publica, y no es el caso; la descripción de la línea y docs/datos.md dicen que faltan esos trenes. El fichero no se guarda en raw/: no se usa en la importación."
+  }
+ ]
 }

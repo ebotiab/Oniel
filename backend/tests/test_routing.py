@@ -124,6 +124,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 3
             + 15
             + 16
+            + 7
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
