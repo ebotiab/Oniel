@@ -36,6 +36,7 @@ LEON_GIJON_SPEC = DATA_DIR / "curated" / "leon-oviedo-gijon.json"
 BURGOS_VITORIA_SPEC = DATA_DIR / "curated" / "burgos-miranda-vitoria.json"
 SEVILLA_CADIZ_SPEC = DATA_DIR / "curated" / "sevilla-cadiz.json"
 LAV_FIGUERES_SPEC = DATA_DIR / "curated" / "lav-barcelona-figueres.json"
+BARCELONA_PORTBOU_SPEC = DATA_DIR / "curated" / "barcelona-girona-portbou.json"
 #: Los dos baipases de la alta velocidad de Barcelona: líneas cortas que cuelgan de ella.
 BYPASS_ZARAGOZA_SPEC = DATA_DIR / "curated" / "baipas-zaragoza.json"
 BYPASS_LLEIDA_SPEC = DATA_DIR / "curated" / "baipas-lleida.json"
@@ -84,6 +85,7 @@ SPECS = [
     LAV_FIGUERES_SPEC,
     TOLEDO_SPEC,
     HUESCA_SPEC,
+    BARCELONA_PORTBOU_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

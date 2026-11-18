@@ -109,8 +109,6 @@ def test_nodes_stations_junctions_and_passing_loops(line: BuiltNetwork) -> None:
     assert line.node("figueres-vilafant").spec.adif_code == FIGUERES
     assert all(n.offset_m < 50 for n in line.nodes)
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "conv-girona-barcelona": "girona",
-        "conv-girona-portbou": "girona",
         "seccion-internacional-figueres-perpinan": LIMIT,
     }
 

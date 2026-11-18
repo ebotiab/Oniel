@@ -46,11 +46,14 @@ test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', (
     await expect(ficha).toContainText('empieza la de Girona y Figueres')
     await expect(ficha).not.toContainText('LAV Barcelona – frontera francesa')
     await expect(ficha).toContainText('Girona')
-    // las dos líneas de la estación salen de la misma relación de OpenStreetMap: se cita una vez
+    // las dos líneas de alta velocidad de la estación salen de la misma relación de OpenStreetMap:
+    // se cita una vez; la convencional de Portbou sale de otra, y se cita aparte
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click()
     await ficha.getByTestId('mas-detalle').locator('summary').click()
-    await expect(ficha.getByTestId('pie-fuente').first().locator('p')).toHaveCount(1)
+    const pie = ficha.getByTestId('pie-fuente').first()
+    await expect(pie.locator('p')).toHaveCount(2)
+    await expect(pie.locator('p').filter({ hasText: '11082425' })).toHaveCount(1)
   })
 
   test('el final de la línea dice que la sección internacional no está cargada', async ({ page }) => {

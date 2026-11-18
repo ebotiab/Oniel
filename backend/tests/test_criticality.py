@@ -332,6 +332,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        "barcelona-girona-portbou",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -379,6 +380,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 16
         + 7  # la de Barcelona a Figueres
         + (1 + 2)
+        + 26  # la de Barcelona a Portbou
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -418,12 +420,17 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # en los cuatro de la línea de Sevilla hasta La Sagra y los 2 de Albacete a Toledo, que cambian
     # de sentido en Atocha, en los diez de la bifurcación de Torrejón de Velasco a Albacete
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3 + 14,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 14 + 12,
     )
-    # la de Barcelona a Figueres, entera: a Girona y a Figueres-Vilafant solo llega ella
+    # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
+    # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
     figueres = {k: n for k, n in none.items() if k.startswith(f"{LAV_FIGUERES}:")}
-    assert len(figueres) == 7
+    assert len(figueres) == 2
+    # la de Barcelona a Portbou, de Girona a Portbou: a Figueres y a Portbou solo llega ella; 43
+    # trenes hasta Flaçà, 42 hasta Figueres y 22 hasta Portbou
+    portbou = {k: n for k, n in none.items() if k.startswith("barcelona-girona-portbou:")}
+    assert len(portbou) == 12 and sorted(set(portbou.values())) == [22, 42, 43]
     # las dos de Galicia, enteras: a Santiago, A Coruña y Vigo solo llegan ellas
     santiago = {k: n for k, n in none.items() if k.startswith(f"{LAV_SANTIAGO}:")}
     assert len(santiago) == 3 and sorted(set(santiago.values())) == [43, 45]
@@ -467,6 +474,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_FIGUERES}:",
         "lav-la-sagra-toledo:",
         "lav-zaragoza-huesca:",
+        "barcelona-girona-portbou:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
