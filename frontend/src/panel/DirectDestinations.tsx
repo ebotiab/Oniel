@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import type { Destination, NetworkOut, Operator } from '../data/types'
-import { formatDate, listaEs, productLabel, shortStop } from '../app/state'
+import { formatDate, listaEs, notaNoOficial, productLabel, shortStop } from '../app/state'
 
 /** Destinos a la vista antes de «Ver los … restantes»: los más frecuentes caben sin desplazar el panel. */
 const A_LA_VISTA = 6
@@ -14,6 +14,8 @@ interface Props {
   operators: Operator[]
   /** Operadores de las líneas de la estación que no publican sus horarios: sus trenes faltan. */
   missing: Operator[]
+  /** Operadores con trenes aquí cuyos horarios salen de una compilación no oficial. */
+  unofficial: Operator[]
   /** Hay alguna interrupción vigente en la red: los destinos son los del horario publicado. */
   interrupted: boolean
   onSelectNode: (id: string) => void
@@ -28,7 +30,7 @@ function horas(d: Destination): string {
  * A dónde se llega desde una estación sin cambiar de tren: cada destino con sus trenes del día, el
  * tipo de servicio y entre qué horas salen. Los destinos que están en la red cargada son enlaces.
  */
-export function DirectDestinations({ destinations, date, network, operators, missing, interrupted, onSelectNode }: Props) {
+export function DirectDestinations({ destinations, date, network, operators, missing, unofficial, interrupted, onSelectNode }: Props) {
   const [todos, setTodos] = useState(false)
   const enLaRed = new Set(network.nodes.map((n) => n.id))
   const operatorName = (id: string) => operators.find((o) => o.id === id)?.name ?? id
@@ -81,6 +83,11 @@ export function DirectDestinations({ destinations, date, network, operators, mis
               <button type="button" className="enlace" onClick={() => setTodos(!todos)} aria-expanded={todos} data-testid="destinos-ver-todos">
                 {todos ? 'Ver solo los más frecuentes' : resto === 1 ? 'Ver el destino restante' : `Ver los ${resto} destinos restantes`}
               </button>
+            </p>
+          )}
+          {unofficial.length > 0 && (
+            <p className="suave destinos-nota" data-testid="destinos-no-oficiales">
+              {notaNoOficial(unofficial.map((o) => o.name))}
             </p>
           )}
           {missing.length > 0 && (

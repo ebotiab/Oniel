@@ -1440,7 +1440,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert {k: (o["timetable"], o["source_id"]) for k, o in operators.items()} == {
         "renfe": ("cargado", "renfe-gtfs-av-ld-md"),
         "ouigo": ("cargado", OUIGO_SOURCE_ID),
-        "iryo": ("no_publicado", "iryo-web"),
+        # los trenes de Iryo se cargan de una compilación no oficial, con su propia fuente
+        "iryo": ("no_oficial", "iryo-gtfs-no-oficial"),
     }
     assert {line["id"]: line["operator_ids"] for line in cov["lines"]} == {
         LAV: ["iryo", "ouigo", "renfe"],
@@ -1457,7 +1458,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         BYPASS_ZARAGOZA: ["iryo", "ouigo", "renfe"],
         BYPASS_LLEIDA: ["iryo", "ouigo", "renfe"],
         LAV_ALICANTE: ["iryo", "ouigo", "renfe"],
-        # Iryo no llega a Murcia: en esta línea no falta ningún operador
+        # Iryo no llega a Murcia
         LAV_MURCIA: ["ouigo", "renfe"],
         LINK_MONFORTE: ["ouigo", "renfe"],
         # por la línea de la costa solo circula Renfe
@@ -1474,8 +1475,14 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_SANTIAGO: ["renfe"],
         EJE_ATLANTICO: ["renfe"],
     }
-    assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
-    assert "No están los trenes de Iryo, que no publica sus horarios" in cov["notice"]
+    assert (
+        "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
+    )
+    assert (
+        "Los horarios de Iryo salen de una compilación no oficial, que no publica el operador"
+        in cov["notice"]
+    )
+    assert "No están los trenes" not in cov["notice"]
     assert "interrupciones" in cov["notice"]
     assert cov["reference_date"] is not None
 
@@ -2187,7 +2194,8 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         LAV_SANTIAGO,
         EJE_ATLANTICO,
     ]
-    assert out["missing_operator_ids"] == ["iryo"]
+    # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
+    assert out["missing_operator_ids"] == []
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
     # los 8 son los tramos de la línea de Monforte del Cid a Murcia; los 35, los de la de

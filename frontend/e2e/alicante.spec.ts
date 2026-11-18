@@ -41,7 +41,7 @@ test.describe('La línea de alta velocidad Albacete – Alicante', () => {
     await page.goto('/tramo/lav-albacete-alicante:albacete-los-llanos:chinchilla-av')
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
-    await expect(page.getByTestId('tramo-operadores-sin-horarios')).toContainText('No están los trenes de Iryo')
+    await expect(page.getByTestId('tramo-operadores-no-oficiales')).toContainText('Los trenes de Iryo salen de una compilación no oficial')
     await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('Sin dato publicado')
     await expect(page.getByTestId('tramo-atributo-bloqueo')).toHaveText('De control automático')
   })

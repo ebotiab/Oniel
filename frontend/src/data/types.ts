@@ -23,8 +23,11 @@ export interface Operator {
   role: 'operador' | 'administrador_infraestructura'
   /** Fuente registrada de la que salen sus datos (sus horarios, si es un operador). */
   source_id?: string | null
-  /** De un operador de trenes: si sus horarios están cargados o no los publica en abierto. */
-  timetable?: 'cargado' | 'no_publicado' | null
+  /**
+   * De un operador de trenes: si sus horarios están cargados (`cargado`), si no los publica en
+   * abierto (`no_publicado`) o si se cargan de una compilación no oficial (`no_oficial`).
+   */
+  timetable?: 'cargado' | 'no_publicado' | 'no_oficial' | null
 }
 
 /** Un fichero de horarios importado: de qué fuente y operador es y qué días cubre. */

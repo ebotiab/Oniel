@@ -221,6 +221,11 @@ export function listaEs(items: string[]): string {
   return new Intl.ListFormat('es', { style: 'long', type: 'conjunction' }).format(items)
 }
 
+/** Frase que avisa de que los trenes de esos operadores no salen de una fuente oficial. */
+export function notaNoOficial(nombres: string[]): string {
+  return `Los trenes de ${listaEs(nombres)} salen de una compilación no oficial de sus horarios, que no publica${nombres.length > 1 ? 'n esos operadores' : ' el operador'}.`
+}
+
 export function productLabel(product: string): string {
   return PRODUCT_LABELS[product] ?? product
 }

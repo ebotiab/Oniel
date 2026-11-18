@@ -106,8 +106,8 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
       'Si este tramo se cortara, sus 75 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
     )
-    // Iryo también pasa por aquí y sus trenes no están: la ficha lo dice junto al recuento
-    await expect(page.getByTestId('tramo-operadores-sin-horarios')).toContainText('Iryo')
+    // Iryo también pasa por aquí y sus trenes salen de una compilación no oficial: la ficha lo dice junto al recuento
+    await expect(page.getByTestId('tramo-operadores-no-oficiales')).toContainText('Iryo')
     await page.getByTestId('mas-detalle').locator('summary').click()
     const grupos = page.getByTestId('tramo-alternativa-detalle').locator('li')
     await expect(grupos).toHaveCount(8)
@@ -139,8 +139,9 @@ test.describe('Tramos sin otro camino', () => {
     // los totales salen del análisis de la instantánea (e2e/instantanea.ts): cambian con cada línea que se carga
     const { sin, con, lineas: esperadas } = sinOtroCamino
     await expect(page.getByTestId('sin-camino-resumen')).toHaveText(`Son ${sin} de los ${sin + con} tramos con trenes, en ${esperadas.length} líneas. En el mapa, lo demás va atenuado.`)
-    // y sin los trenes de Iryo
-    await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
+    // no falta ningún operador, y los trenes de Iryo salen de una compilación no oficial
+    await expect(page.getByTestId('sin-camino-faltan')).toHaveCount(0)
+    await expect(page.getByTestId('sin-camino-no-oficiales')).toHaveText('Los trenes de Iryo salen de una compilación no oficial de sus horarios, que no publica el operador.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos; los tramos de un
     // baipás o de un enlace van en el renglón de su línea, que no cuenta como una línea más
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
