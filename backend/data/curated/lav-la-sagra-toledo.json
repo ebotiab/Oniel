@@ -3,7 +3,7 @@
     "id": "lav-la-sagra-toledo",
     "name": "Línea de alta velocidad La Sagra – Toledo",
     "short_name": "020",
-    "sort_order": 32,
+    "sort_order": 33,
     "zone": "madrid-castilla-la-mancha",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

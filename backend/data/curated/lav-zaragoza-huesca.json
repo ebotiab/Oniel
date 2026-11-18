@@ -3,7 +3,7 @@
     "id": "lav-zaragoza-huesca",
     "name": "Línea de alta velocidad Zaragoza – Huesca",
     "short_name": "070",
-    "sort_order": 33,
+    "sort_order": 34,
     "zone": "aragon-navarra-rioja",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

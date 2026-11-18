@@ -55,6 +55,7 @@ LEON_GIJON = "leon-oviedo-gijon"
 BURGOS_VITORIA = "burgos-miranda-vitoria"
 LAV_SANTIAGO = "lav-ourense-santiago"
 EJE_ATLANTICO = "eje-atlantico"
+SEVILLA_CADIZ = "sevilla-cadiz"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
 #: de Plasencia a Badajoz, el ramal de Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -82,6 +83,7 @@ EXTREMADURA_RULES = {
 #: Barcelona entran por la bifurcación Los Gavilanes y los de Valencia, por la de Yeles.
 #: Los directos de Madrid a Málaga, en la alta velocidad de Sevilla y en la de Málaga.
 MALAGA_RULES = {"madrid-malaga-sin-paradas": 13}
+CADIZ_RULES = {"madrid-sevilla-sin-paradas": 18, "madrid-jerez-sin-paradas": 5}
 AWAY_RULES = {
     "barcelona-cordoba-sin-parar-en-madrid": 8,
     "barcelona-ciudad-real-sin-parar-en-madrid": 8,
@@ -245,6 +247,11 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # por la línea convencional, y los Intercity de Salamanca a Zaragoza por Pamplona. Los otros
     # 105 de sus 182 viajes ya estaban en las líneas de alta velocidad
     trips += 77
+    # Con la de Sevilla a Cádiz entran 136: 126 de sus 202 viajes (los Media Distancia de Sevilla y
+    # de Córdoba a Cádiz, los de Sevilla a Osuna y a Málaga y 13 Alvia de Madrid a Cádiz que no paran
+    # en Córdoba) y 10 AVE sin paradas de Madrid a Sevilla, que con los 13 Alvia entran también en
+    # la alta velocidad de Sevilla por dos reglas nuevas
+    trips += 136
     # Con el ramal de Toledo entran 115 de sus 132 Avant: los 17 que siguen de Madrid a Cuenca y
     # Albacete ya estaban en la de Valencia. Los 11 AVE de Huesca ya estaban en la de Barcelona
     trips += 115
@@ -257,6 +264,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][EJE_ATLANTICO]["trips"] == 432
     for line_id in (LAV_SANTIAGO, EJE_ATLANTICO):
         assert gtfs1["lines"][line_id]["route_overrides"] == {"ourense-vilagarcia-sin-santiago": 10}
+    assert gtfs1["lines"][SEVILLA_CADIZ]["trips"] == 202
+    assert gtfs1["lines"][SEVILLA_CADIZ]["route_overrides"] == {"cordoba-por-la-alta-velocidad": 12}
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
     # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
     # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
@@ -362,13 +371,15 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # En la alta velocidad Madrid – Sevilla, 317 paran en Córdoba y en Madrid y 47 la recorren sin
     # parar en Madrid: 27 Avant de Sevilla y 20 AVE de Barcelona y de Valencia. De esos 47, 31 ya
     # se importaban por las líneas de Málaga y de Granada y 16 son nuevos (4 Avant Sevilla – Córdoba,
-    # 8 AVE Barcelona – Sevilla y 4 AVE Valencia – Sevilla). Los 132 Avant de Toledo entran por su
-    # regla de recorrido y cuentan de Madrid a la bifurcación La Sagra.
-    assert gtfs1["lines"][LAV]["trips"] == 317 + 47 + 13 + 132
+    # 8 AVE Barcelona – Sevilla y 4 AVE Valencia – Sevilla). Y 36 no paran en Córdoba: 13 directos
+    # de Madrid a Málaga y, desde la línea de Sevilla a Cádiz, 10 AVE de Madrid a Sevilla y 13 Alvia
+    # de Madrid a Cádiz. Los 132 Avant de Toledo entran por su regla de recorrido y cuentan de Madrid
+    # a la bifurcación La Sagra.
+    assert gtfs1["lines"][LAV]["trips"] == 317 + 47 + 36 + 132
     assert gtfs1["lines"][CONV]["trips"] == 390 + 42 + 267
     assert gtfs1["lines"][MZCR]["trips"] == 124 + 22
     assert gtfs1["lines"][JAEN]["trips"] == 123
-    assert gtfs1["lines"][LAV]["route_overrides"] == RULES | AWAY_RULES | MALAGA_RULES | {
+    assert gtfs1["lines"][LAV]["route_overrides"] == RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES | {
         "madrid-toledo": 132
     }
     assert gtfs1["lines"][MZCR]["route_overrides"] == RULES
@@ -447,8 +458,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # un tramo, y las cuatro de Extremadura
     # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
     # a Gijón, y la de Burgos a Vitoria
-    # y las dos de Galicia, y los dos ramales de Toledo y de Huesca
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 2
+    # y las dos de Galicia y la de Sevilla a Cádiz, y los dos ramales de Toledo y de Huesca
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -481,6 +492,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 7  # la de Burgos a Vitoria
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
+        + 16  # la de Sevilla a Cádiz
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
     )
@@ -488,7 +500,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
     renfe_passes = (
-        (3996 + 121) + (1968 + 267 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+        (4295 + 121) + (1968 + 267 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     )
     renfe_passes += (1250 + 68) + 498 + 6851 + 97 + 224 + 5048 + 1979 + (677 + 120) + (4223 + 2107)
     # Extremadura: Madrid – Plasencia, Plasencia – Badajoz, el ramal de Mérida y el trazado antiguo
@@ -502,6 +514,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
     renfe_passes += 854  # la de Ourense a Santiago
     renfe_passes += 3035 + 281  # la de A Coruña a Vigo
+    renfe_passes += 1733 + 1081  # la de Sevilla a Cádiz
     # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
     renfe_passes += 4 * 132 + 132 + (11 + 11)
     assert (
@@ -634,6 +647,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 7  # la de Burgos a Vitoria
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
+        + 16  # la de Sevilla a Cádiz
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
     )
@@ -731,6 +745,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        SEVILLA_CADIZ,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -815,6 +830,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 7  # la de Burgos a Vitoria
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
+        + 16  # la de Sevilla a Cádiz
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
     )
@@ -829,6 +845,19 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         f"{MADRID_PLASENCIA}:oropesa-de-toledo:navalmoral-de-la-mata": 155,
         # de León a la bifurcación Pajares: el desvío de la variante trae 250 km/h
         f"{LEON_GIJON}:leon:bif-pajares": 160,
+        # de Sevilla a Utrera, del mapa 3 de la Declaración sobre la Red: OSM no trae velocidad
+        # en el túnel de San Bernardo a Virgen del Rocío, y da 160 de la bifurcación a Utrera
+        **{
+            f"{SEVILLA_CADIZ}:{a}:{b}": 160
+            for a, b in [
+                ("sevilla-santa-justa", "san-bernardo"),
+                ("san-bernardo", "virgen-del-rocio"),
+                ("virgen-del-rocio", "bellavista"),
+                ("bellavista", "dos-hermanas"),
+                ("dos-hermanas", "bif-utrera"),
+            ]
+        },
+        f"{SEVILLA_CADIZ}:bif-utrera:utrera": 140,
         # de Tardienta a Huesca: un trozo de vía de ancho estándar trae 200 km/h
         "lav-zaragoza-huesca:tardienta:huesca": 160,
     }
@@ -1292,6 +1321,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Arganzón, Nanclares-Langraiz y Vitoria-Gasteiz
     # y las dos de Galicia, 14: Santiago de Compostela y las trece que quedan de A Coruña a
     # Vigo-Urzáiz
+    # y la de Sevilla a Cádiz, 15: de San Bernardo a Cádiz
     # y los dos ramales, 3: Toledo, Tardienta y Huesca
     assert cov["station_count"] == (
         6
@@ -1319,6 +1349,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 8
         + 7
         + 14
+        + 15
         + 3
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1343,8 +1374,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Madrid-Príncipe Pío por la línea convencional y los Intercity de Salamanca a Zaragoza
     # y 72 más con las dos de Galicia: los Avant de Ourense a A Coruña y los regionales de
     # A Coruña a Vigo
+    # y 37 más con la de Sevilla a Cádiz: los Media Distancia de Sevilla y de Córdoba a Cádiz y a
+    # Málaga de ese día y los trenes de Madrid a Sevilla y a Cádiz que no paran en Córdoba
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 26
     # y 26 más con el ramal de Toledo: los Avant de Madrid a Toledo de ese día
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 26
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -1392,9 +1425,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # vasca
     # Y 6 de las dos de Galicia: la relación de OSM del Eje Atlántico, los tres ficheros de
     # estaciones y vías de OSM y las dos revisiones de Wikipedia
+    # Y 2 de la de Sevilla a Cádiz: el fichero de sus estaciones y los artículos de Wikipedia de la
+    # línea 400 y de su esquema
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 5
     # Y 5 de los ramales de Toledo y de Huesca: sus dos relaciones de OSM, sus dos artículos de
     # Wikipedia y el fichero de sus estaciones
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 5
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1417,6 +1452,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
     assert "la línea de alta velocidad A Coruña – Santiago – Vigo" in cov["notice"]
+    assert "la línea convencional Sevilla – Cádiz" in cov["notice"]
     assert "la línea de alta velocidad La Sagra – Toledo" in cov["notice"]
     assert "y la línea de alta velocidad Zaragoza – Huesca" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
@@ -1445,6 +1481,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        SEVILLA_CADIZ,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -1503,6 +1540,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         BURGOS_VITORIA: ["renfe"],
         LAV_SANTIAGO: ["renfe"],
         EJE_ATLANTICO: ["renfe"],
+        SEVILLA_CADIZ: ["renfe"],
         "lav-la-sagra-toledo": ["renfe"],
         "lav-zaragoza-huesca": ["renfe"],
     }
@@ -1518,21 +1556,22 @@ async def test_segment_counts_are_split_by_operator(client: httpx.AsyncClient) -
     body = (await client.get("/api/segment-counts", params={"date": "2026-11-13"})).json()
     split, totals = body["by_operator"], body["counts"]
     assert {s: sum(by.values()) for s, by in split.items()} == totals
-    # con los 30 Avant de Toledo desde que está cargado su ramal
+    # (6 más de Renfe en cada tramo desde la línea de Sevilla a Cádiz: los de Madrid a Sevilla y
+    # a Cádiz que no paran en Córdoba)
     assert split[f"{LAV}:madrid-puerta-de-atocha:bif-los-gavilanes"] == {
-        "renfe": 104,
+        "renfe": 110,
         "ouigo": 12,
     }
     # en Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid, y en Yeles,
     # los 2 de Valencia; hasta La Sagra van además los 30 Avant de Toledo
-    assert split[f"{LAV}:bif-los-gavilanes:bif-torrejon-de-velasco"] == {"renfe": 112, "ouigo": 12}
-    assert split[f"{LAV}:bif-yeles:bif-la-sagra"] == {"renfe": 114, "ouigo": 12}
-    assert split[f"{LAV}:ciudad-real:puertollano"] == {"renfe": 106, "ouigo": 12}
+    assert split[f"{LAV}:bif-los-gavilanes:bif-torrejon-de-velasco"] == {"renfe": 118, "ouigo": 12}
+    assert split[f"{LAV}:bif-yeles:bif-la-sagra"] == {"renfe": 120, "ouigo": 12}
+    assert split[f"{LAV}:ciudad-real:puertollano"] == {"renfe": 112, "ouigo": 12}
     # entre Córdoba y la bifurcación de Málaga pasan además los Avant de Sevilla a Málaga y a
     # Granada, que van y vuelven por el tramo y cuentan una vez
-    assert split[f"{LAV}:cordoba:bif-malaga"] == {"renfe": 128, "ouigo": 12}
-    assert split[f"{LAV}:bif-malaga:majarabique"] == {"renfe": 77, "ouigo": 6}
-    assert split[f"{LAV}:majarabique:sevilla-santa-justa"] == {"renfe": 75, "ouigo": 6}
+    assert split[f"{LAV}:cordoba:bif-malaga"] == {"renfe": 134, "ouigo": 12}
+    assert split[f"{LAV}:bif-malaga:majarabique"] == {"renfe": 83, "ouigo": 6}
+    assert split[f"{LAV}:majarabique:sevilla-santa-justa"] == {"renfe": 81, "ouigo": 6}
     lav = [by for s, by in split.items() if s.startswith(f"{LAV}:")]
     assert len(lav) == 13 and all(set(by) == {"renfe", "ouigo"} for by in lav)
     # los 6 Ouigo de Málaga siguen por la línea de Córdoba a Málaga; a Granada solo va Renfe
@@ -1607,7 +1646,7 @@ async def test_segment_counts_are_split_by_operator(client: httpx.AsyncClient) -
     )
     passes = r.json()["passes"]
     ouigo = [p for p in passes if p["service"]["operator_id"] == "ouigo"]
-    assert len(passes) == 118 and len(ouigo) == 12
+    assert len(passes) == 124 and len(ouigo) == 12
     assert {p["service"]["product"] for p in ouigo} == {"Ouigo"}
     assert {p["kind"] for p in ouigo} == {"estimado"}
     first = ouigo[0]["service"]
@@ -1692,7 +1731,9 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     # y 5 más con las de Extremadura, del camino de Ciudad Real a Badajoz: Mérida,
     # Garrovilla-Las Vegas, Montijo, Montijo-El Molino y Badajoz
     # y 1 más: Madrid-Chamartín, que ya era un destino y ahora es una estación de la red
-    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5 + 1
+    # y 4 más con la de Sevilla a Cádiz, adonde llegan los Alvia que paran en Ciudad Real: Jerez de
+    # la Frontera, El Puerto de Santa María, San Fernando-Bahía Sur y Cádiz
+    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5 + 1 + 4
     assert by_node["alicante-terminal"]["trains"] == 2
     assert {"merida", "garrovilla-las-vegas", "montijo", "montijo-el-molino"} <= set(by_node)
     assert by_node["valencia-joaquin-sorolla"]["trains"] == 1
@@ -2042,11 +2083,11 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
         "operator_id": "renfe",
         "retrieved_on": "2026-11-08",
         "date": "2026-11-13",
-        "trains": 106,
+        "trains": 112,
         "products": [
-            {"product": "AVE", "trains": 64},
+            {"product": "AVE", "trains": 66},
             {"product": "Intercity", "trains": 22},
-            {"product": "ALVIA", "trains": 10},
+            {"product": "ALVIA", "trains": 14},
             {"product": "AVLO", "trains": 10},
         ],
         # con un solo fichero de la fuente no hay anterior con el que comparar
@@ -2219,6 +2260,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        SEVILLA_CADIZ,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -2229,27 +2271,55 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
     # Extremadura; los 7 siguientes, la de Burgos a Vitoria; los 3 y 15 de después, las de Galicia,
-    # y el 1 y los 2 del final, los ramales de Toledo y de Huesca
-    assert len(by_id) == (
-        54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
-    ) + (3 + 15) + (1 + 2)
+    # los 16, la de Sevilla a Cádiz, y el 1 y los 2 del final, los ramales de Toledo y de Huesca
+    assert (
+        len(by_id)
+        == (
+            54
+            + 8
+            + 8
+            + 20
+            + 2
+            + 14
+            + 2
+            + 9
+            + 8
+            + 35
+            + 5
+            + 1
+            + 13
+            + 14
+            + 2
+            + 4
+            + 8
+            + 13
+            + 4
+            + 11
+            + 7
+        )
+        + (3 + 15)
+        + 16
+        + (1 + 2)
+    )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
-    assert (south["trains"], south["without_alternative"]) == (83, 83)
+    assert (south["trains"], south["without_alternative"]) == (89, 89)
     assert all(g["alternative"] is None for g in south["groups"])
     # entre Córdoba y la bifurcación de Málaga sí, desde que Granada está unida por los dos lados,
     # salvo para los 22 Avant que solo recorren ese tramo de la línea: la vuelta por Granada mide
     # más del doble que su recorrido y no cuenta
     first = by_id[f"{LAV}:cordoba:bif-malaga"]
-    assert (first["trains"], first["without_alternative"]) == (140, 22)
+    assert (first["trains"], first["without_alternative"]) == (146, 22)
     assert "más del doble" in out["scope_note"] and "más del doble" in out["method"]
     # al norte, la línea convencional salva el tramo: 97 km más para los trenes de Madrid a Sevilla
     north = by_id[f"{LAV}:adamuz:cordoba"]
-    assert (north["trains"], north["without_alternative"]) == (118, 0)
+    assert (north["trains"], north["without_alternative"]) == (124, 0)
     top = north["groups"][0]
+    # (39: los 2 Alvia de Madrid a Cádiz que paran en Córdoba y en Sevilla-Santa Justa siguen
+    # ahora por la línea de Sevilla a Cádiz y forman su grupo)
     assert (top["trains"], top["from_name"], top["to_name"]) == (
-        41,
+        39,
         "Madrid-Puerta de Atocha",
         "Sevilla-Santa Justa",
     )
@@ -2320,6 +2390,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        SEVILLA_CADIZ,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -2408,4 +2479,4 @@ async def test_a_connection_dropped_from_a_spec_goes_away_even_on_a_shared_node(
         await import_network(conn, SPEC, SOURCES, DATA_DIR)
         assert await conn.fetchval(count) == before
     # las de la otra línea que comparte el nodo y las del resto siguen en su sitio
-    assert {"enlace-blancales-lav-sevilla", "sevilla-cadiz"} <= ids
+    assert {"enlace-blancales-lav-sevilla", "sevilla-huelva"} <= ids

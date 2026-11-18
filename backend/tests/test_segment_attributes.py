@@ -239,11 +239,13 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         assert covered.pop("electrification", None) == wired.get(line["line"])
         # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona,
         # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata,
-        # y el de León a la bifurcación Pajares
+        # el de León a la bifurcación Pajares, los seis de Sevilla a Utrera, del mapa 3, y el de
+        # Tardienta a Huesca
         declared_speed = {
             "lav-madrid-barcelona": 3,
             "madrid-plasencia": 1,
             "leon-oviedo-gijon": 1,
+            "sevilla-cadiz": 6,
             "lav-zaragoza-huesca": 1,
         }
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
@@ -276,7 +278,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de Venta de Baños a
                 # Burgos, tres
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres;
-                # la de Burgos a Vitoria, cinco, y las dos de Galicia, seis
+                # la de Burgos a Vitoria, cinco, y las dos de Galicia y la de Sevilla a Cádiz, seis
                 assert value.source_id == DR
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),
