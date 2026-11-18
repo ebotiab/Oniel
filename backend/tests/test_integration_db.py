@@ -503,6 +503,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
     renfe_passes += 854  # la de Ourense a Santiago
     renfe_passes += 3035 + 281  # la de A Coruña a Vigo
+    renfe_passes += 1094 + 208  # la de Barcelona a Figueres
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -1384,7 +1385,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # vasca
     # Y 6 de las dos de Galicia: la relación de OSM del Eje Atlántico, los tres ficheros de
     # estaciones y vías de OSM y las dos revisiones de Wikipedia
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6
+    # Y 2 de la de Barcelona a Figueres: el fichero de sus estaciones en OSM y los horarios
+    # abiertos de SNCF, que solo dicen qué trenes faltan
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1406,7 +1409,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
-    assert "y la línea de alta velocidad A Coruña – Santiago – Vigo" in cov["notice"]
+    assert "la línea de alta velocidad A Coruña – Santiago – Vigo" in cov["notice"]
+    assert "y la línea de alta velocidad Barcelona – Girona – Figueres" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
         LAV,
         CONV,

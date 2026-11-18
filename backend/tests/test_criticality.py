@@ -630,7 +630,11 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     around_zaragoza = _of(exported.segments, "baipas-zaragoza:bif-moncasi:bif-canal-imperial")
     assert (around_zaragoza.trains, around_zaragoza.without_alternative) == (22, 0)
     assert around_zaragoza.by_operator == {"ouigo": 4, "renfe": 18}
-    (direct,) = around_zaragoza.groups
+    # el grupo más numeroso es el de Madrid a Barcelona; los demás, los que siguen por la línea
+    # de Barcelona a Figueres, con un recorrido más largo
+    direct, *beyond = around_zaragoza.groups
+    assert direct.trains + sum(g.trains for g in beyond) == 22
+    assert all(g.line_ids == [BCN, LAV_FIGUERES] for g in beyond)
     assert (direct.from_node_id, direct.to_node_id) == (MADRID, "barcelona-sants")
     assert (direct.length_km, direct.line_ids) == (620.1, [BCN])
     assert direct.alternative is not None and direct.alternative.line_ids == [BCN]
