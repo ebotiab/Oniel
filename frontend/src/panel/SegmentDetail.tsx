@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
 import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
 import { coste, fraseTramo, porLineas, trenes } from '../app/alternativas'
-import { formatDate, formatKm, lineKind, listaEs, productLabel, shortStop } from '../app/state'
+import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, productLabel, shortStop } from '../app/state'
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
@@ -70,6 +70,8 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
 
   // Operadores que circulan por la línea y no publican sus horarios: sus trenes no están en la lista.
   const missing = operators.filter((o) => o.timetable === 'no_publicado' && line?.operator_ids?.includes(o.id))
+  // Operadores de la lista cuyos trenes salen de una compilación que no publican ellos.
+  const unofficial = groups.filter((g) => operators.find((o) => o.id === g.id)?.timetable === 'no_oficial').map((g) => g.name)
 
   return (
     <section className="detalle" aria-labelledby="detalle-titulo" data-testid="detalle-tramo">
@@ -213,6 +215,11 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
             <p className="suave" data-testid="tramo-operadores-sin-horarios">
               No están los trenes de {listaEs(missing.map((o) => o.name))}, que también opera{missing.length > 1 ? 'n' : ''} en esta línea: no publica
               {missing.length > 1 ? 'n' : ''} sus horarios en un formato abierto.
+            </p>
+          )}
+          {unofficial.length > 0 && (
+            <p className="suave" data-testid="tramo-operadores-no-oficiales">
+              {notaNoOficial(unofficial)}
             </p>
           )}
           {alternativa && alternativa.trains > 0 && (

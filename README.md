@@ -260,7 +260,7 @@ Ninguna es obligatoria para desarrollar. Los ejemplos están en `backend/.env.ex
 
 ## Licencias de los datos
 
-- **Horarios**: Renfe Viajeros, CC BY 4.0; Ouigo España, del Punto de Acceso Nacional de Transporte Multimodal (Powered by MITRAMS), con la licencia de datos abiertos del Ministerio de Transportes y Movilidad Sostenible. Iryo no publica sus horarios en un formato abierto y sus trenes no están.
+- **Horarios**: Renfe Viajeros, CC BY 4.0; Ouigo España, del Punto de Acceso Nacional de Transporte Multimodal (Powered by MITRAMS), con la licencia de datos abiertos del Ministerio de Transportes y Movilidad Sostenible. Iryo no publica sus horarios en un formato abierto: sus trenes se cargan de una compilación no oficial y ajena al operador (Clément Desouche, CC BY 4.0 sobre la compilación; los horarios proceden de la web pública de Iryo), y el visor lo dice.
 - **Trazado**: colaboradores de OpenStreetMap, ODbL.
 - **Verificación**: Adif.
 - **Mapa base**: OpenFreeMap / OpenMapTiles / OpenStreetMap.

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import type { AnnotationOut, CoverageOut, NetworkOut, Source } from '../data/types'
 import type { ApiStatus } from '../data/api'
-import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, parentOf, routePath, todayIso } from '../app/state'
+import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, notaNoOficial, parentOf, routePath, todayIso } from '../app/state'
 import { SITIO } from '../app/meta'
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { formatDateLong, lugar } from '../app/annotations'
@@ -92,12 +92,16 @@ function Fuente({ source: s }: { source: Source }) {
  * los operadores de trenes, lo que Oniel sabe de la red (interrupciones y proyectos), lo que falta y, al final, todas las fuentes con su licencia y su fecha, agrupadas por lo
  * que aportan.
  */
+const ordenHorarios = (timetable: string | null | undefined) => (timetable === 'no_publicado' ? 2 : timetable === 'no_oficial' ? 1 : 0)
+
 export function CoveragePage({ coverage, network, annotations, status, onPickLine }: Props) {
   const operadores = coverage.operators
     .filter((o) => o.role === 'operador')
-    // primero los que tienen horarios cargados
-    .sort((a, b) => Number(a.timetable === 'no_publicado') - Number(b.timetable === 'no_publicado'))
+    // primero los que tienen horarios cargados de una fuente oficial, después los de una
+    // compilación no oficial y, al final, los que no los publican
+    .sort((a, b) => ordenHorarios(a.timetable) - ordenHorarios(b.timetable))
   const sinHorarios = operadores.filter((o) => o.timetable === 'no_publicado').map((o) => o.name)
+  const noOficiales = operadores.filter((o) => o.timetable === 'no_oficial').map((o) => o.name)
   const capas = ANNOTATION_LAYERS.map((capa) => ({ capa, vigentes: annotations.filter((a) => a.kind === capa.kind) }))
   const grupos = agruparFuentes(coverage, network.annotations)
   const apartados = [
@@ -202,7 +206,7 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
             <Termino id="operador">Operadores</Termino> de trenes
           </h2>
           <p className="cobertura-texto">
-            Los horarios son los que publica cada operador. No reflejan interrupciones ni alteraciones del servicio: las que Oniel conoce se señalan aparte, con
+            Los horarios son los que publica cada operador.{noOficiales.length > 0 && ` ${notaNoOficial(noOficiales)}`} No reflejan interrupciones ni alteraciones del servicio: las que Oniel conoce se señalan aparte, con
             su fuente y la fecha en que se comprobaron.
           </p>
           <dl className="cobertura-operadores" data-testid="cobertura-operadores">
@@ -216,7 +220,7 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
                   <dd>
                     <p className="operador-estado">
                       {cargado
-                        ? `Horarios cargados${dataset ? `, válidos del ${formatDateLong(dataset.valid_from)} al ${formatDateLong(dataset.valid_to)}` : ''}.`
+                        ? `${o.timetable === 'no_oficial' ? 'Horarios cargados de una compilación no oficial, que no publica el operador' : 'Horarios cargados'}${dataset ? `, válidos del ${formatDateLong(dataset.valid_from)} al ${formatDateLong(dataset.valid_to)}` : ''}.`
                         : 'No publica sus horarios en un formato abierto: sus trenes no están cargados ni contados.'}
                     </p>
                     {source ? (

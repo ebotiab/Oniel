@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -143,13 +143,13 @@ def validate_operators(
             problems.append(
                 f"{feed.file} es del operador {feed.operator_id}, que no está en ninguna línea"
             )
-        elif declared.timetable != "cargado":
+        elif not declared.has_timetable:
             problems.append(
                 f"{feed.file} es de {feed.operator_id}, declarado sin horarios publicados"
             )
     with_feed = {f.operator_id for f in feeds}
     for op in operators.values():
-        if op.timetable == "cargado" and op.id not in with_feed:
+        if op.has_timetable and op.id not in with_feed:
             problems.append(f"el operador {op.id} no tiene ningún fichero de horarios declarado")
     # el vigente de cada fuente es el último de la lista, que va del más antiguo al más reciente
     current = {f.source_id: f for f in feeds}
@@ -244,6 +244,7 @@ def validate_all(
     other_spec_paths: Sequence[Path] = (),
     *,
     stop_id_prefix: str | None = None,
+    stop_id_aliases: Mapping[str, str] | None = None,
     require_rules: bool = True,
 ) -> dict[str, Any]:
     """Comprueba una línea; las demás (``other_spec_paths``) solo se usan para medir por ellas.
@@ -296,7 +297,7 @@ def validate_all(
                 f"el nodo {n.spec.id} queda en el km {expected_pk:.1f} y la referencia es {ref}"
             )
 
-    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix)
+    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
     own = loaded_line(net)
     # Los trenes de un baipás salen al resolver la línea de la que es baipás: se resuelve aquella
     # y se cuentan los viajes que pasan por los tramos de esta.

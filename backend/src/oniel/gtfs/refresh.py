@@ -235,11 +235,15 @@ def refresh_source(
     if any(content_sha256(data_dir / f.file) == content for f in declared):
         return result
     # Leerlo entero antes de declararlo: si no es un GTFS legible, falla aquí y no se guarda nada.
-    feed = read_feed(downloaded, stop_id_prefix=current.stop_id_prefix)
+    reading: dict[str, Any] = {
+        "stop_id_prefix": current.stop_id_prefix,
+        "stop_id_aliases": current.stop_id_aliases,
+    }
+    feed = read_feed(downloaded, **reading)
     result.reason = "contenido"
     if spec_paths:
         specs = [load_network_spec(p) for p in spec_paths]
-        loaded = read_feed(data_dir / current.file, stop_id_prefix=current.stop_id_prefix)
+        loaded = read_feed(data_dir / current.file, **reading)
         differ = train_days(feed, specs, today, window_days) ^ train_days(
             loaded, specs, today, window_days
         )

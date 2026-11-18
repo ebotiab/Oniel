@@ -205,7 +205,7 @@ def test_sources_and_operators_are_registered(bcn_spec: NetworkSpec) -> None:
     assert {k: o.timetable for k, o in operators.items()} == {
         "renfe": "cargado",
         "ouigo": "cargado",
-        "iryo": "no_publicado",
+        "iryo": "no_oficial",
     }
     assert all(o.source_id in sources for o in bcn_spec.operators)
     # la fuente de Iryo dice ya que opera también en esta línea

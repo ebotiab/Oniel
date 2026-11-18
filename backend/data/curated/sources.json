@@ -25,6 +25,15 @@
       "source_id": "renfe-gtfs-av-ld-md",
       "operator_id": "renfe",
       "retrieved_on": "2026-11-17"
+    },
+    {
+      "file": "raw/iryo/gtfs_iryo_no_oficial_2026-11-18.zip",
+      "source_id": "iryo-gtfs-no-oficial",
+      "operator_id": "iryo",
+      "retrieved_on": "2026-11-18",
+      "product": "Iryo",
+      "stop_id_aliases": {"37700": "37300"},
+      "names_stops": false
     }
   ],
   "sources": [
@@ -61,8 +70,20 @@
       "license_url": null,
       "retrieved_on": "2026-11-12",
       "coverage": "Que Iryo opera trenes de alta velocidad por la línea Madrid–Sevilla, por la de Córdoba a Málaga, hasta Málaga, por la de Madrid a Zaragoza y Barcelona, por la de Madrid a Valencia por Cuenca y por la de Albacete a Alicante (su página de destinos enumera, entre otros, Madrid, Zaragoza, Tarragona, Barcelona, Valencia, Cuenca, Albacete, Alicante, Córdoba, Sevilla y Málaga), y que no publica sus horarios en GTFS ni en otro formato reutilizable: no figura entre los conjuntos ferroviarios del Punto de Acceso Nacional (nap.transportes.gob.es) ni en su propia web.",
-      "notes": "Oniel no carga los trenes de Iryo ni reconstruye sus horarios por otros medios: los recuentos de las líneas por las que circula no los incluyen y el visor lo dice. Lo consultado el 11 de noviembre de 2026 está resumido en el registro de consultas de ese día; el 12 de noviembre se volvió a leer la página de destinos (raw/operadores/consultas_2026-11-12.json): Málaga, Córdoba, Zaragoza, Tarragona, Barcelona, Valencia, Cuenca, Albacete y Alicante figuran entre ellos, y Antequera y Granada no. Tampoco figuran Elche, Orihuela ni Murcia: Oniel no declara a Iryo en la línea de Monforte del Cid a Murcia. El 18 de noviembre de 2026 se volvió a leer la página de destinos (raw/operadores/consultas_2026-11-18.json): son trece, y no figuran Girona ni Figueres. Oniel no declara a Iryo en la línea de Barcelona a Girona y Figueres.",
+      "notes": "Desde el 18 de noviembre de 2026 Oniel carga los trenes de Iryo de una compilación no oficial de sus horarios (fuente iryo-gtfs-no-oficial) y el visor lo dice; esta fuente sigue siendo el registro de que el operador no los publica y de las líneas por las que circula. Lo consultado el 11 de noviembre de 2026 está resumido en el registro de consultas de ese día; el 12 de noviembre se volvió a leer la página de destinos (raw/operadores/consultas_2026-11-12.json): Málaga, Córdoba, Zaragoza, Tarragona, Barcelona, Valencia, Cuenca, Albacete y Alicante figuran entre ellos, y Antequera y Granada no. Tampoco figuran Elche, Orihuela ni Murcia: Oniel no declara a Iryo en la línea de Monforte del Cid a Murcia. El 18 de noviembre de 2026 se volvió a leer la página de destinos (raw/operadores/consultas_2026-11-18.json): son trece, y no figuran Girona ni Figueres. Oniel no declara a Iryo en la línea de Barcelona a Girona y Figueres.",
       "file": "raw/operadores/consultas_2026-11-11.json"
+    },
+    {
+      "id": "iryo-gtfs-no-oficial",
+      "name": "Horarios de Iryo (GTFS): compilación no oficial, ajena al operador",
+      "publisher": "Clément Desouche (@deryclem); compilación no oficial y sin vínculo con Iryo",
+      "url": "https://clementdesouche.fr/gtfs",
+      "license": "CC BY 4.0, solo sobre el trabajo de compilación y conversión; los horarios proceden de la web pública de Iryo (© Iryo)",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Servicios de alta velocidad de Iryo: 135 viajes en 14 rutas entre 14 estaciones (Madrid-Puerta de Atocha, Madrid-Chamartín, Zaragoza, Tarragona, Barcelona, Cuenca, Valencia, Albacete, Alicante, Ciudad Real, Puertollano, Córdoba, Sevilla y Málaga). Oniel importa los que recorren las líneas cargadas. Validez declarada por el fichero: del 5 de noviembre de 2026 al 11 de diciembre de 2027.",
+      "notes": "No es una publicación de Iryo, que no publica sus horarios en un formato abierto (fuente iryo-web). Fichero gtfs-iryo.zip, versión 20261105, descargado el 18 de noviembre de 2026 de https://deryclem.github.io/iryo-gtfs/gtfs-iryo.zip. Su LICENSE.txt dice que los horarios salen de la web pública iryo.eu, que la licencia CC BY 4.0 cubre solo el trabajo de compilación y conversión y que el fichero no es oficial ni está vinculado a Iryo; pide citar a su autor. Oniel no lo ha contrastado tren a tren con el operador: comprobó que es coherente (ninguna hora retrocede y ningún número de tren se repite el mismo día), que sus tiempos de viaje encajan con los de Renfe y Ouigo en los mismos trayectos y, por muestreo en el buscador de Iryo, que el 20 de noviembre de 2026 trae los mismos 15 trenes de Madrid a Barcelona y los mismos 7 de Madrid a Valencia, con las mismas horas (raw/operadores/consultas_2026-11-18_iryo.json). Identifica las paradas con el código de estación de Adif, salvo Puertollano, que trae como 37700 (el de Adif es 37300) y Oniel lee como 37300. No rotula los trenes: Oniel los muestra como Iryo. Son horarios planificados: no reflejan la interrupción de la alta velocidad Madrid–Andalucía registrada en interrupciones.json ni otras alteraciones del servicio (el 20 de noviembre de 2026 el buscador de Iryo solo ofrecía 2 de los 8 trenes de Madrid a Sevilla que trae el fichero).",
+      "file": "raw/iryo/gtfs_iryo_no_oficial_2026-11-18.zip"
     },
     {
       "id": "osm-relation-1254828",

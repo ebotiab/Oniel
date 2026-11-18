@@ -12,7 +12,8 @@ import io
 import re
 import zipfile
 from collections import defaultdict
-from dataclasses import dataclass, field
+from collections.abc import Mapping
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 WEEKDAY_COLUMNS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
@@ -127,15 +128,36 @@ def stop_name(name: str) -> str:
     )
 
 
-def read_feed(path: Path, *, stop_id_prefix: str | None = None) -> GtfsFeed:
+def rename_stops(feed: GtfsFeed, names: Mapping[str, str]) -> None:
+    """Pone a las paradas del fichero el nombre que ya tienen en Oniel, por su código.
+
+    Lo usa un fichero que trae los códigos de estación de Adif con otros nombres (una compilación
+    no oficial): así la misma estación no se llama de dos maneras según de quién sea el tren.
+    """
+    for stop_id, name in names.items():
+        stop = feed.stops.get(stop_id)
+        if stop is not None:
+            feed.stops[stop_id] = replace(stop, name=name)
+
+
+def read_feed(
+    path: Path,
+    *,
+    stop_id_prefix: str | None = None,
+    stop_id_aliases: Mapping[str, str] | None = None,
+) -> GtfsFeed:
     """Lee un GTFS y deja un viaje por número de tren y día (``oniel.gtfs.variants``).
 
-    Con ``stop_id_prefix`` se quita ese prefijo de los ``stop_id`` que lo llevan.
+    Con ``stop_id_prefix`` se quita ese prefijo de los ``stop_id`` que lo llevan, y con
+    ``stop_id_aliases`` se cambian por el código de Adif los que el fichero trae con otro.
     """
     from oniel.gtfs.variants import merge_same_day_trips
 
+    aliases = stop_id_aliases or {}
+
     def stop_id(value: str) -> str:
-        return value.removeprefix(stop_id_prefix) if stop_id_prefix else value
+        plain = value.removeprefix(stop_id_prefix) if stop_id_prefix else value
+        return aliases.get(plain, plain)
 
     with zipfile.ZipFile(path) as zf:
         agency = _rows(zf, "agency.txt")

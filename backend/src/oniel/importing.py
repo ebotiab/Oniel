@@ -174,6 +174,8 @@ async def _import_all(
             data_dir=data_dir,
             product=feed.product,
             stop_id_prefix=feed.stop_id_prefix,
+            stop_id_aliases=feed.stop_id_aliases,
+            names_stops=feed.names_stops,
         )
         for feed in feeds
     ]

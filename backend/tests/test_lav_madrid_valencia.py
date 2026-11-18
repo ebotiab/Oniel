@@ -208,7 +208,7 @@ def test_sources_of_the_line_are_registered(valencia: BuiltNetwork) -> None:
         assert section.source_id in sources and section.checked_on is not None
     operators = {o.id: o for o in valencia.spec.operators}
     assert all(o.source_id in sources for o in operators.values())
-    assert operators["iryo"].timetable == "no_publicado"
+    assert operators["iryo"].timetable == "no_oficial"
     assert operators["renfe"].timetable == operators["ouigo"].timetable == "cargado"
     assert "Valencia" in (sources["iryo-web"].coverage or "")
 

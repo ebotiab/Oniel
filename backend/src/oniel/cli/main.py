@@ -193,6 +193,8 @@ def import_gtfs_cmd(
                     data_dir=settings.data_dir,
                     product=f.product,
                     stop_id_prefix=f.stop_id_prefix,
+                    stop_id_aliases=f.stop_id_aliases,
+                    names_stops=f.names_stops,
                 )
                 for f in _declared_feeds()
             ]
@@ -261,10 +263,13 @@ def validate_cmd(
     # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
     # parada puede ser salida hacia otra línea y medir la distancia por ella.
     context = list(dict.fromkeys([*SPECS_DEFAULT, *_specs(spec)]))
-    feeds: list[tuple[Path, str | None]] = (
-        [(feed, None)]
+    feeds: list[tuple[Path, str | None, dict[str, str]]] = (
+        [(feed, None, {})]
         if feed
-        else [(settings.data_dir / f.file, f.stop_id_prefix) for f in _declared_feeds(sources)]
+        else [
+            (settings.data_dir / f.file, f.stop_id_prefix, f.stop_id_aliases)
+            for f in _declared_feeds(sources)
+        ]
     )
     # Los atributos de tramo van primero: si una línea no se puede construir por ellos, se dice
     # como problema y no se sigue con los horarios.
@@ -279,9 +284,10 @@ def validate_cmd(
             settings.data_dir,
             [p for p in context if p != path],
             stop_id_prefix=prefix,
+            stop_id_aliases=aliases,
             require_rules=False,
         )
-        for feed_path, prefix in feeds
+        for feed_path, prefix, aliases in feeds
         for path in _specs(spec)
     ]
     # Cada regla de recorrido tiene que encajar con algún viaje de alguno de los ficheros.

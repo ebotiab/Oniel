@@ -163,7 +163,7 @@ Está automatizado en `frontend/e2e/recorridos.spec.ts` (el criterio, los cortes
 
 Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tramo cortado, esos trenes tendrían otro camino. Lo calcula el servidor (`backend/src/oniel/analysis/criticality.py`) con dos cosas que ya existían: los pasos de cada tren por cada tramo y el grafo de rutas. No añade ningún dato externo.
 
-**«Sin alternativa» significa siempre «en las líneas que Oniel tiene cargadas».** Hacia Sevilla Oniel tiene una sola línea, así que sus dos tramos desde la bifurcación de Málaga salen sin alternativa aunque en la red real haya otras vías. El resultado lleva ese aviso como texto (`scope_note`), la lista de líneas en las que se ha buscado (`line_ids`) y los operadores cuyos trenes no están contados (`missing_operator_ids`; hoy, Iryo), y el visor lo dice junto a cada cifra.
+**«Sin alternativa» significa siempre «en las líneas que Oniel tiene cargadas».** Hacia Sevilla Oniel tiene una sola línea, así que sus dos tramos desde la bifurcación de Málaga salen sin alternativa aunque en la red real haya otras vías. El resultado lleva ese aviso como texto (`scope_note`), la lista de líneas en las que se ha buscado (`line_ids`) y los operadores cuyos trenes no están contados (`missing_operator_ids`; hoy ninguno, desde que los de Iryo se cargan de una compilación no oficial), y el visor lo dice junto a cada cifra.
 
 **Cómo se calcula.**
 
@@ -245,7 +245,7 @@ Desde que está cargada la línea de alta velocidad de Albacete a Alicante, Alba
 1. Nada fuera de las líneas cargadas. Un tramo «sin alternativa» puede tenerla en la red real, y uno «con alternativa» puede tener otra mejor que Oniel no conoce.
 2. Si el tren puede tomar el otro camino. El grafo no distingue anchos de vía ni electrificación, y no mira las paradas que el tren dejaría de hacer.
 3. La capacidad de la vía. No se modela cuántos trenes caben por el otro camino, ni los cruces en vía única; que 81 trenes «tengan otro camino» por una línea de vía única no quiere decir que quepan.
-4. Los trenes que faltan: los de Iryo, Cercanías y mercancías. La carga real de cada tramo es mayor.
+4. Los trenes que faltan: Cercanías y mercancías. La carga real de cada tramo es mayor. Los de Iryo están, pero salen de una compilación no oficial de sus horarios (`docs/datos.md`, «Operadores y sus horarios»): pueden no coincidir con los que el operador tiene previstos.
 5. Los viajeros. Cuenta trenes, no plazas ni personas, y un tren que recorre varios tramos cuenta en cada uno.
 6. El viaje fuera de las líneas cargadas. Los extremos de un grupo son por donde el tren entra y sale de ellas, no su origen y su destino.
 7. Los enlaces sin cargar entre dos líneas cargadas. Un tren que pasa de una línea a otra por un enlace a trazos (el de El Chaparral a Arroyo de la Herrera, junto a Plasencia; la vía de Aljucén a La Garrovilla, junto a Mérida) sale de las líneas cargadas en un nodo y vuelve a entrar en otro: su recorrido se parte ahí. El de un tren de Madrid a Badajoz que no para en Plasencia acaba en la bifurcación El Chaparral, y el resto de su viaje forma otro grupo, desde Arroyo de la Herrera.
@@ -335,7 +335,7 @@ Resultado completo de la API para ese caso (8 de noviembre de 2026, antes de car
 ## Limitaciones conocidas
 
 - Los horarios son los planificados por Renfe y por Ouigo. Las interrupciones registradas en `anotaciones.json` (hoy, la de la alta velocidad desde el 28 de octubre de 2026 y la de la línea convencional por obras desde el 6 de septiembre de 2026) se señalan con una nota, pero sus trenes siguen en las listas y en los recuentos; las alteraciones que Oniel no tiene registradas no se señalan.
-- Hay servicios de Renfe y de Ouigo. Faltan los de Iryo, que no publica sus horarios en un formato abierto, además de Cercanías y mercancías: un cierre en la alta velocidad afecta a más trenes de los que la simulación enumera. Los trenes de Ouigo no paran entre Madrid y Córdoba, de modo que su paso por cada tramo es siempre estimado.
+- Hay servicios de Renfe, de Ouigo y de Iryo. Los de Iryo salen de una compilación no oficial, porque el operador no publica sus horarios en un formato abierto: la simulación los enumera como los demás y el visor dice de dónde vienen. Faltan Cercanías y mercancías: un cierre afecta a más trenes de los que la simulación enumera. Los trenes de Ouigo no paran entre Madrid y Córdoba, de modo que su paso por cada tramo es siempre estimado.
 - El fichero de Ouigo vale hasta el 12 de diciembre de 2026: para un día posterior, la simulación solo cuenta los trenes de Renfe.
 - El cierre se supone de todas las vías del tramo, sin desvíos ni reordenación; las alternativas solo se señalan.
 - Un tren pasa una vez por cada tramo. El que entra en Mérida y vuelve a salir recorre dos veces la vía de Aljucén a Mérida, y Oniel le cuenta un solo paso por ese tramo: un cierre en una franja puede coincidir con una de las dos pasadas y no con la otra.

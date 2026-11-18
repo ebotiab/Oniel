@@ -121,8 +121,14 @@ class OperatorSpec(BaseModel):
     role: Literal["operador", "administrador_infraestructura"]
     source_id: str | None = None
     #: Solo para operadores de trenes que circulan por la línea: ``no_publicado`` si no publican
-    #: sus horarios en un formato abierto y, por tanto, sus trenes no se cargan ni se cuentan.
-    timetable: Literal["cargado", "no_publicado"] = "cargado"
+    #: sus horarios en un formato abierto y, por tanto, sus trenes no se cargan ni se cuentan;
+    #: ``no_oficial`` si sus trenes se cargan de una compilación que no publica el operador.
+    timetable: Literal["cargado", "no_publicado", "no_oficial"] = "cargado"
+
+    @property
+    def has_timetable(self) -> bool:
+        """Si sus trenes están cargados, sea de una fuente oficial o no."""
+        return self.timetable != "no_publicado"
 
 
 class GeometryPart(BaseModel):
@@ -456,6 +462,14 @@ class FeedSpec(BaseModel):
     #: Ouigo usa el código UIC: «0071» y el código de Adif). Se quita al leerlo, de modo que sus
     #: paradas son las mismas que las de los demás ficheros y valen las mismas asignaciones.
     stop_id_prefix: str | None = None
+    #: Códigos de parada que el fichero trae distintos del de Adif, con el de Adif que les
+    #: corresponde (la compilación de Iryo escribe 37700 para Puertollano, que es 37300). Se
+    #: cambian al leerlo, de modo que valen las asignaciones de todas las líneas.
+    stop_id_aliases: dict[str, str] = Field(default_factory=dict)
+    #: ``false`` si el fichero usa los códigos de estación de Adif pero con sus propios nombres y
+    #: coordenadas (una compilación ajena al operador): sus trenes se cargan, y el nombre y la
+    #: posición de las paradas asignadas los siguen poniendo los ficheros oficiales.
+    names_stops: bool = True
 
 
 #: Tipos de geometría GeoJSON que admite una anotación con geometría propia.

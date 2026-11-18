@@ -185,3 +185,32 @@ def test_coverage_notice_lists_the_loaded_lines() -> None:
         "carga la línea de alta velocidad Madrid – Sevilla y la línea convencional Madrid – Córdoba"
         in two
     )
+
+
+def test_coverage_notice_says_which_timetables_are_unofficial() -> None:
+    """Si los trenes de un operador salen de una compilación no oficial, el aviso lo dice."""
+    from oniel.domain.schemas import LineSummary, Operator
+
+    line = LineSummary(
+        id="a",
+        name="Línea de alta velocidad Madrid – Sevilla",
+        mode="ferrocarril",
+        length_km=1.0,
+        status="disponible",
+        node_count=0,
+        segment_count=0,
+    )
+    operators = [
+        Operator(id="renfe", name="Renfe", role="operador", timetable="cargado"),
+        Operator(id="iryo", name="Iryo", role="operador", timetable="no_oficial"),
+    ]
+    notice = coverage_notice([line], operators)
+    assert "con los servicios de Renfe y Iryo que las recorren." in notice
+    assert (
+        "Los horarios de Iryo salen de una compilación no oficial, que no publica el operador;"
+        " los demás son los publicados por Renfe." in notice
+    )
+    assert "No están los trenes" not in notice
+    # sin operadores no oficiales el aviso no cambia
+    official = coverage_notice([line], operators[:1])
+    assert "Los horarios son los publicados por Renfe y no reflejan interrupciones" in official

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 
 import { conAlternativa, costeCorto, grupoPrincipal, rangoTrenes, sinAlternativa, sinAlternativaPorLinea, trenes } from '../app/alternativas'
 import { abreAparte } from '../app/navegacion'
-import { formatDate, lineKind, lineShortLabel, listaEs, routePath } from '../app/state'
+import { formatDate, lineKind, lineShortLabel, listaEs, notaNoOficial, routePath } from '../app/state'
 import { fetchAlternatives } from '../data/api'
 import type { AlternativesOut, CoverageOut, NetworkOut, SegmentAlternatives } from '../data/types'
 import { Muestra } from './Legend'
@@ -44,6 +44,7 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
   const sin = useMemo(() => (datos ? sinAlternativa(datos.segments) : []), [datos])
   const con = useMemo(() => (datos ? conAlternativa(datos.segments) : []), [datos])
   const lineas = useMemo(() => sinAlternativaPorLinea(sin, network), [sin, network])
+  const noOficiales = (coverage?.operators ?? []).filter((o) => o.timetable === 'no_oficial').map((o) => o.name)
   const faltan = datos && coverage ? coverage.operators.filter((o) => datos.missing_operator_ids.includes(o.id)).map((o) => o.name) : []
 
   // El mapa: todos los tramos sin otro camino y, en azul, el tramo elegido o la línea sobre la que se está.
@@ -167,6 +168,11 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
           {faltan.length > 0 && (
             <p className="suave destinos-nota" data-testid="sin-camino-faltan">
               Faltan los trenes de {listaEs(faltan)}, que no publica{faltan.length > 1 ? 'n' : ''} sus horarios en un formato abierto.
+            </p>
+          )}
+          {noOficiales.length > 0 && (
+            <p className="suave destinos-nota" data-testid="sin-camino-no-oficiales">
+              {notaNoOficial(noOficiales)}
             </p>
           )}
           {datos.date && <p className="suave destinos-nota">Trenes del {formatDate(datos.date)}, un tramo cortado cada vez y sin contar las interrupciones vigentes.</p>}

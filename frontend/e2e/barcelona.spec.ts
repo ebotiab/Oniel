@@ -37,25 +37,24 @@ test.describe('La línea de alta velocidad Madrid – Zaragoza – Barcelona', (
     }
   })
 
-  test('la nota del esquema dice que faltan los trenes de Iryo', async ({ page }, testInfo) => {
+  test('la nota del esquema dice que los trenes de Iryo salen de una compilación no oficial', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === 'movil', 'el esquema compacto del móvil no lleva la nota')
     await page.goto('/linea/lav-madrid-barcelona')
-    await expect(page.getByTestId('nota-esquema')).toContainText('según los horarios de Ouigo España y Renfe Viajeros; no incluyen los de Iryo.')
+    await expect(page.getByTestId('nota-esquema')).toContainText('según los horarios de Iryo, Ouigo España y Renfe Viajeros; los de Iryo, de una compilación no oficial.')
   })
 
-  test('un tramo dice sus trenes por operador, los que faltan y su señalización', async ({ page }) => {
+  test('un tramo dice sus trenes por operador, los de fuente no oficial y su señalización', async ({ page }) => {
     await page.goto('/tramo/lav-madrid-barcelona:calatayud:cambiador-plasencia-de-jalon')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     if (await asa.isVisible()) await asa.click() // en móvil, la hoja empieza plegada
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 80 · Ouigo España 11')
-    await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveText(
-      'No están los trenes de Iryo, que también opera en esta línea: no publica sus horarios en un formato abierto.',
-    )
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 80 · Iryo 30 · Ouigo España 11')
+    await expect(page.getByTestId('tramo-operadores-no-oficiales')).toHaveText('Los trenes de Iryo salen de una compilación no oficial de sus horarios, que no publica el operador.')
+    await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveCount(0)
     await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(11)
-    await expect(page.getByTestId('trenes-iryo')).toHaveCount(0)
+    await expect(page.getByTestId('trenes-iryo').locator('li')).toHaveCount(30)
     // la señalización va bajo «Más detalle»: está en la ficha aunque plegada
     await expect(ficha.getByText('ERTMS de nivel 1 y ASFA')).toHaveCount(1)
     await expect(ficha.getByText('De control automático')).toHaveCount(1)
