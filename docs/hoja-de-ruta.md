@@ -1,6 +1,6 @@
 # Hoja de ruta de Oniel
 
-Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 13 de noviembre de 2026.
+Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 18 de noviembre de 2026.
 
 Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
@@ -35,7 +35,9 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», no hay ninguna tarea abierta.
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay una tarea abierta, que espera a algo de fuera:
+
+- **Sustituir mypy y pyright por ty** ([#243](https://github.com/ebotiab/Oniel/issues/243), `infraestructura`). No se empieza hasta que ty, el comprobador de tipos de Astral, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.0.106, todavía en beta: sus diagnósticos cambian de una versión a otra y no tiene modo estricto (de nueve errores de prueba dio cuatro, y mypy los nueve). Las medidas y lo que hay que repetir antes de migrar están en la incidencia.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 

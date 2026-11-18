@@ -55,6 +55,9 @@ export default defineConfig({
     {
       command:
         `npx vite build --outDir ${dirTelemetria} --emptyOutDir --logLevel warn && ` +
+        // En producción el script que cuenta las visitas lo sirve Vercel; aquí ocupa su sitio un
+        // fichero vacío, para que el visor lo encuentre y no cuente nada (e2e/visitas.spec.ts).
+        `mkdir -p ${dirTelemetria}/_vercel/insights && echo "" > ${dirTelemetria}/_vercel/insights/script.js && ` +
         `npx vite preview --outDir ${dirTelemetria} --port ${portTelemetria} --strictPort --host 127.0.0.1`,
       url: URL_TELEMETRIA,
       reuseExistingServer: false,
