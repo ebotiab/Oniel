@@ -1,9 +1,10 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 
 import { ApiError, simulateClosure } from '../data/api'
 import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, ClosureStatus, InterruptionOut, RouteLeg, SegmentOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/annotations'
+import type { Franja } from '../app/meta'
 import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
 import { STATUS } from './labels'
@@ -18,6 +19,10 @@ interface Props {
   interruptions: InterruptionOut[]
   /** Escenario abierto desde la URL (cadena corta): sus modificaciones cuentan al buscar la alternativa. */
   scenario?: string
+  /** El día y la franja que trae la dirección: rellenan el formulario y, al llegar por un enlace, se calculan solos. */
+  franja?: Franja | null
+  /** El día o la franja han cambiado: van a la dirección, para que el enlace a la vista los lleve. */
+  onFranja: (f: Franja) => void
   result: ClosureResult | null
   onResult: (r: ClosureResult | null) => void
   onBack: () => void
@@ -31,20 +36,24 @@ const legName = (leg: RouteLeg) => (leg.line_id ? lowerFirst(leg.line_name) : 'u
 
 const ORDER: ClosureStatus[] = ['afectado_publicado', 'afectado_estimado', 'indeterminado', 'no_afectado']
 
-export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, interruptions, scenario, result, onResult, onBack }: Props) {
-  const [date, setDate] = useState(() => result?.request.date ?? referenceDate ?? todayIso())
-  const [start, setStart] = useState(result?.request.start.slice(0, 5) ?? '08:00')
-  const [end, setEnd] = useState(result?.request.end.slice(0, 5) ?? '09:00')
+export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, interruptions, scenario, franja, onFranja, result, onResult, onBack }: Props) {
+  const [date, setDateState] = useState(() => result?.request.date ?? franja?.date ?? referenceDate ?? todayIso())
+  const [start, setStartState] = useState(result?.request.start.slice(0, 5) ?? franja?.start ?? '08:00')
+  const [end, setEndState] = useState(result?.request.end.slice(0, 5) ?? franja?.end ?? '09:00')
+  // Cada cambio del formulario va a la dirección: el enlace a la vista lleva el día y la franja que se ven.
+  const setDate = (v: string) => (setDateState(v), onFranja({ date: v, start, end }))
+  const setStart = (v: string) => (setStartState(v), onFranja({ date, start: v, end }))
+  const setEnd = (v: string) => (setEndState(v), onFranja({ date, start, end: v }))
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [openMethod, setOpenMethod] = useState(false)
   const [open, setOpen] = useState<Record<string, boolean>>({ afectado_publicado: true, afectado_estimado: true, indeterminado: true })
   const status = useApiStatus()
 
-  async function submit(e: FormEvent) {
-    e.preventDefault()
+  async function calcular() {
     setLoading(true)
     setError(null)
+    onFranja({ date, start, end })
     try {
       onResult(await simulateClosure({ segment_id: segment.id, date, start, end, ...(scenario ? { scenario } : {}) }))
     } catch (err) {
@@ -54,6 +63,22 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
       setLoading(false)
     }
   }
+
+  function submit(e: FormEvent) {
+    e.preventDefault()
+    void calcular()
+  }
+
+  // Quien llega por un enlace con el día y la franja ve el resultado sin tocar nada; quien vuelve a una
+  // simulación ya calculada recupera su franja en la dirección.
+  const alLlegar = useRef<{ franja: Props['franja']; result: Props['result']; calcular: () => Promise<void>; onFranja: Props['onFranja'] } | null>({ franja, result, calcular, onFranja })
+  useEffect(() => {
+    if (!alLlegar.current) return
+    const { franja, result, calcular, onFranja } = alLlegar.current
+    alLlegar.current = null
+    if (result) onFranja({ date: result.request.date, start: result.request.start.slice(0, 5), end: result.request.end.slice(0, 5) })
+    else if (franja) void calcular()
+  }, [])
 
   const affected = result ? result.counts.afectado_publicado + result.counts.afectado_estimado : 0
   const omitted = result?.omitted_alternatives ?? 0

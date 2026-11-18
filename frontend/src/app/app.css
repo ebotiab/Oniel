@@ -2376,3 +2376,165 @@
 .sin-camino-detalle p + p {
   margin-top: 4px;
 }
+
+/* Vía supuesta en el comparador. Lo que no existe va entre trazos, en tinta: nunca en un color de señal. */
+.via-supuesta {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1.5px dashed var(--tinta-2);
+  scroll-margin-top: 8px;
+}
+
+.via-titulo {
+  margin: 0 0 6px;
+  font-size: var(--t-14);
+  font-weight: 620;
+}
+
+.via-titulo.hoy {
+  margin-top: 16px;
+}
+
+.via-campos {
+  display: grid;
+  gap: 6px;
+}
+
+.via-cifras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 4px;
+}
+
+.via-cifra {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: var(--t-14);
+}
+
+.via-cifra input {
+  width: 68px;
+  padding: 4px 6px;
+  border: 1px solid var(--regla);
+  background: var(--papel);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--tinta);
+}
+
+.via-cifra input:focus-visible {
+  outline: 2px solid var(--senal-azul);
+  outline-offset: 1px;
+}
+
+.via-supuesta .suave,
+.via-supuesta .texto {
+  margin-top: 8px;
+}
+
+.via-diferencia {
+  font-weight: 560;
+}
+
+.etiqueta-supuesto {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 6px;
+  border: 1px dashed var(--tinta-2);
+  font-size: var(--t-12);
+  color: var(--tinta-2);
+}
+
+.recorrido.supuesto {
+  border-top-style: dashed;
+  border-top-color: var(--tinta-2);
+}
+
+/* En la barra, el trecho por la vía supuesta va a trazos, como la recta del mapa. */
+.recorrido-barra .trecho-supuesto {
+  background: repeating-linear-gradient(90deg, var(--tinta) 0 4px, transparent 4px 7px);
+}
+
+/* En la leyenda, la misma recta de trazos cortos del mapa. */
+.muestra.via-supuesta-muestra {
+  height: 2px;
+  border-top: 0;
+  background: repeating-linear-gradient(90deg, var(--tinta) 0 4px, transparent 4px 7px);
+}
+
+/* Pie de vista: de qué día son los trenes y el enlace a la vista exacta. Discreto, sin color: no es una señal. */
+.pie-vista {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 1px solid var(--regla);
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--tinta-2);
+}
+
+.pie-vista p {
+  margin: 0;
+  max-width: 58ch;
+}
+
+.pie-vista-accion {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.pie-vista p.pie-vista-accion {
+  margin-top: 6px;
+}
+
+.pie-vista-manual {
+  display: block;
+  margin-top: 8px;
+}
+
+.pie-vista-manual input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--regla);
+  border-radius: 3px;
+  background: var(--papel-2);
+  color: var(--tinta);
+  font: inherit;
+  font-size: var(--t-12);
+}
+
+/* «Cómo citar Oniel», al final de «Cobertura y fuentes». */
+.cobertura-apartado h3 {
+  margin: 26px 0 0;
+  font-size: var(--t-17);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.cobertura-cita {
+  max-width: 62ch;
+  margin: 10px 0 0;
+  padding-left: 14px;
+  border-left: 1px solid var(--regla);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.cobertura-limites {
+  max-width: 62ch;
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.cobertura-limites li + li {
+  margin-top: 6px;
+}

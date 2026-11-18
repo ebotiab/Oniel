@@ -14,6 +14,7 @@ export const SRC = {
   nodes: 'oniel-nodes',
   connections: 'oniel-connections',
   annotations: 'oniel-annotations',
+  supuestas: 'oniel-supuestas',
 } as const
 
 export const LAYER = {
@@ -31,6 +32,9 @@ export const LAYER = {
   segmentsTicksSingle: 'oniel-segments-ticks-unica',
   segmentsFillet: 'oniel-segments-filete',
   segmentsHit: 'oniel-segments-hit',
+  supuestasHalo: 'oniel-supuestas-halo',
+  supuestas: 'oniel-supuestas',
+  supuestasLabel: 'oniel-supuestas-rotulo',
   nodesMinor: 'oniel-nodes-minor',
   nodesStations: 'oniel-nodes-stations',
   nodeLabels: 'oniel-node-labels',
@@ -284,6 +288,23 @@ export function onielLayers(): LayerSpecification[] {
       type: 'line',
       source: SRC.segments,
       paint: { 'line-color': TINTA, 'line-width': 22, 'line-opacity': 0 },
+    },
+    // Vías supuestas del comparador: una recta de trazos entre dos estaciones, con su rótulo. No es un
+    // trazado ni un proyecto, y por eso no se parece a ninguno: es recta, y en tinta (azul si es del
+    // recorrido elegido).
+    { id: LAYER.supuestasHalo, type: 'line', source: SRC.supuestas, paint: { 'line-color': PAPEL, 'line-width': 7 } },
+    {
+      id: LAYER.supuestas,
+      type: 'line',
+      source: SRC.supuestas,
+      paint: { 'line-color': ['case', ['get', 'elegido'], AZUL, TINTA], 'line-width': 2.6, 'line-dasharray': [1.2, 1.6] },
+    },
+    {
+      id: LAYER.supuestasLabel,
+      type: 'symbol',
+      source: SRC.supuestas,
+      layout: { 'symbol-placement': 'line-center', 'text-field': 'vía supuesta', 'text-font': ['Noto Sans Regular'], 'text-size': 12.5, 'text-offset': [0, -0.9], 'text-allow-overlap': true },
+      paint: { 'text-color': ['case', ['get', 'elegido'], AZUL, TINTA], 'text-halo-color': PAPEL, 'text-halo-width': 2 },
     },
     {
       id: LAYER.nodesMinor,
