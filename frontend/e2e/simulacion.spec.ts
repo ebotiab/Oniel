@@ -34,7 +34,8 @@ test.describe('Simular un cierre', () => {
     // la explicación del método está disponible
     await page.getByRole('button', { name: 'Cómo se calcula' }).click()
     await expect(page.getByText(/margen del 15 %/)).toBeVisible()
-    await expect(page).toHaveURL(/\/cierre$/)
+    // la dirección lleva el día y la franja calculados: el enlace reproduce la simulación
+    await expect(page).toHaveURL(/\/cierre\/2026-11-20\/08:00-09:00$/)
   })
 
   test('un cierre en Despeñaperros señala la alta velocidad como alternativa', async ({ page }) => {

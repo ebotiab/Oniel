@@ -6,7 +6,7 @@
 
 import type { InterruptionOut, LineSummary, NodeCall, Route, SegmentOut } from '../data/types.ts'
 import { findRoutes, type Graph } from '../routing/graph.ts'
-import { ScenarioError, scenarioFromCode, withClosures, type Scenario } from '../routing/scenario.ts'
+import { ScenarioError, scenarioFromCode, scenarioToCode, withClosures, type Scenario } from '../routing/scenario.ts'
 import { formatKm, lineKind, parentOf, shortStop } from './state.ts'
 
 /** Recorridos que se enseñan, del más corto al más largo. El grafo ya descarta los desproporcionados. */
@@ -46,8 +46,29 @@ export interface Comparacion {
   sinPaso: boolean
   /** El escenario de la URL no se entiende o no encaja con la red: se ha ignorado. */
   escenarioIlegible: boolean
-  /** Modificaciones del escenario, en palabras, para decir con qué red se compara. */
+  /** Cierres y velocidades del escenario, en palabras, para decir con qué red se compara. Las vías supuestas van aparte. */
   escenario: string[]
+  /**
+   * Los recorridos que usarían una vía supuesta del escenario, del más corto al más largo. Cuando el
+   * escenario trae alguna, `recorridos` son los de la red tal como está: lo que existe y lo que no
+   * van en listas distintas.
+   */
+  supuestos: Recorrido[]
+}
+
+/** Recorridos por una vía supuesta que se enseñan. */
+export const SUPUESTOS_A_LA_VISTA = 2
+
+/** Un tramo del recorrido que es una vía supuesta del escenario y no un tramo de la red. */
+export function esViaSupuesta(segmentId: string): boolean {
+  return segmentId.startsWith('enlace:')
+}
+
+/** Distancia en línea recta entre dos puntos, en kilómetros: lo mínimo que mediría una vía entre ellos. */
+export function lineaRecta(a: { lon: number; lat: number }, b: { lon: number; lat: number }): number {
+  const rad = (g: number) => (g * Math.PI) / 180
+  const h = Math.sin(rad(b.lat - a.lat) / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(rad(b.lon - a.lon) / 2) ** 2
+  return 2 * 6371.0088 * Math.asin(Math.sqrt(h))
 }
 
 const NUMERO = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho']
@@ -80,11 +101,20 @@ function leerEscenario(code: string | undefined): { scenario: Scenario; ilegible
   }
 }
 
+/** «Recorre tres líneas», o «Recorre dos líneas y la vía supuesta»: la vía que no existe no cuenta como línea. */
+function lineasDe(route: Route): string | null {
+  const reales = route.legs.filter((leg) => leg.line_id).length
+  const supuesta = reales < route.legs.length
+  if (route.legs.length < 2) return null
+  const n = `${NUMERO[reales] ?? reales} ${reales === 1 ? 'línea' : 'líneas'}`
+  return supuesta ? `Recorre ${n} y la vía supuesta` : `Recorre ${n}`
+}
+
 /** El nombre de un recorrido: por dónde pasa de una línea a otra o, si es una sola, qué línea es. */
 function titular(route: Route, lines: Map<string, LineSummary>): string {
   if (route.legs.length > 1) return `Por ${enumerar(route.legs.slice(0, -1).map((leg) => shortStop(leg.to_name)))}`
   const line = route.legs[0]?.line_id ? lines.get(route.legs[0].line_id) : undefined
-  if (!line) return 'Por un enlace hipotético'
+  if (!line) return 'Por la vía supuesta'
   return lineKind(line) === 'alta velocidad' ? 'Por la alta velocidad' : 'Por la línea convencional'
 }
 
@@ -187,7 +217,7 @@ export function compararRecorridos(
     key: route.segment_ids.join('|'),
     route,
     titulo: titular(route, lines),
-    lineas: route.legs.length > 1 ? `Recorre ${NUMERO[route.legs.length] ?? route.legs.length} líneas` : null,
+    lineas: lineasDe(route),
     baipases: baipasesDe(route, graph, lines, segments),
     cortes: cortesDe(route),
     alternativa: false,
@@ -230,19 +260,79 @@ export function compararRecorridos(
     const line = r.route.legs.length === 1 && r.route.legs[0]?.line_id ? lines.get(r.route.legs[0].line_id) : undefined
     if (line && recorridos.some((o) => o !== r && o.titulo === r.titulo)) r.titulo = `Por la ${line.name.replace(/^Línea/, 'línea')}`
   }
-  const nombre = (id: string) => graph.nodes.get(id)?.name ?? id
   const escenario = [
     ...scenario.closures.map((id) => {
       const s = segments.get(id)
       return `cierre de ${s ? `${s.from_name} – ${s.to_name}` : id}`
     }),
-    ...scenario.links.map((k) => `enlace hipotético entre ${nombre(k.from_node_id)} y ${nombre(k.to_node_id)}`),
     ...scenario.speeds.map((v) => {
       const s = segments.get(v.segment_id)
       return `${s ? `${s.from_name} – ${s.to_name}` : v.segment_id} a ${v.speed_kmh} km/h`
     }),
   ]
-  return { recorridos, ocultos: Math.max(0, found.length - RECORRIDOS_A_LA_VISTA), sinPaso, escenarioIlegible: ilegible, escenario }
+  // Con una vía supuesta, lo que existe se calcula aparte, sin ella: así no desplaza de la lista a
+  // ningún recorrido de hoy, y los que la usarían se enseñan junto a ellos, no en su lugar.
+  if (scenario.links.length) {
+    const hoy = compararRecorridos(graph, network, from, to, interrupted, scenarioToCode({ ...scenario, links: [] }))
+    const supuestos = found.filter((r) => r.segment_ids.some(esViaSupuesta)).slice(0, SUPUESTOS_A_LA_VISTA).map(presentar)
+    return { ...hoy, escenarioIlegible: ilegible, escenario, supuestos }
+  }
+  return { recorridos, ocultos: Math.max(0, found.length - RECORRIDOS_A_LA_VISTA), sinPaso, escenarioIlegible: ilegible, escenario, supuestos: [] }
+}
+
+/**
+ * Velocidad habitual de las líneas cargadas de cada tipo: la mediana de sus tramos, pesada por
+ * kilómetros y redondeada a la decena. Es lo que el comparador propone para una vía supuesta.
+ */
+export function velocidadesHabituales(network: { lines: LineSummary[]; segments: SegmentOut[] }): { convencional: number; altaVelocidad: number } {
+  const lines = new Map(network.lines.map((l) => [l.id, l]))
+  const mediana = (tipo: ReturnType<typeof lineKind>, sinDato: number): number => {
+    const tramos = network.segments
+      .filter((s) => {
+        const line = lines.get(s.line_id)
+        return line && lineKind(line) === tipo && (s.typical_speed_kmh ?? s.max_speed_kmh)
+      })
+      .map((s) => [(s.typical_speed_kmh ?? s.max_speed_kmh)!, s.length_km] as const)
+      .sort((a, b) => a[0] - b[0])
+    const mitad = tramos.reduce((km, t) => km + t[1], 0) / 2
+    let acumulado = 0
+    for (const [kmh, km] of tramos) {
+      acumulado += km
+      if (acumulado >= mitad) return Math.round(kmh / 10) * 10
+    }
+    return sinDato
+  }
+  return { convencional: mediana('convencional', 160), altaVelocidad: mediana('alta velocidad', 300) }
+}
+
+/**
+ * Lo que cambiaría con la vía supuesta respecto a hoy, en una o dos frases: el tiempo del recorrido
+ * más rápido que la usa frente al más rápido de hoy, y los kilómetros del más corto frente al más
+ * corto de hoy. Nulo si ningún recorrido la usa.
+ */
+export function diferenciaConSupuesto(hoy: Recorrido[], supuestos: Recorrido[]): string | null {
+  const porTiempo = (lista: Recorrido[]) => lista.filter((r) => r.route.time_min !== null).sort((a, b) => a.route.time_min! - b.route.time_min!)[0]
+  const porKm = (lista: Recorrido[]) => [...lista].sort((a, b) => a.route.length_km - b.route.length_km)[0]
+  const corto = porKm(supuestos)
+  if (!corto) return null
+  const rapido = porTiempo(supuestos)
+  const cortoHoy = porKm(hoy)
+  const rapidoHoy = porTiempo(hoy)
+  if (!cortoHoy) {
+    const tiempo = rapido ? `, y el más rápido tardaría ${formatDuracion(rapido.route.time_min!)} sin paradas` : ''
+    return `Hoy no hay ningún recorrido entre estas dos estaciones con las líneas cargadas. Con esta vía, el más corto mediría ${formatKm(corto.route.length_km)} km${tiempo}.`
+  }
+  const frases: string[] = []
+  if (rapido && rapidoHoy) {
+    const d = rapido.route.time_min! - rapidoHoy.route.time_min!
+    const comparado = d === 0 ? 'lo mismo que' : `${formatDuracion(Math.abs(d))} ${d < 0 ? 'menos' : 'más'} que`
+    const porDonde = rapidoHoy.titulo.replace(/^Por /, 'por ')
+    frases.push(`El más rápido con esta vía tardaría ${formatDuracion(rapido.route.time_min!)} sin paradas: ${comparado} el más rápido de hoy (${formatDuracion(rapidoHoy.route.time_min!)}, ${porDonde}).`)
+  }
+  const k = corto.route.length_km - cortoHoy.route.length_km
+  const comparado = Math.abs(k) < 0.05 ? 'lo mismo que' : `${formatKm(Math.abs(k))} km ${k < 0 ? 'menos' : 'más'} que`
+  frases.push(`El más corto mediría ${formatKm(corto.route.length_km)} km: ${comparado} el más corto de hoy.`)
+  return frases.join(' ')
 }
 
 /** Un tren que para en las dos estaciones, en ese orden. */

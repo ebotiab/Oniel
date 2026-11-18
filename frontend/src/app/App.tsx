@@ -6,6 +6,7 @@ import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
 import type { RecorridosEnMapa } from '../map/MapView'
+import { linkId, scenarioFromCode } from '../routing/scenario'
 import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { AnnotationDetail } from '../panel/AnnotationDetail'
@@ -15,6 +16,8 @@ import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
 import { NoAlternativePanel } from '../panel/NoAlternativePanel'
+import { PieVista } from '../panel/PieVista'
+import { tituloDe } from '../panel/glosario'
 import { Navegacion, type Seccion } from '../panel/Navegacion'
 import { NetworkOverview } from '../panel/NetworkOverview'
 import { NodeDetail } from '../panel/NodeDetail'
@@ -23,6 +26,22 @@ import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
 import { Marca } from './Marca'
+import { aplicarMeta } from './aplicarMeta'
+import {
+  META_COBERTURA,
+  META_GLOSARIO,
+  META_RED,
+  META_SIN_OTRO_CAMINO,
+  metaEntradaGlosario,
+  metaLinea,
+  metaNodo,
+  metaProyecto,
+  metaRecorridos,
+  metaSimulacion,
+  metaTramo,
+  type Franja,
+  type Meta,
+} from './meta'
 import { navegar } from './navegacion'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
@@ -42,6 +61,20 @@ function useMedia(query: string): boolean {
     return () => mq.removeEventListener('change', onChange)
   }, [query])
   return matches
+}
+
+/** Las vías supuestas del escenario del comparador, cada una con sus dos estaciones, para dibujarlas en el mapa. */
+function supuestasEnMapa(code: string | undefined, network: { nodes: { id: string; lon: number; lat: number }[] } | null, elegido: string[]): { desde: [number, number]; hasta: [number, number]; elegido: boolean }[] {
+  if (!code || !network) return []
+  try {
+    return scenarioFromCode(code).links.flatMap((k) => {
+      const a = network.nodes.find((n) => n.id === k.from_node_id)
+      const b = network.nodes.find((n) => n.id === k.to_node_id)
+      return a && b ? [{ desde: [a.lon, a.lat] as [number, number], hasta: [b.lon, b.lat] as [number, number], elegido: elegido.includes(linkId(k)) }] : []
+    })
+  } catch {
+    return []
+  }
 }
 
 export default function App() {
@@ -142,10 +175,14 @@ export default function App() {
     }
   }, [])
   // La línea a la vista y el panel de cobertura también van en la URL: toda vista se puede enlazar.
+  const ruta = useMemo(() => routePath({ ...route, linea: activeLineId, cobertura: showCoverage }), [route, activeLineId, showCoverage])
   useEffect(() => {
-    const path = routePath({ ...route, linea: activeLineId, cobertura: showCoverage })
-    if (window.location.pathname !== path) window.history.replaceState(null, '', path + window.location.search)
-  }, [route, activeLineId, showCoverage])
+    if (window.location.pathname !== ruta) window.history.replaceState(null, '', ruta + window.location.search)
+  }, [ruta])
+  // El día y la franja de la simulación van en la dirección, para que su enlace reproduzca la vista.
+  const setFranja = useCallback((franja: Franja) => {
+    setRoute((r) => (r.simulacion && (r.franja?.date !== franja.date || r.franja.start !== franja.start || r.franja.end !== franja.end) ? { ...r, franja } : r))
+  }, [])
 
   const select = useCallback(
     (sel: Selection) => {
@@ -266,7 +303,7 @@ export default function App() {
     if (!comparador?.from || !comparador.to || comparador.from === comparador.to || !graph || !network) return null
     return compararRecorridos(graph, network, comparador.from, comparador.to, interrupted, comparador.escenario)
   }, [comparador, graph, network, interrupted])
-  const elegido = comparacion ? (comparacion.recorridos.find((r) => r.key === elegidoKey) ?? comparacion.recorridos[0] ?? null) : null
+  const elegido = comparacion ? ([...comparacion.recorridos, ...comparacion.supuestos].find((r) => r.key === elegidoKey) ?? comparacion.recorridos[0] ?? null) : null
   // «Tramos sin otro camino» resalta en el mapa con el mismo recurso que el comparador: atenúa el resto de la
   // red y pinta en azul lo que se está mirando en la lista.
   const [sinCamino, setSinCamino] = useState<{ todos: string[]; mirados: string[]; encuadre: string[] } | null>(null)
@@ -274,11 +311,12 @@ export default function App() {
     if (route.sinOtroCamino) return sinCamino ? { todos: sinCamino.todos, elegido: sinCamino.mirados, extremos: [], encuadre: sinCamino.encuadre } : null
     if (!comparador) return null
     return {
-      todos: [...new Set(comparacion?.recorridos.flatMap((r) => r.route.segment_ids))],
+      todos: [...new Set([...(comparacion?.recorridos ?? []), ...(comparacion?.supuestos ?? [])].flatMap((r) => r.route.segment_ids))],
       elegido: elegido?.route.segment_ids ?? [],
+      supuestas: supuestasEnMapa(comparador.escenario, network, elegido?.route.segment_ids ?? []),
       extremos: [comparador.from, comparador.to].filter((id): id is string => Boolean(id)),
     }
-  }, [comparador, comparacion, elegido, route.sinOtroCamino, sinCamino])
+  }, [comparador, comparacion, elegido, network, route.sinOtroCamino, sinCamino])
   // En el comparador, tocar una estación en el mapa la pone en el extremo que falte; lo demás no hace nada.
   const pickOnMap = useCallback(
     (sel: Selection) => {
@@ -344,6 +382,8 @@ export default function App() {
         feedEnd={coverage?.feed_end ?? null}
         interruptions={interrupted.get(segment.id) ?? []}
         scenario={route.escenario}
+        franja={route.franja ?? null}
+        onFranja={setFranja}
         result={result}
         onResult={setResult}
         onBack={() => setRoute({ selection, simulacion: false })}
@@ -444,6 +484,32 @@ export default function App() {
     navegar('/')
   }
 
+  // El título de la pestaña y la descripción dicen qué vista es: lo lee quien guarda el enlace o lo comparte.
+  const meta = useMemo<Meta | null>(() => {
+    if (route.glosario) {
+      const nombre = route.glosario.entrada ? tituloDe(route.glosario.entrada) : null
+      return nombre ? metaEntradaGlosario(nombre) : META_GLOSARIO
+    }
+    if (showCoverage) return META_COBERTURA
+    if (route.sinOtroCamino) return META_SIN_OTRO_CAMINO
+    // Lo demás se titula con nombres de la red: hasta que carga, se queda el título con el que llegó la página.
+    if (!network) return null
+    if (comparador) {
+      const nombre = (id: string | null) => network.nodes.find((n) => n.id === id)?.name ?? null
+      return metaRecorridos(nombre(comparador.from), nombre(comparador.to))
+    }
+    if (segment) return route.simulacion ? metaSimulacion(segment, route.franja) : metaTramo(segment, network.lines.find((l) => l.id === segment.line_id))
+    if (node) return metaNodo(node)
+    if (annotation) return annotation.title ? metaProyecto(annotation.title) : META_RED
+    const linea = network.lines.find((l) => l.id === lineId)
+    return linea ? metaLinea(linea) : META_RED
+  }, [route, showCoverage, network, comparador, segment, node, annotation, lineId])
+  useEffect(() => {
+    if (meta) aplicarMeta(document, meta, ruta)
+  }, [meta, ruta])
+
+  const pie = network && !loadError ? <PieVista key={ruta} coverage={coverage} ruta={ruta} dia={route.simulacion ? (route.franja?.date ?? null) : null} /> : null
+
   const lines = network?.lines ?? []
   // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
   const enPagina = Boolean(route.glosario) || showCoverage
@@ -496,7 +562,10 @@ export default function App() {
             <span />
           </button>
         )}
-        <div className="panel-contenido">{panel}</div>
+        <div className="panel-contenido">
+          {panel}
+          {pie}
+        </div>
       </aside>
       {!mobile && (
         <Legend
@@ -504,6 +573,7 @@ export default function App() {
           annotations={annotations}
           lines={lines}
           singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false}
+          viaSupuesta={Boolean(recorridosEnMapa?.supuestas?.length)}
           highlight={highlight}
           onHighlight={setHighlight}
           onPin={pinTrazo}
