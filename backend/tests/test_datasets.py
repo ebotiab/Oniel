@@ -229,15 +229,49 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # a Figueres y los AVE de Barcelona a Lyon
     assert (
         await _count(conn, "services", FEED_DATASET_ID)
-        == 727 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114
+        == 727
+        + 26
+        + 15
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
     )
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 726 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114
+        == 726
+        + 26
+        + 15
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
-    passes = (3996 + 121) + (1968 + 267 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
+    passes = (4295 + 121) + (1968 + 267 + 523) + (66 + 372) + (226 + 20) + (62 + 18) + (478 + 516)
     passes += (1250 + 68) + 498  # las dos líneas de alta velocidad a Málaga y a Granada
     # la alta velocidad de Barcelona, todos estimados: 6.851 en la línea y 97 y 224 en los
     # baipases de Zaragoza y de Lleida. Eran 7.590 cuando el tren que no para figuraba por la
@@ -257,6 +291,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 715 + 209  # la de Burgos a Vitoria
     passes += 854  # la de Ourense a Santiago, sin estaciones intermedias: todos estimados
     passes += 3035 + 281  # la de A Coruña a Vigo
+    passes += 1733 + 1081  # la de Sevilla a Cádiz
     passes += 1094 + 208  # la de Barcelona a Figueres: publicados, de Girona a Figueres-Vilafant
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
@@ -524,10 +559,10 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     # 409 del final, los de las cuatro líneas de Extremadura
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114
+        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114
+        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114
     )
 
 
@@ -561,8 +596,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     # los 409 del final son los de las cuatro líneas de Extremadura que no estaban en otra
     assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114,
-        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114,
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114,
+        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114,
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -603,7 +638,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
     assert await conn.fetchval("SELECT count(*) FROM services") == (
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 114
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]

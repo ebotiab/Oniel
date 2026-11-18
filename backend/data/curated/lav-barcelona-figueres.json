@@ -3,7 +3,7 @@
     "id": "lav-barcelona-figueres",
     "name": "Línea de alta velocidad Barcelona – Girona – Figueres",
     "short_name": "050",
-    "sort_order": 32,
+    "sort_order": 33,
     "zone": "cataluna",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

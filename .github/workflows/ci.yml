@@ -24,10 +24,12 @@ on:
 permissions:
   contents: read
 
-# Un push nuevo a la misma rama cancela la ejecución anterior, que ya no interesa.
+# En una rama, un push nuevo cancela la ejecución anterior, que ya no interesa. En `main` no: cada
+# fusión termina su ejecución, que es la única que mide la cobertura del backend, y las que llegan
+# mientras tanto esperan (GitHub deja en espera solo la más reciente).
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   cambios:
