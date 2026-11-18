@@ -62,6 +62,7 @@ class Settings(BaseSettings):
         "lav-zaragoza-huesca",
         "barcelona-girona-portbou",
         "tarragona-barcelona",
+        "valencia-xativa-alicante",
     ]
 
 

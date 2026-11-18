@@ -27,7 +27,8 @@ test.describe('Línea de València a Camp de Tarragona: une la alta velocidad de
     const lineasDe = (id: string) => red.nodes.filter((n) => n.id === id).map((n) => n.line_id).sort()
     expect(lineasDe(SOROLLA)).toEqual(['lav-madrid-valencia', LINEA])
     expect(lineasDe(CAMP)).toEqual(['lav-madrid-barcelona', LINEA])
-    expect(lineasDe(NORD)).toEqual([LINEA])
+    // la Estació del Nord es también el origen de la línea de Xàtiva y Alicante (#208)
+    expect(lineasDe(NORD)).toEqual([LINEA, 'valencia-xativa-alicante'])
   })
 
   test('el ancho cambia por tramos: mixto hasta Castelló, ibérico hasta La Boella y estándar hasta Camp de Tarragona', () => {
@@ -52,7 +53,8 @@ test.describe('Línea de València a Camp de Tarragona: une la alta velocidad de
     // y de Madrid a Barcelona hay ya otros caminos por València, por Cuenca o por Albacete, que acaban por la
     // alta velocidad o por la costa de Tarragona, y uno que deja la alta velocidad en Camp de Tarragona
     const aBarcelona = findRoutes(grafo, 'madrid-puerta-de-atocha', 'barcelona-sants')
-    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 632.0, 734.8, 755.1, 844.6, 864.8])
+    // y, desde la línea de València a Alicante por Xàtiva, dos más: por Albacete, Alicante y Xàtiva
+    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 632.0, 734.8, 755.1, 844.6, 864.8, 971.5, 991.8])
   })
 
   test('la ficha del último tramo dice que es de ancho estándar; la de un tramo de ancho ibérico no dice nada', async ({ page }) => {

@@ -147,9 +147,8 @@ def test_both_ends_are_nodes_that_other_lines_define(coast: BuiltNetwork) -> Non
     # la Estació del Nord es otra estación: la línea sale de ella y pasa junto a Joaquín Sorolla
     assert coast.node(NORD).km == 0 and coast.node(SOROLLA).km == pytest.approx(0.76, abs=0.05)
     assert not coast.node(NORD).spec.shared
-    # lo que sigue sin cargar sale a trazos
+    # lo que sigue sin cargar sale a trazos; hacia el sur ya está la línea de Xàtiva y Alicante
     assert {c.id: c.node_id for c in coast.spec.connections} == {
-        "valencia-nord-sur": NORD,
         "sagunt-teruel": "sagunt",
         "ramal-de-tortosa": "l-aldea-amposta-tortosa",
     }

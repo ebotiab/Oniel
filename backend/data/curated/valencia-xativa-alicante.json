@@ -1,0 +1,173 @@
+{
+  "line": {
+    "id": "valencia-xativa-alicante",
+    "name": "Línea convencional Valencia – Xàtiva – Alicante",
+    "short_name": "300, 332 y 330",
+    "sort_order": 38,
+    "zone": "levante",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 200,
+    "tracks": 1,
+    "pk_restarts": [
+      {
+        "node": "caudete",
+        "pk_km": 383.1
+      }
+    ],
+    "status": "disponible",
+    "description": "Une València con Alicante por el interior: baja por la Ribera hasta Xàtiva, sube al altiplano por Moixent y La Font de la Figuera y, junto a La Encina, gira hacia Villena, Elda y Alicante. Es el camino del Corredor Mediterráneo al sur de València.\n\nPara Adif son varias líneas: la de Madrid a València, que aquí se recorre de València hasta La Encina, la variante de Caudete, que evita la estación de La Encina, y la de La Encina a Alicante. Oniel las carga como una sola porque los trenes de València a Alicante las recorren seguidas.\n\nDe València a Xàtiva tiene dos vías; de Xàtiva a Alicante, una sola. Entre Xàtiva y La Encina los trenes van desde el 9 de septiembre de 2023 por una vía nueva de ancho ibérico, mientras las dos vías por las que iban antes se cambian al ancho estándar para la alta velocidad. Esas obras siguen: mientras duren, todos los trenes de este trecho comparten una vía.\n\nJunto a La Encina se separa la línea de Almansa y Albacete, que no está cargada: por ella siguen los regionales de València a Albacete, Alcázar de San Juan y Ciudad Real, y por Caudete entran los de Ciudad Real y Albacete a Alicante. En Xàtiva sale la línea de Alcoi.\n\nEn los horarios de Renfe la recorren los Euromed e Intercity de Barcelona y València a Alicante, que cambian de sentido en València-Estació del Nord, los Intercity y regionales de València a Alicante, Murcia y Cartagena, los regionales de Villena a Alicante y los de València a Alcoi hasta Xàtiva. Los trenes de Cercanías de València y de Alicante usan también sus vías, pero no están en los horarios cargados.",
+    "geometry_source": {
+      "source_id": "osm-relation-16947106",
+      "parts": [
+        {
+          "source_id": "osm-relation-16947106",
+          "file": "raw/osm/relation_16947106_servicio_valencia_alacant_2026-11-18.json",
+          "relation_id": 16947106,
+          "from": [
+            -0.3771908,
+            39.4669126
+          ],
+          "to": [
+            -0.4955241,
+            38.3447127
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-330-la-encina-alicante"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "valencia-estacio-del-nord", "name": "València-Estació del Nord", "kind": "estacion", "adif_code": "65000", "shared": true, "position": {"lon": -0.3771908, "lat": 39.4669126}},
+    {"id": "alfafar-benetusser", "name": "Alfafar-Benetússer", "kind": "estacion", "adif_code": "64203", "rank": "secundario", "position": {"lon": -0.392605, "lat": 39.4224232}},
+    {"id": "massanassa", "name": "Massanassa", "kind": "estacion", "adif_code": "64202", "rank": "secundario", "position": {"lon": -0.3953073, "lat": 39.4091934}},
+    {"id": "catarroja", "name": "Catarroja", "kind": "estacion", "adif_code": "64201", "rank": "secundario", "position": {"lon": -0.3992195, "lat": 39.4000447}},
+    {"id": "silla", "name": "Silla", "kind": "estacion", "adif_code": "64200", "rank": "secundario", "position": {"lon": -0.4149813, "lat": 39.3619548}, "description": "Estación de Silla. Al sur de ella sale la línea de Cullera y Gandia, que recorren los trenes de Cercanías y no está cargada."},
+    {"id": "benifaio", "name": "Benifaió", "kind": "estacion", "adif_code": "64107", "rank": "secundario", "position": {"lon": -0.4299537, "lat": 39.2843027}},
+    {"id": "algemesi", "name": "Algemesí", "kind": "estacion", "adif_code": "64105", "rank": "secundario", "position": {"lon": -0.4409196, "lat": 39.1931484}},
+    {"id": "alzira", "name": "Alzira", "kind": "estacion", "adif_code": "64104", "rank": "secundario", "position": {"lon": -0.4506011, "lat": 39.1531495}},
+    {"id": "carcaixent", "name": "Carcaixent", "kind": "estacion", "adif_code": "64103", "rank": "secundario", "position": {"lon": -0.4544102, "lat": 39.1205251}},
+    {"id": "la-pobla-llarga", "name": "La Pobla Llarga", "kind": "estacion", "adif_code": "64102", "rank": "secundario", "position": {"lon": -0.4696592, "lat": 39.0833385}},
+    {"id": "l-enova-manuel", "name": "L'Ènova-Manuel", "kind": "estacion", "adif_code": "64007", "rank": "secundario", "position": {"lon": -0.4776036, "lat": 39.0500727}},
+    {"id": "xativa", "name": "Xàtiva", "kind": "estacion", "adif_code": "64100", "position": {"lon": -0.5245402, "lat": 38.992148}, "description": "La estación de Xàtiva. Hasta aquí la línea tiene dos vías; desde aquí hasta Alicante, una. De ella sale la línea de Ontinyent y Alcoi, que no está cargada. Junto a la estación acaba la plataforma nueva de alta velocidad que viene de València, todavía en obras."},
+    {"id": "bif-la-encina", "name": "Bifurcación de La Encina", "kind": "bifurcacion", "position": {"lon": -0.9264679, "lat": 38.7591849}, "description": "Punto donde las vías se separan, tres kilómetros antes de la estación de La Encina. Los trenes de València a Alicante toman aquí la variante de Caudete, una vía de seis kilómetros abierta en 1992 que les evita entrar en La Encina y cambiar de sentido. Los de València a Albacete siguen recto hacia La Encina y Almansa, por una línea que no está cargada."},
+    {"id": "caudete", "name": "Caudete", "kind": "estacion", "adif_code": "60901", "position": {"lon": -0.959727, "lat": 38.716163}, "description": "Estación de Caudete. Aquí la variante que viene de València se une a la línea de La Encina a Alicante: por el norte llegan a ella los trenes de Albacete y Ciudad Real, que pasan por La Encina."},
+    {"id": "villena", "name": "Villena", "kind": "estacion", "adif_code": "60902", "position": {"lon": -0.867689, "lat": 38.631738}, "reference_pk_km": 396.1, "description": "La estación de Villena de la línea convencional, en la ciudad. La de alta velocidad, Villena Alta Velocidad, es otra y está a unos seis kilómetros."},
+    {"id": "sax", "name": "Sax", "kind": "estacion", "adif_code": "60904", "rank": "secundario", "position": {"lon": -0.813729, "lat": 38.544251}, "reference_pk_km": 407.1},
+    {"id": "elda-petrer", "name": "Elda-Petrer", "kind": "estacion", "adif_code": "60905", "position": {"lon": -0.80109, "lat": 38.484879}, "reference_pk_km": 413.9},
+    {"id": "novelda-aspe", "name": "Novelda-Aspe", "kind": "estacion", "adif_code": "60907", "rank": "secundario", "position": {"lon": -0.777744, "lat": 38.407086}, "reference_pk_km": 424.5},
+    {"id": "sant-vicent-centre", "name": "Sant Vicent Centre", "kind": "estacion", "adif_code": "60913", "rank": "secundario", "position": {"lon": -0.5287247, "lat": 38.3946533}, "reference_pk_km": 447.0},
+    {"id": "universidad-de-alicante", "name": "Universidad de Alicante", "kind": "estacion", "adif_code": "60914", "rank": "secundario", "position": {"lon": -0.528411, "lat": 38.384165}, "reference_pk_km": 448.7},
+    {"id": "alicante-terminal", "name": "Alicante-Terminal", "kind": "estacion", "adif_code": "60911", "shared": true, "position": {"lon": -0.4955241, "lat": 38.3447127}, "reference_pk_km": 454.7}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "valencia-estacio-del-nord", "to_node": "xativa", "value": 2, "source_id": "osm-relation-16947106", "checked_on": "2026-11-18", "note": "Vía doble de València a Xàtiva: las vías de OSM llevan passenger_lines=2 y las dos relaciones de servicio, una por sentido, recorren vías distintas del km 0,6 al 56,7. Coincide con el mapa 4 de la Declaración sobre la Red («Doble a 3 kV a 1.668 mm»). La vía única empieza 800 m pasada la estación de Xàtiva; se declara desde ella."},
+    {"attribute": "tracks", "from_node": "xativa", "to_node": "alicante-terminal", "value": 1, "source_id": "osm-relation-16947106", "checked_on": "2026-11-18", "note": "Vía única de Xàtiva a Alicante: las dos relaciones de servicio recorren las mismas vías, salvo en las vías de cruce de las estaciones, y el mapa 4 dibuja «Única a 3 kV a 1.668 mm» de «Xátiva Ag.km47» a La Encina y de La Encina a Alacant Terminal. Adif dice que entre Xàtiva y el nudo de La Encina se circula por vía única de ancho ibérico desde el 9 de septiembre de 2023. En los 3,7 km anteriores a la bifurcación de La Encina las vías de OSM llevan passenger_lines=2 y el mapa dibuja un trecho corto de vía doble junto a La Encina: ningún nodo marca dónde empieza y no se declara aparte."},
+    {"attribute": "proteccion_tren", "from_node": "valencia-estacio-del-nord", "to_node": "alicante-terminal", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea entre Valencia Nord y Silla, entre Silla y Xátiva, junto a Moixent, junto a La Encina, entre La Encina y Villena y junto a Alacant Terminal. Las vías de OSM llevan railway:asfa=yes."},
+    {"attribute": "bloqueo", "from_node": "valencia-estacio-del-nord", "to_node": "xativa", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: trazo marrón y rótulo «BAB ctc» de Valencia Nord a Silla y de Silla a Xátiva."},
+    {"attribute": "bloqueo", "from_node": "xativa", "to_node": "alicante-terminal", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: trazo naranja y rótulo «BAU ctc» de Xátiva a La Encina, por «Xátiva Ag.km47» y Moixent, en la variante de Caudete y de La Encina a Villena y Alacant Terminal. Junto a La Encina hay además un trecho corto con trazo marrón de «BAB ctc», el de la vía doble que entra en la estación: el mapa es un esquema y no dice dónde empieza."},
+    {"attribute": "mando", "from_node": "valencia-estacio-del-nord", "to_node": "alicante-terminal", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea, «BAB ctc» y «BAU ctc»."}
+  ],
+  "connections": [
+    {"id": "conv-xativa-alcoi", "node_id": "xativa", "name": "Línea Xàtiva – Alcoi", "towards": "Benigànim, Albaida, Ontinyent y Alcoi", "status": "no_cargada", "sketch": [[-0.5245402, 38.992148], [-0.453424, 38.938499], [-0.518129, 38.845645], [-0.602457, 38.809692], [-0.470247, 38.709349]]},
+    {"id": "conv-la-encina-albacete", "node_id": "bif-la-encina", "name": "Línea convencional La Encina – Albacete", "towards": "La Encina, Almansa y Albacete", "status": "no_cargada", "sketch": [[-0.9264679, 38.7591849], [-0.954244, 38.765344], [-1.105446, 38.867822], [-1.84845, 38.999384]]},
+    {"id": "conv-caudete-la-encina", "node_id": "caudete", "name": "Línea La Encina – Caudete", "towards": "La Encina, Almansa y Albacete", "status": "no_cargada", "sketch": [[-0.959727, 38.716163], [-0.954244, 38.765344]]},
+    {"id": "conv-alicante-murcia", "node_id": "alicante-terminal", "name": "Línea convencional Alicante – Murcia", "towards": "Elche, Orihuela y Murcia", "status": "no_cargada", "sketch": [[-0.4955241, 38.3447127], [-0.5086866, 38.3290647], [-0.6952193, 38.2717809], [-0.944606, 38.0779321], [-1.131508, 37.9748243]]}
+  ],
+  "stop_mappings": {
+    "65000": {"node": "valencia-estacio-del-nord"},
+    "64203": {"node": "alfafar-benetusser"},
+    "64202": {"node": "massanassa"},
+    "64201": {"node": "catarroja"},
+    "64200": {"node": "silla"},
+    "64107": {"node": "benifaio"},
+    "64105": {"node": "algemesi"},
+    "64104": {"node": "alzira"},
+    "64103": {"node": "carcaixent"},
+    "64102": {"node": "la-pobla-llarga"},
+    "64007": {"node": "l-enova-manuel"},
+    "64100": {"node": "xativa"},
+    "60901": {"node": "caudete"},
+    "60902": {"node": "villena"},
+    "60904": {"node": "sax"},
+    "60905": {"node": "elda-petrer"},
+    "60907": {"node": "novelda-aspe"},
+    "60913": {"node": "sant-vicent-centre"},
+    "60914": {"node": "universidad-de-alicante"},
+    "60911": {"node": "alicante-terminal"},
+    "65200": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65300": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65318": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65304": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65311": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65312": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65402": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "65422": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "04104": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}},
+    "71801": {"exits": ["valencia-estacio-del-nord"], "via": [{"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}, {"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}]},
+    "79300": {"exits": ["valencia-estacio-del-nord"], "via": [{"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}, {"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}, {"line": "lav-barcelona-figueres", "node": "barcelona-sants"}]},
+    "04307": {"exits": ["valencia-estacio-del-nord"], "via": [{"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}, {"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}, {"line": "lav-barcelona-figueres", "node": "barcelona-sants"}]},
+    "69001": {"exits": ["xativa"]},
+    "69002": {"exits": ["xativa"]},
+    "69003": {"exits": ["xativa"]},
+    "69004": {"exits": ["xativa"]},
+    "69005": {"exits": ["xativa"]},
+    "69006": {"exits": ["xativa"]},
+    "69007": {"exits": ["xativa"]},
+    "69008": {"exits": ["xativa"]},
+    "69009": {"exits": ["xativa"]},
+    "69010": {"exits": ["xativa"]},
+    "69011": {"exits": ["xativa"]},
+    "60900": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60800": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60600": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60507": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60505": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60503": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60500": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60406": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60402": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "60400": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "50100": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "94002": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "94004": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "37200": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "50102": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "50207": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "50300": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "50500": {"exits": ["bif-la-encina", "caudete"], "aside": true},
+    "62109": {"exits": ["alicante-terminal"]},
+    "62104": {"exits": ["alicante-terminal"]},
+    "62103": {"exits": ["alicante-terminal"]},
+    "62102": {"exits": ["alicante-terminal"]},
+    "62101": {"exits": ["alicante-terminal"]},
+    "62100": {"exits": ["alicante-terminal"]},
+    "62003": {"exits": ["alicante-terminal"]},
+    "62002": {"exits": ["alicante-terminal"]},
+    "61200": {"exits": ["alicante-terminal"]},
+    "06002": {"exits": ["alicante-terminal"]},
+    "06003": {"exits": ["alicante-terminal"]},
+    "06006": {"exits": ["alicante-terminal"]},
+    "61303": {"exits": ["alicante-terminal"]},
+    "61304": {"exits": ["alicante-terminal"]},
+    "61307": {"exits": ["alicante-terminal"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos estaciones de la línea o más: los Euromed e Intercity de València a Alicante, los regionales de València a Alicante, Murcia y Cartagena, los de Villena a Alicante, los de València a Alcoi, que la dejan en Xàtiva, y los de València a Albacete y Ciudad Real, que la dejan en la bifurcación de La Encina. Entran además los regionales de Ciudad Real que acaban en Villena sin parar en Caudete: van de Almansa a Villena y recorren la línea desde Caudete. Quedan fuera los que solo la tocan en una estación: los de alta velocidad que acaban en Alicante-Terminal, los regionales de Alicante a Murcia y los que salen de la Estació del Nord hacia Castelló.",
+    "min_node_stops": 2,
+    "consecutive_stop_ids": [
+      [
+        "60800",
+        "60902"
+      ]
+    ]
+  },
+  "route_overrides": [
+  ]
+}

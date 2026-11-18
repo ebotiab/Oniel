@@ -77,7 +77,6 @@
     {"attribute": "mando", "from_node": "cambiador-la-boella", "to_node": "camp-de-tarragona", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."}
   ],
   "connections": [
-    {"id": "valencia-nord-sur", "node_id": "valencia-estacio-del-nord", "name": "Líneas convencionales al sur de València", "towards": "Xàtiva, Alacant y Albacete", "status": "no_cargada", "sketch": [[-0.3771908, 39.4669126], [-0.4, 39.4], [-0.45, 39.2], [-0.5245402, 38.992148]]},
     {"id": "sagunt-teruel", "node_id": "sagunt", "name": "Línea de Sagunt a Teruel y Zaragoza", "towards": "Segorbe, Teruel y Zaragoza", "status": "no_cargada", "sketch": [[-0.2714149, 39.6756707], [-0.4823544, 39.8471755], [-1.110284, 40.341029]]},
     {"id": "ramal-de-tortosa", "node_id": "l-aldea-amposta-tortosa", "name": "Ramal de Tortosa", "towards": "Tortosa", "status": "no_cargada", "sketch": [[0.6145466, 40.7535866], [0.5558561, 40.7590832], [0.5230136, 40.807333]]}
   ],
@@ -119,7 +118,7 @@
     "03213": {"exits": ["valencia-joaquin-sorolla"], "via": {"line": "lav-madrid-valencia", "node": "valencia-joaquin-sorolla"}},
     "03208": {"exits": ["valencia-joaquin-sorolla"], "via": {"line": "lav-madrid-valencia", "node": "valencia-joaquin-sorolla"}},
     "60000": {"exits": ["valencia-joaquin-sorolla"], "via": [{"line": "lav-madrid-valencia", "node": "valencia-joaquin-sorolla"}, {"line": "lav-madrid-sevilla", "node": "bif-torrejon-de-velasco"}]},
-    "64100": {"exits": ["valencia-estacio-del-nord"]},
+    "64100": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-xativa-alicante", "node": "valencia-estacio-del-nord"}},
     "60600": {"exits": ["valencia-estacio-del-nord"]},
     "60500": {"exits": ["valencia-estacio-del-nord"]},
     "60406": {"exits": ["valencia-estacio-del-nord"]},
@@ -129,9 +128,9 @@
     "50207": {"exits": ["valencia-estacio-del-nord"]},
     "50300": {"exits": ["valencia-estacio-del-nord"]},
     "50500": {"exits": ["valencia-estacio-del-nord"]},
-    "60902": {"exits": ["valencia-estacio-del-nord"]},
-    "60905": {"exits": ["valencia-estacio-del-nord"]},
-    "60911": {"exits": ["valencia-estacio-del-nord"]},
+    "60902": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-xativa-alicante", "node": "valencia-estacio-del-nord"}},
+    "60905": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-xativa-alicante", "node": "valencia-estacio-del-nord"}},
+    "60911": {"exits": ["valencia-estacio-del-nord"], "via": {"line": "valencia-xativa-alicante", "node": "valencia-estacio-del-nord"}},
     "67215": {"exits": ["sagunt"]},
     "67208": {"exits": ["sagunt"]},
     "67207": {"exits": ["sagunt"]},
