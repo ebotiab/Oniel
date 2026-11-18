@@ -171,7 +171,10 @@ test.describe('Elegir línea sin pestañas', () => {
     await page.getByTestId('linea-lav-madrid-barcelona').hover()
     await expect(mapa).toHaveAttribute('data-lineas-resaltadas', 'lav-madrid-barcelona|baipas-zaragoza|baipas-lleida')
     await page.getByTestId('zona-madrid-castilla-la-mancha').locator('.zona-cabecera').hover()
-    await expect(mapa).toHaveAttribute('data-lineas-resaltadas', /^(manzanares-ciudad-real\|alcazar-albacete|alcazar-albacete\|manzanares-ciudad-real)$/)
+    // las tres de la zona, en cualquier orden
+    await expect
+      .poll(async () => (await mapa.getAttribute('data-lineas-resaltadas'))?.split('|').sort())
+      .toEqual(['alcazar-albacete', 'lav-la-sagra-toledo', 'manzanares-ciudad-real'])
     await page.getByTestId('ficha-red').hover()
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')
     // al elegir una línea no queda nada resaltado, ni al volver a la red

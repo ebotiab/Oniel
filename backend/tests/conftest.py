@@ -48,6 +48,9 @@ LAV_OURENSE_SPEC = DATA_DIR / "curated" / "lav-olmedo-ourense.json"
 LAV_SANTIAGO_SPEC = DATA_DIR / "curated" / "lav-ourense-santiago.json"
 EJE_ATLANTICO_SPEC = DATA_DIR / "curated" / "eje-atlantico.json"
 LINK_MONFORTE_SPEC = DATA_DIR / "curated" / "enlace-monforte-del-cid.json"
+#: Los ramales cortos de alta velocidad a Toledo y a Huesca.
+TOLEDO_SPEC = DATA_DIR / "curated" / "lav-la-sagra-toledo.json"
+HUESCA_SPEC = DATA_DIR / "curated" / "lav-zaragoza-huesca.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -80,6 +83,8 @@ SPECS = [
     BURGOS_VITORIA_SPEC,
     SEVILLA_CADIZ_SPEC,
     LAV_FIGUERES_SPEC,
+    TOLEDO_SPEC,
+    HUESCA_SPEC,
     BARCELONA_PORTBOU_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"

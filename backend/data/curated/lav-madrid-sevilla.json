@@ -77,7 +77,6 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."}
   ],
   "connections": [
-    {"id": "lav-la-sagra-toledo", "node_id": "bif-la-sagra", "name": "Ramal La Sagra–Toledo", "towards": "Toledo", "status": "no_cargada", "sketch": [[-3.98, 39.96], [-4.0112, 39.8623]]},
     {"id": "majarabique-huelva", "node_id": "majarabique", "name": "Red convencional por Majarabique", "towards": "Huelva", "status": "no_cargada", "sketch": [[-6.1, 37.45], [-6.55, 37.39]]},
     {"id": "sevilla-huelva", "node_id": "sevilla-santa-justa", "name": "Red convencional Sevilla–Huelva", "towards": "Huelva", "status": "no_cargada", "sketch": [[-5.974927, 37.392496], [-6.15, 37.42], [-6.45, 37.4]]}
   ],
@@ -88,6 +87,7 @@
     "37704": {"node": "villanueva-de-cordoba"},
     "50500": {"node": "cordoba"},
     "51003": {"node": "sevilla-santa-justa"},
+    "92102": {"exits": ["bif-la-sagra"], "via": {"line": "lav-la-sagra-toledo", "node": "bif-la-sagra"}},
     "17000": {"exits": ["madrid-puerta-de-atocha"]},
     "18000": {"exits": ["madrid-puerta-de-atocha"]},
     "04040": {"exits": ["madrid-puerta-de-atocha"], "via": {"line": "lav-madrid-barcelona", "node": "madrid-puerta-de-atocha"}},
@@ -119,6 +119,12 @@
     "consecutive_stop_ids": [["51003", "50500"]]
   },
   "route_overrides": [
+    {
+      "id": "madrid-toledo",
+      "description": "Avant entre Madrid-Puerta de Atocha y Toledo: no paran en ninguna otra estación de la línea, así que no pasan el filtro de corredor, pero la recorren de Madrid a la bifurcación La Sagra y siguen por el ramal de Toledo. La regla vale también para el Avant que sigue de Madrid a Cuenca y Albacete: por esta línea se resuelve solo entre Madrid y Toledo.",
+      "consecutive_stop_ids": ["60000", "92102"],
+      "from_stop_id": "60000"
+    },
     {
       "id": "madrid-malaga-sin-paradas",
       "description": "Trenes directos entre Madrid-Puerta de Atocha y Málaga, de Renfe y de Ouigo: no paran en Córdoba, así que no pasan el filtro de corredor, pero recorren la línea de Madrid a la bifurcación de Málaga y siguen por la de Córdoba a Málaga.",

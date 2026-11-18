@@ -686,7 +686,7 @@
       "license_url": "https://www.adif.es/aviso-legal",
       "retrieved_on": "2026-11-18",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
@@ -1797,6 +1797,64 @@
       "coverage": "Que SNCF Voyageurs opera trenes TGV entre Paris Gare de Lyon y Barcelona-Sants con parada en Perpiñán, Figueres-Vilafant y Girona, dos por sentido y día en el fichero válido del 18 de noviembre de 2026 al 30 de abril de 2027, y que publica sus horarios en GTFS con licencia abierta.",
       "notes": "Oniel no carga estos horarios: de la fuente solo se toma que esos trenes existen y cuántos son, para decir en la descripción de la línea que faltan. El fichero es de toda la red de SNCF (84 MB de horarios sin comprimir) y sus paradas llevan un código propio, distinto del de Renfe; cargarlo queda para una tarea aparte. Lo consultado está resumido en el registro de consultas de ese día; el fichero no se guarda en raw/ porque la importación no lo usa.",
       "file": "raw/operadores/consultas_2026-11-18.json"
+    },
+    {
+      "id": "osm-relation-15616205",
+      "name": "Trazado de la línea de alta velocidad La Sagra – Toledo (relación OSM 15616205, línea 020 de Adif, de ancho estándar a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/15616205",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Las dos vías del ramal, del desvío en el que se separa de la línea Madrid – Sevilla en La Sagra a las toperas de la estación de Toledo; velocidad máxima por tramo.",
+      "notes": "Descargada por la API de OpenStreetMap (relation/15616205/full.json) el 18 de noviembre de 2026, porque los servidores públicos de Overpass no respondían. La relación es de infraestructura («020: Bif. La Sagra - Toledo», ref=020) y sus 30 vías llevan gauge=1435, 25000 V, passenger_lines=2 y velocidades de 220 km/h en la mayor parte, 165 y 140 km/h en la salida de La Sagra y 80 km/h a la entrada de Toledo. Empieza en el desvío 2145131699, a 37 m del punto en que Oniel sitúa la bifurcación La Sagra sobre la línea Madrid – Sevilla, y la línea de Oniel termina en la topera 2278917749 de una vía de andén. El número de línea es el de estas etiquetas.",
+      "file": "raw/osm/relation_15616205_lav_la_sagra_toledo_2026-11-18.json"
+    },
+    {
+      "id": "wikipedia-lav-la-sagra-toledo",
+      "name": "Artículos «Línea de alta velocidad La Sagra-Toledo» y «Estación de Toledo» de Wikipedia en español (longitud, puntos kilométricos, características, apertura, servicios)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_La_Sagra-Toledo",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Longitud (21 km), punto kilométrico 0,0 en la bifurcación La Sagra y 20,842 en Toledo, ancho estándar, 25 kV de alterna, velocidad de diseño de 220 km/h, viaducto de 1.602 m sobre el Tajo, apertura el 15 de noviembre de 2005, servicios Avant de Madrid y de Cuenca y Albacete; edificio de la estación de 1919, restaurado en 2005, y falta de enlace de ancho ibérico desde la apertura.",
+      "notes": "Fuente de verificación, no de geometría, consultada por la API de Wikipedia el 18 de noviembre de 2026. Revisiones: línea (24 de abril de 2025, oldid 167038285) y estación de Toledo (27 de septiembre de 2026, oldid 175548657), de donde salen el punto kilométrico de la estación y la fecha de apertura. El esquema del artículo de la línea da a la bifurcación el PK 53,7 de la línea Madrid – Sevilla; Oniel la tiene en el 52,7, como ya estaba cargada, y no se ha movido."
+    },
+    {
+      "id": "osm-relation-9277290",
+      "name": "Trazado de la línea de alta velocidad Zaragoza – Huesca (relación OSM 9277290, línea 070 de Adif, de ancho estándar y mixto a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/9277290",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "La vía de la línea, del desvío en el que se separa de la alta velocidad Madrid – Barcelona, junto a Zaragoza-Miraflores, a la topera de la estación de Huesca, por Tardienta; velocidad máxima por tramo; dónde es de ancho estándar y dónde de ancho mixto.",
+      "notes": "Descargada por la API de OpenStreetMap (relation/9277290/full.json) el 18 de noviembre de 2026, porque los servidores públicos de Overpass no respondían. La relación es de infraestructura («Línea Zaragoza-Huesca», nombre oficial «Bifurcación Huesca a Huesca», ref=070). Sus vías llevan 25000 V y passenger_lines=1 salvo en las estaciones; gauge=1435 desde la bifurcación hasta la entrada de Tardienta y gauge=1435;1668 desde allí hasta la estación de Huesca, cuyas dos vías de andén vuelven a ser de 1435. Velocidades de 200 km/h hasta Tardienta, 160 km/h de Tardienta a Huesca y de 40 a 100 km/h en las estaciones. Empieza en el desvío 1118539642, a 4 m del nodo de Adif «Bifurcación Huesca» (8060137209). Un trozo de 30 m con tercer carril junto a Zuera es una escape entre vías, no un cambio de ancho.",
+      "file": "raw/osm/relation_9277290_linea_070_zaragoza_huesca_2026-11-18.json"
+    },
+    {
+      "id": "wikipedia-lav-zaragoza-huesca",
+      "name": "Artículo «Línea de alta velocidad Zaragoza–Huesca» de Wikipedia en español (trazado, ancho, vía única, velocidades, señalización, apertura, servicios)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Zaragoza%E2%80%93Huesca",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Origen en un desvío de la alta velocidad Madrid – Barcelona en Zaragoza (PK 311,7 de esa línea); vía única de ancho estándar a 25 kV entre Zaragoza y Tardienta, paralela a la convencional; 20,7 km de vía única de tres carriles de Tardienta a Huesca, compartida con los trenes de ancho ibérico de la línea de Canfranc, que van con tracción diésel; 200 km/h hasta Tardienta y 160 km/h hasta Huesca; ASFA; apertura el 23 de diciembre de 2003; estudio de 2010 para separar los dos anchos entre Tardienta y Huesca.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 6 de febrero de 2026 (oldid 171929229), consultada por la API de Wikipedia el 18 de noviembre de 2026. No trae tabla de puntos kilométricos, así que los nodos de la línea no guardan PK. La longitud de referencia, 79,4 km, es la suma de los tres tramos que da el artículo (31,2 y 27,5 km hasta Tardienta y 20,7 km hasta Huesca); el trazado de OSM mide 79,3 km. Las velocidades las cita del mapa de la Declaración sobre la Red de 2022."
+    },
+    {
+      "id": "osm-instalaciones-toledo-huesca",
+      "name": "Estaciones de Toledo, Tardienta y Huesca y bifurcación Huesca en OpenStreetMap",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Coordenadas de las estaciones de Toledo (nodo 254453384), Tardienta (4338239783) y Huesca (8051540821), de Zaragoza-Miraflores y de la bifurcación Huesca (8060137209, ref=86144).",
+      "notes": "Elementos con railway=station, halt, junction u otras instalaciones de cinco recuadros pequeños alrededor de cada lugar, pedidos el 18 de noviembre de 2026 a la API de OpenStreetMap (map.json), porque los servidores públicos de Overpass no respondían. Los códigos de las estaciones (etiqueta ref) son los de sus paradas en el GTFS de Renfe.",
+      "file": "raw/osm/instalaciones_toledo_huesca_2026-11-18.json"
     },
     {
       "id": "osm-relation-11087891",

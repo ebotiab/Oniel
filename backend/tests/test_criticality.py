@@ -330,6 +330,8 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         EJE_ATLANTICO,
         SEVILLA_CADIZ,
         LAV_FIGUERES,
+        "lav-la-sagra-toledo",
+        "lav-zaragoza-huesca",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -346,7 +348,8 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
     # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
     # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón; los 7, la de Burgos a
-    # Vitoria; los 3 y los 15 de después, las dos de Galicia, y los 16 del final, la de Sevilla a Cádiz
+    # Vitoria; los 3 y los 15 de después, las dos de Galicia, y los 16 del final, la de Sevilla a Cádiz, y el 1 y
+    # los 2 de después, los ramales de Toledo y de Huesca
     assert (
         len(exported.segments)
         == (
@@ -375,6 +378,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + (3 + 15)
         + 16
         + 7  # la de Barcelona a Figueres
+        + (1 + 2)
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -409,9 +413,13 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # y los once de la de León a Gijón, la única cargada al norte de León, y los siete de la de
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     # y los dieciséis de la de Sevilla a Cádiz, el único camino cargado a Jerez y a Cádiz
+    # y los tres de los ramales de Toledo y de Huesca, que acaban en una estación término; con
+    # ellos se queda sin otro camino una parte de los trenes en otros catorce: los Avant de Toledo
+    # en los cuatro de la línea de Sevilla hasta La Sagra y los 2 de Albacete a Toledo, que cambian
+    # de sentido en Atocha, en los diez de la bifurcación de Torrejón de Velasco a Albacete
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7 + 3 + 14,
     )
     # la de Barcelona a Figueres, entera: a Girona y a Figueres-Vilafant solo llega ella
     figueres = {k: n for k, n in none.items() if k.startswith(f"{LAV_FIGUERES}:")}
@@ -424,6 +432,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     cadiz = {k: n for k, n in none.items() if k.startswith(f"{SEVILLA_CADIZ}:")}
     # la de Sevilla a Cádiz, entera: 56 trenes hasta la bifurcación Utrera y 42 desde allí
     assert len(cadiz) == 16 and sorted(set(cadiz.values())) == [42, 56]
+    ramales = {
+        k: n
+        for k, n in none.items()
+        if k.startswith(("lav-la-sagra-toledo:", "lav-zaragoza-huesca:"))
+    }
+    assert len(ramales) == 3
     vitoria = {k: n for k, n in none.items() if k.startswith(f"{BURGOS_VITORIA}:")}
     # la de Burgos a Vitoria, entera: 29 trenes de Burgos a Miranda de Ebro y 31 de Miranda a Vitoria
     assert len(vitoria) == 7 and sorted(set(vitoria.values())) == [29, 31]
@@ -451,6 +465,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{EJE_ATLANTICO}:",
         f"{SEVILLA_CADIZ}:",
         f"{LAV_FIGUERES}:",
+        "lav-la-sagra-toledo:",
+        "lav-zaragoza-huesca:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
@@ -488,7 +504,9 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # salen de Chamartín; los 10 que faltan hasta 84 entran por la bifurcación de Torrejón de
     # Velasco desde Madrid-Puerta de Atocha
     assert [s.trains for s in trunk[:10]] == [74, 74, 84] + [86] * 7
-    assert all(s.without_alternative == 0 for s in trunk[2:10])
+    # salvo para los 2 Avant de Albacete a Toledo, que cambian de sentido en Madrid-Puerta de
+    # Atocha: sus tramos no forman un camino seguido y su recorrido se queda en cada tramo
+    assert all(s.without_alternative == 2 for s in trunk[2:10])
     # La línea de Valencia a Camp de Tarragona cierra un anillo con la de Madrid a Valencia y la de
     # Madrid a Barcelona, pero dar la vuelta entera no cuenta: de la bifurcación de Albacete a
     # València solo tienen otro camino los 4 AVE de Madrid a Castelló; los de Madrid a València,
@@ -510,11 +528,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # y en la de Albacete a Alicante, los siete que van de Albacete a Alicante: 42 trenes hasta
     # la bifurcación de Murcia, 36 de allí a Monforte del Cid (los 6 de Madrid a Murcia que no
     # entran en Alicante ya han salido) y 56 de Monforte del Cid a Alicante, con los 20 Avant de
-    # Alicante a Murcia. De la bifurcación a Albacete, 44, con otro camino
+    # Alicante a Murcia. De la bifurcación a Albacete, 44, con otro camino salvo los 2 Avant de
+    # Albacete a Toledo
     alicante = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_ALICANTE}:")]
     assert [(s.trains, s.without_alternative) for s in alicante] == [
-        (44, 0),
-        (44, 0),
+        (44, 2),
+        (44, 2),
         (42, 42),
         (42, 42),
         (42, 42),

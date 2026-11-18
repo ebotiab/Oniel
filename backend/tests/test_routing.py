@@ -125,6 +125,8 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 15
             + 16
             + 7
+            + 1  # el ramal de Toledo
+            + 2  # la línea de Huesca
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -356,6 +358,20 @@ def test_cadiz_is_reached_from_madrid_through_seville(graph: Graph) -> None:
     assert [(r.length_km, r.time_min, r.line_ids) for r in from_sevilla] == [
         (152.5, 49, ["sevilla-cadiz"])
     ]
+
+
+def test_toledo_and_huesca_are_reached_by_their_branches(graph: Graph) -> None:
+    """Los dos ramales cortos de alta velocidad: a Toledo, por la línea de Sevilla hasta La Sagra;
+    a Huesca, por la de Barcelona hasta la bifurcación Huesca, junto a Zaragoza-Miraflores."""
+    to_toledo = find_routes(graph, MADRID, "toledo")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_toledo] == [
+        (74.9, 19, [LAV, "lav-la-sagra-toledo"])
+    ]
+    to_huesca = find_routes(graph, MADRID, "huesca")
+    assert (to_huesca[0].length_km, to_huesca[0].time_min) == (390.7, 93)
+    assert to_huesca[0].line_ids == ["lav-madrid-barcelona", "lav-zaragoza-huesca"]
+    from_zaragoza = find_routes(graph, "zaragoza-delicias", "huesca")
+    assert [(r.length_km, r.time_min) for r in from_zaragoza] == [(84.2, 30)]
 
 
 def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:

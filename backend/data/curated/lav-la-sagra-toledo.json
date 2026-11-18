@@ -1,0 +1,59 @@
+{
+  "line": {
+    "id": "lav-la-sagra-toledo",
+    "name": "Línea de alta velocidad La Sagra – Toledo",
+    "short_name": "020",
+    "sort_order": 34,
+    "zone": "madrid-castilla-la-mancha",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 220,
+    "tracks": 2,
+    "opened_on": "2005-11-15",
+    "reference_length_km": 20.842,
+    "status": "disponible",
+    "description": "Un ramal corto de alta velocidad que sale de la línea Madrid – Sevilla en La Sagra y termina en Toledo. Es la única vía de tren que llega hoy a la ciudad.\n\nLos trenes de Toledo recorren primero unos cincuenta kilómetros de la línea de Sevilla, desde Madrid-Puerta de Atocha, y en la bifurcación La Sagra toman este ramal, que es solo suyo y no tiene estaciones intermedias. Cruza el Tajo por un viaducto de 1,6 km y acaba en la estación de Toledo, un edificio de 1919 restaurado para la llegada de la alta velocidad.\n\nSe abrió el 15 de noviembre de 2005. Hoy la recorren los Avant de Renfe entre Madrid y Toledo, que tardan una media hora, y uno al día en cada sentido que sigue de Madrid hacia Cuenca y Albacete por la línea de alta velocidad de Levante.\n\nCuando se abrió, Toledo perdió su enlace con la red convencional: no queda vía de ancho ibérico hasta la ciudad.",
+    "geometry_source": {
+      "source_id": "osm-relation-15616205",
+      "parts": [
+        {
+          "source_id": "osm-relation-15616205",
+          "file": "raw/osm/relation_15616205_lav_la_sagra_toledo_2026-11-18.json",
+          "relation_id": 15616205,
+          "from": [-3.8360015, 39.9907849],
+          "to": [-4.0104056, 39.862563]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-la-sagra-toledo"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "bif-la-sagra", "name": "Bifurcación La Sagra", "kind": "bifurcacion", "shared": true, "position": {"lon": -3.835908, "lat": 39.991107}, "reference_pk_km": 0.0},
+    {"id": "toledo", "name": "Toledo", "kind": "estacion", "adif_code": "92102", "position": {"lon": -4.0108266, "lat": 39.8625625}, "reference_pk_km": 20.842,
+     "description": "Estación término del ramal, abierta a la alta velocidad en noviembre de 2005 en el edificio neomudéjar de 1919. Solo llegan trenes Avant: casi todos van y vienen de Madrid-Puerta de Atocha, y uno al día en cada sentido sigue hasta Cuenca y Albacete."}
+  ],
+  "attribute_sections": [
+    {"attribute": "proteccion_tren", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "lzb_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: junto a Toledo, la estrella de «LZB», el cuadrado amarillo de «ASFA - AV» y el triángulo de GSM-R, como en la línea Madrid – Sevilla."},
+    {"attribute": "bloqueo", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: trazo rosa de BCA, con su rótulo, de La Sagra a Toledo."},
+    {"attribute": "mando", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Junto al BCA el mapa 4 no dice nada del mando, como en la línea Madrid – Sevilla."}
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "92102": {"node": "toledo"},
+    "60000": {"exits": ["bif-la-sagra"], "via": {"line": "lav-madrid-sevilla", "node": "bif-la-sagra"}},
+    "03208": {"exits": ["bif-la-sagra"]},
+    "60600": {"exits": ["bif-la-sagra"]}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Toledo, a la que solo se llega por este ramal: los Avant entre Madrid-Puerta de Atocha y Toledo y los que siguen de Madrid a Cuenca y Albacete.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": ["92102"],
+    "min_node_stops": 1
+  }
+}

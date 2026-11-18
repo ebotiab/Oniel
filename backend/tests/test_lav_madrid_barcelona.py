@@ -221,7 +221,6 @@ def test_continuations_are_connections_not_loaded_and_the_bypasses_no_longer_are
         "enlace-vallecas-perales-del-rio": "bif-vallecas-av",
         "convencional-plasencia-de-jalon-tudela": "cambiador-plasencia-de-jalon",
         "convencional-zaragoza-norte": "zaragoza-delicias",
-        "zaragoza-huesca": "bif-huesca",
     }
     # de Barcelona-Sants ya no sale una conexión a trazos: la continuación es la línea de
     # Barcelona a Figueres, y Girona y Figueres-Vilafant llevan el camino por ella

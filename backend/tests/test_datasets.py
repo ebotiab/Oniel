@@ -224,7 +224,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # Ebro y de Vitoria, los de Madrid-Príncipe Pío por la línea convencional y los Intercity de
     # Salamanca a Zaragoza
     # y los 293 de las dos líneas de Galicia que no estaban en otra: los Avant de Ourense a
-    # A Coruña y los regionales de A Coruña a Vigo
+    # A Coruña y los regionales de A Coruña a Vigo, y los 115 Avant del ramal de Toledo que no
+    # estaban en la línea de Valencia
     # y los 114 de la línea de Barcelona a Figueres que no estaban en otra: los Avant de Barcelona
     # a Figueres y los AVE de Barcelona a Lyon
     assert (
@@ -247,6 +248,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 293
         + 136
         + 114
+        + 115
     )
     assert (
         await _count(conn, "services", NEWER_ID)
@@ -268,6 +270,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 293
         + 136
         + 114
+        + 115
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -293,6 +296,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 3035 + 281  # la de A Coruña a Vigo
     passes += 1733 + 1081  # la de Sevilla a Cádiz
     passes += 1094 + 208  # la de Barcelona a Figueres: publicados, de Girona a Figueres-Vilafant
+    # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
+    passes += 4 * 132 + 132 + (11 + 11)
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral
@@ -559,10 +564,26 @@ async def test_importing_the_same_file_again_duplicates_nothing(
     # 409 del final, los de las cuatro líneas de Extremadura
     assert (
         await _count(conn, "services", NEWER_ID)
-        == 767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114
+        == 767
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
+        + 115
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114
+        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115
     )
 
 
@@ -596,8 +617,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     # los 409 del final son los de las cuatro líneas de Extremadura que no estaban en otra
     assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114,
-        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114,
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115,
+        767 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115,
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -638,7 +659,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
     assert await conn.fetchval("SELECT count(*) FROM services") == (
-        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114
+        768 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]
