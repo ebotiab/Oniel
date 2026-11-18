@@ -381,9 +381,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # y los once de la de León a Gijón, la única cargada al norte de León, y los siete de la de
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 7,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 7,
     )
+    # la de Barcelona a Figueres, entera: a Girona y a Figueres-Vilafant solo llega ella
+    figueres = {k: n for k, n in none.items() if k.startswith(f"{LAV_FIGUERES}:")}
+    assert len(figueres) == 7
     # las dos de Galicia, enteras: a Santiago, A Coruña y Vigo solo llegan ellas
     santiago = {k: n for k, n in none.items() if k.startswith(f"{LAV_SANTIAGO}:")}
     assert len(santiago) == 3 and sorted(set(santiago.values())) == [43, 45]
@@ -414,6 +417,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{BURGOS_VITORIA}:",
         f"{LAV_SANTIAGO}:",
         f"{EJE_ATLANTICO}:",
+        f"{LAV_FIGUERES}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",

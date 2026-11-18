@@ -257,6 +257,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 715 + 209  # la de Burgos a Vitoria
     passes += 854  # la de Ourense a Santiago, sin estaciones intermedias: todos estimados
     passes += 3035 + 281  # la de A Coruña a Vigo
+    passes += 1094 + 208  # la de Barcelona a Figueres: publicados, de Girona a Figueres-Vilafant
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral

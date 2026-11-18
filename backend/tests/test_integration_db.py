@@ -449,8 +449,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # un tramo, y las cuatro de Extremadura
     # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
     # a Gijón, y la de Burgos a Vitoria
-    # y las dos de Galicia
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2
+    # y las dos de Galicia, y la de Barcelona a Figueres
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -1334,7 +1334,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Madrid-Príncipe Pío por la línea convencional y los Intercity de Salamanca a Zaragoza
     # y 72 más con las dos de Galicia: los Avant de Ourense a A Coruña y los regionales de
     # A Coruña a Vigo
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72
+    # y 33 más con la de Barcelona a Figueres: los Avant de Barcelona a Figueres y los AVE de
+    # Barcelona a Lyon
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 33
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
