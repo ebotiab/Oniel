@@ -39,7 +39,8 @@ PADRON, PONTECESURES, CATOIRA = "23011", "23010", "23009"
 CHAMARTIN = "17000"
 #: Estaciones de la línea antigua de Ourense a Santiago, por O Carballiño y Lalín.
 OLD_LINE = ["31303", "31304", "31306", "31308"]
-#: Paradas repetidas del horario: la misma estación, un minuto después, en algunos trenes.
+#: Paradas repetidas del horario: la misma estación con otro código, un minuto después y sin
+#: subida ni bajada de viajeros, en algunos trenes.
 DUPLICATES = {"99117": "ourense", "99159": "santiago", "99143": "a-coruna", "99161": "pontevedra"}
 SANTIAGO_SEGMENTS = [
     "ourense:bif-coto-da-torre",
@@ -375,23 +376,33 @@ def test_the_eje_takes_every_train_that_stops_twice_on_it(
     }
     selected = {t.trip_id for t in trips}
     # quedan fuera los que de la línea solo tocan una estación: los de Ferrol, Lugo y Monforte
-    # en A Coruña y los de Ourense que acaban en Santiago. Una parada repetida no cuenta por dos
-    stations = {s for s, m in eje_spec.stop_mappings.items() if m.node and s not in DUPLICATES}
+    # en A Coruña y los de Ourense que acaban en Santiago
+    stations = {s for s, m in eje_spec.stop_mappings.items() if m.node}
+    assert not stations & set(DUPLICATES)
     for trip in feed.trips.values():
         assert (len(stations & set(_stops(trip))) >= 2) == (trip.trip_id in selected)
     assert select_trips_for_spec(ouigo_feed, eje_spec) == []
 
 
-def test_duplicate_stops_are_the_station_itself(
-    santiago_spec: NetworkSpec, eje_spec: NetworkSpec
+def test_duplicate_stops_are_exits_next_to_their_station(
+    feed: GtfsFeed, santiago_spec: NetworkSpec, eje_spec: NetworkSpec
 ) -> None:
     """El horario repite algunas estaciones con otro código («Santiago-Turístico»), un minuto
-    después: se asignan al mismo nodo, y el filtro de Ourense a Santiago pide paradas concretas
-    para que no cuenten como una segunda estación."""
-    for stop_id in ("99117", "99159"):
-        assert santiago_spec.stop_mappings[stop_id].node == DUPLICATES[stop_id]
-    for stop_id in ("99159", "99143", "99161"):
-        assert eje_spec.stop_mappings[stop_id].node == DUPLICATES[stop_id]
+    después y sin viajeros. No son un nodo, o el tren saldría dos veces en la ficha de la
+    estación: son salidas por su estación, a 0,1 km, para que el paso no quede indeterminado."""
+    for spec, stop_ids in (
+        (santiago_spec, ("99117", "99159")),
+        (eje_spec, ("99159", "99143", "99161")),
+    ):
+        for stop_id in stop_ids:
+            mapping = spec.stop_mappings[stop_id]
+            assert mapping.node is None and mapping.exits == [DUPLICATES[stop_id]]
+            assert mapping.track_km == 0.1 and not mapping.via
+    for stop_id in DUPLICATES:
+        for call in (
+            st for t in feed.trips.values() for st in t.stop_times if st.stop_id == stop_id
+        ):
+            assert call.pickup_type == 1 and call.drop_off_type == 1
 
 
 def test_old_tracks_are_stops_to_one_side(feed: GtfsFeed, eje: BuiltNetwork) -> None:

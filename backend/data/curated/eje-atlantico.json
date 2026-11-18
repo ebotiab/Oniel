@@ -636,20 +636,25 @@
     "99117": {
       "exits": [
         "santiago"
-      ],
-      "via": {
-        "line": "lav-ourense-santiago",
-        "node": "santiago"
-      }
+      ]
     },
     "99143": {
-      "node": "a-coruna"
+      "exits": [
+        "a-coruna"
+      ],
+      "track_km": 0.1
     },
     "99159": {
-      "node": "santiago"
+      "exits": [
+        "santiago"
+      ],
+      "track_km": 0.1
     },
     "99161": {
-      "node": "pontevedra"
+      "exits": [
+        "pontevedra"
+      ],
+      "track_km": 0.1
     }
   },
   "corridor_filter": {

@@ -413,19 +413,21 @@
       ]
     },
     "99117": {
-      "node": "ourense"
+      "exits": [
+        "ourense"
+      ],
+      "track_km": 0.1
     },
     "99143": {
       "exits": [
         "santiago"
-      ],
-      "via": {
-        "line": "eje-atlantico",
-        "node": "santiago"
-      }
+      ]
     },
     "99159": {
-      "node": "santiago"
+      "exits": [
+        "santiago"
+      ],
+      "track_km": 0.1
     }
   },
   "corridor_filter": {

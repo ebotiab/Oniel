@@ -493,7 +493,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 1311 + 125  # la de León a Gijón
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
     renfe_passes += 854  # la de Ourense a Santiago
-    renfe_passes += 3031 + 285  # la de A Coruña a Vigo
+    renfe_passes += 3035 + 281  # la de A Coruña a Vigo
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -653,6 +653,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_LEON,
         LAV_OURENSE,
         LAV_BURGOS,
+        # el kilómetro de la salida de Ourense, por la vía de la línea convencional
+        LAV_SANTIAGO,
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -823,6 +825,8 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         f"{LEON_GIJON}:bif-pajares:la-robla-av": "25kv_ca",
         f"{LEON_GIJON}:la-robla-av:campomanes-av": "25kv_ca",
         f"{LEON_GIJON}:campomanes-av:pola-de-lena": "25kv_ca",
+        # la salida de Ourense, a 3 kV en una línea a 25 kV
+        f"{LAV_SANTIAGO}:ourense:bif-coto-da-torre": "3kv_cc",
     }
     # el ancho, solo donde no es el de su línea: el mixto del paso por Loja, de la entrada a
     # Granada, de la de Murcia, de la llegada a Ourense y de la variante de Pajares, y en la línea de Valencia a Camp de Tarragona, el mixto de
@@ -1314,9 +1318,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # pasan por ninguna otra línea cargada
     # y 30 más con la de Burgos a Vitoria: los regionales de Miranda de Ebro y de Vitoria, los de
     # Madrid-Príncipe Pío por la línea convencional y los Intercity de Salamanca a Zaragoza
-    # y 58 más con las dos de Galicia: los Avant de Ourense a A Coruña y los regionales de
+    # y 72 más con las dos de Galicia: los Avant de Ourense a A Coruña y los regionales de
     # A Coruña a Vigo
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 58
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
