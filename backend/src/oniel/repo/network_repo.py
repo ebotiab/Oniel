@@ -45,8 +45,9 @@ def _listed(names: list[str]) -> str:
 
 def coverage_notice(lines: list[LineSummary], operators: Sequence[Operator] = ()) -> str:
     """Aviso de cobertura construido a partir de las líneas cargadas y de sus operadores."""
-    loaded = [o.name for o in operators if o.timetable == "cargado"] or ["Renfe"]
+    loaded = [o.name for o in operators if o.timetable in ("cargado", "no_oficial")] or ["Renfe"]
     missing = [o.name for o in operators if o.timetable == "no_publicado"]
+    unofficial = [o.name for o in operators if o.timetable == "no_oficial"]
     # Un baipás o un enlace es parte de la línea de la que cuelga: no se nombra aparte.
     names = [
         line.name[0].lower() + line.name[1:]
@@ -65,10 +66,18 @@ def coverage_notice(lines: list[LineSummary], operators: Sequence[Operator] = ()
         if missing
         else ""
     )
+    official = [name for name in loaded if name not in unofficial] or loaded
+    published = "cada operador" if len(official) > 1 else official[0]
+    origin = (
+        f" Los horarios de {_listed(unofficial)} salen de una compilación no oficial, que no"
+        f" publica{'n esos operadores' if len(unofficial) > 1 else ' el operador'}; los demás son"
+        f" los publicados por {published}. No reflejan interrupciones ni"
+        if unofficial
+        else f" Los horarios son los publicados por {published} y no reflejan interrupciones ni"
+    )
     return (
         f"Esta versión de Oniel carga {listed}, con los servicios de {_listed(loaded)} que las"
-        f" recorren.{absent} Los horarios son los publicados por"
-        f" {'cada operador' if len(loaded) > 1 else loaded[0]} y no reflejan interrupciones ni"
+        f" recorren.{absent}{origin}"
         " alteraciones del servicio; las interrupciones que Oniel conoce se señalan aparte, con"
         " su fuente y la fecha en que se comprobaron."
     )

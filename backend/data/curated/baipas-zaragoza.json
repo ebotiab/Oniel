@@ -58,8 +58,8 @@
       "id": "iryo",
       "name": "Iryo",
       "role": "operador",
-      "source_id": "iryo-web",
-      "timetable": "no_publicado"
+      "source_id": "iryo-gtfs-no-oficial",
+      "timetable": "no_oficial"
     }
   ],
   "nodes": [

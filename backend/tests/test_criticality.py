@@ -333,7 +333,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
-    assert exported.missing_operator_ids == ["iryo"]
+    assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
     counts: dict[str, int] = {}
     by_operator: dict[str, dict[str, int]] = {}

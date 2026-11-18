@@ -37,8 +37,8 @@ test.describe('La línea de alta velocidad Madrid – Cuenca – Valencia', () =
     await expect(esquema).toContainText('Bif. Albacete')
     await expect(esquema).toContainText('Requena-Utiel')
     await expect(esquema).toContainText('València-Joaquín Sorolla')
-    // los recuentos del esquema son de Renfe y de Ouigo; faltan los de Iryo (el esquema compacto del móvil no lleva la nota)
-    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('nota-esquema')).toContainText('no incluyen los de Iryo')
+    // los recuentos del esquema son de Renfe, de Ouigo y de Iryo, estos de una compilación no oficial (el esquema compacto del móvil no lleva la nota)
+    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('nota-esquema')).toContainText('los de Iryo, de una compilación no oficial')
   })
 
   test('el buscador lleva a Madrid-Chamartín, que tiene su ficha con los destinos de Levante', async ({ page }) => {
@@ -68,17 +68,17 @@ test.describe('La línea de alta velocidad Madrid – Cuenca – Valencia', () =
     await page.goto('/tramo/lav-madrid-valencia:madrid-chamartin:paso-bajo-atocha')
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
-    await expect(page.getByTestId('tramo-operadores')).toHaveText(/^Renfe Viajeros \d+ · Ouigo España \d+$/)
+    await expect(page.getByTestId('tramo-operadores')).toHaveText(/^Renfe Viajeros \d+ · Ouigo España \d+ · Iryo \d+$/)
     await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de nivel 1 y ASFA')
   })
 
-  test('un tramo dice sus trenes por operador, que faltan los de Iryo y su señalización', async ({ page }) => {
+  test('un tramo dice sus trenes por operador, que los de Iryo no salen de una fuente oficial y su señalización', async ({ page }) => {
     await page.goto('/tramo/lav-madrid-valencia:horcajada:cuenca-fernando-zobel')
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
-    await expect(page.getByTestId('tramo-operadores')).toHaveText(/^Renfe Viajeros \d+ · Ouigo España \d+$/)
-    await expect(page.getByTestId('tramo-operadores-sin-horarios')).toContainText('No están los trenes de Iryo')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText(/^Renfe Viajeros \d+ · Ouigo España \d+ · Iryo \d+$/)
+    await expect(page.getByTestId('tramo-operadores-no-oficiales')).toContainText('Los trenes de Iryo salen de una compilación no oficial')
     // la señalización va bajo «Más detalle»: está en la ficha aunque plegada
     await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de nivel 1 y ASFA')
     await expect(page.getByTestId('tramo-atributo-bloqueo')).toHaveText('De control automático')

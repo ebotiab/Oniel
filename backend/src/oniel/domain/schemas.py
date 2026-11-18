@@ -30,8 +30,9 @@ class Operator(BaseModel):
     role: Literal["operador", "administrador_infraestructura"]
     #: Fuente registrada de la que salen sus datos (sus horarios, si es un operador).
     source_id: str | None = None
-    #: De un operador de trenes: si sus horarios están cargados o no los publica en abierto.
-    timetable: Literal["cargado", "no_publicado"] | None = None
+    #: De un operador de trenes: si sus horarios están cargados (``cargado``), si no los publica
+    #: en abierto (``no_publicado``) o si se cargan de una compilación no oficial (``no_oficial``).
+    timetable: Literal["cargado", "no_publicado", "no_oficial"] | None = None
 
 
 class ZoneOut(BaseModel):

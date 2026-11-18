@@ -40,7 +40,7 @@
     {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
     {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"},
     {"id": "ouigo", "name": "Ouigo España", "role": "operador", "source_id": "ouigo-gtfs-nap"},
-    {"id": "iryo", "name": "Iryo", "role": "operador", "source_id": "iryo-web", "timetable": "no_publicado"}
+    {"id": "iryo", "name": "Iryo", "role": "operador", "source_id": "iryo-gtfs-no-oficial", "timetable": "no_oficial"}
   ],
   "nodes": [
     {"id": "madrid-chamartin", "name": "Madrid-Chamartín", "kind": "estacion", "adif_code": "17000", "position": {"lon": -3.6822622, "lat": 40.4720571}, "reference_pk_km": 0.0,

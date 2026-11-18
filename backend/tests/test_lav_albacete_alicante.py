@@ -235,7 +235,7 @@ def test_sources_and_operators_are_registered(spec: NetworkSpec) -> None:
         assert section.source_id in sources
     operators = {o.id: o for o in spec.operators if o.role == "operador"}
     assert set(operators) == {"renfe", "ouigo", "iryo"}
-    assert operators["iryo"].timetable == "no_publicado"
+    assert operators["iryo"].timetable == "no_oficial"
     assert "Albacete a Alicante" in str(sources["iryo-web"].coverage)
     assert all(o.source_id in sources for o in spec.operators)
 

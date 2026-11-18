@@ -12,7 +12,7 @@ import datetime as dt
 import hashlib
 import re
 from collections import Counter
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
@@ -21,7 +21,7 @@ import asyncpg
 import logfire
 
 from oniel.db.pool import fetch_int
-from oniel.gtfs.reader import GtfsFeed, GtfsTrip, read_feed
+from oniel.gtfs.reader import GtfsFeed, GtfsTrip, read_feed, rename_stops
 from oniel.gtfs.trips import (
     LoadedLine,
     bypasses_of,
@@ -146,6 +146,8 @@ async def import_gtfs(
     data_dir: Path | None = None,
     product: str | None = None,
     stop_id_prefix: str | None = None,
+    stop_id_aliases: Mapping[str, str] | None = None,
+    names_stops: bool = True,
 ) -> dict[str, Any]:
     """Importa un fichero GTFS como conjunto de datos, sin tocar los demás conjuntos.
 
@@ -153,7 +155,9 @@ async def import_gtfs(
     sustituye sus servicios (las reglas de recorrido pueden haber cambiado) y no duplica nada.
     ``retrieved_on`` es el día de descarga; si no se da, se lee del nombre del fichero. Con
     ``product`` todos los trenes del fichero se rotulan con ese nombre en vez de con el suyo, y con
-    ``stop_id_prefix`` se quita ese prefijo de sus códigos de parada (véase ``FeedSpec``).
+    ``stop_id_prefix`` se quita ese prefijo de sus códigos de parada (véase ``FeedSpec``) y con
+    ``stop_id_aliases`` se cambian por el de Adif los códigos que trae distintos. Con
+    ``names_stops`` a ``False`` el fichero no pone nombre ni coordenadas a las paradas asignadas.
     """
     retrieved = retrieved_on or retrieved_on_from_name(feed_path)
     if retrieved is None:
@@ -166,10 +170,17 @@ async def import_gtfs(
     paths = [spec_paths] if isinstance(spec_paths, Path) else list(spec_paths)
     specs = [load_network_spec(p) for p in paths]
     with logfire.span("import gtfs {feed}", feed=feed_path.name):
-        feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix)
+        feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
         if product:
             for trip in feed.trips.values():
                 trip.product = product
+        if not names_stops:
+            # Sus paradas llevan el código de Adif con otro nombre: se muestran con el que ya les
+            # han puesto los ficheros oficiales.
+            named = await conn.fetch(
+                "SELECT stop_id, stop_name FROM stop_mappings WHERE stop_name IS NOT NULL"
+            )
+            rename_stops(feed, {r["stop_id"]: r["stop_name"] for r in named})
         plans: dict[str, _TripPlan] = {}
         per_line: dict[str, dict[str, Any]] = {}
         unmapped: Counter[str] = Counter()
@@ -255,12 +266,13 @@ async def import_gtfs(
             await conn.execute("DELETE FROM services WHERE dataset_id = $1", dataset_id)
             await _insert_services(conn, plans.values(), feed, dataset_id, operator_id, run_id)
             # Nombre y coordenadas de las paradas asignadas: los pone un fichero con sus propios
-            # códigos, no uno que toma prestados los de Adif quitando un prefijo.
+            # códigos, no uno que toma prestados los de Adif quitando un prefijo ni una
+            # compilación no oficial que los usa con otros nombres.
             await conn.executemany(
                 "UPDATE stop_mappings SET stop_name=$2, lon=$3, lat=$4, source_id=$5 WHERE stop_id=$1",
                 [
                     (stop_id, stop.name, stop.lon, stop.lat, source_id)
-                    for spec in ([] if stop_id_prefix else specs)
+                    for spec in ([] if stop_id_prefix or not names_stops else specs)
                     for stop_id in spec.stop_mappings
                     if (stop := feed.stops.get(stop_id))
                 ],

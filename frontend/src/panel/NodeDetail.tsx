@@ -66,6 +66,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
   // Fuentes de los horarios de los trenes que paran aquí, para citarlas al pie del detalle.
   const callOperators = new Set(calls?.calls.map((c) => c.operator_id))
   const timetables = operators.filter((o) => callOperators.has(o.id)).map((o) => sources.find((s) => s.id === o.source_id))
+  const unofficial = operators.filter((o) => o.timetable === 'no_oficial' && callOperators.has(o.id))
   const operatorName = (id: string | undefined) => operators.find((o) => o.id === id)?.name ?? id ?? ''
 
   return (
@@ -171,6 +172,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
           network={network}
           operators={operators}
           missing={missing}
+          unofficial={unofficial}
           interrupted={[...annotated.values()].some((list) => list.some(isInterruption))}
           onSelectNode={onSelectNode}
         />
