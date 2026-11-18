@@ -104,6 +104,12 @@ test.describe('El enlace de Monforte del Cid', () => {
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos.first()).toContainText('529,5 km · 2 h 3 min sin paradas')
     await expect(recorridos.first()).toContainText('Recorre tres líneas')
-    for (const recorrido of await recorridos.all()) await expect(recorrido).not.toContainText('Monforte del Cid')
+    // Solo pasa por el enlace el recorrido que llega antes a Alicante, por València y Xàtiva (#208): entra
+    // en él desde Alicante-Terminal, como los trenes de Alicante a Murcia, y no dobla ninguna esquina
+    for (const recorrido of await recorridos.all()) {
+      const texto = (await recorrido.textContent()) ?? ''
+      if (texto.includes('Alicante-Terminal')) expect(texto).toContain('Xàtiva')
+      else expect(texto).not.toContain('Monforte del Cid')
+    }
   })
 })
