@@ -38,6 +38,7 @@ from conftest import (
     MONFRAGUE_CACERES_SPEC,
     MZCR_SPEC,
     RAMAL_MERIDA_SPEC,
+    SEVILLA_CADIZ_SPEC,
     SPEC,
     SPECS,
 )
@@ -72,6 +73,9 @@ RULES = {
 #: La alta velocidad de Sevilla tiene además la de los directos de Madrid a Málaga, que no paran
 #: en Córdoba y no pasan su filtro de corredor.
 MALAGA_RULES = {"madrid-malaga-sin-paradas": 13}
+#: Y, desde la línea de Sevilla a Cádiz, las de los trenes de Madrid a Sevilla y a Cádiz que tampoco
+#: paran en Córdoba: 10 AVE y 8 Alvia sin paradas hasta Santa Justa, y 5 Alvia hasta Jerez.
+CADIZ_RULES = {"madrid-sevilla-sin-paradas": 18, "madrid-jerez-sin-paradas": 5}
 #: La convencional tiene además la regla de los trenes de Jaén que solo paran una vez en ella.
 JAEN_RULES = {"cordoba-jaen-sin-paradas": 42}
 #: Y las de los trenes de la línea de Extremadura, que solo la recorren de Madrid-Atocha Cercanías
@@ -276,8 +280,9 @@ def test_the_diverted_trains_enter_the_three_lines(
     lav_trips = select_trips_for_spec(feed, spec)
     conv_trips = select_trips_for_spec(feed, conv_spec)
     mzcr_trips = select_trips_for_spec(feed, mzcr_spec)
-    # 317 ya entraban por el filtro; 47 no paran en Madrid y 13 van directos a Málaga
-    assert len(lav_trips) == 317 + 47 + 13
+    # 317 ya entraban por el filtro; 47 no paran en Madrid y 36 no paran en Córdoba: 13 van
+    # directos a Málaga, 10 a Sevilla y 13 a Cádiz
+    assert len(lav_trips) == 317 + 47 + 36
     # los 22, los 42 de Jaén y los 267 de la línea de Extremadura entran por las reglas
     assert len(conv_trips) == 368 + 22 + 42 + 267
     assert len(mzcr_trips) == 124 + 22  # no paran en la línea: también por las reglas
@@ -287,7 +292,7 @@ def test_the_diverted_trains_enter_the_three_lines(
             r.id: sum(1 for m in matched if m is not None and m.override.id == r.id)
             for r in line_spec.route_overrides
         }
-        lav_rules = AWAY_RULES | MALAGA_RULES
+        lav_rules = AWAY_RULES | MALAGA_RULES | CADIZ_RULES
         conv_rules = JAEN_RULES | EXTREMADURA_RULES
         extra = conv_rules if line_spec is conv_spec else lav_rules if line_spec is spec else {}
         assert by_rule == RULES | extra
@@ -587,7 +592,7 @@ def test_via_legs_say_why_a_chain_cannot_be_followed(lines: Lines) -> None:
 def test_validate_reports_the_rules_and_no_problems() -> None:
     reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
     expected = {
-        SPEC.name: RULES | AWAY_RULES | MALAGA_RULES,
+        SPEC.name: RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES,
         CONV_SPEC.name: RULES | JAEN_RULES | EXTREMADURA_RULES,
         MZCR_SPEC.name: RULES,
         JAEN_SPEC.name: {},
@@ -685,6 +690,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         LEON_GIJON_SPEC.name: {},
         # ni la de Burgos a Vitoria: todos sus trenes paran en dos de sus estaciones
         BURGOS_VITORIA_SPEC.name: {},
+        # los Alvia de Cádiz que llegan a Santa Justa por la alta velocidad desde Córdoba
+        SEVILLA_CADIZ_SPEC.name: {"cordoba-por-la-alta-velocidad": 12},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin
@@ -707,7 +714,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     granada = reports[LBMG_SPEC.name]["gtfs"]
     assert granada["trips"] == 38 and granada["passes"] == {"publicado": 18, "estimado": 62}
     assert reports[CONV_SPEC.name]["gtfs"]["trips"] == 432 + 267
-    assert reports[SPEC.name]["gtfs"]["trips"] == 317 + 47 + 13
+    assert reports[SPEC.name]["gtfs"]["trips"] == 317 + 47 + 36
     assert reports[MZCR_SPEC.name]["gtfs"]["trips"] == 146
     assert reports[BCN_SPEC.name]["gtfs"]["trips"] == 571
     assert reports[MADRID_PLASENCIA_SPEC.name]["gtfs"]["trips"] == 267

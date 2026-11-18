@@ -96,9 +96,32 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-08",
-      "coverage": "De la relación completa (Alcázar de San Juan–Cádiz) Oniel usa los 293,5 km entre Alcázar de San Juan y Córdoba, por Manzanares, Despeñaperros, Linares-Baeza y Andújar; velocidad máxima por tramo.",
-      "notes": "Descargado por la API Overpass el 8 de noviembre de 2026. Mismo método que la línea 300: camino más corto en el grafo de vías de la relación. Las etiquetas de número de vías de OSM no cubren este tramo, así que los tramos de vía única se tomaron de Wikipedia y del rutómetro de la FCMAF. También se descargaron los nodos de estaciones e instalaciones de Adif del corredor (raw/osm/adif_facility_nodes_mancha_andalucia_2026-11-08.json) para situar los nodos.",
+      "coverage": "De la relación completa (Alcázar de San Juan–Cádiz) Oniel usa dos trechos: los 293,5 km entre Alcázar de San Juan y Córdoba, por Manzanares, Despeñaperros, Linares-Baeza y Andújar, y los 152,6 km entre Sevilla-Santa Justa y Cádiz, por Utrera, la variante de Lebrija y Jerez de la Frontera; velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 8 de noviembre de 2026. Mismo método que la línea 300: camino más corto en el grafo de vías de la relación. Las etiquetas de número de vías de OSM no cubren este tramo, así que los tramos de vía única se tomaron de Wikipedia y del rutómetro de la FCMAF. También se descargaron los nodos de estaciones e instalaciones de Adif del corredor (raw/osm/adif_facility_nodes_mancha_andalucia_2026-11-08.json) para situar los nodos. El trecho de Sevilla a Cádiz (línea Sevilla – Cádiz, 18 de noviembre de 2026) se traza desde el punto de parada de la vía 9 de Santa Justa (nodo 7763430689), a 30 m del nodo de la estación: desde el vértice más cercano a la estación el camino más corto subía por la otra vía hasta cerca de Lora del Río y volvía.",
       "file": "raw/osm/relation_11351144_linea_400_alcazar_cadiz_2026-11-08.json"
+    },
+    {
+      "id": "osm-instalaciones-sevilla-cadiz",
+      "name": "Estaciones e instalaciones de la línea Sevilla–Cádiz en OpenStreetMap",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Coordenadas de las estaciones y apeaderos de San Bernardo (nodo 7763424280), Virgen del Rocío (7763424278), Bellavista (7782117948), Dos Hermanas (7758141421), Utrera (7768401196), Las Cabezas de San Juan (919627525), Lebrija (7768387808), Aeropuerto de Jerez (1567648473), Jerez de la Frontera (10922195562), El Puerto de Santa María (1738646773), Puerto Real (7768387859), San Fernando-Bahía Sur (2340360836), Estadio (496496219), Segunda Aguada (5302170172) y Cádiz (259625422), y de la bifurcación Utrera (8048235469, «Bifurcación Utrera», de Adif).",
+      "notes": "Nodos con etiqueta railway de dieciséis recuadros pequeños alrededor de cada estación, pedidos uno a uno a la API de OpenStreetMap (map.json?bbox=…) el 18 de noviembre de 2026 y reunidos en un fichero; Overpass no respondía. Los códigos de las estaciones son los de sus paradas en el GTFS de Renfe. Que la bifurcación Utrera es el arranque de la línea hacia Marchena lo dice también la relación de esa línea (11797051, «FFCC Bifurcación Utrera - Fuente de Piedra», línea 422 de Adif).",
+      "file": "raw/osm/instalaciones_sevilla_cadiz_2026-11-18.json"
+    },
+    {
+      "id": "wikipedia-linea-400-sevilla-cadiz",
+      "name": "Artículos «Línea Alcázar de San Juan-Cádiz» y «Anexo:Esquema de la línea Alcázar de San Juan-Cádiz» de Wikipedia en español (puntos kilométricos de Sevilla a Cádiz, vía doble, electrificación, bloqueo, historia)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Alc%C3%A1zar_de_San_Juan-C%C3%A1diz",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Línea 400 de la Red Ferroviaria de Interés General: ancho ibérico, electrificada a 3 kV, 200 km/h en partes del tramo de Sevilla a Cádiz, duplicación progresiva de la vía, variante de Lebrija (2013), soterramiento en Cádiz (2000–2002) y apertura de Jerez–Sevilla (1860) y Trocadero–Cádiz (1861). Puntos kilométricos del esquema, que en Sevilla-Santa Justa vuelve a empezar: San Bernardo 1,9, Virgen del Rocío 3,6, Bellavista 8,5, Dos Hermanas 15,1, bifurcación Utrera 27,7, Utrera 31,7, Las Cabezas de San Juan 55,5, Lebrija 74,2, Aeropuerto de Jerez 99,7, Jerez de la Frontera 109,5, El Puerto de Santa María 124,4, Puerto Real 133,2, San Fernando-Bahía Sur 145,4, Estadio 154,9, Segunda Aguada 156,2 y Cádiz 158,1.",
+      "notes": "Fuente de verificación, no de geometría, consultada por la API de Wikipedia el 18 de noviembre de 2026. Revisiones: artículo de la línea 169363032 (6 de septiembre de 2025) y esquema 169363023 (6 de septiembre de 2025). El esquema no da punto kilométrico a Santa Justa en la numeración de Sevilla a Cádiz. Los puntos kilométricos de Aeropuerto de Jerez en adelante son los del trazado anterior a la variante de Lebrija: sobre el trazado actual quedan unos 5,3 km por delante del kilómetro que les toca contando desde Sevilla, y la línea retoma la cuenta en Aeropuerto de Jerez (pk_restarts)."
     },
     {
       "id": "wikipedia-lineas-300-400",
@@ -616,7 +639,7 @@
       "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
       "retrieved_on": "2026-11-12",
-      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF).",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra.",
       "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
       "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },
@@ -638,9 +661,9 @@
       "url": "https://www.adif.es/viajeros/estado-de-la-red",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-17",
+      "retrieved_on": "2026-11-18",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {

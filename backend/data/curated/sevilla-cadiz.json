@@ -1,0 +1,528 @@
+{
+  "line": {
+    "id": "sevilla-cadiz",
+    "name": "Línea convencional Sevilla – Cádiz",
+    "short_name": "400",
+    "sort_order": 30,
+    "zone": "andalucia",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 200,
+    "tracks": 2,
+    "pk_origin_km": 0.3,
+    "pk_restarts": [
+      {
+        "node": "aeropuerto-de-jerez",
+        "pk_km": 99.7
+      }
+    ],
+    "status": "disponible",
+    "description": "Une Sevilla con Jerez de la Frontera y Cádiz por Dos Hermanas y Utrera. Por ella siguen hasta Cádiz los trenes de larga distancia que llegan de Madrid a Sevilla por la alta velocidad.\n\nEs el último trecho de la línea de Adif que va de Alcázar de San Juan a Cádiz, y en Sevilla-Santa Justa empieza a contar los kilómetros de nuevo. La construyó en el siglo XIX una compañía de Sevilla, Jerez y Cádiz: llegó de Jerez a Sevilla en 1860 y a Cádiz en 1861. Desde finales del siglo XX se ha ido duplicando y preparando para más velocidad; hoy es de vía doble de punta a punta, y entre Las Cabezas de San Juan y el aeropuerto de Jerez va por la variante de Lebrija, abierta en 2013.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Cádiz y los Media Distancia de Sevilla, Córdoba y Jaén a Cádiz. Los de Córdoba y Jaén llegan a Sevilla por la línea convencional de Córdoba, que no está cargada. Los Media Distancia de Sevilla a Osuna y Málaga van por ella hasta la bifurcación Utrera, donde toman la línea de Marchena.\n\nPor ella circulan también los trenes de Cercanías de Sevilla y de Cádiz, que no están cargados. Las estaciones que solo usan ellos no figuran en la línea.",
+    "geometry_source": {
+      "source_id": "osm-relation-11351144",
+      "parts": [
+        {
+          "source_id": "osm-relation-11351144",
+          "file": "raw/osm/relation_11351144_linea_400_alcazar_cadiz_2026-11-08.json",
+          "relation_id": 11351144,
+          "from": [
+            -5.975224,
+            37.3923692
+          ],
+          "to": [
+            -6.2868833,
+            36.5279393
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-400-sevilla-cadiz"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "sevilla-santa-justa",
+      "name": "Sevilla-Santa Justa",
+      "kind": "estacion",
+      "shared": true,
+      "adif_code": "51003",
+      "position": {
+        "lon": -5.974927,
+        "lat": 37.392496
+      }
+    },
+    {
+      "id": "san-bernardo",
+      "name": "San Bernardo",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51100",
+      "position": {
+        "lon": -5.9795353,
+        "lat": 37.3776609
+      },
+      "reference_pk_km": 1.9
+    },
+    {
+      "id": "virgen-del-rocio",
+      "name": "Virgen del Rocío",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51110",
+      "position": {
+        "lon": -5.9758225,
+        "lat": 37.3628127
+      },
+      "reference_pk_km": 3.6
+    },
+    {
+      "id": "bellavista",
+      "name": "Bellavista",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51111",
+      "position": {
+        "lon": -5.9642315,
+        "lat": 37.3215196
+      },
+      "reference_pk_km": 8.5
+    },
+    {
+      "id": "dos-hermanas",
+      "name": "Dos Hermanas",
+      "kind": "estacion",
+      "adif_code": "51103",
+      "position": {
+        "lon": -5.9233167,
+        "lat": 37.2872158
+      },
+      "reference_pk_km": 15.1
+    },
+    {
+      "id": "bif-utrera",
+      "name": "Bifurcación Utrera",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -5.8190804,
+        "lat": 37.2104554
+      },
+      "reference_pk_km": 27.7,
+      "description": "Punto donde se separa de la línea, hacia el este, la de Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga. Esa línea no está cargada y se dibuja a trazos."
+    },
+    {
+      "id": "utrera",
+      "name": "Utrera",
+      "kind": "estacion",
+      "adif_code": "51200",
+      "position": {
+        "lon": -5.7902404,
+        "lat": 37.1833437
+      },
+      "reference_pk_km": 31.7
+    },
+    {
+      "id": "las-cabezas-de-san-juan",
+      "name": "Las Cabezas de San Juan",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51202",
+      "position": {
+        "lon": -5.9456942,
+        "lat": 37.0185216
+      },
+      "reference_pk_km": 55.5
+    },
+    {
+      "id": "lebrija",
+      "name": "Lebrija",
+      "kind": "estacion",
+      "adif_code": "51203",
+      "position": {
+        "lon": -6.0951993,
+        "lat": 36.9115448
+      },
+      "reference_pk_km": 74.2,
+      "description": "Última estación antes de la variante de Lebrija, el trazado nuevo que llega hasta el aeropuerto de Jerez."
+    },
+    {
+      "id": "aeropuerto-de-jerez",
+      "name": "Aeropuerto de Jerez",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51205",
+      "position": {
+        "lon": -6.066446,
+        "lat": 36.7512312
+      }
+    },
+    {
+      "id": "jerez-de-la-frontera",
+      "name": "Jerez de la Frontera",
+      "kind": "estacion",
+      "adif_code": "51300",
+      "position": {
+        "lon": -6.1261035,
+        "lat": 36.6798124
+      },
+      "reference_pk_km": 109.5,
+      "description": "La estación de Jerez, donde paran todos los trenes de la línea, también los de larga distancia de Madrid."
+    },
+    {
+      "id": "el-puerto-de-santa-maria",
+      "name": "El Puerto de Santa María",
+      "kind": "estacion",
+      "adif_code": "51400",
+      "position": {
+        "lon": -6.2169966,
+        "lat": 36.6041992
+      },
+      "reference_pk_km": 124.4
+    },
+    {
+      "id": "puerto-real",
+      "name": "Puerto Real",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51401",
+      "position": {
+        "lon": -6.1853007,
+        "lat": 36.5308306
+      },
+      "reference_pk_km": 133.2
+    },
+    {
+      "id": "san-fernando-bahia-sur",
+      "name": "San Fernando-Bahía Sur",
+      "kind": "estacion",
+      "adif_code": "51406",
+      "position": {
+        "lon": -6.206875,
+        "lat": 36.4679215
+      },
+      "reference_pk_km": 145.4
+    },
+    {
+      "id": "estadio",
+      "name": "Cádiz-Estadio",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51409",
+      "position": {
+        "lon": -6.2720481,
+        "lat": 36.5029227
+      },
+      "reference_pk_km": 154.9
+    },
+    {
+      "id": "segunda-aguada",
+      "name": "Segunda Aguada",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "51404",
+      "position": {
+        "lon": -6.2769634,
+        "lat": 36.5135032
+      },
+      "reference_pk_km": 156.2
+    },
+    {
+      "id": "cadiz",
+      "name": "Cádiz",
+      "kind": "estacion",
+      "adif_code": "51405",
+      "position": {
+        "lon": -6.2868833,
+        "lat": 36.5279393
+      },
+      "reference_pk_km": 158.1,
+      "description": "Estación término de la línea, abierta en los primeros años de este siglo, cuando se soterró buena parte del recorrido por la ciudad."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "bif-utrera",
+      "value": 160,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 3 (velocidades máximas, página 7 del PDF): «160» junto a la línea entre Sevilla-Santa Justa y la bifurcación Utrera. Las vías de OSM traen 160 km/h en casi todo el trecho, pero no traen velocidad en el túnel de San Bernardo a Virgen del Rocío, y sin esta sección ese tramo se quedaría sin ella."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "bif-utrera",
+      "to_node": "utrera",
+      "value": 140,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 3: «140» entre la bifurcación Utrera y Utrera, y «200» desde Utrera hacia Cádiz. Las vías de OSM traen aquí 160 km/h; se declara lo que dice el mapa."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "cadiz",
+      "value": "ertms_n1_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: tréboles morados de «ERTMS N1» junto a la bifurcación Utrera, entre Utrera y Las Cabezas de San Juan y junto a Jerez de la Frontera, y círculos verdes de «Tren tierra y ASFA conv.» a lo largo de la línea, de Sevilla a Cádiz."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "cadiz",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: trazo marrón discontinuo de «BAB ctc» a lo largo de toda la línea, con el rótulo junto a la bifurcación Utrera, entre Utrera y Las Cabezas de San Juan, junto a Jerez y antes de Cádiz. La línea se dibuja con el trazo de «Doble a 3 kV a 1.668 mm»."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "cadiz",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-bif-utrera-marchena",
+      "node_id": "bif-utrera",
+      "name": "Línea Utrera – Fuente de Piedra",
+      "towards": "Arahal, Marchena, Osuna, Bobadilla y Málaga",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.8190804,
+          37.2104554
+        ],
+        [
+          -5.548514,
+          37.268081
+        ],
+        [
+          -5.425519,
+          37.334282
+        ],
+        [
+          -5.115026,
+          37.233899
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "51003": {
+      "node": "sevilla-santa-justa"
+    },
+    "51100": {
+      "node": "san-bernardo"
+    },
+    "51110": {
+      "node": "virgen-del-rocio"
+    },
+    "51111": {
+      "node": "bellavista"
+    },
+    "51103": {
+      "node": "dos-hermanas"
+    },
+    "51200": {
+      "node": "utrera"
+    },
+    "51202": {
+      "node": "las-cabezas-de-san-juan"
+    },
+    "51203": {
+      "node": "lebrija"
+    },
+    "51205": {
+      "node": "aeropuerto-de-jerez"
+    },
+    "51300": {
+      "node": "jerez-de-la-frontera"
+    },
+    "51400": {
+      "node": "el-puerto-de-santa-maria"
+    },
+    "51401": {
+      "node": "puerto-real"
+    },
+    "51406": {
+      "node": "san-fernando-bahia-sur"
+    },
+    "51409": {
+      "node": "estadio"
+    },
+    "51404": {
+      "node": "segunda-aguada"
+    },
+    "51405": {
+      "node": "cadiz"
+    },
+    "60000": {
+      "exits": [
+        "sevilla-santa-justa"
+      ],
+      "via": {
+        "line": "lav-madrid-sevilla",
+        "node": "sevilla-santa-justa"
+      }
+    },
+    "37200": {
+      "exits": [
+        "sevilla-santa-justa"
+      ],
+      "via": {
+        "line": "lav-madrid-sevilla",
+        "node": "sevilla-santa-justa"
+      }
+    },
+    "37300": {
+      "exits": [
+        "sevilla-santa-justa"
+      ],
+      "via": {
+        "line": "lav-madrid-sevilla",
+        "node": "sevilla-santa-justa"
+      }
+    },
+    "50500": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50600": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50507": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50506": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50504": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50407": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50403": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "50400": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "03100": {
+      "exits": [
+        "sevilla-santa-justa"
+      ]
+    },
+    "01003": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "01005": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "01007": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "01009": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "02003": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "54400": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "54403": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "54404": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "54405": {
+      "exits": [
+        "bif-utrera"
+      ]
+    },
+    "54413": {
+      "exits": [
+        "bif-utrera"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos estaciones de la línea o más. Los que solo paran en una, Sevilla-Santa Justa, no la recorren: son los de alta velocidad que acaban allí y los Media Distancia de Huelva y de Mérida, que salen de Sevilla por otras líneas.",
+    "min_node_stops": 2
+  },
+  "route_overrides": [
+    {
+      "id": "cordoba-por-la-alta-velocidad",
+      "description": "Alvia e Intercity de Madrid a Cádiz que paran en Córdoba, Sevilla-Santa Justa y Jerez de la Frontera: de Córdoba a Sevilla-Santa Justa van sin paradas por la alta velocidad, no por la línea convencional como los Media Distancia que paran en Lora del Río o en Posadas. Para ellos Córdoba es una salida por Sevilla-Santa Justa hacia la alta velocidad.",
+      "consecutive_stop_ids": [
+        "51300",
+        "51003",
+        "50500"
+      ],
+      "stop_mappings": {
+        "50500": {
+          "exits": [
+            "sevilla-santa-justa"
+          ],
+          "via": {
+            "line": "lav-madrid-sevilla",
+            "node": "sevilla-santa-justa"
+          }
+        }
+      }
+    }
+  ]
+}

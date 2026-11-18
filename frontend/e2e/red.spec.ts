@@ -30,7 +30,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^23 líneas · 4\.754 km\s*145 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^24 líneas · 4\.907 km\s*160 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     // las zonas van de norte a sur, y solo las que tienen alguna línea; con diecinueve líneas (más de doce)
     // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
@@ -42,7 +42,7 @@ test.describe('Elegir línea sin pestañas', () => {
       /^›Comunidad Valenciana y Murcia4 líneasValencia, Alicante, Murcia, Elche$/,
       /^›Madrid y Castilla-La Mancha2 líneasCiudad Real, Albacete$/,
       /^›Extremadura4 líneasCáceres, Mérida, Badajoz, Plasencia$/,
-      /^›Andalucía6 líneasSevilla, Córdoba, Málaga, Granada, Jaén3 líneas con un tramo sin circulación$/,
+      /^›Andalucía7 líneasSevilla, Córdoba, Málaga, Granada, Jaén, Cádiz3 líneas con un tramo sin circulación$/,
     ])
     for (const cabecera of await red.locator('.zona-cabecera').all()) await expect(cabecera).toHaveAttribute('aria-expanded', 'false')
     await expect(red.locator('.fila-linea')).toHaveCount(0)
@@ -71,6 +71,7 @@ test.describe('Elegir línea sin pestañas', () => {
       /^Alta velocidad: Antequera – Granada114 km$/,
       /^Línea convencional: Madrid – Córdoba por Alcázar de San Juan441 kmun tramo sin circulación$/,
       /^Línea convencional: Linares-Baeza – Granada por Moreda174 km$/,
+      /^Línea convencional: Sevilla – Cádiz152 km$/,
       /^Línea convencional: Espelúy – Jaén33 kmun tramo sin circulación$/,
     ])
     // el tipo de vía ya no agrupa: lo dice la muestra de cada fila, con su clave sobre las zonas
@@ -80,9 +81,9 @@ test.describe('Elegir línea sin pestañas', () => {
     await expect(andalucia.locator('.zona-detalle')).toHaveCount(0)
     await andalucia.locator('.zona-cabecera').click()
     await expect(andalucia.locator('.fila-linea')).toHaveCount(0)
-    await expect(andalucia.locator('.zona-detalle')).toHaveText('Sevilla, Córdoba, Málaga, Granada, Jaén3 líneas con un tramo sin circulación')
+    await expect(andalucia.locator('.zona-detalle')).toHaveText('Sevilla, Córdoba, Málaga, Granada, Jaén, Cádiz3 líneas con un tramo sin circulación')
     await andalucia.locator('.zona-cabecera').click()
-    await expect(andalucia.locator('.fila-linea')).toHaveCount(6)
+    await expect(andalucia.locator('.fila-linea')).toHaveCount(7)
     // no arranca en ninguna línea: ni esquema ni pestañas, y con ocho líneas aparece ya el filtro de la lista
     await expect(page.getByTestId('esquema')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
@@ -147,17 +148,17 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('ficha-red')).toContainText(/^83 líneas · /)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^84 líneas · /)
     // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con dieciocho que con setenta y ocho
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     const lista = page.getByTestId('lista-lineas')
     // con más de doce líneas la lista es un índice de zonas: un renglón por zona, ninguna línea a la vista
-    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Galicia1 línea/, /^›Asturias, Cantabria y País Vasco2 líneas/, /^›Castilla y León3 líneas/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
+    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Galicia1 línea/, /^›Asturias, Cantabria y País Vasco2 líneas/, /^›Castilla y León3 líneas/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía67 líneas/])
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     // plegar no esconde un corte
     await expect(page.getByTestId('zona-andalucia').locator('.zona-detalle')).toContainText('3 líneas con un tramo sin circulación')
     await page.getByTestId('zona-andalucia').locator('.zona-cabecera').click()
-    await expect(lista.locator('.fila-linea')).toHaveCount(66)
+    await expect(lista.locator('.fila-linea')).toHaveCount(67)
     const filtro = page.getByTestId('filtro-lineas')
     await filtro.fill('alcazar')
     // dos líneas llevan Alcázar en el nombre; filtrando, sus zonas están abiertas
