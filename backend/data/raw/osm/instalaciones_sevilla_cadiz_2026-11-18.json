@@ -1,0 +1,352 @@
+{
+ "version": "0.6",
+ "generator": "api.openstreetmap.org (map.json?bbox=…, recuadros de 0,012 × 0,010 grados alrededor de cada estación), 2026-11-18",
+ "copyright": "OpenStreetMap and contributors",
+ "license": "http://opendatacommons.org/licenses/odbl/1-0/",
+ "elements": [
+  {
+   "type": "node",
+   "id": 7763424280,
+   "lat": 37.3776609,
+   "lon": -5.9795353,
+   "timestamp": "2026-03-04T12:56:36Z",
+   "version": 2,
+   "changeset": 179348312,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "San Bernardo",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q3497828",
+    "wikipedia": "es:Estación de San Bernardo (Sevilla)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7763424278,
+   "lat": 37.3628127,
+   "lon": -5.9758225,
+   "timestamp": "2026-03-04T12:56:26Z",
+   "version": 2,
+   "changeset": 179348305,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Virgen del Rocío",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8842320"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7782117948,
+   "lat": 37.3215196,
+   "lon": -5.9642315,
+   "timestamp": "2026-03-04T12:56:17Z",
+   "version": 2,
+   "changeset": 179348297,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Bellavista",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5686149"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7758141421,
+   "lat": 37.2872158,
+   "lon": -5.9233167,
+   "timestamp": "2026-03-04T12:57:02Z",
+   "version": 2,
+   "changeset": 179348329,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Dos Hermanas",
+    "operator": "Adif",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q4352686"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8048235469,
+   "lat": 37.2104554,
+   "lon": -5.8190804,
+   "timestamp": "2020-10-27T22:55:28Z",
+   "version": 2,
+   "changeset": 93146335,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Bifurcación Utrera",
+    "operator": "Adif",
+    "railway": "junction"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7768401196,
+   "lat": 37.1833437,
+   "lon": -5.7902404,
+   "timestamp": "2026-03-04T12:56:46Z",
+   "version": 3,
+   "changeset": 179348318,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Utrera",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8842131"
+   }
+  },
+  {
+   "type": "node",
+   "id": 919627525,
+   "lat": 37.0185216,
+   "lon": -5.9456942,
+   "timestamp": "2020-07-30T00:32:57Z",
+   "version": 6,
+   "changeset": 88702490,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Las Cabezas de San Juan",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846555"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7768387808,
+   "lat": 36.9115448,
+   "lon": -6.0951993,
+   "timestamp": "2020-07-30T00:32:57Z",
+   "version": 1,
+   "changeset": 88702490,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Lebrija",
+    "name:ar": "نبريشة",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q16595808"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1567648473,
+   "lat": 36.7512312,
+   "lon": -6.066446,
+   "timestamp": "2026-03-03T14:33:20Z",
+   "version": 8,
+   "changeset": 179305056,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "internet_access": "no",
+    "name": "Aeropuerto de Jerez",
+    "network": "Cercanías Cádiz",
+    "network:wikidata": "Q1054745",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5845587"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10922195562,
+   "lat": 36.6798124,
+   "lon": -6.1261035,
+   "timestamp": "2026-03-03T14:34:00Z",
+   "version": 2,
+   "changeset": 179305081,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Jerez de la Frontera",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "7151300",
+    "wikidata": "Q3394770"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1738646773,
+   "lat": 36.6041992,
+   "lon": -6.2169966,
+   "timestamp": "2026-03-03T14:32:53Z",
+   "version": 5,
+   "changeset": 179305035,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "El Puerto de Santa María",
+    "network": "Cercanías Cádiz",
+    "network:wikidata": "Q1054745",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q3096416"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7768387859,
+   "lat": 36.5308306,
+   "lon": -6.1853007,
+   "timestamp": "2026-03-03T14:32:04Z",
+   "version": 2,
+   "changeset": 179305006,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Puerto Real",
+    "network": "Cercanías Cádiz",
+    "network:wikidata": "Q1054745",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5650049",
+    "wikipedia": "es:Estación de Puerto Real"
+   }
+  },
+  {
+   "type": "node",
+   "id": 259625422,
+   "lat": 36.5279393,
+   "lon": -6.2868833,
+   "timestamp": "2022-01-26T17:15:45Z",
+   "version": 7,
+   "changeset": 116630842,
+   "user": "Swily",
+   "uid": 13948552,
+   "tags": {
+    "name": "Cádiz",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q630752"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5302170172,
+   "lat": 36.5135032,
+   "lon": -6.2769634,
+   "timestamp": "2026-03-03T14:30:42Z",
+   "version": 5,
+   "changeset": 179304952,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Segunda Aguada",
+    "network": "Cercanías Cádiz",
+    "network:wikidata": "Q1054745",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5847218"
+   }
+  },
+  {
+   "type": "node",
+   "id": 496496219,
+   "lat": 36.5029227,
+   "lon": -6.2720481,
+   "timestamp": "2026-03-03T14:30:38Z",
+   "version": 7,
+   "changeset": 179304949,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Estadio",
+    "network": "Cercanías Cádiz",
+    "network:wikidata": "Q1054745",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5688092"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2340360836,
+   "lat": 36.4679215,
+   "lon": -6.206875,
+   "timestamp": "2026-03-03T13:18:09Z",
+   "version": 4,
+   "changeset": 179301864,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "San Fernando-Bahía Sur",
+    "network": "Cercanías Cádiz",
+    "network:wikidata": "Q1054745",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q3394783"
+   }
+  }
+ ]
+}

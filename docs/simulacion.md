@@ -174,7 +174,7 @@ Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tra
 
 Cada tramo se cierra por separado sobre la red completa: las interrupciones vigentes no se aplican. Hoy, con la alta velocidad y la convencional interrumpidas a la vez, varios de los «otros caminos» están también cortados; el comparador de recorridos es el que cruza cortes reales con caminos.
 
-**Lo que sale** con los trenes del 13 de noviembre de 2026, el día de referencia (260 tramos, con los dos de los baipases, el del enlace de Monforte del Cid, los cinco de la línea de Madrid a Valladolid, los ocho de la de Valladolid a León, los trece de la de Olmedo a Ourense, los cuatro de la de Venta de Baños a Burgos, los once de la de León a Gijón, los siete de la de Burgos a Vitoria, los tres de la de Ourense a Santiago, los quince de la de A Coruña a Vigo y los 33 de las cuatro líneas de Extremadura; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
+**Lo que sale** con los trenes del 13 de noviembre de 2026, el día de referencia (276 tramos, con los dos de los baipases, el del enlace de Monforte del Cid, los cinco de la línea de Madrid a Valladolid, los ocho de la de Valladolid a León, los trece de la de Olmedo a Ourense, los cuatro de la de Venta de Baños a Burgos, los once de la de León a Gijón, los siete de la de Burgos a Vitoria, los tres de la de Ourense a Santiago, los quince de la de A Coruña a Vigo, los dieciséis de la de Sevilla a Cádiz y los 33 de las cuatro líneas de Extremadura; un tren por número y día, `docs/datos.md`, «Trenes repetidos en el horario de Renfe»):
 
 | Tramos | Trenes al día | Otro camino en las líneas cargadas |
 |---|---|---|
@@ -200,9 +200,10 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Albacete-Los Llanos – Alicante-Terminal (alta velocidad de Albacete a Alicante, siete tramos) | 36 a 56 | Ninguno. Al sur de Albacete Oniel solo tiene cargada esta línea |
 | Bifurcación Murcia – Murcia del Carmen (alta velocidad de Monforte del Cid a Murcia, ocho tramos) | 6 y 36 | Ninguno. A Murcia solo llega esta línea. Por el primer tramo pasan solo los 6 trenes de Madrid que no entran en Alicante; los demás se unen en la bifurcación Vinalopó por el enlace de Monforte del Cid |
 | Monforte del Cid – Bifurcación Vinalopó (enlace de Monforte del Cid) | 30 | Ninguno. Los otros dos lados del triángulo, por la bifurcación de Murcia, obligarían a invertir la marcha |
-| Bifurcación Málaga – Majarabique (LAV) | 83 | Ninguno |
+| Sevilla-Santa Justa – Cádiz (línea de Sevilla a Cádiz, la línea entera, dieciséis tramos) | 42 a 56 | Ninguno. A Cádiz solo llega esta línea; la de Marchena, que sale de la bifurcación Utrera, no está cargada. Los 56 van hasta la bifurcación Utrera, donde 14 siguen hacia Osuna y Málaga |
+| Bifurcación Málaga – Majarabique (LAV) | 89 | Ninguno. Desde la línea de Sevilla a Cádiz (#206) cuentan también los trenes de Madrid a Sevilla y a Cádiz que no paran en Córdoba |
 | Antequera-Santa Ana – Málaga-María Zambrano (LAV de Málaga, cuatro tramos) | 57 a 63 | Ninguno. A Málaga solo llega esta línea, y el enlace de la bifurcación Gobantes hacia Granada no está cargado |
-| Majarabique – Sevilla-Santa Justa (LAV) | 81 | Ninguno |
+| Majarabique – Sevilla-Santa Justa (LAV) | 87 | Ninguno |
 | Espelúy – Mengíbar-Artichuela (línea de Jaén) | 26 | Ninguno |
 | Mengíbar-Artichuela – Jaén (línea de Jaén) | 26 | Ninguno |
 | Bifurcación Planetario – Monfragüe (línea de Madrid a Plasencia, once tramos) | 20 a 34 | Ninguno. La línea sale de la convencional de Andalucía en la bifurcación Planetario y es el único camino cargado hasta Monfragüe |
@@ -217,13 +218,13 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Bifurcación San Esteban – Bifurcación Casa de la Torre (alta velocidad de Extremadura, tres tramos) | 12 a 20 | Por Monfragüe y la línea antigua de Cañaveral. Para los 4 que van de Arroyo de la Herrera a Cáceres, 26 km y 24 min más; para los 4 de Arroyo de la Herrera a Mérida, 26 km y 25 min más; para los 2 de Plasencia a Mérida, 16 km y 22 min más. En el tramo del medio, de Arroyo de la Herrera a la bifurcación El Palmeral, la tienen los 20. En el primero no la tienen 10 de los 12 y en el último, 10 de los 20: su recorrido se queda en el tramo y la vuelta mide más del doble |
 | Monfragüe – Bifurcación Casa de la Torre (línea antigua de Cañaveral, cuatro tramos) | 2 | Ninguno. La vuelta por la línea de alta velocidad mide más del doble que el recorrido de sus dos trenes |
 | Madrid-Puerta de Atocha – Bifurcación Planetario (convencional) | 75 | Los 34 de la línea de Extremadura, que dejan la convencional en la bifurcación, no tienen: la vuelta por Ciudad Real, Manzanares y Aranjuez hasta ella mide más del doble que su recorrido. Los otros 41 tienen la alta velocidad: para los 10 de Madrid a Sevilla, 90 km y 1 h 8 min menos |
-| Córdoba – Bifurcación Málaga (LAV) | 140 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 41 de Madrid a Sevilla, 340 km y 3 h 2 min más; para los 6 de Madrid a Granada, 82 km menos y 1 h 15 min más |
+| Córdoba – Bifurcación Málaga (LAV) | 146 | Por Linares-Baeza, Moreda, Granada y Antequera. Para los 39 de Madrid a Sevilla, 340 km y 3 h 2 min más; para los 6 de Madrid a Granada, 82 km menos y 1 h 15 min más |
 | Bifurcación Málaga – Antequera-Santa Ana (LAV de Málaga, cuatro tramos) | 77 | Para los 33 de Madrid a Málaga, por Moreda y Granada hasta Antequera-Santa Ana: 147 km y 2 h 23 min más |
 | Antequera-Santa Ana – Granada (LAV de Granada, ocho tramos) | 18 a 24 | Para los 6 de Madrid a Granada, la convencional por Moreda: 82 km menos y 1 h 15 min más |
 | Bifurcación Almería – Iznalloz – Granada (dos tramos) | 12 | Para los 10 de Granada a Almería, la vuelta por Antequera, Córdoba y Linares-Baeza: 415 km y 2 h 11 min más |
 | Linares-Baeza – Moreda (tres tramos) | 2 | Ninguno. La vuelta por Córdoba, Antequera y Granada mide más del doble |
-| Ciudad Real – Córdoba (LAV, cuatro tramos) | 118 | Para los 41 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 46 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
-| Madrid – Ciudad Real (LAV, seis tramos) | 86 a 96 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 8 min más |
+| Ciudad Real – Córdoba (LAV, cuatro tramos) | 124 | Para los 39 de Madrid a Sevilla, la línea convencional hasta Córdoba: 97 km y 1 h 46 min más. Para los 22 desviados por Manzanares, 7 km y 37 o 38 min más |
+| Madrid – Ciudad Real (LAV, seis tramos) | 92 a 102 | Por la convencional hasta Manzanares y la línea de Manzanares a Ciudad Real: 90 km y 1 h 8 min más |
 | Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 8 min menos |
 | Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 30 min menos |
 

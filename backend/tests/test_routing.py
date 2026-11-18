@@ -93,8 +93,9 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # Murcia; los 35, la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 siguientes, las
     # cuatro líneas de Extremadura; los 8 de después, la de Valladolid a León; los 4 siguientes,
-    # la de Venta de Baños a Burgos; los 11 siguientes, la de León a Gijón, y los 7 del final, la
-    # de Burgos a Vitoria, y los 3 y 15 últimos, las dos de Galicia
+    # la de Venta de Baños a Burgos; los 11 siguientes, la de León a Gijón; los 7 siguientes, la
+    # de Burgos a Vitoria; los 3 y 15 de después, las dos de Galicia, y los 16 del final, la de
+    # Sevilla a Cádiz
     assert (
         len(graph.edges)
         == len(network.segments)
@@ -122,6 +123,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 7
             + 3
             + 15
+            + 16
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -336,6 +338,23 @@ def test_santiago_a_coruna_and_vigo_are_reached_from_madrid_through_ourense(grap
     assert [(r.length_km, r.time_min, r.line_ids) for r in to_vigo] == [(643.0, 159, lines)]
     along = find_routes(graph, "a-coruna", "vigo-urzaiz")
     assert [(r.length_km, r.time_min, r.line_ids) for r in along] == [(155.2, 53, lines[3:])]
+
+
+def test_cadiz_is_reached_from_madrid_through_seville(graph: Graph) -> None:
+    """El camino a Cádiz: la alta velocidad hasta Sevilla-Santa Justa y, desde allí, la línea de
+    Sevilla a Cádiz. Los demás caminos dan la vuelta por la convencional de Andalucía."""
+    to_cadiz = find_routes(graph, "madrid-puerta-de-atocha", "cadiz")
+    assert (to_cadiz[0].length_km, to_cadiz[0].time_min, to_cadiz[0].line_ids) == (
+        622.7,
+        163,
+        [LAV, "sevilla-cadiz"],
+    )
+    assert to_cadiz[0].single_track_km == 0.0
+    assert all(CONV in r.line_ids for r in to_cadiz[1:])
+    from_sevilla = find_routes(graph, "sevilla-santa-justa", "cadiz")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in from_sevilla] == [
+        (152.5, 49, ["sevilla-cadiz"])
+    ]
 
 
 def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:

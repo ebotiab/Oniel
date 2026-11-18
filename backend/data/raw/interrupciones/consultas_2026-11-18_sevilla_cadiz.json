@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 al cargar la línea convencional Sevilla – Cádiz: la comprobación de que ese día no había ninguna interrupción anunciada en ella. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-18 10:51 (hora que da la página)",
+   "resumen": "Tres avisos. Uno de Madrid: los trenes de la línea C8a de cercanías recuperan su frecuencia tras una incidencia en El Escorial. Otro de Castilla y León y Madrid: se restablece la circulación por una vía entre Robledo de Chavela y Zarzalejo, en la línea convencional de Madrid a Ávila, tras el descarrilamiento de una locomotora de mercancías. El tercero es el de la alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre; dice que se sigue prestando servicio en los tramos de alta velocidad Madrid-Toledo y Málaga-Sevilla. Ninguno nombra la línea de Sevilla a Cádiz.",
+   "que_aporta": "Que el 18 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción en la línea Sevilla – Cádiz. La interrupción de la alta velocidad Madrid-Andalucía ya está registrada en la línea de Madrid a Sevilla; afecta a los trenes de Madrid a Cádiz antes de llegar a esta línea."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-18, leída justo después del estado de la red",
+   "resumen": "Catorce avisos de obras y restablecimientos. Los de Andalucía son el de las obras de la autopista ferroviaria Algeciras-Zaragoza, con el servicio interrumpido entre Córdoba y Santa Cruz de Mudela y en el tramo Algeciras-Bobadilla-Córdoba, y el de las obras entre Huércal-Viator y Almería. Ninguno nombra Sevilla, Utrera, Jerez de la Frontera ni Cádiz.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en la línea Sevilla – Cádiz. Las obras de la autopista ferroviaria son de la línea convencional de Madrid a Córdoba, ya registradas, y de la de Algeciras a Bobadilla y Córdoba, que no está cargada."
+  }
+ ]
+}

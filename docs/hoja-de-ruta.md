@@ -61,9 +61,8 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 - [#204](https://github.com/ebotiab/Oniel/issues/204) Datos: alta velocidad Barcelona – Girona – Figueres y frontera francesa. No depende de nada.
 - [#205](https://github.com/ebotiab/Oniel/issues/205) Datos: ramales cortos de alta velocidad a Toledo y a Huesca. No depende de nada.
 
-**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías:
+**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hecha: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga.
 
-- [#206](https://github.com/ebotiab/Oniel/issues/206) Datos: línea Sevilla – Cádiz.
 - [#209](https://github.com/ebotiab/Oniel/issues/209) Datos: línea Tarragona – Barcelona por la costa. Une el Corredor Mediterráneo con Barcelona.
 - [#208](https://github.com/ebotiab/Oniel/issues/208) Datos: línea València – Xàtiva – La Encina – Alicante.
 - [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Mejor después de #204, para compartir sus nodos.
