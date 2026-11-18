@@ -20,7 +20,7 @@ test.describe('La línea de alta velocidad Madrid – Zaragoza – Barcelona', (
     await expect(page).toHaveURL(/\/nodo\/barcelona-sants$/)
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Barcelona-Sants' })).toBeVisible()
-    await expect(ficha).toContainText('Girona, Figueres y Francia')
+    await expect(ficha).toContainText('empieza la de Girona y Figueres')
     // destinos directos del día de referencia, entre los que más trenes tienen
     await expect(ficha).toContainText('Camp de Tarragona')
     await expect(ficha).toContainText('Zaragoza-Delicias')

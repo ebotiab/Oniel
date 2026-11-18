@@ -1,0 +1,595 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-06-01T08:52:28Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1914054304,
+  "lat": 42.2646953,
+  "lon": 2.9426836,
+  "tags": {
+    "alt_name": "Figueres-Alt Empordà",
+    "name": "Figueres Vilafant",
+    "name:ca": "Figueres Vilafant",
+    "name:fr": "Figueras-Vilafant",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "ref:FR:sncf:resarail": "ESFIR",
+    "ref:FR:uic8": "71043075",
+    "train": "yes",
+    "uic_ref": "7104307",
+    "wheelchair": "yes",
+    "wikidata": "Q2783545",
+    "wikipedia": "ca:Estació de Figueres-Vilafant"
+  }
+},
+{
+  "type": "node",
+  "id": 2101427701,
+  "lat": 42.4549935,
+  "lon": 2.8612980,
+  "tags": {
+    "railway": "border"
+  }
+},
+{
+  "type": "node",
+  "id": 2101427704,
+  "lat": 42.4554865,
+  "lon": 2.8619561,
+  "tags": {
+    "railway": "border"
+  }
+},
+{
+  "type": "node",
+  "id": 2158044594,
+  "lat": 41.3790068,
+  "lon": 2.1400042,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "1-7",
+    "addr:postcode": "08014",
+    "addr:street": "Plaça dels Països Catalans",
+    "alt_name": "Barcelona Sants",
+    "description:ru": "Ж/д вокзал. Главный",
+    "iata": "YJB",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "layer": "1",
+    "name": "Barcelona - Sants",
+    "name:ca": "Barcelona - Sants",
+    "name:es": "Barcelona - Sants",
+    "name:fr": "Barcelone-Sants",
+    "official_name": "Barcelona - Sants",
+    "opening_hours": "Mo-Fr 04:30-00:30; Sa-Su 05:00-00:30; PH 05:00-00:30",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "BSA",
+    "ref": "71801",
+    "ref:EU:PLC": "ES71801",
+    "ref:FR:sncf:resarail": "ESBST",
+    "ref:FR:uic8": "71718010",
+    "source": "http://adif.es/es_ES/infraestructuras/estaciones/71801/informacion_000097.shtml;https://github.com/trainline-eu/stations",
+    "toilets:wheelchair": "yes",
+    "uic_ref": "7171801",
+    "website": "https://www.adif.es/w/71801-barcelona-sants?pageFromPlid=335",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2483779639,
+  "lat": 41.9349663,
+  "lon": 2.8094752,
+  "tags": {
+    "name": "Fornells de la Selva",
+    "name:ca": "Fornells de la Selva",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779799",
+    "wikipedia": "ca:Estació de Fornells de la Selva"
+  }
+},
+{
+  "type": "node",
+  "id": 5330131966,
+  "lat": 42.0369781,
+  "lon": 2.9152965,
+  "tags": {
+    "name": "Bordils - Juià",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5334025975,
+  "lat": 41.8961609,
+  "lon": 2.8117435,
+  "tags": {
+    "name": "Riudellots de la Selva",
+    "name:ca": "Riudellots de la Selva",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8841623",
+    "wikipedia": "ca:Estació de Riudellots"
+  }
+},
+{
+  "type": "node",
+  "id": 5419793235,
+  "lat": 42.2991932,
+  "lon": 2.1654577,
+  "tags": {
+    "name": "Ribes de Freser",
+    "name:ca": "Ribes de Freser",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841610",
+    "wikipedia": "ca:Estació de Ribes de Freser"
+  }
+},
+{
+  "type": "node",
+  "id": 5420065015,
+  "lat": 42.1048309,
+  "lon": 2.2176466,
+  "tags": {
+    "name": "Sant Quirze de Besora",
+    "name:ca": "Sant Quirze de Besora",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841803",
+    "wikipedia": "ca:Estació de Sant Quirze de Besora"
+  }
+},
+{
+  "type": "node",
+  "id": 5420065123,
+  "lat": 42.2216469,
+  "lon": 2.1657706,
+  "tags": {
+    "name": "Campdevànol",
+    "name:ca": "Campdevànol",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 5420065124,
+  "lat": 42.1955071,
+  "lon": 2.1961600,
+  "tags": {
+    "name": "Ripoll",
+    "name:ca": "Ripoll",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 5420065133,
+  "lat": 42.1297082,
+  "lon": 2.2035940,
+  "tags": {
+    "name": "La Farga de Bebié",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q11681651",
+    "wikipedia": "ca:Estació de la Farga de Bebié"
+  }
+},
+{
+  "type": "node",
+  "id": 7201979113,
+  "lat": 41.3925448,
+  "lon": 2.1653802,
+  "tags": {
+    "location": "underground",
+    "name": "Barcelona-Passeig de Gràcia",
+    "name:ca": "Barcelona-Passeig de Gràcia",
+    "network": "Rodalies de Catalunya (ATM Barcelona)",
+    "network:wikidata": "Q3322422",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "71802",
+    "ref:EU:PLC": "ES71802",
+    "ref:FR:sncf:resarail": "ESBPG",
+    "ref:FR:uic8": "71718023",
+    "ref:ibnr": "7100063",
+    "route_ref": "R2;R2N;R2S;R11;R13;R14;R15;R16;R17",
+    "train": "yes",
+    "uic_ref": "7171802",
+    "website": "https://www.adif.es/w/71802-barcelona-p.gr%C3%A0cia",
+    "wheelchair": "yes",
+    "wikidata": "Q800446",
+    "wikipedia": "ca:Estació de Passeig de Gràcia"
+  }
+},
+{
+  "type": "node",
+  "id": 7396279601,
+  "lat": 41.3982685,
+  "lon": 2.1868162,
+  "tags": {
+    "name": "Bifurcació Vilanova",
+    "name:ca": "Bifurcació Vilanova",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7396279602,
+  "lat": 41.3993417,
+  "lon": 2.1873248,
+  "tags": {
+    "name": "Bifurcació Clot",
+    "name:ca": "Bifurcació Clot",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7396279603,
+  "lat": 41.4003513,
+  "lon": 2.1757317,
+  "tags": {
+    "name": "Bifurcació Aragó",
+    "name:ca": "Bifurcació Aragó",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7403579018,
+  "lat": 41.8074774,
+  "lon": 2.7450153,
+  "tags": {
+    "name": "Sils",
+    "name:ca": "Sils",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8841959",
+    "wikipedia": "ca:Estació de Sils"
+  }
+},
+{
+  "type": "node",
+  "id": 7482996431,
+  "lat": 41.5102504,
+  "lon": 2.2003046,
+  "tags": {
+    "name": "la Llagosta - Mercaderies",
+    "operator": "Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 7490586749,
+  "lat": 42.0273151,
+  "lon": 2.8748493,
+  "tags": {
+    "name": "Celrà",
+    "name:ca": "Celrà",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779562",
+    "wikipedia": "ca:Estació de Celrà"
+  }
+},
+{
+  "type": "node",
+  "id": 7490586752,
+  "lat": 41.9791657,
+  "lon": 2.8162865,
+  "tags": {
+    "name": "Girona",
+    "name:ca": "Girona",
+    "name:es": "Gerona",
+    "name:fr": "Gérone",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "ref:FR:sncf:resarail": "ESGRO",
+    "ref:FR:uic8": "71793000",
+    "uic_ref": "7179300",
+    "wikidata": "Q3088107",
+    "wikipedia": "ca:Estació de Girona"
+  }
+},
+{
+  "type": "node",
+  "id": 7490586755,
+  "lat": 41.8411638,
+  "lon": 2.8005718,
+  "tags": {
+    "name": "Caldes de Malavella",
+    "name:ca": "Caldes de Malavella",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779450",
+    "wikipedia": "ca:Estació de Caldes de Malavella"
+  }
+},
+{
+  "type": "node",
+  "id": 7490586757,
+  "lat": 41.9528948,
+  "lon": 2.8064514,
+  "tags": {
+    "name": "Girona Mercaderies",
+    "operator": "Adif",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 7498825440,
+  "lat": 41.5104344,
+  "lon": 2.1998592,
+  "tags": {
+    "name": "la Llagosta",
+    "name:ca": "la Llagosta",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779962",
+    "wikipedia": "ca:Estació de la Llagosta"
+  }
+},
+{
+  "type": "node",
+  "id": 7504525657,
+  "lat": 42.2163747,
+  "lon": 2.9780258,
+  "tags": {
+    "name": "Vilamalla",
+    "name:ca": "Vilamalla",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q8842215",
+    "wikipedia": "ca:Estació de Vilamalla"
+  }
+},
+{
+  "type": "node",
+  "id": 7504603522,
+  "lat": 42.1722868,
+  "lon": 2.9893316,
+  "tags": {
+    "name": "Sant Miquel de Fluvià",
+    "name:ca": "Sant Miquel de Fluvià",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q8841742",
+    "wikipedia": "ca:Estació de Sant Miquel de Fluvià"
+  }
+},
+{
+  "type": "node",
+  "id": 7504603523,
+  "lat": 42.1222164,
+  "lon": 2.9656082,
+  "tags": {
+    "name": "Camallera",
+    "name:ca": "Camallera",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q5853553",
+    "wikipedia": "ca:Estació de Camallera"
+  }
+},
+{
+  "type": "node",
+  "id": 7504603546,
+  "lat": 42.0682831,
+  "lon": 2.9647622,
+  "tags": {
+    "name": "Sant Jordi Desvalls",
+    "name:ca": "Sant Jordi Desvalls",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q11681683",
+    "wikipedia": "ca:Estació de Sant Jordi Desvalls"
+  }
+},
+{
+  "type": "node",
+  "id": 7504603570,
+  "lat": 42.0474920,
+  "lon": 2.9571710,
+  "tags": {
+    "name": "Flaçà",
+    "name:ca": "Flaçà",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7512362046,
+  "lat": 41.4002926,
+  "lon": 2.1870121,
+  "tags": {
+    "name": "Bifurcació Glòries",
+    "name:ca": "Bifurcació Glòries",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 7512362062,
+  "lat": 42.2650045,
+  "lon": 2.9689697,
+  "tags": {
+    "name": "Figueres",
+    "name:ca": "Figueres",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref:DB": "XEFI",
+    "wheelchair": "yes",
+    "wikidata": "Q3096440",
+    "wikipedia": "ca:Estació de Figueres"
+  }
+},
+{
+  "type": "node",
+  "id": 7527423076,
+  "lat": 42.0646699,
+  "lon": 2.2419284,
+  "tags": {
+    "name": "Borgonyà",
+    "name:ca": "Borgonyà",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 7527423077,
+  "lat": 42.0521388,
+  "lon": 2.2599804,
+  "tags": {
+    "name": "Torelló",
+    "name:ca": "Torelló",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8842059",
+    "wikipedia": "ca:Estació de Torelló"
+  }
+},
+{
+  "type": "node",
+  "id": 7527423078,
+  "lat": 41.9998571,
+  "lon": 2.2691128,
+  "tags": {
+    "name": "Manlleu",
+    "name:ca": "Manlleu",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8841016",
+    "wikipedia": "ca:Estació de Manlleu"
+  }
+},
+{
+  "type": "node",
+  "id": 13647707478,
+  "lat": 41.4557771,
+  "lon": 2.1914984,
+  "tags": {
+    "name": "Bifurcació Aigües",
+    "name:ca": "Bifurcació Aigües",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 13652699294,
+  "lat": 41.4299252,
+  "lon": 2.2024810,
+  "tags": {
+    "name": "Bifurcació Sant Andreu",
+    "name:ca": "Bifurcació Sant Andreu",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 13672711066,
+  "lat": 41.3843894,
+  "lon": 2.1855604,
+  "tags": {
+    "name": "Barcelona-Estació de França",
+    "name:ca": "Barcelona-Estació de França",
+    "network": "Rodalies de Catalunya (ATM Barcelona)",
+    "network:wikidata": "Q3322422",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "route_ref": "R2S;R13;R14;R15;R16;R17",
+    "train": "yes",
+    "website": "https://www.adif.es/w/79400-barcelona-e.fran%C3%A7a",
+    "wheelchair": "yes",
+    "wikidata": "Q800449",
+    "wikipedia": "ca:Estació de França"
+  }
+}
+
+  ]
+}

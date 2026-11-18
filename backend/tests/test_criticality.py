@@ -57,6 +57,7 @@ BURGOS_VITORIA = "burgos-miranda-vitoria"
 LAV_SANTIAGO = "lav-ourense-santiago"
 EJE_ATLANTICO = "eje-atlantico"
 SEVILLA_CADIZ = "sevilla-cadiz"
+LAV_FIGUERES = "lav-barcelona-figueres"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -328,6 +329,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_SANTIAGO,
         EJE_ATLANTICO,
         SEVILLA_CADIZ,
+        LAV_FIGUERES,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -372,6 +374,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         )
         + (3 + 15)
         + 16
+        + 7  # la de Barcelona a Figueres
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -407,9 +410,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     # y los dieciséis de la de Sevilla a Cádiz, el único camino cargado a Jerez y a Cádiz
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 7,
     )
+    # la de Barcelona a Figueres, entera: a Girona y a Figueres-Vilafant solo llega ella
+    figueres = {k: n for k, n in none.items() if k.startswith(f"{LAV_FIGUERES}:")}
+    assert len(figueres) == 7
     # las dos de Galicia, enteras: a Santiago, A Coruña y Vigo solo llegan ellas
     santiago = {k: n for k, n in none.items() if k.startswith(f"{LAV_SANTIAGO}:")}
     assert len(santiago) == 3 and sorted(set(santiago.values())) == [43, 45]
@@ -444,6 +450,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_SANTIAGO}:",
         f"{EJE_ATLANTICO}:",
         f"{SEVILLA_CADIZ}:",
+        f"{LAV_FIGUERES}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
@@ -656,7 +663,11 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     around_zaragoza = _of(exported.segments, "baipas-zaragoza:bif-moncasi:bif-canal-imperial")
     assert (around_zaragoza.trains, around_zaragoza.without_alternative) == (22, 0)
     assert around_zaragoza.by_operator == {"ouigo": 4, "renfe": 18}
-    (direct,) = around_zaragoza.groups
+    # el grupo más numeroso es el de Madrid a Barcelona; los demás, los que siguen por la línea
+    # de Barcelona a Figueres, con un recorrido más largo
+    direct, *beyond = around_zaragoza.groups
+    assert direct.trains + sum(g.trains for g in beyond) == 22
+    assert all(g.line_ids == [BCN, LAV_FIGUERES] for g in beyond)
     assert (direct.from_node_id, direct.to_node_id) == (MADRID, "barcelona-sants")
     assert (direct.length_km, direct.line_ids) == (620.1, [BCN])
     assert direct.alternative is not None and direct.alternative.line_ids == [BCN]

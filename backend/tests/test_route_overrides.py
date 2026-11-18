@@ -24,6 +24,7 @@ from conftest import (
     LAV_ALICANTE_SPEC,
     LAV_BADAJOZ_SPEC,
     LAV_BURGOS_SPEC,
+    LAV_FIGUERES_SPEC,
     LAV_GRANADA_SPEC,
     LAV_LEON_SPEC,
     LAV_MALAGA_SPEC,
@@ -697,6 +698,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         EJE_ATLANTICO_SPEC.name: {"ourense-vilagarcia-sin-santiago": 10},
         # los Alvia de Cádiz que llegan a Santa Justa por la alta velocidad desde Córdoba
         SEVILLA_CADIZ_SPEC.name: {"cordoba-por-la-alta-velocidad": 12},
+        # la de Barcelona a Figueres no tiene reglas: todos sus trenes paran en Figueres-Vilafant
+        LAV_FIGUERES_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

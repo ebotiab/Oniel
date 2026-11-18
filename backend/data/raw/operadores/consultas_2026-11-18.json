@@ -1,0 +1,30 @@
+{
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 para saber qué operadores recorren la línea de alta velocidad de Barcelona a Girona y Figueres. Las páginas y los ficheros consultados cambian, así que aquí queda qué decían ese día, resumido con palabras propias (no se reproduce el texto original).",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "iryo-web",
+   "titulo": "Destinos iryo",
+   "editor": "Iryo",
+   "url": "https://iryo.eu/es/destinos",
+   "resumen": "La página enumera trece destinos: Madrid, Barcelona, Zaragoza, Valencia, Sevilla, Málaga, Cuenca, Córdoba, Alicante, Albacete, Tarragona, Puertollano y Ciudad Real. No figuran Girona ni Figueres.",
+   "que_aporta": "Que Iryo no circula al norte de Barcelona: la línea de Barcelona a Figueres no lo declara."
+  },
+  {
+   "source_id": "ouigo-gtfs-nap",
+   "titulo": "GTFS de Ouigo España (fichero ya cargado, del 2 de julio de 2026)",
+   "editor": "Ouigo España; Ministerio de Transportes y Movilidad Sostenible",
+   "url": "https://nap.transportes.gob.es/",
+   "resumen": "El fichero trae dieciséis paradas. La única de Cataluña al norte de Camp de Tarragona es Barcelona-Sants; no trae Girona ni Figueres-Vilafant.",
+   "que_aporta": "Que Ouigo no circula al norte de Barcelona: la línea de Barcelona a Figueres no lo declara."
+  },
+  {
+   "source_id": "sncf-horarios-abiertos",
+   "titulo": "Réseau SNCF TGV, Intercités et TER (fichero GTFS «Export_OpenData_SNCF_GTFS_NewTripId.zip»)",
+   "editor": "SNCF",
+   "url": "https://transport.data.gouv.fr/datasets/horaires-sncf",
+   "resumen": "El conjunto figura en el punto de acceso nacional francés con licencia ODbL. El fichero GTFS descargado ese día (5,6 MB comprimido; versión 2026-11-18, válido del 18 de noviembre de 2026 al 30 de abril de 2027) cubre toda la red de SNCF. Una de sus rutas, «Paris - Espagne TGV», de SNCF Voyageurs, trae 55 viajes entre Paris Gare de Lyon y Barcelona-Sants con parada en Perpiñán, Figueres-Vilafant y Girona: dos trenes por sentido y día en 162 de los 163 días con servicio, y uno por sentido en el otro. Sus números de tren son 9704, 9706, 9708, 9711, 9713 y 9715. Las paradas se identifican con un código propio («StopPoint:OCETGV INOUI-71718010» para Barcelona-Sants), distinto del de los ficheros de Renfe y de Ouigo.",
+   "que_aporta": "Que SNCF Voyageurs recorre la línea de Barcelona a Figueres con trenes de París a Barcelona, unos dos por sentido y día, y que publica sus horarios en un formato abierto. Oniel no los carga todavía: el fichero es de toda Francia y sus códigos de parada tienen otro formato. La línea no declara a SNCF como operador, porque el aviso del visor para un operador sin horarios dice que no los publica, y no es el caso; la descripción de la línea y docs/datos.md dicen que faltan esos trenes. El fichero no se guarda en raw/: no se usa en la importación."
+  }
+ ]
+}

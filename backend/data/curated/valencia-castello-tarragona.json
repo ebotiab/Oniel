@@ -172,8 +172,8 @@
     "71802": {"exits": ["bif-la-feredat"]},
     "79400": {"exits": ["bif-la-feredat"]},
     "71801": {"exits": ["camp-de-tarragona"], "via": {"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}},
-    "79300": {"exits": ["camp-de-tarragona"]},
-    "04307": {"exits": ["camp-de-tarragona"]}
+    "79300": {"exits": ["camp-de-tarragona"], "via": [{"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}, {"line": "lav-barcelona-figueres", "node": "barcelona-sants"}]},
+    "04307": {"exits": ["camp-de-tarragona"], "via": [{"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}, {"line": "lav-barcelona-figueres", "node": "barcelona-sants"}]}
   },
   "corridor_filter": {
     "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea: los Euromed, Intercity y Alvia de València a Barcelona, los AVE de Madrid que siguen de València-Joaquín Sorolla a Castelló, los regionales de València a Castelló, Vinaròs y Tortosa, los de Tortosa a Barcelona, que la dejan en la bifurcación La Feredat, y los Media Distancia de València a Teruel y Zaragoza, que la recorren hasta Sagunt. Quedan fuera los trenes que solo tocan la línea en una estación: los de alta velocidad que acaban en València-Joaquín Sorolla o paran en Camp de Tarragona y los que salen de la Estació del Nord hacia el sur.",

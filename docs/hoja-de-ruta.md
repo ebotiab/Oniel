@@ -56,16 +56,16 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 **Extremadura.** Para ver qué parte del camino de Madrid a Badajoz es nueva y cuál no. Hecha (#179): la línea convencional Madrid – Talavera de la Reina – Plasencia, la de alta velocidad Plasencia – Cáceres – Badajoz, la convencional Aljucén – Mérida y la línea antigua Monfragüe – Cañaveral – Cáceres. Quedan a trazos, sin incidencia abierta, las líneas de Cáceres a Valencia de Alcántara, de Badajoz a Elvas, de Mérida a Sevilla por Zafra y de Mérida a Ciudad Real.
 
-**Completar la alta velocidad.** Lo que le falta a la red de alta velocidad en servicio, después del norte:
+**Completar la alta velocidad.** Lo que le falta a la red de alta velocidad en servicio, después del norte. Hecha: la línea de alta velocidad Barcelona – Girona – Figueres (#204), que continúa la de Madrid hasta el límite con la sección internacional de Perpiñán y entra como línea aparte, porque Ouigo e Iryo acaban en Barcelona. Los TGV de SNCF de París a Barcelona la recorren y no están cargados: cargar sus horarios, que SNCF publica, va en #230. Queda:
 
-- [#204](https://github.com/ebotiab/Oniel/issues/204) Datos: alta velocidad Barcelona – Girona – Figueres y frontera francesa. No depende de nada.
+- [#230](https://github.com/ebotiab/Oniel/issues/230) Datos: horarios de SNCF para los TGV de París a Barcelona. Depende de #204, ya cerrada.
 - [#205](https://github.com/ebotiab/Oniel/issues/205) Datos: ramales cortos de alta velocidad a Toledo y a Huesca. No depende de nada.
 
 **Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hecha: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga.
 
 - [#209](https://github.com/ebotiab/Oniel/issues/209) Datos: línea Tarragona – Barcelona por la costa. Une el Corredor Mediterráneo con Barcelona.
 - [#208](https://github.com/ebotiab/Oniel/issues/208) Datos: línea València – Xàtiva – La Encina – Alicante.
-- [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Mejor después de #204, para compartir sus nodos.
+- [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Comparte con la de alta velocidad (#204, ya cerrada) los nodos de Barcelona-Sants y de Girona.
 - [#211](https://github.com/ebotiab/Oniel/issues/211) Datos: línea convencional Madrid – Ávila – Medina del Campo – Valladolid.
 - [#212](https://github.com/ebotiab/Oniel/issues/212) Datos: línea Palencia – Santander.
 - [#213](https://github.com/ebotiab/Oniel/issues/213) Datos: línea Zaragoza – Castejón – Pamplona y Logroño.
