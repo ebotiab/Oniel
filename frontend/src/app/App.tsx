@@ -15,6 +15,8 @@ import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
 import { LineOverview } from '../panel/LineOverview'
 import { NoAlternativePanel } from '../panel/NoAlternativePanel'
+import { PieVista } from '../panel/PieVista'
+import { tituloDe } from '../panel/glosario'
 import { Navegacion, type Seccion } from '../panel/Navegacion'
 import { NetworkOverview } from '../panel/NetworkOverview'
 import { NodeDetail } from '../panel/NodeDetail'
@@ -23,6 +25,22 @@ import { SimulationPanel } from '../panel/SimulationPanel'
 import { SearchBox } from '../panel/SearchBox'
 import { activeAnnotations, bySegment, isInterruption, pastInterruptions } from './annotations'
 import { Marca } from './Marca'
+import { aplicarMeta } from './aplicarMeta'
+import {
+  META_COBERTURA,
+  META_GLOSARIO,
+  META_RED,
+  META_SIN_OTRO_CAMINO,
+  metaEntradaGlosario,
+  metaLinea,
+  metaNodo,
+  metaProyecto,
+  metaRecorridos,
+  metaSimulacion,
+  metaTramo,
+  type Franja,
+  type Meta,
+} from './meta'
 import { navegar } from './navegacion'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
@@ -32,6 +50,10 @@ import './app.css'
 // MapLibre pesa tres cuartas partes del JavaScript del visor: va en un fichero aparte para que el panel
 // no lo espere. index.html lo precarga (vite.config.ts), así que se descarga a la vez que el resto.
 const MapView = lazy(() => import('../map/MapView').then((m) => ({ default: m.MapView })))
+
+// Dónde va el pie de vista: al final de la ficha o fijo bajo el panel. Son las dos variantes propuestas en
+// docs/diseno.md («Citar una vista»); queda la que se elija.
+const PIE_FIJO = false
 
 function useMedia(query: string): boolean {
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
@@ -142,10 +164,14 @@ export default function App() {
     }
   }, [])
   // La línea a la vista y el panel de cobertura también van en la URL: toda vista se puede enlazar.
+  const ruta = useMemo(() => routePath({ ...route, linea: activeLineId, cobertura: showCoverage }), [route, activeLineId, showCoverage])
   useEffect(() => {
-    const path = routePath({ ...route, linea: activeLineId, cobertura: showCoverage })
-    if (window.location.pathname !== path) window.history.replaceState(null, '', path + window.location.search)
-  }, [route, activeLineId, showCoverage])
+    if (window.location.pathname !== ruta) window.history.replaceState(null, '', ruta + window.location.search)
+  }, [ruta])
+  // El día y la franja de la simulación van en la dirección, para que su enlace reproduzca la vista.
+  const setFranja = useCallback((franja: Franja) => {
+    setRoute((r) => (r.simulacion && (r.franja?.date !== franja.date || r.franja.start !== franja.start || r.franja.end !== franja.end) ? { ...r, franja } : r))
+  }, [])
 
   const select = useCallback(
     (sel: Selection) => {
@@ -344,6 +370,8 @@ export default function App() {
         feedEnd={coverage?.feed_end ?? null}
         interruptions={interrupted.get(segment.id) ?? []}
         scenario={route.escenario}
+        franja={route.franja ?? null}
+        onFranja={setFranja}
         result={result}
         onResult={setResult}
         onBack={() => setRoute({ selection, simulacion: false })}
@@ -444,6 +472,32 @@ export default function App() {
     navegar('/')
   }
 
+  // El título de la pestaña y la descripción dicen qué vista es: lo lee quien guarda el enlace o lo comparte.
+  const meta = useMemo<Meta | null>(() => {
+    if (route.glosario) {
+      const nombre = route.glosario.entrada ? tituloDe(route.glosario.entrada) : null
+      return nombre ? metaEntradaGlosario(nombre) : META_GLOSARIO
+    }
+    if (showCoverage) return META_COBERTURA
+    if (route.sinOtroCamino) return META_SIN_OTRO_CAMINO
+    // Lo demás se titula con nombres de la red: hasta que carga, se queda el título con el que llegó la página.
+    if (!network) return null
+    if (comparador) {
+      const nombre = (id: string | null) => network.nodes.find((n) => n.id === id)?.name ?? null
+      return metaRecorridos(nombre(comparador.from), nombre(comparador.to))
+    }
+    if (segment) return route.simulacion ? metaSimulacion(segment, route.franja) : metaTramo(segment, network.lines.find((l) => l.id === segment.line_id))
+    if (node) return metaNodo(node)
+    if (annotation) return annotation.title ? metaProyecto(annotation.title) : META_RED
+    const linea = network.lines.find((l) => l.id === lineId)
+    return linea ? metaLinea(linea) : META_RED
+  }, [route, showCoverage, network, comparador, segment, node, annotation, lineId])
+  useEffect(() => {
+    if (meta) aplicarMeta(document, meta, ruta)
+  }, [meta, ruta])
+
+  const pie = network && !loadError ? <PieVista key={ruta} coverage={coverage} ruta={ruta} dia={route.simulacion ? (route.franja?.date ?? null) : null} fijo={PIE_FIJO} /> : null
+
   const lines = network?.lines ?? []
   // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
   const enPagina = Boolean(route.glosario) || showCoverage
@@ -496,7 +550,11 @@ export default function App() {
             <span />
           </button>
         )}
-        <div className="panel-contenido">{panel}</div>
+        <div className="panel-contenido">
+          {panel}
+          {!PIE_FIJO && pie}
+        </div>
+        {PIE_FIJO && pie}
       </aside>
       {!mobile && (
         <Legend

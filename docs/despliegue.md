@@ -44,6 +44,8 @@ El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_EN
 
 Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
 
+Desde el 18 de noviembre de 2026 la compilación escribe además una página estática por vista principal (`dist/linea/<id>/index.html`, `dist/tramo/<id>/index.html`, `dist/nodo/<id>/index.html`, `dist/cobertura/index.html`…): el mismo `index.html` con el título y las etiquetas de enlace compartido de esa vista, para los rastreadores que no ejecutan JavaScript (`docs/diseno.md`, «Citar una vista»). Como son ficheros que existen, Vercel los sirve antes de mirar la regla; si alguno no se sirviera, la regla devuelve `index.html` y solo se pierde la tarjeta propia. Se comprueba con `curl -s https://oniel.vercel.app/linea/lav-madrid-sevilla | grep '<title>'`, que tiene que dar el título de la línea.
+
 ## API en Render
 
 `render.yaml` es un Blueprint de Render con:
