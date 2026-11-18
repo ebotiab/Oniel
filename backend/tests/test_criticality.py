@@ -53,6 +53,7 @@ LAV_LEON = "lav-valladolid-leon"
 LAV_OURENSE = "lav-olmedo-ourense"
 LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
+BURGOS_VITORIA = "burgos-miranda-vitoria"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -320,6 +321,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_OURENSE,
         LAV_BURGOS,
         LEON_GIJON,
+        BURGOS_VITORIA,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -335,10 +337,11 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     # la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
     # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
-    # 4 siguientes, la de Venta de Baños a Burgos, y los 11 del final, la de León a Gijón
+    # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón, y los 7 del final,
+    # la de Burgos a Vitoria
     assert (
         len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11
+        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -370,11 +373,15 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # Cerrato, 22 con los 2 que llegan de Palencia por el ramal
     burgos = {k: n for k, n in none.items() if k.startswith(f"{LAV_BURGOS}:")}
     assert len(burgos) == 4 and sorted(set(burgos.values())) == [20, 22]
-    # y los once de la de León a Gijón, la única cargada al norte de León
+    # y los once de la de León a Gijón, la única cargada al norte de León, y los siete de la de
+    # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11,
-        121 + 29 + 4 + 8 + 13 + 4 + 11,
+        54 + 29 + 8 + 13 + 4 + 11 + 7,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7,
     )
+    vitoria = {k: n for k, n in none.items() if k.startswith(f"{BURGOS_VITORIA}:")}
+    # la de Burgos a Vitoria, entera: 29 trenes de Burgos a Miranda de Ebro y 31 de Miranda a Vitoria
+    assert len(vitoria) == 7 and sorted(set(vitoria.values())) == [29, 31]
     # la de León a Gijón, entera: 16 trenes donde van también los regionales y 14 en la variante
     # y de Villabona de Asturias a Gijón
     gijon = {k: n for k, n in none.items() if k.startswith(f"{LEON_GIJON}:")}
@@ -394,6 +401,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_OURENSE}:",
         f"{LAV_BURGOS}:",
         f"{LEON_GIJON}:",
+        f"{BURGOS_VITORIA}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",

@@ -93,11 +93,34 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
     # Murcia; los 35, la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13 de después, la de Olmedo a Ourense; los 13, 14, 2 y 4 siguientes, las
     # cuatro líneas de Extremadura; los 8 de después, la de Valladolid a León; los 4 siguientes,
-    # la de Venta de Baños a Burgos, y los 11 del final, la de León a Gijón
+    # la de Venta de Baños a Burgos; los 11 siguientes, la de León a Gijón, y los 7 del final, la
+    # de Burgos a Vitoria
     assert (
         len(graph.edges)
         == len(network.segments)
-        == (54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 13 + 14 + 2 + 4 + 8 + 4 + 11)
+        == (
+            54
+            + 8
+            + 8
+            + 20
+            + 2
+            + 14
+            + 2
+            + 9
+            + 8
+            + 35
+            + 5
+            + 1
+            + 13
+            + 13
+            + 14
+            + 2
+            + 4
+            + 8
+            + 4
+            + 11
+            + 7
+        )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
     assert len(graph.nodes) == len({n.id for n in network.nodes})
@@ -279,6 +302,23 @@ def test_burgos_is_reached_from_madrid_through_venta_de_banos(graph: Graph) -> N
         "lav-valladolid-leon",
         "lav-venta-de-banos-burgos",
     }
+
+
+def test_vitoria_is_reached_from_madrid_through_burgos(graph: Graph) -> None:
+    """El camino al País Vasco: de Madrid-Chamartín a Burgos por la alta velocidad y, desde
+    Burgos, por la línea convencional de Miranda de Ebro a Vitoria. Hay un solo camino."""
+    lines = [
+        "lav-madrid-valladolid",
+        "lav-valladolid-leon",
+        "lav-venta-de-banos-burgos",
+        "burgos-miranda-vitoria",
+    ]
+    to_vitoria = find_routes(graph, "madrid-chamartin", "vitoria-gasteiz")
+    assert [(r.length_km, r.time_min, r.line_ids) for r in to_vitoria] == [(420.5, 116, lines)]
+    to_miranda = find_routes(graph, "madrid-chamartin", "miranda-de-ebro")
+    assert [(r.length_km, r.time_min) for r in to_miranda] == [(387.2, 100)]
+    from_burgos = find_routes(graph, "burgos-rosa-manzano", "vitoria-gasteiz")
+    assert [(r.length_km, r.line_ids) for r in from_burgos] == [(117.3, lines[3:])]
 
 
 def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:

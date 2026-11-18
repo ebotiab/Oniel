@@ -15,7 +15,7 @@
     "reference_length_km": 86.463,
     "pk_origin_km": 217.578,
     "status": "disponible",
-    "description": "Lleva la alta velocidad desde Venta de Baños, cerca de Palencia, hasta Burgos. Es el camino de los trenes de Madrid a Burgos y al País Vasco.\n\nSe abrió a los viajeros el 22 de julio de 2022. Por ella van los AVE de Burgos a Madrid, Valencia y Murcia; los Alvia e Intercity de Madrid a Vitoria, Bilbao, San Sebastián, Irún y Logroño, y los Alvia que unen Barcelona y el País Vasco con León y Galicia, que llegan desde Palencia por un ramal corto, sin pasar por Venta de Baños.\n\nEn Burgos, los trenes que siguen hacia Miranda de Ebro, Vitoria y el País Vasco cambian de ancho de vía al salir de la estación y continúan por la línea convencional, que no está cargada. La alta velocidad de Burgos a Vitoria es un proyecto con varios tramos ya licitados.\n\nLa plataforma se construyó para dos vías, pero desde poco después de Venta de Baños hasta Burgos solo hay una. Los trenes de un sentido y de otro pueden cruzarse en los dos apartaderos del camino, Río Arlanzón y Estépar. En los últimos kilómetros, por la variante que rodea Burgos, la línea usa una de las vías de la línea convencional, adaptada al ancho de la alta velocidad.",
+    "description": "Lleva la alta velocidad desde Venta de Baños, cerca de Palencia, hasta Burgos. Es el camino de los trenes de Madrid a Burgos y al País Vasco.\n\nSe abrió a los viajeros el 22 de julio de 2022. Por ella van los AVE de Burgos a Madrid, Valencia y Murcia; los Alvia e Intercity de Madrid a Vitoria, Bilbao, San Sebastián, Irún y Logroño, y los Alvia que unen Barcelona y el País Vasco con León y Galicia, que llegan desde Palencia por un ramal corto, sin pasar por Venta de Baños.\n\nEn Burgos, los trenes que siguen hacia Miranda de Ebro, Vitoria y el País Vasco cambian de ancho de vía al salir de la estación y continúan por la línea convencional de Burgos a Miranda de Ebro y Vitoria. La alta velocidad de Burgos a Vitoria es un proyecto con varios tramos ya licitados.\n\nLa plataforma se construyó para dos vías, pero desde poco después de Venta de Baños hasta Burgos solo hay una. Los trenes de un sentido y de otro pueden cruzarse en los dos apartaderos del camino, Río Arlanzón y Estépar. En los últimos kilómetros, por la variante que rodea Burgos, la línea usa una de las vías de la línea convencional, adaptada al ancho de la alta velocidad.",
     "geometry_source": {
       "source_id": "osm-relation-4777557",
       "parts": [
@@ -106,7 +106,7 @@
         "lat": 42.3711651
       },
       "reference_pk_km": 304.041,
-      "description": "La estación de Burgos, al norte de la ciudad, donde acaba esta línea. Se abrió en 2008 en la variante que sacó el tren del centro de Burgos, y los trenes de alta velocidad llegan a ella desde julio de 2022. Justo al salir de la estación está el cambiador de ancho por el que los trenes que siguen a Miranda de Ebro, Vitoria, Bilbao y San Sebastián pasan a la línea convencional, que no está cargada."
+      "description": "La estación de Burgos, al norte de la ciudad, donde acaba esta línea. Se abrió en 2008 en la variante que sacó el tren del centro de Burgos, y los trenes de alta velocidad llegan a ella desde julio de 2022. Justo al salir de la estación está el cambiador de ancho por el que los trenes que siguen a Miranda de Ebro, Vitoria, Bilbao y San Sebastián pasan a la línea convencional."
     }
   ],
   "attribute_sections": [
@@ -174,35 +174,6 @@
         [
           -4.4820799,
           41.9680494
-        ]
-      ]
-    },
-    {
-      "id": "conv-burgos-miranda-vitoria",
-      "node_id": "burgos-rosa-manzano",
-      "name": "Línea convencional Madrid–Irún",
-      "towards": "Briviesca, Miranda de Ebro, Vitoria y el País Vasco",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -3.6663219,
-          42.3711651
-        ],
-        [
-          -3.5,
-          42.45
-        ],
-        [
-          -3.3236,
-          42.5497
-        ],
-        [
-          -2.9465,
-          42.6858
-        ],
-        [
-          -2.6731,
-          42.8415
         ]
       ]
     }
@@ -431,12 +402,20 @@
     "11200": {
       "exits": [
         "burgos-rosa-manzano"
-      ]
+      ],
+      "via": {
+        "line": "burgos-miranda-vitoria",
+        "node": "burgos-rosa-manzano"
+      }
     },
     "11208": {
       "exits": [
         "burgos-rosa-manzano"
-      ]
+      ],
+      "via": {
+        "line": "burgos-miranda-vitoria",
+        "node": "burgos-rosa-manzano"
+      }
     },
     "11400": {
       "exits": [
