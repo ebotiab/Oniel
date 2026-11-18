@@ -41,6 +41,14 @@
       "url": "https://iryo.eu/es/home",
       "resumen": "Cuatro búsquedas hechas a mano en el buscador, comparando las horas de salida y de llegada con las del fichero. Madrid a Barcelona el 20 de noviembre de 2026: 15 trenes en el buscador y los mismos 15 en el fichero, con las mismas horas. Madrid a Valencia el mismo día: 7 y los mismos 7. Madrid a Sevilla el mismo día: el buscador solo ofrecía 2 trenes, los dos sin plazas, y el fichero trae 8, entre ellos esos 2; la web de Iryo avisaba ese día de servicios cancelados en el corredor sur. Madrid a Sevilla el 15 de enero de 2027: 7 trenes en el buscador y 8 en el fichero, los mismos 7 con las mismas horas y uno más, el de las 06:50.",
       "que_aporta": "Que el fichero coincide con el buscador donde el servicio es normal (22 de 22 trenes en la muestra) y que en el corredor sur trae el horario previsto, no las cancelaciones vigentes: como los ficheros de Renfe y de Ouigo, no refleja la interrupción de la alta velocidad Madrid–Andalucía."
+    },
+    {
+      "source_id": "iryo-web",
+      "titulo": "Respuesta del Punto de Acceso Nacional sobre los horarios de Iryo",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible (Punto de Acceso Nacional de Transporte Multimodal)",
+      "url": "https://nap.transportes.gob.es/contacto",
+      "resumen": "A la consulta enviada el 12 de noviembre de 2026 por correo y por el formulario de contacto, y repetida el 18 de noviembre, el buzón del Punto de Acceso Nacional contestó por correo el 18 de noviembre que, por el momento, Iryo no le ha facilitado su información para publicarla. No dice si está previsto que lo haga, en qué plazo, ni si hay otro cauce oficial para obtener esos horarios; se le volvió a preguntar.",
+      "que_aporta": "Que la ausencia de Iryo en el Punto de Acceso Nacional no es un retraso de publicación: el operador no ha entregado sus horarios, y no hay fecha. A esa fecha ni Iryo ni el autor de la compilación habían contestado."
     }
   ]
 }
