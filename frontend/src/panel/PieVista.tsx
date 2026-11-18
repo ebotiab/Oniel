@@ -10,8 +10,6 @@ interface Props {
   ruta: string
   /** El día de los trenes de la vista, si no es el de referencia (una simulación con su día). */
   dia?: string | null
-  /** Variante con el pie fijo bajo el panel (docs/diseno.md, «Citar una vista»). */
-  fijo?: boolean
 }
 
 /** «el 17 nov 2026 (Renfe) y el 12 nov 2026 (Ouigo)»: cuándo se descargó el fichero de horarios de cada operador. */
@@ -32,7 +30,7 @@ function descargas(coverage: CoverageOut): string | null {
  * horarios y un botón que copia la dirección exacta de la vista, para citarla desde fuera
  * (docs/diseno.md, «Citar una vista»).
  */
-export function PieVista({ coverage, ruta, dia, fijo = false }: Props) {
+export function PieVista({ coverage, ruta, dia }: Props) {
   const [estado, setEstado] = useState<'reposo' | 'copiado' | 'manual'>('reposo')
   const campo = useRef<HTMLInputElement>(null)
   const enlace = window.location.origin + ruta
@@ -60,7 +58,7 @@ export function PieVista({ coverage, ruta, dia, fijo = false }: Props) {
   const referencia = dia ?? coverage?.reference_date ?? null
   const descargados = coverage ? descargas(coverage) : null
   return (
-    <footer className={fijo ? 'pie-vista fijo' : 'pie-vista'} data-testid="pie-vista">
+    <footer className="pie-vista" data-testid="pie-vista">
       {referencia && (
         <p className="pie-vista-fecha" data-testid="pie-vista-fecha">
           Trenes del {formatDateLong(referencia)}
@@ -68,7 +66,7 @@ export function PieVista({ coverage, ruta, dia, fijo = false }: Props) {
         </p>
       )}
       <p className="pie-vista-accion">
-        <button type="button" className={fijo ? 'boton menor' : 'enlace'} onClick={() => void copiar()} data-testid="copiar-enlace">
+        <button type="button" className="enlace" onClick={() => void copiar()} data-testid="copiar-enlace">
           Copiar enlace a esta vista
         </button>
         <span role="status" data-testid="copiar-enlace-estado">

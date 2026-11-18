@@ -2421,41 +2421,6 @@
   font-size: var(--t-12);
 }
 
-/* Variante con el pie fijo bajo el panel: la fecha a la izquierda y el botón, con borde, a la derecha. */
-.pie-vista.fijo {
-  flex: none;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 4px 14px;
-  margin: 0;
-  padding: 9px 18px 10px;
-  background: var(--papel);
-}
-
-.pie-vista.fijo p.pie-vista-accion {
-  margin-top: 0;
-  flex-direction: column-reverse;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.pie-vista.fijo .pie-vista-manual {
-  grid-column: 1 / -1;
-  margin-top: 2px;
-}
-
-.boton.menor {
-  padding: 5px 9px;
-  font-size: var(--t-12);
-  border-color: var(--tinta-3);
-  white-space: nowrap;
-}
-
-.movil:not(.hoja-abierta) .pie-vista.fijo {
-  display: none;
-}
-
 /* «Cómo citar Oniel», al final de «Cobertura y fuentes». */
 .cobertura-apartado h3 {
   margin: 26px 0 0;

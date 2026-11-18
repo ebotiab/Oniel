@@ -51,10 +51,6 @@ import './app.css'
 // no lo espere. index.html lo precarga (vite.config.ts), así que se descarga a la vez que el resto.
 const MapView = lazy(() => import('../map/MapView').then((m) => ({ default: m.MapView })))
 
-// Dónde va el pie de vista: al final de la ficha o fijo bajo el panel. Son las dos variantes propuestas en
-// docs/diseno.md («Citar una vista»); queda la que se elija.
-const PIE_FIJO = false
-
 function useMedia(query: string): boolean {
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
   useEffect(() => {
@@ -496,7 +492,7 @@ export default function App() {
     if (meta) aplicarMeta(document, meta, ruta)
   }, [meta, ruta])
 
-  const pie = network && !loadError ? <PieVista key={ruta} coverage={coverage} ruta={ruta} dia={route.simulacion ? (route.franja?.date ?? null) : null} fijo={PIE_FIJO} /> : null
+  const pie = network && !loadError ? <PieVista key={ruta} coverage={coverage} ruta={ruta} dia={route.simulacion ? (route.franja?.date ?? null) : null} /> : null
 
   const lines = network?.lines ?? []
   // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
@@ -552,9 +548,8 @@ export default function App() {
         )}
         <div className="panel-contenido">
           {panel}
-          {!PIE_FIJO && pie}
+          {pie}
         </div>
-        {PIE_FIJO && pie}
       </aside>
       {!mobile && (
         <Legend
