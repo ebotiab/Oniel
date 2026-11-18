@@ -39,6 +39,11 @@ updates:
     groups:
       menores-y-parches:
         update-types: [minor, patch]
+    ignore:
+      # @types/node describe el Node que se usa (el 20, en el CI y en el README): sube de versión
+      # mayor cuando sube Node, no por su cuenta.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   # Las acciones de los flujos de .github/workflows/.
   - package-ecosystem: github-actions
