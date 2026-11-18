@@ -398,10 +398,14 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     assert len(burgos) == 4 and sorted(set(burgos.values())) == [20, 22]
     # y los once de la de León a Gijón, la única cargada al norte de León, y los siete de la de
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
+    # y los dieciséis de la de Sevilla a Cádiz, el único camino cargado a Jerez y a Cádiz
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 16,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 16,
     )
+    cadiz = {k: n for k, n in none.items() if k.startswith(f"{SEVILLA_CADIZ}:")}
+    # la de Sevilla a Cádiz, entera: 56 trenes hasta la bifurcación Utrera y 42 desde allí
+    assert len(cadiz) == 16 and sorted(set(cadiz.values())) == [42, 56]
     vitoria = {k: n for k, n in none.items() if k.startswith(f"{BURGOS_VITORIA}:")}
     # la de Burgos a Vitoria, entera: 29 trenes de Burgos a Miranda de Ebro y 31 de Miranda a Vitoria
     assert len(vitoria) == 7 and sorted(set(vitoria.values())) == [29, 31]
@@ -425,6 +429,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_BURGOS}:",
         f"{LEON_GIJON}:",
         f"{BURGOS_VITORIA}:",
+        f"{SEVILLA_CADIZ}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
@@ -435,8 +440,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         *extremadura_lines,
     )
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
-        f"{LAV}:bif-malaga:majarabique": 83,
-        f"{LAV}:majarabique:sevilla-santa-justa": 81,
+        f"{LAV}:bif-malaga:majarabique": 89,
+        f"{LAV}:majarabique:sevilla-santa-justa": 87,
         f"{JAEN}:espeluy:mengibar-artichuela": 26,
         f"{JAEN}:mengibar-artichuela:jaen": 26,
         # a Málaga solo llega la alta velocidad de Córdoba, y el enlace de la bifurcación Gobantes
@@ -675,7 +680,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # figuran ya: sus trenes de largo recorrido tienen otro camino, aunque sea por una línea de
     # otro ancho. Los de recorrido corto (los Avant de Sevilla, Málaga y Granada), no
     first = _of(exported.segments, CORDOBA_BIF_MALAGA)
-    assert (first.trains, first.without_alternative) == (140, 22)
+    assert (first.trains, first.without_alternative) == (146, 22)
     loja = _of(exported.segments, f"{LAV_GRANADA}:loja:bif-tocon")
     assert (loja.trains, loja.without_alternative) == (24, 14)
     # para los 6 trenes de Madrid a Granada (los dos Alvia que siguen a Almería cuentan con
@@ -689,8 +694,9 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     assert _of(exported.segments, f"{LAV_MALAGA}:bif-malaga:la-marota").trains == 77
     # entre la estación de Moreda y la bifurcación no pasa ningún tren de los horarios
     assert _of(exported.segments, f"{LBMG}:moreda:bif-almeria").trains == 0
-    # el grupo más numeroso de Adamuz – Córdoba: los 41 trenes entre Madrid y Sevilla
+    # el grupo más numeroso de Adamuz – Córdoba: los 39 trenes entre Madrid y Sevilla (eran 41,
+    # con los 2 Alvia de Cádiz, que siguen ahora por la línea de Sevilla a Cádiz)
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
-    assert (top.trains, top.from_node_id, top.to_node_id) == (41, MADRID, SEVILLA)
+    assert (top.trains, top.from_node_id, top.to_node_id) == (39, MADRID, SEVILLA)
     assert top.alternative is not None
     assert (top.alternative.extra_km, top.alternative.extra_min) == (97.0, 106)
