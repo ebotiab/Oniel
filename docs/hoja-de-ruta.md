@@ -35,9 +35,10 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay una tarea abierta, que espera a algo de fuera:
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay dos tareas abiertas, y las dos esperan a algo de fuera:
 
 - **Sustituir mypy y pyright por ty** ([#243](https://github.com/ebotiab/Oniel/issues/243), `infraestructura`). No se empieza hasta que ty, el comprobador de tipos de Astral, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.0.106, todavía en beta: sus diagnósticos cambian de una versión a otra y no tiene modo estricto (de nueve errores de prueba dio cuatro, y mypy los nueve). Las medidas y lo que hay que repetir antes de migrar están en la incidencia.
+- **Formatear el visor con oxfmt** ([#247](https://github.com/ebotiab/Oniel/issues/247), `infraestructura`). No se empieza hasta que oxfmt, el formateador de la familia de oxlint, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.79.0, en beta. El código ya es uniforme, así que la ganancia hoy es pequeña, y adoptarlo pide un reformateo único de entre 49 y 93 ficheros según el ancho de línea, que decide el usuario. Se hace sin ninguna PR del visor abierta. Las medidas están en la incidencia.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 

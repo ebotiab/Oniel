@@ -284,10 +284,11 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     if (existing) {
       // La red ya está dibujada: la geometría completa de una línea recién cargada, o la red de la API,
       // sustituyen a lo anterior sin recrear capas ni eventos.
-      existing.setData(segs.data)
-      ;(map.getSource(SRC.nodes) as GeoJSONSource).setData(nodes.data)
-      ;(map.getSource(SRC.connections) as GeoJSONSource).setData(conns.data)
-      ;(map.getSource(SRC.annotations) as GeoJSONSource).setData(notes.data)
+      // `setData` devuelve una promesa que se cumple cuando el mapa ha cargado los datos; aquí no se espera.
+      void existing.setData(segs.data)
+      void (map.getSource(SRC.nodes) as GeoJSONSource).setData(nodes.data)
+      void (map.getSource(SRC.connections) as GeoJSONSource).setData(conns.data)
+      void (map.getSource(SRC.annotations) as GeoJSONSource).setData(notes.data)
       applyStates(map)
       reportNearLines(map)
       return
@@ -401,7 +402,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
   const supuestasKey = JSON.stringify(recorridos?.supuestas ?? [])
   useEffect(() => {
     const source = mapRef.current?.getSource(SRC.supuestas) as GeoJSONSource | undefined
-    source?.setData(supuestasData())
+    void source?.setData(supuestasData())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supuestasKey])
 
