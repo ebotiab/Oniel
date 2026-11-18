@@ -6,6 +6,7 @@ import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
 import type { RecorridosEnMapa } from '../map/MapView'
+import { linkId, scenarioFromCode } from '../routing/scenario'
 import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { AnnotationDetail } from '../panel/AnnotationDetail'
@@ -42,6 +43,20 @@ function useMedia(query: string): boolean {
     return () => mq.removeEventListener('change', onChange)
   }, [query])
   return matches
+}
+
+/** Las vías supuestas del escenario del comparador, cada una con sus dos estaciones, para dibujarlas en el mapa. */
+function supuestasEnMapa(code: string | undefined, network: { nodes: { id: string; lon: number; lat: number }[] } | null, elegido: string[]): { desde: [number, number]; hasta: [number, number]; elegido: boolean }[] {
+  if (!code || !network) return []
+  try {
+    return scenarioFromCode(code).links.flatMap((k) => {
+      const a = network.nodes.find((n) => n.id === k.from_node_id)
+      const b = network.nodes.find((n) => n.id === k.to_node_id)
+      return a && b ? [{ desde: [a.lon, a.lat] as [number, number], hasta: [b.lon, b.lat] as [number, number], elegido: elegido.includes(linkId(k)) }] : []
+    })
+  } catch {
+    return []
+  }
 }
 
 export default function App() {
@@ -266,7 +281,7 @@ export default function App() {
     if (!comparador?.from || !comparador.to || comparador.from === comparador.to || !graph || !network) return null
     return compararRecorridos(graph, network, comparador.from, comparador.to, interrupted, comparador.escenario)
   }, [comparador, graph, network, interrupted])
-  const elegido = comparacion ? (comparacion.recorridos.find((r) => r.key === elegidoKey) ?? comparacion.recorridos[0] ?? null) : null
+  const elegido = comparacion ? ([...comparacion.recorridos, ...comparacion.supuestos].find((r) => r.key === elegidoKey) ?? comparacion.recorridos[0] ?? null) : null
   // «Tramos sin otro camino» resalta en el mapa con el mismo recurso que el comparador: atenúa el resto de la
   // red y pinta en azul lo que se está mirando en la lista.
   const [sinCamino, setSinCamino] = useState<{ todos: string[]; mirados: string[]; encuadre: string[] } | null>(null)
@@ -274,11 +289,12 @@ export default function App() {
     if (route.sinOtroCamino) return sinCamino ? { todos: sinCamino.todos, elegido: sinCamino.mirados, extremos: [], encuadre: sinCamino.encuadre } : null
     if (!comparador) return null
     return {
-      todos: [...new Set(comparacion?.recorridos.flatMap((r) => r.route.segment_ids))],
+      todos: [...new Set([...(comparacion?.recorridos ?? []), ...(comparacion?.supuestos ?? [])].flatMap((r) => r.route.segment_ids))],
       elegido: elegido?.route.segment_ids ?? [],
+      supuestas: supuestasEnMapa(comparador.escenario, network, elegido?.route.segment_ids ?? []),
       extremos: [comparador.from, comparador.to].filter((id): id is string => Boolean(id)),
     }
-  }, [comparador, comparacion, elegido, route.sinOtroCamino, sinCamino])
+  }, [comparador, comparacion, elegido, network, route.sinOtroCamino, sinCamino])
   // En el comparador, tocar una estación en el mapa la pone en el extremo que falte; lo demás no hace nada.
   const pickOnMap = useCallback(
     (sel: Selection) => {
@@ -504,6 +520,7 @@ export default function App() {
           annotations={annotations}
           lines={lines}
           singleTrack={network?.segments.some((s) => s.tracks === 1) ?? false}
+          viaSupuesta={Boolean(recorridosEnMapa?.supuestas?.length)}
           highlight={highlight}
           onHighlight={setHighlight}
           onPin={pinTrazo}
