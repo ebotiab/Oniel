@@ -12,6 +12,8 @@ interface Props {
   annotations: AnnotationOut[]
   lines: LineSummary[]
   singleTrack: boolean
+  /** El comparador tiene una vía supuesta dibujada: la leyenda dice qué es esa recta de trazos. */
+  viaSupuesta?: boolean
   /** Trazo resaltado en el mapa: el que se toca en la leyenda o sobre el que se pasa. */
   highlight: Trazo | null
   onHighlight: (trazo: Trazo | null) => void
@@ -34,7 +36,7 @@ export function Muestra({ trazo }: { trazo: Trazo }) {
   )
 }
 
-export function Legend({ closed, annotations, lines, singleTrack, highlight, onHighlight, onPin }: Props) {
+export function Legend({ closed, annotations, lines, singleTrack, viaSupuesta = false, highlight, onHighlight, onPin }: Props) {
   const kinds = new Set(lines.map(lineKind))
   const several = kinds.size > 1
   // Fijado con un toque o un clic; al pasar por encima se resalta sin fijar.
@@ -83,6 +85,12 @@ export function Legend({ closed, annotations, lines, singleTrack, highlight, onH
           <span>{entrada.termino ? <Termino id={entrada.termino}>{entrada.texto}</Termino> : entrada.texto}</span>
         </Fragment>
       ))}
+      {viaSupuesta && (
+        <>
+          <span className="muestra via-supuesta-muestra" aria-hidden="true" data-testid="leyenda-via-supuesta" />
+          <span>Vía supuesta, que no existe</span>
+        </>
+      )}
       <span className="muestra seleccion" aria-hidden="true" />
       <span>Tramo seleccionado</span>
       {closed && (

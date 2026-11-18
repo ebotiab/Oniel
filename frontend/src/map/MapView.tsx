@@ -58,6 +58,8 @@ export interface RecorridosEnMapa {
   extremos: string[]
   /** Tramos que el mapa encuadra; sin ellos, todos los que se enseñan. */
   encuadre?: string[]
+  /** Vías supuestas del escenario: no tienen trazado, así que van como una recta entre sus dos estaciones. */
+  supuestas?: { desde: [number, number]; hasta: [number, number]; elegido: boolean }[]
 }
 
 /**
@@ -294,6 +296,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     map.addSource(SRC.nodes, { type: 'geojson', data: nodes.data })
     map.addSource(SRC.connections, { type: 'geojson', data: conns.data })
     map.addSource(SRC.annotations, { type: 'geojson', data: notes.data })
+    map.addSource(SRC.supuestas, { type: 'geojson', data: supuestasData() })
     for (const layer of onielLayers()) {
       try {
         map.addLayer(layer)
@@ -383,6 +386,24 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     applyStates(map)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selection, hoverId, closedSegmentId, recorridos])
+
+  /** Las vías supuestas del comparador, como rectas entre sus dos estaciones. */
+  function supuestasData(): GeoJSON.FeatureCollection {
+    return {
+      type: 'FeatureCollection',
+      features: (stateRef.current.recorridos?.supuestas ?? []).map((v) => ({
+        type: 'Feature',
+        properties: { elegido: v.elegido },
+        geometry: { type: 'LineString', coordinates: [v.desde, v.hasta] },
+      })),
+    }
+  }
+  const supuestasKey = JSON.stringify(recorridos?.supuestas ?? [])
+  useEffect(() => {
+    const source = mapRef.current?.getSource(SRC.supuestas) as GeoJSONSource | undefined
+    source?.setData(supuestasData())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [supuestasKey])
 
   // Encuadrar la selección. La red se lee de la referencia: que llegue el detalle de una línea cambia
   // la red, pero no debe volver a mover el mapa.
@@ -481,7 +502,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
 
   if (sinWebgl) return <SinWebgl padding={padding} />
 
-  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} data-lineas-resaltadas={lineasKey ?? undefined} data-recorrido-elegido={recorridos?.elegido.length || undefined} />
+  return <div ref={containerRef} className="mapa" role="region" aria-label="Mapa de la red ferroviaria" data-testid="mapa" data-resaltado={highlight ?? undefined} data-lineas-resaltadas={lineasKey ?? undefined} data-recorrido-elegido={recorridos?.elegido.length || undefined} data-vias-supuestas={recorridos?.supuestas?.length || undefined} />
 }
 
 /**
