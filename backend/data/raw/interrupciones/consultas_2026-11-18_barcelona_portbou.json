@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 18 de noviembre de 2026 al cargar la línea convencional Barcelona – Girona – Portbou: la comprobación de que ese día no había ninguna interrupción anunciada en ella. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las que da cada página.",
+ "consultado_el": "2026-11-18",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-18 15:57",
+   "resumen": "Dos avisos: el restablecimiento de la circulación por una vía entre Robledo de Chavela y Zarzalejo, en la línea convencional de Madrid a Ávila, y el de la línea de alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre. No hay ningún aviso de Cataluña.",
+   "que_aporta": "Que el 18 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción entre Barcelona-Sants, Girona y Portbou."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-18",
+   "resumen": "Los mismos catorce avisos de obras y restablecimientos que por la mañana. Tres son de Cataluña y los tres de Rodalies: las obras de la estación de Montcada Bifurcació, con la línea R7 interrumpida desde el 15 de noviembre, y las de duplicación de vía de la línea R3, entre Parets del Vallès y La Garriga y entre La Garriga y Figaró.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en la línea de Barcelona a Portbou. Los tres son de otras líneas de Rodalies, que no están cargadas; los regionales de esta línea no pasan por esos tramos."
+  }
+ ]
+}

@@ -249,6 +249,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 136
         + 114
         + 115
+        + 117
         + 63  # los regionales de la costa de Tarragona que no estaban en otra línea
     )
     assert (
@@ -272,6 +273,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 136
         + 114
         + 115
+        + 117
         + 63  # los regionales de la costa de Tarragona que no estaban en otra línea
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -300,6 +302,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 1094 + 208  # la de Barcelona a Figueres: publicados, de Girona a Figueres-Vilafant
     # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
     passes += 4 * 132 + 132 + (11 + 11)
+    passes += 1486 + 1282  # la de Barcelona a Portbou
     passes += 209 + 394  # la de Tarragona a Barcelona por la costa
     passes += 91  # el enlace de Monforte del Cid: los viajes que paran en Alicante, estimados
     # Extremadura, estimados y publicados: la convencional de Madrid a Plasencia, la línea nueva
@@ -584,10 +587,28 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 136
         + 114
         + 115
+        + 117
         + 63  # los regionales de la costa de Tarragona que no estaban en otra línea
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77 + 293 + 136 + 114 + 115 + 63
+        37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 293
+        + 136
+        + 114
+        + 115
+        + 117
+        + 63
     )
 
 
@@ -638,6 +659,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
         + 136
         + 114
         + 115
+        + 117
         + 63,
         767
         + 37
@@ -656,6 +678,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
         + 136
         + 114
         + 115
+        + 117
         + 63,
     ]
     assert result["datasets_removed"] == []
@@ -714,6 +737,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
         + 136
         + 114
         + 115
+        + 117
         + 63
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(

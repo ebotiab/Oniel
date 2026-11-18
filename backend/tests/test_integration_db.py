@@ -274,6 +274,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # Marsella, ya estaban en la línea de Madrid a Barcelona
     trips += 114
     assert gtfs1["lines"][LAV_FIGUERES]["trips"] == 208
+    # Con la de Barcelona a Portbou entran sus 117 regionales: ninguno estaba en otra línea
+    trips += 117
+    assert gtfs1["lines"]["barcelona-girona-portbou"]["trips"] == 117
     assert gtfs1["lines"][LAV_FIGUERES]["passes"] == {"estimado": 1094, "publicado": 208}
     assert gtfs1["lines"][LAV_FIGUERES]["route_overrides"] == {}
     # Con la de Tarragona a Barcelona por la costa entran 63: los regionales de Reus, Móra la Nova,
@@ -476,8 +479,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
     # a Gijón, y la de Burgos a Vitoria
     # y las dos de Galicia, la de Sevilla a Cádiz y la de Barcelona a Figueres, y los dos ramales de
-    # Toledo y de Huesca, y la de Tarragona a Barcelona por la costa
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1
+    # Toledo y de Huesca, la de Barcelona a Portbou y la de Tarragona a Barcelona por la costa
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -514,6 +517,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
+        + 26  # la de Barcelona a Portbou
         + 8  # la de Tarragona a Barcelona por la costa
     )
     assert c["services"] == trips + 47 + 22
@@ -538,6 +542,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 1094 + 208  # la de Barcelona a Figueres
     # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
     renfe_passes += 4 * 132 + 132 + (11 + 11)
+    renfe_passes += 1486 + 1282  # la de Barcelona a Portbou
     renfe_passes += 209 + 394  # la de Tarragona a Barcelona por la costa
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
@@ -673,6 +678,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
+        + 26  # la de Barcelona a Portbou
         + 8  # la de Tarragona a Barcelona por la costa
     )
     assert data["connection_features"]["features"]
@@ -775,6 +781,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        "barcelona-girona-portbou",
         TARRAGONA_BARCELONA,
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
@@ -862,6 +869,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
+        + 26  # la de Barcelona a Portbou
         + 8  # la de Tarragona a Barcelona por la costa
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
@@ -921,6 +929,19 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         f"{LEON_GIJON}:la-robla-av:campomanes-av",
         # la vía de tres carriles de Tardienta a Huesca
         "lav-zaragoza-huesca:tardienta:huesca",
+        # la vía 1 de la línea de Barcelona a Portbou, con tercer carril de Girona a Vilamalla
+        *(
+            f"barcelona-girona-portbou:{a}:{b}"
+            for a, b in [
+                ("girona", "celra"),
+                ("celra", "bordils-juia"),
+                ("bordils-juia", "flaca"),
+                ("flaca", "sant-jordi-desvalls"),
+                ("sant-jordi-desvalls", "camallera"),
+                ("camallera", "sant-miquel-de-fluvia"),
+                ("sant-miquel-de-fluvia", "vilamalla"),
+            ]
+        ),
     }
     coast = {s: v for s, v in values.items() if s.startswith(MEDITERRANEO)}
     assert len(coast) == 19 and sorted(coast.values()) == ["estandar"] + ["mixto"] * 18
@@ -1354,6 +1375,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y la de Sevilla a Cádiz, 15: de San Bernardo a Cádiz
     # y la de Barcelona a Figueres, 2: Girona y Figueres-Vilafant
     # y los dos ramales, 3: Toledo, Tardienta y Huesca
+    # y la de Barcelona a Portbou, 25: de Passeig de Gràcia a Portbou, salvo Girona
     # y la de Tarragona a Barcelona, 6: Vila-seca, Tarragona, Altafulla-Tamarit, Torredembarra,
     # Sant Vicenç de Calders y Vilanova i la Geltrú
     assert cov["station_count"] == (
@@ -1385,6 +1407,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 15
         + 2
         + 3
+        + 25
         + 6  # la de Tarragona a Barcelona: de Vila-seca a Vilanova i la Geltrú
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1414,9 +1437,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y 33 más con la de Barcelona a Figueres: los Avant de Barcelona a Figueres y los AVE de
     # Barcelona a Lyon
     # y 26 más con el ramal de Toledo: los Avant de Madrid a Toledo de ese día
+    # y 62 más con la de Barcelona a Portbou: sus regionales de ese día
     # y 56 más con la de Tarragona a Barcelona: los regionales de Reus, Caspe, Zaragoza, Lleida y
     # Salou-Port Aventura de ese día
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 56
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -1469,13 +1493,15 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Y 2 de la de Barcelona a Figueres: el fichero de sus estaciones en OSM y los horarios
     # abiertos de SNCF, que solo dicen qué trenes faltan
     # y una más: la compilación no oficial de los horarios de Iryo
+    # Y 5 de los ramales de Toledo y de Huesca: sus dos relaciones de OSM, sus dos artículos de
+    # Wikipedia y el fichero de sus estaciones
+    # Y 4 de la de Barcelona a Portbou: las relaciones de OSM de la línea 270 y del R11, el fichero
+    # de sus estaciones y los artículos de Wikipedia de la línea
     # Y 3 de la de Tarragona a Barcelona: la relación de OSM del R16, el fichero de sus estaciones y
     # los artículos de Wikipedia de las líneas 210 y 200
     assert len(cov["sources"]) == (
-        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 3
+        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 4 + 3
     )
-    # Y 5 de los ramales de Toledo y de Huesca: sus dos relaciones de OSM, sus dos artículos de
-    # Wikipedia y el fichero de sus estaciones
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1494,6 +1520,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea de alta velocidad Valladolid – Palencia – León" in cov["notice"]
     assert "la línea de alta velocidad Olmedo – Zamora – Ourense" in cov["notice"]
     assert "la línea de alta velocidad Venta de Baños – Burgos" in cov["notice"]
+    assert "la línea convencional Barcelona – Girona – Portbou" in cov["notice"]
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
@@ -1533,6 +1560,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        "barcelona-girona-portbou",
         TARRAGONA_BARCELONA,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
@@ -1596,6 +1624,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_FIGUERES: ["renfe"],
         "lav-la-sagra-toledo": ["renfe"],
         "lav-zaragoza-huesca": ["renfe"],
+        "barcelona-girona-portbou": ["renfe"],
         TARRAGONA_BARCELONA: ["renfe"],
     }
     assert (
@@ -2325,6 +2354,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        "barcelona-girona-portbou",
         TARRAGONA_BARCELONA,
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
@@ -2336,7 +2366,8 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
     # Extremadura; los 7 siguientes, la de Burgos a Vitoria; los 3 y 15 de después, las de Galicia,
     # los 16 siguientes, la de Sevilla a Cádiz; los 7, la de Barcelona a Figueres, y el 1 y los 2 del
-    # final, los ramales de Toledo y de Huesca, y los 8 de la de Tarragona a Barcelona
+    # final, los ramales de Toledo y de Huesca, los 26 de la de Barcelona a Portbou y los 8 de la de
+    # Tarragona a Barcelona
     assert (
         len(by_id)
         == (
@@ -2366,6 +2397,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         + 16
         + 7
         + (1 + 2)
+        + 26
         + 8
     )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
@@ -2461,6 +2493,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
+        "barcelona-girona-portbou",
         TARRAGONA_BARCELONA,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(

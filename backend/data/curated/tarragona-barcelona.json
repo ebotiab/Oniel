@@ -3,7 +3,7 @@
     "id": "tarragona-barcelona",
     "name": "Línea convencional Tarragona – Vilanova i la Geltrú – Barcelona",
     "short_name": "632, 210 y 200",
-    "sort_order": 36,
+    "sort_order": 37,
     "zone": "cataluna",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
@@ -325,7 +325,11 @@
     "71802": {
       "exits": [
         "barcelona-sants"
-      ]
+      ],
+      "via": {
+        "line": "barcelona-girona-portbou",
+        "node": "barcelona-sants"
+      }
     },
     "79400": {
       "exits": [

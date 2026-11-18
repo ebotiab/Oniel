@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 from conftest import (
     ALBACETE_SPEC,
+    BARCELONA_PORTBOU_SPEC,
     BCN_SPEC,
     BURGOS_VITORIA_SPEC,
     BYPASS_LLEIDA_SPEC,
@@ -708,6 +709,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # los dos ramales tampoco: les basta parar en Toledo, en Tardienta o en Huesca
         TOLEDO_SPEC.name: {},
         HUESCA_SPEC.name: {},
+        # la de Barcelona a Portbou tampoco: ningún tren pasa de ella a otra línea
+        BARCELONA_PORTBOU_SPEC.name: {},
         # los regionales de Lleida por Valls, que dejan la línea de la costa de Tarragona en Sant
         # Vicenç de Calders camino de Roda de Mar
         TARRAGONA_BARCELONA_SPEC.name: {"lleida-por-valls": 8},

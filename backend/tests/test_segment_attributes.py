@@ -223,6 +223,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "leon-oviedo-gijon": 2,
             "valencia-castello-tarragona": 19,
             "lav-zaragoza-huesca": 1,
+            # el tercer carril de Girona a Vilamalla
+            "barcelona-girona-portbou": 7,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
         # la electrificación solo se declara donde no es la de la línea: ese último tramo de la

@@ -245,6 +245,8 @@ def test_lleida_stops_leave_by_reus_or_by_valls(spec: NetworkSpec) -> None:
         assert sm[stop_id].exits == [SANT_VICENC]
     assert sm[SALOU].exits == ["tarragona"]
     assert sm["79400"].exits == [SANTS] and sm["71802"].exits == [SANTS]
+    # Passeig de Gràcia es un nodo de la línea de Portbou: se llega a ella desde Sants
+    assert [(v.line, v.node) for v in sm["71802"].via] == [("barcelona-girona-portbou", SANTS)]
     (rule,) = spec.route_overrides
     assert rule.consecutive_stop_ids == [RODA_DE_MAR, "71600"]
     assert rule.stop_mappings[LLEIDA].exits == [SANT_VICENC]

@@ -1,6 +1,6 @@
 # Hoja de ruta de Oniel
 
-Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 13 de noviembre de 2026.
+Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 18 de noviembre de 2026.
 
 Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
@@ -35,7 +35,10 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», no hay ninguna tarea abierta.
+Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay dos tareas abiertas, y las dos esperan a algo de fuera:
+
+- **Sustituir mypy y pyright por ty** ([#243](https://github.com/ebotiab/Oniel/issues/243), `infraestructura`). No se empieza hasta que ty, el comprobador de tipos de Astral, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.0.106, todavía en beta: sus diagnósticos cambian de una versión a otra y no tiene modo estricto (de nueve errores de prueba dio cuatro, y mypy los nueve). Las medidas y lo que hay que repetir antes de migrar están en la incidencia.
+- **Formatear el visor con oxfmt** ([#247](https://github.com/ebotiab/Oniel/issues/247), `infraestructura`). No se empieza hasta que oxfmt, el formateador de la familia de oxlint, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.79.0, en beta. El código ya es uniforme, así que la ganancia hoy es pequeña, y adoptarlo pide un reformateo único de entre 49 y 93 ficheros según el ancho de línea, que decide el usuario. Se hace sin ninguna PR del visor abierta. Las medidas están en la incidencia.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
 
@@ -60,10 +63,9 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 - [#230](https://github.com/ebotiab/Oniel/issues/230) Datos: horarios de SNCF para los TGV de París a Barcelona. Depende de #204, ya cerrada.
 
-**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hechas: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Y la línea Tarragona – Vilanova i la Geltrú – Barcelona (#209), que sale de la de València en La Feredat y llega a Barcelona-Sants por la costa; el comparador enseña València – Barcelona por ella, 345,9 km. Quedan a trazos, sin incidencia abierta, la línea de Reus a Móra la Nova, Caspe y Zaragoza, la de Valls y La Plana-Picamoixons a Lleida, el ramal de Salou-Port Aventura y la línea de Sant Vicenç de Calders a Barcelona por Vilafranca del Penedès. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga.
+**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hecha: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga. Hecha también la línea convencional Barcelona – Girona – Portbou (#210), por Granollers, que comparte con la alta velocidad Barcelona-Sants y Girona: el comparador enseña los dos caminos de Barcelona a Girona y a Figueres. Quedan a trazos, sin incidencia abierta, la línea del Maresme, de Maçanet-Massanes a Barcelona por la costa, y la continuación de Portbou a Cerbère. Hecha también la línea Tarragona – Vilanova i la Geltrú – Barcelona (#209), que sale de la de València en La Feredat y llega a Barcelona-Sants por la costa; el comparador enseña València – Barcelona por ella, 345,9 km. Quedan a trazos, sin incidencia abierta, la línea de Reus a Móra la Nova, Caspe y Zaragoza, la de Valls y La Plana-Picamoixons a Lleida, el ramal de Salou-Port Aventura y la línea de Sant Vicenç de Calders a Barcelona por Vilafranca del Penedès.
 
 - [#208](https://github.com/ebotiab/Oniel/issues/208) Datos: línea València – Xàtiva – La Encina – Alicante.
-- [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Comparte con la de alta velocidad (#204, ya cerrada) los nodos de Barcelona-Sants y de Girona.
 - [#211](https://github.com/ebotiab/Oniel/issues/211) Datos: línea convencional Madrid – Ávila – Medina del Campo – Valladolid.
 - [#212](https://github.com/ebotiab/Oniel/issues/212) Datos: línea Palencia – Santander.
 - [#213](https://github.com/ebotiab/Oniel/issues/213) Datos: línea Zaragoza – Castejón – Pamplona y Logroño.

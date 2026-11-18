@@ -32,7 +32,9 @@
       "operator_id": "iryo",
       "retrieved_on": "2026-11-18",
       "product": "Iryo",
-      "stop_id_aliases": {"37700": "37300"},
+      "stop_id_aliases": {
+        "37700": "37300"
+      },
       "names_stops": false
     }
   ],
@@ -684,7 +686,7 @@
       "license_url": "https://www.adif.es/aviso-legal",
       "retrieved_on": "2026-11-18",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea de Tarragona a Barcelona por la costa: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña; los avisos de obras de ese día solo traían de Cataluña obras de las líneas R3 y R7 de Rodalies, que no están cargadas (raw/interrupciones/consultas_2026-11-18_tarragona_barcelona.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea de Tarragona a Barcelona por la costa: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña; los avisos de obras de ese día solo traían de Cataluña obras de las líneas R3 y R7 de Rodalies, que no están cargadas (raw/interrupciones/consultas_2026-11-18_tarragona_barcelona.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
@@ -1853,6 +1855,53 @@
       "coverage": "Coordenadas de las estaciones de Toledo (nodo 254453384), Tardienta (4338239783) y Huesca (8051540821), de Zaragoza-Miraflores y de la bifurcación Huesca (8060137209, ref=86144).",
       "notes": "Elementos con railway=station, halt, junction u otras instalaciones de cinco recuadros pequeños alrededor de cada lugar, pedidos el 18 de noviembre de 2026 a la API de OpenStreetMap (map.json), porque los servidores públicos de Overpass no respondían. Los códigos de las estaciones (etiqueta ref) son los de sus paradas en el GTFS de Renfe.",
       "file": "raw/osm/instalaciones_toledo_huesca_2026-11-18.json"
+    },
+    {
+      "id": "osm-relation-11087891",
+      "name": "Trazado de la línea convencional Barcelona – Girona – Portbou (relación OSM 11087891, línea 270 de Adif)",
+      "url": "https://www.openstreetmap.org/relation/11087891",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "La línea 270 de Adif desde la bifurcación Aragó, dentro del túnel de Aragó, entre Passeig de Gràcia y El Clot, hasta Portbou y Cerbère, por Granollers Centre, Maçanet-Massanes, Girona y Figueres: vías de ancho ibérico electrificadas a 3 kV, con tercer carril de ancho estándar entre Girona y Vilamalla; velocidad máxima por vía.",
+      "notes": "Descargada por la API de OpenStreetMap (relation/11087891/full.json) el 18 de noviembre de 2026; Overpass no respondía. Es de una pieza: sus 667 vías forman un solo grafo. Oniel la traza por el camino más corto desde su primer nodo, el 2535697864 de la bifurcación Aragó, hasta el nodo de la estación de Portbou; lo que sigue hasta Cerbère no se carga.",
+      "file": "raw/osm/relation_11087891_linea_270_barcelona_portbou_2026-11-18.json"
+    },
+    {
+      "id": "osm-relation-6021916",
+      "name": "Recorrido del regional R11 Barcelona-Sants – Portbou (relación OSM 6021916), para el trecho de Sants a la bifurcación Aragó",
+      "url": "https://www.openstreetmap.org/relation/6021916",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "De Barcelona-Sants a la bifurcación Aragó, por el túnel de Aragó y Passeig de Gràcia: 3,8 km que no están en la relación de la línea 270, que empieza en la bifurcación.",
+      "notes": "Descargada por la API de OpenStreetMap (relation/6021916/full.json) el 18 de noviembre de 2026. Es una relación de servicio, de un solo sentido; se usa solo hasta el nodo 2535697864, el primero de la relación de la línea 270, en el que empalman las dos partes.",
+      "file": "raw/osm/relation_6021916_r11_barcelona_portbou_2026-11-18.json"
+    },
+    {
+      "id": "osm-instalaciones-barcelona-portbou",
+      "name": "Estaciones de la línea Barcelona – Girona – Portbou en OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Coordenadas de las 25 estaciones y apeaderos de la línea en los que paran los regionales del horario de Renfe, de Barcelona-Passeig de Gràcia a Portbou (Girona y Barcelona-Sants son nodos de la alta velocidad y conservan sus coordenadas).",
+      "notes": "Nodos railway=station o railway=halt de 25 recuadros de 0,012 × 0,010 grados alrededor de cada parada del GTFS de Renfe, pedidos uno a uno a la API de OpenStreetMap (map.json?bbox=…) el 18 de noviembre de 2026 y reunidos en un fichero, sin las estaciones de metro que caían en los recuadros de Barcelona. Los códigos de estación son los de sus paradas en el GTFS; Barcelona-Passeig de Gràcia, El Clot y Sant Andreu llevan en OSM uic_ref 7171802, 7179009 y 7179004.",
+      "file": "raw/osm/instalaciones_barcelona_portbou_2026-11-18.json"
+    },
+    {
+      "id": "wikipedia-linea-270-barcelona-portbou",
+      "name": "Artículo «Línia Barcelona-Girona-Portbou» y plantilla de su esquema en la Wikipedia en catalán, y artículo «Línea Barcelona-Cervera» de la Wikipedia en español",
+      "url": "https://ca.wikipedia.org/wiki/L%C3%ADnia_Barcelona-Girona-Portbou",
+      "publisher": "Colaboradores de Wikipedia",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Línea 270 de Adif: empieza en la bifurcación Aragó, dentro del túnel de Aragó, y acaba en la frontera, entre Portbou y Cerbère; 166,1 km; vía doble, ancho ibérico, 3 kV; tercer carril de ancho estándar en la vía 1 entre el centro logístico de Girona y Vilamalla desde el 21 de diciembre de 2010; apertura por tramos de 1854 a 1878. Puntos kilométricos del esquema: El Clot 110,068, Sant Andreu 113,215, Granollers Centre 135,305, Sant Celoni 157,085, Gualba 162,486, Riells i Viabrea-Breda 165,151, Hostalric 170,978, Maçanet-Massanes 175,818, Sils 183,462, Caldes de Malavella 189,439, Riudellots 195,698, Fornells de la Selva 200,400, Girona 205,572, Celrà 214,720, Bordils-Juià 218,242, Flaçà 221,940, Sant Jordi Desvalls 224,373, Camallera 230,555, Sant Miquel de Fluvià 236,575, Vilamalla 241,627, Figueres 247,070, Vilajuïga 258,947, Llançà 266,237, Colera 270,846 y Portbou 273,106.",
+      "notes": "Fuente de verificación, no de geometría, consultada por la API de Wikipedia el 18 de noviembre de 2026. Revisiones: artículo en catalán 38007530, plantilla «Línia Barcelona-Granollers-Girona-Figueres-Portbou» 33814514 y artículo en español 176219606 (vía doble a 3 kV, 140 km/h con trechos a 160 entre Mollet y Girona, bloqueos BAB, BAD y BAU). El esquema no da punto kilométrico a Barcelona-Sants ni a Passeig de Gràcia, que están antes de la bifurcación Aragó, ni a la bifurcación misma: la numeración que usa en El Clot continúa una anterior, y la línea la retoma allí (pk_restarts)."
     },
     {
       "id": "osm-relation-5913127",

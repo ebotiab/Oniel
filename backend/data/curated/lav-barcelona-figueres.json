@@ -176,52 +176,6 @@
   ],
   "connections": [
     {
-      "id": "conv-girona-barcelona",
-      "node_id": "girona",
-      "name": "Línea convencional Barcelona – Girona",
-      "towards": "Caldes de Malavella, Maçanet-Massanes, Granollers y Barcelona",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          2.8162865,
-          41.9791657
-        ],
-        [
-          2.80057,
-          41.84116
-        ],
-        [
-          2.74502,
-          41.80748
-        ]
-      ]
-    },
-    {
-      "id": "conv-girona-portbou",
-      "node_id": "girona",
-      "name": "Línea convencional Girona – Portbou",
-      "towards": "Flaçà, Figueres y Portbou",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          2.8162865,
-          41.9791657
-        ],
-        [
-          2.95717,
-          42.04749
-        ],
-        [
-          2.96897,
-          42.265
-        ],
-        [
-          3.15801841,
-          42.4245908
-        ]
-      ]
-    },
-    {
       "id": "seccion-internacional-figueres-perpinan",
       "node_id": "limite-seccion-internacional",
       "name": "Sección internacional Figueres – Perpiñán",
