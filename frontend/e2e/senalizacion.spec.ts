@@ -26,12 +26,14 @@ async function abrirDetalle(page: Page, tramo: string) {
 
 test.describe('Señalización: protección del tren, bloqueo y mando de cada tramo', () => {
   test('todos los tramos de la instantánea traen los tres, con la fuente y la fecha', () => {
-    expect(red.segments).toHaveLength(242)
+    // están todos: tantos como dicen las líneas que tienen
+    expect(red.segments).toHaveLength(red.lines.reduce((suma, l) => suma + l.segment_count, 0))
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
         expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE })
-        // la prolongación a Málaga se leyó en el mapa un día después que el resto; la línea de León a Gijón, tres
-        expect(['2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-17']).toContain(s.attributes?.[clave]?.checked_on)
+        // la fecha es la del día en que se leyó en el mapa: cada línea, el día en que se cargó, desde el 12 de noviembre de 2026
+        expect(s.attributes?.[clave]?.checked_on, `${clave} de ${s.id}`).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+        expect((s.attributes?.[clave]?.checked_on ?? '') >= '2026-11-12', `${clave} de ${s.id}`).toBe(true)
       }
       const filas = attributeRows(s, red.lines.find((l) => l.id === s.line_id), 'detalle')
       // cada valor tiene su texto en la ficha: ninguno sale con la clave cruda

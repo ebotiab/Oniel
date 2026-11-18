@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
-import { abrirZonas } from './navegar.ts'
+import { fraseOtroCamino } from './instantanea.ts'
+import { abrirLinea } from './navegar.ts'
 
 
 const LINEA = 'linares-baeza-moreda-granada'
@@ -14,8 +15,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
   test('la lista lleva a la línea, de vía única y sin electrificar, con sus estaciones', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
-    await abrirZonas(page)
-    await page.getByTestId(`linea-${LINEA}`).click()
+    await abrirLinea(page, LINEA)
     await expect(page).toHaveURL(new RegExp(`/linea/${LINEA}$`))
     await expect(page.getByRole('heading', { name: 'Línea convencional Linares-Baeza – Moreda – Granada' })).toBeVisible()
     await expect(page.getByTestId('ficha-linea')).toHaveText(/173,7 km.*hasta 140 km\/h/)
@@ -53,18 +53,16 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('tramo-operadores')).toHaveText('Solo Renfe Viajeros')
     await expect(page.getByTestId('lista-servicios')).toContainText(/Regional \d+ Granada → Almería/)
-    // con la alta velocidad de Antequera cargada, Granada está unida por los dos lados: el otro
-    // camino existe, dando la vuelta por Linares-Baeza, Córdoba y Antequera
-    await expect(page.getByTestId('tramo-alternativa')).toContainText(
-      '10 de sus 12 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (2, entre Madrid-Puerta de Atocha y Bifurcación Almería), 192 km menos y 29 min más.',
-    )
+    // la ficha dice cuántos de sus trenes tendrían otro camino, como lo da el análisis de la red: cambia
+    // con las líneas cargadas (con la alta velocidad de Antequera, Granada quedó unida por los dos lados)
+    await expect(page.getByTestId('tramo-alternativa')).toContainText(`${fraseOtroCamino(`${LINEA}:iznalloz:granada`)} en las líneas que Oniel tiene cargadas`)
   })
 
   test('el comparador encuentra Madrid – Granada por Alcázar de San Juan y Linares-Baeza', async ({ page }) => {
     await page.goto('/recorridos/madrid-puerta-de-atocha/granada')
     await abrirHoja(page)
     const recorridos = page.getByTestId('recorrido')
-    await expect(recorridos).toHaveCount(3)
+    // cuántos recorridos hay depende de las líneas cargadas: aquí se miran los dos de esta prueba
     await expect(recorridos.nth(0)).toContainText('Por Linares-Baeza')
     await expect(recorridos.nth(0)).toContainText('Recorre dos líneas')
     await expect(recorridos.nth(0)).toContainText('487,3 km')

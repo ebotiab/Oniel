@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+import { fraseOtroCamino } from './instantanea.ts'
+
 /** El campo del buscador: en escritorio está a la vista; en el móvil lo despliega la lupa. */
 async function abrirBuscador(page: import('@playwright/test').Page) {
   const lupa = page.getByTestId('buscador-abrir')
@@ -41,8 +43,9 @@ test.describe('La alta velocidad Córdoba – Málaga, entera', () => {
     await expect(ficha).toBeVisible()
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
     await expect(ficha.getByText('ERTMS de niveles 1 y 2 y ASFA')).toHaveCount(1)
-    // a Málaga solo llega esta línea: sus trenes no tienen otro camino en las líneas cargadas
-    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 55 trenes no tendrían otro camino')
+    // la ficha dice si sus trenes tendrían otro camino, como lo da el análisis de la red (hoy a Málaga
+    // solo llega esta línea, y no lo tienen)
+    await expect(page.getByTestId('tramo-alternativa')).toContainText(fraseOtroCamino('lav-cordoba-malaga:paet-los-prados:malaga-maria-zambrano'))
     // el corte por el desprendimiento de Álora terminó: no se dibuja, pero queda en el detalle
     await expect(ficha).toContainText('Interrupciones anteriores en este tramo')
     await expect(ficha).toContainText('desprendimiento de tierras a la altura de Álora')

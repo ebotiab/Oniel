@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 
+import { colgadas } from './instantanea.ts'
 import { irA } from './navegar.ts'
 
 // «Cobertura y fuentes» es una página propia, sin mapa: lo esencial arriba, las líneas como lista
@@ -32,7 +33,11 @@ test.describe('Cobertura y fuentes, como página', () => {
     // colgados de la suya y no cuentan
     const lineas = page.getByTestId('cobertura-lineas')
     await expect(lineas.locator('li:not(.cobertura-baipas)')).toHaveCount(Number(await cifras.nth(0).locator('dd').innerText()))
-    await expect(lineas.locator('li.cobertura-baipas')).toHaveText([/^Baipás de Zaragoza20,7 km$/, /^Baipás de Lleida14,3 km$/, /^Enlace de Monforte del Cid2,1 km$/])
+    // van todos los de la red, cada uno con sus kilómetros
+    const baipases = lineas.locator('li.cobertura-baipas')
+    await expect(baipases).toHaveCount(colgadas.length)
+    await expect(baipases.filter({ hasText: 'Baipás de Zaragoza' })).toHaveText(/^Baipás de Zaragoza20,7 km$/)
+    await expect(baipases.filter({ hasText: 'Enlace de Monforte del Cid' })).toHaveText(/^Enlace de Monforte del Cid2,1 km$/)
     await expect(cifras.nth(1)).toContainText('Kilómetros')
     await expect(cifras.nth(2)).toContainText('Estaciones')
     await expect(cifras.nth(3)).toContainText('Trenes distintos')
