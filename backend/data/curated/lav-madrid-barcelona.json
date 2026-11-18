@@ -86,7 +86,6 @@
     {"id": "enlace-vallecas-perales-del-rio", "node_id": "bif-vallecas-av", "name": "Enlace con la alta velocidad de Sevilla", "towards": "Córdoba, Sevilla y Málaga sin pasar por Madrid-Puerta de Atocha", "status": "no_cargada", "sketch": [[-3.6215531, 40.3375843], [-3.6583785, 40.3061689]]},
     {"id": "convencional-plasencia-de-jalon-tudela", "node_id": "cambiador-plasencia-de-jalon", "name": "Red convencional por Plasencia de Jalón", "towards": "Tudela, Pamplona y Logroño", "status": "no_cargada", "sketch": [[-1.2343583, 41.6896227], [-1.36, 41.85], [-1.59793, 42.05943]]},
     {"id": "convencional-zaragoza-norte", "node_id": "zaragoza-delicias", "name": "Red convencional desde Zaragoza", "towards": "Tudela, Pamplona, Logroño, Bilbao y Galicia", "status": "no_cargada", "sketch": [[-0.9113881, 41.6585732], [-1.02019, 41.72265], [-1.3, 41.88]]},
-    {"id": "zaragoza-huesca", "node_id": "bif-huesca", "name": "Línea Zaragoza – Huesca", "towards": "Tardienta y Huesca", "status": "no_cargada", "sketch": [[-0.8679639, 41.6327417], [-0.53822, 41.97572], [-0.40975, 42.13359]]},
     {"id": "lav-barcelona-frontera-francesa", "node_id": "barcelona-sants", "name": "LAV Barcelona – frontera francesa", "towards": "Girona, Figueres y Francia", "status": "no_cargada", "sketch": [[2.1400042, 41.3790068], [2.81694, 41.97936], [2.94355, 42.26477]]}
   ],
   "stop_mappings": {
@@ -136,8 +135,8 @@
     "81110": {"exits": ["zaragoza-delicias"]},
     "81200": {"exits": ["zaragoza-delicias"]},
     "81202": {"exits": ["zaragoza-delicias"]},
-    "78200": {"exits": ["bif-huesca"]},
-    "74200": {"exits": ["bif-huesca"]},
+    "78200": {"exits": ["bif-huesca"], "via": {"line": "lav-zaragoza-huesca", "node": "bif-huesca"}},
+    "74200": {"exits": ["bif-huesca"], "via": {"line": "lav-zaragoza-huesca", "node": "bif-huesca"}},
     "50100": {"exits": ["camp-de-tarragona"]},
     "50102": {"exits": ["camp-de-tarragona"]},
     "50207": {"exits": ["camp-de-tarragona"]},

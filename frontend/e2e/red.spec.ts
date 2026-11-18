@@ -30,7 +30,7 @@ test.describe('Elegir línea sin pestañas', () => {
     await abrirHoja(page)
     const red = page.getByTestId('vista-red')
     await expect(red.getByRole('heading', { name: 'La red ferroviaria española, línea a línea' })).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toHaveText(/^23 líneas · 4\.754 km\s*145 estaciones$/)
+    await expect(page.getByTestId('ficha-red')).toHaveText(/^25 líneas · 4\.856 km\s*148 estaciones$/)
     await expect(red).toContainText(/Toca una vía en el mapa o elige una línea de la lista/)
     // las zonas van de norte a sur, y solo las que tienen alguna línea; con diecinueve líneas (más de doce)
     // empiezan plegadas: la lista es un índice de zonas, y cada una dice sus ciudades con estación
@@ -38,9 +38,10 @@ test.describe('Elegir línea sin pestañas', () => {
       /^›Galicia1 líneaOurense$/,
       /^›Asturias, Cantabria y País Vasco2 líneasOviedo, Gijón, Vitoria$/,
       /^›Castilla y León3 líneasValladolid, León, Burgos, Segovia, Palencia$/,
+      /^›Aragón, Navarra y La Rioja1 líneaHuesca$/,
       /^›Cataluña1 líneaBarcelona, Lleida$/,
       /^›Comunidad Valenciana y Murcia4 líneasValencia, Alicante, Murcia, Elche$/,
-      /^›Madrid y Castilla-La Mancha2 líneasCiudad Real, Albacete$/,
+      /^›Madrid y Castilla-La Mancha3 líneasToledo, Ciudad Real, Albacete$/,
       /^›Extremadura4 líneasCáceres, Mérida, Badajoz, Plasencia$/,
       /^›Andalucía6 líneasSevilla, Córdoba, Málaga, Granada, Jaén3 líneas con un tramo sin circulación$/,
     ])
@@ -58,7 +59,9 @@ test.describe('Elegir línea sin pestañas', () => {
       /^Alta velocidad: Monforte del Cid – Murcia68 km$/,
       /^Línea convencional: Valencia – Camp de Tarragona por Castellón267 km$/,
     ])
+    await expect(red.getByRole('region', { name: 'Aragón, Navarra y La Rioja' }).locator('.fila-linea')).toHaveText([/^Alta velocidad: Zaragoza – Huesca79 km$/])
     await expect(red.getByRole('region', { name: 'Madrid y Castilla-La Mancha' }).locator('.fila-linea')).toHaveText([
+      /^Alta velocidad: La Sagra – Toledo22 km$/,
       /^Línea convencional: Alcázar de San Juan – Albacete131 km$/,
       /^Línea convencional: Manzanares – Ciudad Real64 km$/,
     ])
@@ -147,12 +150,12 @@ test.describe('Elegir línea sin pestañas', () => {
     await conMuchasLineas(page, 60)
     await page.reload()
     await abrirHoja(page)
-    await expect(page.getByTestId('ficha-red')).toContainText(/^83 líneas · /)
+    await expect(page.getByTestId('ficha-red')).toContainText(/^85 líneas · /)
     // la cabecera no enumera las líneas ni las cuenta: mide lo mismo con dieciocho que con setenta y ocho
     expect((await cabecera.boundingBox())!.height).toBe(altoConTres)
     const lista = page.getByTestId('lista-lineas')
     // con más de doce líneas la lista es un índice de zonas: un renglón por zona, ninguna línea a la vista
-    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Galicia1 línea/, /^›Asturias, Cantabria y País Vasco2 líneas/, /^›Castilla y León3 líneas/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha2 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
+    await expect(lista.locator('.zona-cabecera')).toHaveText([/^›Galicia1 línea/, /^›Asturias, Cantabria y País Vasco2 líneas/, /^›Castilla y León3 líneas/, /^›Aragón, Navarra y La Rioja1 línea/, /^›Cataluña1 línea/, /^›Comunidad Valenciana y Murcia4 líneas/, /^›Madrid y Castilla-La Mancha3 líneas/, /^›Extremadura4 líneas/, /^›Andalucía66 líneas/])
     await expect(lista.locator('.fila-linea')).toHaveCount(0)
     // plegar no esconde un corte
     await expect(page.getByTestId('zona-andalucia').locator('.zona-detalle')).toContainText('3 líneas con un tramo sin circulación')
@@ -187,7 +190,10 @@ test.describe('Elegir línea sin pestañas', () => {
     await page.getByTestId('linea-lav-madrid-barcelona').hover()
     await expect(mapa).toHaveAttribute('data-lineas-resaltadas', 'lav-madrid-barcelona|baipas-zaragoza|baipas-lleida')
     await page.getByTestId('zona-madrid-castilla-la-mancha').locator('.zona-cabecera').hover()
-    await expect(mapa).toHaveAttribute('data-lineas-resaltadas', /^(manzanares-ciudad-real\|alcazar-albacete|alcazar-albacete\|manzanares-ciudad-real)$/)
+    // las tres de la zona, en cualquier orden
+    await expect
+      .poll(async () => (await mapa.getAttribute('data-lineas-resaltadas'))?.split('|').sort())
+      .toEqual(['alcazar-albacete', 'lav-la-sagra-toledo', 'manzanares-ciudad-real'])
     await page.getByTestId('ficha-red').hover()
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')
     // al elegir una línea no queda nada resaltado, ni al volver a la red

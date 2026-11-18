@@ -134,12 +134,12 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('alternativa-alcance')).toHaveText(
       'Si uno de estos tramos se cortara, ninguno de sus trenes tendría por dónde ir en las líneas que Oniel tiene cargadas. No quiere decir que no exista otro camino en la red real.',
     )
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 126 de los 241 tramos con trenes, en 19 líneas. En el mapa, lo demás va atenuado.')
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText('Son 129 de los 244 tramos con trenes, en 21 líneas. En el mapa, lo demás va atenuado.')
     // y sin los trenes de Iryo
     await expect(page.getByTestId('sin-camino-faltan')).toHaveText('Faltan los trenes de Iryo, que no publica sus horarios en un formato abierto.')
     // una línea por renglón, de la que deja a más trenes sin otro camino a la que menos
     const lineas = page.getByTestId('lista-sin-alternativa').locator('> li')
-    await expect(lineas).toHaveCount(19)
+    await expect(lineas).toHaveCount(21)
     const linea = (nombre: string) => lineas.filter({ hasText: nombre })
     // tres de los veinte de la alta velocidad de Barcelona, de Camp de Tarragona a Barcelona-Sants: son los que
     // más trenes llevan. El resto de la línea queda en el anillo que cierra la línea de València a Camp de Tarragona
@@ -191,6 +191,11 @@ test.describe('Tramos sin otro camino', () => {
     // el ramal de Jaén, que acaba en una estación término
     await expect(linea('Espelúy – Jaén')).toContainText('Toda la línea, 2 tramos')
     await expect(linea('Espelúy – Jaén')).toContainText('26 trenes')
+    // y los dos ramales de alta velocidad, que también acaban en una estación término
+    await expect(linea('La Sagra – Toledo')).toContainText('Toda la línea, 1 tramo')
+    await expect(linea('La Sagra – Toledo')).toContainText('30 trenes')
+    await expect(linea('Zaragoza – Huesca')).toContainText('Toda la línea, 2 tramos')
+    await expect(linea('Zaragoza – Huesca')).toContainText('4 trenes')
     // Extremadura cuelga de Madrid por una sola línea: de la bifurcación Planetario a Monfragüe no hay
     // otro camino, y en el último tramo, hasta la bifurcación San Esteban, tampoco: sus trenes entran en
     // Plasencia y la vuelta por el trazado antiguo mide más del doble. Solo queda fuera el de Monfragüe a El Chaparral
@@ -227,17 +232,23 @@ test.describe('Tramos sin otro camino', () => {
     await resto.locator('summary').click()
     const otros = page.getByTestId('lista-con-alternativa').locator('li')
     await expect(otros).toHaveCount(115)
-    // el que más trenes lleva: por él pasan también los que no paran en Madrid
-    await expect(otros.first()).toContainText('Córdoba – Bifurcación Málaga-Alta Velocidad')
-    await expect(otros.first()).toContainText('124 trenes')
-    // de ellos, los Avant que solo recorren ese tramo no lo tienen: la fila lo dice
-    await expect(otros.first()).toContainText('22 sin él')
-    await expect(otros.first()).toContainText('+340 km · +3 h 2 min')
+    // el que más trenes lleva, desde que está cargado el ramal de Toledo: el último de la línea de Sevilla antes
+    // de La Sagra, por el que pasan también los Avant de Toledo, que no tienen otro camino
+    await expect(otros.first()).toContainText('Bifurcación Yeles – Bifurcación La Sagra')
+    await expect(otros.first()).toContainText('128 trenes')
+    await expect(otros.first()).toContainText('30 sin él')
+    await expect(otros.first()).toContainText('+90 km · +1 h 8 min')
+    // de Córdoba a la bifurcación de Málaga pasan también los que no paran en Madrid; los Avant que solo recorren
+    // ese tramo no tienen otro camino: la fila lo dice
+    const cordoba = otros.filter({ hasText: 'Córdoba – Bifurcación Málaga-Alta Velocidad' })
+    await expect(cordoba).toContainText('124 trenes')
+    await expect(cordoba).toContainText('22 sin él')
+    await expect(cordoba).toContainText('+340 km · +3 h 2 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(vista).not.toContainText('Moreda – Bifurcación Almería')
     // cada fila lleva a la ficha de su tramo
-    await otros.first().getByRole('button').click()
+    await cordoba.getByRole('button').click()
     await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:cordoba:bif-malaga$/)
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
   })

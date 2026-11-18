@@ -145,6 +145,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 66
             + 33
             + 77
+            + 115  # los Avant de Toledo que no estaban en la línea de Valencia
         )
         # misma huella: se salta sin tocar la base
         second = await run(if_changed=True)
@@ -177,7 +178,24 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
     ]
     assert [r["outcome"] for r in runs] == ["completed", "skipped", "completed"]
     assert runs[0]["trips_imported"] == (
-        317 + 432 - 22 + 26 + 15 + 37 + 555 + 8 + 13 + 465 + 92 + 181 + 661 + 409 + 66 + 33 + 77
+        317
+        + 432
+        - 22
+        + 26
+        + 15
+        + 37
+        + 555
+        + 8
+        + 13
+        + 465
+        + 92
+        + 181
+        + 661
+        + 409
+        + 66
+        + 33
+        + 77
+        + 115
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False
     assert "trips_imported" not in runs[1]

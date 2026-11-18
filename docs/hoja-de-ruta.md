@@ -57,10 +57,9 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 **Extremadura.** Para ver qué parte del camino de Madrid a Badajoz es nueva y cuál no. Hecha (#179): la línea convencional Madrid – Talavera de la Reina – Plasencia, la de alta velocidad Plasencia – Cáceres – Badajoz, la convencional Aljucén – Mérida y la línea antigua Monfragüe – Cañaveral – Cáceres. Quedan a trazos, sin incidencia abierta, las líneas de Cáceres a Valencia de Alcántara, de Badajoz a Elvas, de Mérida a Sevilla por Zafra y de Mérida a Ciudad Real.
 
-**Completar la alta velocidad.** Lo que le falta a la red de alta velocidad en servicio, después del norte:
+**Completar la alta velocidad.** Lo que le falta a la red de alta velocidad en servicio, después del norte. Hechos: los ramales de La Sagra a Toledo y de Zaragoza a Huesca (#205). El comparador enseña Madrid – Toledo, 74,9 km desde Madrid-Puerta de Atocha, y Madrid – Huesca, 390,7 km. Quedan a trazos, sin incidencia abierta, la línea convencional de Tardienta a Monzón y Lleida y la de Huesca a Jaca y Canfranc.
 
 - [#204](https://github.com/ebotiab/Oniel/issues/204) Datos: alta velocidad Barcelona – Girona – Figueres y frontera francesa. No depende de nada.
-- [#205](https://github.com/ebotiab/Oniel/issues/205) Datos: ramales cortos de alta velocidad a Toledo y a Huesca. No depende de nada.
 
 **Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías:
 

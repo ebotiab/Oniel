@@ -93,6 +93,11 @@
 | `moncloa-nota-y-vasca-2026-03` | Estado de las obras de la «Y» vasca y de la alta velocidad Burgos–Vitoria el 6 de marzo de 2026 | Ministerio de Transportes y Movilidad Sostenible; La Moncloa | Consulta pública | 2026-11-17 |
 | `europa-press-baipas-montoro-2025-03` | Municipios por los que pasaría el baipás, según la prensa del día del anuncio | Europa Press; Forbes España | © de la agencia; se cita el dato | 2026-11-12 |
 | `osm-nominatim-lugares` | Situación de los municipios y lugares por los que pasan los esbozos de los proyectos | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-12 |
+| `osm-relation-15616205` | Geometría del ramal de alta velocidad La Sagra–Toledo (línea 020) y su velocidad | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-18 |
+| `wikipedia-lav-la-sagra-toledo` | PK de Toledo, características y apertura del ramal de Toledo (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-18 |
+| `osm-relation-9277290` | Geometría de la línea de alta velocidad Zaragoza–Huesca (línea 070), su velocidad y dónde es de ancho mixto | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-18 |
+| `wikipedia-lav-zaragoza-huesca` | Longitud de sus tramos, vía única, ancho mixto de Tardienta a Huesca, velocidades, ASFA y apertura de la línea de Huesca (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-18 |
+| `osm-instalaciones-toledo-huesca` | Coordenadas de las estaciones de Toledo, Tardienta y Huesca y de la bifurcación Huesca | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-18 |
 | `openfreemap` | Mapa base del visor | OpenFreeMap · OpenMapTiles · OSM | ODbL / BSD | 2026-11-08 |
 
 El registro completo, con URL, cobertura y notas, está en `backend/data/curated/sources.json` y se sirve en `GET /api/sources`. Los ficheros crudos están en `backend/data/raw/` con fecha en el nombre; su SHA-256 se guarda en la tabla `sources` al importar. Los ficheros de horarios se declaran además en la lista `feeds` del mismo `sources.json`, uno por descarga (véase «Conjuntos de datos»); el de Renfe lo descarga cada semana un flujo de GitHub Actions, que abre una PR cuando el horario publicado ha cambiado (véase «Refresco de los horarios»). Las seis fuentes del 10 de noviembre de 2026 son las de las interrupciones del servicio: avisos, paneles y noticias que cambian, de modo que su fichero crudo es un registro de lo que decían ese día (`raw/interrupciones/consultas_2026-11-10.json`), resumido y sin copiar el texto. Lo mismo vale para las consultas sobre Iryo: sus horarios (`raw/operadores/consultas_2026-11-11.json`) y sus destinos (`raw/operadores/consultas_2026-11-12.json`).
@@ -103,7 +108,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 | Operador | Líneas | Horarios | Fuente |
 |---|---|---|---|
-| Renfe Viajeros (`renfe`) | las veintitrés y los dos baipases | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
+| Renfe Viajeros (`renfe`) | las veinticinco y los dos baipases | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
 | Ouigo España (`ouigo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona, LAV Madrid – Cuenca – Valencia, LAV Albacete – Alicante, LAV Monforte del Cid – Murcia y LAV Madrid – Segovia – Valladolid | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
 | Iryo (`iryo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona, LAV Madrid – Cuenca – Valencia y LAV Albacete – Alicante | No publicados (`timetable: "no_publicado"`) | `iryo-web` |
 
@@ -117,7 +122,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 | Línea | Id | Longitud medida | Nodos | Tramos | Viajes del GTFS |
 |---|---|---|---|---|---|
-| Alta velocidad Madrid – Sevilla (Adif 010) | `lav-madrid-sevilla` | 470,5 km | 14 | 13 | 377 de Renfe (AVE, AVLO, Alvia, Intercity, Avant) y 26 de Ouigo |
+| Alta velocidad Madrid – Sevilla (Adif 010) | `lav-madrid-sevilla` | 470,5 km | 14 | 13 | 509 de Renfe (AVE, AVLO, Alvia, Intercity, Avant; 132 de ellos, los Avant de Toledo, por la regla `madrid-toledo`) y 26 de Ouigo |
 | Convencional Madrid – Alcázar de San Juan – Córdoba (Adif 300 y 400) | `convencional-madrid-alcazar-cordoba` | 440,7 km | 26 (2 compartidos) | 25 (11 de vía única) | 699 (382 MD, 162 Proximidad, 65 Alvia, 40 Regional Exprés, 30 Regional y 20 Intercity) |
 | Convencional Manzanares – Ciudad Real (Adif 522) | `manzanares-ciudad-real` | 64,4 km | 4 (2 compartidos) | 3 (los 3 de vía única) | 146 (MD, Regional Exprés, Intercity, Alvia) |
 | Convencional Espelúy – Jaén (Adif 402) | `espeluy-jaen` | 33,2 km | 3 (1 compartido) | 2 (los 2 de vía única) | 123 (MD) |
@@ -136,6 +141,8 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Alta velocidad Olmedo – Zamora – Ourense (982 y 822 en las etiquetas de OSM), desde la bifurcación Medina | `lav-olmedo-ourense` | 328,3 km | 14 (1 compartido) | 13 (5 de vía única) | 210 (106 AVE, 58 Alvia y 46 AVLO) |
 | Convencional León – Oviedo – Gijón por la variante de Pajares (130 de Adif y 984 en las etiquetas de OSM) | `leon-oviedo-gijon` | 132,6 km | 12 (1 compartido) | 11 | 141 (50 Alvia, 39 AVE, 25 Regional, 16 AVLO y 11 MD) |
 | Convencional Burgos – Miranda de Ebro – Vitoria (Adif 100) | `burgos-miranda-vitoria` | 117,3 km | 8 (1 compartido) | 7 | 182 (54 Intercity, 45 Regional Exprés, 38 Alvia, 33 MD y 12 Regional) |
+| Alta velocidad La Sagra – Toledo (Adif 020; sale de la de Sevilla en la bifurcación La Sagra) | `lav-la-sagra-toledo` | 22,2 km | 2 (1 compartido) | 1 | 132 (Avant) |
+| Alta velocidad Zaragoza – Huesca (Adif 070; sale de la de Barcelona en la bifurcación Huesca) | `lav-zaragoza-huesca` | 79,3 km | 3 (1 compartido) | 2 (los 2 de vía única) | 11 (AVE), que ya contaban en la línea de Barcelona |
 | Baipás de Zaragoza (Adif 050; cuelga de la alta velocidad de Barcelona) | `baipas-zaragoza` | 20,7 km | 2 (los 2 compartidos) | 1 | 97 de Renfe (AVE) y 10 de Ouigo: los de la línea de Barcelona que no paran en Zaragoza |
 | Baipás de Lleida (Adif 050; cuelga de la misma línea) | `baipas-lleida` | 14,3 km | 2 (los 2 compartidos) | 1 | 224 de Renfe (169 AVE y 55 AVE internacionales) y 25 de Ouigo: los que no paran en Lleida |
 | Enlace de Monforte del Cid (Adif 048; cuelga de la alta velocidad de Monforte del Cid a Murcia) | `enlace-monforte-del-cid` | 2,1 km | 2 (los 2 compartidos) | 1 (de vía única) | 91 de Renfe (72 Avant, 12 AVE y 7 AVLO) y 5 de Ouigo: los que paran en Alicante y siguen a Elche, Orihuela o Murcia, o vienen de allí |
@@ -1213,6 +1220,42 @@ Verificación:
 
 **Proyectos.** La alta velocidad de Burgos a Vitoria sigue en la capa de proyectos como `licitado`, con un hito nuevo, y entra la «Y» vasca, `en_obras` (véase «Proyectos registrados»).
 
+## Cómo se construyeron los ramales de Toledo y de Huesca
+
+Dos ramales cortos de alta velocidad que estaban a trazos: el de La Sagra a Toledo, que sale de la línea Madrid – Sevilla, y la línea de Zaragoza a Huesca por Tardienta, que sale de la de Barcelona junto a Zaragoza-Miraflores (#205). Entran como dos líneas, `lav-la-sagra-toledo` y `lav-zaragoza-huesca`, y se retiran las conexiones a trazos `lav-la-sagra-toledo` de la línea de Sevilla y `zaragoza-huesca` de la de Barcelona. Las dos bifurcaciones ya eran nodos de esas líneas: cada ramal las incorpora con `shared: true`, sin moverlas.
+
+**Geometría.** Una parte de la relación de infraestructura de cada ramal, descargadas por la API de OpenStreetMap porque los servidores públicos de Overpass no respondían: la `15616205` («020: Bif. La Sagra - Toledo», dos vías) y la `9277290` («Línea Zaragoza-Huesca», `ref=070`, una vía). Las dos son de una pieza. La de Toledo empieza en un desvío a 37 m del punto en que la línea de Sevilla sitúa la bifurcación La Sagra y acaba en la topera de una vía de andén de Toledo; la de Huesca empieza a 4 m del nodo de Adif «Bifurcación Huesca» y acaba en la topera de Huesca. Las coordenadas de las estaciones son las de sus nodos de Adif en OSM (`raw/osm/instalaciones_toledo_huesca_2026-11-18.json`).
+
+**Toledo.**
+
+1. **Longitud y puntos kilométricos.** El trazado mide 22,2 km y Wikipedia da a la estación de Toledo el PK 20,842, desde el 0,0 de la bifurcación: 1,4 km de diferencia, dentro de la tolerancia. El esquema del artículo pone la bifurcación en el PK 53,7 de la línea de Sevilla, y Oniel la tiene en el 52,7, que es donde está el desvío en OSM; con dos nodos no se puede saber si es un desfase de origen, así que no se ha corregido nada y se dice aquí.
+2. **Vías, ancho, electrificación y velocidad.** Vía doble, ancho estándar y 25 kV, según las etiquetas de las vías y Wikipedia. La velocidad es la de las vías de OSM: 220 km/h, la de diseño según el artículo, con 165 y 140 a la salida de La Sagra y 80 a la entrada de Toledo.
+3. **Señalización.** El mapa 4 dibuja junto a Toledo la estrella de «LZB», el cuadrado de «ASFA - AV» y el triángulo de GSM-R, y el trazo rosa de BCA a lo largo del ramal: `lzb_asfa`, `bca` y, como en la línea de Sevilla, `sin_dato_publicado` en el mando.
+4. **Un solo tramo.** El ramal no tiene estaciones intermedias, así que es un tramo de la bifurcación a Toledo.
+
+**Trenes de Toledo.** El filtro pide que el viaje pare en Toledo, a la que solo se llega por el ramal. Con el fichero de las pruebas son 132 Avant: los de Madrid-Puerta de Atocha a Toledo y uno al día en cada sentido que sigue de Madrid a Cuenca y Albacete. Ninguno de Ouigo. Los de Madrid a Toledo no contaban hasta ahora en ninguna línea, porque el filtro de la de Sevilla pide parada en Córdoba: entran en ella con una regla de recorrido (`madrid-toledo`, Madrid-Puerta de Atocha seguida de Toledo) y cuentan de Madrid a La Sagra. Los de Cuenca y Albacete ya contaban en la línea de Valencia, que los resuelve hasta Atocha; allí Toledo sigue siendo una salida sin camino, porque el tren cambia de sentido en Atocha y un `via` por la línea de Sevilla lo mandaría de Torrejón de Velasco a La Sagra sin pasar por Madrid. La línea de Sevilla pasa de 377 a 509 viajes de Renfe. De los 132, 115 no contaban en ninguna otra línea; los 17 de Cuenca y Albacete ya estaban en la de Valencia. El total de Renfe pasa de 3.365 a 3.480.
+
+**Huesca.**
+
+1. **Longitud.** El trazado mide 79,3 km, lo que suman los tres tramos que da Wikipedia (31,2 y 27,5 km hasta Tardienta y 20,7 km hasta Huesca). El artículo no trae tabla de puntos kilométricos, así que los nodos no guardan PK.
+2. **Vía única y ancho mixto.** Vía única en toda la línea. Hasta Tardienta es una vía nueva de ancho estándar, paralela a la línea convencional de Zaragoza a Lleida; de Tardienta a Huesca, la vía de siempre con un tercer carril, compartida con los regionales de Canfranc (en OSM, `gauge=1435;1668` desde la entrada de Tardienta). El segundo tramo lleva `gauge: mixto`, como la entrada a Murcia o la llegada a Ourense.
+3. **Velocidad.** 200 km/h hasta Tardienta, de las vías de OSM. De Tardienta a Huesca las vías de tres carriles llevan 160 km/h, pero un trozo de vía de ancho estándar a la salida de Tardienta subía el tramo a 200: se declara `max_speed_kmh: 160`, la que da Wikipedia.
+4. **Señalización.** El mapa 4 dibuja a lo largo de la vía de alta velocidad el trazo azul claro de «BLAU ctc», y junto a ella el cuadrado de «ASFA - AV» con el de tren tierra, sin ERTMS ni LZB: `asfa`, `blau` y `ctc` en los dos tramos. Wikipedia dice también que la línea lleva ASFA. La línea convencional paralela lleva el naranja de «BAU ctc», y la de Canfranc, el lila de «BLAU».
+
+**Trenes de Huesca.** Los AVE de Huesca a Madrid y a Zaragoza, que paran en Zaragoza-Delicias y en Tardienta o en Huesca. Por Tardienta y Huesca pasan también los regionales de Zaragoza a Huesca y Canfranc y los de Zaragoza a Lleida, que van por la línea convencional y paran en Zaragoza-Portillo, Zaragoza-Goya, Zaragoza-Miraflores o Villanueva de Gállego: el filtro pide parada en Tardienta o en Huesca y excluye esas cuatro. Con el fichero de las pruebas son 11 AVE, que ya contaban en la línea de Barcelona: no cambian el total de viajes. Tardienta y Huesca pasan a llevar `via` hacia esta línea en la de Barcelona. Los regionales comparten la vía de Tardienta a Huesca y no están en los recuentos, como los trenes de Cartagena en la entrada a Murcia: la descripción de la línea lo dice.
+
+**Conexiones a trazos.** De Tardienta, la línea convencional hacia Monzón y Lleida; de Huesca, la de Jaca y Canfranc. La línea convencional de Zaragoza a Tardienta corre junto a la de alta velocidad y no se dibuja aparte.
+
+**Lo que enseña el comparador.** De Madrid-Puerta de Atocha a Toledo, 74,9 km y 19 min estimados sin paradas, por la línea de Sevilla y el ramal. A Huesca, 390,7 km y 1 h 33 min por la línea de Barcelona; de Zaragoza-Delicias a Huesca, 84,2 km y 30 min.
+
+**Tramos sin otro camino.** Los tres de los ramales: los dos acaban en una estación término. Con ellos son 129 de los 244 tramos con trenes. El día de referencia (viernes 20 de noviembre de 2026) llevan 30 trenes el de Toledo y 4 cada uno de los de Huesca. En los cuatro tramos de la línea de Sevilla de Madrid-Puerta de Atocha a la bifurcación La Sagra pasan ahora también los 30 Avant de Toledo, sin otro camino, y los 2 Avant de Albacete a Toledo se quedan sin él en los diez tramos de la bifurcación Torrejón de Velasco a Albacete-Los Llanos: cambian de sentido en Atocha y sus tramos no forman un camino seguido (`docs/simulacion.md`, «Tramos sin alternativa»).
+
+**Zonas.** Toledo, en «Madrid y Castilla-La Mancha», con `sort_order: 30`; Huesca, en «Aragón, Navarra y La Rioja», con `sort_order: 31`.
+
+**Operadores.** Solo Renfe en los dos. Ouigo e Iryo no van a Toledo ni a Huesca.
+
+**Interrupciones.** El 18 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en los dos ramales (`raw/interrupciones/consultas_2026-11-18_toledo_huesca.json`). El aviso de la línea Madrid – Andalucía dice que el servicio sigue de Madrid a Toledo, que es lo que ya recoge su anotación, que empieza en la bifurcación La Sagra.
+
 ## Límites y avisos
 
 - **Corte por obras.** Desde el 6 de septiembre de 2026 no circulan trenes de viajeros entre Almuradiel-Viso del Marqués y Alcolea de Córdoba, por la adaptación del gálibo de 13 túneles (entre Venta de Cárdenas y Los Cansinos) y otras estructuras para la autopista ferroviaria Algeciras–Madrid–Zaragoza. Está registrado en `interrupciones.json` con sus fechas y sus fuentes (véase «Interrupciones del servicio»). Los horarios GTFS cargados son los planificados y no lo reflejan: muestran trenes Madrid–Jaén por Despeñaperros, y los traen repetidos en varios viajes que Oniel junta en un solo tren (véase «Trenes repetidos en el horario de Renfe»). El visor marca esos tramos en rojo y añade una nota a sus listas de trenes; el panel de Venta de Cárdenas y el de cualquier otro nodo del corte muestran la interrupción a partir del mismo dato.
@@ -1652,6 +1695,8 @@ Con la vigesimoprimera (alta velocidad Venta de Baños – Burgos, 86,7 km y cua
 Con la vigesimosegunda (León – Oviedo – Gijón, 132,6 km y once tramos), medido el 15 de noviembre de 2026 de la misma manera sobre las veintiuna anteriores, los dos baipases y el enlace (4.636,9 km, 227 nodos distintos y 235 tramos): `index.json` pasa de 442,5 a 460,8 KB (de 67,3 a 70,2 KB comprimido) y `lines/leon-oviedo-gijon.json` pesa 65,6 KB (15,3 KB comprimido). `alternatives.json` pesa 700,6 KB (20,1 KB comprimido). Las anotaciones no cambian.
 
 Con la vigesimotercera (Burgos – Miranda de Ebro – Vitoria, 117,3 km y siete tramos), medido el 17 de noviembre de 2026 de la misma manera sobre las veintidós anteriores, los dos baipases y el enlace, con el fichero de horarios del 17 de noviembre: `index.json` pasa de 460,8 a 476,4 KB (de 70,2 a 72,8 KB comprimido) y `lines/burgos-miranda-vitoria.json` pesa 53,4 KB (13,6 KB comprimido). `alternatives.json` pasa de 695,2 a 711,4 KB (20,5 KB comprimido). Las anotaciones, con el proyecto de la «Y» vasca y un hito más en el de Burgos a Vitoria, pasan de 66,3 a 69,3 KB, y el tope de `e2e/carga.spec.ts` y de `test_integration_db.py` sube de 70 a 75 KB.
+
+Con los ramales de Toledo y de Huesca (22,2 y 79,3 km, tres tramos), medido el 18 de noviembre de 2026 de la misma manera sobre las veintitrés anteriores, los dos baipases y el enlace: `index.json` pasa de 476,4 a 485,2 KB (de 72,8 a 74,3 KB comprimido), `lines/lav-la-sagra-toledo.json` pesa 8,1 KB (2,8 KB comprimido) y `lines/lav-zaragoza-huesca.json`, 22,3 KB (6,5 KB comprimido). `alternatives.json` pasa de 711,4 a 711,8 KB (21,0 KB comprimido). Las anotaciones no cambian.
 
 ## Atributos de tramo
 

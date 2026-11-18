@@ -222,6 +222,7 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "lav-olmedo-ourense": 1,
             "leon-oviedo-gijon": 2,
             "valencia-castello-tarragona": 19,
+            "lav-zaragoza-huesca": 1,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
         # la electrificación solo se declara donde no es la de la línea: ese último tramo de la
@@ -233,7 +234,12 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona,
         # uno de la convencional de Extremadura, el de Oropesa de Toledo a Navalmoral de la Mata,
         # y el de León a la bifurcación Pajares
-        declared_speed = {"lav-madrid-barcelona": 3, "madrid-plasencia": 1, "leon-oviedo-gijon": 1}
+        declared_speed = {
+            "lav-madrid-barcelona": 3,
+            "madrid-plasencia": 1,
+            "leon-oviedo-gijon": 1,
+            "lav-zaragoza-huesca": 1,
+        }
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
@@ -272,6 +278,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     dt.date(2026, 11, 14),
                     dt.date(2026, 11, 15),
                     dt.date(2026, 11, 17),
+                    dt.date(2026, 11, 18),
                 )
 
 

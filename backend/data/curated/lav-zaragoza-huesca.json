@@ -1,0 +1,69 @@
+{
+  "line": {
+    "id": "lav-zaragoza-huesca",
+    "name": "Línea de alta velocidad Zaragoza – Huesca",
+    "short_name": "070",
+    "sort_order": 31,
+    "zone": "aragon-navarra-rioja",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 200,
+    "tracks": 1,
+    "opened_on": "2003-12-23",
+    "reference_length_km": 79.4,
+    "status": "disponible",
+    "description": "Lleva la alta velocidad desde la línea Madrid – Barcelona, a la salida de Zaragoza, hasta Huesca, pasando por Tardienta. Por ella llegan a Huesca los AVE de Madrid y de Zaragoza.\n\nEs de una sola vía. Hasta Tardienta es una vía nueva de ancho estándar, la de la alta velocidad, que corre junto a la línea convencional de Zaragoza a Lleida. De Tardienta a Huesca no hay vía aparte: la vía de siempre lleva un tercer carril, de modo que sobre ella caben trenes de los dos anchos. Por ella pasan también los regionales de Zaragoza a Huesca, Jaca y Canfranc, de ancho ibérico y movidos por motores diésel, porque la catenaria de este trecho solo la pueden usar los trenes de ancho estándar.\n\nSe abrió el 23 de diciembre de 2003. Hoy la recorren unos pocos AVE al día entre Huesca y Madrid o Zaragoza. Oniel cuenta en ella solo esos trenes: los regionales, que van de Zaragoza a Tardienta por la línea convencional, no están cargados, aunque compartan la vía de Tardienta a Huesca.",
+    "geometry_source": {
+      "source_id": "osm-relation-9277290",
+      "parts": [
+        {
+          "source_id": "osm-relation-9277290",
+          "file": "raw/osm/relation_9277290_linea_070_zaragoza_huesca_2026-11-18.json",
+          "relation_id": 9277290,
+          "from": [-0.8679365, 41.6327802],
+          "to": [-0.4097232, 42.1330289]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-zaragoza-huesca"
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "bif-huesca", "name": "Bifurcación Huesca", "kind": "bifurcacion", "shared": true, "position": {"lon": -0.8679639, "lat": 41.6327417}},
+    {"id": "tardienta", "name": "Tardienta", "kind": "estacion", "adif_code": "78200", "position": {"lon": -0.5384281, "lat": 41.9755672},
+     "description": "Estación en la que se juntan la alta velocidad de Huesca y la línea convencional de Zaragoza a Lleida. Aquí empieza la vía de tres carriles hasta Huesca. Paran algunos AVE de Madrid y de Zaragoza a Huesca y los regionales de las dos líneas."},
+    {"id": "huesca", "name": "Huesca", "kind": "estacion", "adif_code": "74200", "position": {"lon": -0.4098509, "lat": 42.1327508},
+     "description": "Final de la línea. Tiene dos vías de andén de ancho estándar para los AVE y otras de ancho ibérico para los regionales, que siguen hacia Jaca y Canfranc por la línea convencional."}
+  ],
+  "attribute_sections": [
+    {"attribute": "max_speed_kmh", "from_node": "tardienta", "to_node": "huesca", "value": 160, "source_id": "wikipedia-lav-zaragoza-huesca", "checked_on": "2026-11-18", "note": "Wikipedia: 160 km/h entre Tardienta y Huesca. En OSM las vías de tres carriles llevan 160 km/h y menos en las estaciones, pero el tramo saldría con 200 km/h por un trozo de vía de ancho estándar a la salida de Tardienta."},
+    {"attribute": "gauge", "from_node": "tardienta", "to_node": "huesca", "value": "mixto", "source_id": "osm-relation-9277290", "checked_on": "2026-11-18", "note": "En OSM, gauge=1435;1668 desde la entrada de Tardienta hasta la estación de Huesca, cuyas dos vías de andén vuelven a ser de 1435. Wikipedia: 20,7 km de vía única de triple carril al norte de Tardienta, compartida con los trenes de ancho ibérico de la línea de Canfranc."},
+    {"attribute": "proteccion_tren", "from_node": "bif-huesca", "to_node": "huesca", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: junto a la línea, entre Zaragoza y Tardienta, el cuadrado amarillo de «ASFA - AV» con el cuadrado negro de tren tierra; ningún símbolo de ERTMS ni de LZB. Wikipedia dice también que la línea lleva ASFA. El valor asfa no distingue un ASFA de otro."},
+    {"attribute": "bloqueo", "from_node": "bif-huesca", "to_node": "huesca", "value": "blau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: trazo azul claro rotulado «BLAU ctc» a lo largo de la vía de alta velocidad, de Zaragoza a Tardienta y de allí a Huesca. La línea convencional de Zaragoza a Lleida lleva el naranja de «BAU ctc», y la de Huesca a Canfranc, el lila de «BLAU»."},
+    {"attribute": "mando", "from_node": "bif-huesca", "to_node": "huesca", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
+  ],
+  "connections": [
+    {"id": "tardienta-lleida", "node_id": "tardienta", "name": "Línea convencional Zaragoza – Tardienta – Lleida", "towards": "Monzón y Lleida", "status": "no_cargada", "sketch": [[-0.5384281, 41.9755672], [-0.369329, 41.938033], [-0.17076, 41.817529], [0.196939, 41.913679]]},
+    {"id": "huesca-canfranc", "node_id": "huesca", "name": "Línea convencional Huesca – Canfranc", "towards": "Jaca y Canfranc", "status": "no_cargada", "sketch": [[-0.4098509, 42.1327508], [-0.682569, 42.27561], [-0.539231, 42.578303], [-0.514641, 42.751471]]}
+  ],
+  "stop_mappings": {
+    "78200": {"node": "tardienta"},
+    "74200": {"node": "huesca"},
+    "04040": {"exits": ["bif-huesca"], "via": {"line": "lav-madrid-barcelona", "node": "bif-huesca"}},
+    "70600": {"exits": ["bif-huesca"], "via": {"line": "lav-madrid-barcelona", "node": "bif-huesca"}},
+    "04007": {"exits": ["bif-huesca"], "via": {"line": "lav-madrid-barcelona", "node": "bif-huesca"}},
+    "60000": {"exits": ["bif-huesca"], "via": {"line": "lav-madrid-barcelona", "node": "bif-huesca"}}
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Tardienta o en Huesca y en ninguna de las paradas que solo tienen los regionales de la línea convencional: Zaragoza-Portillo, Zaragoza-Goya, Zaragoza-Miraflores y Villanueva de Gállego. Así entran los AVE de Huesca a Madrid y a Zaragoza, y quedan fuera los regionales de Zaragoza a Huesca y Canfranc y los de Zaragoza a Lleida por Tardienta, que van por la línea convencional.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": ["78200", "74200"],
+    "min_node_stops": 1,
+    "exclude_stop_ids": ["70806", "70807", "71100", "78005"]
+  }
+}
