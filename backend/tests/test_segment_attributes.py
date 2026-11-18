@@ -264,7 +264,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de Venta de Baños a
                 # Burgos, tres
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres;
-                # la de Burgos a Vitoria, cinco
+                # la de Burgos a Vitoria, cinco, y las dos de Galicia, seis
                 assert value.source_id == DR
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),
@@ -272,6 +272,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     dt.date(2026, 11, 14),
                     dt.date(2026, 11, 15),
                     dt.date(2026, 11, 17),
+                    dt.date(2026, 11, 18),
                 )
 
 

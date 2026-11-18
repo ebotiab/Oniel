@@ -54,6 +54,8 @@ LAV_OURENSE = "lav-olmedo-ourense"
 LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
 BURGOS_VITORIA = "burgos-miranda-vitoria"
+LAV_SANTIAGO = "lav-ourense-santiago"
+EJE_ATLANTICO = "eje-atlantico"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -322,6 +324,8 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_BURGOS,
         LEON_GIJON,
         BURGOS_VITORIA,
+        LAV_SANTIAGO,
+        EJE_ATLANTICO,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -338,11 +342,10 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
     # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
     # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón, y los 7 del final,
-    # la de Burgos a Vitoria
-    assert (
-        len(exported.segments)
-        == 54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
-    )
+    # la de Burgos a Vitoria; los 3 y los 15 de después, las dos de Galicia
+    assert len(exported.segments) == (
+        54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
+    ) + (3 + 15)
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -376,9 +379,14 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # y los once de la de León a Gijón, la única cargada al norte de León, y los siete de la de
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15,
     )
+    # las dos de Galicia, enteras: a Santiago, A Coruña y Vigo solo llegan ellas
+    santiago = {k: n for k, n in none.items() if k.startswith(f"{LAV_SANTIAGO}:")}
+    assert len(santiago) == 3 and sorted(set(santiago.values())) == [43, 45]
+    eje = {k: n for k, n in none.items() if k.startswith(f"{EJE_ATLANTICO}:")}
+    assert len(eje) == 15 and sorted(set(eje.values())) == [35, 36, 51, 53, 55, 64]
     vitoria = {k: n for k, n in none.items() if k.startswith(f"{BURGOS_VITORIA}:")}
     # la de Burgos a Vitoria, entera: 29 trenes de Burgos a Miranda de Ebro y 31 de Miranda a Vitoria
     assert len(vitoria) == 7 and sorted(set(vitoria.values())) == [29, 31]
@@ -402,6 +410,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_BURGOS}:",
         f"{LEON_GIJON}:",
         f"{BURGOS_VITORIA}:",
+        f"{LAV_SANTIAGO}:",
+        f"{EJE_ATLANTICO}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",
         f"{LAV_ALICANTE}:",
