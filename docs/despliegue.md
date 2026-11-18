@@ -42,9 +42,37 @@ El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_EN
 
 `frontend/vercel.json` fija la caché: un año e inmutable para `/assets/` (ficheros con hash en el nombre) y una hora con revalidación para `/data/`.
 
-Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
+Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Deja fuera también `/_vercel/`, de donde Vercel sirve el script que cuenta las visitas («Visitas del visor»). Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
 
 Desde el 18 de noviembre de 2026 la compilación escribe además una página estática por vista principal (`dist/linea/<id>/index.html`, `dist/tramo/<id>/index.html`, `dist/nodo/<id>/index.html`, `dist/cobertura/index.html`…): el mismo `index.html` con el título y las etiquetas de enlace compartido de esa vista, para los rastreadores que no ejecutan JavaScript (`docs/diseno.md`, «Citar una vista»). Como son ficheros que existen, Vercel los sirve antes de mirar la regla; si alguno no se sirviera, la regla devuelve `index.html` y solo se pierde la tarjeta propia. Se comprueba con `curl -s https://oniel.vercel.app/linea/lav-madrid-sevilla | grep '<title>'`, que tiene que dar el título de la línea.
+
+### Visitas del visor
+
+Desde el 18 de noviembre de 2026 el visor publicado cuenta sus visitas con Vercel Web Analytics (`@vercel/analytics` 2.0.1), para saber si se usa y qué se consulta. El código está en `frontend/src/telemetria/visitas.ts`. Hasta entonces lo único que quedaba de una visita eran las peticiones a la API en Logfire, que no distinguen a un visitante de otro, no dicen de dónde llega y no existen si quien visita se va antes de que Render despierte la API.
+
+**Dónde se mira.** Vercel → proyecto `oniel` → Analytics (https://vercel.com/enrique-botia-barbera-s-projects/oniel/analytics): visitantes y páginas vistas por día, qué páginas, de dónde se llega, país, dispositivo, sistema y navegador.
+
+**Qué se envía.** Una petición a `/_vercel/insights/view`, en el propio dominio del visor, por cada página vista: al abrir el visor y cada vez que cambia la ruta (una línea, un tramo, una estación, el glosario). Lleva la dirección sin parámetros ni fragmento, que el visor recorta antes de enviar (`alEnviar`), y, en la primera página, la página desde la que se llega si es de otro sitio. Vercel anota además la hora, la ubicación aproximada (país, región y ciudad), el sistema, el navegador y el tipo de dispositivo. Según su documentación (https://vercel.com/docs/analytics/privacy-policy, consultada el 18 de noviembre de 2026), no usa cookies de terceros, distingue a un visitante por un resumen calculado de la petición que se descarta a las 24 horas, y los datos no quedan asociados a una persona ni a una dirección IP. El script no escribe nada en el navegador de quien visita, y el visor no envía eventos propios: solo páginas vistas.
+
+**Qué no se cuenta.**
+
+- El servidor de desarrollo, las pruebas y las vistas previas de Vercel: como con los errores, hace falta una compilación de producción con `VERCEL_ENV=production`, y sin ella el recuento no forma parte de lo publicado.
+- Los navegadores automáticos: el script de Vercel no envía nada si el navegador se declara automatizado (`navigator.webdriver`, como Playwright) o lleva `Headless` en su agente de usuario.
+- El navegador integrado de la app de Claude, con el que las sesiones de desarrollo abren producción (`Claude/` en el agente de usuario).
+- Un navegador marcado. Abrir https://oniel.vercel.app/?visitas=no deja de contar las visitas de ese navegador, y https://oniel.vercel.app/?visitas=si vuelve a contarlas. El parámetro desaparece de la dirección al momento, y esa es la señal de que se ha aplicado. La marca se guarda en ese navegador (`localStorage`, clave `oniel:visitas:no-contar`): hay que ponerla una vez en cada navegador y en cada dispositivo de quien mantiene Oniel, no dura en una ventana privada y se pierde al borrar los datos del sitio.
+- Las visitas con un bloqueador de contenido que corte el script: el visor funciona igual y el recuento se queda corto.
+
+**Cuota.** El plan Hobby incluye 50.000 páginas vistas al mes, sumando todos los proyectos de la cuenta, y guarda un mes de datos. Al superarlas Vercel deja de recoger hasta el ciclo siguiente y no cobra nada (https://vercel.com/docs/analytics/limits-and-pricing, consultada el 18 de noviembre de 2026).
+
+**Peso.** Medido el 18 de noviembre de 2026: el arranque del visor publicado crece 2,5 kB (1,1 kB comprimido). El script de Vercel se pide aparte y sin retrasar el primer pintado (`defer`). Fuera de producción, lo compilado no lleva nada del recuento.
+
+**Alta, hecha el 18 de noviembre de 2026.** Web Analytics se activa por proyecto, y el script solo existe en los despliegues posteriores:
+
+1. Activarlo: `env -u HTTPS_PROXY -u HTTP_PROXY vercel project web-analytics enable oniel --scope enrique-botia-barbera-s-projects`, o en la web, Vercel → proyecto `oniel` → Analytics → Enable.
+2. Volver a desplegar producción con una fusión que toque `frontend/`.
+3. Comprobarlo: `curl -s -o /dev/null -w "%{http_code} %{content_type}\n" https://oniel.vercel.app/_vercel/insights/script.js` tiene que dar `200` y JavaScript, y al abrir el visor en un navegador sin marcar, la pestaña de red enseña un `POST` a `/_vercel/insights/view`. Las visitas aparecen después en el panel.
+
+Sin activar, Vercel no sirve el script. Antes de este cambio la regla de `rewrites` devolvía `index.html` en su lugar (comprobado en producción el 18 de noviembre de 2026: `200 text/html`), y un navegador que lo cargara como script habría dejado un error de sintaxis en Logfire en cada visita. Por eso la regla deja fuera `/_vercel/`: si el recuento se desactiva algún día, el script da 404 y el visor sigue igual.
 
 ## API en Render
 
@@ -210,7 +238,7 @@ Desde #131 el visor publicado envía a Logfire sus errores, y solo sus errores, 
 | `browser.language`, `browser.brands`, `browser.mobile`, `browser.platform` | Idioma, navegador con su versión mayor, si es móvil y sistema operativo. En los navegadores que no dan esos datos (Firefox, Safari), el agente de usuario entero en `user_agent.original`. Los anota el SDK |
 | `telemetry.sdk.*` | Nombre y versión del SDK |
 
-**Qué no se envía.** Nada en una visita sin errores: ni carga de página, ni rendimiento, ni peticiones, ni clics. No hay repetición de sesión (el paquete que la hace no está instalado), ni identificador de sesión o de visitante, ni se guarda nada en el navegador (`rum.session: false`). No va el contenido de ningún campo: lo que se escribe en el buscador o en el filtro del glosario no está en la dirección ni en los mensajes de error. Tampoco se instrumentan `fetch` ni los clics (`autoInstrumentations: false`): de hacerlo, cada sondeo de `/healthz` sin respuesta mientras Render despierta la API llegaría como un error, y los fallos de la API ya los envía la propia API. Un recurso que no carga (una tesela, una imagen) no es un error de JavaScript y no llega. Como en cualquier petición, Logfire ve la dirección IP de quien la hace y el origen `https://oniel.vercel.app`; el visor no las anota.
+**Qué no se envía.** A Logfire, nada en una visita sin errores: ni carga de página, ni rendimiento, ni peticiones, ni clics. El recuento de visitas es aparte y va a Vercel («Visitas del visor»). No hay repetición de sesión (el paquete que la hace no está instalado), ni identificador de sesión o de visitante, ni se guarda nada en el navegador (`rum.session: false`). No va el contenido de ningún campo: lo que se escribe en el buscador o en el filtro del glosario no está en la dirección ni en los mensajes de error. Tampoco se instrumentan `fetch` ni los clics (`autoInstrumentations: false`): de hacerlo, cada sondeo de `/healthz` sin respuesta mientras Render despierta la API llegaría como un error, y los fallos de la API ya los envía la propia API. Un recurso que no carga (una tesela, una imagen) no es un error de JavaScript y no llega. Como en cualquier petición, Logfire ve la dirección IP de quien la hace y el origen `https://oniel.vercel.app`; el visor no las anota.
 
 **Cuándo.** Solo si las tres condiciones se cumplen al compilar: compilación de producción, `VERCEL_ENV=production` y `VITE_LOGFIRE_TOKEN` definido (`frontend/src/telemetria/arranque.ts`). Si falta alguna, el SDK no forma parte de lo publicado y el visor no hace ninguna petición a Logfire.
 
