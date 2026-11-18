@@ -49,7 +49,10 @@ test.describe('Destinos directos de una estación', () => {
     await expect(filas.nth(0)).toContainText('Córdoba')
     await expect(filas.nth(0)).toContainText('de 06:55 a 21:20 · Renfe Viajeros 39, Ouigo España 6')
     await expect(filas.nth(0)).toContainText('45 trenes')
-    await expect(filas.filter({ hasText: 'Ciudad Real' })).toContainText('· Renfe Viajeros')
+    // un destino solo de Renfe entre los que se ven de entrada: Toledo, desde que está cargado su ramal, va por
+    // delante de Ciudad Real
+    await expect(filas.filter({ hasText: 'Toledo' })).toContainText('15 trenes')
+    await expect(filas.filter({ hasText: 'Toledo' })).toContainText('· Renfe Viajeros')
   })
 
   test('el comparador de recorridos cuenta los mismos trenes directos que la ficha', async ({ page }) => {
