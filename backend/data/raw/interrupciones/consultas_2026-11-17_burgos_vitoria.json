@@ -1,0 +1,24 @@
+{
+ "descripcion": "Registro de las consultas hechas el 17 de noviembre de 2026 al cargar la línea convencional Burgos – Miranda de Ebro – Vitoria: la comprobación de que ese día no había ninguna interrupción anunciada en ella. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-17",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-17 17:51 (leída a esa hora)",
+   "resumen": "Tres avisos. Uno de Asturias: la línea C7 de cercanías está cortada entre Pravia y San Esteban por un árbol caído, con autobuses. Otro de Castilla y León: una incidencia de señalización en la bifurcación Cerrato (Palencia) retrasa los trenes de alta velocidad entre Madrid y León. El tercero es el de la alta velocidad Madrid-Andalucía, que sigue interrumpida desde el 28 de octubre. Ninguno nombra la línea de Burgos a Miranda de Ebro y Vitoria.",
+   "que_aporta": "Que el 17 de noviembre de 2026 el estado de la red no anuncia ninguna interrupción en la línea Burgos – Miranda de Ebro – Vitoria. La incidencia de la bifurcación Cerrato es un retraso, no un corte, y está en la línea de Valladolid a León."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-17 17:53",
+   "resumen": "Catorce avisos de obras y restablecimientos. El único que nombra Miranda de Ebro es el de las obras entre Miranda de Ebro y Logroño, que cortan el tráfico entre las dos estaciones algunos fines de semana hasta mediados de diciembre. Ninguno afecta al trecho de Burgos a Miranda de Ebro ni al de Miranda de Ebro a Vitoria.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en la línea Burgos – Miranda de Ebro – Vitoria. Las obras de Miranda de Ebro a Logroño son de la rama de Logroño, que sale de Miranda y queda a trazos; afectan a los Alvia de Madrid a Logroño fuera de la línea."
+  }
+ ]
+}

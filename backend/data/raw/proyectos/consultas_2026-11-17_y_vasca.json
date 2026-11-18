@@ -1,0 +1,21 @@
+{
+ "descripcion": "Registro de las consultas hechas el 17 de noviembre de 2026 para el proyecto de la «Y» vasca de backend/data/curated/anotaciones.json y el hito nuevo del proyecto de la alta velocidad Burgos – Vitoria, al cargar la línea convencional Burgos – Miranda de Ebro – Vitoria. Queda, con palabras propias, qué decía cada página y de dónde salen los puntos del esbozo.",
+ "consultado_el": "2026-11-17",
+ "consultas": [
+  {
+   "source_id": "moncloa-nota-y-vasca-2026-03",
+   "titulo": "Óscar Puente reafirma su compromiso con la 'Y' vasca como motor de cohesión territorial en Euskadi",
+   "editor": "Ministerio de Transportes y Movilidad Sostenible; La Moncloa",
+   "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2026/060326-puente-movilidad-euskadi.aspx",
+   "fecha_de_la_pagina": "2026-03-06 (leída el 17 de noviembre de 2026 en el navegador)",
+   "resumen": "Nota sobre la intervención del ministro en un foro en Vitoria. Sobre la «Y» vasca: unirá Vitoria, Bilbao y San Sebastián con la frontera francesa; ya se monta la vía y se tienden la catenaria y las instalaciones de seguridad; del ramal vizcaíno-alavés hay 15 tramos terminados y cuatro en obras, tres de ellos del nudo de Bergara, donde se unen los ramales; el ministro prevé terminar la plataforma de toda la línea en menos de un año, y quedan por definir los accesos a las ciudades. Sobre la alta velocidad de Burgos a Vitoria: unos 94 km, cuatro tramos en marcha y la redacción y licitación de los otros cuatro por terminar; obras de plataforma licitadas o en ejecución en el 60 % del recorrido, incluido el paso de Pancorbo; vía doble de ancho estándar y un baipás de vía única en Miranda de Ebro.",
+   "que_aporta": "El estado de la «Y» vasca (en obras) y los lugares del esbozo (Vitoria, el nudo de Bergara, Bilbao y San Sebastián). Para la alta velocidad Burgos – Vitoria, un hito más; no dice qué tramos están en obras y cuáles solo licitados, así que su estado sigue siendo «licitado». La previsión de terminar la plataforma es una declaración del ministro y no se registra como fecha."
+  }
+ ],
+ "lugares_del_esbozo": [
+  {"lugar": "Vitoria-Gasteiz", "coordenadas": [-2.672697, 42.841303], "de_donde": "Nodo de la estación en la línea Burgos – Miranda de Ebro – Vitoria (OpenStreetMap, nodo 29568804)."},
+  {"lugar": "Bergara (nudo de Bergara)", "coordenadas": [-2.4294921, 43.1248632], "de_donde": "Nominatim, búsqueda «Bergara, Gipuzkoa, España», 17 de noviembre de 2026: el centro del municipio, no el nudo."},
+  {"lugar": "Bilbao", "coordenadas": [-2.9285592, 43.2601304], "de_donde": "Parada 13200, Bilbao-Abando, del GTFS de Renfe del 17 de noviembre de 2026."},
+  {"lugar": "San Sebastián", "coordenadas": [-1.9767172, 43.3176961], "de_donde": "Parada 11511, San Sebastián-Donostia, del GTFS de Renfe del 17 de noviembre de 2026."}
+ ]
+}
