@@ -2,7 +2,8 @@ import type { ReactNode } from 'react'
 
 import type { AnnotationOut, CoverageOut, NetworkOut, Source } from '../data/types'
 import type { ApiStatus } from '../data/api'
-import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, parentOf, routePath } from '../app/state'
+import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, parentOf, routePath, todayIso } from '../app/state'
+import { SITIO } from '../app/meta'
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { formatDateLong, lugar } from '../app/annotations'
 import { agruparFuentes } from '../app/fuentes'
@@ -105,7 +106,14 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
     ...capas.map(({ capa }) => ({ id: capa.kind, titulo: capa.cobertura.titulo })),
     { id: 'pendiente', titulo: 'Pendiente de cargar' },
     { id: 'fuentes', titulo: 'Fuentes y licencias' },
+    { id: 'citar', titulo: 'Cómo citar Oniel' },
   ]
+  // De quién son los horarios y con qué licencia los publica: lo dice la fuente de cada operador cargado.
+  const conHorarios = operadores
+    .filter((o) => o.timetable === 'cargado')
+    .map((o) => ({ nombre: o.name, licencia: coverage.sources.find((f) => f.id === o.source_id)?.license ?? null }))
+  // El ejemplo de cita usa la línea más larga de las cargadas.
+  const lineaDeEjemplo = mainLines(coverage.lines).reduce<(typeof coverage.lines)[number] | undefined>((a, l) => (a && a.length_km >= l.length_km ? a : l), undefined)
   const cifras = [
     { cifra: formatCount(mainLines(coverage.lines).length), que: 'Líneas cargadas' },
     { cifra: formatKm(coverage.total_length_km), que: 'Kilómetros' },
@@ -329,6 +337,59 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
               </details>
             ))}
           </div>
+        </section>
+
+        <section id="cobertura-citar" className="cobertura-apartado" aria-labelledby="cob-citar" data-testid="cobertura-citar">
+          <h2 id="cob-citar">Cómo citar Oniel</h2>
+          <p className="cobertura-texto">
+            Oniel es un mapa de la red ferroviaria española hecho con datos públicos. No es una fuente oficial ni la web de ningún operador: ordena lo que
+            publican otros y dice de dónde sale cada dato.
+          </p>
+          <h3>De quién son los datos</h3>
+          <p className="cobertura-texto" data-testid="citar-datos">
+            Los datos son de quien los publica, y al citar una cifra conviene nombrarlo.
+            {conHorarios.length > 0 &&
+              ` Los horarios son de ${listaEs(conHorarios.map((o) => (o.licencia ? `${o.nombre} (${o.licencia})` : o.nombre)))}.`}{' '}
+            El trazado de las líneas es de los colaboradores de OpenStreetMap (ODbL 1.0). Los puntos kilométricos, las velocidades y la señalización salen de
+            documentos públicos de Adif y del Boletín Oficial del Estado. Cada fuente, con su licencia, está en «Fuentes y licencias».
+          </p>
+          <h3>Qué fecha poner</h3>
+          <p className="cobertura-texto" data-testid="citar-fecha">
+            Dos: el día al que se refieren los trenes{coverage.reference_date ? `, que hoy es el ${formatDateLong(coverage.reference_date)},` : ''} y el día en
+            que consultaste Oniel. Los horarios se renuevan cuando el operador publica otros, y una cifra de hoy puede no ser la del mes que viene.
+          </p>
+          <p className="cobertura-texto">
+            Cada vista del mapa dice esas fechas al pie, junto a «Copiar enlace a esta vista», que da la dirección exacta de lo que estás viendo: una línea,
+            una estación, un tramo, una comparación de recorridos o una simulación con su día y su franja.
+          </p>
+          {lineaDeEjemplo && (
+            <>
+              <h3>Un ejemplo</h3>
+              <p className="cobertura-cita" data-testid="citar-ejemplo">
+                Oniel, «{lineaDeEjemplo.name}»
+                {conHorarios.length > 0 && `, con los horarios de ${listaEs(conHorarios.map((o) => o.nombre))}`}
+                {coverage.reference_date && ` del ${formatDateLong(coverage.reference_date)}`}. {SITIO}
+                {routePath({ selection: null, simulacion: false, linea: lineaDeEjemplo.id })} (consultado el {formatDateLong(todayIso())}).
+              </p>
+            </>
+          )}
+          <h3>Lo que hay que decir al citar una cifra</h3>
+          <ul className="cobertura-limites" data-testid="citar-limites">
+            {sinHorarios.length > 0 && (
+              <li>
+                Faltan los trenes de {listaEs(sinHorarios)}, que no publica{sinHorarios.length > 1 ? 'n' : ''} sus horarios en un formato abierto: donde
+                opera{sinHorarios.length > 1 ? 'n' : ''}, pasan más trenes de los que Oniel cuenta.
+              </li>
+            )}
+            <li>Tampoco están los trenes de Cercanías ni los de mercancías.</li>
+            <li>Los trenes se cuentan en un día concreto y con el horario publicado: no reflejan retrasos, supresiones ni interrupciones del servicio.</li>
+            <li>
+              Los tiempos de «Comparar recorridos» son estimaciones sin paradas ni esperas. Sirven para comparar un camino con otro; no son el tiempo de
+              ningún tren.
+            </li>
+            <li>Una simulación de cierre es hipotética: dice qué trenes pasarían por el tramo en esa franja, no anuncia ningún corte.</li>
+            <li>«Sin otro camino» quiere decir sin otro camino entre las líneas que Oniel tiene cargadas, que no son toda la red.</li>
+          </ul>
         </section>
       </main>
     </div>

@@ -1,6 +1,7 @@
 import type { LineSummary } from '../data/types.ts'
 import { annotationLayer, layerByRoute } from './annotationLayers.ts'
 import { scenarioFromCode } from '../routing/scenario.ts'
+import type { Franja } from './meta.ts'
 
 /** Lo seleccionado: un tramo, un nodo o una anotación con ficha propia (un proyecto), con su tipo. */
 export type Selection = { type: 'tramo'; id: string } | { type: 'nodo'; id: string } | { type: 'anotacion'; kind: string; id: string } | null
@@ -14,6 +15,8 @@ export interface Route {
   cobertura?: boolean
   /** Escenario abierto desde la URL, como cadena corta (`frontend/src/routing/scenario.ts`). */
   escenario?: string
+  /** El día y la franja del cierre simulado, cuando la dirección los lleva. */
+  franja?: Franja
   /** El comparador de recorridos está abierto, con las estaciones que ya se han elegido. */
   recorridos?: Comparador
   /** La vista «Tramos sin otro camino» está abierta. */
@@ -31,7 +34,8 @@ export interface Comparador {
 
 /**
  * Ruta en la dirección. Toda vista del visor tiene la suya, para poder compartir un enlace exacto:
- * / (la vista de la red), /linea/<id>, /tramo/<id>, /nodo/<id>, /tramo/<id>/cierre, /escenario/<cadena>,
+ * / (la vista de la red), /linea/<id>, /tramo/<id>, /nodo/<id>, /tramo/<id>/cierre, /escenario/<cadena>
+ * (las dos últimas, con el día y la franja detrás si se han elegido: /tramo/<id>/cierre/2026-11-20/08:00-09:00),
  * /recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), /glosario,
  * /glosario/<entrada>, /cobertura, /sin-otro-camino y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
  * (/proyecto/<id>).
@@ -42,7 +46,9 @@ export function parseRoute(pathname: string): Route {
   const parts = pathname.split('/').filter(Boolean).map(decode)
   const [kind, id, action] = parts
   if ((kind === 'tramo' || kind === 'nodo') && id) {
-    return { selection: { type: kind, id }, simulacion: kind === 'tramo' && action === 'cierre' }
+    const simulacion = kind === 'tramo' && action === 'cierre'
+    const franja = simulacion ? parseFranja(parts[3], parts[4]) : null
+    return { selection: { type: kind, id }, simulacion, ...(franja ? { franja } : {}) }
   }
   const capa = kind ? layerByRoute(kind) : undefined
   if (capa && id) return { selection: { type: 'anotacion', kind: capa.kind, id }, simulacion: false }
@@ -59,12 +65,20 @@ export function parseRoute(pathname: string): Route {
     // Un escenario que cierra un tramo abre la simulación de ese cierre; la URL lo conserva entero.
     try {
       const closed = scenarioFromCode(id).closures[0]
-      if (closed) return { selection: { type: 'tramo', id: closed }, simulacion: true, escenario: id }
+      const franja = parseFranja(action, parts[3])
+      if (closed) return { selection: { type: 'tramo', id: closed }, simulacion: true, escenario: id, ...(franja ? { franja } : {}) }
     } catch {
       /* cadena ilegible: se ignora */
     }
   }
   return { selection: null, simulacion: false }
+}
+
+/** El día y la franja de un cierre, como van en la dirección: `2026-11-20` y `08:00-09:00`. Nulo si no se entienden. */
+function parseFranja(dia: string | undefined, horas: string | undefined): Franja | null {
+  const h = /^(\d{2}:\d{2})-(\d{2}:\d{2})$/.exec(horas ?? '')
+  if (!dia || !/^\d{4}-\d{2}-\d{2}$/.test(dia) || !h) return null
+  return { date: dia, start: h[1]!, end: h[2]! }
 }
 
 /** Un trozo de la ruta tal y como se escribió; si no se puede descodificar (un «%» suelto), se deja como está. */
@@ -100,13 +114,14 @@ export function routePath(route: Route): string {
     return ['/recorridos', ...parts.map(code)].join('/')
   }
   if (!route.selection) return route.linea ? `/linea/${encodeURIComponent(route.linea)}` : '/'
-  if (route.escenario && route.simulacion) return `/escenario/${code(route.escenario)}`
+  const franja = route.simulacion && route.franja ? `/${route.franja.date}/${route.franja.start}-${route.franja.end}` : ''
+  if (route.escenario && route.simulacion) return `/escenario/${code(route.escenario)}${franja}`
   if (route.selection.type === 'anotacion') {
     const ruta = annotationLayer(route.selection.kind)?.ruta
     return ruta ? `/${ruta}/${encodeURIComponent(route.selection.id)}` : '/'
   }
   const base = `/${route.selection.type}/${encodeURIComponent(route.selection.id).replace(/%3A/gi, ':')}`
-  return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre` : base
+  return route.simulacion && route.selection.type === 'tramo' ? `${base}/cierre${franja}` : base
 }
 
 /** El enlace a la ficha propia de una anotación; nulo si su tipo no la tiene. */
