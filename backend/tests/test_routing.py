@@ -127,6 +127,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 7
             + 1  # el ramal de Toledo
             + 2  # la línea de Huesca
+            + 26  # la de Barcelona a Portbou
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una

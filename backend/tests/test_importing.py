@@ -126,6 +126,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 136
             + 114
             + 115  # los Avant de Toledo que no estaban en la línea de Valencia
+            + 117  # los regionales de Barcelona a Girona y Portbou
         )
         # misma huella: se salta sin tocar la base
         second = await run(if_changed=True)
@@ -179,6 +180,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
         + 136
         + 114
         + 115
+        + 117
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False
     assert "trips_imported" not in runs[1]

@@ -55,7 +55,7 @@
   "operators": [
     {
       "id": "adif",
-      "name": "Adif",
+      "name": "Adif / Adif Alta Velocidad",
       "role": "administrador_infraestructura",
       "source_id": "adif-mapa-red"
     },

@@ -60,11 +60,10 @@ La red crece poco a poco, una línea por PR, con «Añadir otra línea» de `doc
 
 - [#230](https://github.com/ebotiab/Oniel/issues/230) Datos: horarios de SNCF para los TGV de París a Barcelona. Depende de #204, ya cerrada.
 
-**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hecha: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga.
+**Media distancia.** Las líneas convencionales con más viajeros fuera de Cercanías y las capitales que aún no están en el mapa. Ninguna carga servicios de Cercanías. Hecha: la línea Sevilla – Cádiz (#206), que sigue desde Sevilla-Santa Justa; el comparador enseña Madrid – Cádiz, 622,7 km. Queda a trazos, sin incidencia abierta, la línea de Utrera a Marchena, Osuna y Bobadilla, por la que van los trenes de Sevilla a Málaga. Hecha también la línea convencional Barcelona – Girona – Portbou (#210), por Granollers, que comparte con la alta velocidad Barcelona-Sants y Girona: el comparador enseña los dos caminos de Barcelona a Girona y a Figueres. Quedan a trazos, sin incidencia abierta, la línea del Maresme, de Maçanet-Massanes a Barcelona por la costa, y la continuación de Portbou a Cerbère.
 
 - [#209](https://github.com/ebotiab/Oniel/issues/209) Datos: línea Tarragona – Barcelona por la costa. Une el Corredor Mediterráneo con Barcelona.
 - [#208](https://github.com/ebotiab/Oniel/issues/208) Datos: línea València – Xàtiva – La Encina – Alicante.
-- [#210](https://github.com/ebotiab/Oniel/issues/210) Datos: línea convencional Barcelona – Girona – Portbou. Comparte con la de alta velocidad (#204, ya cerrada) los nodos de Barcelona-Sants y de Girona.
 - [#211](https://github.com/ebotiab/Oniel/issues/211) Datos: línea convencional Madrid – Ávila – Medina del Campo – Valladolid.
 - [#212](https://github.com/ebotiab/Oniel/issues/212) Datos: línea Palencia – Santander.
 - [#213](https://github.com/ebotiab/Oniel/issues/213) Datos: línea Zaragoza – Castejón – Pamplona y Logroño.
