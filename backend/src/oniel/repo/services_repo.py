@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -197,6 +197,8 @@ async def calls_at_node(
         f"""
         SELECT s.id, s.operator_id, s.train_number, s.product, s.origin_name, s.destination_name, ss.arrival_s, ss.departure_s, ss.seq,
                ss.pickup_type, ss.drop_off_type,
+               (SELECT min(seq) FROM service_stops x
+                WHERE x.dataset_id = s.dataset_id AND x.service_id = s.id) AS first_seq,
                (SELECT max(seq) FROM service_stops x
                 WHERE x.dataset_id = s.dataset_id AND x.service_id = s.id) AS last_seq
         FROM service_stops ss
@@ -210,22 +212,30 @@ async def calls_at_node(
         node_id,
         date,
     )
-    return [
-        {
-            "service_id": r["id"],
-            "operator_id": r["operator_id"],
-            "train_number": r["train_number"],
-            "product": r["product"],
-            "origin_name": r["origin_name"],
-            "destination_name": r["destination_name"],
-            "arrival": None if r["seq"] == 1 else fmt_time(r["arrival_s"]),
-            "departure": None if r["seq"] == r["last_seq"] else fmt_time(r["departure_s"]),
-            # El fichero marca las paradas en las que un tren solo deja o solo recoge viajeros.
-            "boards": r["pickup_type"] != 1 and r["seq"] != r["last_seq"],
-            "alights": r["drop_off_type"] != 1 and r["seq"] != 1,
-        }
-        for r in rows
-    ]
+    return [call_at_node(r) for r in rows]
+
+
+def call_at_node(r: Mapping[str, Any]) -> dict[str, Any]:
+    """La parada de un tren en una estación: a qué hora llega y sale, y si deja o recoge viajeros.
+
+    La primera y la última parada del tren se reconocen por su número de orden dentro del viaje
+    (``first_seq`` y ``last_seq``), no por un valor fijo: un fichero puede numerarlas desde 0 (el de
+    Iryo) o desde 1 (los de Renfe y Ouigo).
+    """
+    first, last = r["seq"] == r["first_seq"], r["seq"] == r["last_seq"]
+    return {
+        "service_id": r["id"],
+        "operator_id": r["operator_id"],
+        "train_number": r["train_number"],
+        "product": r["product"],
+        "origin_name": r["origin_name"],
+        "destination_name": r["destination_name"],
+        "arrival": None if first else fmt_time(r["arrival_s"]),
+        "departure": None if last else fmt_time(r["departure_s"]),
+        # El fichero marca las paradas en las que un tren solo deja o solo recoge viajeros.
+        "boards": r["pickup_type"] != 1 and not last,
+        "alights": r["drop_off_type"] != 1 and not first,
+    }
 
 
 @dataclass(frozen=True)

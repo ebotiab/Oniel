@@ -10,6 +10,7 @@ from conftest import DATA_DIR, SOURCES, SPECS
 from oniel.gtfs.reader import GtfsFeed, read_feed, rename_stops
 from oniel.gtfs.trips import select_trips_for_spec
 from oniel.network.spec import FeedSpec, load_feeds, load_network_spec
+from oniel.repo.services_repo import call_at_node
 
 
 @pytest.fixture(scope="module")
@@ -81,3 +82,32 @@ def test_its_stops_take_the_names_oniel_already_has(declared: FeedSpec) -> None:
     assert feed.stops["60000"].name == "Madrid-Puerta de Atocha"
     # las demás quedan como estaban y no se añade ninguna
     assert feed.stops["71801"].name == "Barcelona Sants" and "99999" not in feed.stops
+
+
+def test_a_feed_that_counts_stops_from_zero_is_read_like_the_others(iryo_feed: GtfsFeed) -> None:
+    """El fichero numera las paradas desde 0. La primera y la última de un tren se reconocen por
+    su orden en el viaje: en un tren de dos paradas, la segunda es la de llegada."""
+    trip = next(t for t in iryo_feed.trips.values() if len(t.stop_times) == 2)
+    assert [s.seq for s in trip.stop_times] == [0, 1]
+
+    def row(seq: int, pickup: int, drop: int) -> dict[str, object]:
+        return {
+            "id": trip.trip_id,
+            "operator_id": "iryo",
+            "train_number": trip.train_number,
+            "product": "Iryo",
+            "origin_name": "Madrid-Puerta de Atocha",
+            "destination_name": "Barcelona-Sants",
+            "arrival_s": 37440,
+            "departure_s": 37440,
+            "seq": seq,
+            "first_seq": 0,
+            "last_seq": 1,
+            "pickup_type": pickup,
+            "drop_off_type": drop,
+        }
+
+    departure, arrival = call_at_node(row(0, 0, 1)), call_at_node(row(1, 1, 0))
+    assert (departure["arrival"], departure["boards"], departure["alights"]) == (None, True, False)
+    assert (arrival["departure"], arrival["boards"], arrival["alights"]) == (None, False, True)
+    assert arrival["arrival"] == "10:24"
