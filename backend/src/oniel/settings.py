@@ -56,6 +56,7 @@ class Settings(BaseSettings):
         "lav-venta-de-banos-burgos",
         "leon-oviedo-gijon",
         "burgos-miranda-vitoria",
+        "lav-barcelona-figueres",
     ]
 
 

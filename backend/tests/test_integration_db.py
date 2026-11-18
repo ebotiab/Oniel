@@ -55,6 +55,7 @@ LEON_GIJON = "leon-oviedo-gijon"
 BURGOS_VITORIA = "burgos-miranda-vitoria"
 LAV_SANTIAGO = "lav-ourense-santiago"
 EJE_ATLANTICO = "eje-atlantico"
+LAV_FIGUERES = "lav-barcelona-figueres"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
 #: de Plasencia a Badajoz, el ramal de Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -254,6 +255,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][EJE_ATLANTICO]["trips"] == 432
     for line_id in (LAV_SANTIAGO, EJE_ATLANTICO):
         assert gtfs1["lines"][line_id]["route_overrides"] == {"ourense-vilagarcia-sin-santiago": 10}
+    # Con la de Barcelona a Figueres entran 114: los Avant de Barcelona a Figueres y los AVE de
+    # Barcelona a Lyon. Los otros 94 de sus 208 viajes, los de Madrid y València y los de
+    # Marsella, ya estaban en la línea de Madrid a Barcelona
+    trips += 114
+    assert gtfs1["lines"][LAV_FIGUERES]["trips"] == 208
+    assert gtfs1["lines"][LAV_FIGUERES]["passes"] == {"estimado": 1094, "publicado": 208}
+    assert gtfs1["lines"][LAV_FIGUERES]["route_overrides"] == {}
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
     # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
     # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
@@ -475,6 +483,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 7  # la de Burgos a Vitoria
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
+        + 7  # la de Barcelona a Figueres
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -624,6 +633,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 7  # la de Burgos a Vitoria
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
+        + 7  # la de Barcelona a Figueres
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -718,6 +728,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        LAV_FIGUERES,
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -800,6 +811,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 7  # la de Burgos a Vitoria
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
+        + 7  # la de Barcelona a Figueres
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1271,6 +1283,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Arganzón, Nanclares-Langraiz y Vitoria-Gasteiz
     # y las dos de Galicia, 14: Santiago de Compostela y las trece que quedan de A Coruña a
     # Vigo-Urzáiz
+    # y la de Barcelona a Figueres, 2: Girona y Figueres-Vilafant
     assert cov["station_count"] == (
         6
         + 22
@@ -1297,6 +1310,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 8
         + 7
         + 14
+        + 2
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
     # alta velocidad de Barcelona (eran 270 el viernes 13 con las ocho líneas anteriores)
@@ -1417,6 +1431,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        LAV_FIGUERES,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1473,6 +1488,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         BURGOS_VITORIA: ["renfe"],
         LAV_SANTIAGO: ["renfe"],
         EJE_ATLANTICO: ["renfe"],
+        # Ouigo e Iryo acaban en Barcelona; los TGV de SNCF no están cargados ni declarados
+        LAV_FIGUERES: ["renfe"],
     }
     assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
     assert "No están los trenes de Iryo, que no publica sus horarios" in cov["notice"]
@@ -2186,6 +2203,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        LAV_FIGUERES,
     ]
     assert out["missing_operator_ids"] == ["iryo"]
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
@@ -2196,7 +2214,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # Extremadura; los 7 siguientes, la de Burgos a Vitoria, y los 3 y 15 del final, las de Galicia
     assert len(by_id) == (
         54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
-    ) + (3 + 15)
+    ) + (3 + 15 + 7)
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
@@ -2284,6 +2302,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        LAV_FIGUERES,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

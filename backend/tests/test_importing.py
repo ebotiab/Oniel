@@ -125,7 +125,9 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
         # base vacía: aunque se pida saltar, hay que importar
         first = await run(if_changed=True)
         assert first["skipped"] is False
-        # los 409 del final, los de las cuatro líneas de Extremadura que no estaban en otra
+        # los 409, los de las cuatro líneas de Extremadura que no estaban en otra; los 114 del
+        # final, los de la línea de Barcelona a Figueres: los Avant de Barcelona a Figueres y los
+        # AVE de Barcelona a Lyon
         assert (
             first["gtfs"][0]["trips_imported"]
             == 317
@@ -146,6 +148,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 33
             + 77
             + 293
+            + 114
         )
         # misma huella: se salta sin tocar la base
         second = await run(if_changed=True)
@@ -196,6 +199,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
         + 33
         + 77
         + 293
+        + 114
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False
     assert "trips_imported" not in runs[1]

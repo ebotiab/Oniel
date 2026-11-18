@@ -56,6 +56,7 @@ LEON_GIJON = "leon-oviedo-gijon"
 BURGOS_VITORIA = "burgos-miranda-vitoria"
 LAV_SANTIAGO = "lav-ourense-santiago"
 EJE_ATLANTICO = "eje-atlantico"
+LAV_FIGUERES = "lav-barcelona-figueres"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
 #: la de Aljucén a Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -326,6 +327,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         BURGOS_VITORIA,
         LAV_SANTIAGO,
         EJE_ATLANTICO,
+        LAV_FIGUERES,
     ]
     assert exported.missing_operator_ids == ["iryo"]
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -345,7 +347,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     # la de Burgos a Vitoria; los 3 y los 15 de después, las dos de Galicia
     assert len(exported.segments) == (
         54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
-    ) + (3 + 15)
+    ) + (3 + 15 + 7)
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})

@@ -1,0 +1,400 @@
+{
+  "line": {
+    "id": "lav-barcelona-figueres",
+    "name": "Línea de alta velocidad Barcelona – Girona – Figueres",
+    "short_name": "050",
+    "sort_order": 32,
+    "zone": "cataluna",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 290,
+    "tracks": 2,
+    "opened_on": "2013-01-09",
+    "reference_length_km": 131.7,
+    "pk_origin_km": 621.0,
+    "status": "disponible",
+    "description": "Une Barcelona-Sants con Girona y Figueres-Vilafant y llega hasta el túnel por el que la alta velocidad cruza a Francia. Es el camino de los trenes de Barcelona a Girona y Figueres y de los que siguen a Perpiñán, Marsella, Lyon y París.\n\nEs la continuación de la línea de Madrid a Barcelona: para Adif las dos son una sola, la 050, y los kilómetros se siguen contando desde Madrid. Oniel la enseña aparte porque no la recorren los mismos trenes: los de Ouigo y los de Iryo acaban en Barcelona.\n\nSale de Sants por un túnel que cruza Barcelona bajo el Eixample y pasa por La Sagrera, donde está prevista una estación. Entre Mollet del Vallès y Girona la usan también trenes de mercancías, que entran por un ramal que viene del puerto de Barcelona. En Girona los trenes de alta velocidad paran bajo tierra, en la misma estación que los de la línea convencional.\n\nSe abrió el 9 de enero de 2013. Los últimos kilómetros, junto a Figueres-Vilafant, estaban en servicio desde diciembre de 2010 para los trenes que llegaban de Francia.\n\nLa línea de Adif acaba cuatro kilómetros al norte de Figueres-Vilafant. Lo que sigue hasta Perpiñán, con el túnel de El Pertús bajo los Pirineos, es la sección internacional, que gestiona otra empresa y no está cargada.\n\nAquí están los trenes de Renfe: los Avant de Barcelona a Figueres, los AVE de Madrid que siguen hasta Figueres y los AVE a Marsella y a Lyon. Faltan los TGV de París a Barcelona, de la compañía francesa SNCF, dos al día por sentido: sus horarios todavía no están cargados.",
+    "geometry_source": {
+      "source_id": "osm-relation-11082425",
+      "parts": [
+        {
+          "source_id": "osm-relation-11082425",
+          "file": "raw/osm/relation_11082425_lav_madrid_barcelona_frontera_2026-11-12.json",
+          "relation_id": 11082425,
+          "from": [
+            2.1400042,
+            41.3790068
+          ],
+          "to": [
+            2.9293482,
+            42.2963818
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-lav-madrid-barcelona"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "barcelona-sants",
+      "name": "Barcelona-Sants",
+      "kind": "estacion",
+      "adif_code": "71801",
+      "shared": true,
+      "position": {
+        "lon": 2.1400042,
+        "lat": 41.3790068
+      },
+      "reference_pk_km": 621.0
+    },
+    {
+      "id": "bif-mollet",
+      "name": "Bifurcación Mollet",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": 2.2191505,
+        "lat": 41.5297294
+      },
+      "reference_pk_km": 640.5,
+      "description": "Junto a Mollet del Vallès se une a la línea un ramal de mercancías que viene del puerto de Barcelona. Desde aquí hasta Girona comparten la vía los trenes de viajeros y los de mercancías de ancho estándar."
+    },
+    {
+      "id": "riells",
+      "name": "Riells",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 57.4
+      },
+      "reference_pk_km": 678.1,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) junto a Riells i Viabrea. No tiene servicio de viajeros: permite que un tren adelante a otro o espere en vía apartada."
+    },
+    {
+      "id": "vilobi-d-onyar",
+      "name": "Vilobí d'Onyar",
+      "kind": "paet",
+      "rank": "secundario",
+      "position": {
+        "km": 82.85
+      },
+      "reference_pk_km": 703.5,
+      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) junto a Vilobí d'Onyar. No tiene servicio de viajeros."
+    },
+    {
+      "id": "bif-girona-mercaderies",
+      "name": "Bifurcación Girona-Mercaderies",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": 2.7994548,
+        "lat": 41.9440308
+      },
+      "reference_pk_km": 710.7,
+      "description": "Antes de entrar en Girona sale de la línea el ramal hacia la terminal de mercancías de Girona. Por él dejan la línea de alta velocidad los trenes de mercancías."
+    },
+    {
+      "id": "girona",
+      "name": "Girona",
+      "kind": "estacion",
+      "adif_code": "79300",
+      "position": {
+        "lon": 2.8162865,
+        "lat": 41.9791657
+      },
+      "reference_pk_km": 714.7,
+      "description": "La estación de Girona. Los trenes de alta velocidad paran en andenes subterráneos; los de la línea convencional de Barcelona a Portbou, en la misma estación, por otras vías. En los horarios comparten nombre y código."
+    },
+    {
+      "id": "figueres-vilafant",
+      "name": "Figueres-Vilafant",
+      "kind": "estacion",
+      "adif_code": "04307",
+      "position": {
+        "lon": 2.9426836,
+        "lat": 42.2646953
+      },
+      "reference_pk_km": 748.865,
+      "description": "La estación de alta velocidad de Figueres, en el término de Vilafant, al oeste de la ciudad. Se abrió en diciembre de 2010. La estación de Figueres de la línea convencional es otra, a unos dos kilómetros."
+    },
+    {
+      "id": "limite-seccion-internacional",
+      "name": "Límite con la sección internacional",
+      "kind": "referencia",
+      "position": {
+        "lon": 2.9293482,
+        "lat": 42.2963818
+      },
+      "reference_pk_km": 752.7,
+      "description": "Aquí termina la línea de Adif y empieza la sección internacional de Figueres a Perpiñán, que gestiona la sociedad Línea Figueras Perpignan. No hay estación ni andén: es el punto en el que la vía cambia de administrador. Lo que sigue, con el túnel de El Pertús, no está cargado."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "barcelona-sants",
+      "to_node": "limite-seccion-internacional",
+      "value": "ertms_n1_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: símbolos de ERTMS N1 (trébol morado oscuro) y de ASFA de alta velocidad (cuadrado amarillo) junto a la línea en dos sitios: a la salida de Barcelona, con una línea de llamada, y junto a Figueres Vilafant. El mapa los sitúa por línea, no tramo a tramo. Wikipedia dice que toda la línea lleva ETCS de nivel 1 y ASFA; las vías de OSM llevan railway:etcs=2, que el mapa no dibuja aquí: se declara lo que pone el mapa."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "barcelona-sants",
+      "to_node": "limite-seccion-internacional",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: trazo rosa y rótulo «BCA» de Barcelona Sants a Girona y de Girona a Figueres Vilafant, hasta la marca «LFP SA» en la que acaba la línea."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "barcelona-sants",
+      "to_node": "limite-seccion-internacional",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-girona-barcelona",
+      "node_id": "girona",
+      "name": "Línea convencional Barcelona – Girona",
+      "towards": "Caldes de Malavella, Maçanet-Massanes, Granollers y Barcelona",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          2.8162865,
+          41.9791657
+        ],
+        [
+          2.80057,
+          41.84116
+        ],
+        [
+          2.74502,
+          41.80748
+        ]
+      ]
+    },
+    {
+      "id": "conv-girona-portbou",
+      "node_id": "girona",
+      "name": "Línea convencional Girona – Portbou",
+      "towards": "Flaçà, Figueres y Portbou",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          2.8162865,
+          41.9791657
+        ],
+        [
+          2.95717,
+          42.04749
+        ],
+        [
+          2.96897,
+          42.265
+        ],
+        [
+          3.15801841,
+          42.4245908
+        ]
+      ]
+    },
+    {
+      "id": "seccion-internacional-figueres-perpinan",
+      "node_id": "limite-seccion-internacional",
+      "name": "Sección internacional Figueres – Perpiñán",
+      "towards": "Perpiñán y la red francesa, por el túnel de El Pertús",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          2.9293482,
+          42.2963818
+        ],
+        [
+          2.8619561,
+          42.4554865
+        ],
+        [
+          2.880381,
+          42.696421
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "71801": {
+      "node": "barcelona-sants"
+    },
+    "79300": {
+      "node": "girona"
+    },
+    "04307": {
+      "node": "figueres-vilafant"
+    },
+    "60000": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "barcelona-sants"
+      }
+    },
+    "04007": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "barcelona-sants"
+      }
+    },
+    "70600": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "barcelona-sants"
+      }
+    },
+    "04040": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "barcelona-sants"
+      }
+    },
+    "78400": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "barcelona-sants"
+      }
+    },
+    "04104": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "barcelona-sants"
+      }
+    },
+    "65300": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-barcelona",
+          "node": "barcelona-sants"
+        },
+        {
+          "line": "valencia-castello-tarragona",
+          "node": "camp-de-tarragona"
+        }
+      ]
+    },
+    "65000": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-barcelona",
+          "node": "barcelona-sants"
+        },
+        {
+          "line": "valencia-castello-tarragona",
+          "node": "camp-de-tarragona"
+        }
+      ]
+    },
+    "60911": {
+      "exits": [
+        "barcelona-sants"
+      ]
+    },
+    "87374": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87088": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87173": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87302": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87814": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87912": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87089": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87810": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87303": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Figueres-Vilafant, a la que solo se llega por esta línea: todos los trenes de alta velocidad del horario paran en ella. Girona y Barcelona-Sants no sirven de filtro, porque en las dos paran también los regionales de la línea convencional de Barcelona a Portbou, que van por otras vías y en los horarios comparten parada.",
+    "required_stop_ids": [],
+    "any_of_stop_ids": [
+      "04307"
+    ],
+    "min_node_stops": 1
+  },
+  "route_overrides": []
+}
