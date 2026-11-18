@@ -350,8 +350,8 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-14",
-      "coverage": "Dos trechos de la línea: de la bifurcación Medina a la salida de Zamora (98,9 km) y de la bifurcación Valorio al final de la vía nueva en Taboadela (212,2 km); velocidad máxima y número de vías por tramo. La relación sigue de Ourense a Santiago de Compostela y A Coruña; ese trecho no se usa.",
-      "notes": "Descargado por la API Overpass el 14 de noviembre de 2026 del servidor overpass.openstreetmap.fr, porque overpass-api.de respondía 406 y 502. La relación es de infraestructura («LAV Olmedo-Zamora-Galicia», operator=Adif) y trae las dos vías (766 vías, 25 de ellas en construcción, que el trazado no usa), pero no es de una pieza: le faltan la salida de Zamora hasta la bifurcación Valorio (2,4 km) y la llegada a Ourense desde Taboadela (14,7 km), que van por vías de la línea convencional y se toman de la relación 11109438. Los cuatro empalmes son nodos de OSM que están en las dos relaciones. Empieza en el mismo punto que la bifurcación Medina de la línea de Madrid a Valladolid. Sus vías llevan ref=982 entre Olmedo y Taboadela, de donde sale el número de línea que enseña Oniel; no se ha contrastado con la Declaración sobre la Red. La etiqueta passenger_lines dice dónde hay una vía y dónde dos, y se contrastó con Wikipedia y con el mapa 4 de la Declaración sobre la Red. Las coordenadas de Medina del Campo AV, Zamora, Sanabria AV, A Gudiña-Porta de Galicia y Ourense son las de sus estaciones en OSM (raw/osm/instalaciones_olmedo_zamora_ourense_2026-11-14.json, descargado el mismo día); sus códigos coinciden con las paradas del GTFS de Renfe. La parada de Medina del Campo AV del GTFS trae las coordenadas de la estación convencional, a 1,1 km: no se usan.",
+      "coverage": "Dos trechos de la línea: de la bifurcación Medina a la salida de Zamora (98,9 km) y de la bifurcación Valorio al final de la vía nueva en Taboadela (212,2 km); velocidad máxima y número de vías por tramo. La relación sigue de Ourense a Santiago de Compostela y A Coruña; ese trecho no se usa. Desde el 18 de noviembre de 2026 se usa también el trecho de la bifurcación Coto da Torre a la entrada de la estación de Santiago de Compostela (86,8 km), que es el trazado de la línea de alta velocidad Ourense–Santiago, con su velocidad máxima por tramo.",
+      "notes": "Descargado por la API Overpass el 14 de noviembre de 2026 del servidor overpass.openstreetmap.fr, porque overpass-api.de respondía 406 y 502. La relación es de infraestructura («LAV Olmedo-Zamora-Galicia», operator=Adif) y trae las dos vías (766 vías, 25 de ellas en construcción, que el trazado no usa), pero no es de una pieza: le faltan la salida de Zamora hasta la bifurcación Valorio (2,4 km) y la llegada a Ourense desde Taboadela (14,7 km), que van por vías de la línea convencional y se toman de la relación 11109438. Los cuatro empalmes son nodos de OSM que están en las dos relaciones. Empieza en el mismo punto que la bifurcación Medina de la línea de Madrid a Valladolid. Sus vías llevan ref=982 entre Olmedo y Taboadela, de donde sale el número de línea que enseña Oniel; no se ha contrastado con la Declaración sobre la Red. La etiqueta passenger_lines dice dónde hay una vía y dónde dos, y se contrastó con Wikipedia y con el mapa 4 de la Declaración sobre la Red. Las coordenadas de Medina del Campo AV, Zamora, Sanabria AV, A Gudiña-Porta de Galicia y Ourense son las de sus estaciones en OSM (raw/osm/instalaciones_olmedo_zamora_ourense_2026-11-14.json, descargado el mismo día); sus códigos coinciden con las paradas del GTFS de Renfe. La parada de Medina del Campo AV del GTFS trae las coordenadas de la estación convencional, a 1,1 km: no se usan. El trecho de Ourense a Santiago (mismo fichero, del 14 de noviembre de 2026) es de una pieza desde un nodo común con la relación 11109438, junto a la bifurcación Coto da Torre, hasta 160 m antes del nodo de la estación de Santiago; sus vías llevan ref=082 y, de la bifurcación A Grandeira a Santiago, ref=822, ancho ibérico y 25 kV, salvo los primeros 2,3 km, etiquetados a 3 kV. La relación no recoge el enlace de Conxo (ref=842).",
       "file": "raw/osm/relation_4777980_lav_olmedo_zamora_galicia_2026-11-14.json"
     },
     {
@@ -362,8 +362,8 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-14",
-      "coverage": "Los dos trechos que faltan en la relación 4777980: la salida de Zamora hasta la bifurcación Valorio (2,4 km) y de Taboadela a la estación de Ourense (14,7 km), de vía única y ancho mixto; velocidad máxima por tramo.",
-      "notes": "Descargado por la API Overpass el 14 de noviembre de 2026 del servidor overpass.openstreetmap.fr. La relación es de infraestructura («Liña Zamora-A Coruña», operator=Adif) y es de una pieza de Zamora a Santiago de Compostela; de ella solo se usan los dos trechos por los que pasan los trenes de alta velocidad. En los dos las vías llevan gauge=1435;1668 y 25 kV; entre Taboadela y Ourense, ref=822 y velocidades de 50 a 90 km/h. Los últimos 0,8 km, dentro de la estación de Ourense, están etiquetados con ancho ibérico y 3 kV: el trazado acaba en la parada de la relación, que no es la vía de topera de ancho estándar.",
+      "coverage": "Los dos trechos que faltan en la relación 4777980: la salida de Zamora hasta la bifurcación Valorio (2,4 km) y de Taboadela a la estación de Ourense (14,7 km), de vía única y ancho mixto; velocidad máxima por tramo. Desde el 18 de noviembre de 2026 se usa también el kilómetro de la estación de Ourense a la bifurcación Coto da Torre (1,0 km), por el que salen hacia Santiago los trenes de la línea de alta velocidad Ourense–Santiago.",
+      "notes": "Descargado por la API Overpass el 14 de noviembre de 2026 del servidor overpass.openstreetmap.fr. La relación es de infraestructura («Liña Zamora-A Coruña», operator=Adif) y es de una pieza de Zamora a Santiago de Compostela; de ella solo se usan los dos trechos por los que pasan los trenes de alta velocidad. En los dos las vías llevan gauge=1435;1668 y 25 kV; entre Taboadela y Ourense, ref=822 y velocidades de 50 a 90 km/h. Los últimos 0,8 km, dentro de la estación de Ourense, están etiquetados con ancho ibérico y 3 kV: el trazado acaba en la parada de la relación, que no es la vía de topera de ancho estándar. De Ourense a la bifurcación Coto da Torre las vías llevan ref=822, ancho ibérico y 3 kV. La relación y la 4777980 comparten además un nodo en la bifurcación A Grandeira, a 3 km de Santiago, donde la línea antigua de Lalín se junta con la vía nueva.",
       "file": "raw/osm/relation_11109438_linea_zamora_a_coruna_2026-11-14.json"
     },
     {
@@ -1657,6 +1657,76 @@
       "coverage": "Estado de la «Y» vasca el 6 de marzo de 2026 (montaje de vía en marcha, 15 tramos del ramal de Vitoria a Bilbao terminados y cuatro en obras, tres del nudo de Bergara) y de la alta velocidad Burgos – Vitoria (cuatro tramos en marcha, obras de plataforma licitadas o en ejecución en el 60 % del recorrido).",
       "notes": "Publicada el 6 de marzo de 2026 en la web de La Moncloa y leída en el navegador el 17 de noviembre de 2026. No da fecha de puesta en servicio de ninguna de las dos líneas. Lo que decía, resumido, en el registro de consultas.",
       "file": "raw/proyectos/consultas_2026-11-17_y_vasca.json"
+    },
+    {
+      "id": "osm-relation-1941090",
+      "name": "Trazado de la línea A Coruña–Santiago–Vigo, el Eje Atlántico (relación OSM 1941090, ancho ibérico a 25 kV)",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/1941090",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Trazado de A Coruña a Vigo-Urzáiz por Santiago de Compostela, Vilagarcía de Arousa y Pontevedra (155,2 km) y velocidad máxima por tramo.",
+      "notes": "Descargado por la API de OpenStreetMap (relation/1941090/full.json) el 18 de noviembre de 2026, porque los servidores públicos de Overpass no respondían a esa hora. No hay en OSM una relación de infraestructura que recoja la línea entera: se usa una de servicio («LAV Eixo Atlántico A Coruña - Vigo», route=train), que recorre una sola vía de punta a punta y es de una pieza. Sus vías llevan ref=822 de A Coruña a Santiago (61,4 km), ref=824 de Santiago a Arcade (76 km) y ref=850 de Arcade a Vigo-Urzáiz (17,4 km), de donde sale el número de línea que enseña Oniel; no se ha contrastado con la Declaración sobre la Red. Todas llevan ancho ibérico y 25 kV. La relación del sentido contrario (2253088, «LAV Eixo Atlántico Vigo - A Coruña»), descargada el mismo día y no guardada, recorre vías distintas en todo el trayecto salvo 0,8 km dentro de la estación de Santiago: es la comprobación de que la línea es de vía doble, porque la etiqueta passenger_lines falta en casi todas las vías.",
+      "file": "raw/osm/relation_1941090_eixo_atlantico_a_coruna_vigo_2026-11-18.json"
+    },
+    {
+      "id": "osm-instalaciones-galicia",
+      "name": "Estaciones, apeaderos y bifurcaciones de OpenStreetMap entre Ourense, A Coruña y Vigo",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Coordenadas de las estaciones de A Coruña (nodo 13782316672), Uxes, Cerceda-Meirama, Ordes, Santiago de Compostela-Daniel Castelao (12768629140), Osebe, Padrón-Barbanza, Vilagarcía de Arousa, A Portela, Pontevedra-Universidade, Pontevedra, Arcade, Redondela AV y Vigo-Urzáiz, y de las bifurcaciones Coto da Torre, Río Sar y Angueira; también las de las estaciones de las vías antiguas (Padrón, Pontecesures, Catoira, Cesantes, Redondela, Vigo-Guixar, O Carballiño, Lalín), que sirven para dibujar las conexiones a trazos.",
+      "notes": "Descargado por la API Overpass (overpass-api.de) el 18 de noviembre de 2026: los nodos railway=station, halt, junction, service_station, yard, site, gauge_conversion y crossover y las estaciones dibujadas como áreas (out center) del rectángulo 42,2–43,4° N, 8,8–7,85° O. La bifurcación A Grandeira no tiene nodo propio en OSM: se sitúa en el nodo que comparten las relaciones 4777980 y 11109438. El nodo de A Portela queda a 250 m del trazado de la relación 1941090 y los demás, a menos de 30 m. La bifurcación Arcade (137,6 km del trazado) queda a 240 m de la estación de Arcade y no se carga como nodo; tampoco las bifurcaciones Uxes, San Amaro y Redondela.",
+      "file": "raw/osm/instalaciones_galicia_2026-11-18.json"
+    },
+    {
+      "id": "osm-vias-santiago-sur",
+      "name": "Vías de OpenStreetMap al sur de Santiago de Compostela: el enlace de Conxo entre la línea de Ourense y la de Vigo",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/143163375",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Existencia y trazado del enlace entre la línea de alta velocidad Ourense–Santiago y la línea de Vigo (vía 143163375, «Desvío de Conxo», ref=842, 1,0 km, ancho ibérico, 50 km/h), que no se carga y se dibuja a trazos.",
+      "notes": "Descargado por la API Overpass (overpass-api.de) el 18 de noviembre de 2026: las vías railway=rail del rectángulo 42,80–42,89° N, 8,62–8,48° O. El enlace sale de la línea de Ourense 0,7 km después de la bifurcación A Grandeira (el «desvío B7 hacia bifurcación Río Sar, PK 0,0 de la línea 842» de la tabla de Wikipedia) y acaba en la bifurcación Río Sar de la línea de Vigo.",
+      "file": "raw/osm/vias_santiago_sur_2026-11-18.json"
+    },
+    {
+      "id": "osm-vias-padron-vigo",
+      "name": "Vías de OpenStreetMap entre Padrón y Vigo: dónde se separan del Eje Atlántico las vías antiguas",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Dónde dejan la línea y vuelven a ella las vías antiguas que siguen en servicio: la de Padrón, Pontecesures y Catoira (ref=818, 28,6 km, sin electrificar), de la bifurcación Angueira a la salida sur de la estación de Vilagarcía de Arousa; la de Portas a la bifurcación San Amaro por A Portela (ref=828, 13 km, sin electrificar), y la de Arcade a Redondela (ref=824), que sigue hacia Vigo-Guixar (ref=810).",
+      "notes": "Descargado por la API Overpass (maps.mail.ru, porque overpass-api.de respondía 502) el 18 de noviembre de 2026: las vías railway=rail del rectángulo 42,22–42,81° N, 8,78–8,59° O. En el fichero la vía 828 no llega a unirse a la línea en Portas: acaba en las vías de la estación. Los trenes que paran en Portela tardan 9 o 10 minutos desde Vilagarcía y 10 a 12 hasta Pontevedra, lo mismo que los demás regionales, y Oniel sitúa el apeadero en la línea.",
+      "file": "raw/osm/vias_padron_vigo_2026-11-18.json"
+    },
+    {
+      "id": "wikipedia-lav-ourense-santiago",
+      "name": "Artículo «Línea de alta velocidad Olmedo-Zamora-Orense-Santiago de Compostela» de Wikipedia en español: tramo Orense-Santiago (puntos kilométricos, velocidades, ancho, fecha de apertura)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/w/index.php?title=L%C3%ADnea_de_alta_velocidad_Olmedo-Zamora-Orense-Santiago_de_Compostela&oldid=176322589",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Puntos kilométricos del tramo Orense-Santiago, que el artículo toma de una consigna de Adif: estación de Ourense (0,000), bifurcación Coto da Torre, inicio de la vía doble (1,041), base de mantenimiento de O Irixo (28,845), bifurcación A Grandeira (85,041), desvío hacia la bifurcación Río Sar, PK 0 de la línea 842 (85,732) y estación de Santiago de Compostela (88,280). Cuadro de velocidades máximas: 110 km/h hasta el PK 2,903, 235 hasta el 6,094, 300 hasta el 84,230 y 80 hasta el 85,000. Ancho ibérico de Ourense a Santiago, con traviesas que admiten el cambio a ancho estándar; 25 kV; apertura el 10 de diciembre de 2011.",
+      "notes": "Consultado por la API de Wikipedia el 18 de noviembre de 2026 (revisión 176322589, del 16 de noviembre). Es el mismo artículo de la fuente wikipedia-lav-olmedo-zamora-galicia, en una revisión posterior. La tabla trae además cuatro puestos intermedios que llama PCA (Arroyo-Garabanes, Lalín, Río Deza y O Curro), que Oniel no carga. Dice que el accidente del 24 de julio de 2013 ocurrió en la curva de A Grandeira; Oniel no lo recoge, porque no registra más que las interrupciones vigentes. Dice que están en obras la variante de Ourense y el tramo de Ourense a Coto da Torre; Oniel no los ha registrado como proyectos sin su fuente oficial. El artículo da 350 km/h como velocidad máxima de la línea; el cuadro de velocidades y las vías de OSM dan 300, que es lo que se declara."
+    },
+    {
+      "id": "wikipedia-eje-atlantico",
+      "name": "Artículo «Eje Atlántico de Alta Velocidad» de Wikipedia en español (longitud, vía doble, ancho, electrificación, velocidad, estaciones, fechas de apertura por tramos)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/w/index.php?title=Eje_Atl%C3%A1ntico_de_Alta_Velocidad&oldid=171733454",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-18",
+      "coverage": "Longitud de A Coruña a Vigo (155,6 km), vía doble, ancho ibérico, 25 kV 50 Hz, velocidad máxima de 200 km/h (250 de proyecto); las trece estaciones y apeaderos de la línea; fechas de entrada en servicio de cada tramo, de 2003 a 2015 (los últimos, de Vilagarcía de Arousa a Padrón y de Redondela a Vigo-Urzáiz, el 29 de marzo de 2015), y ERTMS en servicio desde agosto de 2023.",
+      "notes": "Consultado por la API de Wikipedia el 18 de noviembre de 2026 (revisión 171733454, del 26 de enero de 2026). El artículo no trae puntos kilométricos ni el número de línea de Adif: los nodos de la línea se sitúan con sus coordenadas de OSM y no llevan PK de referencia. No nombra el apeadero de Portela entre las estaciones, aunque lo usa para partir los tramos."
     }
   ]
 }

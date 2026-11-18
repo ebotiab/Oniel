@@ -18,6 +18,7 @@ from conftest import (
     BYPASS_ZARAGOZA_SPEC,
     CONV_SPEC,
     DATA_DIR,
+    EJE_ATLANTICO_SPEC,
     FEED,
     JAEN_SPEC,
     LAV_ALICANTE_SPEC,
@@ -28,6 +29,7 @@ from conftest import (
     LAV_MALAGA_SPEC,
     LAV_MURCIA_SPEC,
     LAV_OURENSE_SPEC,
+    LAV_SANTIAGO_SPEC,
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
@@ -685,6 +687,9 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         LEON_GIJON_SPEC.name: {},
         # ni la de Burgos a Vitoria: todos sus trenes paran en dos de sus estaciones
         BURGOS_VITORIA_SPEC.name: {},
+        # las dos de Galicia, la de los trenes de Ourense a Vilagarcía que no entran en Santiago
+        LAV_SANTIAGO_SPEC.name: {"ourense-vilagarcia-sin-santiago": 10},
+        EJE_ATLANTICO_SPEC.name: {"ourense-vilagarcia-sin-santiago": 10},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin
