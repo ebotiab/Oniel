@@ -51,7 +51,11 @@ test.describe('Navegar por el mapa', () => {
     const izquierda = movil ? 0 : panel!.x + panel!.width - lienzo!.x
     const abajo = movil ? asa!.y - lienzo!.y : lienzo!.height
     const puntos = await page.evaluate(
-      (nodos) => nodos.map((n) => ({ id: n.id, ...(globalThis as unknown as ConMapa).__onielMap!.project([n.lon, n.lat]) })),
+      (nodos) =>
+        nodos.map((n) => {
+          const p = (globalThis as unknown as ConMapa).__onielMap!.project([n.lon, n.lat])
+          return { id: n.id, x: p.x, y: p.y }
+        }),
       indice.nodes,
     )
     for (const p of puntos) {
@@ -62,7 +66,11 @@ test.describe('Navegar por el mapa', () => {
     }
     // además, las cuatro esquinas de la península caben en ese mismo hueco
     const esquinas = await page.evaluate(
-      (caja) => [caja[0], caja[1]].map((c) => ({ ...(globalThis as unknown as ConMapa).__onielMap!.project(c) })),
+      (caja) =>
+        [caja[0], caja[1]].map((c) => {
+          const p = (globalThis as unknown as ConMapa).__onielMap!.project(c)
+          return { x: p.x, y: p.y }
+        }),
       SPAIN_BOUNDS,
     )
     const [suroeste, nordeste] = esquinas
