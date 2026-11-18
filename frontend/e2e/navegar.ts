@@ -1,5 +1,7 @@
 import type { Page } from '@playwright/test'
 
+import { zonaDeLinea } from './instantanea.ts'
+
 export type Seccion = 'mapa' | 'recorridos' | 'sin-otro-camino' | 'glosario' | 'cobertura'
 
 /** En el móvil los enlaces de la cabecera van tras «Menú»: lo abre si está cerrado. */
@@ -15,8 +17,11 @@ export async function irA(page: Page, seccion: Seccion) {
 }
 
 /**
- * Despliega las zonas de la lista de líneas. Con más de doce líneas las zonas empiezan plegadas
- * (docs/diseno.md, «Elegir línea»): una prueba que busca una línea en la lista las abre antes.
+ * Despliega todas las zonas de la lista de líneas, que con más de doce líneas empiezan plegadas
+ * (docs/diseno.md, «Elegir línea»). Solo para la prueba que mira la lista entera: cada despliegue
+ * cambia qué líneas resalta el mapa y lo repinta, y en el móvil del CI, que pinta sin tarjeta
+ * gráfica, son de 1,3 a 2 segundos por zona. La prueba que solo quiere llegar a una línea usa
+ * `abrirLinea`, que cuesta lo mismo con ocho zonas que con quince.
  */
 export async function abrirZonas(page: Page) {
   const lista = page.getByTestId('lista-lineas')
@@ -25,14 +30,19 @@ export async function abrirZonas(page: Page) {
   while ((await plegadas.count()) > 0) await plegadas.first().click()
 }
 
-/**
- * Despliega una sola zona de la lista de líneas, si está plegada. Para la prueba que vuelve varias
- * veces a la lista: al volver, las zonas están otra vez plegadas, y cada despliegue repinta el mapa
- * con el trazado completo de las líneas ya abiertas. En el CI, que pinta sin tarjeta gráfica, son
- * unos dos segundos por zona, y abrirlas todas cada vez no cabe en el tiempo de una prueba.
- */
+/** Despliega una sola zona de la lista de líneas, si está plegada. */
 export async function abrirZona(page: Page, id: string) {
   const cabecera = page.getByTestId(`zona-${id}`).locator('.zona-cabecera')
   await cabecera.waitFor()
   if ((await cabecera.getAttribute('aria-expanded')) !== 'true') await cabecera.click()
+}
+
+/**
+ * Abre una línea desde la lista, como un visitante: despliega la zona en la que está (la lee de la
+ * instantánea, así que la prueba no tiene que saberla) y toca su renglón. Vale también para un
+ * baipás o un enlace, que van en la zona de la línea de la que cuelgan.
+ */
+export async function abrirLinea(page: Page, lineId: string) {
+  await abrirZona(page, zonaDeLinea(lineId))
+  await page.getByTestId(`linea-${lineId}`).click()
 }

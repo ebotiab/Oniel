@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
-import { abrirZona } from './navegar.ts'
-
+import { FICHA_RED } from './instantanea.ts'
+import { abrirLinea } from './navegar.ts'
 
 // La red se carga por partes: al arrancar solo el índice; el detalle de cada línea, al abrirla o al
 // acercar el mapa. Vale igual con la instantánea estática (/data/…) que con la API (/api/lines…).
@@ -8,9 +8,6 @@ import { abrirZona } from './navegar.ts'
 const LAV = 'lav-madrid-sevilla'
 const CONV = 'convencional-madrid-alcazar-cordoba'
 const MZCR = 'manzanares-ciudad-real'
-// Las zonas de la lista en las que están esas dos líneas (`zone` en su especificación).
-const ZONA_LAV = 'andalucia'
-const ZONA_MZCR = 'madrid-castilla-la-mancha'
 
 /** Anota qué partes de la red pide la página: el índice, cada línea y la red entera (que ya no debe pedirse). */
 function partesPedidas(page: Page) {
@@ -35,7 +32,7 @@ test.describe('Carga de la red por partes', () => {
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
-    await expect(page.getByTestId('ficha-red')).toContainText(/^23 líneas · 4\.754 km/)
+    await expect(page.getByTestId('ficha-red')).toContainText(FICHA_RED)
     await expect(page.locator('.maplibregl-canvas')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.indice).toBeGreaterThan(0)
@@ -64,30 +61,25 @@ test.describe('Carga de la red por partes', () => {
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {
-    // abre tres veces una línea desde la lista, y cada vez hay que desplegar antes las zonas: en el
-    // móvil del CI ronda el minuto (44 s con trece líneas), así que lleva el triple de margen
-    test.slow()
+    // abre tres veces una línea desde la lista, y cada vez despliega solo la zona de esa línea: abrirlas
+    // todas no cabía en el minuto de la prueba en el móvil del CI (e2e/navegar.ts)
     const pedidas = partesPedidas(page)
     await page.goto('/')
     await abrirHoja(page)
-    const red = page.getByTestId('vista-red')
-    await abrirZona(page, ZONA_LAV)
-    await red.getByRole('button', { name: /Madrid – Sevilla/ }).click()
+    await abrirLinea(page, LAV)
     await expect(page.getByTestId('esquema')).toBeVisible()
     await expect(page.getByTestId('esquema-rotulo-trenes').or(page.getByTestId('esquema-tramo-1')).first()).toBeVisible()
     await expect.poll(() => new Set(pedidas.lineas)).toEqual(new Set([LAV]))
 
     // una segunda línea pide su detalle; volver a la primera no la pide otra vez
     await page.getByTestId('volver-red').click()
-    await abrirZona(page, ZONA_MZCR)
-    await red.getByRole('button', { name: /Manzanares – Ciudad Real/ }).click()
+    await abrirLinea(page, MZCR)
     await expect(page.getByRole('heading', { name: /Manzanares – Ciudad Real/ })).toBeVisible()
     // (al encuadrarla, el mapa queda cerca y puede pedir también las vecinas)
     await expect.poll(() => pedidas.lineas).toContain(MZCR)
     const antes = pedidas.lineas.filter((l) => l === LAV).length
     await page.getByTestId('volver-red').click()
-    await abrirZona(page, ZONA_LAV)
-    await red.getByRole('button', { name: /Madrid – Sevilla/ }).click()
+    await abrirLinea(page, LAV)
     await expect(page.getByTestId('esquema')).toBeVisible()
     await page.waitForTimeout(1_500) // margen para una petición que no debe llegar
     expect(pedidas.lineas.filter((l) => l === LAV).length).toBe(antes)
