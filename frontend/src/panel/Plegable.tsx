@@ -59,7 +59,8 @@ export function Plegable({ rotulo = 'Más detalle', memoria = 'detalle', testId 
 
 /** Pie de una ficha: de dónde sale el dato y cuándo se consultó. */
 export function PieFuente({ sources, de }: { sources: (Source | undefined)[]; de: string }) {
-  const fuentes = sources.filter((s): s is Source => Boolean(s))
+  // una estación de dos líneas con el mismo trazado de origen (Barcelona-Sants) lo cita una sola vez
+  const fuentes = sources.filter((s, i): s is Source => Boolean(s) && sources.findIndex((o) => o?.id === s?.id) === i)
   if (!fuentes.length) return null
   return (
     <div className="pie-fuente" data-testid="pie-fuente">

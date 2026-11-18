@@ -56,6 +56,7 @@ BURGOS_VITORIA = "burgos-miranda-vitoria"
 LAV_SANTIAGO = "lav-ourense-santiago"
 EJE_ATLANTICO = "eje-atlantico"
 SEVILLA_CADIZ = "sevilla-cadiz"
+LAV_FIGUERES = "lav-barcelona-figueres"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
 #: de Plasencia a Badajoz, el ramal de Mérida y el trazado antiguo de Monfragüe a Cáceres.
@@ -266,6 +267,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         assert gtfs1["lines"][line_id]["route_overrides"] == {"ourense-vilagarcia-sin-santiago": 10}
     assert gtfs1["lines"][SEVILLA_CADIZ]["trips"] == 202
     assert gtfs1["lines"][SEVILLA_CADIZ]["route_overrides"] == {"cordoba-por-la-alta-velocidad": 12}
+    # Con la de Barcelona a Figueres entran 114: los Avant de Barcelona a Figueres y los AVE de
+    # Barcelona a Lyon. Los otros 94 de sus 208 viajes, los de Madrid y València y los de
+    # Marsella, ya estaban en la línea de Madrid a Barcelona
+    trips += 114
+    assert gtfs1["lines"][LAV_FIGUERES]["trips"] == 208
+    assert gtfs1["lines"][LAV_FIGUERES]["passes"] == {"estimado": 1094, "publicado": 208}
+    assert gtfs1["lines"][LAV_FIGUERES]["route_overrides"] == {}
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
     # 4.314 pasos hasta que la línea empezó en Madrid-Chamartín: sus 367 viajes de Chamartín
     # recorren además los dos tramos nuevos, el túnel y el acceso (4.314 + 2 × 367 = 5.048)
@@ -379,9 +387,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][CONV]["trips"] == 390 + 42 + 267
     assert gtfs1["lines"][MZCR]["trips"] == 124 + 22
     assert gtfs1["lines"][JAEN]["trips"] == 123
-    assert gtfs1["lines"][LAV]["route_overrides"] == RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES | {
-        "madrid-toledo": 132
-    }
+    assert gtfs1["lines"][LAV][
+        "route_overrides"
+    ] == RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES | {"madrid-toledo": 132}
     assert gtfs1["lines"][MZCR]["route_overrides"] == RULES
     assert gtfs1["lines"][CONV]["route_overrides"] == RULES | JAEN_RULES | EXTREMADURA_RULES
     # los 267 de la línea de Extremadura solo cuentan en el primer tramo, con paso estimado
@@ -458,8 +466,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # un tramo, y las cuatro de Extremadura
     # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
     # a Gijón, y la de Burgos a Vitoria
-    # y las dos de Galicia y la de Sevilla a Cádiz, y los dos ramales de Toledo y de Huesca
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2
+    # y las dos de Galicia, la de Sevilla a Cádiz y la de Barcelona a Figueres, y los dos ramales de
+    # Toledo y de Huesca
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -493,6 +502,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
         + 16  # la de Sevilla a Cádiz
+        + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
     )
@@ -515,6 +525,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 854  # la de Ourense a Santiago
     renfe_passes += 3035 + 281  # la de A Coruña a Vigo
     renfe_passes += 1733 + 1081  # la de Sevilla a Cádiz
+    renfe_passes += 1094 + 208  # la de Barcelona a Figueres
     # los 132 Avant de Toledo: 4 tramos en la de Sevilla y el del ramal; los 11 AVE de Huesca
     renfe_passes += 4 * 132 + 132 + (11 + 11)
     assert (
@@ -648,6 +659,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
         + 16  # la de Sevilla a Cádiz
+        + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
     )
@@ -746,6 +758,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_SANTIAGO,
         EJE_ATLANTICO,
         SEVILLA_CADIZ,
+        LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -831,6 +844,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 3  # la de Ourense a Santiago
         + 15  # la de A Coruña a Vigo
         + 16  # la de Sevilla a Cádiz
+        + 7  # la de Barcelona a Figueres
         + 1  # el ramal de Toledo
         + 2  # la línea de Huesca
     )
@@ -1322,6 +1336,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y las dos de Galicia, 14: Santiago de Compostela y las trece que quedan de A Coruña a
     # Vigo-Urzáiz
     # y la de Sevilla a Cádiz, 15: de San Bernardo a Cádiz
+    # y la de Barcelona a Figueres, 2: Girona y Figueres-Vilafant
     # y los dos ramales, 3: Toledo, Tardienta y Huesca
     assert cov["station_count"] == (
         6
@@ -1350,6 +1365,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 7
         + 14
         + 15
+        + 2
         + 3
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1376,7 +1392,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # A Coruña a Vigo
     # y 37 más con la de Sevilla a Cádiz: los Media Distancia de Sevilla y de Córdoba a Cádiz y a
     # Málaga de ese día y los trenes de Madrid a Sevilla y a Cádiz que no paran en Córdoba
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 26
+    # y 33 más con la de Barcelona a Figueres: los Avant de Barcelona a Figueres y los AVE de
+    # Barcelona a Lyon
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26
     # y 26 más con el ramal de Toledo: los Avant de Madrid a Toledo de ese día
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
@@ -1427,7 +1445,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # estaciones y vías de OSM y las dos revisiones de Wikipedia
     # Y 2 de la de Sevilla a Cádiz: el fichero de sus estaciones y los artículos de Wikipedia de la
     # línea 400 y de su esquema
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 5
+    # Y 2 de la de Barcelona a Figueres: el fichero de sus estaciones en OSM y los horarios
+    # abiertos de SNCF, que solo dicen qué trenes faltan
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 5
     # Y 5 de los ramales de Toledo y de Huesca: sus dos relaciones de OSM, sus dos artículos de
     # Wikipedia y el fichero de sus estaciones
     assert "línea convencional" in cov["notice"]
@@ -1453,6 +1473,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
     assert "la línea de alta velocidad A Coruña – Santiago – Vigo" in cov["notice"]
     assert "la línea convencional Sevilla – Cádiz" in cov["notice"]
+    assert "la línea de alta velocidad Barcelona – Girona – Figueres" in cov["notice"]
     assert "la línea de alta velocidad La Sagra – Toledo" in cov["notice"]
     assert "y la línea de alta velocidad Zaragoza – Huesca" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
@@ -1482,6 +1503,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_SANTIAGO,
         EJE_ATLANTICO,
         SEVILLA_CADIZ,
+        LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -1541,6 +1563,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_SANTIAGO: ["renfe"],
         EJE_ATLANTICO: ["renfe"],
         SEVILLA_CADIZ: ["renfe"],
+        # Ouigo e Iryo acaban en Barcelona; los TGV de SNCF no están cargados ni declarados
+        LAV_FIGUERES: ["renfe"],
         "lav-la-sagra-toledo": ["renfe"],
         "lav-zaragoza-huesca": ["renfe"],
     }
@@ -2261,6 +2285,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         LAV_SANTIAGO,
         EJE_ATLANTICO,
         SEVILLA_CADIZ,
+        LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]
@@ -2271,36 +2296,11 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
     # Extremadura; los 7 siguientes, la de Burgos a Vitoria; los 3 y 15 de después, las de Galicia,
-    # los 16, la de Sevilla a Cádiz, y el 1 y los 2 del final, los ramales de Toledo y de Huesca
-    assert (
-        len(by_id)
-        == (
-            54
-            + 8
-            + 8
-            + 20
-            + 2
-            + 14
-            + 2
-            + 9
-            + 8
-            + 35
-            + 5
-            + 1
-            + 13
-            + 14
-            + 2
-            + 4
-            + 8
-            + 13
-            + 4
-            + 11
-            + 7
-        )
-        + (3 + 15)
-        + 16
-        + (1 + 2)
-    )
+    # los 16 siguientes, la de Sevilla a Cádiz; los 7, la de Barcelona a Figueres, y el 1 y los 2 del
+    # final, los ramales de Toledo y de Huesca
+    assert len(by_id) == (
+        54 + 8 + 8 + 20 + 2 + 14 + 2 + 9 + 8 + 35 + 5 + 1 + 13 + 14 + 2 + 4 + 8 + 13 + 4 + 11 + 7
+    ) + (3 + 15) + 16 + 7 + (1 + 2)
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
@@ -2391,6 +2391,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         LAV_SANTIAGO,
         EJE_ATLANTICO,
         SEVILLA_CADIZ,
+        LAV_FIGUERES,
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]

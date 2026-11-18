@@ -57,6 +57,7 @@ class Settings(BaseSettings):
         "leon-oviedo-gijon",
         "burgos-miranda-vitoria",
         "sevilla-cadiz",
+        "lav-barcelona-figueres",
         "lav-la-sagra-toledo",
         "lav-zaragoza-huesca",
     ]

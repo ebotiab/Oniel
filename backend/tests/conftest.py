@@ -30,6 +30,7 @@ LAV_BURGOS_SPEC = DATA_DIR / "curated" / "lav-venta-de-banos-burgos.json"
 LEON_GIJON_SPEC = DATA_DIR / "curated" / "leon-oviedo-gijon.json"
 BURGOS_VITORIA_SPEC = DATA_DIR / "curated" / "burgos-miranda-vitoria.json"
 SEVILLA_CADIZ_SPEC = DATA_DIR / "curated" / "sevilla-cadiz.json"
+LAV_FIGUERES_SPEC = DATA_DIR / "curated" / "lav-barcelona-figueres.json"
 #: Los dos baipases de la alta velocidad de Barcelona: líneas cortas que cuelgan de ella.
 BYPASS_ZARAGOZA_SPEC = DATA_DIR / "curated" / "baipas-zaragoza.json"
 BYPASS_LLEIDA_SPEC = DATA_DIR / "curated" / "baipas-lleida.json"
@@ -75,6 +76,7 @@ SPECS = [
     LEON_GIJON_SPEC,
     BURGOS_VITORIA_SPEC,
     SEVILLA_CADIZ_SPEC,
+    LAV_FIGUERES_SPEC,
     TOLEDO_SPEC,
     HUESCA_SPEC,
 ]
