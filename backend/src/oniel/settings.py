@@ -58,6 +58,7 @@ class Settings(BaseSettings):
         "burgos-miranda-vitoria",
         "sevilla-cadiz",
         "lav-barcelona-figueres",
+        "barcelona-girona-portbou",
     ]
 
 

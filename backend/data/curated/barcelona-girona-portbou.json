@@ -1,0 +1,608 @@
+{
+  "line": {
+    "id": "barcelona-girona-portbou",
+    "name": "Línea convencional Barcelona – Girona – Portbou",
+    "short_name": "270",
+    "sort_order": 36,
+    "zone": "cataluna",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 2,
+    "pk_restarts": [
+      {
+        "node": "barcelona-el-clot",
+        "pk_km": 110.068
+      }
+    ],
+    "status": "disponible",
+    "description": "Une Barcelona con Girona, Figueres y Portbou, en la frontera con Francia, por Granollers y Maçanet-Massanes. Es el camino de los regionales de Barcelona a Girona, Figueres y Portbou, que paran en las estaciones de las ciudades y los pueblos por los que la alta velocidad pasa de largo.\n\nEs la línea 270 de Adif, una de las más antiguas de España: llegó de Barcelona a Granollers en 1854 y a la frontera en 1878. Fue durante más de un siglo el camino de los trenes de Barcelona a Francia. Desde 2013 los de larga distancia van por la línea de alta velocidad, que corre en paralelo y comparte con ella las estaciones de Barcelona-Sants y Girona.\n\nSale de Sants por el túnel de Aragó, bajo el centro de Barcelona, con paradas en Passeig de Gràcia y El Clot. Dentro del túnel, entre esas dos estaciones, empieza la línea de Adif, y desde ahí se cuentan sus kilómetros. En Maçanet-Massanes se le une la línea que viene de Barcelona por la costa del Maresme. Entre Girona y Vilamalla una de sus dos vías tiene un tercer carril para los trenes de mercancías de ancho europeo, que llegan por la alta velocidad. Acaba en Portbou, cuya estación tiene vías de los dos anchos; lo que sigue hasta Cerbère, ya en Francia, no está cargado.\n\nAquí están los regionales de Renfe del horario: los de Barcelona a Girona, Figueres y Portbou, que siguen algunos hasta Cerbère, y los de Girona y Flaçà a Barcelona. No están los trenes de Rodalies, los de cercanías, que también la usan, ni sus estaciones: solo figuran las estaciones en las que paran los regionales.",
+    "geometry_source": {
+      "source_id": "osm-relation-11087891",
+      "parts": [
+        {
+          "source_id": "osm-relation-6021916",
+          "file": "raw/osm/relation_6021916_r11_barcelona_portbou_2026-11-18.json",
+          "relation_id": 6021916,
+          "from": [
+            2.1400042,
+            41.3790068
+          ],
+          "to": [
+            2.1757392,
+            41.4003292
+          ]
+        },
+        {
+          "source_id": "osm-relation-11087891",
+          "file": "raw/osm/relation_11087891_linea_270_barcelona_portbou_2026-11-18.json",
+          "relation_id": 11087891,
+          "from": [
+            2.1757392,
+            41.4003292
+          ],
+          "to": [
+            3.1580125,
+            42.4247982
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-270-barcelona-portbou"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "barcelona-sants",
+      "name": "Barcelona-Sants",
+      "kind": "estacion",
+      "adif_code": "71801",
+      "shared": true,
+      "position": {
+        "lon": 2.1400042,
+        "lat": 41.3790068
+      }
+    },
+    {
+      "id": "barcelona-passeig-de-gracia",
+      "name": "Barcelona-Passeig de Gràcia",
+      "kind": "estacion",
+      "adif_code": "71802",
+      "position": {
+        "lon": 2.1653802,
+        "lat": 41.3925448
+      },
+      "description": "Estación subterránea bajo el paseo de Gràcia, en el túnel de Aragó, que cruza el centro de Barcelona. Paran en ella los trenes que van de Sants hacia Girona y hacia Tarragona."
+    },
+    {
+      "id": "barcelona-el-clot",
+      "name": "Barcelona-El Clot",
+      "kind": "estacion",
+      "adif_code": "79009",
+      "position": {
+        "lon": 2.1874108,
+        "lat": 41.4090696
+      },
+      "description": "Estación subterránea del barrio del Clot. Entre ella y Passeig de Gràcia, dentro del túnel, empieza la línea 270 de Adif: de aquí en adelante los puntos kilométricos son los suyos."
+    },
+    {
+      "id": "barcelona-sant-andreu",
+      "name": "Barcelona-Sant Andreu",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79004",
+      "position": {
+        "lon": 2.1938582,
+        "lat": 41.4362694
+      },
+      "reference_pk_km": 113.215
+    },
+    {
+      "id": "granollers-centre",
+      "name": "Granollers Centre",
+      "kind": "estacion",
+      "adif_code": "79100",
+      "position": {
+        "lon": 2.291612,
+        "lat": 41.5996549
+      },
+      "reference_pk_km": 135.305
+    },
+    {
+      "id": "sant-celoni",
+      "name": "Sant Celoni",
+      "kind": "estacion",
+      "adif_code": "79104",
+      "position": {
+        "lon": 2.4909668,
+        "lat": 41.6856507
+      },
+      "reference_pk_km": 157.085
+    },
+    {
+      "id": "gualba",
+      "name": "Gualba",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79105",
+      "position": {
+        "lon": 2.5389321,
+        "lat": 41.7179554
+      },
+      "reference_pk_km": 162.486
+    },
+    {
+      "id": "riells-i-viabrea-breda",
+      "name": "Riells i Viabrea-Breda",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79106",
+      "position": {
+        "lon": 2.568691,
+        "lat": 41.7264867
+      },
+      "reference_pk_km": 165.151
+    },
+    {
+      "id": "hostalric",
+      "name": "Hostalric",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79107",
+      "position": {
+        "lon": 2.6316683,
+        "lat": 41.7479019
+      },
+      "reference_pk_km": 170.978
+    },
+    {
+      "id": "macanet-massanes",
+      "name": "Maçanet-Massanes",
+      "kind": "estacion",
+      "adif_code": "79200",
+      "position": {
+        "lon": 2.6733774,
+        "lat": 41.7721702
+      },
+      "reference_pk_km": 175.818,
+      "description": "Aquí se une a la línea la del Maresme, que viene de Barcelona por la costa, por Mataró y Blanes. Desde Maçanet hasta Girona las dos comparten vía."
+    },
+    {
+      "id": "sils",
+      "name": "Sils",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79202",
+      "position": {
+        "lon": 2.7450153,
+        "lat": 41.8074774
+      },
+      "reference_pk_km": 183.462
+    },
+    {
+      "id": "caldes-de-malavella",
+      "name": "Caldes de Malavella",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79203",
+      "position": {
+        "lon": 2.8005718,
+        "lat": 41.8411638
+      },
+      "reference_pk_km": 189.439
+    },
+    {
+      "id": "riudellots",
+      "name": "Riudellots",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79204",
+      "position": {
+        "lon": 2.8117435,
+        "lat": 41.8961609
+      },
+      "reference_pk_km": 195.698
+    },
+    {
+      "id": "fornells-de-la-selva",
+      "name": "Fornells de la Selva",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79205",
+      "position": {
+        "lon": 2.8094752,
+        "lat": 41.9349663
+      },
+      "reference_pk_km": 200.4
+    },
+    {
+      "id": "girona",
+      "name": "Girona",
+      "kind": "estacion",
+      "adif_code": "79300",
+      "shared": true,
+      "position": {
+        "lon": 2.8162865,
+        "lat": 41.9791657
+      },
+      "reference_pk_km": 205.572
+    },
+    {
+      "id": "celra",
+      "name": "Celrà",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79301",
+      "position": {
+        "lon": 2.8748493,
+        "lat": 42.0273151
+      },
+      "reference_pk_km": 214.72
+    },
+    {
+      "id": "bordils-juia",
+      "name": "Bordils-Juià",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79302",
+      "position": {
+        "lon": 2.9152965,
+        "lat": 42.0369781
+      },
+      "reference_pk_km": 218.242
+    },
+    {
+      "id": "flaca",
+      "name": "Flaçà",
+      "kind": "estacion",
+      "adif_code": "79303",
+      "position": {
+        "lon": 2.957171,
+        "lat": 42.047492
+      },
+      "reference_pk_km": 221.94
+    },
+    {
+      "id": "sant-jordi-desvalls",
+      "name": "Sant Jordi Desvalls",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79304",
+      "position": {
+        "lon": 2.9647622,
+        "lat": 42.0682831
+      },
+      "reference_pk_km": 224.373
+    },
+    {
+      "id": "camallera",
+      "name": "Camallera",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79305",
+      "position": {
+        "lon": 2.9656082,
+        "lat": 42.1222164
+      },
+      "reference_pk_km": 230.555
+    },
+    {
+      "id": "sant-miquel-de-fluvia",
+      "name": "Sant Miquel de Fluvià",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79306",
+      "position": {
+        "lon": 2.9893316,
+        "lat": 42.1722868
+      },
+      "reference_pk_km": 236.575
+    },
+    {
+      "id": "vilamalla",
+      "name": "Vilamalla",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79308",
+      "position": {
+        "lon": 2.9780258,
+        "lat": 42.2163747
+      },
+      "reference_pk_km": 241.627,
+      "description": "Entre Vilamalla y Figueres sale de la línea un enlace hacia Figueres-Vilafant, la estación de la alta velocidad, por el que pasan trenes de mercancías."
+    },
+    {
+      "id": "figueres",
+      "name": "Figueres",
+      "kind": "estacion",
+      "adif_code": "79309",
+      "position": {
+        "lon": 2.9689697,
+        "lat": 42.2650045
+      },
+      "reference_pk_km": 247.07,
+      "description": "La estación de Figueres de la línea convencional, junto al centro de la ciudad. La de alta velocidad, Figueres-Vilafant, es otra, a unos dos kilómetros al oeste."
+    },
+    {
+      "id": "vilajuiga",
+      "name": "Vilajuïga",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79311",
+      "position": {
+        "lon": 3.0863044,
+        "lat": 42.3251541
+      },
+      "reference_pk_km": 258.947
+    },
+    {
+      "id": "llanca",
+      "name": "Llançà",
+      "kind": "estacion",
+      "adif_code": "79312",
+      "position": {
+        "lon": 3.1491602,
+        "lat": 42.3668
+      },
+      "reference_pk_km": 266.237
+    },
+    {
+      "id": "colera",
+      "name": "Colera",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "79314",
+      "position": {
+        "lon": 3.1541786,
+        "lat": 42.4069982
+      },
+      "reference_pk_km": 270.846
+    },
+    {
+      "id": "portbou",
+      "name": "Portbou",
+      "kind": "estacion",
+      "adif_code": "79315",
+      "position": {
+        "lon": 3.1580125,
+        "lat": 42.4247982
+      },
+      "reference_pk_km": 273.106,
+      "description": "Última estación española de la línea, junto a la frontera. Tiene vías de los dos anchos, el ibérico y el europeo, y en ella acaban los trenes franceses que llegan desde Cerbère. Por un túnel de algo más de un kilómetro la vía sigue hasta Cerbère, ya en Francia."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "gauge",
+      "from_node": "girona",
+      "to_node": "vilamalla",
+      "value": "mixto",
+      "source_id": "wikipedia-linea-270-barcelona-portbou",
+      "checked_on": "2026-11-18",
+      "note": "Wikipedia en catalán: desde el 21 de diciembre de 2010 la vía 1, la del sentido Barcelona – Francia, tiene un tercer carril de ancho estándar en los 41,2 km que van del centro logístico de Girona a Vilamalla. Las vías de OSM por las que va el trazado llevan gauge=1435;1668 desde 2,5 km antes de Girona, donde llega el ramal de la terminal de mercancías, hasta 0,4 km antes de Vilamalla. El tercer carril está en una sola de las dos vías; el tramo de Fornells de la Selva a Girona, en el que empieza, sigue con el ancho de la línea. En el mapa 4 este trecho se dibuja con el trazo de «con 3er carril»."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "barcelona-sants",
+      "to_node": "portbou",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea en Barcelona, junto a Maçanet-Massanes, entre Girona y Flaçà y junto a Figueres y Portbou, y ningún símbolo de ERTMS. El trébol de ERTMS N1 y el cuadrado de ASFA - AV que hay junto a Barcelona Sants son de la alta velocidad, con su línea de llamada."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "barcelona-sants",
+      "to_node": "vilamalla",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: trazo marrón de «BAB ctc» a lo largo de la línea desde Barcelona Sants, por Mollet, hasta Vilamalla, con el rótulo entre Maçanet-Massanes y Girona y entre Flaçà y Vilamalla."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "vilamalla",
+      "to_node": "portbou",
+      "value": "bad",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: desde Vilamalla hasta Portbou el trazo es verde, con el rótulo «BAD», que en la leyenda de vía doble es el bloqueo automático de vía doble sin «ctc». Lo que sigue de Portbou a Cerbère va rotulado «BAU»."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "barcelona-sants",
+      "to_node": "vilamalla",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "vilamalla",
+      "to_node": "portbou",
+      "value": "sin_ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-18",
+      "note": "Mapa 4: el rótulo es «BAD», sin «ctc», y la leyenda distingue «BAD» de «BAD ctc» (trazo naranja): el mapa dice que este trecho no tiene control de tráfico centralizado."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-macanet-maresme",
+      "node_id": "macanet-massanes",
+      "name": "Línea Barcelona – Mataró – Maçanet-Massanes",
+      "towards": "Blanes, Mataró y Barcelona por la costa del Maresme",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          2.6733774,
+          41.7721702
+        ],
+        [
+          2.7907,
+          41.6747
+        ],
+        [
+          2.4445,
+          41.5372
+        ],
+        [
+          2.2478,
+          41.4475
+        ]
+      ]
+    },
+    {
+      "id": "conv-portbou-cerbere",
+      "node_id": "portbou",
+      "name": "Línea Portbou – Cerbère",
+      "towards": "Cerbère y la red francesa",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          3.1580125,
+          42.4247982
+        ],
+        [
+          3.163383,
+          42.441508
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "71801": {
+      "node": "barcelona-sants"
+    },
+    "71802": {
+      "node": "barcelona-passeig-de-gracia"
+    },
+    "79009": {
+      "node": "barcelona-el-clot"
+    },
+    "79004": {
+      "node": "barcelona-sant-andreu"
+    },
+    "79100": {
+      "node": "granollers-centre"
+    },
+    "79104": {
+      "node": "sant-celoni"
+    },
+    "79105": {
+      "node": "gualba"
+    },
+    "79106": {
+      "node": "riells-i-viabrea-breda"
+    },
+    "79107": {
+      "node": "hostalric"
+    },
+    "79200": {
+      "node": "macanet-massanes"
+    },
+    "79202": {
+      "node": "sils"
+    },
+    "79203": {
+      "node": "caldes-de-malavella"
+    },
+    "79204": {
+      "node": "riudellots"
+    },
+    "79205": {
+      "node": "fornells-de-la-selva"
+    },
+    "79300": {
+      "node": "girona"
+    },
+    "79301": {
+      "node": "celra"
+    },
+    "79302": {
+      "node": "bordils-juia"
+    },
+    "79303": {
+      "node": "flaca"
+    },
+    "79304": {
+      "node": "sant-jordi-desvalls"
+    },
+    "79305": {
+      "node": "camallera"
+    },
+    "79306": {
+      "node": "sant-miquel-de-fluvia"
+    },
+    "79308": {
+      "node": "vilamalla"
+    },
+    "79309": {
+      "node": "figueres"
+    },
+    "79311": {
+      "node": "vilajuiga"
+    },
+    "79312": {
+      "node": "llanca"
+    },
+    "79314": {
+      "node": "colera"
+    },
+    "79315": {
+      "node": "portbou"
+    },
+    "79316": {
+      "exits": [
+        "portbou"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos estaciones de la línea o más y al menos en una de las que solo tiene ella, de Barcelona-El Clot a Portbou. Así quedan fuera los trenes de alta velocidad, que paran en Barcelona-Sants, Girona y Figueres-Vilafant; los regionales de Tarragona, Tortosa y Lleida, que paran en Sants y Passeig de Gràcia y siguen a Barcelona-Estació de França; y los trenes de Cerbère a Portbou, que solo paran en una.",
+    "min_node_stops": 2,
+    "any_of_stop_ids": [
+      "79009",
+      "79004",
+      "79100",
+      "79104",
+      "79105",
+      "79106",
+      "79107",
+      "79200",
+      "79202",
+      "79203",
+      "79204",
+      "79205",
+      "79301",
+      "79302",
+      "79303",
+      "79304",
+      "79305",
+      "79306",
+      "79308",
+      "79309",
+      "79311",
+      "79312",
+      "79314",
+      "79315"
+    ]
+  },
+  "route_overrides": []
+}
