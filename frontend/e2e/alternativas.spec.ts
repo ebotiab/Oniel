@@ -150,7 +150,8 @@ test.describe('Tramos sin otro camino', () => {
     await expect(lineas).toHaveCount(esperadas.length)
     // (a igualdad de trenes y de tramos el orden no está fijado: se comparan por tandas)
     const orden = await lineas.evaluateAll((els) => els.map((e) => (e.getAttribute('data-testid') ?? '').replace('sin-camino-linea-', '')))
-    expect([...orden].sort()).toEqual(esperadas.map((l) => l.id).sort())
+    const alfabetico = (a: string, b: string) => a.localeCompare(b)
+    expect([...orden].sort(alfabetico)).toEqual(esperadas.map((l) => l.id).sort(alfabetico))
     const clave = (id: string) => esperadas.find((l) => l.id === id)!
     expect(orden.map((id) => [clave(id).max, clave(id).tramos])).toEqual(esperadas.map((l) => [l.max, l.tramos]))
     // cada renglón dice cuántos de sus tramos son (o que es toda la línea) y cuántos trenes llevan

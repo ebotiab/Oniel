@@ -1,8 +1,22 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
+  "plugins": ["react", "typescript", "oxc", "jsx-a11y"],
+  "options": {
+    // Un aviso hace fallar la orden, y con ella el CI: no queda ninguno sin resolver.
+    "denyWarnings": true,
+    // Las reglas que necesitan los tipos (promesas sin esperar, por ejemplo). Las pasa oxlint-tsgolint.
+    "typeAware": true
+  },
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    // `role="status"`, `role="region"` o `role="button"` sobre un elemento de SVG no tienen una
+    // etiqueta que los sustituya sin cambiar el dibujo o el comportamiento.
+    "jsx-a11y/prefer-tag-over-role": "off",
+    // Las listas con `listbox` y `option` son el patrón del buscador (un campo con sus sugerencias).
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": [
+      "warn",
+      { "ul": ["listbox", "menu", "menubar", "radiogroup", "tablist", "tree", "treegrid"], "li": ["menuitem", "option", "row", "tab", "treeitem"] }
+    ]
   }
 }

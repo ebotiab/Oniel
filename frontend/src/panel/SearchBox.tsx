@@ -174,6 +174,8 @@ export function SearchBox({ network, scope = 'todo', label, placeholder, onPick,
         {!typed && hits.length > 0 && <p className="buscador-rotulo">Líneas y glosario</p>}
         <ul id={listId} role="listbox" aria-label={typed ? 'Resultados' : 'Líneas y glosario'}>
           {hits.map((hit, i) => (
+            // El teclado lo atiende el campo, que no pierde el foco: las flechas eligen y Intro abre.
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
             <li
               key={hit.entry.key}
               id={`${listId}-${i}`}

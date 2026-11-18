@@ -9,9 +9,13 @@ import App from './app/App'
 import { legacyHashPath } from './app/state'
 import './index.css'
 import { iniciarTelemetria } from './telemetria/arranque'
+import { iniciarVisitas } from './telemetria/visitas'
 
 // Antes que nada, para no perder un error del propio arranque. No hace nada fuera de producción o sin token.
 iniciarTelemetria()
+// El recuento de visitas, también solo en producción. Va antes de leer la ruta porque retira de la
+// dirección el parámetro con el que un navegador deja de contarse.
+iniciarVisitas()
 
 // Un enlace antiguo (`/#/tramo/<id>`) pasa a su dirección limpia antes de que el visor lea la ruta, sin recargar.
 const limpia = legacyHashPath(window.location.hash)

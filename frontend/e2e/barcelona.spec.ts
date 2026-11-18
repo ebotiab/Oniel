@@ -12,7 +12,8 @@ test.describe('La línea de alta velocidad Madrid – Zaragoza – Barcelona', (
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
     const campo = await abrirBuscador(page)
-    await campo.fill('barcelona')
+    // «barcelona» encuentra ya varias estaciones de la ciudad: se busca por la que es
+    await campo.fill('sants')
     const primero = page.getByRole('option').first()
     await expect(primero).toContainText('Barcelona-Sants')
     await expect(primero).toContainText('Estación')

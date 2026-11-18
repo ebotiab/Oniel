@@ -50,7 +50,7 @@ test.describe('Carga de la red por partes', () => {
     // El de las anotaciones subió de 45 a 70 KB con los proyectos de la alta velocidad de Extremadura,
     // que traen muchos hitos y un esbozo propio, y los de la línea de València a Camp de Tarragona:
     // de 70 a 75 KB con la «Y» vasca, y de 75 a 85 KB con los dos proyectos de la línea de València a
-    // Alicante por Xàtiva: hoy pesan 77,8 KB.
+    // Alicante por Xàtiva: hoy pesan 75,3 KB.
     expect(bytes({ annotations, interruptions })).toBeLessThan(85_000)
     // Con veintiuna entradas (dieciocho líneas, dos baipases y un enlace), la red del índice (305 KB) pesa ya el doble que el detalle
     // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
