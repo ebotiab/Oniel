@@ -3,7 +3,7 @@
     "id": "sevilla-cadiz",
     "name": "Línea convencional Sevilla – Cádiz",
     "short_name": "400",
-    "sort_order": 30,
+    "sort_order": 32,
     "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

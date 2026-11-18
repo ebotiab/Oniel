@@ -1,0 +1,1256 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-18T09:12:01Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 338888796,
+  "lat": 42.2343634,
+  "lon": -8.5969128,
+  "tags": {
+    "name": "Louredo-Os Valos",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q8840983",
+    "wikipedia": "gl:Estación de Louredo-Valos"
+  }
+},
+{
+  "type": "node",
+  "id": 420539798,
+  "lat": 42.3102052,
+  "lon": -8.6164386,
+  "tags": {
+    "name": "Cesantes",
+    "railway": "halt",
+    "wikidata": "Q8002684",
+    "wikipedia": "gl:Apeadoiro de Cesantes"
+  }
+},
+{
+  "type": "node",
+  "id": 453651815,
+  "lat": 42.4216790,
+  "lon": -8.6354004,
+  "tags": {
+    "name": "Pontevedra",
+    "name:ar": "بونتيفيدرا",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "website": "https://www.adif.es/w/23004-pontevedra",
+    "wikidata": "Q11681671",
+    "wikipedia": "gl:Estación de Pontevedra"
+  }
+},
+{
+  "type": "node",
+  "id": 1692189268,
+  "lat": 42.3404114,
+  "lon": -8.6106694,
+  "tags": {
+    "name": "Arcade",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8004097",
+    "wikipedia": "gl:Apeadoiro de Arcade"
+  }
+},
+{
+  "type": "node",
+  "id": 1842017741,
+  "lat": 42.3506920,
+  "lon": -7.8725510,
+  "tags": {
+    "name": "Ourense-Empalme",
+    "name:ar": "أورنسي",
+    "name:es": "Orense",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3268431",
+    "wikipedia": "gl:Estación de Ourense"
+  }
+},
+{
+  "type": "node",
+  "id": 1876244569,
+  "lat": 42.2867555,
+  "lon": -8.6072864,
+  "tags": {
+    "name": "Redondela-A Picota",
+    "operator": "Adif",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q5405392",
+    "wikipedia": "gl:Apeadoiro de Redondela-Picota"
+  }
+},
+{
+  "type": "node",
+  "id": 1998751056,
+  "lat": 42.6324367,
+  "lon": -8.1428602,
+  "tags": {
+    "name": "Lalín",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779998",
+    "wikipedia": "gl:Estación de Lalín"
+  }
+},
+{
+  "type": "node",
+  "id": 2021640848,
+  "lat": 42.7764777,
+  "lon": -8.4282063,
+  "tags": {
+    "name": "Vedra-Ribadulla",
+    "public_transport": "platform",
+    "railway": "halt",
+    "wikidata": "Q5673968",
+    "wikipedia": "gl:Estación de Vedra-Ribadulla"
+  }
+},
+{
+  "type": "node",
+  "id": 2475737415,
+  "lat": 43.3496847,
+  "lon": -8.2072394,
+  "tags": {
+    "name": "Miño",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "source": "Forza4 : Datos obtidos directamente / Datos obtenidos directamente / Directly adquired data",
+    "train": "yes",
+    "wikidata": "Q20545374",
+    "wikipedia": "gl:Apeadoiro de Miño"
+  }
+},
+{
+  "type": "node",
+  "id": 3006639152,
+  "lat": 42.5177000,
+  "lon": -8.6543530,
+  "tags": {
+    "name": "A Portela",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8021843",
+    "wikipedia": "gl:Estación de Portela"
+  }
+},
+{
+  "type": "node",
+  "id": 3014214982,
+  "lat": 42.4389820,
+  "lon": -8.6303264,
+  "tags": {
+    "name": "Pontevedra-Universidade",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q8016360",
+    "wikipedia": "gl:Apeadoiro de Pontevedra-Universidade"
+  }
+},
+{
+  "type": "node",
+  "id": 9374763919,
+  "lat": 43.2975115,
+  "lon": -8.4441772,
+  "tags": {
+    "name": "Uxes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q11681688",
+    "wikipedia": "gl:Estación de Uxes"
+  }
+},
+{
+  "type": "node",
+  "id": 10554286687,
+  "lat": 42.4315242,
+  "lon": -8.0686581,
+  "tags": {
+    "name": "O Carballiño",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779500",
+    "wikipedia": "gl:Estación do Carballiño"
+  }
+},
+{
+  "type": "node",
+  "id": 12587231537,
+  "lat": 42.7389768,
+  "lon": -8.6524123,
+  "tags": {
+    "name": "Padrón",
+    "network:wikidata": "Q1054739",
+    "operator": "Adif",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q8037564",
+    "wikipedia": "gl:Estación de Padrón"
+  }
+},
+{
+  "type": "node",
+  "id": 12589966787,
+  "lat": 42.8252328,
+  "lon": -8.6156811,
+  "tags": {
+    "name": "Osebe",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q8040872",
+    "wikipedia": "gl:Apeadoiro de Osebe"
+  }
+},
+{
+  "type": "node",
+  "id": 12593234166,
+  "lat": 42.5196234,
+  "lon": -8.1048390,
+  "tags": {
+    "name": "O Irixo",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q8779914",
+    "wikipedia": "gl:Estación do Irixo"
+  }
+},
+{
+  "type": "node",
+  "id": 12768629140,
+  "lat": 42.8704417,
+  "lon": -8.5451964,
+  "tags": {
+    "name": "Santiago de Compostela - Daniel Castelao",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "ref:ibnr": "7100028",
+    "train": "yes",
+    "uic_ref": "7131400",
+    "website": "https://www.adif.es/w/31400-santiago-compost.",
+    "wheelchair": "yes",
+    "wikidata": "Q8841900",
+    "wikipedia": "gl:Estación de Santiago de Compostela"
+  }
+},
+{
+  "type": "node",
+  "id": 12793484035,
+  "lat": 43.2150063,
+  "lon": -8.4497481,
+  "tags": {
+    "name": "Meirama",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 12793504327,
+  "lat": 43.2076598,
+  "lon": -8.4466353,
+  "tags": {
+    "building": "yes",
+    "name": "Cerceda-Meirama",
+    "name:en": "Cerceda-Meirama",
+    "name:es": "Cerceda-Meirama",
+    "name:gl": "Cerceda-Meirama",
+    "name:pt": "Cerceda-Meirama",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "7131416",
+    "wikidata": "Q11681642",
+    "wikipedia": "gl:Estación de Cerceda-Meirama"
+  }
+},
+{
+  "type": "node",
+  "id": 12819737430,
+  "lat": 42.2349637,
+  "lon": -8.7118996,
+  "tags": {
+    "addr:city": "Vigo",
+    "addr:postcode": "36201",
+    "addr:street": "Praza da Estación",
+    "name": "Vigo-Urzáiz",
+    "operator": "Adif",
+    "platforms": "6",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "7100024",
+    "wheelchair": "yes",
+    "wikidata": "Q3320436",
+    "wikipedia": "es:Estación de Vigo-Urzaiz"
+  }
+},
+{
+  "type": "node",
+  "id": 13370314589,
+  "lat": 42.4114189,
+  "lon": -8.0289609,
+  "tags": {
+    "name": "A Friela-Maside",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q8779813",
+    "wikipedia": "gl:Estación da Friela-Maside"
+  }
+},
+{
+  "type": "node",
+  "id": 13448962867,
+  "lat": 43.1452628,
+  "lon": -8.1912988,
+  "tags": {
+    "name": "Piñoi",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "halt",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q5429446",
+    "wikipedia": "gl:Apeadoiro de Piñoi"
+  }
+},
+{
+  "type": "node",
+  "id": 13449142853,
+  "lat": 42.8296163,
+  "lon": -8.4860877,
+  "tags": {
+    "name": "A Susana",
+    "public_transport": "platform",
+    "railway": "yard",
+    "train": "yes",
+    "wikidata": "Q20550272",
+    "wikipedia": "gl:Estación da Susana"
+  }
+},
+{
+  "type": "node",
+  "id": 13453006278,
+  "lat": 43.0378623,
+  "lon": -8.4482103,
+  "tags": {
+    "alt_name": "Ordes-Fosado",
+    "internet_access": "no",
+    "name": "Ordes",
+    "name:en": "Ordes",
+    "name:es": "Ordes",
+    "name:gl": "Ordes",
+    "name:pt": "Ordes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "7131415",
+    "wikidata": "Q11681663",
+    "wikipedia": "gl:Estación de Ordes"
+  }
+},
+{
+  "type": "node",
+  "id": 13462107889,
+  "lat": 42.5867157,
+  "lon": -8.6582635,
+  "tags": {
+    "name": "Portas",
+    "railway": "yard"
+  }
+},
+{
+  "type": "node",
+  "id": 13473968936,
+  "lat": 42.3325926,
+  "lon": -7.8607130,
+  "tags": {
+    "name": "Ourense-San Francisco",
+    "public_transport": "halt",
+    "railway": "halt",
+    "train": "yes",
+    "uic_ref": "7131215",
+    "website": "https://www.adif.es/w/31215-ourense-san-fco",
+    "wikidata": "Q8841347",
+    "wikipedia": "gl:Apeadoiro de Ourense-San Francisco"
+  }
+},
+{
+  "type": "node",
+  "id": 13522163528,
+  "lat": 42.2930393,
+  "lon": -8.1390152,
+  "tags": {
+    "name": "Ribadavia",
+    "name:en": "Ribadavia",
+    "name:es": "Ribadavia",
+    "name:gl": "Ribadavia",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "7122102",
+    "wikidata": "Q8841616"
+  }
+},
+{
+  "type": "node",
+  "id": 13573540430,
+  "lat": 43.1272997,
+  "lon": -8.1432357,
+  "tags": {
+    "name": "Curtis",
+    "name:en": "Curtis",
+    "name:es": "Curtis",
+    "name:gl": "Curtis",
+    "name:pt": "Cúrtis",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "7120317",
+    "wikidata": "Q11681644",
+    "wikipedia": "gl:Estación de Curtis"
+  }
+},
+{
+  "type": "node",
+  "id": 13716624631,
+  "lat": 42.2845561,
+  "lon": -8.6036293,
+  "tags": {
+    "full_name": "Redondela Alta Velocidade",
+    "name": "Redondela AV",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q19760237",
+    "wikipedia": "gl:Estación de Redondela AV"
+  }
+},
+{
+  "type": "node",
+  "id": 13782316672,
+  "lat": 43.3525198,
+  "lon": -8.4099507,
+  "tags": {
+    "addr:city": "A Coruña",
+    "addr:housenumber": "2",
+    "addr:postcode": "15008",
+    "addr:street": "Avenida do Ferrocarril",
+    "alt_name": "Estación de tren A Coruña-San Cristóbal",
+    "description": "La estación de A Coruña-San Cristóbal es la principal estación ferroviaria de la ciudad. Inaugurada en 1943 y de estilo neorrománico, cuenta con servicios de larga y media distancia. Es una estación terminal y una de las más transitadas de",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "A Coruña",
+    "opening_hours": "Mo-Su 05:00-00:00",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "toilets:wheelchair": "yes",
+    "train": "yes",
+    "website": "https://www.renfe.com/es/es/inspirate/estaciones/estacion-a-coruna",
+    "wheelchair": "yes",
+    "wikidata": "Q3329088",
+    "wikipedia": "es:Estación de La Coruña"
+  }
+},
+{
+  "type": "node",
+  "id": 13782316673,
+  "lat": 43.3352525,
+  "lon": -8.4130086,
+  "tags": {
+    "name": "Elviña-Universidade",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q583277"
+  }
+},
+{
+  "type": "node",
+  "id": 13782316674,
+  "lat": 43.3179815,
+  "lon": -8.3686174,
+  "tags": {
+    "name": "O Burgo-Santiago",
+    "name:gl": "O Burgo-Santiago",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q6389560",
+    "wikipedia": "gl:Estación do Burgo-Santiago"
+  }
+},
+{
+  "type": "node",
+  "id": 13782316675,
+  "lat": 43.2904406,
+  "lon": -8.3521713,
+  "tags": {
+    "air_conditioning": "no",
+    "baby_feeding": "no",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Estaci%C3%B3n_de_Cambre_A_Coru%C3%B1a.jpg/1920px-Estaci%C3%B3n_de_Cambre_A_Coru%C3%B1a.jpg",
+    "internet_access": "no",
+    "name": "Cambre",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "start_date": "1875-10-10",
+    "train": "yes",
+    "wikidata": "Q6389550",
+    "wikipedia": "gl:Apeadoiro de Cambre"
+  }
+},
+{
+  "type": "node",
+  "id": 13782316676,
+  "lat": 43.2878479,
+  "lon": -8.3077695,
+  "tags": {
+    "name": "Cecebre",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q6389575",
+    "wikipedia": "gl:Apeadoiro de Cecebre"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650006,
+  "lat": 42.2933400,
+  "lon": -8.6037859,
+  "tags": {
+    "name": "Bif. Redondela",
+    "railway": "junction",
+    "railway:ref": "B2230"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650007,
+  "lat": 42.3382601,
+  "lon": -8.6103019,
+  "tags": {
+    "name": "Bif. Arcade",
+    "railway": "junction",
+    "railway:ref": "B2300"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650008,
+  "lat": 42.4884529,
+  "lon": -8.6490250,
+  "tags": {
+    "name": "Bif. San Amaro",
+    "railway": "junction",
+    "railway:ref": "B2301"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650009,
+  "lat": 42.7949727,
+  "lon": -8.6413588,
+  "tags": {
+    "name": "Bif. Angueira",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650010,
+  "lat": 42.8567629,
+  "lon": -8.5523223,
+  "tags": {
+    "name": "Bif. Rio Sar",
+    "railway": "junction",
+    "railway:ref": "B0902"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650011,
+  "lat": 43.3366859,
+  "lon": -8.4247291,
+  "tags": {
+    "name": "Bif. Uxes",
+    "railway": "junction",
+    "railway:ref": "B3141"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650012,
+  "lat": 43.3363263,
+  "lon": -8.4173670,
+  "tags": {
+    "name": "Bif. San Cristóbal",
+    "railway": "junction",
+    "railway:ref": "B2052"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650013,
+  "lat": 43.3489793,
+  "lon": -8.3913989,
+  "tags": {
+    "name": "Bif. San Diego",
+    "railway": "junction",
+    "railway:ref": "B2051"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650014,
+  "lat": 43.3475955,
+  "lon": -8.3877928,
+  "tags": {
+    "name": "Bif. O Burgo",
+    "railway": "junction",
+    "railway:ref": "B2041"
+  }
+},
+{
+  "type": "node",
+  "id": 14029650015,
+  "lat": 42.3561136,
+  "lon": -7.8836573,
+  "tags": {
+    "name": "Bif. Coto da Torre",
+    "railway": "junction",
+    "railway:ref": "B0860"
+  }
+},
+{
+  "type": "node",
+  "id": 14072946437,
+  "lat": 42.2688576,
+  "lon": -8.6717576,
+  "tags": {
+    "name": "Chapela",
+    "operator": "Adif",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14106323728,
+  "lat": 42.3385063,
+  "lon": -8.0114575,
+  "tags": {
+    "name": "Barbantes",
+    "operator": "ADIF",
+    "operator:wikidata": "Q358752",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779339"
+  }
+},
+{
+  "type": "way",
+  "id": 108153480,
+  "center": {
+    "lat": 43.1413870,
+    "lon": -8.0376749
+  },
+  "nodes": [
+    11914267997,
+    1241259015,
+    1241259013,
+    1241259016,
+    11914267997
+  ],
+  "tags": {
+    "building": "train_station",
+    "name": "Teixeiro",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "PNOA",
+    "train": "yes",
+    "uic_ref": "7120316",
+    "wikidata": "Q583245",
+    "wikipedia": "gl:Estación de Teixeiro"
+  }
+},
+{
+  "type": "way",
+  "id": 141812901,
+  "center": {
+    "lat": 42.2392603,
+    "lon": -8.7120742
+  },
+  "nodes": [
+    2371189635,
+    1552261948,
+    2371189696,
+    13294160837,
+    2371189702,
+    13449625741,
+    2371189676,
+    4567424132,
+    4567424130,
+    4567424129,
+    2371189687,
+    1552262020,
+    4567424133,
+    1552261978,
+    4567424131,
+    13294160838,
+    2371189635
+  ],
+  "tags": {
+    "building": "train_station",
+    "name": "Vigo-Guixar",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "GPS waypoints",
+    "station": "train",
+    "train": "yes",
+    "website": "https://www.adif.es/w/22308-vigo-guixar",
+    "wikidata": "Q3330602",
+    "wikipedia": "gl:Estación de Vigo-Guixar"
+  }
+},
+{
+  "type": "way",
+  "id": 163424010,
+  "center": {
+    "lat": 42.2860248,
+    "lon": -8.6194219
+  },
+  "nodes": [
+    1751219509,
+    1751219399,
+    4511931258,
+    4511931256,
+    4511931255,
+    4511931259,
+    1751219459,
+    1751219489,
+    4511931261,
+    4511931264,
+    4511931265,
+    4511931262,
+    1751219509
+  ],
+  "tags": {
+    "addr:city": "Redondela",
+    "addr:housenumber": "83",
+    "addr:postcode": "36800",
+    "addr:street": "Aldea Portela",
+    "building": "train_station",
+    "building:levels": "1",
+    "name": "Redondela",
+    "old_name": "Redondela de Galicia",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "source": "http://www.adif.es/es_ES/infraestructuras/estaciones/22300/informacion_000135.shtml",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8841588",
+    "wikipedia": "gl:Estación de Redondela"
+  }
+},
+{
+  "type": "way",
+  "id": 195442753,
+  "center": {
+    "lat": 42.5196459,
+    "lon": -8.1050408
+  },
+  "nodes": [
+    2058930782,
+    12307307174,
+    12307307175,
+    2058930781,
+    2058930779,
+    2058930780,
+    12307307173,
+    12307307176,
+    2058930782
+  ],
+  "tags": {
+    "building": "train_station",
+    "name": "O Irixo",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779914",
+    "wikipedia": "gl:Estación do Irixo"
+  }
+},
+{
+  "type": "way",
+  "id": 213985408,
+  "center": {
+    "lat": 43.2841806,
+    "lon": -8.2159304
+  },
+  "nodes": [
+    2236221232,
+    6245041126,
+    2236221067,
+    9055664420,
+    2236220987,
+    2236221088,
+    2236221232
+  ],
+  "tags": {
+    "addr:city": "Betanzos",
+    "addr:postcode": "15300",
+    "building": "train_station",
+    "name": "Betanzos-Cidade",
+    "network": "Renfe Alvia",
+    "network:wikidata": "Q448931",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5845821",
+    "wikipedia": "gl:Estación de Betanzos-Cidade"
+  }
+},
+{
+  "type": "way",
+  "id": 216233567,
+  "center": {
+    "lat": 43.3423185,
+    "lon": -8.2054175
+  },
+  "nodes": [
+    2255839341,
+    2255839347,
+    2255839273,
+    2255839319,
+    2255839341
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Miño-Castro",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "no",
+    "wikidata": "Q7735166",
+    "wikipedia": "gl:Estación de Miño-Castro"
+  }
+},
+{
+  "type": "way",
+  "id": 238054649,
+  "center": {
+    "lat": 43.1730198,
+    "lon": -8.2005437
+  },
+  "nodes": [
+    2459205418,
+    2459205405,
+    2459205407,
+    2459205409,
+    2459205418
+  ],
+  "tags": {
+    "addr:city": "Oza-Cesuras",
+    "addr:housenumber": "1",
+    "addr:postcode": "15390",
+    "addr:street": "O Forte, Bragade",
+    "building": "yes",
+    "name": "Cesuras",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5429435",
+    "wikipedia": "gl:Estación de Cesuras"
+  }
+},
+{
+  "type": "way",
+  "id": 238055509,
+  "center": {
+    "lat": 43.2187082,
+    "lon": -8.1870153
+  },
+  "nodes": [
+    2459214513,
+    2459214510,
+    2459214511,
+    2459214512,
+    2459214513
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Oza dos Ríos",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q6392795",
+    "wikipedia": "gl:Estación de Oza dos Ríos"
+  }
+},
+{
+  "type": "way",
+  "id": 238059601,
+  "center": {
+    "lat": 43.2707162,
+    "lon": -8.2258335
+  },
+  "nodes": [
+    2459241993,
+    2459241995,
+    2459241996,
+    2459242001,
+    2459241993
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Betanzos-A Infesta",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5429473",
+    "wikipedia": "gl:Estación de Betanzos-Infesta"
+  }
+},
+{
+  "type": "way",
+  "id": 240624796,
+  "center": {
+    "lat": 43.3781854,
+    "lon": -8.2010957
+  },
+  "nodes": [
+    2483439598,
+    2483439600,
+    2483439602,
+    2483439605,
+    2483439598
+  ],
+  "tags": {
+    "building": "train_station",
+    "name": "Perbes",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q7740709",
+    "wikipedia": "gl:Apeadoiro de Perbes"
+  }
+},
+{
+  "type": "way",
+  "id": 258110614,
+  "center": {
+    "lat": 43.1790512,
+    "lon": -7.8951039
+  },
+  "nodes": [
+    1959214962,
+    2635191213,
+    2635191217,
+    2635191220,
+    1959214962
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Guitiriz",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q583256",
+    "wikipedia": "gl:Estación de Guitiriz"
+  }
+},
+{
+  "type": "way",
+  "id": 391681629,
+  "center": {
+    "lat": 42.6019723,
+    "lon": -8.7622840
+  },
+  "nodes": [
+    3949169057,
+    3949169058,
+    3949169059,
+    3949169060,
+    3949169061,
+    3949169062,
+    3949169063,
+    3949169064,
+    3949169057
+  ],
+  "tags": {
+    "building": "train_station",
+    "name": "Vilagarcía de Arousa",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8026084",
+    "wikipedia": "gl:Estación de Vilagarcía de Arousa"
+  }
+},
+{
+  "type": "way",
+  "id": 630158383,
+  "center": {
+    "lat": 42.6722651,
+    "lon": -8.7253578
+  },
+  "nodes": [
+    5950825627,
+    14219522922,
+    5950825618,
+    5950825619,
+    5950825620,
+    5950825621,
+    5950825622,
+    5950825624,
+    5950825625,
+    5950825626,
+    5950825623,
+    5950825627
+  ],
+  "tags": {
+    "area": "yes",
+    "building": "train_station",
+    "name": "Catoira",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8027331",
+    "wikipedia": "gl:Estación de Catoira"
+  }
+},
+{
+  "type": "way",
+  "id": 738202043,
+  "center": {
+    "lat": 42.7229492,
+    "lon": -8.6521527
+  },
+  "nodes": [
+    6912105865,
+    6912105866,
+    6912105867,
+    6912105868,
+    1740830449,
+    6912105865
+  ],
+  "tags": {
+    "building": "train_station",
+    "name": "Pontecesures",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8028272",
+    "wikipedia": "gl:Estación de Pontecesures"
+  }
+},
+{
+  "type": "way",
+  "id": 1257751763,
+  "center": {
+    "lat": 42.8252622,
+    "lon": -8.6158670
+  },
+  "nodes": [
+    3006673220,
+    11693467406,
+    11693467407,
+    11693467408,
+    11693467409,
+    11693467410,
+    11693467411,
+    11693467412,
+    3006673220
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Osebe",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8040872",
+    "wikipedia": "gl:Apeadoiro de Osebe"
+  }
+},
+{
+  "type": "way",
+  "id": 1278786692,
+  "center": {
+    "lat": 42.7765989,
+    "lon": -8.4282025
+  },
+  "nodes": [
+    11871779496,
+    11871779497,
+    11871779498,
+    11871779499,
+    12883071281,
+    12883071280,
+    11871779500,
+    11871779501,
+    11871779496
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Vedra-Ribadulla",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5673968",
+    "wikipedia": "gl:Estación de Vedra-Ribadulla"
+  }
+},
+{
+  "type": "way",
+  "id": 1325270999,
+  "center": {
+    "lat": 43.3504432,
+    "lon": -8.4120608
+  },
+  "nodes": [
+    12262883658,
+    12758751509,
+    14007352308,
+    12262883659,
+    12758751508,
+    12758751514,
+    12262883660,
+    12557787358,
+    13835264919,
+    12557787359,
+    12262883661,
+    12262883658
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "A Coruña",
+    "note": "Provisional",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1385345343,
+  "center": {
+    "lat": 42.6325236,
+    "lon": -8.1426556
+  },
+  "nodes": [
+    12825778168,
+    12825778169,
+    12825778170,
+    12825778171,
+    12825778172,
+    12825778173,
+    12825778174,
+    12825778175,
+    12825778176,
+    12825778177,
+    12825778178,
+    12825778179,
+    12825778180,
+    12825778181,
+    12825778182,
+    12825778183,
+    12825778168
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Lalín",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779998",
+    "wikipedia": "gl:Estación de Lalín"
+  }
+},
+{
+  "type": "relation",
+  "id": 6858135,
+  "center": {
+    "lat": 42.7812842,
+    "lon": -8.6566593
+  },
+  "members": [
+    {
+      "type": "way",
+      "ref": 464452429,
+      "role": "outer"
+    },
+    {
+      "type": "way",
+      "ref": 464452428,
+      "role": "outer"
+    }
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Padrón-Barbanza",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "type": "multipolygon",
+    "uic_ref": "7123021",
+    "wikidata": "Q31281803",
+    "wikipedia": "gl:Estación de Padrón-Barbanza"
+  }
+}
+
+  ]
+}

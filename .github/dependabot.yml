@@ -1,0 +1,56 @@
+# Actualizaciones de dependencias de Oniel.
+#
+# Cada lunes, Dependabot mira los tres ecosistemas y abre como mucho tres PR por ecosistema: una
+# con todas las actualizaciones menores y de parche juntas, y una aparte por cada versión mayor, que
+# suele romper algo y conviene revisar sola. Las PR pasan el CI como cualquier otra
+# (.github/scripts/que-cambia.sh lanza la mitad que toca el lockfile) y no se fusionan solas.
+#
+# Este fichero solo programa las actualizaciones de versión: las alertas de seguridad y los demás
+# ajustes del repositorio se deciden en GitHub, no aquí.
+version: 2
+
+updates:
+  # El backend: pyproject.toml y uv.lock.
+  - package-ecosystem: uv
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Madrid
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "Dependencias del backend"
+    groups:
+      menores-y-parches:
+        update-types: [minor, patch]
+
+  # El visor: package.json y package-lock.json.
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Madrid
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "Dependencias del visor"
+    groups:
+      menores-y-parches:
+        update-types: [minor, patch]
+
+  # Las acciones de los flujos de .github/workflows/.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Madrid
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "Acciones del CI"
+    groups:
+      menores-y-parches:
+        update-types: [minor, patch]

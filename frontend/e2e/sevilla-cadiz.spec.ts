@@ -51,6 +51,13 @@ test.describe('La línea Sevilla – Cádiz', () => {
     await expect(page.getByTestId('mas-detalle')).toContainText('3 kV CC')
   })
 
+  test('a Cádiz no hay otro camino: la línea entera figura entre los tramos sin otro camino', async ({ page }) => {
+    await page.goto('/sin-otro-camino')
+    const fila = page.getByTestId('sin-camino-linea-sevilla-cadiz')
+    await expect(fila).toContainText('Sevilla – Cádiz')
+    await expect(fila).toContainText('Toda la línea, 16 tramos')
+  })
+
   test('el comparador encuentra Madrid – Cádiz y Sevilla – Cádiz', async ({ page }) => {
     await page.goto('/recorridos/madrid-puerta-de-atocha/cadiz')
     const recorridos = page.getByTestId('recorrido')

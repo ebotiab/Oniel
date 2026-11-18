@@ -54,6 +54,8 @@ LAV_OURENSE = "lav-olmedo-ourense"
 LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
 BURGOS_VITORIA = "burgos-miranda-vitoria"
+LAV_SANTIAGO = "lav-ourense-santiago"
+EJE_ATLANTICO = "eje-atlantico"
 SEVILLA_CADIZ = "sevilla-cadiz"
 LINK = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: de Madrid a Plasencia, la de alta velocidad hasta Badajoz,
@@ -323,6 +325,8 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         LAV_BURGOS,
         LEON_GIJON,
         BURGOS_VITORIA,
+        LAV_SANTIAGO,
+        EJE_ATLANTICO,
         SEVILLA_CADIZ,
     ]
     assert exported.missing_operator_ids == ["iryo"]
@@ -339,31 +343,34 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
     # la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
     # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
-    # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón; los 7, la de
-    # Burgos a Vitoria, y los 16 del final, la de Sevilla a Cádiz
+    # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón; los 7, la de Burgos a
+    # Vitoria; los 3 y los 15 de después, las dos de Galicia, y los 16 del final, la de Sevilla a Cádiz
     assert (
         len(exported.segments)
-        == 54
-        + 8
-        + 8
-        + 20
-        + 2
-        + 14
-        + 2
-        + 9
-        + 8
-        + 35
-        + 5
-        + 1
-        + 13
-        + 14
-        + 2
-        + 4
-        + 8
-        + 13
-        + 4
-        + 11
-        + 7
+        == (
+            54
+            + 8
+            + 8
+            + 20
+            + 2
+            + 14
+            + 2
+            + 9
+            + 8
+            + 35
+            + 5
+            + 1
+            + 13
+            + 14
+            + 2
+            + 4
+            + 8
+            + 13
+            + 4
+            + 11
+            + 7
+        )
+        + (3 + 15)
         + 16
     )
     for s in exported.segments:
@@ -400,9 +407,14 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     # y los dieciséis de la de Sevilla a Cádiz, el único camino cargado a Jerez y a Cádiz
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 16,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 16,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16,
+        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16,
     )
+    # las dos de Galicia, enteras: a Santiago, A Coruña y Vigo solo llegan ellas
+    santiago = {k: n for k, n in none.items() if k.startswith(f"{LAV_SANTIAGO}:")}
+    assert len(santiago) == 3 and sorted(set(santiago.values())) == [43, 45]
+    eje = {k: n for k, n in none.items() if k.startswith(f"{EJE_ATLANTICO}:")}
+    assert len(eje) == 15 and sorted(set(eje.values())) == [35, 36, 51, 53, 55, 64]
     cadiz = {k: n for k, n in none.items() if k.startswith(f"{SEVILLA_CADIZ}:")}
     # la de Sevilla a Cádiz, entera: 56 trenes hasta la bifurcación Utrera y 42 desde allí
     assert len(cadiz) == 16 and sorted(set(cadiz.values())) == [42, 56]
@@ -429,6 +441,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_BURGOS}:",
         f"{LEON_GIJON}:",
         f"{BURGOS_VITORIA}:",
+        f"{LAV_SANTIAGO}:",
+        f"{EJE_ATLANTICO}:",
         f"{SEVILLA_CADIZ}:",
         f"{BCN}:",
         f"{LAV_VALENCIA}:",

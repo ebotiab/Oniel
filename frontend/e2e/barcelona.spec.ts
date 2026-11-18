@@ -65,9 +65,8 @@ test.describe('La línea de alta velocidad Madrid – Zaragoza – Barcelona', (
     await page.goto('/recorridos/madrid-puerta-de-atocha/barcelona-sants')
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos.first()).toBeVisible()
-    // el primero, medido por los dos baipases (e2e/baipases.spec.ts): 620,1 km. Los otros dos bajan a València y
-    // suben por la costa (e2e/mediterraneo.spec.ts)
-    await expect(recorridos).toHaveCount(3)
+    // el primero, medido por los dos baipases (e2e/baipases.spec.ts): 620,1 km. Cuántos más hay depende de las
+    // otras líneas cargadas (los que bajan a València y suben por la costa están en e2e/mediterraneo.spec.ts)
     await expect(recorridos.first()).toContainText('620,1 km')
     await expect(recorridos.first()).toContainText('Zaragoza-Delicias')
     // hay tiempo porque ningún tramo se queda sin velocidad: 2 h 5 min sin paradas

@@ -50,13 +50,13 @@ hasta que no haya problemas ni ningún paso `indeterminado`, y luego `validate` 
 
 **5. Importación e instantánea (paso 13).** `uv run oniel-data import all` sobre la base de la sesión. Si has retirado una conexión a trazos o has movido nodos compartidos, impórtalo sobre una base vacía antes de dar la instantánea por buena. Anota los pesos nuevos en «Medidas».
 
-**6. Pruebas (pasos 14, 16 y 17).** La especificación entra en `SPECS` y la línea tiene su `test_<línea>.py`. El paso 14 enumera los ficheros cuyos recuentos cambian, en el backend y en el visor. Si el día de referencia se mueve, cambian los recuentos de todas las líneas, no solo los de la nueva. Ningún recuento se ajusta a ojo: se lee del resultado y se explica en la PR por qué cambia.
+**6. Pruebas (pasos 14, 16 y 17).** La especificación entra en `SPECS` y la línea tiene su `test_<línea>.py`. El paso 14 enumera los ficheros del backend cuyos recuentos cambian. En el visor los totales de la red no están escritos en ninguna prueba: se leen de la instantánea (`frontend/e2e/instantanea.ts`), así que al añadir una línea no hay ningún fichero de `frontend/e2e/` que tocar por ellos. La prueba de la línea nueva sigue la misma regla (`CLAUDE.md`, «Pruebas»): escribe a mano solo lo de su línea, pide a `instantanea.ts` cualquier total o si un tramo tiene otro camino, y llega a la línea con `abrirLinea`. Solo cambia una prueba ajena cuando la línea nueva cambia de verdad lo que esa prueba afirma de la suya: una estación que pasa a ser común a dos líneas, un tramo compartido que gana trenes o un recorrido más corto entre dos estaciones. Si el día de referencia se mueve, cambian los recuentos de todas las líneas, no solo los de la nueva. Ningún recuento se ajusta a ojo: se lee del resultado y se explica en la PR por qué cambia.
 
 **7. Documentación (paso 15).** Las tablas de `docs/datos.md`, el apartado «Cómo se construyó…», la tabla de «Tramos sin alternativa» de `docs/simulacion.md`, la lista de líneas de `CLAUDE.md` y la hoja de ruta.
 
 ## Qué pasar en local
 
-Lo que dice «Arrancar y comprobar» de `CLAUDE.md`: las comprobaciones rápidas de las dos mitades, `pytest` con la base de pruebas de la sesión, `oniel-data validate` y, con `ONIEL_E2E_STATIC=1`, solo los ficheros de Playwright que enumera el paso 14 más el de la línea nueva. La batería completa la pasa el CI.
+Lo que dice «Arrancar y comprobar» de `CLAUDE.md`: las comprobaciones rápidas de las dos mitades, `pytest` con la base de pruebas de la sesión, `oniel-data validate` y, con `ONIEL_E2E_STATIC=1`, solo el fichero de Playwright de la línea nueva, `e2e/red.spec.ts` y `e2e/alternativas.spec.ts` (los dos que recorren la red entera) y los de las líneas con las que comparte estación o tramo. La batería completa la pasa el CI.
 
 ## Está terminada cuando
 

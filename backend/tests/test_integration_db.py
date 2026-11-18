@@ -53,6 +53,8 @@ LAV_OURENSE = "lav-olmedo-ourense"
 LAV_BURGOS = "lav-venta-de-banos-burgos"
 LEON_GIJON = "leon-oviedo-gijon"
 BURGOS_VITORIA = "burgos-miranda-vitoria"
+LAV_SANTIAGO = "lav-ourense-santiago"
+EJE_ATLANTICO = "eje-atlantico"
 SEVILLA_CADIZ = "sevilla-cadiz"
 LINK_MONFORTE = "enlace-monforte-del-cid"
 #: Las cuatro líneas de Extremadura: la convencional de Madrid a Plasencia, la de alta velocidad
@@ -252,6 +254,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     trips += 136
     assert gtfs1["lines"][BURGOS_VITORIA]["trips"] == 182
     assert gtfs1["lines"][BURGOS_VITORIA]["route_overrides"] == {}
+    # Con las dos de Galicia entran 293: los Avant de Ourense a Santiago y A Coruña y los
+    # regionales de A Coruña a Vigo. Los de Madrid ya estaban en la línea de Olmedo a Ourense
+    trips += 293
+    assert gtfs1["lines"][LAV_SANTIAGO]["trips"] == 288
+    assert gtfs1["lines"][EJE_ATLANTICO]["trips"] == 432
+    for line_id in (LAV_SANTIAGO, EJE_ATLANTICO):
+        assert gtfs1["lines"][line_id]["route_overrides"] == {"ourense-vilagarcia-sin-santiago": 10}
     assert gtfs1["lines"][SEVILLA_CADIZ]["trips"] == 202
     assert gtfs1["lines"][SEVILLA_CADIZ]["route_overrides"] == {"cordoba-por-la-alta-velocidad": 12}
     assert gtfs1["lines"][LAV_VALENCIA]["trips"] == 489
@@ -442,8 +451,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # catorce líneas, los dos baipases y el enlace de Monforte del Cid, que son líneas cortas de
     # un tramo, y las cuatro de Extremadura
     # la de Valladolid a León, la de Olmedo a Ourense, la de Venta de Baños a Burgos y la de León
-    # a Gijón, la de Burgos a Vitoria y la de Sevilla a Cádiz
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 1
+    # a Gijón, y la de Burgos a Vitoria
+    # y las dos de Galicia y la de Sevilla a Cádiz
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -474,6 +484,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 4
         + 11  # la de León a Gijón
         + 7  # la de Burgos a Vitoria
+        + 3  # la de Ourense a Santiago
+        + 15  # la de A Coruña a Vigo
         + 16  # la de Sevilla a Cádiz
     )
     assert c["services"] == trips + 47 + 22
@@ -492,6 +504,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 514  # la de Venta de Baños a Burgos, todos estimados
     renfe_passes += 1311 + 125  # la de León a Gijón
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
+    renfe_passes += 854  # la de Ourense a Santiago
+    renfe_passes += 3035 + 281  # la de A Coruña a Vigo
     renfe_passes += 1733 + 1081  # la de Sevilla a Cádiz
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
@@ -621,6 +635,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 4
         + 11  # la de León a Gijón
         + 7  # la de Burgos a Vitoria
+        + 3  # la de Ourense a Santiago
+        + 15  # la de A Coruña a Vigo
         + 16  # la de Sevilla a Cádiz
     )
     assert data["connection_features"]["features"]
@@ -651,6 +667,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_LEON,
         LAV_OURENSE,
         LAV_BURGOS,
+        # el kilómetro de la salida de Ourense, por la vía de la línea convencional
+        LAV_SANTIAGO,
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -712,6 +730,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_BURGOS,
         LEON_GIJON,
         BURGOS_VITORIA,
+        LAV_SANTIAGO,
+        EJE_ATLANTICO,
         SEVILLA_CADIZ,
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
@@ -793,6 +813,8 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 4
         + 11  # la de León a Gijón
         + 7  # la de Burgos a Vitoria
+        + 3  # la de Ourense a Santiago
+        + 15  # la de A Coruña a Vigo
         + 16  # la de Sevilla a Cádiz
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
@@ -832,6 +854,8 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         f"{LEON_GIJON}:bif-pajares:la-robla-av": "25kv_ca",
         f"{LEON_GIJON}:la-robla-av:campomanes-av": "25kv_ca",
         f"{LEON_GIJON}:campomanes-av:pola-de-lena": "25kv_ca",
+        # la salida de Ourense, a 3 kV en una línea a 25 kV
+        f"{LAV_SANTIAGO}:ourense:bif-coto-da-torre": "3kv_cc",
     }
     # el ancho, solo donde no es el de su línea: el mixto del paso por Loja, de la entrada a
     # Granada, de la de Murcia, de la llegada a Ourense y de la variante de Pajares, y en la línea de Valencia a Camp de Tarragona, el mixto de
@@ -1274,6 +1298,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # de Asturias, Calzada de Asturias y Gijón-Sanz Crespo
     # y la de Burgos a Vitoria, 7: Briviesca, Pancorbo, Miranda de Ebro, Manzanos, La Puebla de
     # Arganzón, Nanclares-Langraiz y Vitoria-Gasteiz
+    # y las dos de Galicia, 14: Santiago de Compostela y las trece que quedan de A Coruña a
+    # Vigo-Urzáiz
     # y la de Sevilla a Cádiz, 15: de San Bernardo a Cádiz
     assert cov["station_count"] == (
         6
@@ -1300,6 +1326,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 1
         + 8
         + 7
+        + 14
         + 15
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1322,9 +1349,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # pasan por ninguna otra línea cargada
     # y 30 más con la de Burgos a Vitoria: los regionales de Miranda de Ebro y de Vitoria, los de
     # Madrid-Príncipe Pío por la línea convencional y los Intercity de Salamanca a Zaragoza
+    # y 72 más con las dos de Galicia: los Avant de Ourense a A Coruña y los regionales de
+    # A Coruña a Vigo
     # y 37 más con la de Sevilla a Cádiz: los Media Distancia de Sevilla y de Córdoba a Cádiz y a
     # Málaga de ese día y los trenes de Madrid a Sevilla y a Cádiz que no paran en Córdoba
-    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 37
+    assert cov["service_count"] == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
         "osm-relation-1254828",
@@ -1370,9 +1399,11 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Y 4 de la de Burgos a Vitoria: la relación de OSM de la línea 100, el fichero de sus
     # estaciones, el artículo de Wikipedia de la línea 100 y la nota del Ministerio sobre la «Y»
     # vasca
+    # Y 6 de las dos de Galicia: la relación de OSM del Eje Atlántico, los tres ficheros de
+    # estaciones y vías de OSM y las dos revisiones de Wikipedia
     # Y 2 de la de Sevilla a Cádiz: el fichero de sus estaciones y los artículos de Wikipedia de la
     # línea 400 y de su esquema
-    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 2
+    assert len(cov["sources"]) == 72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
     assert "la línea convencional Espelúy – Jaén" in cov["notice"]
@@ -1393,6 +1424,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea de alta velocidad Venta de Baños – Burgos" in cov["notice"]
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
+    assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
+    assert "la línea de alta velocidad A Coruña – Santiago – Vigo" in cov["notice"]
     assert "y la línea convencional Sevilla – Cádiz" in cov["notice"]
     assert [line["id"] for line in cov["lines"]] == [
         LAV,
@@ -1418,6 +1451,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_BURGOS,
         LEON_GIJON,
         BURGOS_VITORIA,
+        LAV_SANTIAGO,
+        EJE_ATLANTICO,
         SEVILLA_CADIZ,
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
@@ -1473,6 +1508,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_BURGOS: ["renfe"],
         LEON_GIJON: ["renfe"],
         BURGOS_VITORIA: ["renfe"],
+        LAV_SANTIAGO: ["renfe"],
+        EJE_ATLANTICO: ["renfe"],
         SEVILLA_CADIZ: ["renfe"],
     }
     assert "con los servicios de Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
@@ -2189,6 +2226,8 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         LAV_BURGOS,
         LEON_GIJON,
         BURGOS_VITORIA,
+        LAV_SANTIAGO,
+        EJE_ATLANTICO,
         SEVILLA_CADIZ,
     ]
     assert out["missing_operator_ids"] == ["iryo"]
@@ -2197,30 +2236,34 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
     # los 8 son los tramos de la línea de Monforte del Cid a Murcia; los 35, los de la de
     # Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
-    # Extremadura; los 7, la de Burgos a Vitoria, y los 16 del final, la de Sevilla a Cádiz
+    # Extremadura; los 7 siguientes, la de Burgos a Vitoria; los 3 y 15 de después, las de Galicia,
+    # y los 16 del final, la de Sevilla a Cádiz
     assert (
         len(by_id)
-        == 54
-        + 8
-        + 8
-        + 20
-        + 2
-        + 14
-        + 2
-        + 9
-        + 8
-        + 35
-        + 5
-        + 1
-        + 13
-        + 14
-        + 2
-        + 4
-        + 8
-        + 13
-        + 4
-        + 11
-        + 7
+        == (
+            54
+            + 8
+            + 8
+            + 20
+            + 2
+            + 14
+            + 2
+            + 9
+            + 8
+            + 35
+            + 5
+            + 1
+            + 13
+            + 14
+            + 2
+            + 4
+            + 8
+            + 13
+            + 4
+            + 11
+            + 7
+        )
+        + (3 + 15)
         + 16
     )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
@@ -2310,6 +2353,8 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         LAV_BURGOS,
         LEON_GIJON,
         BURGOS_VITORIA,
+        LAV_SANTIAGO,
+        EJE_ATLANTICO,
         SEVILLA_CADIZ,
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(

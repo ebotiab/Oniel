@@ -145,6 +145,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 66
             + 33
             + 77
+            + 293
             + 136
         )
         # misma huella: se salta sin tocar la base
@@ -195,6 +196,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
         + 66
         + 33
         + 77
+        + 293
         + 136
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False

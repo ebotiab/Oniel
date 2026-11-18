@@ -323,6 +323,14 @@ def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> Non
         assert [(v.line, v.node) for v in mapping.via] == [("lav-olmedo-ourense", "bif-medina")]
     for stop_id in ("30100", "31400", "31412", "08223"):
         assert spec.stop_mappings[stop_id].exits == ["bif-medina"]
+    # Santiago, A Coruña y Vigo siguen desde Ourense por las dos líneas de Galicia
+    galicia = [("lav-olmedo-ourense", "bif-medina"), ("lav-ourense-santiago", "ourense")]
+    assert [(v.line, v.node) for v in spec.stop_mappings["31400"].via] == galicia
+    for stop_id in ("31412", "08223"):
+        assert [(v.line, v.node) for v in spec.stop_mappings[stop_id].via] == [
+            *galicia,
+            ("eje-atlantico", "santiago"),
+        ]
     for stop_id in ("14100", "15100", "11014", "15410", "14223", "11600", "13200"):
         assert spec.stop_mappings[stop_id].exits == ["valladolid-campo-grande"]
     # Palencia y León son estaciones de la línea que sigue desde Valladolid

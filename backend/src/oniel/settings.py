@@ -46,6 +46,8 @@ class Settings(BaseSettings):
         "enlace-monforte-del-cid",
         "lav-madrid-valladolid",
         "lav-olmedo-ourense",
+        "lav-ourense-santiago",
+        "eje-atlantico",
         "madrid-plasencia",
         "lav-plasencia-badajoz",
         "ramal-merida",
