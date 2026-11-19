@@ -1,0 +1,33 @@
+{
+  "descripcion": "Registro de las consultas hechas el 19 de noviembre de 2026 para ver si la línea convencional Palencia – Santander, que se carga ese día, tiene alguna interrupción vigente.",
+  "consultado_el": "2026-11-19",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-19 17:09",
+      "resumen": "Dos avisos: la circulación restablecida por una vía entre Robledo de Chavela y Zarzalejo, en la línea de Madrid a Ávila, y la interrupción de la alta velocidad Madrid – Andalucía desde el 28 de octubre. Nada de Cantabria ni de la línea de Palencia a Santander.",
+      "que_aporta": "Que no hay ninguna interrupción anunciada en la línea."
+    },
+    {
+      "source_id": null,
+      "titulo": "Avisos",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "fecha_de_la_pagina": "2026-11-19 17:15",
+      "resumen": "Avisos de obras en Cataluña, Asturias (vía estrecha de Pola de Siero a Ribadesella), Miranda de Ebro – Logroño, Córdoba – Santa Cruz de Mudela, Redondela – O Porriño, Murcia – Almería, Xàtiva – Alcoi, Guadalajara – Plasencia de Jalón, Zaragoza – Teruel – Sagunt y cercanías de València y Madrid. Ninguno de la línea de Palencia a Santander ni de Cantabria.",
+      "que_aporta": "Que no hay obras anunciadas que corten la línea."
+    },
+    {
+      "source_id": null,
+      "titulo": "Panel de salidas de la estación de Santander",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/14223-santander",
+      "fecha_de_la_pagina": "2026-11-19 17:20",
+      "resumen": "A esa hora solo quedaban salidas de Cercanías (C1, C2 y C3), sin observaciones de transbordo por carretera. No había ningún Alvia ni regional en la lista.",
+      "que_aporta": "Nada sobre los trenes cargados: el panel no los traía a esa hora."
+    }
+  ]
+}

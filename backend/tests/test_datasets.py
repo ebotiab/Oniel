@@ -233,6 +233,9 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # y los 475 de la línea de Madrid a Valladolid por Ávila que no estaban en otra: los regionales
     # y Media Distancia de Madrid a Ávila, Salamanca, Valladolid y León, los de Madrid a Segovia por
     # Villalba y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria
+    # y los 20 de la línea de Palencia a Santander que no estaban en otra: los regionales de
+    # Valladolid a Santander, que van a Palencia por la convencional; sus Alvia ya estaban en la
+    # alta velocidad
     assert (
         await _count(conn, "services", FEED_DATASET_ID)
         == 727
@@ -258,6 +261,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 63  # los regionales de la costa de Tarragona que no estaban en otra línea
         + 426
         + 475
+        + 20  # los regionales de Valladolid a Santander
     )
     assert (
         await _count(conn, "services", NEWER_ID)
@@ -284,6 +288,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 63  # los regionales de la costa de Tarragona que no estaban en otra línea
         + 426
         + 475
+        + 20  # los regionales de Valladolid a Santander
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -319,6 +324,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += (2051 + 582) + (2247 + 134) + 344 + (26 + 26)
     passes += 2028 + 4255  # la de València a Alicante por Xàtiva, publicados y estimados
     passes += 2463 + 2915  # la de Madrid a Valladolid por Ávila, publicados y estimados
+    passes += 372 + 993  # la de Palencia a Santander, publicados y estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -644,6 +650,7 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 63  # los regionales de la costa de Tarragona que no estaban en otra línea
         + 426
         + 475
+        + 20  # los regionales de Valladolid a Santander
     )
     assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
         37
@@ -666,6 +673,7 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 63
         + 426
         + 475
+        + 20  # los regionales de Valladolid a Santander
     )
 
 
@@ -719,7 +727,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
         + 117
         + 63
         + 426
-        + 475,
+        + 475
+        + 20,  # los regionales de Valladolid a Santander
         767
         + 37
         + 555
@@ -740,7 +749,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
         + 117
         + 63
         + 426
-        + 475,
+        + 475
+        + 20,  # los regionales de Valladolid a Santander
     ]
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
@@ -802,6 +812,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
         + 63
         + 426
         + 475
+        + 20  # los regionales de Valladolid a Santander
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]

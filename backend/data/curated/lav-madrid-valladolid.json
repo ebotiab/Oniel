@@ -426,21 +426,61 @@
     "14114": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "14202": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "14213": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "14223": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "15122": {

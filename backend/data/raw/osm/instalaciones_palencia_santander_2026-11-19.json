@@ -1,0 +1,1883 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-19T19:48:33Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 33727552,
+  "lat": 43.4444040,
+  "lon": -3.8472394,
+  "tags": {
+    "name": "Nueva Montaña",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14231",
+    "shelter": "yes",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5846820",
+    "wikipedia": "es:Estación de Nueva Montaña"
+  }
+},
+{
+  "type": "node",
+  "id": 246573025,
+  "lat": 43.3243879,
+  "lon": -4.0540426,
+  "tags": {
+    "name": "Viérnoles",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847520"
+  }
+},
+{
+  "type": "node",
+  "id": 258415358,
+  "lat": 42.7233705,
+  "lon": -4.2756573,
+  "tags": {
+    "name": "Mave",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "14113",
+    "ref:EU:PLC": "ES14113",
+    "train": "yes",
+    "uic_ref": "7114113",
+    "wikidata": "Q5846695",
+    "wikipedia": "es:Estación de Mave"
+  }
+},
+{
+  "type": "node",
+  "id": 274618728,
+  "lat": 42.2648724,
+  "lon": -4.4023891,
+  "tags": {
+    "addr:city": "Frómista",
+    "addr:postcode": "34440",
+    "name": "Frómista",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14104",
+    "ref:EU:PLC": "ES14104",
+    "train": "yes",
+    "uic_ref": "7114104",
+    "wikidata": "Q5846262",
+    "wikimedia_commons": "File:Frómista_-_Estación_de_Adif_2.jpg",
+    "wikipedia": "es:Estación de Frómista"
+  }
+},
+{
+  "type": "node",
+  "id": 274618736,
+  "lat": 42.2116871,
+  "lon": -4.4345268,
+  "tags": {
+    "name": "Piña",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "14103",
+    "ref:EU:PLC": "ES14103",
+    "train": "yes",
+    "uic_ref": "7114103",
+    "wikidata": "Q5846923",
+    "wikimedia_commons": "File:Piña_de_Campos_06.JPG",
+    "wikipedia": "es:Estación de Piña"
+  }
+},
+{
+  "type": "node",
+  "id": 498472945,
+  "lat": 42.8189340,
+  "lon": -4.2027985,
+  "tags": {
+    "name": "Quintanilla de las Torres",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "14115",
+    "ref:EU:PLC": "ES14115",
+    "train": "yes",
+    "uic_ref": "7114115",
+    "wikidata": "Q5847021",
+    "wikipedia": "es:Estación de Quintanilla de las Torres"
+  }
+},
+{
+  "type": "node",
+  "id": 915443518,
+  "lat": 43.3476778,
+  "lon": -3.9910016,
+  "tags": {
+    "name": "Zurita",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847566"
+  }
+},
+{
+  "type": "node",
+  "id": 985942118,
+  "lat": 42.4789460,
+  "lon": -4.3745248,
+  "tags": {
+    "name": "Espinosa de Villagonzalo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "14108",
+    "ref:EU:PLC": "ES14108",
+    "train": "yes",
+    "uic_ref": "7114108",
+    "wikidata": "Q5846215",
+    "wikipedia": "es:Estación de Espinosa de Villagonzalo"
+  }
+},
+{
+  "type": "node",
+  "id": 1732357745,
+  "lat": 42.7852684,
+  "lon": -4.2337453,
+  "tags": {
+    "name": "Aguilar de Campoo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14114",
+    "ref:EU:PLC": "ES14114",
+    "train": "yes",
+    "uic_ref": "7114114",
+    "wikidata": "Q5845598",
+    "wikipedia": "es:Estación de Aguilar de Campoo"
+  }
+},
+{
+  "type": "node",
+  "id": 1732357748,
+  "lat": 42.1782283,
+  "lon": -4.4805773,
+  "tags": {
+    "name": "Amusco",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "14102",
+    "ref:EU:PLC": "ES14102",
+    "train": "yes",
+    "uic_ref": "7114102",
+    "wikidata": "Q5845688",
+    "wikipedia": "es:Estación de Amusco"
+  }
+},
+{
+  "type": "node",
+  "id": 1732357750,
+  "lat": 42.1167509,
+  "lon": -4.4958622,
+  "tags": {
+    "name": "El Carrión",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "14117",
+    "ref:EU:PLC": "ES14117",
+    "train": "yes",
+    "uic_ref": "7114117",
+    "wikidata": "Q5846149",
+    "wikipedia": "es:Estación de El Carrión"
+  }
+},
+{
+  "type": "node",
+  "id": 1732357761,
+  "lat": 42.5986754,
+  "lon": -4.3164721,
+  "tags": {
+    "name": "Herrera de Pisuerga",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14111",
+    "ref:EU:PLC": "ES14111",
+    "train": "yes",
+    "uic_ref": "7114111",
+    "wikidata": "Q5846369",
+    "wikipedia": "es:Estación de Herrera de Pisuerga"
+  }
+},
+{
+  "type": "node",
+  "id": 1732357762,
+  "lat": 42.1055648,
+  "lon": -4.5017290,
+  "tags": {
+    "name": "Monzón de Campos",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14101",
+    "ref:EU:PLC": "ES14101",
+    "train": "yes",
+    "uic_ref": "7114101",
+    "wikidata": "Q5846758",
+    "wikipedia": "es:Estación de Monzón de Campos"
+  }
+},
+{
+  "type": "node",
+  "id": 1732357763,
+  "lat": 42.4141808,
+  "lon": -4.3572812,
+  "tags": {
+    "name": "Osorno",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14107",
+    "ref:EU:PLC": "ES14107",
+    "train": "yes",
+    "uic_ref": "7114107",
+    "wikidata": "Q5846847",
+    "wikipedia": "es:Estación de Osorno"
+  }
+},
+{
+  "type": "node",
+  "id": 1939943099,
+  "lat": 42.0157277,
+  "lon": -4.5338617,
+  "tags": {
+    "name": "Palencia",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "platforms": "3",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14100",
+    "ref:EU:PLC": "ES14100",
+    "source": "https://github.com/trainline-eu/stations",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7114100",
+    "website": "https://www.adif.es/w/14100-palencia",
+    "wheelchair": "yes",
+    "wikidata": "Q11681667",
+    "wikipedia": "es:Estación de Palencia"
+  }
+},
+{
+  "type": "node",
+  "id": 2284687616,
+  "lat": 42.0799608,
+  "lon": -4.1985544,
+  "tags": {
+    "name": "Quintana del Puente",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11006",
+    "ref:EU:PLC": "ES11006",
+    "train": "yes",
+    "uic_ref": "7111006",
+    "wikidata": "Q5553058",
+    "wikimedia_commons": "Category:Quintana del Puente train station",
+    "wikipedia": "es:Estación de Quintana del Puente"
+  }
+},
+{
+  "type": "node",
+  "id": 2371681583,
+  "lat": 42.2156639,
+  "lon": -3.9996183,
+  "tags": {
+    "name": "Villaquirán",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11009",
+    "ref:EU:PLC": "ES11009",
+    "train": "yes",
+    "uic_ref": "7111009",
+    "wikidata": "Q5847498",
+    "wikipedia": "es:Estación de Villaquirán"
+  }
+},
+{
+  "type": "node",
+  "id": 2383276325,
+  "lat": 42.0498424,
+  "lon": -4.5849145,
+  "tags": {
+    "name": "Grijota",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "15001",
+    "ref:EU:PLC": "ES15001",
+    "train": "yes",
+    "uic_ref": "7115001",
+    "wikidata": "Q5846322",
+    "wikimedia_commons": "File:Estación_de_tren_de_Grijota.jpg",
+    "wikipedia": "es:Estación de Grijota"
+  }
+},
+{
+  "type": "node",
+  "id": 3150316666,
+  "lat": 43.4249982,
+  "lon": -3.9604347,
+  "tags": {
+    "name": "Mogro",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "01076",
+    "source": "ADIF",
+    "source:url": "http://www.iderail.es/2012/02/06/posicion-de-las-estaciones-de-feve-ii/",
+    "train": "yes",
+    "wikidata": "Q18604582"
+  }
+},
+{
+  "type": "node",
+  "id": 3826212457,
+  "lat": 43.1285848,
+  "lon": -4.0538120,
+  "tags": {
+    "name": "Bárcena",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "14206",
+    "wikidata": "Q6432985",
+    "wikipedia": "es:Estación de Bárcena"
+  }
+},
+{
+  "type": "node",
+  "id": 4547815449,
+  "lat": 43.4534552,
+  "lon": -3.8558009,
+  "tags": {
+    "addr:housenumber": "77",
+    "addr:postcode": "39011",
+    "addr:street": "Calle Adarzo",
+    "name": "Adarzo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q107804847",
+    "wikipedia": "eu:Adarzoko geltokia"
+  }
+},
+{
+  "type": "node",
+  "id": 4955025224,
+  "lat": 43.4352223,
+  "lon": -3.9181991,
+  "tags": {
+    "name": "Mompía-Mortera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q107971980"
+  }
+},
+{
+  "type": "node",
+  "id": 4969016461,
+  "lat": 43.4316864,
+  "lon": -3.9463196,
+  "tags": {
+    "name": "Boo de Piélagos",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "01075",
+    "train": "yes",
+    "wikidata": "Q18619867"
+  }
+},
+{
+  "type": "node",
+  "id": 5338732626,
+  "lat": 43.1701057,
+  "lon": -4.0450857,
+  "tags": {
+    "name": "Santa Cruz de Iguña",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5473790",
+    "wikipedia": "es:Estación de Santa Cruz de Iguña"
+  }
+},
+{
+  "type": "node",
+  "id": 5338732628,
+  "lat": 43.1932268,
+  "lon": -4.0541622,
+  "tags": {
+    "name": "Las Fraguas",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846562",
+    "wikipedia": "es:Estación de Las Fraguas"
+  }
+},
+{
+  "type": "node",
+  "id": 5893228216,
+  "lat": 43.4586539,
+  "lon": -3.8112272,
+  "tags": {
+    "name": "Santander",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "01069",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5893258391,
+  "lat": 43.4526920,
+  "lon": -3.8285718,
+  "tags": {
+    "name": "Valdecilla-La Marga",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q82474114"
+  }
+},
+{
+  "type": "node",
+  "id": 5919350285,
+  "lat": 42.8393287,
+  "lon": -4.4943991,
+  "tags": {
+    "name": "Vado-Cervera",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q107976155"
+  }
+},
+{
+  "type": "node",
+  "id": 5919355191,
+  "lat": 42.8576986,
+  "lon": -4.2790892,
+  "tags": {
+    "name": "Cillamayor",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q107976145",
+    "wikipedia": "es:Estación de Cillamayor"
+  }
+},
+{
+  "type": "node",
+  "id": 6283393015,
+  "lat": 43.4274629,
+  "lon": -3.8404099,
+  "tags": {
+    "internet_access": "no",
+    "name": "Valle Real",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q107440681",
+    "wikipedia": "es:Estación de Valle Real"
+  }
+},
+{
+  "type": "node",
+  "id": 6283406177,
+  "lat": 43.4161183,
+  "lon": -3.8409624,
+  "tags": {
+    "internet_access": "no",
+    "name": "Maliaño - La Vidriera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846665",
+    "wikipedia": "es:Estación de Maliaño"
+  }
+},
+{
+  "type": "node",
+  "id": 6283409470,
+  "lat": 43.4039572,
+  "lon": -3.8208987,
+  "tags": {
+    "name": "Astillero",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q82759617",
+    "wikipedia": "es:Estación de Astillero"
+  }
+},
+{
+  "type": "node",
+  "id": 6283419316,
+  "lat": 43.3972705,
+  "lon": -3.8148923,
+  "tags": {
+    "name": "La Cantábrica",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q82747707"
+  }
+},
+{
+  "type": "node",
+  "id": 6284896256,
+  "lat": 43.3937311,
+  "lon": -3.8037687,
+  "tags": {
+    "name": "San Salvador",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q82692500"
+  }
+},
+{
+  "type": "node",
+  "id": 6285101623,
+  "lat": 43.4401306,
+  "lon": -3.8495346,
+  "tags": {
+    "name": "Nueva Montaña",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q107652652",
+    "wikipedia": "es:Estación de Nueva Montaña (Ancho Métrico)"
+  }
+},
+{
+  "type": "node",
+  "id": 6565464317,
+  "lat": 42.8513072,
+  "lon": -4.3861116,
+  "tags": {
+    "name": "Salinas de Pisuerga",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q107976153"
+  }
+},
+{
+  "type": "node",
+  "id": 6568552483,
+  "lat": 42.9912145,
+  "lon": -3.9446298,
+  "tags": {
+    "name": "Arija",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "05740",
+    "ref:EU:PLC": "ES05740",
+    "train": "yes",
+    "uic_ref": "7105740",
+    "wikidata": "Q107976079",
+    "wikipedia": "es:Estación de Arija"
+  }
+},
+{
+  "type": "node",
+  "id": 6570251746,
+  "lat": 42.9879536,
+  "lon": -3.9826134,
+  "tags": {
+    "name": "Llano",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "05741",
+    "ref:EU:PLC": "ES05741",
+    "train": "yes",
+    "uic_ref": "7105741",
+    "wikidata": "Q107976102"
+  }
+},
+{
+  "type": "node",
+  "id": 6570292849,
+  "lat": 42.9320962,
+  "lon": -4.0426779,
+  "tags": {
+    "name": "Montes Claros",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "05743",
+    "ref:EU:PLC": "ES05743",
+    "train": "yes",
+    "uic_ref": "7105743",
+    "wikidata": "Q107976104"
+  }
+},
+{
+  "type": "node",
+  "id": 6570309847,
+  "lat": 42.9103248,
+  "lon": -4.0753133,
+  "tags": {
+    "name": "Los Carabeos",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "05744",
+    "ref:EU:PLC": "ES05744",
+    "train": "yes",
+    "uic_ref": "7105744",
+    "wikidata": "Q107976105"
+  }
+},
+{
+  "type": "node",
+  "id": 6570337796,
+  "lat": 42.9736210,
+  "lon": -4.0298526,
+  "tags": {
+    "name": "Las Rozas de Valdearroyo",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "05742",
+    "ref:EU:PLC": "ES05742",
+    "train": "yes",
+    "uic_ref": "7105742",
+    "wikidata": "Q107976103",
+    "wikipedia": "eu:Las Rozas de Valdearroyoko geltokia"
+  }
+},
+{
+  "type": "node",
+  "id": 6570580746,
+  "lat": 43.4407290,
+  "lon": -3.8995722,
+  "tags": {
+    "name": "Bezana",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q107804806",
+    "wikipedia": "eu:Bezanako geltokia"
+  }
+},
+{
+  "type": "node",
+  "id": 8038471610,
+  "lat": 43.3274410,
+  "lon": -4.0424622,
+  "tags": {
+    "name": "Torrelavega",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "L160",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8038499695,
+  "lat": 43.1847739,
+  "lon": -4.0499546,
+  "tags": {
+    "name": "Arenas de Iguña",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5845711"
+  }
+},
+{
+  "type": "node",
+  "id": 8038502915,
+  "lat": 43.2658133,
+  "lon": -4.0675886,
+  "tags": {
+    "name": "Lombera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846612",
+    "wikipedia": "es:Estación de Lombera"
+  }
+},
+{
+  "type": "node",
+  "id": 8038507760,
+  "lat": 43.1227657,
+  "lon": -4.0824973,
+  "tags": {
+    "name": "Pujayo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846999"
+  }
+},
+{
+  "type": "node",
+  "id": 8057319955,
+  "lat": 42.3460955,
+  "lon": -3.7879019,
+  "tags": {
+    "name": "Bifurcación Aranda",
+    "operator": "Adif",
+    "railway": "junction"
+  }
+},
+{
+  "type": "node",
+  "id": 9879276439,
+  "lat": 42.8712059,
+  "lon": -4.1650592,
+  "tags": {
+    "name": "Mataporquera",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14200",
+    "ref:EU:PLC": "ES14200",
+    "train": "yes",
+    "uic_ref": "7114200",
+    "wikidata": "Q5846686"
+  }
+},
+{
+  "type": "node",
+  "id": 12495839163,
+  "lat": 42.9963732,
+  "lon": -3.8584113,
+  "tags": {
+    "name": "Cabañas de Virtus",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "05739",
+    "ref:EU:PLC": "ES05739",
+    "train": "yes",
+    "uic_ref": "7105739"
+  }
+},
+{
+  "type": "node",
+  "id": 12495839164,
+  "lat": 43.0190367,
+  "lon": -3.8093148,
+  "tags": {
+    "name": "Robredo-Ahedo",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "05737",
+    "ref:EU:PLC": "ES05737",
+    "train": "yes",
+    "uic_ref": "7105737",
+    "wikidata": "Q107976077",
+    "wikipedia": "es:Estación de Robredo Ahedo"
+  }
+},
+{
+  "type": "node",
+  "id": 12714808106,
+  "lat": 42.6568209,
+  "lon": -4.3112334,
+  "tags": {
+    "ele": "853",
+    "name": "Alar del Rey",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "14112",
+    "ref:EU:PLC": "ES14112",
+    "train": "yes",
+    "uic_ref": "7114112",
+    "wikidata": "Q5845610",
+    "wikipedia": "es:Estación de Alar del Rey"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284069,
+  "lat": 43.3749250,
+  "lon": -4.5143617,
+  "tags": {
+    "name": "Unquera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18602037",
+    "wikipedia": "es:Estación de Unquera"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284070,
+  "lat": 43.3677507,
+  "lon": -4.4045634,
+  "tags": {
+    "name": "San Vicente de la Barquera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18602056",
+    "wikipedia": "es:Estación de San Vicente de la Barquera"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284071,
+  "lat": 43.3078404,
+  "lon": -4.2317625,
+  "tags": {
+    "name": "Cabezón de la Sal",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18603172"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284072,
+  "lat": 43.3611541,
+  "lon": -4.1493960,
+  "tags": {
+    "name": "San Pedro de Rudagüera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18603231",
+    "wikipedia": "es:Estación de San Pedro de Rudagüera"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284073,
+  "lat": 43.3587717,
+  "lon": -4.0877171,
+  "tags": {
+    "name": "Puente San Miguel",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18603277",
+    "wikipedia": "es:Estación de Puente San Miguel"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284074,
+  "lat": 43.3740216,
+  "lon": -4.0420696,
+  "tags": {
+    "name": "Barreda",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18604566"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284075,
+  "lat": 43.4543137,
+  "lon": -3.8404296,
+  "tags": {
+    "addr:city": "Santander",
+    "name": "Cazoña",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q107804886",
+    "wikipedia": "es:Estación de Cazoña"
+  }
+},
+{
+  "type": "node",
+  "id": 12926284076,
+  "lat": 43.3913314,
+  "lon": -4.0285381,
+  "tags": {
+    "name": "Requejada",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18604570"
+  }
+},
+{
+  "type": "node",
+  "id": 13028045957,
+  "lat": 42.1440880,
+  "lon": -4.1155470,
+  "tags": {
+    "name": "Río Arlanzón",
+    "operator": "Adif AV",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 13028045964,
+  "lat": 42.2848793,
+  "lon": -3.8883562,
+  "tags": {
+    "name": "Estépar",
+    "operator": "Adif AV",
+    "railway": "service_station"
+  }
+},
+{
+  "type": "node",
+  "id": 13333702365,
+  "lat": 43.4097995,
+  "lon": -3.9884800,
+  "tags": {
+    "name": "Gornazo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333702366,
+  "lat": 43.3983014,
+  "lon": -4.0100259,
+  "tags": {
+    "name": "Mar",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18604574"
+  }
+},
+{
+  "type": "node",
+  "id": 13333702368,
+  "lat": 43.3519131,
+  "lon": -4.0569977,
+  "tags": {
+    "name": "Altamira",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333702370,
+  "lat": 43.3590382,
+  "lon": -4.1118453,
+  "tags": {
+    "name": "Santa Isabel",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333702371,
+  "lat": 43.4539790,
+  "lon": -3.8278039,
+  "tags": {
+    "name": "Valdecilla",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5847394",
+    "wikipedia": "es:Estación de Valdecilla"
+  }
+},
+{
+  "type": "node",
+  "id": 13333702385,
+  "lat": 43.3915424,
+  "lon": -3.8595309,
+  "tags": {
+    "name": "Guarnizo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333708244,
+  "lat": 43.3767685,
+  "lon": -3.8942297,
+  "tags": {
+    "bench": "yes",
+    "name": "Parbayón",
+    "network": "ADIF",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "shelter": "yes",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5846883"
+  }
+},
+{
+  "type": "node",
+  "id": 13333708245,
+  "lat": 43.3417870,
+  "lon": -4.0264453,
+  "tags": {
+    "name": "Sierrapando",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752683,
+  "lat": 43.3152864,
+  "lon": -4.2153991,
+  "tags": {
+    "name": "Ontoria",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752684,
+  "lat": 43.3183889,
+  "lon": -4.3089980,
+  "tags": {
+    "name": "Treceño",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752685,
+  "lat": 43.3283448,
+  "lon": -4.3491743,
+  "tags": {
+    "name": "Roiz",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q18602079"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752686,
+  "lat": 43.3410026,
+  "lon": -4.3837800,
+  "tags": {
+    "name": "El Barcenal",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18602068",
+    "wikipedia": "es:Estación de El Barcenal"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752687,
+  "lat": 43.3702832,
+  "lon": -4.4801595,
+  "tags": {
+    "name": "Pesués",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752689,
+  "lat": 43.3230054,
+  "lon": -4.1935499,
+  "tags": {
+    "name": "Virgen de la Peña",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18603198"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752690,
+  "lat": 43.3388087,
+  "lon": -4.1749131,
+  "tags": {
+    "name": "Casar de Periedo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333752691,
+  "lat": 43.3407721,
+  "lon": -4.1556452,
+  "tags": {
+    "name": "Golbardo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333883588,
+  "lat": 42.9947716,
+  "lon": -4.1404468,
+  "tags": {
+    "name": "Reinosa",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13333883589,
+  "lat": 43.0007560,
+  "lon": -4.1343786,
+  "tags": {
+    "name": "Río Ebro",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13338126376,
+  "lat": 43.3510437,
+  "lon": -4.0512722,
+  "tags": {
+    "name": "Torrelavega-Centro",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13389024736,
+  "lat": 43.4217430,
+  "lon": -3.8441265,
+  "tags": {
+    "name": "Muriedas-Bahía",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13389024737,
+  "lat": 43.4104141,
+  "lon": -3.8414526,
+  "tags": {
+    "bench": "yes",
+    "name": "Boo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "shelter": "yes",
+    "train": "yes",
+    "wikidata": "Q5845851"
+  }
+},
+{
+  "type": "node",
+  "id": 13389024738,
+  "lat": 43.2985850,
+  "lon": -4.0731106,
+  "tags": {
+    "name": "Las Caldas de Besaya",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13654590000,
+  "lat": 43.0057900,
+  "lon": -3.8448630,
+  "tags": {
+    "name": "Soncillo",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "05738",
+    "ref:EU:PLC": "ES05738",
+    "train": "yes",
+    "uic_ref": "7105738",
+    "wikidata": "Q107976078",
+    "wikipedia": "es:Estación de Soncillo"
+  }
+},
+{
+  "type": "node",
+  "id": 13728429302,
+  "lat": 43.2551344,
+  "lon": -4.0638840,
+  "tags": {
+    "name": "Los Corrales de Buelna",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13728429303,
+  "lat": 43.3530530,
+  "lon": -3.9495092,
+  "tags": {
+    "name": "Renedo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13728429304,
+  "lat": 43.3606597,
+  "lon": -3.9648736,
+  "tags": {
+    "name": "Vioño",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13787040246,
+  "lat": 43.3564869,
+  "lon": -4.0701529,
+  "tags": {
+    "name": "Ganzo",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q18603289",
+    "wikipedia": "es:Estación de Ganzo"
+  }
+},
+{
+  "type": "node",
+  "id": 14197094767,
+  "lat": 43.3828695,
+  "lon": -4.5568701,
+  "tags": {
+    "name": "Colombres",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14247580210,
+  "lat": 43.0822354,
+  "lon": -4.0737450,
+  "tags": {
+    "name": "Pesquera",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14247759432,
+  "lat": 43.0581999,
+  "lon": -4.0842292,
+  "tags": {
+    "name": "Lantueno",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q5846548"
+  }
+},
+{
+  "type": "node",
+  "id": 14273209205,
+  "lat": 42.8726650,
+  "lon": -4.1641557,
+  "tags": {
+    "name": "Mataporquera",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "way",
+  "id": 224871994,
+  "center": {
+    "lat": 43.4174057,
+    "lon": -3.8420590
+  },
+  "tags": {
+    "building": "yes",
+    "layer": "1",
+    "name": "Maliaño",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5846665"
+  }
+},
+{
+  "type": "way",
+  "id": 342602313,
+  "center": {
+    "lat": 43.2958937,
+    "lon": -4.4115541
+  },
+  "tags": {
+    "building": "roof",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "way",
+  "id": 372798985,
+  "center": {
+    "lat": 43.2551220,
+    "lon": -4.0639959
+  },
+  "tags": {
+    "building": "train_station",
+    "building:levels": "2",
+    "name": "Los Corrales de Buelna",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846627",
+    "wikipedia": "es:Estación de Los Corrales de Buelna"
+  }
+},
+{
+  "type": "way",
+  "id": 432420156,
+  "center": {
+    "lat": 43.3606347,
+    "lon": -3.9649006
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Vioño",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 432558973,
+  "center": {
+    "lat": 43.3530084,
+    "lon": -3.9495476
+  },
+  "tags": {
+    "building": "public",
+    "name": "Renedo de Piélagos",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 589678628,
+  "center": {
+    "lat": 43.3509626,
+    "lon": -4.0512029
+  },
+  "tags": {
+    "architect:wikidata": "Q5927805",
+    "building": "yes",
+    "building:levels": "2",
+    "name": "Torrelavega-Centro",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "start_date": "1938",
+    "train": "yes",
+    "wikidata": "Q18603535",
+    "wikipedia": "es:Estación de Torrelavega-Centro"
+  }
+},
+{
+  "type": "way",
+  "id": 641944901,
+  "center": {
+    "lat": 43.1454878,
+    "lon": -4.0390676
+  },
+  "tags": {
+    "name": "Molledo Portolín",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846730",
+    "wikipedia": "es:Estación de Molledo-Portolín"
+  }
+},
+{
+  "type": "way",
+  "id": 1081345493,
+  "center": {
+    "lat": 43.4447145,
+    "lon": -3.8471869
+  },
+  "tags": {
+    "building": "industrial",
+    "building:levels": "1",
+    "name": "Nueva Montaña",
+    "railway": "halt"
+  }
+},
+{
+  "type": "way",
+  "id": 1102282850,
+  "center": {
+    "lat": 43.3974964,
+    "lon": -3.8150375
+  },
+  "tags": {
+    "area": "yes",
+    "internet_access": "no",
+    "name": "La Cantábrica",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "01228",
+    "train": "yes",
+    "wikidata": "Q82747707",
+    "wikipedia": "es:Estación de La Cantábrica"
+  }
+},
+{
+  "type": "relation",
+  "id": 6439767,
+  "center": {
+    "lat": 42.9945395,
+    "lon": -4.1408331
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Estación de Renfe, ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "type": "multipolygon",
+    "wikidata": "Q5847037",
+    "wikipedia": "es:Estación de Reinosa"
+  }
+},
+{
+  "type": "relation",
+  "id": 8522067,
+  "center": {
+    "lat": 43.2985875,
+    "lon": -4.0732361
+  },
+  "tags": {
+    "building": "train_station",
+    "name": "Las Caldas de Besaya",
+    "network": "Cercanías Cantabria",
+    "network:wikidata": "Q1054773",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "type": "multipolygon",
+    "wikidata": "Q5846557"
+  }
+}
+
+  ]
+}
