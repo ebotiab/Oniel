@@ -1,0 +1,50 @@
+# Mantener despierta la API de producción en horario de día.
+#
+# La API corre en el plan gratuito de Render, que la suspende tras 15 minutos sin tráfico y tarda
+# cerca de un minuto en despertarla. El visor no espera (arranca con la instantánea estática), pero
+# quien llega por un enlace directo a una comparación o a una simulación sí. Este flujo pide
+# `/healthz` cada 10 minutos para que no llegue a suspenderse.
+#
+# Apagado por defecto: el trabajo solo corre si la variable del repositorio
+# ONIEL_MANTENER_API_DESPIERTA vale 1 (Settings → Secrets and variables → Actions → Variables).
+# Sin ella, cada ejecución programada se salta el trabajo y no hace ninguna petición.
+# Qué cuesta tenerlo encendido (horas de Render, base de datos, Logfire) está en docs/despliegue.md,
+# «Mantener la API despierta».
+name: Mantener la API despierta
+
+on:
+  schedule:
+    # Cada 10 minutos de 05:00 a 22:59 UTC. El cron de GitHub va en UTC y no sabe de cambios de hora,
+    # así que la franja cubre las dos: en invierno (UTC+1) va de 06:00 a 23:59 en Madrid y en verano
+    # (UTC+2), de 07:00 a 00:59. En los dos casos queda dentro todo el tramo de 07:00 a 23:59.
+    # Los minutos 3, 13, 23… evitan el comienzo de la hora, cuando GitHub tiene más cola.
+    - cron: "3-59/10 5-22 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: mantener-api-despierta
+  cancel-in-progress: false
+
+env:
+  # La dirección pública de la API (no es un secreto). La variable ONIEL_API_URL, si existe, la sustituye.
+  API_URL: ${{ vars.ONIEL_API_URL || 'https://oniel-api-5e63.onrender.com' }}
+
+jobs:
+  despertar:
+    name: Pedir /healthz
+    if: vars.ONIEL_MANTENER_API_DESPIERTA == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Una petición a la ruta de salud
+        run: |
+          # Si la encuentra dormida, Render retiene la petición mientras la despierta (cerca de un
+          # minuto): de ahí los 150 s por intento. Reintenta dos veces ante cualquier fallo (tres
+          # intentos, 8 minutos como mucho) y solo falla si ninguno responde.
+          curl --fail --silent --show-error \
+            --max-time 150 \
+            --retry 2 --retry-delay 15 --retry-all-errors \
+            --write-out '\nHTTP %{http_code} en %{time_total} s\n' \
+            "${API_URL%/}/healthz"
