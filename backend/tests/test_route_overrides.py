@@ -43,6 +43,7 @@ from conftest import (
     MEDITERRANEO_SPEC,
     MONFRAGUE_CACERES_SPEC,
     MZCR_SPEC,
+    PALENCIA_SANTANDER_SPEC,
     RAMAL_MERIDA_SPEC,
     SEVILLA_CADIZ_SPEC,
     SPEC,
@@ -726,6 +727,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "salamanca-por-medina-32001": 5,
             "principe-pio-atocha": 12,
         },
+        # la de Palencia a Santander no tiene reglas: todos sus trenes la recorren entera
+        PALENCIA_SANTANDER_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

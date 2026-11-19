@@ -1,0 +1,584 @@
+{
+  "line": {
+    "id": "palencia-santander",
+    "name": "Línea convencional Palencia – Santander",
+    "short_name": "160",
+    "sort_order": 40,
+    "zone": "cantabrico",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 155,
+    "tracks": 1,
+    "pk_origin_km": 297.3,
+    "status": "disponible",
+    "description": "Une la meseta con la costa de Cantabria: sale de Palencia hacia el norte por Tierra de Campos, sube a Aguilar de Campoo y Reinosa, cruza la cordillera Cantábrica y baja por el valle del Besaya hasta Torrelavega y Santander.\n\nEs la línea 160 de Adif y el único camino de ancho ibérico entre Cantabria y la meseta. El trecho de Alar del Rey a Santander se terminó en 1866 y fue uno de los primeros ferrocarriles de largo recorrido de España. Entre Reinosa y Bárcena, en la montaña, el trazado sigue siendo casi el original, con muchos túneles y curvas cerradas, y los trenes van más despacio.\n\nEn los horarios de Renfe la recorren los Alvia de Madrid a Santander, que llegan por la alta velocidad y cambian de ancho de vía poco antes de Palencia; los de Alicante a Santander, que cruzan Madrid, y los regionales de Valladolid a Santander, que van de Valladolid a Palencia por la línea convencional, que no está cargada, y paran en casi todas las estaciones. Los trenes de Cercanías de Santander a Reinosa usan también sus vías, pero no están en los horarios cargados.\n\nLa alta velocidad de Palencia a Aguilar de Campoo está en obras; mientras no se termine, todos los trenes de Santander van por esta línea.",
+    "geometry_source": {
+      "source_id": "osm-relation-4220975",
+      "parts": [
+        {
+          "source_id": "osm-relation-4220975",
+          "file": "raw/osm/relation_4220975_linea_160_palencia_santander_2026-11-19.json",
+          "relation_id": 4220975,
+          "from": [
+            -4.5336556,
+            42.0158571
+          ],
+          "to": [
+            -3.8164434,
+            43.4578983
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-palencia-santander"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "palencia",
+      "name": "Palencia",
+      "kind": "estacion",
+      "adif_code": "14100",
+      "shared": true,
+      "position": {
+        "lon": -4.5338617,
+        "lat": 42.0157277
+      }
+    },
+    {
+      "id": "monzon-de-campos",
+      "name": "Monzón de Campos",
+      "kind": "estacion",
+      "adif_code": "14101",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.501729,
+        "lat": 42.105565
+      }
+    },
+    {
+      "id": "el-carrion",
+      "name": "El Carrión",
+      "kind": "estacion",
+      "adif_code": "14117",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.495862,
+        "lat": 42.116751
+      }
+    },
+    {
+      "id": "amusco",
+      "name": "Amusco",
+      "kind": "estacion",
+      "adif_code": "14102",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.480577,
+        "lat": 42.178228
+      }
+    },
+    {
+      "id": "pina",
+      "name": "Piña",
+      "kind": "estacion",
+      "adif_code": "14103",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.434527,
+        "lat": 42.211687
+      }
+    },
+    {
+      "id": "fromista",
+      "name": "Frómista",
+      "kind": "estacion",
+      "adif_code": "14104",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.402389,
+        "lat": 42.264872
+      }
+    },
+    {
+      "id": "osorno",
+      "name": "Osorno",
+      "kind": "estacion",
+      "adif_code": "14107",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.357281,
+        "lat": 42.414181
+      }
+    },
+    {
+      "id": "espinosa-de-villagonzalo",
+      "name": "Espinosa de Villagonzalo",
+      "kind": "estacion",
+      "adif_code": "14108",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.374525,
+        "lat": 42.478946
+      }
+    },
+    {
+      "id": "herrera-de-pisuerga",
+      "name": "Herrera de Pisuerga",
+      "kind": "estacion",
+      "adif_code": "14111",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.316472,
+        "lat": 42.598675
+      }
+    },
+    {
+      "id": "alar-del-rey",
+      "name": "Alar del Rey",
+      "kind": "estacion",
+      "adif_code": "14112",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.311233,
+        "lat": 42.656821
+      }
+    },
+    {
+      "id": "mave",
+      "name": "Mave",
+      "kind": "estacion",
+      "adif_code": "14113",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.275657,
+        "lat": 42.723371
+      }
+    },
+    {
+      "id": "aguilar-de-campoo",
+      "name": "Aguilar de Campoo",
+      "kind": "estacion",
+      "adif_code": "14114",
+      "position": {
+        "lon": -4.233745,
+        "lat": 42.785268
+      },
+      "reference_pk_km": 394.8,
+      "description": "La estación de Aguilar de Campoo, la principal del norte de Palencia. Paran en ella los Alvia de Madrid a Santander y los regionales. La alta velocidad que se construye desde Palencia llegará hasta aquí."
+    },
+    {
+      "id": "quintanilla-de-las-torres",
+      "name": "Quintanilla de las Torres",
+      "kind": "estacion",
+      "adif_code": "14115",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.202799,
+        "lat": 42.818934
+      }
+    },
+    {
+      "id": "mataporquera",
+      "name": "Mataporquera",
+      "kind": "estacion",
+      "adif_code": "14200",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.165059,
+        "lat": 42.871206
+      },
+      "description": "Estación de Mataporquera, ya en Cantabria. Junto a ella cruza la línea de vía estrecha de Bilbao a León, cuyos trenes paran en la misma estación; esa línea no está cargada."
+    },
+    {
+      "id": "reinosa",
+      "name": "Reinosa",
+      "kind": "estacion",
+      "adif_code": "14202",
+      "position": {
+        "lon": -4.140447,
+        "lat": 42.994772
+      },
+      "reference_pk_km": 426.4,
+      "description": "La estación de Reinosa, en Campoo. Desde aquí la línea baja hacia la costa por el valle del Besaya, el trecho de montaña, con más túneles y más curvas."
+    },
+    {
+      "id": "barcena",
+      "name": "Bárcena",
+      "kind": "estacion",
+      "adif_code": "14206",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.053812,
+        "lat": 43.128585
+      }
+    },
+    {
+      "id": "los-corrales-de-buelna",
+      "name": "Los Corrales de Buelna",
+      "kind": "estacion",
+      "adif_code": "14210",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.063884,
+        "lat": 43.255134
+      }
+    },
+    {
+      "id": "torrelavega",
+      "name": "Torrelavega",
+      "kind": "estacion",
+      "adif_code": "14213",
+      "position": {
+        "lon": -4.042462,
+        "lat": 43.327441
+      },
+      "reference_pk_km": 485.1,
+      "description": "La estación de Torrelavega, la segunda ciudad de Cantabria. Paran en ella los Alvia y los regionales. Los trenes de vía estrecha de Santander a Oviedo paran en otra estación, Torrelavega-Centro."
+    },
+    {
+      "id": "renedo",
+      "name": "Renedo",
+      "kind": "estacion",
+      "adif_code": "14216",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.949509,
+        "lat": 43.353053
+      }
+    },
+    {
+      "id": "maliano",
+      "name": "Maliaño",
+      "kind": "estacion",
+      "adif_code": "14220",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.842059,
+        "lat": 43.417406
+      }
+    },
+    {
+      "id": "valdecilla",
+      "name": "Valdecilla",
+      "kind": "estacion",
+      "adif_code": "14230",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.827804,
+        "lat": 43.453979
+      }
+    },
+    {
+      "id": "santander",
+      "name": "Santander",
+      "kind": "estacion",
+      "adif_code": "14223",
+      "position": {
+        "lon": -3.8118904,
+        "lat": 43.4592409
+      },
+      "reference_pk_km": 514.5,
+      "description": "La estación de Santander, donde acaba la línea. Al lado está la de vía estrecha, de la que salen los trenes a Bilbao y a Oviedo, que no están cargados."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "palencia",
+      "to_node": "santander",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-19",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea a la altura de Alar del Rey, de Reinosa y de Bárcena. Wikipedia da ASFA y tren-tierra en toda la línea."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "palencia",
+      "to_node": "santander",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-19",
+      "note": "Mapa 4: trazo naranja discontinuo de «BAU ctc» a lo largo de toda la línea, de Palencia a Santander. Wikipedia da bloqueo automático en vía única con control de tráfico centralizado."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "palencia",
+      "to_node": "santander",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-19",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "14100": {
+      "node": "palencia"
+    },
+    "14101": {
+      "node": "monzon-de-campos"
+    },
+    "14117": {
+      "node": "el-carrion"
+    },
+    "14102": {
+      "node": "amusco"
+    },
+    "14103": {
+      "node": "pina"
+    },
+    "14104": {
+      "node": "fromista"
+    },
+    "14107": {
+      "node": "osorno"
+    },
+    "14108": {
+      "node": "espinosa-de-villagonzalo"
+    },
+    "14111": {
+      "node": "herrera-de-pisuerga"
+    },
+    "14112": {
+      "node": "alar-del-rey"
+    },
+    "14113": {
+      "node": "mave"
+    },
+    "14114": {
+      "node": "aguilar-de-campoo"
+    },
+    "14115": {
+      "node": "quintanilla-de-las-torres"
+    },
+    "14200": {
+      "node": "mataporquera"
+    },
+    "14202": {
+      "node": "reinosa"
+    },
+    "14206": {
+      "node": "barcena"
+    },
+    "14210": {
+      "node": "los-corrales-de-buelna"
+    },
+    "14213": {
+      "node": "torrelavega"
+    },
+    "14216": {
+      "node": "renedo"
+    },
+    "14220": {
+      "node": "maliano"
+    },
+    "14230": {
+      "node": "valdecilla"
+    },
+    "14223": {
+      "node": "santander"
+    },
+    "10610": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "10602": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "10603": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "10604": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "10605": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "11000": {
+      "exits": [
+        "palencia"
+      ]
+    },
+    "10600": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        }
+      ]
+    },
+    "17000": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "08004": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "03208": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        }
+      ]
+    },
+    "60600": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "03309": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    },
+    "60911": {
+      "exits": [
+        "palencia"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "palencia"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-madrid-valencia",
+          "node": "madrid-chamartin"
+        },
+        {
+          "line": "lav-albacete-alicante",
+          "node": "bif-albacete"
+        }
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos nodos de la línea o más y en una de sus estaciones propias, de Monzón de Campos a Santander: Palencia no cuenta sola, porque en ella paran los trenes de León, Asturias, Galicia, Burgos y el País Vasco. Entran los Alvia de Madrid y de Alicante a Santander y los regionales de Valladolid a Santander. Quedan fuera los trenes de vía estrecha que paran en Santander o en Mataporquera, porque no paran en ninguna otra estación de la línea.",
+    "any_of_stop_ids": [
+      "14101",
+      "14117",
+      "14102",
+      "14103",
+      "14104",
+      "14107",
+      "14108",
+      "14111",
+      "14112",
+      "14113",
+      "14114",
+      "14115",
+      "14200",
+      "14202",
+      "14206",
+      "14210",
+      "14213",
+      "14216",
+      "14220",
+      "14230",
+      "14223"
+    ],
+    "min_node_stops": 2
+  }
+}

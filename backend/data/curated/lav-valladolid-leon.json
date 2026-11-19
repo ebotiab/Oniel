@@ -15,7 +15,7 @@
     "reference_length_km": 166.141,
     "pk_origin_km": 179.309,
     "status": "disponible",
-    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos. En León los trenes de Asturias cambian de ancho de vía y siguen por la línea de León a Gijón, que cruza la cordillera por la variante de Pajares. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional, y en León, los de Ponferrada y Galicia: de estos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
+    "description": "Sigue hacia el norte la línea de alta velocidad que llega de Madrid: sale de Valladolid, pasa por Palencia y acaba en León.\n\nSe abrió al público el 30 de septiembre de 2015. Por ella van los trenes de Madrid a Palencia, León, Asturias y Cantabria, y en su primer trecho, hasta Venta de Baños, también los de Burgos y el País Vasco.\n\nCerca de Venta de Baños sale la línea de alta velocidad a Burgos. En León los trenes de Asturias cambian de ancho de vía y siguen por la línea de León a Gijón, que cruza la cordillera por la variante de Pajares. En Palencia dejan la línea los trenes de Santander, que siguen por la línea convencional de Palencia a Santander, y en León, los de Ponferrada y Galicia: de estos últimos Oniel cuenta el paso por esta línea hasta el punto en que la dejan.\n\nLa plataforma se construyó para dos vías, pero en la mitad del recorrido solo hay una: a la salida de Valladolid, de Venta de Baños a pasado Palencia y en los últimos kilómetros antes de León. En los tramos de vía única los trenes de un sentido y de otro no pueden cruzarse.",
     "geometry_source": {
       "source_id": "osm-relation-5546933",
       "parts": [
@@ -119,7 +119,7 @@
         "lat": 42.0157277
       },
       "reference_pk_km": 230.627,
-      "description": "La estación de Palencia, la única intermedia de la línea. La comparten la alta velocidad y las líneas convencionales. Aquí dejan la alta velocidad los trenes de Santander: poco antes de la estación cambian de ancho de vía y siguen por la línea convencional de Palencia a Santander, que no está cargada."
+      "description": "La estación de Palencia, la única intermedia de la línea. La comparten la alta velocidad y las líneas convencionales. Aquí dejan la alta velocidad los trenes de Santander: poco antes de la estación cambian de ancho de vía y siguen por la línea convencional de Palencia a Santander."
     },
     {
       "id": "bif-las-barreras",
@@ -226,27 +226,6 @@
     }
   ],
   "connections": [
-    {
-      "id": "conv-palencia-santander",
-      "node_id": "palencia",
-      "name": "Línea convencional Palencia–Santander",
-      "towards": "Aguilar de Campoo, Reinosa y Santander",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.5338617,
-          42.0157277
-        ],
-        [
-          -4.402433,
-          42.2649
-        ],
-        [
-          -4.233899,
-          42.785362
-        ]
-      ]
-    },
     {
       "id": "conv-leon-galicia",
       "node_id": "leon",
@@ -471,21 +450,45 @@
     "14114": {
       "exits": [
         "palencia"
+      ],
+      "via": [
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "14202": {
       "exits": [
         "palencia"
+      ],
+      "via": [
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "14213": {
       "exits": [
         "palencia"
+      ],
+      "via": [
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "14223": {
       "exits": [
         "palencia"
+      ],
+      "via": [
+        {
+          "line": "palencia-santander",
+          "node": "palencia"
+        }
       ]
     },
     "15122": {

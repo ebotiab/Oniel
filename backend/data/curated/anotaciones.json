@@ -554,6 +554,69 @@
         "adif-nota-ancho-estandar-la-encina-alicante-2024-08"
       ],
       "checked_on": "2026-11-18"
+    },
+    {
+      "id": "proyecto-lav-palencia-aguilar",
+      "kind": "proyecto",
+      "status": "en_obras",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -4.5339,
+            42.0157
+          ],
+          [
+            -4.4699,
+            42.1729
+          ],
+          [
+            -4.361,
+            42.4107
+          ],
+          [
+            -4.3853,
+            42.5747
+          ],
+          [
+            -4.3112,
+            42.6596
+          ]
+        ]
+      },
+      "title": "Línea de alta velocidad Palencia – Aguilar de Campoo",
+      "reason": "Vía nueva de ancho estándar desde la alta velocidad de Palencia hacia el norte, el primer tramo de la que llevará la alta velocidad hasta Reinosa. Desde allí los trenes seguirán a Santander por la línea convencional.",
+      "note": "Lo que está en obras es la plataforma de los cinco tramos entre Palencia y Alar del Rey, 78,4 km; de Alar del Rey a Reinosa, por Aguilar de Campoo, se redacta el proyecto. Las fuentes oficiales leídas no dan fecha de puesta en servicio; las que da la prensa no se registran. Mientras no se termine, los trenes de Santander van por la línea convencional, que es la que está cargada. El trazado dibujado es un esbozo.",
+      "milestones": [
+        {
+          "date": "2023-05-31",
+          "text": "Adif Alta Velocidad contrata el último de los cinco tramos de plataforma entre Palencia y Alar del Rey: todos están contratados o en obras.",
+          "source_id": "adif-av-nota-palencia-alar-del-rey-2023-05"
+        },
+        {
+          "date": "2025-03-13",
+          "text": "Adif licita la redacción de los proyectos de la electrificación y de la base de montaje de vía del tramo hasta Alar del Rey, mientras sigue la construcción de la plataforma.",
+          "source_id": "adif-av-nota-montaje-electrificacion-palencia-cantabria-2025-03"
+        },
+        {
+          "date": "2025-07-15",
+          "text": "El Ministerio de Transportes da por en ejecución la plataforma de los cinco tramos entre Palencia y Alar del Rey.",
+          "source_id": "mitma-nota-palencia-aguilar-2025-07"
+        },
+        {
+          "date": "2026-05-06",
+          "text": "Adif-Alta Velocidad somete a información pública la ocupación de terrenos para caminos de enlace y líneas eléctricas en las obras de dos de los tramos.",
+          "source_id": "boe-b-2026-14346"
+        }
+      ],
+      "source_ids": [
+        "adif-av-nota-palencia-alar-del-rey-2023-05",
+        "adif-av-nota-montaje-electrificacion-palencia-cantabria-2025-03",
+        "mitma-nota-palencia-aguilar-2025-07",
+        "boe-b-2026-14346",
+        "osm-nominatim-lugares"
+      ],
+      "checked_on": "2026-11-19"
     }
   ]
 }

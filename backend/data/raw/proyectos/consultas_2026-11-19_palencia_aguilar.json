@@ -1,0 +1,86 @@
+{
+  "descripcion": "Registro de las consultas hechas el 19 de noviembre de 2026 para el proyecto de la línea de alta velocidad Palencia – Aguilar de Campoo de backend/data/curated/anotaciones.json, al cargar la línea convencional Palencia – Santander. Queda, con palabras propias, qué decía cada página y de dónde salen los puntos del esbozo.",
+  "consultado_el": "2026-11-19",
+  "consultas": [
+    {
+      "source_id": "adif-av-nota-palencia-alar-del-rey-2023-05",
+      "titulo": "Adif AV contrata el último tramo de la LAV entre Palencia y Alar del Rey por 109,3 M€",
+      "editor": "Adif Alta Velocidad",
+      "url": "https://www.adifaltavelocidad.es/w/adif-av-contrata-el-%C3%BAltimo-tramo-de-la-lav-entre-palencia-y-alar-del-rey-por-109-3-m%E2%82%AC",
+      "fecha_de_la_pagina": "2023-05-31",
+      "resumen": "Adif Alta Velocidad contrata la plataforma del tramo Calahorra de Boedo – Alar del Rey (13,7 km, vía única) y con él tiene contratados o en obras los cinco tramos de plataforma entre Palencia y Alar del Rey, 78,4 km: Palencia – Palencia Norte (obras desde marzo de 2023), Palencia Norte – Amusco (desde octubre de 2021), Amusco – Osorno (desde julio de 2021), Osorno – Calahorra de Boedo y Calahorra de Boedo – Alar del Rey (adjudicados). La prolongación de Alar del Rey a Reinosa tiene el estudio informativo aprobado y está en redacción de proyectos. Hasta Santander, los trenes seguirán por la línea convencional, en la que se prevé duplicar los trechos Renedo – Guarnizo y Muriedas – Santander.",
+      "que_aporta": "Que en mayo de 2023 los cinco tramos de plataforma entre Palencia y Alar del Rey estaban contratados o en obras, y cuándo empezaron los tres primeros."
+    },
+    {
+      "source_id": "adif-av-nota-montaje-electrificacion-palencia-cantabria-2025-03",
+      "titulo": "Adif avanza en la LAV Palencia-Cantabria: licita la redacción de proyectos para el montaje de vía y su electrificación",
+      "editor": "Adif Alta Velocidad",
+      "url": "https://www.adifaltavelocidad.es/w/adif-avanza-lav-palencia-cantabria-licita-redaccion-proyectos-montaje-via-electrificacion",
+      "fecha_de_la_pagina": "2025-03-13",
+      "resumen": "Adif licita la redacción del proyecto de la electrificación del tramo Palencia – Alar del Rey y de la conexión de Nogales de Pisuerga, y la del proyecto de la base de montaje de vía. Dice que avanza en la construcción de los cinco subtramos de plataforma hasta Alar del Rey y en la redacción del proyecto de Alar del Rey a Reinosa (51,4 km), y que redacta el proyecto de la conexión de Nogales, un enlace de 3,2 km con la línea convencional para poner en servicio el primer tramo antes de que llegue la alta velocidad a Reinosa.",
+      "que_aporta": "Que en marzo de 2025 seguían las obras de plataforma y empezaba la preparación del montaje de vía y de la electrificación."
+    },
+    {
+      "source_id": "mitma-nota-palencia-aguilar-2025-07",
+      "titulo": "Transportes da un paso más en las obras de la nueva línea de alta velocidad entre Palencia y Aguilar de Campoo",
+      "editor": "Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/mar-15072025-1201",
+      "fecha_de_la_pagina": "2025-07-15",
+      "resumen": "El Ministerio dice que sigue la construcción de la plataforma de los cinco subtramos entre Palencia y Alar del Rey (78,4 km), la redacción del proyecto de Alar del Rey a Reinosa y la del proyecto de la conexión de Nogales. Anuncia cortes de la autovía A-65 en julio y agosto de 2025 por las obras del subtramo Palencia Norte – Amusco.",
+      "que_aporta": "La fuente oficial más reciente leída que da las obras de plataforma por en ejecución."
+    },
+    {
+      "source_id": "boe-b-2026-14346",
+      "titulo": "Anuncio de Adif-Alta Velocidad: información pública de la necesidad de ocupación de los caminos de enlace y la reposición de líneas eléctricas de los tramos Calahorra de Boedo – Alar del Rey y Palencia Norte – Amusco",
+      "editor": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-14346",
+      "fecha_de_la_pagina": "2026-05-06",
+      "resumen": "Adif-Alta Velocidad abre información pública sobre los bienes afectados por un proyecto básico de caminos de enlace y reposición de líneas eléctricas «en las obras de ejecución» de la línea de alta velocidad Palencia – Aguilar de Campoo, en los tramos Calahorra de Boedo – Alar del Rey y Palencia Norte – Amusco. Nombra los municipios afectados.",
+      "que_aporta": "Que en mayo de 2026 Adif seguía tramitando actuaciones de las obras de esos dos tramos. El anuncio enumera a particulares: no se guarda."
+    },
+    {
+      "source_id": null,
+      "titulo": "Artículo «Línea de alta velocidad Palencia-Reinosa» de Wikipedia en español",
+      "editor": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_de_alta_velocidad_Palencia-Reinosa",
+      "fecha_de_la_pagina": "2026-08-18",
+      "resumen": "Revisión 174907645. Da los cinco tramos en obras salvo Palencia – Palencia Norte, que recoge de la prensa como paralizado por una sentencia de mayo de 2025, y recoge también de la prensa que en junio de 2026 el Ministerio renunció a la conexión de Nogales.",
+      "que_aporta": "Nada que se registre: lo que añade a las fuentes oficiales sale de la prensa. Queda anotado para la siguiente revisión."
+    }
+  ],
+  "esbozo": {
+    "descripcion": "Rectas entre la estación de Palencia y los municipios que nombran los tramos de Adif, situados con OpenStreetMap (consulta a overpass-api.de del 19 de noviembre de 2026). No es el trazado de las obras.",
+    "puntos": [
+      {
+        "lugar": "Palencia (estación)",
+        "lon": -4.5338617,
+        "lat": 42.0157277,
+        "de_donde": "nodo palencia de la red cargada"
+      },
+      {
+        "lugar": "Amusco",
+        "lon": -4.4699037,
+        "lat": 42.1728976,
+        "de_donde": "OSM nodo 274619042, place=village"
+      },
+      {
+        "lugar": "Osorno la Mayor",
+        "lon": -4.3609815,
+        "lat": 42.4106725,
+        "de_donde": "OSM nodo 171360985, place=village"
+      },
+      {
+        "lugar": "Calahorra de Boedo",
+        "lon": -4.3852597,
+        "lat": 42.5747181,
+        "de_donde": "OSM nodo 347735612, place=village"
+      },
+      {
+        "lugar": "Alar del Rey",
+        "lon": -4.3111784,
+        "lat": 42.6595668,
+        "de_donde": "OSM nodo 251222552, place=village"
+      }
+    ]
+  }
+}

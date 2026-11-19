@@ -250,6 +250,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # Medina del Campo, Salamanca y Puebla de Sanabria. Los otros 27 de sus 502 viajes ya estaban en
     # la de Burgos a Vitoria: los de Madrid-Príncipe Pío a Vitoria e Irún y los de Salamanca a Zaragoza
     trips += 475
+    # Con la de Palencia a Santander entran 20: los regionales de Valladolid a Santander, que van de
+    # Valladolid a Palencia por la línea convencional. Los otros 45 de sus 65 viajes, los Alvia de
+    # Madrid y de Alicante a Santander, ya estaban en las líneas de alta velocidad
+    trips += 20
     # Con la de León a Gijón entran 33: los 25 regionales de León y de Valladolid a Gijón, que
     # suben el puerto de Pajares por la vía antigua, y 8 Media Distancia de León a Gijón. Los
     # otros 108 de sus 141 viajes ya estaban en la de Valladolid a León
@@ -490,7 +494,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # y las dos de Galicia, la de Sevilla a Cádiz y la de Barcelona a Figueres, y los dos ramales de
     # Toledo y de Huesca, la de Barcelona a Portbou y la de Tarragona a Barcelona por la costa
     # y la de València a Alicante por Xàtiva y la de Madrid a Valladolid por Ávila
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1
+    # y la de Palencia a Santander
+    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -531,6 +536,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 8  # la de Tarragona a Barcelona por la costa
         + 20  # la de València a Alicante por Xàtiva
         + 27  # la de Madrid a Valladolid por Ávila
+        + 21  # la de Palencia a Santander
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -558,6 +564,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 209 + 394  # la de Tarragona a Barcelona por la costa
     renfe_passes += 2028 + 4255  # la de València a Alicante por Xàtiva
     renfe_passes += 2463 + 2915  # la de Madrid a Valladolid por Ávila
+    renfe_passes += 372 + 993  # la de Palencia a Santander
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -696,6 +703,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 8  # la de Tarragona a Barcelona por la costa
         + 20  # la de València a Alicante por Xàtiva
         + 27  # la de Madrid a Valladolid por Ávila
+        + 21  # la de Palencia a Santander
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -732,6 +740,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         TARRAGONA_BARCELONA,
         # de Xàtiva a Alicante
         "valencia-xativa-alicante",
+        # la de Palencia a Santander, entera
+        "palencia-santander",
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -803,6 +813,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         TARRAGONA_BARCELONA,
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
+        "palencia-santander",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -893,6 +904,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 8  # la de Tarragona a Barcelona por la costa
         + 20  # la de València a Alicante por Xàtiva
         + 27  # la de Madrid a Valladolid por Ávila
+        + 21  # la de Palencia a Santander
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1110,8 +1122,9 @@ async def test_projects_are_served_with_their_status_milestones_and_sketch(
     # cinco, los dos de la línea de Valencia a Camp de Tarragona y los dos de la alta velocidad
     # de Madrid a Extremadura: de Madrid a Oropesa, en estudio, y de Talayuela a Plasencia, en
     # obras; la alta velocidad de Burgos a Vitoria, licitada, y la «Y» vasca, en obras
-    # y los dos de la línea de València a Alicante por Xàtiva
-    assert len(by_id) == 5 + 2 + 2 + 1 + 1 + 2
+    # y los dos de la línea de València a Alicante por Xàtiva, y la alta velocidad de Palencia a
+    # Aguilar de Campoo, en obras
+    assert len(by_id) == 5 + 2 + 2 + 1 + 1 + 2 + 1
     burgos_vitoria = by_id["proyecto-lav-burgos-vitoria"]
     assert burgos_vitoria["status"] == "licitado"
     assert burgos_vitoria["geometry"]["coordinates"][0] == [-3.6663219, 42.3711651]
@@ -1437,6 +1450,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 6  # la de Tarragona a Barcelona: de Vila-seca a Vilanova i la Geltrú
             + 18  # la de València a Alicante por Xàtiva: de Alfafar-Benetússer a Universidad de Alicante
             + 26  # la de Madrid a Valladolid por Ávila: de Madrid-Ramón y Cajal a Viana
+            + 21  # la de Palencia a Santander: de Monzón de Campos a Santander
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1471,9 +1485,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Salou-Port Aventura de ese día
     # y 57 más con la línea de València a Alicante por Xàtiva: los que no estaban en otra línea
     # y 107 más con la de Madrid a Valladolid por Ávila: los que no estaban en otra línea
+    # y 5 más con la de Palencia a Santander: los regionales de Valladolid a Santander de ese día
     assert (
         cov["service_count"]
-        == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56 + 57 + 107
+        == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56 + 57 + 107 + 5
     )
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
@@ -1537,8 +1552,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # Wikipedia y tres notas de Adif
     # Y 4 de la de Madrid a Valladolid por Ávila: dos relaciones de OSM, el fichero de sus
     # estaciones y el esquema de la línea de Wikipedia
+    # Y 7 de la de Palencia a Santander: su relación de OSM, el fichero de sus estaciones, el
+    # artículo de Wikipedia de la línea y las cuatro fuentes del proyecto de Palencia a Aguilar
     assert len(cov["sources"]) == (
-        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 4 + 3 + 9 + 4
+        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 4 + 3 + 9 + 4 + 7
     )
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
@@ -1560,7 +1577,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea de alta velocidad Venta de Baños – Burgos" in cov["notice"]
     assert "la línea convencional Barcelona – Girona – Portbou" in cov["notice"]
     assert "la línea convencional Valencia – Xàtiva – Alicante" in cov["notice"]
-    assert "y la línea convencional Madrid – Ávila – Medina del Campo – Valladolid" in cov["notice"]
+    assert "y la línea convencional Palencia – Santander" in cov["notice"]
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
@@ -1604,6 +1621,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         TARRAGONA_BARCELONA,
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
+        "palencia-santander",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1670,6 +1688,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         TARRAGONA_BARCELONA: ["renfe"],
         "valencia-xativa-alicante": ["renfe"],
         "madrid-avila-valladolid": ["renfe"],
+        "palencia-santander": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
@@ -2408,6 +2427,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         TARRAGONA_BARCELONA,
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
+        "palencia-santander",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -2453,6 +2473,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         + 8
         + 20
         + 27
+        + 21
     )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
@@ -2551,6 +2572,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         TARRAGONA_BARCELONA,
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
+        "palencia-santander",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

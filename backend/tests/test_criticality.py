@@ -336,6 +336,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "tarragona-barcelona",
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
+        "palencia-santander",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -387,6 +388,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 8  # la de Tarragona a Barcelona por la costa
         + 20  # la de València a Alicante por Xàtiva
         + 27  # la de Madrid a Valladolid por Ávila
+        + 21  # la de Palencia a Santander
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -440,8 +442,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # y en el último, de la bifurcación Medina a Valladolid, lo tienen todos. De la línea nueva,
     # los cuatro de Chamartín a Pinar de las Rozas quedan sin él para todos, y los veintisiete,
     # sin él para una parte
+    # La de Palencia a Santander acaba en Santander, adonde no llega otra línea cargada: sus
+    # veintiún tramos quedan sin otro camino para todos sus trenes
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23 - 5 + 4,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23 - 5 + 4 + 21,
         121
         + 29
         + 4
@@ -462,7 +466,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         - 9
         + 20
         - 1
-        + 27,
+        + 27
+        + 21,
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -497,6 +502,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # la de Olmedo a Ourense, entera: 30 trenes hasta Medina del Campo AV y 22 en los demás
     ourense = {k: n for k, n in none.items() if k.startswith(f"{LAV_OURENSE}:")}
     assert len(ourense) == 13 and sorted(set(ourense.values())) == [22, 30]
+    # la de Palencia a Santander, entera: a Santander solo llega ella; los 13 trenes de ese día la
+    # recorren de punta a punta
+    santander = {k: n for k, n in none.items() if k.startswith("palencia-santander:")}
+    assert len(santander) == 21 and set(santander.values()) == {13}
     extremadura_lines = (
         f"{MADRID_PLASENCIA}:",
         f"{LAV_BADAJOZ}:",
@@ -523,6 +532,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{MEDITERRANEO}:",
         f"{LAV_VALLADOLID}:",
         f"{LINK}:",
+        "palencia-santander:",
         *extremadura_lines,
     )
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {

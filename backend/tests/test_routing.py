@@ -134,6 +134,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 8  # la de Tarragona a Barcelona por la costa
             + 20  # la línea de València a Alicante por Xàtiva
             + 27  # la línea de Madrid a Valladolid por Ávila
+            + 21  # la línea de Palencia a Santander
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una

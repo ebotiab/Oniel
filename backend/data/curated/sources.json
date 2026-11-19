@@ -686,7 +686,7 @@
       "license_url": "https://www.adif.es/aviso-legal",
       "retrieved_on": "2026-11-19",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea de Tarragona a Barcelona por la costa: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña; los avisos de obras de ese día solo traían de Cataluña obras de las líneas R3 y R7 de Rodalies, que no están cargadas (raw/interrupciones/consultas_2026-11-18_tarragona_barcelona.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó otra vez al cargar la línea de València a Alicante por Xàtiva: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-18_valencia_alicante.json). El 19 de noviembre de 2026, con la hora de página 8:00, se leyó al cargar la línea convencional de Madrid a Valladolid por Ávila y Medina del Campo: la circulación entre Robledo de Chavela y Zarzalejo se había restablecido por una vía tras el descarrilamiento de la locomotora de un tren de mercancías, y el panel de la estación de Ávila daba retrasos en ese trecho y un cambio de tren en El Escorial para los regionales a Chamartín; no anunciaba ninguna interrupción vigente en la línea (raw/interrupciones/consultas_2026-11-19_madrid_avila_valladolid.json).",
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea de Tarragona a Barcelona por la costa: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña; los avisos de obras de ese día solo traían de Cataluña obras de las líneas R3 y R7 de Rodalies, que no están cargadas (raw/interrupciones/consultas_2026-11-18_tarragona_barcelona.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó otra vez al cargar la línea de València a Alicante por Xàtiva: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-18_valencia_alicante.json). El 19 de noviembre de 2026, con la hora de página 8:00, se leyó al cargar la línea convencional de Madrid a Valladolid por Ávila y Medina del Campo: la circulación entre Robledo de Chavela y Zarzalejo se había restablecido por una vía tras el descarrilamiento de la locomotora de un tren de mercancías, y el panel de la estación de Ávila daba retrasos en ese trecho y un cambio de tren en El Escorial para los regionales a Chamartín; no anunciaba ninguna interrupción vigente en la línea (raw/interrupciones/consultas_2026-11-19_madrid_avila_valladolid.json). El 19 de noviembre de 2026, con la hora de página 17:09, se leyó al cargar la línea convencional de Palencia a Santander: no anunciaba ninguna interrupción en ella ni traía avisos de Cantabria; tampoco la página de avisos (raw/interrupciones/consultas_2026-11-19_palencia_santander.json).",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
     },
     {
@@ -1559,7 +1559,7 @@
       "license_url": "https://www.openstreetmap.org/copyright",
       "retrieved_on": "2026-11-12",
       "coverage": "Coordenadas de los municipios y lugares por los que pasan los esbozos de los proyectos.",
-      "notes": "Cada esbozo une con rectas el punto de la red cargada del que sale el proyecto y los lugares que nombra su fuente; no es el trazado del proyecto. Los lugares del esbozo de la alta velocidad Burgos – Vitoria se consultaron el 15 de noviembre de 2026 y están en raw/proyectos/consultas_2026-11-15_lav_burgos_vitoria.json.",
+      "notes": "Cada esbozo une con rectas el punto de la red cargada del que sale el proyecto y los lugares que nombra su fuente; no es el trazado del proyecto. Los lugares del esbozo de la alta velocidad Burgos – Vitoria se consultaron el 15 de noviembre de 2026 y están en raw/proyectos/consultas_2026-11-15_lav_burgos_vitoria.json. Los del esbozo de la alta velocidad Palencia – Aguilar de Campoo se pidieron el 19 de noviembre de 2026 a Overpass (nodos place de OpenStreetMap) y están en raw/proyectos/consultas_2026-11-19_palencia_aguilar.json.",
       "file": "raw/proyectos/consultas_2026-11-12.json"
     },
     {
@@ -2089,6 +2089,88 @@
       "retrieved_on": "2026-11-19",
       "coverage": "Puntos kilométricos de la línea 100, desde Madrid-Chamartín: Ramón y Cajal (2,50), Pitis (6,20), bifurcación Príncipe Pío (19,2), Pinar (20,4), Las Matas (24,00), Torrelodones (30,2), Galapagar-La Navata (34,00), Villalba (37,9), San Yago (40,00), Las Zorreras (41,70), El Escorial (50,30), Zarzalejo (56,60), Robledo de Chavela (64,80), Santa María de la Alameda-Peguerinos (71,80), El Pimpollar (73,00), Las Navas del Marqués (83,70), Navalperal (88,50), Herradón-La Cañada (97,80), Guimorcondo (114,30), Ávila (120,60), Arévalo (171,00), Medina del Campo (206,30), Pozaldez (215,00), Matapozuelos (222,40), Valdestillas (230,30), Viana de Cega (234,80) y Valladolid-Campo Grande (248,50); salidas hacia Segovia en Villalba, hacia Salamanca en Ávila y en Medina del Campo y hacia Zamora y Segovia en Medina del Campo.",
       "notes": "Fuente de verificación, no de geometría; revisión del 19 de mayo de 2026 (oldid 173533922), consultada por la API de Wikipedia el 19 de noviembre de 2026. El esquema sitúa la bifurcación Príncipe Pío antes de Pinar viniendo de Chamartín; en OSM las dos vías se unen 200 m al norte de la estación, y por eso no es un nodo aparte. Mirasierra-Paco de Lucía figura sin punto kilométrico."
+    },
+    {
+      "id": "osm-relation-4220975",
+      "name": "Trazado de la línea Palencia – Santander (relación OSM 4220975, línea 160 de Adif)",
+      "url": "https://www.openstreetmap.org/relation/4220975",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Trazado de la línea entera, de la estación de Palencia a la de Santander; velocidad máxima por tramo.",
+      "notes": "Descargada por la API de OpenStreetMap (api.openstreetmap.org, relation/4220975/full.json) el 19 de noviembre de 2026. Es una relación de servicio (route=train, «Línea Palencia-Santander», ref=160) y no de infraestructura, pero recorre la línea entera de una pieza, con sus 287 vías en orden, de Palencia a Santander; no se encontró una relación de infraestructura que pase por Frómista. Todas sus vías llevan gauge=1668, electrified=contact_line y voltage=3000; maxspeed en todas menos una, de 80 a 155 km/h; passenger_lines solo en dos.",
+      "file": "raw/osm/relation_4220975_linea_160_palencia_santander_2026-11-19.json"
+    },
+    {
+      "id": "osm-instalaciones-palencia-santander",
+      "name": "Estaciones de la línea Palencia – Santander en OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Coordenadas de las estaciones de la línea, de Monzón de Campos a Santander.",
+      "notes": "Nodos, vías y relaciones con railway=station, halt, junction, service_station o yard del recuadro 42,0–43,48 N × 4,6–3,78 O, pedidos el 19 de noviembre de 2026 al servidor de Overpass overpass-api.de con out center, porque algunas estaciones están dibujadas como áreas. El recuadro trae también las estaciones de vía estrecha de Cantabria, que no se usan. Los nodos no llevan los códigos de Adif: las estaciones se identifican por el nombre con las paradas del GTFS de Renfe. Maliaño es un área y se usa su centro. La relación de la línea acaba a la entrada de la estación de Santander, unos 400 m antes de los andenes; la estación se sitúa en el punto de parada de OSM (nodo 13330330553), que está en la vía que sigue hasta las toperas (vía 1453569321, guardada en raw/osm/via_entrada_santander_2026-11-19.json), y el trazado no incluye esos 400 m.",
+      "file": "raw/osm/instalaciones_palencia_santander_2026-11-19.json"
+    },
+    {
+      "id": "wikipedia-linea-palencia-santander",
+      "name": "Artículo «Línea Palencia-Santander» de Wikipedia en español (número de línea, puntos kilométricos, vía, electrificación, bloqueo, velocidades)",
+      "publisher": "Colaboradores de Wikipedia",
+      "url": "https://es.wikipedia.org/wiki/L%C3%ADnea_Palencia-Santander",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Línea 160 de Adif, de 217 km: vía única de ancho ibérico, electrificada a 3 kV, bloqueo automático en vía única con control de tráfico centralizado, ASFA y tren-tierra; 155 km/h de Palencia a Reinosa y de Bárcena a Santander y 90 km/h entre Reinosa y Bárcena. Puntos kilométricos de su esquema: Palencia (297,30), Aguilar de Campoo (394,80), Reinosa (426,40), Torrelavega (485,10) y Santander (514,50). Historia: el trecho de Alar del Rey a Santander se terminó en 1866.",
+      "notes": "Fuente de verificación, no de geometría; revisión del 9 de noviembre de 2026 (oldid 176218493), consultada por la API de Wikipedia el 19 de noviembre de 2026. Los datos de la vía, el bloqueo y las velocidades citan la Declaración sobre la Red de 2013; el bloqueo y la protección del tren se contrastaron con el mapa 4 de la de 2026. La numeración de los puntos kilométricos es la de la línea original desde Madrid: la línea lleva el de Palencia como origen (pk_origin_km). Las demás estaciones no traen punto kilométrico en el artículo y se sitúan con OpenStreetMap."
+    },
+    {
+      "id": "adif-av-nota-palencia-alar-del-rey-2023-05",
+      "name": "Nota de prensa «Adif AV contrata el último tramo de la LAV entre Palencia y Alar del Rey por 109,3 M€»",
+      "url": "https://www.adifaltavelocidad.es/w/adif-av-contrata-el-%C3%BAltimo-tramo-de-la-lav-entre-palencia-y-alar-del-rey-por-109-3-m%E2%82%AC",
+      "publisher": "Adif Alta Velocidad",
+      "license": "Consulta pública; © Adif Alta Velocidad",
+      "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Los cinco tramos de plataforma de la alta velocidad entre Palencia y Alar del Rey (78,4 km), contratados o en obras el 31 de mayo de 2023, con la fecha de comienzo de los tres primeros; la prolongación hasta Reinosa, en redacción de proyectos.",
+      "notes": "Publicada el 31 de mayo de 2023; se leyó en un navegador el 19 de noviembre de 2026, porque la web rechaza las descargas automáticas. Resumida en raw/proyectos/consultas_2026-11-19_palencia_aguilar.json.",
+      "file": "raw/proyectos/consultas_2026-11-19_palencia_aguilar.json"
+    },
+    {
+      "id": "adif-av-nota-montaje-electrificacion-palencia-cantabria-2025-03",
+      "name": "Nota de prensa «Adif avanza en la LAV Palencia-Cantabria: licita la redacción de proyectos para el montaje de vía y su electrificación»",
+      "url": "https://www.adifaltavelocidad.es/w/adif-avanza-lav-palencia-cantabria-licita-redaccion-proyectos-montaje-via-electrificacion",
+      "publisher": "Adif Alta Velocidad",
+      "license": "Consulta pública; © Adif Alta Velocidad",
+      "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Licitación, el 13 de marzo de 2025, de la redacción de los proyectos de la electrificación y de la base de montaje de vía del tramo Palencia – Alar del Rey y de la conexión de Nogales; construcción en marcha de los cinco subtramos de plataforma.",
+      "notes": "Publicada el 13 de marzo de 2025; se leyó en un navegador el 19 de noviembre de 2026. Resumida en raw/proyectos/consultas_2026-11-19_palencia_aguilar.json.",
+      "file": "raw/proyectos/consultas_2026-11-19_palencia_aguilar.json"
+    },
+    {
+      "id": "mitma-nota-palencia-aguilar-2025-07",
+      "name": "Nota de prensa «Transportes da un paso más en las obras de la nueva línea de alta velocidad entre Palencia y Aguilar de Campoo»",
+      "publisher": "Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/mar-15072025-1201",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del Ministerio de Transportes)",
+      "license_url": "https://www.transportes.gob.es/aviso-legal",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Construcción en ejecución, el 15 de julio de 2025, de la plataforma de los cinco subtramos entre Palencia y Alar del Rey; redacción de los proyectos del tramo Alar del Rey – Reinosa y de la conexión de Nogales.",
+      "notes": "Publicada el 15 de julio de 2025; se leyó en un navegador el 19 de noviembre de 2026, porque la web rechaza las descargas automáticas. Resumida en raw/proyectos/consultas_2026-11-19_palencia_aguilar.json.",
+      "file": "raw/proyectos/consultas_2026-11-19_palencia_aguilar.json"
+    },
+    {
+      "id": "boe-b-2026-14346",
+      "name": "BOE-B-2026-14346: información pública de la necesidad de ocupación para caminos de enlace y reposición de líneas eléctricas de la alta velocidad Palencia – Aguilar de Campoo",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-14346",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-19",
+      "coverage": "Anuncio de Adif-Alta Velocidad del 6 de mayo de 2026 sobre un proyecto básico de caminos de enlace y reposición de líneas eléctricas en las obras de los tramos Calahorra de Boedo – Alar del Rey y Palencia Norte – Amusco.",
+      "notes": "Publicado en el BOE el 2026-05-06. El anuncio enumera los bienes afectados y a sus titulares, particulares: por eso no se guarda el XML y lo que sostiene el hito queda resumido en raw/proyectos/consultas_2026-11-19_palencia_aguilar.json."
     }
   ]
 }
