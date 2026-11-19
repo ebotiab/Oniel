@@ -456,6 +456,48 @@ async def test_each_dataset_is_counted_on_its_own_reference_day(
 
 @requires_db
 @in_db
+async def test_the_first_day_does_not_count_if_it_had_passed_when_the_file_was_downloaded(
+    conn: asyncpg.Connection, two_datasets: dict[str, Any]
+) -> None:
+    """Renfe publica cada fichero con un primer día ya pasado que trae el servicio a medias (el
+    del 17 de noviembre de 2026 empieza el 16 casi sin Alvia ni Intercity y con más servicios que
+    ningún otro laborable). Ese día no puede ser el de referencia; si el fichero empieza el mismo
+    día en que se descarga, sí."""
+    from oniel.repo import datasets_repo
+
+    monday = dt.date(2026, 11, 9)
+    transaction = conn.transaction()
+    await transaction.start()
+    try:
+        # el fichero empieza un lunes, y ese lunes tiene todos los servicios del fichero
+        await conn.execute(
+            "DELETE FROM service_dates WHERE dataset_id = $1 AND service_date < $2",
+            FEED_DATASET_ID,
+            monday,
+        )
+        await conn.execute(
+            """
+            INSERT INTO service_dates (dataset_id, service_id, service_date)
+            SELECT dataset_id, id, $2 FROM services WHERE dataset_id = $1
+            ON CONFLICT DO NOTHING
+            """,
+            FEED_DATASET_ID,
+            monday,
+        )
+        set_retrieved = "UPDATE datasets SET retrieved_on = $2 WHERE id = $1"
+        # se descargó el martes: el lunes ya había pasado y no cuenta
+        await conn.execute(set_retrieved, FEED_DATASET_ID, monday + dt.timedelta(days=1))
+        start, _, ref = await datasets_repo.feed_bounds(conn, FEED_DATASET_ID)
+        assert start == monday and ref == REFERENCE
+        # se descargó el mismo lunes: es el día más cargado y es el de referencia
+        await conn.execute(set_retrieved, FEED_DATASET_ID, monday)
+        assert (await datasets_repo.feed_bounds(conn, FEED_DATASET_ID))[2] == monday
+    finally:
+        await transaction.rollback()
+
+
+@requires_db
+@in_db
 async def test_counts_are_split_by_operator_and_the_reference_day_is_common_to_all(
     conn: asyncpg.Connection, two_datasets: dict[str, Any]
 ) -> None:

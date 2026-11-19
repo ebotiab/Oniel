@@ -76,7 +76,8 @@ async def feed_bounds(
     que cubren todos a la vez, del comienzo más tardío al final más temprano, para que el día de
     referencia tenga los trenes de todos los operadores. Si no coinciden en ningún día, se devuelve
     el periodo que cubren entre todos. El día de referencia es el laborable con más servicios de
-    los primeros treinta días.
+    los primeros treinta días, sin contar el primero si es anterior a la descarga más reciente:
+    ese día ya había pasado al publicarse el fichero y puede venir a medias.
     """
     return await cache.remember(("feed_bounds", dataset_id), lambda: _feed_bounds(conn, dataset_id))
 
@@ -97,6 +98,15 @@ async def _feed_bounds(
     if r is None or r["a"] is None:
         return None, None, None
     start, end = (r["a"], r["b"]) if r["a"] <= r["b"] else (r["first"], r["last"])
+    # El primer día de vigencia, si ya había pasado cuando se descargó el fichero, no cuenta: Renfe
+    # publica el suyo con un día de vigencia anterior que trae el servicio a medias (el del 17 de
+    # noviembre de 2026 empieza el 16 casi sin Alvia ni Intercity, y con más servicios que ningún
+    # otro laborable). Si el fichero empieza el día de la descarga o después, ese día sí cuenta.
+    own = "id = $1" if dataset_id else f"id IN {CURRENT_IDS_SQL}"
+    retrieved = await conn.fetchval(f"SELECT max(retrieved_on) FROM datasets WHERE {own}", *args)
+    first = (
+        start + dt.timedelta(days=1) if retrieved is not None and start < retrieved < end else start
+    )
     n = len(args) + 1
     ref = await conn.fetchrow(
         f"""
@@ -106,10 +116,10 @@ async def _feed_bounds(
         GROUP BY service_date ORDER BY count(*) DESC, service_date LIMIT 1
         """,
         *args,
-        start,
+        first,
         end,
     )
-    return start, end, ref["service_date"] if ref else start
+    return start, end, ref["service_date"] if ref else first
 
 
 async def reference_dates(conn: asyncpg.Connection) -> dict[str, dt.date]:
