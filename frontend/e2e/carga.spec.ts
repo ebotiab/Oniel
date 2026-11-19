@@ -57,8 +57,10 @@ test.describe('Carga de la red por partes', () => {
     // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más
     // grandes juntas (285 KB). Desde la línea de Sevilla a Cádiz (424 KB, con veintinueve entradas) pesa también más
     // que las tres más grandes (414 KB): se compara con las cuatro, la convencional de Córdoba, la alta velocidad
-    // de Barcelona, la de València a Camp de Tarragona y la alta velocidad de Sevilla.
-    const otras = await Promise.all(['lav-madrid-barcelona', 'valencia-castello-tarragona', 'lav-madrid-sevilla'].map(async (id) => (await request.get(`/data/lines/${id}.json`)).body()))
+    // de Barcelona, la de València a Camp de Tarragona y la alta velocidad de Sevilla. Desde la convencional de Madrid
+    // a Valladolid por Ávila (554 KB, con treinta y seis entradas) pesa más que esas cuatro (521 KB): se compara
+    // también con ella, que es la segunda más grande (138 KB), y las cinco suman 659 KB.
+    const otras = await Promise.all(['madrid-avila-valladolid', 'lav-madrid-barcelona', 'valencia-castello-tarragona', 'lav-madrid-sevilla'].map(async (id) => (await request.get(`/data/lines/${id}.json`)).body()))
     expect(bytes(red)).toBeLessThan(linea.byteLength + otras.reduce((suma, otra) => suma + otra.byteLength, 0))
   })
 

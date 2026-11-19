@@ -162,9 +162,7 @@ def test_kilometre_points_restart_where_the_principe_pio_branch_joins(
     """Los puntos kilométricos del esquema de la línea cuentan desde Chamartín, pero entre Pitis y
     Pinar de las Rozas el trazado mide 0,75 km más que ellos: la cuenta se retoma en Pinar, donde
     se une el ramal de Príncipe Pío. Desde allí cada estación queda a menos de 0,9 km del suyo."""
-    assert [(r.node, r.pk_km) for r in line.spec.line.pk_restarts] == [
-        ("pinar-de-las-rozas", 20.4)
-    ]
+    assert [(r.node, r.pk_km) for r in line.spec.line.pk_restarts] == [("pinar-de-las-rozas", 20.4)]
     assert line.node("avila").spec.reference_pk_km == 120.6
     assert line.node("medina-del-campo").spec.reference_pk_km == 206.3
     pinar = line.node("pinar-de-las-rozas").km
@@ -182,7 +180,7 @@ def test_double_track_electrified_and_speeds_from_the_tracks(line: BuiltNetwork)
     assert [s.id.removeprefix(f"{LINE}:") for s in line.segments] == ALL_SEGMENTS
     assert all(s.tracks == 2 for s in line.segments)
     assert line.spec.line.gauge_mm == 1668 and line.spec.line.electrification == "3 kV CC"
-    speeds = [s.max_speed_kmh for s in line.segments]
+    speeds = [s.max_speed_kmh or 0 for s in line.segments]
     assert all(speeds) and max(speeds) == 160
     # la sierra, entre El Escorial y Ávila, es lo más lento
     assert max(speeds[NODES.index("santa-maria-de-la-alameda-peguerinos") : 18]) <= 105
@@ -237,13 +235,9 @@ def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNe
     """Los de Príncipe Pío entran en Pinar de las Rozas; los de Segovia dejan la línea en
     Villalba; los de Salamanca por Medina solo recorren de Medina a Valladolid."""
     trips = select_trips_for_spec(feed, line.spec)
-    pp_valladolid = [
-        t for t in trips if _stops(t)[0] == PRINCIPE_PIO and VALLADOLID in _stops(t)
-    ]
+    pp_valladolid = [t for t in trips if _stops(t)[0] == PRINCIPE_PIO and VALLADOLID in _stops(t)]
     segovia = [t for t in trips if SEGOVIA in _stops(t) and CHAMARTIN in _stops(t)]
-    sal_medina = [
-        t for t in trips if EL_CARPIO in _stops(t) and VALLADOLID in _stops(t)
-    ]
+    sal_medina = [t for t in trips if EL_CARPIO in _stops(t) and VALLADOLID in _stops(t)]
     assert pp_valladolid and segovia and sal_medina
     for trip in pp_valladolid[:10]:
         assert _short(_passes(trip, feed, line)) == ALL_SEGMENTS[4:]
