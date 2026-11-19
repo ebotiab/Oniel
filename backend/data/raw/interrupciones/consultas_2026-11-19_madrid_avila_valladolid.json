@@ -1,0 +1,33 @@
+{
+ "descripcion": "Registro de las consultas hechas el 19 de noviembre de 2026 al cargar la línea convencional de Madrid a Valladolid por Ávila y Medina del Campo: la comprobación de si ese día había alguna interrupción anunciada en ella. Queda qué decía cada página ese día, resumido con palabras propias (no se reproduce el texto original). Las horas son las de la península.",
+ "consultado_el": "2026-11-19",
+ "consultas": [
+  {
+   "source_id": "adif-estado-de-la-red",
+   "titulo": "Estado de la red. Información del tráfico ferroviario",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/estado-de-la-red",
+   "fecha_de_la_pagina": "2026-11-19 8:00 (hora que da la página; se leyó hacia las 11:30)",
+   "resumen": "Tres avisos. Uno de Castilla y León y Madrid: la circulación entre Robledo de Chavela y Zarzalejo, en la línea convencional de Madrid a Ávila, se restablece por una de las dos vías; estaba interrumpida por el descarrilamiento de la locomotora de un tren de mercancías. No da la fecha en que empezó ni cuándo volverán las dos vías. Los otros dos son de una línea de ancho métrico de Galicia y de la alta velocidad Madrid-Andalucía, interrumpida desde el 28 de octubre.",
+   "que_aporta": "Que el 19 de noviembre de 2026 los trenes circulan entre Robledo de Chavela y Zarzalejo por una sola vía. No anuncia ninguna interrupción vigente en la línea."
+  },
+  {
+   "source_id": null,
+   "titulo": "Avisos. Información de servicio, actividad e incidencias",
+   "editor": "Adif",
+   "url": "https://www.adif.es/viajeros/avisos",
+   "fecha_de_la_pagina": "2026-11-19, leída hacia las 11:30, justo después del estado de la red",
+   "resumen": "Quince avisos de obras y restablecimientos. El único de la sierra de Madrid es el de la línea C9 de Cercanías, de Cercedilla a Cotos, con servicio por carretera desde el 6 de mayo de 2024. Ninguno nombra Villalba, El Escorial, Ávila, Arévalo, Medina del Campo ni Valladolid.",
+   "que_aporta": "Que entre los avisos de obras de Adif de ese día no hay ninguno en la línea. La línea de Cercedilla a Cotos no está cargada ni sale de esta."
+  },
+  {
+   "source_id": null,
+   "titulo": "Estación de Ávila (10400). Salidas",
+   "editor": "Adif",
+   "url": "https://www.adif.es/w/10400-ávila",
+   "fecha_de_la_pagina": "2026-11-19 11:33 (hora que da la página)",
+   "resumen": "Salidas de ese día hacia Madrid-Príncipe Pío, Madrid-Chamartín, Salamanca, Valladolid, León, Vitoria y San Sebastián. Casi todas llevan la observación de que hay retrasos entre Zarzalejo y Robledo de Chavela por una incidencia en un tren, y los regionales a Madrid-Chamartín, además, la de que hay que cambiar de tren en El Escorial.",
+   "que_aporta": "Que los trenes recorren la línea, con retrasos y con un cambio de tren en El Escorial para los regionales de Ávila a Chamartín. Es una alteración del servicio de ese día, no una interrupción: no se registra en anotaciones.json. Conviene volver a mirarlo en la próxima revisión de las interrupciones."
+  }
+ ]
+}

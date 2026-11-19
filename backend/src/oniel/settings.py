@@ -63,6 +63,7 @@ class Settings(BaseSettings):
         "barcelona-girona-portbou",
         "tarragona-barcelona",
         "valencia-xativa-alicante",
+        "madrid-avila-valladolid",
     ]
 
 

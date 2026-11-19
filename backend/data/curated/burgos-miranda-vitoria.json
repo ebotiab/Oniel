@@ -352,86 +352,324 @@
     "10200": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10203": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10204": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10205": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10206": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10207": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10208": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10209": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10300": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10302": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10400": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10409": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10500": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10501": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10502": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10503": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "10504": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
       ]
     },
     "11000": {
