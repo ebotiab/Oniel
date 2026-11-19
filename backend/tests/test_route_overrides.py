@@ -38,6 +38,7 @@ from conftest import (
     LBMG_SPEC,
     LEON_GIJON_SPEC,
     LINK_MONFORTE_SPEC,
+    MADRID_AVILA_VALLADOLID_SPEC,
     MADRID_PLASENCIA_SPEC,
     MEDITERRANEO_SPEC,
     MONFRAGUE_CACERES_SPEC,
@@ -717,6 +718,14 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         TARRAGONA_BARCELONA_SPEC.name: {"lleida-por-valls": 8},
         # ni la de València a Alicante: las paradas del lado de La Encina llevan dos salidas
         VALENCIA_ALICANTE_SPEC.name: {},
+        # los trenes de Salamanca que llegan por Medina del Campo, no por Ávila, y los regionales de
+        # Ávila que siguen de Príncipe Pío a Atocha y Chamartín por el túnel de Cercanías
+        MADRID_AVILA_VALLADOLID_SPEC.name: {
+            "salamanca-por-medina-30100": 23,
+            "salamanca-por-medina-32002": 16,
+            "salamanca-por-medina-32001": 5,
+            "principe-pio-atocha": 12,
+        },
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

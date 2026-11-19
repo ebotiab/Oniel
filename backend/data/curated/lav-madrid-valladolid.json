@@ -155,29 +155,7 @@
       "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
     }
   ],
-  "connections": [
-    {
-      "id": "conv-valladolid-medina-del-campo",
-      "node_id": "valladolid-campo-grande",
-      "name": "Línea convencional Madrid–Irún",
-      "towards": "Medina del Campo y Ávila",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.7269507,
-          41.6421265
-        ],
-        [
-          -4.772948,
-          41.4887437
-        ],
-        [
-          -4.9096781,
-          41.3172598
-        ]
-      ]
-    }
-  ],
+  "connections": [],
   "stop_mappings": {
     "17000": {
       "node": "madrid-chamartin"

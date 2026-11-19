@@ -118,12 +118,11 @@ def test_nodes_are_ready_for_the_lines_that_follow(line: BuiltNetwork) -> None:
     }
     # la bifurcación de la que sale la línea de Galicia y la estación de Valladolid son nodos
     # principales. De la bifurcación sale ya la línea de Olmedo a Ourense y de Valladolid, la de
-    # Palencia y León: no queda conexión a trazos hacia ninguna de las dos
+    # Palencia y León, y la línea convencional de Medina del Campo y Ávila: no queda conexión a
+    # trazos hacia ninguna
     assert line.node("bif-medina").spec.kind == "bifurcacion"
     assert line.node("bif-medina").spec.rank == "principal"
-    assert {c.id: c.node_id for c in line.spec.connections} == {
-        "conv-valladolid-medina-del-campo": "valladolid-campo-grande",
-    }
+    assert line.spec.connections == []
     assert all(n.offset_m < 250 for n in line.nodes)
 
 

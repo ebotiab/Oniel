@@ -335,6 +335,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "barcelona-girona-portbou",
         "tarragona-barcelona",
         "valencia-xativa-alicante",
+        "madrid-avila-valladolid",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -385,6 +386,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 26  # la de Barcelona a Portbou
         + 8  # la de Tarragona a Barcelona por la costa
         + 20  # la de València a Alicante por Xàtiva
+        + 27  # la de Madrid a Valladolid por Ávila
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -433,9 +435,34 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # total, porque sus trenes de largo recorrido tienen la vuelta por València y Xàtiva o por
     # Madrid. De los que se quedan sin él solo en parte salen nueve, en los que ya lo tienen
     # todos, y entran los veinte de la línea nueva
+    # La convencional de Madrid a Valladolid por Ávila da otro camino a casi todos los trenes de la
+    # alta velocidad de Valladolid: sus cinco tramos dejan de estar sin otro camino para ninguno,
+    # y en el último, de la bifurcación Medina a Valladolid, lo tienen todos. De la línea nueva,
+    # los cuatro de Chamartín a Pinar de las Rozas quedan sin él para todos, y los veintisiete,
+    # sin él para una parte
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23,
-        121 + 29 + 4 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 14 + 12 - 5 + 4 - 9 + 20,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23 - 5 + 4,
+        121
+        + 29
+        + 4
+        + 8
+        + 13
+        + 4
+        + 11
+        + 7
+        + 3
+        + 15
+        + 16
+        + 2
+        + 3
+        + 14
+        + 12
+        - 5
+        + 4
+        - 9
+        + 20
+        - 1
+        + 27,
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -514,6 +541,17 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LBMG}:linares-baeza:jodar-ubeda": 2,
         f"{LBMG}:jodar-ubeda:cabra-del-santo-cristo": 2,
         f"{LBMG}:cabra-del-santo-cristo:moreda": 2,
+        # de Chamartín a Pinar de las Rozas solo pasan los regionales de Madrid a Villalba y a
+        # Ávila: la vuelta por la alta velocidad de Valladolid mide más del doble
+        **{
+            f"madrid-avila-valladolid:{a}:{b}": 12
+            for a, b in [
+                ("madrid-chamartin", "madrid-ramon-y-cajal"),
+                ("madrid-ramon-y-cajal", "mirasierra-paco-de-lucia"),
+                ("mirasierra-paco-de-lucia", "pitis"),
+                ("pitis", "pinar-de-las-rozas"),
+            ]
+        },
     }
     # desde que Albacete está unida a Madrid por dos caminos, el convencional por Alcázar de San
     # Juan y el de alta velocidad por Cuenca, cada uno es el otro camino del otro: los 13 trenes
@@ -658,15 +696,17 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     assert (shared.trains, shared.without_alternative) == (41 + 34, 34)
     # De la alta velocidad de Barcelona solo quedan los tres tramos de Camp de Tarragona a
     # Barcelona-Sants, fuera del anillo, con sus 108 trenes
-    # la de Madrid a Valladolid entera: es la única cargada al norte de Madrid. 122 trenes hasta
-    # Segovia, 111 hasta la bifurcación Medina, donde salen los de Galicia, y 81 hasta Valladolid
+    # la de Madrid a Valladolid entera: 122 trenes hasta Segovia, 111 hasta la bifurcación Medina,
+    # donde salen los de Galicia, y 81 hasta Valladolid. Desde que está la convencional por Ávila
+    # casi todos tienen otro camino por ella; no lo tienen los 11 de Segovia-Guiomar ni los 8 de
+    # Medina del Campo AV, para los que la vuelta mide más del doble
     valladolid = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALLADOLID}:")]
     assert [(s.trains, s.without_alternative) for s in valladolid] == [
-        (122, 122),
-        (122, 122),
-        (111, 111),
-        (111, 111),
-        (81, 81),
+        (122, 19),
+        (122, 19),
+        (111, 8),
+        (111, 8),
+        (81, 0),
     ]
     # y la de Valladolid a León, que la continúa: 53 trenes hasta la bifurcación Venta de Baños,
     # donde salen los 20 de Burgos; 35 de la bifurcación Cerrato a Palencia, con los 2 que llegan

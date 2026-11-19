@@ -1,0 +1,1231 @@
+{
+  "line": {
+    "id": "madrid-avila-valladolid",
+    "name": "Línea convencional Madrid – Ávila – Medina del Campo – Valladolid",
+    "short_name": "100",
+    "sort_order": 39,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 2,
+    "pk_restarts": [
+      {
+        "node": "pinar-de-las-rozas",
+        "pk_km": 20.4
+      }
+    ],
+    "status": "disponible",
+    "description": "El camino de siempre de Madrid a Castilla y León: sale de Madrid-Chamartín, cruza la sierra de Guadarrama por Villalba, El Escorial y Las Navas del Marqués y sigue por Ávila y Medina del Campo hasta Valladolid.\n\nEs el primer tramo de la línea 100 de Adif, la de Madrid a Hendaya, abierta en 1864 por la Compañía de los Caminos de Hierro del Norte. Antes de la alta velocidad por Segovia era la puerta de todo el norte; hoy la usan sobre todo los trenes regionales y de media distancia, y algunos que siguen a León, Burgos y el País Vasco.\n\nLa mayoría de esos trenes no salen de Chamartín, sino de Madrid-Príncipe Pío, y llegan a la línea por Pozuelo y Las Rozas: se unen a ella en Pinar de las Rozas. Ese ramal, que para Adif es otra línea, no está cargado. En Villalba sale la línea de Cercedilla y Segovia; en Ávila y en Medina del Campo, las de Salamanca, y en Medina, también la de Zamora.\n\nEn los horarios de Renfe la recorren los regionales y Media Distancia de Madrid a Ávila, Salamanca, Valladolid, León, Burgos, Vitoria e Irún, los regionales de Madrid a Segovia hasta Villalba y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria. Los trenes de Cercanías de Madrid también usan parte de sus vías, pero no están en los horarios cargados.",
+    "geometry_source": {
+      "source_id": "osm-relation-13489217",
+      "parts": [
+        {
+          "source_id": "osm-relation-18369027",
+          "file": "raw/osm/relation_18369027_linea_100_chamartin_pinar_2026-11-19.json",
+          "relation_id": 18369027,
+          "from": [
+            -3.6815079,
+            40.4740481
+          ],
+          "to": [
+            -3.8830879,
+            40.5249495
+          ]
+        },
+        {
+          "source_id": "osm-relation-13489217",
+          "file": "raw/osm/relation_13489217_linea_100_madrid_valladolid_burgos_2026-11-19.json",
+          "relation_id": 13489217,
+          "from": [
+            -3.8830879,
+            40.5249495
+          ],
+          "to": [
+            -4.7268608,
+            41.6418742
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-100-esquema"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "madrid-chamartin",
+      "name": "Madrid-Chamartín",
+      "kind": "estacion",
+      "adif_code": "17000",
+      "shared": true,
+      "position": {
+        "lon": -3.6822622,
+        "lat": 40.4720571
+      }
+    },
+    {
+      "id": "madrid-ramon-y-cajal",
+      "name": "Madrid-Ramón y Cajal",
+      "kind": "estacion",
+      "adif_code": "97201",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.694516,
+        "lat": 40.488139
+      },
+      "reference_pk_km": 2.5
+    },
+    {
+      "id": "mirasierra-paco-de-lucia",
+      "name": "Mirasierra-Paco de Lucía",
+      "kind": "estacion",
+      "adif_code": "97200",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.709304,
+        "lat": 40.499878
+      }
+    },
+    {
+      "id": "pitis",
+      "name": "Pitis",
+      "kind": "estacion",
+      "adif_code": "97100",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.72649,
+        "lat": 40.4953
+      },
+      "reference_pk_km": 6.2
+    },
+    {
+      "id": "pinar-de-las-rozas",
+      "name": "Pinar de las Rozas",
+      "kind": "estacion",
+      "adif_code": "10100",
+      "position": {
+        "lon": -3.882318,
+        "lat": 40.523069
+      },
+      "reference_pk_km": 20.4,
+      "description": "Estación de Las Rozas donde se une a la línea, viniendo de Madrid-Príncipe Pío por Pozuelo y Las Rozas, el ramal por el que llegan casi todos sus trenes regionales y de media distancia. Ese ramal no está cargado."
+    },
+    {
+      "id": "las-matas",
+      "name": "Las Matas",
+      "kind": "estacion",
+      "adif_code": "10101",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.89667,
+        "lat": 40.552008
+      },
+      "reference_pk_km": 24.0
+    },
+    {
+      "id": "torrelodones",
+      "name": "Torrelodones",
+      "kind": "estacion",
+      "adif_code": "10103",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.956873,
+        "lat": 40.57458
+      },
+      "reference_pk_km": 30.2
+    },
+    {
+      "id": "galapagar-la-navata",
+      "name": "Galapagar-La Navata",
+      "kind": "estacion",
+      "adif_code": "10104",
+      "rank": "secundario",
+      "position": {
+        "lon": -3.982249,
+        "lat": 40.600592
+      },
+      "reference_pk_km": 34.0
+    },
+    {
+      "id": "villalba-de-guadarrama",
+      "name": "Villalba de Guadarrama",
+      "kind": "estacion",
+      "adif_code": "10200",
+      "position": {
+        "lon": -4.008153,
+        "lat": 40.626382
+      },
+      "reference_pk_km": 37.9,
+      "description": "Estación de Collado Villalba, al pie de la sierra de Guadarrama. Aquí sale la línea de Cercedilla y Segovia, que no está cargada."
+    },
+    {
+      "id": "san-yago",
+      "name": "San Yago",
+      "kind": "estacion",
+      "adif_code": "10201",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.031078,
+        "lat": 40.617834
+      },
+      "reference_pk_km": 40.0
+    },
+    {
+      "id": "las-zorreras-navalquejigo",
+      "name": "Las Zorreras-Navalquejigo",
+      "kind": "estacion",
+      "adif_code": "10202",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.045954,
+        "lat": 40.609449
+      },
+      "reference_pk_km": 41.7
+    },
+    {
+      "id": "el-escorial",
+      "name": "El Escorial",
+      "kind": "estacion",
+      "adif_code": "10203",
+      "position": {
+        "lon": -4.132322,
+        "lat": 40.585256
+      },
+      "reference_pk_km": 50.3,
+      "description": "Estación de San Lorenzo de El Escorial, al pie de la sierra."
+    },
+    {
+      "id": "zarzalejo",
+      "name": "Zarzalejo",
+      "kind": "estacion",
+      "adif_code": "10204",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.157973,
+        "lat": 40.538631
+      },
+      "reference_pk_km": 56.6
+    },
+    {
+      "id": "robledo-de-chavela",
+      "name": "Robledo de Chavela",
+      "kind": "estacion",
+      "adif_code": "10205",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.247136,
+        "lat": 40.521216
+      },
+      "reference_pk_km": 64.8
+    },
+    {
+      "id": "santa-maria-de-la-alameda-peguerinos",
+      "name": "Santa María de la Alameda-Peguerinos",
+      "kind": "estacion",
+      "adif_code": "10206",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.269318,
+        "lat": 40.568823
+      },
+      "reference_pk_km": 71.8
+    },
+    {
+      "id": "el-pimpollar",
+      "name": "El Pimpollar",
+      "kind": "estacion",
+      "adif_code": "10209",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.28277,
+        "lat": 40.567684
+      },
+      "reference_pk_km": 73.0
+    },
+    {
+      "id": "las-navas-del-marques",
+      "name": "Las Navas del Marqués",
+      "kind": "estacion",
+      "adif_code": "10207",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.36162,
+        "lat": 40.58916
+      },
+      "reference_pk_km": 83.7
+    },
+    {
+      "id": "navalperal",
+      "name": "Navalperal",
+      "kind": "estacion",
+      "adif_code": "10208",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.408628,
+        "lat": 40.590934
+      },
+      "reference_pk_km": 88.5
+    },
+    {
+      "id": "herradon-la-canada",
+      "name": "Herradón-La Cañada",
+      "kind": "estacion",
+      "adif_code": "10300",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.495012,
+        "lat": 40.599349
+      },
+      "reference_pk_km": 97.8
+    },
+    {
+      "id": "guimorcondo",
+      "name": "Guimorcondo",
+      "kind": "estacion",
+      "adif_code": "10302",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.614986,
+        "lat": 40.648939
+      },
+      "reference_pk_km": 114.3
+    },
+    {
+      "id": "avila",
+      "name": "Ávila",
+      "kind": "estacion",
+      "adif_code": "10400",
+      "position": {
+        "lon": -4.683002,
+        "lat": 40.657091
+      },
+      "reference_pk_km": 120.6,
+      "description": "La estación de Ávila. Aquí sale la línea de Peñaranda de Bracamonte y Salamanca, que no está cargada: por ella siguen casi todos los trenes de Madrid a Salamanca por esta línea."
+    },
+    {
+      "id": "arevalo",
+      "name": "Arévalo",
+      "kind": "estacion",
+      "adif_code": "10409",
+      "position": {
+        "lon": -4.701933,
+        "lat": 41.047072
+      },
+      "reference_pk_km": 171.0,
+      "description": "La estación de Arévalo, entre Ávila y Medina del Campo."
+    },
+    {
+      "id": "medina-del-campo",
+      "name": "Medina del Campo",
+      "kind": "estacion",
+      "adif_code": "10500",
+      "position": {
+        "lon": -4.909678,
+        "lat": 41.31726
+      },
+      "reference_pk_km": 206.3,
+      "description": "La estación de Medina del Campo de la línea convencional; la de la alta velocidad es otra, a las afueras. Aquí salen las líneas de Salamanca y de Zamora, que no están cargadas."
+    },
+    {
+      "id": "pozaldez",
+      "name": "Pozaldez",
+      "kind": "estacion",
+      "adif_code": "10501",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.835661,
+        "lat": 41.367657
+      },
+      "reference_pk_km": 215.0
+    },
+    {
+      "id": "matapozuelos",
+      "name": "Matapozuelos",
+      "kind": "estacion",
+      "adif_code": "10502",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.801475,
+        "lat": 41.421901
+      },
+      "reference_pk_km": 222.4
+    },
+    {
+      "id": "valdestillas",
+      "name": "Valdestillas",
+      "kind": "estacion",
+      "adif_code": "10503",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.772948,
+        "lat": 41.488744
+      },
+      "reference_pk_km": 230.3
+    },
+    {
+      "id": "viana",
+      "name": "Viana",
+      "kind": "estacion",
+      "adif_code": "10504",
+      "rank": "secundario",
+      "position": {
+        "lon": -4.75456,
+        "lat": 41.524066
+      },
+      "reference_pk_km": 234.8
+    },
+    {
+      "id": "valladolid-campo-grande",
+      "name": "Valladolid-Campo Grande",
+      "kind": "estacion",
+      "adif_code": "10600",
+      "shared": true,
+      "position": {
+        "lon": -4.7269507,
+        "lat": 41.6421265
+      }
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-19",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea entre Madrid y Villalba, entre Ávila y Medina del Campo y junto a Medina y Valladolid."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-19",
+      "note": "Mapa 4: trazo marrón y rótulo «BAB ctc» de Madrid Chamartín a Villalba G., de Villalba a Ávila, de Ávila a Medina del Campo y de Medina a Valladolid Campo Grande. Wikipedia da bloqueo automático banalizado con control de tráfico centralizado."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-19",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-pinar-principe-pio",
+      "node_id": "pinar-de-las-rozas",
+      "name": "Línea Atocha – Pinar de las Rozas",
+      "towards": "Las Rozas, Pozuelo y Madrid-Príncipe Pío",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -3.882318,
+          40.523069
+        ],
+        [
+          -3.867936,
+          40.494294
+        ],
+        [
+          -3.8000491,
+          40.4474232
+        ],
+        [
+          -3.7192492,
+          40.4220483
+        ]
+      ]
+    },
+    {
+      "id": "conv-villalba-segovia",
+      "node_id": "villalba-de-guadarrama",
+      "name": "Línea Villalba – Segovia",
+      "towards": "Cercedilla y Segovia",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.008153,
+          40.626382
+        ],
+        [
+          -4.022075,
+          40.639063
+        ],
+        [
+          -4.066034,
+          40.737658
+        ],
+        [
+          -4.189518,
+          40.740831
+        ],
+        [
+          -4.11365,
+          40.93403
+        ]
+      ]
+    },
+    {
+      "id": "conv-avila-salamanca",
+      "node_id": "avila",
+      "name": "Línea Ávila – Salamanca",
+      "towards": "Peñaranda de Bracamonte y Salamanca",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.683002,
+          40.657091
+        ],
+        [
+          -4.750887,
+          40.73918
+        ],
+        [
+          -4.871463,
+          40.803847
+        ],
+        [
+          -5.64899,
+          40.972235
+        ]
+      ]
+    },
+    {
+      "id": "conv-medina-salamanca",
+      "node_id": "medina-del-campo",
+      "name": "Línea Medina del Campo – Salamanca",
+      "towards": "Cantalapiedra y Salamanca",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.909678,
+          41.31726
+        ],
+        [
+          -5.64899,
+          40.972235
+        ]
+      ]
+    },
+    {
+      "id": "conv-valladolid-venta-de-banos",
+      "node_id": "valladolid-campo-grande",
+      "name": "Línea Madrid – Hendaya",
+      "towards": "Venta de Baños, Burgos y el País Vasco",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -4.7269507,
+          41.6421265
+        ],
+        [
+          -4.651294,
+          41.737276
+        ],
+        [
+          -4.541216,
+          41.87048
+        ],
+        [
+          -4.495844,
+          41.91736
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "17000": {
+      "node": "madrid-chamartin"
+    },
+    "97201": {
+      "node": "madrid-ramon-y-cajal"
+    },
+    "97200": {
+      "node": "mirasierra-paco-de-lucia"
+    },
+    "97100": {
+      "node": "pitis"
+    },
+    "10100": {
+      "node": "pinar-de-las-rozas"
+    },
+    "10101": {
+      "node": "las-matas"
+    },
+    "10103": {
+      "node": "torrelodones"
+    },
+    "10104": {
+      "node": "galapagar-la-navata"
+    },
+    "10200": {
+      "node": "villalba-de-guadarrama"
+    },
+    "10201": {
+      "node": "san-yago"
+    },
+    "10202": {
+      "node": "las-zorreras-navalquejigo"
+    },
+    "10203": {
+      "node": "el-escorial"
+    },
+    "10204": {
+      "node": "zarzalejo"
+    },
+    "10205": {
+      "node": "robledo-de-chavela"
+    },
+    "10206": {
+      "node": "santa-maria-de-la-alameda-peguerinos"
+    },
+    "10209": {
+      "node": "el-pimpollar"
+    },
+    "10207": {
+      "node": "las-navas-del-marques"
+    },
+    "10208": {
+      "node": "navalperal"
+    },
+    "10300": {
+      "node": "herradon-la-canada"
+    },
+    "10302": {
+      "node": "guimorcondo"
+    },
+    "10400": {
+      "node": "avila"
+    },
+    "10409": {
+      "node": "arevalo"
+    },
+    "10500": {
+      "node": "medina-del-campo"
+    },
+    "10501": {
+      "node": "pozaldez"
+    },
+    "10502": {
+      "node": "matapozuelos"
+    },
+    "10503": {
+      "node": "valdestillas"
+    },
+    "10504": {
+      "node": "viana"
+    },
+    "10600": {
+      "node": "valladolid-campo-grande"
+    },
+    "18000": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "18001": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "18002": {
+      "exits": [
+        "madrid-chamartin"
+      ]
+    },
+    "10000": {
+      "exits": [
+        "pinar-de-las-rozas"
+      ]
+    },
+    "10001": {
+      "exits": [
+        "pinar-de-las-rozas"
+      ]
+    },
+    "10002": {
+      "exits": [
+        "pinar-de-las-rozas"
+      ]
+    },
+    "10005": {
+      "exits": [
+        "pinar-de-las-rozas"
+      ]
+    },
+    "12001": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12002": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12004": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12005": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12006": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12007": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12008": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12009": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12010": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12011": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12012": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12013": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12014": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "12100": {
+      "exits": [
+        "villalba-de-guadarrama"
+      ]
+    },
+    "34002": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34005": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34007": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34008": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34010": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34011": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34012": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34013": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "34014": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "30100": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "30110": {
+      "exits": [
+        "avila"
+      ]
+    },
+    "32001": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32002": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32003": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32004": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32006": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32007": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32008": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "32009": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31002": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31006": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "30200": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31104": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31106": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31107": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31108": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31109": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31112": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "31200": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "10610": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "10602": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "10603": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "10604": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "10605": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11000": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11004": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11006": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11009": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11109": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11111": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11210": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11212": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11213": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11300": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11306": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11404": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11405": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11500": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11503": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11504": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11507": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11515": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11516": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "11600": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15004": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15007": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "15009": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "80100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "04040": {
+      "exits": [
+        "valladolid-campo-grande"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "valladolid-campo-grande"
+      }
+    },
+    "15100": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "valladolid-campo-grande"
+      }
+    },
+    "11014": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        }
+      ]
+    },
+    "11200": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
+      ]
+    },
+    "11208": {
+      "exits": [
+        "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos nodos de la línea o más y en una de sus estaciones propias, de Madrid-Ramón y Cajal a Viana: Madrid-Chamartín y Valladolid-Campo Grande no cuentan solas, porque en ellas paran los trenes de alta velocidad por Segovia. Entran los regionales y Media Distancia de Madrid-Príncipe Pío, Madrid-Chamartín y Madrid-Atocha a Ávila, Salamanca, Valladolid y el norte, los regionales de Madrid a Segovia, que la dejan en Villalba, y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria.",
+    "any_of_stop_ids": [
+      "97201",
+      "97200",
+      "97100",
+      "10100",
+      "10101",
+      "10103",
+      "10104",
+      "10200",
+      "10201",
+      "10202",
+      "10203",
+      "10204",
+      "10205",
+      "10206",
+      "10209",
+      "10207",
+      "10208",
+      "10300",
+      "10302",
+      "10400",
+      "10409",
+      "10500",
+      "10501",
+      "10502",
+      "10503",
+      "10504"
+    ],
+    "min_node_stops": 2
+  },
+  "route_overrides": [
+    {
+      "id": "salamanca-por-medina-30100",
+      "description": "Trenes de Salamanca que llegan a esta línea por Medina del Campo, no por Ávila.",
+      "consecutive_stop_ids": [
+        "30100",
+        "10500"
+      ],
+      "stop_mappings": {
+        "30100": {
+          "exits": [
+            "medina-del-campo"
+          ]
+        },
+        "30110": {
+          "exits": [
+            "medina-del-campo"
+          ]
+        }
+      }
+    },
+    {
+      "id": "salamanca-por-medina-32002",
+      "description": "Trenes de Salamanca que llegan a esta línea por Medina del Campo, no por Ávila.",
+      "consecutive_stop_ids": [
+        "32002",
+        "10500"
+      ],
+      "stop_mappings": {
+        "30100": {
+          "exits": [
+            "medina-del-campo"
+          ]
+        },
+        "30110": {
+          "exits": [
+            "medina-del-campo"
+          ]
+        }
+      }
+    },
+    {
+      "id": "salamanca-por-medina-32001",
+      "description": "Trenes de Salamanca que llegan a esta línea por Medina del Campo, no por Ávila.",
+      "consecutive_stop_ids": [
+        "32001",
+        "10500"
+      ],
+      "stop_mappings": {
+        "30100": {
+          "exits": [
+            "medina-del-campo"
+          ]
+        },
+        "30110": {
+          "exits": [
+            "medina-del-campo"
+          ]
+        }
+      }
+    },
+    {
+      "id": "principe-pio-atocha",
+      "description": "Trenes de Ávila que siguen de Príncipe Pío a Atocha y Chamartín por el túnel de Cercanías: dejan la línea en Pinar de las Rozas.",
+      "consecutive_stop_ids": [
+        "10000",
+        "18000"
+      ],
+      "to_stop_id": "10000"
+    }
+  ]
+}
