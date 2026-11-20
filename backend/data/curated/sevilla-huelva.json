@@ -3,7 +3,7 @@
     "id": "sevilla-huelva",
     "name": "Línea convencional Sevilla – Huelva",
     "short_name": "440",
-    "sort_order": 43,
+    "sort_order": 44,
     "zone": "andalucia",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",

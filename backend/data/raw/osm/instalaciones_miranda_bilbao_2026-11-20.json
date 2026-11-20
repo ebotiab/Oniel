@@ -1,0 +1,3097 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-07-24T11:04:51Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 29569217,
+  "lat": 42.7424154,
+  "lon": -2.8677056,
+  "tags": {
+    "name": "Manzanos",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 29569297,
+  "lat": 42.6910020,
+  "lon": -2.9412527,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 524822442,
+  "lat": 43.1421686,
+  "lon": -2.9604318,
+  "tags": {
+    "name": "Laudio/Llodio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 571816986,
+  "lat": 43.2596365,
+  "lon": -2.9207685,
+  "tags": {
+    "name": "Zazpikaleak / Casco Viejo",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 571821991,
+  "lat": 43.2543486,
+  "lon": -2.9133353,
+  "tags": {
+    "name": "Santutxu",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 571822184,
+  "lat": 43.2511062,
+  "lon": -2.9107270,
+  "tags": {
+    "name": "Basarrate",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 582484533,
+  "lat": 43.2401363,
+  "lon": -2.9240997,
+  "tags": {
+    "name": "La Peña",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 582489148,
+  "lat": 43.2542470,
+  "lon": -2.9430356,
+  "tags": {
+    "local_ref": "2",
+    "name": "Ametzola",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 583053647,
+  "lat": 43.2423867,
+  "lon": -2.9164260,
+  "tags": {
+    "name": "Ollargan",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 612066327,
+  "lat": 43.2288012,
+  "lon": -2.8539361,
+  "tags": {
+    "name": "Zuhatzu",
+    "operator": "Eusko Trenbideak – Ferrocarriles Vascos",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wikidata": "Q2361768"
+  }
+},
+{
+  "type": "node",
+  "id": 672132978,
+  "lat": 43.0489207,
+  "lon": -3.0017561,
+  "tags": {
+    "name": "Amurrio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wikidata": "Q5555641",
+    "wikipedia": "es:Estación de Amurrio"
+  }
+},
+{
+  "type": "node",
+  "id": 678832648,
+  "lat": 42.9946628,
+  "lon": -3.0159761,
+  "tags": {
+    "name": "Orduña",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846839"
+  }
+},
+{
+  "type": "node",
+  "id": 683124104,
+  "lat": 43.1768598,
+  "lon": -2.9092532,
+  "tags": {
+    "name": "Bakiola",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683124105,
+  "lat": 43.1791952,
+  "lon": -2.9028305,
+  "tags": {
+    "light_rail": "yes",
+    "name": "Ugao-Miraballes",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "light_rail",
+    "wikidata": "Q5846726",
+    "wikipedia": "es:Estación de Miravalles"
+  }
+},
+{
+  "type": "node",
+  "id": 683124106,
+  "lat": 43.2100805,
+  "lon": -2.8887455,
+  "tags": {
+    "name": "Arrigorriaga",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683124109,
+  "lat": 43.2367866,
+  "lon": -2.8896692,
+  "tags": {
+    "name": "Bidebieta-Basauri",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683134760,
+  "lat": 43.1329035,
+  "lon": -2.9696048,
+  "tags": {
+    "name": "Santa Kurutz Laudio/Santa Cruz de Llodio",
+    "network": "Cercanías Bilbao",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683134763,
+  "lat": 43.1632032,
+  "lon": -2.9276720,
+  "tags": {
+    "name": "Arbide",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 683134764,
+  "lat": 43.1699659,
+  "lon": -2.9181040,
+  "tags": {
+    "name": "Arrankudiaga",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 683138341,
+  "lat": 43.0575359,
+  "lon": -2.9962432,
+  "tags": {
+    "name": "Amurrio Iparralde",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683138342,
+  "lat": 43.0741498,
+  "lon": -2.9994571,
+  "tags": {
+    "name": "Salbio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683371933,
+  "lat": 43.2617105,
+  "lon": -2.9726969,
+  "tags": {
+    "name": "Santa Águeda",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683387749,
+  "lat": 43.2484308,
+  "lon": -2.9900170,
+  "tags": {
+    "local_ref": "1",
+    "name": "Irauregi Alonsotegi",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683387865,
+  "lat": 43.2554389,
+  "lon": -2.9720892,
+  "tags": {
+    "name": "Kastrexana",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683390230,
+  "lat": 43.2333309,
+  "lon": -3.0160537,
+  "tags": {
+    "name": "Zaramillo",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683398151,
+  "lat": 43.2228068,
+  "lon": -3.0248854,
+  "tags": {
+    "name": "La Quadra",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683405040,
+  "lat": 43.2010155,
+  "lon": -3.0716418,
+  "tags": {
+    "name": "Artxube",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q12254239"
+  }
+},
+{
+  "type": "node",
+  "id": 683405046,
+  "lat": 43.2010174,
+  "lon": -3.0716600,
+  "tags": {
+    "name": "Artxube",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683405101,
+  "lat": 43.2016630,
+  "lon": -3.0508450,
+  "tags": {
+    "name": "Sodupe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683414819,
+  "lat": 43.2090281,
+  "lon": -3.0953911,
+  "tags": {
+    "name": "Güeñes",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 683635947,
+  "lat": 43.2059610,
+  "lon": -3.0824724,
+  "tags": {
+    "name": "Lámbarri",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "operator": "Renfe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 799419105,
+  "lat": 43.2438591,
+  "lon": -2.8977539,
+  "tags": {
+    "name": "Etxebarri",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 817476494,
+  "lat": 43.2502526,
+  "lon": -2.9305941,
+  "tags": {
+    "name": "Miribilla",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q3097050",
+    "wikipedia": "es:Estación de Miribilla"
+  }
+},
+{
+  "type": "node",
+  "id": 1576577787,
+  "lat": 43.2621000,
+  "lon": -2.9492300,
+  "tags": {
+    "name": "San Mamés",
+    "operator": "Renfe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1582382454,
+  "lat": 43.2562459,
+  "lon": -2.9326770,
+  "tags": {
+    "name": "Zabalburu",
+    "operator": "Renfe Cercanias",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1818583829,
+  "lat": 43.2566196,
+  "lon": -2.9323569,
+  "tags": {
+    "name": "Zabalburu",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1848293666,
+  "lat": 43.2582401,
+  "lon": -2.9460095,
+  "tags": {
+    "name": "Autonomía",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1915115143,
+  "lat": 43.2401085,
+  "lon": -2.9241290,
+  "tags": {
+    "name": "La Peña",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1915115161,
+  "lat": 43.2502340,
+  "lon": -2.9306333,
+  "tags": {
+    "name": "Miribilla",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q3097050",
+    "wikipedia": "es:Estación de Miribilla"
+  }
+},
+{
+  "type": "node",
+  "id": 1915525478,
+  "lat": 43.2423621,
+  "lon": -2.9163926,
+  "tags": {
+    "name": "Ollargan",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2041973720,
+  "lat": 42.9926849,
+  "lon": -2.9155461,
+  "tags": {
+    "name": "Inoso-Oiardo",
+    "operator": "Adif",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 2046477540,
+  "lat": 42.7427360,
+  "lon": -2.8673352,
+  "tags": {
+    "name": "Manzanos",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11203",
+    "ref:EU:PLC": "ES11203",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111203",
+    "wikidata": "Q3381098",
+    "wikipedia": "es:Estación de Manzanos"
+  }
+},
+{
+  "type": "node",
+  "id": 2094929939,
+  "lat": 43.1422134,
+  "lon": -2.9605172,
+  "tags": {
+    "name": "Laudio / Llodio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2094929956,
+  "lat": 43.1450261,
+  "lon": -2.9435969,
+  "tags": {
+    "name": "Areta",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2094929957,
+  "lat": 43.1450435,
+  "lon": -2.9435522,
+  "tags": {
+    "name": "Areta",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2234150332,
+  "lat": 43.0358269,
+  "lon": -3.0039810,
+  "tags": {
+    "name": "Iñarratxu",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2242617877,
+  "lat": 43.2469890,
+  "lon": -2.9057446,
+  "tags": {
+    "name": "Bolueta",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2266300652,
+  "lat": 43.2451555,
+  "lon": -2.8904282,
+  "tags": {
+    "name": "Etxebarri",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2284495436,
+  "lat": 43.2511399,
+  "lon": -2.8896898,
+  "tags": {
+    "name": "Kukullaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2446230092,
+  "lat": 43.1632562,
+  "lon": -2.9276461,
+  "tags": {
+    "name": "Arbide",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2446230157,
+  "lat": 43.1699779,
+  "lon": -2.9181450,
+  "tags": {
+    "name": "Arrankudiaga",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2580210358,
+  "lat": 43.2380373,
+  "lon": -2.8820293,
+  "tags": {
+    "name": "Ariz",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2612695530,
+  "lat": 43.2100818,
+  "lon": -2.8887909,
+  "tags": {
+    "name": "Arrigorriaga",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2612704686,
+  "lat": 43.2367698,
+  "lon": -2.8897110,
+  "tags": {
+    "name": "Bidebieta-Basauri",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2675831573,
+  "lat": 43.2362409,
+  "lon": -2.8934670,
+  "tags": {
+    "name": "Basauri",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3271221734,
+  "lat": 43.2613582,
+  "lon": -2.9274943,
+  "tags": {
+    "name": "Abando",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3290281999,
+  "lat": 43.2624945,
+  "lon": -2.9474081,
+  "tags": {
+    "name": "San Mamés",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3298307132,
+  "lat": 43.2451322,
+  "lon": -2.8904547,
+  "tags": {
+    "name": "Etxebarri",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3298307133,
+  "lat": 43.2287723,
+  "lon": -2.8539235,
+  "tags": {
+    "name": "Zuhatzu",
+    "operator": "Euskotren Trena",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3742790942,
+  "lat": 43.2483971,
+  "lon": -2.9900232,
+  "tags": {
+    "local_ref": "2",
+    "name": "Irauregi Alonsotegi",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3742790996,
+  "lat": 43.2554487,
+  "lon": -2.9718912,
+  "tags": {
+    "name": "Kastrexana",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3777778546,
+  "lat": 43.2438908,
+  "lon": -2.8977485,
+  "tags": {
+    "name": "Etxebarri",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3923774420,
+  "lat": 42.6918228,
+  "lon": -2.9404391,
+  "tags": {
+    "name": "Miranda de Ebro Clasificación",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "yard",
+    "ref": "11220",
+    "ref:EU:PLC": "ES11220",
+    "uic_ref": "7111220"
+  }
+},
+{
+  "type": "node",
+  "id": 4060532219,
+  "lat": 43.2586724,
+  "lon": -2.8986873,
+  "tags": {
+    "level": "-2",
+    "name": "Otxarkoaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4298706695,
+  "lat": 43.2602381,
+  "lon": -2.9218583,
+  "tags": {
+    "name": "Zazpikaleak / Casco Viejo",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4298706759,
+  "lat": 43.2668495,
+  "lon": -2.9200094,
+  "tags": {
+    "name": "Uribarri",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4404666702,
+  "lat": 42.9946489,
+  "lon": -3.0159596,
+  "tags": {
+    "name": "Orduña",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4404666703,
+  "lat": 42.9946765,
+  "lon": -3.0159863,
+  "tags": {
+    "name": "Orduña",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4405544474,
+  "lat": 43.1530509,
+  "lon": -2.9384224,
+  "tags": {
+    "name": "Arakaldo",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4405545034,
+  "lat": 43.1530605,
+  "lon": -2.9384637,
+  "tags": {
+    "name": "Arakaldo",
+    "network": "Renfe",
+    "operator": "Adif",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4405545209,
+  "lat": 43.1769611,
+  "lon": -2.9089793,
+  "tags": {
+    "name": "Bakiola",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4411849558,
+  "lat": 43.2625710,
+  "lon": -2.9330517,
+  "tags": {
+    "name": "Eliptikoa",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4416291394,
+  "lat": 43.2017399,
+  "lon": -3.0506912,
+  "tags": {
+    "name": "Sodupe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4437544066,
+  "lat": 43.2398145,
+  "lon": -2.8789548,
+  "tags": {
+    "name": "Ariz",
+    "operator": "Eusko Trenbideak – Ferrocarriles Vascos",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4455256013,
+  "lat": 43.2602112,
+  "lon": -2.9218139,
+  "tags": {
+    "name": "Zazpikaleak / Casco Viejo",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4456492479,
+  "lat": 43.2591030,
+  "lon": -2.9063861,
+  "tags": {
+    "name": "Txurdinaga",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4458546393,
+  "lat": 43.2620692,
+  "lon": -2.9492563,
+  "tags": {
+    "name": "San Mamés",
+    "operator": "Renfe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4458957134,
+  "lat": 43.2582541,
+  "lon": -2.9461081,
+  "tags": {
+    "name": "Autonomía",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4514096949,
+  "lat": 43.2362055,
+  "lon": -2.8934695,
+  "tags": {
+    "name": "Basauri",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4541002132,
+  "lat": 43.2545172,
+  "lon": -2.9429076,
+  "tags": {
+    "local_ref": "3",
+    "name": "Ametzola",
+    "old_ref": "2AM",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4541033572,
+  "lat": 43.2542170,
+  "lon": -2.9430544,
+  "tags": {
+    "local_ref": "1",
+    "name": "Ametzola",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4556990099,
+  "lat": 43.2518642,
+  "lon": -2.8870180,
+  "tags": {
+    "funicular": "yes",
+    "name": "San Antonio",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "funicular"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951433,
+  "lat": 43.2601460,
+  "lon": -2.9278255,
+  "tags": {
+    "name": "Abando Indalecio Prieto",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "7",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951435,
+  "lat": 43.2601174,
+  "lon": -2.9277959,
+  "tags": {
+    "name": "Abando Indalecio Prieto",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "8",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951437,
+  "lat": 43.2604604,
+  "lon": -2.9275717,
+  "tags": {
+    "name": "Bilbao Abando",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "5",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951439,
+  "lat": 43.2604325,
+  "lon": -2.9275408,
+  "tags": {
+    "name": "Abando Indalecio Prieto",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "6",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951440,
+  "lat": 43.2605267,
+  "lon": -2.9276451,
+  "tags": {
+    "name": "Bilbao Abando",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "4",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951442,
+  "lat": 43.2605600,
+  "lon": -2.9276820,
+  "tags": {
+    "name": "Bilbao Abando",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "3",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951444,
+  "lat": 43.2606217,
+  "lon": -2.9277503,
+  "tags": {
+    "name": "Bilbao Abando",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "2",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4641951446,
+  "lat": 43.2606551,
+  "lon": -2.9277873,
+  "tags": {
+    "name": "Bilbao Abando",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "ref": "1",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4747723693,
+  "lat": 43.2513087,
+  "lon": -2.8893505,
+  "tags": {
+    "funicular": "yes",
+    "name": "Kukullaga",
+    "public_transport": "stop_position",
+    "railway": "stop"
+  }
+},
+{
+  "type": "node",
+  "id": 4747723694,
+  "lat": 43.2512849,
+  "lon": -2.8893396,
+  "tags": {
+    "funicular": "yes",
+    "name": "Kukullaga",
+    "public_transport": "stop_position",
+    "railway": "stop"
+  }
+},
+{
+  "type": "node",
+  "id": 4747723719,
+  "lat": 43.2516432,
+  "lon": -2.8878937,
+  "tags": {
+    "alt_name": "Kukullaga",
+    "funicular": "yes",
+    "name": "Euskal Herria",
+    "public_transport": "stop_position",
+    "railway": "stop"
+  }
+},
+{
+  "type": "node",
+  "id": 4747723720,
+  "lat": 43.2516677,
+  "lon": -2.8879056,
+  "tags": {
+    "alt_name": "Kukullaga",
+    "funicular": "yes",
+    "name": "Euskal Herria",
+    "public_transport": "stop_position",
+    "railway": "stop"
+  }
+},
+{
+  "type": "node",
+  "id": 4781280704,
+  "lat": 43.2690417,
+  "lon": -2.9254531,
+  "tags": {
+    "name": "Matiko",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4781324060,
+  "lat": 43.2690140,
+  "lon": -2.9254617,
+  "tags": {
+    "name": "Matiko",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4781324061,
+  "lat": 43.2668502,
+  "lon": -2.9199332,
+  "tags": {
+    "name": "Uribarri",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4781324062,
+  "lat": 43.2591223,
+  "lon": -2.9063583,
+  "tags": {
+    "name": "Txurdinaga",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4781324063,
+  "lat": 43.2586971,
+  "lon": -2.8986054,
+  "tags": {
+    "level": "-2",
+    "name": "Otxarkoaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Eusko Trenbideak",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4781324064,
+  "lat": 43.2511329,
+  "lon": -2.8898027,
+  "tags": {
+    "name": "Kukullaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4781324065,
+  "lat": 43.2511360,
+  "lon": -2.8896474,
+  "tags": {
+    "name": "Kukullaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4791982846,
+  "lat": 43.2398040,
+  "lon": -2.8789910,
+  "tags": {
+    "name": "Ariz",
+    "operator": "Eusko Trenbideak – Ferrocarriles Vascos",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813215917,
+  "lat": 43.2625230,
+  "lon": -2.9474001,
+  "tags": {
+    "name": "San Mamés",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813215918,
+  "lat": 43.2612485,
+  "lon": -2.9415767,
+  "tags": {
+    "name": "Indautxu",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813215919,
+  "lat": 43.2380228,
+  "lon": -2.8819958,
+  "tags": {
+    "name": "Ariz",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813215920,
+  "lat": 43.2470142,
+  "lon": -2.9057196,
+  "tags": {
+    "name": "Bolueta",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813216421,
+  "lat": 43.2511212,
+  "lon": -2.9106870,
+  "tags": {
+    "name": "Basarrate",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813216422,
+  "lat": 43.2543600,
+  "lon": -2.9132960,
+  "tags": {
+    "name": "Santutxu",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813216423,
+  "lat": 43.2596641,
+  "lon": -2.9207510,
+  "tags": {
+    "name": "Zazpikaleak / Casco Viejo",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813216424,
+  "lat": 43.2613856,
+  "lon": -2.9274803,
+  "tags": {
+    "name": "Abando",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813216425,
+  "lat": 43.2627787,
+  "lon": -2.9338721,
+  "tags": {
+    "name": "Eliptikoa",
+    "network": "Metro Bilbao",
+    "operator": "Metro Bilbao S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4820046510,
+  "lat": 43.2641519,
+  "lon": -2.9552834,
+  "tags": {
+    "name": "Olabeaga",
+    "operator": "Renfe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4820046511,
+  "lat": 43.2642173,
+  "lon": -2.9552793,
+  "tags": {
+    "name": "Olabeaga",
+    "operator": "Renfe",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4828555100,
+  "lat": 43.2333604,
+  "lon": -3.0163017,
+  "tags": {
+    "name": "Zaramillo",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4829272640,
+  "lat": 43.2615530,
+  "lon": -2.9724346,
+  "tags": {
+    "name": "Santa Águeda",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4940786737,
+  "lat": 42.7430395,
+  "lon": -2.8669787,
+  "tags": {
+    "name": "Manzanos",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4944868144,
+  "lat": 43.2597526,
+  "lon": -2.9533208,
+  "tags": {
+    "name": "Basurto-Ospitalea/Hospital",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4944875068,
+  "lat": 43.2596668,
+  "lon": -2.9533914,
+  "tags": {
+    "name": "Basurto-Ospitalea/Hospital",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5061716164,
+  "lat": 43.2690276,
+  "lon": -2.9254554,
+  "tags": {
+    "name": "Matiko",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3497404",
+    "wikipedia": "es:Estación de Matiko"
+  }
+},
+{
+  "type": "node",
+  "id": 5155885328,
+  "lat": 43.2564683,
+  "lon": -2.9324993,
+  "tags": {
+    "name": "Zabalburu",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3042534",
+    "wikipedia": "es:Estación de Zabalburu"
+  }
+},
+{
+  "type": "node",
+  "id": 5254810527,
+  "lat": 43.2401241,
+  "lon": -2.9241114,
+  "tags": {
+    "name": "La Peña",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5254817178,
+  "lat": 43.2423731,
+  "lon": -2.9164101,
+  "tags": {
+    "name": "Ollargan",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846828"
+  }
+},
+{
+  "type": "node",
+  "id": 5259835085,
+  "lat": 43.2367855,
+  "lon": -2.8896904,
+  "tags": {
+    "name": "Bidebieta-Basauri",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "no",
+    "wikidata": "Q5650045"
+  }
+},
+{
+  "type": "node",
+  "id": 5289510526,
+  "lat": 43.2641894,
+  "lon": -2.9552744,
+  "tags": {
+    "name": "Olabeaga",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "no",
+    "wikidata": "Q3497380",
+    "wikipedia": "es:Estación de Olabeaga"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695226,
+  "lat": 43.2625807,
+  "lon": -2.9330356,
+  "tags": {
+    "name": "Eliptikoa",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752232",
+    "wikipedia": "es:Estación de Eliptikoa"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695227,
+  "lat": 43.2601704,
+  "lon": -2.9218236,
+  "tags": {
+    "name": "Zazpikaleak / Casco Viejo",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752228",
+    "wikipedia": "es:Estación de Zazpikaleak/Casco Viejo"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695228,
+  "lat": 43.2613630,
+  "lon": -2.9274368,
+  "tags": {
+    "name": "Abando",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5845574",
+    "wikipedia": "es:Estación de Abando (Metro de Bilbao)"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695229,
+  "lat": 43.2596406,
+  "lon": -2.9207090,
+  "tags": {
+    "name": "Zazpikaleak / Casco Viejo",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752228",
+    "wikipedia": "es:Estación de Zazpikaleak/Casco Viejo"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695230,
+  "lat": 43.2542965,
+  "lon": -2.9132866,
+  "tags": {
+    "name": "Santutxu",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752244",
+    "wikipedia": "es:Estación de Santutxu"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695231,
+  "lat": 43.2511513,
+  "lon": -2.9107440,
+  "tags": {
+    "name": "Basarrate",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752248",
+    "wikipedia": "es:Estación de Basarrate"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695232,
+  "lat": 43.2469513,
+  "lon": -2.9056437,
+  "tags": {
+    "name": "Bolueta",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752252",
+    "wikipedia": "es:Estación de Bolueta"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695233,
+  "lat": 43.2438731,
+  "lon": -2.8977406,
+  "tags": {
+    "name": "Etxebarri",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3750918",
+    "wikipedia": "es:Estación de Etxebarri (Metro de Bilbao)"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695234,
+  "lat": 43.2380070,
+  "lon": -2.8820302,
+  "tags": {
+    "name": "Ariz",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3045499",
+    "wikipedia": "es:Estación de Ariz (Metro de Bilbao)"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695235,
+  "lat": 43.2362268,
+  "lon": -2.8934826,
+  "tags": {
+    "name": "Basauri",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "wheelchair": "yes",
+    "wikidata": "Q4866280",
+    "wikipedia": "es:Estación de Basauri (Metro de Bilbao)"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695236,
+  "lat": 43.2612942,
+  "lon": -2.9418608,
+  "tags": {
+    "name": "Indautxu",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3752239",
+    "wikipedia": "es:Estación de Indautxu"
+  }
+},
+{
+  "type": "node",
+  "id": 5294695237,
+  "lat": 43.2625524,
+  "lon": -2.9475962,
+  "tags": {
+    "name": "San Mamés",
+    "network": "Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5294711012,
+  "lat": 43.2510643,
+  "lon": -2.8896799,
+  "tags": {
+    "name": "Kukullaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q10750880",
+    "wikipedia": "es:Estación de Kukullaga"
+  }
+},
+{
+  "type": "node",
+  "id": 5294711013,
+  "lat": 43.2586868,
+  "lon": -2.8986874,
+  "tags": {
+    "level": "-2",
+    "name": "Otxarkoaga",
+    "network": "Euskotren Trena;Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q10750544",
+    "wikipedia": "es:Estación de Otxarkoaga"
+  }
+},
+{
+  "type": "node",
+  "id": 5294711014,
+  "lat": 43.2591630,
+  "lon": -2.9064323,
+  "tags": {
+    "name": "Txurdinaga",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q10750595",
+    "wikipedia": "es:Estación de Txurdinaga"
+  }
+},
+{
+  "type": "node",
+  "id": 5294711015,
+  "lat": 43.2637265,
+  "lon": -2.9137236,
+  "tags": {
+    "name": "Zurbaranbarri",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5847563",
+    "wikipedia": "es:Estación de Zurbaranbarri"
+  }
+},
+{
+  "type": "node",
+  "id": 5294711016,
+  "lat": 43.2668389,
+  "lon": -2.9199473,
+  "tags": {
+    "name": "Uribarri",
+    "network": "Euskotren Trena; Metro Bilbao",
+    "operator": "Euskal Trenbide Sarea",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "wheelchair": "yes",
+    "wikidata": "Q3497383",
+    "wikipedia": "es:Estación de Uribarri"
+  }
+},
+{
+  "type": "node",
+  "id": 5299959449,
+  "lat": 43.2545365,
+  "lon": -2.9431329,
+  "tags": {
+    "name": "Ametzola",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3497373",
+    "wikipedia": "es:Estación de Amézola"
+  }
+},
+{
+  "type": "node",
+  "id": 5299959450,
+  "lat": 43.2545459,
+  "lon": -2.9428975,
+  "tags": {
+    "local_ref": "4",
+    "name": "Ametzola",
+    "old_ref": "1AM",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5299959451,
+  "lat": 43.2585953,
+  "lon": -2.9461119,
+  "tags": {
+    "name": "Autonomía",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3497378",
+    "wikipedia": "es:Estación de Autonomía"
+  }
+},
+{
+  "type": "node",
+  "id": 5299959452,
+  "lat": 43.2621135,
+  "lon": -2.9492811,
+  "tags": {
+    "name": "San Mamés",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q800531",
+    "wikipedia": "es:Intercambiador de San Mamés"
+  }
+},
+{
+  "type": "node",
+  "id": 5301954661,
+  "lat": 43.2500877,
+  "lon": -2.9305152,
+  "tags": {
+    "name": "Miribilla",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3097050"
+  }
+},
+{
+  "type": "node",
+  "id": 5301954667,
+  "lat": 43.2554381,
+  "lon": -2.9719856,
+  "tags": {
+    "name": "Kastrexana",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q12261355",
+    "wikipedia": "es:Estación de Castrejana"
+  }
+},
+{
+  "type": "node",
+  "id": 5301954668,
+  "lat": 43.2484283,
+  "lon": -2.9899106,
+  "tags": {
+    "name": "Irauregi Alonsotegi",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3381120",
+    "wikipedia": "eu:Irauregiko geltokia"
+  }
+},
+{
+  "type": "node",
+  "id": 5301954698,
+  "lat": 43.2100820,
+  "lon": -2.8887684,
+  "tags": {
+    "name": "Arrigorriaga",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5845731"
+  }
+},
+{
+  "type": "node",
+  "id": 5301954699,
+  "lat": 43.2596484,
+  "lon": -2.9532226,
+  "tags": {
+    "name": "Basurto-Ospitalea/Hospital",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q5845781",
+    "wikipedia": "es:Estación de Basurto Hospital"
+  }
+},
+{
+  "type": "node",
+  "id": 5318330534,
+  "lat": 43.2687349,
+  "lon": -2.9259346,
+  "tags": {
+    "funicular": "yes",
+    "name": "Castaños",
+    "network": "Funicular de Artxanda",
+    "operator": "Funicular de Artxanda S.A.",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "station": "funicular",
+    "survey:date": "2024-04-24"
+  }
+},
+{
+  "type": "node",
+  "id": 5451385119,
+  "lat": 43.2599833,
+  "lon": -2.9264076,
+  "tags": {
+    "name": "Bilbao La Concordia",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5451385120,
+  "lat": 43.2600154,
+  "lon": -2.9264770,
+  "tags": {
+    "name": "Bilbao La Concordia",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5451395346,
+  "lat": 43.2617130,
+  "lon": -2.9726763,
+  "tags": {
+    "name": "Santa Águeda",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q12266971",
+    "wikipedia": "eu:Santa Agedako geralekua"
+  }
+},
+{
+  "type": "node",
+  "id": 5454334453,
+  "lat": 43.2017279,
+  "lon": -3.0507325,
+  "tags": {
+    "name": "Sodupe",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q12267477"
+  }
+},
+{
+  "type": "node",
+  "id": 5454334458,
+  "lat": 43.2333567,
+  "lon": -3.0164284,
+  "tags": {
+    "name": "Zaramillo",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q12269216",
+    "wikipedia": "es:Estación de Zaramillo"
+  }
+},
+{
+  "type": "node",
+  "id": 5869099562,
+  "lat": 43.1530710,
+  "lon": -2.9384324,
+  "tags": {
+    "name": "Arakaldo",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5845694",
+    "wikipedia": "es:Estación de Aracaldo"
+  }
+},
+{
+  "type": "node",
+  "id": 5872061988,
+  "lat": 43.1632305,
+  "lon": -2.9276570,
+  "tags": {
+    "name": "Arbide",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5845701",
+    "wikipedia": "es:Estación de Arbide"
+  }
+},
+{
+  "type": "node",
+  "id": 5872101431,
+  "lat": 43.1699214,
+  "lon": -2.9181512,
+  "tags": {
+    "name": "Arrankudiaga",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5845725",
+    "wikipedia": "es:Estación de Arrancudiaga"
+  }
+},
+{
+  "type": "node",
+  "id": 5959602924,
+  "lat": 42.6909399,
+  "lon": -2.9412137,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6013539945,
+  "lat": 43.1422321,
+  "lon": -2.9605553,
+  "tags": {
+    "name": "Laudio/Llodio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6074627183,
+  "lat": 43.0576686,
+  "lon": -2.9961940,
+  "tags": {
+    "name": "Amurrio Iparralde",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q5845686",
+    "wikipedia": "es:Estación de Amurrio-Iparralde"
+  }
+},
+{
+  "type": "node",
+  "id": 6074627517,
+  "lat": 43.0579438,
+  "lon": -2.9960702,
+  "tags": {
+    "name": "Amurrio Iparralde",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6074646911,
+  "lat": 43.0747348,
+  "lon": -2.9994455,
+  "tags": {
+    "name": "Salbio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6074646912,
+  "lat": 43.0744001,
+  "lon": -2.9994528,
+  "tags": {
+    "name": "Salbio",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q5847097",
+    "wikipedia": "es:Estación de Salbio"
+  }
+},
+{
+  "type": "node",
+  "id": 6074657072,
+  "lat": 43.0935411,
+  "lon": -2.9995296,
+  "tags": {
+    "name": "Luiaondo",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q5846655",
+    "wikipedia": "es:Estación de Luyando"
+  }
+},
+{
+  "type": "node",
+  "id": 6074666380,
+  "lat": 43.1329357,
+  "lon": -2.9696255,
+  "tags": {
+    "name": "Santa Kurutz Laudio/Santa Cruz de Llodio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6074666381,
+  "lat": 43.1329214,
+  "lon": -2.9696111,
+  "tags": {
+    "name": "Santa Kurutz Laudio/Santa Cruz de Llodio",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q5847167",
+    "wikipedia": "eu:Santa Kurutz–Laudio geralekua"
+  }
+},
+{
+  "type": "node",
+  "id": 6074703741,
+  "lat": 43.1422527,
+  "lon": -2.9605007,
+  "tags": {
+    "name": "Laudio/Llodio",
+    "network": "Arabako Aldiriak / Cercanías Álava",
+    "network:es": "Cercanías Álava",
+    "network:eu": "Arabako Aldiriak",
+    "network:wikidata": "Q134617299",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3381376",
+    "wikipedia": "es:Estación de Llodio"
+  }
+},
+{
+  "type": "node",
+  "id": 6077520291,
+  "lat": 43.1769055,
+  "lon": -2.9091410,
+  "tags": {
+    "name": "Bakiola",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q5845765",
+    "wikipedia": "es:Estación de Bakiola"
+  }
+},
+{
+  "type": "node",
+  "id": 6077628621,
+  "lat": 42.6909034,
+  "lon": -2.9412005,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6077628636,
+  "lat": 42.6905009,
+  "lon": -2.9409698,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6077628637,
+  "lat": 42.6905588,
+  "lon": -2.9410174,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6077628638,
+  "lat": 42.6905962,
+  "lon": -2.9410258,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6148706091,
+  "lat": 43.2089639,
+  "lon": -3.0953271,
+  "tags": {
+    "name": "Güeñes",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q12258774"
+  }
+},
+{
+  "type": "node",
+  "id": 6148706092,
+  "lat": 43.2228165,
+  "lon": -3.0248881,
+  "tags": {
+    "name": "La Quadra",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q12266393"
+  }
+},
+{
+  "type": "node",
+  "id": 6148706093,
+  "lat": 43.2059870,
+  "lon": -3.0824606,
+  "tags": {
+    "name": "Lámbarri",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q12261835"
+  }
+},
+{
+  "type": "node",
+  "id": 6609322923,
+  "lat": 43.2450591,
+  "lon": -2.8903114,
+  "tags": {
+    "name": "Etxebarri",
+    "network": "Euskotren Trena",
+    "network:wikidata": "Q149274",
+    "operator": "Eusko Trenbideak – Ferrocarriles Vascos",
+    "operator:es": "Ferrocarriles Vascos",
+    "operator:eu": "Eusko Trenbideak",
+    "operator:wikidata": "Q3061020",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3752252",
+    "wikipedia": "es:Estación de Bolueta"
+  }
+},
+{
+  "type": "node",
+  "id": 7230240788,
+  "lat": 43.2509473,
+  "lon": -2.9259361,
+  "tags": {
+    "access": "yes",
+    "bicycle": "yes",
+    "fee": "no",
+    "funicular": "yes",
+    "handrail": "yes",
+    "name": "Juan Carlos de Gortazar kalea",
+    "opening_hours": "24/7",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "station": "funicular",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7230240789,
+  "lat": 43.2513034,
+  "lon": -2.9257029,
+  "tags": {
+    "access": "yes",
+    "bicycle": "yes",
+    "fee": "no",
+    "funicular": "yes",
+    "handrail": "yes",
+    "name": "Askatasuna etorbidea",
+    "opening_hours": "24/7",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "station": "funicular",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8044677096,
+  "lat": 43.2287798,
+  "lon": -2.8541878,
+  "tags": {
+    "addr:city": "Galdakao",
+    "addr:postcode": "48960",
+    "addr:street": "Txomin Egileor kalea",
+    "alt_name": "Zuhatzu-Galdakao",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "name": "Zuhatzu",
+    "network": "Euskotren Trena",
+    "network:wikidata": "Q149274",
+    "nohousenumber": "yes",
+    "operator": "Eusko Trenbideak – Ferrocarriles Vascos",
+    "operator:es": "Ferrocarriles Vascos",
+    "operator:eu": "Eusko Trenbideak",
+    "operator:wikidata": "Q3061020",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q2361768"
+  }
+},
+{
+  "type": "node",
+  "id": 8738524371,
+  "lat": 43.2398022,
+  "lon": -2.8789725,
+  "tags": {
+    "name": "Ariz",
+    "network": "Euskotren Trena",
+    "network:wikidata": "Q149274",
+    "operator": "Eusko Trenbideak – Ferrocarriles Vascos",
+    "operator:es": "Ferrocarriles Vascos",
+    "operator:eu": "Eusko Trenbideak",
+    "operator:wikidata": "Q3061020",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q12253973"
+  }
+},
+{
+  "type": "node",
+  "id": 11298591181,
+  "lat": 43.0358251,
+  "lon": -3.0039566,
+  "tags": {
+    "name": "Iñarratxu",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12086836777,
+  "lat": 43.1999307,
+  "lon": -3.0470764,
+  "tags": {
+    "note": "Ahora es un bar",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q118034832",
+    "wikipedia": "es:Estación de Sodupe (FC de La Robla)"
+  }
+},
+{
+  "type": "node",
+  "id": 12771090377,
+  "lat": 43.2255940,
+  "lon": -2.8868907,
+  "tags": {
+    "name": "Abaroa-San Miguel",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12771113925,
+  "lat": 43.2235018,
+  "lon": -2.8822105,
+  "tags": {
+    "addr:street": "Uriarte kalea",
+    "name": "Basauri",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12771120499,
+  "lat": 43.1791963,
+  "lon": -2.9028471,
+  "tags": {
+    "name": "Ugao-Miraballes",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12771168075,
+  "lat": 43.1450228,
+  "lon": -2.9435423,
+  "tags": {
+    "name": "Areta",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12771185439,
+  "lat": 43.0487701,
+  "lon": -3.0019459,
+  "tags": {
+    "name": "Amurrio",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes",
+    "wikidata": "Q5555641",
+    "wikipedia": "es:Estación de Amurrio"
+  }
+},
+{
+  "type": "node",
+  "id": 12771185440,
+  "lat": 43.0488575,
+  "lon": -3.0018386,
+  "tags": {
+    "name": "Amurrio",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13415700225,
+  "lat": 43.2687155,
+  "lon": -2.9259622,
+  "tags": {
+    "name": "Funicular de Artxanda",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13520650582,
+  "lat": 43.2484983,
+  "lon": -2.9900211,
+  "tags": {
+    "local_ref": "3",
+    "name": "Irauregi Alonsotegi",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13581745246,
+  "lat": 43.2555154,
+  "lon": -2.9551117,
+  "tags": {
+    "funicular": "yes",
+    "name": "Funicular de Masustegi",
+    "network": "Funicular de Masustegi",
+    "operator": "Ayuntamiento de Bilbao",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "start_date": "18/02/2026",
+    "station": "funicular"
+  }
+},
+{
+  "type": "node",
+  "id": 13581745247,
+  "lat": 43.2549463,
+  "lon": -2.9557848,
+  "tags": {
+    "funicular": "yes",
+    "name": "Funicular de Masustegi",
+    "network": "Funicular de Masustegi",
+    "operator": "Ayuntamiento de Bilbao",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "start_date": "18/02/2026",
+    "station": "funicular"
+  }
+},
+{
+  "type": "node",
+  "id": 13653602041,
+  "lat": 42.6907987,
+  "lon": -2.9411390,
+  "tags": {
+    "name": "Miranda de Ebro",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11200",
+    "ref:EU:PLC": "ES11200",
+    "train": "yes",
+    "uic_ref": "7111200",
+    "website": "https://www.adif.es/w/11200-miranda-de-ebro",
+    "wikidata": "Q3327097",
+    "wikipedia": "es:Estación de Miranda de Ebro"
+  }
+},
+{
+  "type": "node",
+  "id": 13927059949,
+  "lat": 43.2516559,
+  "lon": -2.8879002,
+  "tags": {
+    "alt_name": "Kukullaga",
+    "funicular": "yes",
+    "name": "Euskal Herria",
+    "public_transport": "station",
+    "railway": "halt",
+    "station": "funicular"
+  }
+},
+{
+  "type": "way",
+  "id": 28776478,
+  "center": {
+    "lat": 43.2599774,
+    "lon": -2.9284608
+  },
+  "tags": {
+    "addr:city": "Bilbao",
+    "addr:housenumber": "2",
+    "addr:postcode": "48008",
+    "addr:street": "Plaza Biribila",
+    "alt_name": "Abando Indalecio Prieto geltokia",
+    "alt_name:es": "Estación de Abando Indalecio Prieto",
+    "alt_name:eu": "Abando Indalecio Prieto geltokia",
+    "building": "train_station",
+    "layer": "1",
+    "name": "Abando Indalecio Prieto",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q800535"
+  }
+},
+{
+  "type": "way",
+  "id": 44113519,
+  "center": {
+    "lat": 43.2599185,
+    "lon": -2.9264420
+  },
+  "tags": {
+    "building": "train_station",
+    "name": "Bilbao La Concordia",
+    "network": "Bilboko Aldiriak / Cercanías Bilbao",
+    "network:es": "Cercanías Bilbao",
+    "network:eu": "Bilboko Aldiriak",
+    "network:wikidata": "Q685485",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "train",
+    "train": "yes",
+    "wikidata": "Q3095996",
+    "wikipedia": "es:Estación de Bilbao Concordia"
+  }
+},
+{
+  "type": "way",
+  "id": 402170994,
+  "center": {
+    "lat": 43.2596794,
+    "lon": -2.9531856
+  },
+  "tags": {
+    "building:levels": "0",
+    "building:levels:underground": "2",
+    "layer": "-1",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+}
+
+  ]
+}

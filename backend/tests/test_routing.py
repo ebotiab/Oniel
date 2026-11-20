@@ -136,6 +136,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 27  # la línea de Madrid a Valladolid por Ávila
             + 21  # la línea de Palencia a Santander
             + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
+            + 3  # la de Miranda de Ebro a Bilbao
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una

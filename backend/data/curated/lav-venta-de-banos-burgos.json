@@ -440,11 +440,31 @@
     "13106": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "miranda-bilbao",
+          "node": "miranda-de-ebro"
+        }
       ]
     },
     "13200": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "miranda-bilbao",
+          "node": "miranda-de-ebro"
+        }
       ]
     },
     "81002": {

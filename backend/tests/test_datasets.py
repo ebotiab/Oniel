@@ -263,6 +263,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 475
         + 20  # los regionales de Valladolid a Santander
         + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+        + 4  # los Intercity de Miranda de Ebro a Bilbao
     )
     assert (
         await _count(conn, "services", NEWER_ID)
@@ -291,6 +292,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 475
         + 20  # los regionales de Valladolid a Santander
         + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+        + 4  # los Intercity de Miranda de Ebro a Bilbao
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -329,6 +331,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 372 + 993  # la de Palencia a Santander, publicados y estimados
     passes += 471 + 1515  # la de Zaragoza a Logroño, publicados y estimados
     passes += 192 + 448  # la de Castejón a Pamplona, publicados y estimados
+    passes += 18 + 66  # la de Miranda de Ebro a Bilbao, publicados y estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -656,6 +659,7 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 475
         + 20  # los regionales de Valladolid a Santander
         + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+        + 4  # los Intercity de Miranda de Ebro a Bilbao
     )
     assert (
         await conn.fetchval("SELECT count(*) FROM services")
@@ -685,6 +689,7 @@ async def test_importing_the_same_file_again_duplicates_nothing(
             + 475
             + 20  # los regionales de Valladolid a Santander
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            + 4  # los Intercity de Miranda de Ebro a Bilbao
         )
     )
 
@@ -743,7 +748,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
             + 426
             + 475
             + 20  # los regionales de Valladolid a Santander
-            + 84,  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            + 4,  # los Intercity de Miranda de Ebro a Bilbao
             767
             + 37
             + 555
@@ -766,7 +772,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
             + 426
             + 475
             + 20  # los regionales de Valladolid a Santander
-            + 84,  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            + 4,  # los Intercity de Miranda de Ebro a Bilbao
         ]
     )
     assert result["datasets_removed"] == []
@@ -833,6 +840,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
             + 475
             + 20  # los regionales de Valladolid a Santander
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            + 4  # los Intercity de Miranda de Ebro a Bilbao
         )
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
