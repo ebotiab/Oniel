@@ -56,6 +56,9 @@ TARRAGONA_BARCELONA_SPEC = DATA_DIR / "curated" / "tarragona-barcelona.json"
 VALENCIA_ALICANTE_SPEC = DATA_DIR / "curated" / "valencia-xativa-alicante.json"
 MADRID_AVILA_VALLADOLID_SPEC = DATA_DIR / "curated" / "madrid-avila-valladolid.json"
 PALENCIA_SANTANDER_SPEC = DATA_DIR / "curated" / "palencia-santander.json"
+#: Las dos líneas del valle del Ebro: de Zaragoza a Logroño por Castejón y de Castejón a Pamplona.
+ZARAGOZA_LOGRONO_SPEC = DATA_DIR / "curated" / "zaragoza-castejon-logrono.json"
+CASTEJON_PAMPLONA_SPEC = DATA_DIR / "curated" / "castejon-pamplona.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -95,6 +98,8 @@ SPECS = [
     VALENCIA_ALICANTE_SPEC,
     MADRID_AVILA_VALLADOLID_SPEC,
     PALENCIA_SANTANDER_SPEC,
+    ZARAGOZA_LOGRONO_SPEC,
+    CASTEJON_PAMPLONA_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

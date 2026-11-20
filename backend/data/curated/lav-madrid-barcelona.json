@@ -44,7 +44,7 @@
     {"id": "calatayud", "name": "Calatayud", "kind": "estacion", "adif_code": "70600", "position": {"lon": -1.6384166, "lat": 41.3463614}, "reference_pk_km": 221.3,
      "description": "Estación que comparten la alta velocidad y la línea convencional de Madrid a Zaragoza, cada una con sus vías y andenes."},
     {"id": "cambiador-plasencia-de-jalon", "name": "Cambiador de Plasencia de Jalón", "kind": "cambiador", "position": {"km": 276.7}, "reference_pk_km": 276.705,
-     "description": "Cambiador de ancho por el que los trenes de Madrid a Pamplona y Logroño dejan la alta velocidad y siguen por la red convencional hacia Tudela. Unos kilómetros antes está el PAET de Plasencia de Jalón."},
+     "description": "Cambiador de ancho por el que los trenes de Madrid a Pamplona y Logroño dejan la alta velocidad. Siguen por una vía de ancho ibérico hasta Cabañas de Ebro, donde entran en la línea de Zaragoza a Castejón y Logroño, sin pasar por Zaragoza. Unos kilómetros antes está el PAET de Plasencia de Jalón."},
     {"id": "bif-moncasi", "name": "Bifurcación Moncasi", "kind": "bifurcacion", "position": {"lon": -1.0270992, "lat": 41.6346471}, "reference_pk_km": 294.897,
      "description": "Aquí se separan dos caminos: el que entra en Zaragoza-Delicias y el baipás, que rodea la ciudad por el sur y lo toman los trenes que no paran en ella."},
     {"id": "zaragoza-delicias", "name": "Zaragoza-Delicias", "kind": "estacion", "adif_code": "04040", "position": {"lon": -0.9113881, "lat": 41.6585732}, "reference_pk_km": 306.7,
@@ -84,8 +84,7 @@
   ],
   "connections": [
     {"id": "enlace-vallecas-perales-del-rio", "node_id": "bif-vallecas-av", "name": "Enlace con la alta velocidad de Sevilla", "towards": "Córdoba, Sevilla y Málaga sin pasar por Madrid-Puerta de Atocha", "status": "no_cargada", "sketch": [[-3.6215531, 40.3375843], [-3.6583785, 40.3061689]]},
-    {"id": "convencional-plasencia-de-jalon-tudela", "node_id": "cambiador-plasencia-de-jalon", "name": "Red convencional por Plasencia de Jalón", "towards": "Tudela, Pamplona y Logroño", "status": "no_cargada", "sketch": [[-1.2343583, 41.6896227], [-1.36, 41.85], [-1.59793, 42.05943]]},
-    {"id": "convencional-zaragoza-norte", "node_id": "zaragoza-delicias", "name": "Red convencional desde Zaragoza", "towards": "Tudela, Pamplona, Logroño, Bilbao y Galicia", "status": "no_cargada", "sketch": [[-0.9113881, 41.6585732], [-1.02019, 41.72265], [-1.3, 41.88]]}
+    {"id": "convencional-plasencia-de-jalon-tudela", "node_id": "cambiador-plasencia-de-jalon", "name": "Vía de ancho ibérico por Grisén", "towards": "Cabañas de Ebro, donde se une a la línea de Zaragoza a Castejón y Logroño", "status": "no_cargada", "sketch": [[-1.2343583, 41.6896227], [-1.1658454, 41.7452588], [-1.1684037, 41.7883119]]}
   ],
   "stop_mappings": {
     "60000": {"node": "madrid-puerta-de-atocha"},
@@ -125,15 +124,15 @@
     "23004": {"exits": ["zaragoza-delicias"]},
     "23008": {"exits": ["zaragoza-delicias"]},
     "31400": {"exits": ["zaragoza-delicias"]},
-    "80100": {"exits": ["zaragoza-delicias"]},
-    "80108": {"exits": ["zaragoza-delicias"]},
+    "80100": {"exits": ["zaragoza-delicias"], "via": [{"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]},
+    "80108": {"exits": ["zaragoza-delicias"], "via": [{"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]},
     "81002": {"exits": ["zaragoza-delicias"]},
-    "81100": {"exits": ["zaragoza-delicias"]},
-    "81108": {"exits": ["zaragoza-delicias"]},
-    "81109": {"exits": ["zaragoza-delicias"]},
-    "81110": {"exits": ["zaragoza-delicias"]},
-    "81200": {"exits": ["zaragoza-delicias"]},
-    "81202": {"exits": ["zaragoza-delicias"]},
+    "81100": {"exits": ["zaragoza-delicias"], "via": {"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}},
+    "81108": {"exits": ["zaragoza-delicias"], "via": {"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}},
+    "81109": {"exits": ["zaragoza-delicias"], "via": {"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}},
+    "81110": {"exits": ["zaragoza-delicias"], "via": {"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}},
+    "81200": {"exits": ["zaragoza-delicias"], "via": {"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}},
+    "81202": {"exits": ["zaragoza-delicias"], "via": {"line": "zaragoza-castejon-logrono", "node": "zaragoza-delicias"}},
     "78200": {"exits": ["bif-huesca"], "via": {"line": "lav-zaragoza-huesca", "node": "bif-huesca"}},
     "74200": {"exits": ["bif-huesca"], "via": {"line": "lav-zaragoza-huesca", "node": "bif-huesca"}},
     "50100": {"exits": ["camp-de-tarragona"]},
@@ -183,19 +182,19 @@
       "id": "calatayud-tudela-por-plasencia-de-jalon",
       "description": "Alvia de Madrid a Pamplona y Logroño con parada en Calatayud: dejan la alta velocidad en el cambiador de Plasencia de Jalón y siguen por la red convencional hacia Tudela, sin pasar por Zaragoza.",
       "consecutive_stop_ids": ["70600", "81202"],
-      "stop_mappings": {"80100": {"exits": ["cambiador-plasencia-de-jalon"]}, "80108": {"exits": ["cambiador-plasencia-de-jalon"]}, "81100": {"exits": ["cambiador-plasencia-de-jalon"]}, "81108": {"exits": ["cambiador-plasencia-de-jalon"]}, "81109": {"exits": ["cambiador-plasencia-de-jalon"]}, "81110": {"exits": ["cambiador-plasencia-de-jalon"]}, "81200": {"exits": ["cambiador-plasencia-de-jalon"]}, "81202": {"exits": ["cambiador-plasencia-de-jalon"]}}
+      "stop_mappings": {"80100": {"exits": ["cambiador-plasencia-de-jalon"], "via": [{"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]}, "80108": {"exits": ["cambiador-plasencia-de-jalon"], "via": [{"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]}, "81100": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81108": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81109": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81110": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81200": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81202": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}}
     },
     {
       "id": "calatayud-pamplona-por-plasencia-de-jalon",
       "description": "Alvia de Madrid a Pamplona con parada en Calatayud y sin parada en Tudela: también salen por el cambiador de Plasencia de Jalón.",
       "consecutive_stop_ids": ["70600", "80100"],
-      "stop_mappings": {"80100": {"exits": ["cambiador-plasencia-de-jalon"]}, "80108": {"exits": ["cambiador-plasencia-de-jalon"]}, "81100": {"exits": ["cambiador-plasencia-de-jalon"]}, "81108": {"exits": ["cambiador-plasencia-de-jalon"]}, "81109": {"exits": ["cambiador-plasencia-de-jalon"]}, "81110": {"exits": ["cambiador-plasencia-de-jalon"]}, "81200": {"exits": ["cambiador-plasencia-de-jalon"]}, "81202": {"exits": ["cambiador-plasencia-de-jalon"]}}
+      "stop_mappings": {"80100": {"exits": ["cambiador-plasencia-de-jalon"], "via": [{"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]}, "80108": {"exits": ["cambiador-plasencia-de-jalon"], "via": [{"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]}, "81100": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81108": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81109": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81110": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81200": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81202": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}}
     },
     {
       "id": "madrid-tudela-por-plasencia-de-jalon",
       "description": "Alvia e Intercity de Madrid a Pamplona y Logroño sin parada entre Madrid y Tudela: solo paran en una estación de la línea, así que no pasan el filtro de corredor, pero la recorren de Madrid al cambiador de Plasencia de Jalón.",
       "consecutive_stop_ids": ["60000", "81202"],
-      "stop_mappings": {"80100": {"exits": ["cambiador-plasencia-de-jalon"]}, "80108": {"exits": ["cambiador-plasencia-de-jalon"]}, "81100": {"exits": ["cambiador-plasencia-de-jalon"]}, "81108": {"exits": ["cambiador-plasencia-de-jalon"]}, "81109": {"exits": ["cambiador-plasencia-de-jalon"]}, "81110": {"exits": ["cambiador-plasencia-de-jalon"]}, "81200": {"exits": ["cambiador-plasencia-de-jalon"]}, "81202": {"exits": ["cambiador-plasencia-de-jalon"]}}
+      "stop_mappings": {"80100": {"exits": ["cambiador-plasencia-de-jalon"], "via": [{"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]}, "80108": {"exits": ["cambiador-plasencia-de-jalon"], "via": [{"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}, {"line": "castejon-pamplona", "node": "castejon-de-ebro"}]}, "81100": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81108": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81109": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81110": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81200": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}, "81202": {"exits": ["cambiador-plasencia-de-jalon"], "via": {"line": "zaragoza-castejon-logrono", "node": "cabanas-de-ebro"}}}
     },
     {
       "id": "zaragoza-huesca",

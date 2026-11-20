@@ -1,0 +1,948 @@
+{
+  "line": {
+    "id": "zaragoza-castejon-logrono",
+    "name": "Línea convencional Zaragoza – Castejón – Logroño",
+    "short_name": "200 y 700",
+    "sort_order": 41,
+    "zone": "aragon-navarra-rioja",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 2,
+    "pk_restarts": [
+      {
+        "node": "casetas",
+        "pk_km": 15.4
+      },
+      {
+        "node": "castejon-de-ebro",
+        "pk_km": 0.0
+      }
+    ],
+    "status": "disponible",
+    "description": "Sigue el valle del Ebro aguas arriba: sale de Zaragoza hacia Tudela y Castejón, en Navarra, y continúa por Calahorra hasta Logroño.\n\nEs el camino del tren entre Aragón, Navarra y La Rioja. Hasta Castejón tiene dos vías; de Castejón a Logroño, una sola. En Castejón sale de ella la línea de Pamplona, que va aparte.\n\nPara Adif son dos líneas: los primeros kilómetros, hasta Casetas, son de la línea de Madrid a Barcelona por Calatayud, y el resto, de la línea de Casetas a Bilbao, que se abrió entre 1861 y 1863. Oniel las enseña juntas porque los trenes las recorren seguidas.\n\nEn los horarios de Renfe la usan tres familias de trenes. Los Alvia e Intercity de Madrid a Pamplona y a Logroño dejan la alta velocidad en el cambiador de ancho de Plasencia de Jalón, antes de Zaragoza, y entran en la línea junto a Cabañas de Ebro, sin pasar por la ciudad. Los de Barcelona a Pamplona, San Sebastián, Bilbao y Galicia cambian de ancho en Zaragoza-Delicias y la recorren desde el principio. Y los regionales de Zaragoza a Castejón, Logroño, Pamplona y Vitoria paran en casi todas las estaciones. De Zaragoza a Casetas pasan también los regionales de Zaragoza a Calatayud.\n\nMás allá de Logroño la línea sigue hasta Miranda de Ebro y Bilbao; ese trecho no está cargado. Los trenes de Cercanías de Zaragoza usan las vías entre Delicias y Casetas, pero no están en los horarios cargados.",
+    "geometry_source": {
+      "source_id": "osm-relation-9277501",
+      "parts": [
+        {
+          "source_id": "osm-relation-6205861",
+          "file": "raw/osm/relation_6205861_cercanias_c1_casetas_miraflores_2026-11-20.json",
+          "relation_id": 6205861,
+          "from": [
+            -0.9113881,
+            41.6585732
+          ],
+          "to": [
+            -1.0226707,
+            41.7240483
+          ]
+        },
+        {
+          "source_id": "osm-relation-9277501",
+          "file": "raw/osm/relation_9277501_linea_700_casetas_bilbao_2026-11-20.json",
+          "relation_id": 9277501,
+          "from": [
+            -1.0226707,
+            41.7240483
+          ],
+          "to": [
+            -2.4408195,
+            42.4575743
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-casetas-bilbao"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "zaragoza-delicias",
+      "name": "Zaragoza-Delicias",
+      "kind": "estacion",
+      "adif_code": "04040",
+      "shared": true,
+      "position": {
+        "lon": -0.9113881,
+        "lat": 41.6585732
+      }
+    },
+    {
+      "id": "utebo",
+      "name": "Utebo",
+      "kind": "estacion",
+      "adif_code": "70801",
+      "rank": "secundario",
+      "position": {
+        "lon": -0.9984922,
+        "lat": 41.7109202
+      }
+    },
+    {
+      "id": "casetas",
+      "name": "Casetas",
+      "kind": "estacion",
+      "adif_code": "70800",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.0204905,
+        "lat": 41.7227337
+      },
+      "description": "Estación del barrio zaragozano de Casetas. Aquí se separan dos líneas: la de Madrid por Calatayud, que no está cargada, y la que sigue el Ebro hacia Tudela, Castejón y Logroño."
+    },
+    {
+      "id": "alagon",
+      "name": "Alagón",
+      "kind": "estacion",
+      "adif_code": "81210",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.1126082,
+        "lat": 41.7716254
+      },
+      "reference_pk_km": 24.8
+    },
+    {
+      "id": "cabanas-de-ebro",
+      "name": "Cabañas de Ebro",
+      "kind": "estacion",
+      "adif_code": "81209",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.1684037,
+        "lat": 41.7883119
+      },
+      "reference_pk_km": 29.9,
+      "description": "Junto a esta estación se une a la línea la vía que viene del cambiador de ancho de Plasencia de Jalón. Por ella llegan los trenes de Madrid a Pamplona y a Logroño, que dejan la alta velocidad antes de Zaragoza y no pasan por la ciudad. Esa vía no está cargada."
+    },
+    {
+      "id": "pedrola",
+      "name": "Pedrola",
+      "kind": "estacion",
+      "adif_code": "81208",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.2019377,
+        "lat": 41.8050976
+      },
+      "reference_pk_km": 33.3
+    },
+    {
+      "id": "luceni",
+      "name": "Luceni",
+      "kind": "estacion",
+      "adif_code": "81207",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.2440052,
+        "lat": 41.8261552
+      },
+      "reference_pk_km": 37.5
+    },
+    {
+      "id": "gallur",
+      "name": "Gallur",
+      "kind": "estacion",
+      "adif_code": "81206",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.3213259,
+        "lat": 41.8670941
+      },
+      "reference_pk_km": 45.4
+    },
+    {
+      "id": "cortes-de-navarra",
+      "name": "Cortes de Navarra",
+      "kind": "estacion",
+      "adif_code": "81205",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.4208711,
+        "lat": 41.9153579
+      },
+      "reference_pk_km": 55.3
+    },
+    {
+      "id": "ribaforada",
+      "name": "Ribaforada",
+      "kind": "estacion",
+      "adif_code": "81203",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.5154793,
+        "lat": 41.9970724
+      },
+      "reference_pk_km": 67.4
+    },
+    {
+      "id": "tudela-de-navarra",
+      "name": "Tudela de Navarra",
+      "kind": "estacion",
+      "adif_code": "81202",
+      "position": {
+        "lon": -1.5976655,
+        "lat": 42.0594993
+      },
+      "reference_pk_km": 77.4,
+      "description": "La estación de Tudela, la segunda ciudad de Navarra. Paran en ella casi todos los trenes de la línea, también los Alvia de Madrid a Pamplona y a Logroño."
+    },
+    {
+      "id": "castejon-de-ebro",
+      "name": "Castejón de Ebro",
+      "kind": "estacion",
+      "adif_code": "81200",
+      "position": {
+        "lon": -1.6924387,
+        "lat": 42.1728682
+      },
+      "reference_pk_km": 93.7,
+      "description": "Nudo ferroviario del sur de Navarra. Aquí se separan dos caminos: el que sigue el Ebro hacia Calahorra y Logroño y el que sube hacia Tafalla y Pamplona. Hasta aquí la vía es doble; a partir de aquí, las dos líneas son de vía única."
+    },
+    {
+      "id": "alfaro",
+      "name": "Alfaro",
+      "kind": "estacion",
+      "adif_code": "81110",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.7481374,
+        "lat": 42.1866089
+      },
+      "reference_pk_km": 5.2
+    },
+    {
+      "id": "rincon-de-soto",
+      "name": "Rincón de Soto",
+      "kind": "estacion",
+      "adif_code": "81109",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.8478614,
+        "lat": 42.2300474
+      },
+      "reference_pk_km": 14.8
+    },
+    {
+      "id": "calahorra",
+      "name": "Calahorra",
+      "kind": "estacion",
+      "adif_code": "81108",
+      "position": {
+        "lon": -1.9578188,
+        "lat": 42.3106958
+      },
+      "reference_pk_km": 27.7,
+      "description": "La estación de Calahorra, la segunda ciudad de La Rioja. Paran en ella los Alvia de Madrid a Logroño, los de Barcelona a Bilbao y los regionales."
+    },
+    {
+      "id": "feculas-navarra",
+      "name": "Féculas-Navarra",
+      "kind": "estacion",
+      "adif_code": "81106",
+      "rank": "secundario",
+      "position": {
+        "lon": -2.0980062,
+        "lat": 42.4111574
+      },
+      "reference_pk_km": 44.7
+    },
+    {
+      "id": "alcanadre",
+      "name": "Alcanadre",
+      "kind": "estacion",
+      "adif_code": "81105",
+      "rank": "secundario",
+      "position": {
+        "lon": -2.1219746,
+        "lat": 42.407592
+      },
+      "reference_pk_km": 47.8
+    },
+    {
+      "id": "agoncillo",
+      "name": "Agoncillo",
+      "kind": "estacion",
+      "adif_code": "81102",
+      "rank": "secundario",
+      "position": {
+        "lon": -2.29167,
+        "lat": 42.4435543
+      },
+      "reference_pk_km": 63.4
+    },
+    {
+      "id": "logrono",
+      "name": "Logroño",
+      "kind": "estacion",
+      "adif_code": "81100",
+      "position": {
+        "lon": -2.4408195,
+        "lat": 42.4575743
+      },
+      "description": "La estación de Logroño, con las vías bajo tierra desde 2011. Aquí acaba la línea cargada: los trenes siguen hacia Haro y Miranda de Ebro, y de allí a Bilbao o a Burgos, por una vía que no está cargada."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "zaragoza-delicias",
+      "to_node": "castejon-de-ebro",
+      "value": 2,
+      "source_id": "osm-relation-9277501",
+      "checked_on": "2026-11-20",
+      "note": "Vía doble de Zaragoza-Delicias a Castejón de Ebro: las vías de OSM llevan passenger_lines=2 hasta 360 m antes de la estación de Castejón. Coincide con el mapa 4 de la Declaración sobre la Red («Doble a 3 kV a 1.668 mm» de Zaragoza Delicias a Castejón) y con los artículos de Wikipedia de las estaciones de Alagón, Luceni y Tudela de Navarra."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "castejon-de-ebro",
+      "to_node": "logrono",
+      "value": 1,
+      "source_id": "osm-relation-9277501",
+      "checked_on": "2026-11-20",
+      "note": "Vía única de Castejón de Ebro a Logroño: las vías de OSM llevan passenger_lines=1 y el mapa 4 dibuja «Única a 3 kV a 1.668 mm». Los últimos 2 km antes de la estación de Logroño llevan passenger_lines=2: ningún nodo marca dónde empiezan y no se declaran aparte."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "zaragoza-delicias",
+      "to_node": "logrono",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea entre Zaragoza Delicias y Casetas, entre Casetas y Tudela de Navarra, junto a Castejón y entre Castejón y Logroño."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "zaragoza-delicias",
+      "to_node": "castejon-de-ebro",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo marrón y rótulo «BAB ctc» de Zaragoza Delicias a Casetas y de Casetas a Tudela de Navarra y Castejón."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "castejon-de-ebro",
+      "to_node": "logrono",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo naranja y rótulo «BAU ctc» de Castejón a Logroño."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "zaragoza-delicias",
+      "to_node": "logrono",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea, «BAB ctc» y «BAU ctc»."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-casetas-calatayud",
+      "node_id": "casetas",
+      "name": "Línea convencional Madrid – Zaragoza",
+      "towards": "Grisén, Ricla-La Almunia, Calatayud y Madrid",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -1.0204905,
+          41.7227337
+        ],
+        [
+          -1.1658454,
+          41.7452588
+        ],
+        [
+          -1.2343583,
+          41.6896227
+        ],
+        [
+          -1.2816817,
+          41.639215
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "04040": {
+      "node": "zaragoza-delicias"
+    },
+    "70801": {
+      "node": "utebo"
+    },
+    "70800": {
+      "node": "casetas"
+    },
+    "81210": {
+      "node": "alagon"
+    },
+    "81209": {
+      "node": "cabanas-de-ebro"
+    },
+    "81208": {
+      "node": "pedrola"
+    },
+    "81207": {
+      "node": "luceni"
+    },
+    "81206": {
+      "node": "gallur"
+    },
+    "81205": {
+      "node": "cortes-de-navarra"
+    },
+    "81203": {
+      "node": "ribaforada"
+    },
+    "81202": {
+      "node": "tudela-de-navarra"
+    },
+    "81200": {
+      "node": "castejon-de-ebro"
+    },
+    "81110": {
+      "node": "alfaro"
+    },
+    "81109": {
+      "node": "rincon-de-soto"
+    },
+    "81108": {
+      "node": "calahorra"
+    },
+    "81106": {
+      "node": "feculas-navarra"
+    },
+    "81105": {
+      "node": "alcanadre"
+    },
+    "81102": {
+      "node": "agoncillo"
+    },
+    "81100": {
+      "node": "logrono"
+    },
+    "70806": {
+      "exits": [
+        "zaragoza-delicias"
+      ]
+    },
+    "70807": {
+      "exits": [
+        "zaragoza-delicias"
+      ]
+    },
+    "71100": {
+      "exits": [
+        "zaragoza-delicias"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "zaragoza-delicias"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "zaragoza-delicias"
+      }
+    },
+    "04104": {
+      "exits": [
+        "zaragoza-delicias"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "zaragoza-delicias"
+      }
+    },
+    "71801": {
+      "exits": [
+        "zaragoza-delicias"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "zaragoza-delicias"
+      }
+    },
+    "60000": {
+      "exits": [
+        "cabanas-de-ebro"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "cambiador-plasencia-de-jalon"
+      }
+    },
+    "04007": {
+      "exits": [
+        "cabanas-de-ebro"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "cambiador-plasencia-de-jalon"
+      }
+    },
+    "70600": {
+      "exits": [
+        "cabanas-de-ebro"
+      ],
+      "via": {
+        "line": "lav-madrid-barcelona",
+        "node": "cambiador-plasencia-de-jalon"
+      }
+    },
+    "70706": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70705": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70704": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70703": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70702": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70701": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70700": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70607": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70606": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70605": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70604": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70602": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70603": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70505": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70504": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70503": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70502": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70501": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70500": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70405": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70404": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "70403": {
+      "exits": [
+        "casetas"
+      ]
+    },
+    "80115": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "castejon-pamplona",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "80114": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "castejon-pamplona",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "80109": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "castejon-pamplona",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "80108": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "castejon-pamplona",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "80100": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "castejon-pamplona",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "80005": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "80003": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "80001": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11300": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11213": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11212": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11210": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11205": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11204": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11203": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11111": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11109": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "10600": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "10504": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "10503": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "10502": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "10501": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "10500": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "32002": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "32003": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "32004": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "30100": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20100": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "81002": {
+      "exits": [
+        "logrono"
+      ]
+    },
+    "13200": {
+      "exits": [
+        "logrono"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos o más estaciones de la línea, y además los que la recorren parando en una sola o en ninguna: los Alvia e Intercity de Madrid a Pamplona, que van de Madrid o de Calatayud a Tudela sin parar, o de Calatayud a Pamplona. Entran también los regionales de Zaragoza a Calatayud, que recorren la línea de Zaragoza-Delicias a Casetas. Quedan fuera los que solo tocan una estación y no recorren ningún tramo: los Intercity de Madrid-Chamartín a Logroño por Burgos y Miranda de Ebro, los regionales de Miranda de Ebro y Vitoria que acaban en Castejón y los trenes de alta velocidad y los regionales que solo paran en Zaragoza-Delicias.",
+    "min_node_stops": 2,
+    "consecutive_stop_ids": [
+      [
+        "60000",
+        "81202"
+      ],
+      [
+        "70600",
+        "81202"
+      ],
+      [
+        "70600",
+        "80100"
+      ]
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "regionales-de-calatayud-por-utebo",
+      "description": "Regionales de Zaragoza a Calatayud que no paran en Casetas: van de Utebo a Grisén, dejan la línea en Casetas y llegan a Calatayud por la línea convencional de Madrid, no por el cambiador de Plasencia de Jalón.",
+      "consecutive_stop_ids": [
+        "70801",
+        "70706"
+      ],
+      "stop_mappings": {
+        "70600": {
+          "exits": [
+            "casetas"
+          ]
+        }
+      }
+    },
+    {
+      "id": "regionales-de-calatayud-por-casetas",
+      "description": "Regionales de Zaragoza a Calatayud con parada en Casetas: siguen de allí a Grisén y llegan a Calatayud por la línea convencional de Madrid.",
+      "consecutive_stop_ids": [
+        "70800",
+        "70706"
+      ],
+      "stop_mappings": {
+        "70600": {
+          "exits": [
+            "casetas"
+          ]
+        }
+      }
+    },
+    {
+      "id": "miranda-por-logrono",
+      "description": "Trenes que siguen de Logroño a Haro y Miranda de Ebro: los regionales de Zaragoza a Miranda y los Alvia de Barcelona a Bilbao. Dejan la línea en Logroño. Los demás trenes que paran en Miranda de Ebro llegan a ella por Pamplona y Vitoria, y dejan la línea en Castejón.",
+      "consecutive_stop_ids": [
+        "81108",
+        "81100",
+        "81002"
+      ],
+      "stop_mappings": {
+        "11200": {
+          "exits": [
+            "logrono"
+          ]
+        }
+      }
+    }
+  ]
+}

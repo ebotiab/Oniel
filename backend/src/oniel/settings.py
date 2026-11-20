@@ -65,6 +65,8 @@ class Settings(BaseSettings):
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
         "palencia-santander",
+        "zaragoza-castejon-logrono",
+        "castejon-pamplona",
     ]
 
 

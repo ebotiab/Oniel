@@ -1,0 +1,665 @@
+{
+  "line": {
+    "id": "castejon-pamplona",
+    "name": "Línea convencional Castejón – Pamplona",
+    "short_name": "710",
+    "sort_order": 42,
+    "zone": "aragon-navarra-rioja",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 140,
+    "tracks": 1,
+    "pk_origin_km": 93.7,
+    "status": "disponible",
+    "description": "Sale de Castejón de Ebro, en la línea de Zaragoza a Logroño, y sube hacia el norte por Tafalla hasta Pamplona.\n\nEs el único camino del tren a Pamplona desde Zaragoza, Madrid y Barcelona. Tiene una sola vía en todo el recorrido. Para Adif es parte de la línea 710, de Castejón a Altsasu, que se abrió entre 1860 y 1865 para unir Zaragoza con Pamplona.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Pamplona, que llegan por la alta velocidad hasta el cambiador de Plasencia de Jalón; los de Barcelona a Pamplona, San Sebastián y Galicia, que cambian de ancho en Zaragoza, y los regionales de Zaragoza a Pamplona y Vitoria.\n\nMás allá de Pamplona la línea sigue hasta Altsasu, donde se une a la de Madrid a Irún; ese trecho no está cargado.",
+    "geometry_source": {
+      "source_id": "osm-relation-9392199",
+      "parts": [
+        {
+          "source_id": "osm-relation-9277501",
+          "file": "raw/osm/relation_9277501_linea_700_casetas_bilbao_2026-11-20.json",
+          "relation_id": 9277501,
+          "from": [
+            -1.6924387,
+            42.1728682
+          ],
+          "to": [
+            -1.696804,
+            42.1746875
+          ]
+        },
+        {
+          "source_id": "osm-relation-9392199",
+          "file": "raw/osm/relation_9392199_linea_710_castejon_alsasua_2026-11-20.json",
+          "relation_id": 9392199,
+          "from": [
+            -1.696804,
+            42.1746875
+          ],
+          "to": [
+            -1.6614867,
+            42.8250496
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-castejon-alsasua"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "castejon-de-ebro",
+      "name": "Castejón de Ebro",
+      "kind": "estacion",
+      "adif_code": "81200",
+      "shared": true,
+      "position": {
+        "lon": -1.6924387,
+        "lat": 42.1728682
+      }
+    },
+    {
+      "id": "villafranca-de-navarra",
+      "name": "Villafranca de Navarra",
+      "kind": "estacion",
+      "adif_code": "80115",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.745439,
+        "lat": 42.2807416
+      },
+      "reference_pk_km": 106.9
+    },
+    {
+      "id": "marcilla-de-navarra",
+      "name": "Marcilla de Navarra",
+      "kind": "estacion",
+      "adif_code": "80114",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.7172237,
+        "lat": 42.3347126
+      },
+      "reference_pk_km": 113.3
+    },
+    {
+      "id": "olite",
+      "name": "Olite-Erriberri",
+      "kind": "estacion",
+      "adif_code": "80109",
+      "rank": "secundario",
+      "position": {
+        "lon": -1.6497603,
+        "lat": 42.4851261
+      },
+      "reference_pk_km": 133.4
+    },
+    {
+      "id": "tafalla",
+      "name": "Tafalla",
+      "kind": "estacion",
+      "adif_code": "80108",
+      "position": {
+        "lon": -1.6712149,
+        "lat": 42.525751
+      },
+      "reference_pk_km": 138.3,
+      "description": "La estación de Tafalla, la principal entre Castejón y Pamplona. Paran en ella casi todos los trenes de la línea."
+    },
+    {
+      "id": "pamplona",
+      "name": "Pamplona/Iruña",
+      "kind": "estacion",
+      "adif_code": "80100",
+      "position": {
+        "lon": -1.6614867,
+        "lat": 42.8250496
+      },
+      "reference_pk_km": 181.0,
+      "description": "La estación de Pamplona, donde acaba la línea cargada. Los trenes siguen hacia Altsasu, y de allí a Vitoria o a San Sebastián e Irún, por una vía que no está cargada."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "castejon-de-ebro",
+      "to_node": "pamplona",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a la línea entre Castejón y Pamplona."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "castejon-de-ebro",
+      "to_node": "pamplona",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo naranja y rótulo «BAU ctc» de Castejón a Pamplona. Wikipedia da bloqueo automático en vía única con control de tráfico centralizado."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "castejon-de-ebro",
+      "to_node": "pamplona",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-pamplona-altsasu",
+      "node_id": "pamplona",
+      "name": "Línea Castejón – Altsasu",
+      "towards": "Altsasu, y de allí a Vitoria o a San Sebastián e Irún",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -1.6614867,
+          42.8250496
+        ],
+        [
+          -1.974814,
+          42.920606
+        ],
+        [
+          -2.181237,
+          42.894847
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "81200": {
+      "node": "castejon-de-ebro"
+    },
+    "80115": {
+      "node": "villafranca-de-navarra"
+    },
+    "80114": {
+      "node": "marcilla-de-navarra"
+    },
+    "80109": {
+      "node": "olite"
+    },
+    "80108": {
+      "node": "tafalla"
+    },
+    "80100": {
+      "node": "pamplona"
+    },
+    "04040": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "70801": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "70800": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81210": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81209": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81208": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81207": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81206": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81205": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81203": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81202": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81110": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81109": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81108": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81106": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81105": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81102": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "81100": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": {
+        "line": "zaragoza-castejon-logrono",
+        "node": "castejon-de-ebro"
+      }
+    },
+    "78400": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": [
+        {
+          "line": "zaragoza-castejon-logrono",
+          "node": "castejon-de-ebro"
+        },
+        {
+          "line": "lav-madrid-barcelona",
+          "node": "zaragoza-delicias"
+        }
+      ]
+    },
+    "04104": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": [
+        {
+          "line": "zaragoza-castejon-logrono",
+          "node": "castejon-de-ebro"
+        },
+        {
+          "line": "lav-madrid-barcelona",
+          "node": "zaragoza-delicias"
+        }
+      ]
+    },
+    "71801": {
+      "exits": [
+        "castejon-de-ebro"
+      ],
+      "via": [
+        {
+          "line": "zaragoza-castejon-logrono",
+          "node": "castejon-de-ebro"
+        },
+        {
+          "line": "lav-madrid-barcelona",
+          "node": "zaragoza-delicias"
+        }
+      ]
+    },
+    "70806": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "70807": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "71100": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "60000": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "04007": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "70600": {
+      "exits": [
+        "castejon-de-ebro"
+      ]
+    },
+    "80005": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "80003": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "80001": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11300": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11400": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11511": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11213": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11212": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11210": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11208": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11205": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11204": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11203": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11111": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11109": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "10600": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "10504": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "10503": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "10502": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "10501": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "10500": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "32002": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "32003": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "32004": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "30100": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20100": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "08223": {
+      "exits": [
+        "pamplona"
+      ]
+    },
+    "11200": {
+      "exits": [
+        "pamplona"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos o más estaciones de la línea, y además los que la recorren entera parando solo en Pamplona: los Alvia de Madrid que van de Calatayud a Pamplona sin parar y los Intercity de Zaragoza a Vitoria, que van de Tudela a Pamplona. Quedan fuera los regionales de Miranda de Ebro y Vitoria que acaban en Pamplona, y los de Logroño y Zaragoza que acaban en Castejón: tocan una estación y no recorren ningún tramo.",
+    "min_node_stops": 2,
+    "consecutive_stop_ids": [
+      [
+        "70600",
+        "80100"
+      ],
+      [
+        "81202",
+        "80100"
+      ]
+    ]
+  }
+}

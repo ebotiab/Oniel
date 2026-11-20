@@ -1,0 +1,961 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-20T09:41:33Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 26212732,
+  "lat": 42.2807416,
+  "lon": -1.7454390,
+  "tags": {
+    "name": "Villafranca de Navarra",
+    "name:es": "Villafranca de Navarra",
+    "name:eu": "Alesbes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5552479",
+    "wikipedia": "es:Estación de Villafranca de Navarra"
+  }
+},
+{
+  "type": "node",
+  "id": 26230611,
+  "lat": 42.1728682,
+  "lon": -1.6924387,
+  "tags": {
+    "name": "Castejón de Ebro",
+    "name:es": "Castejón de Ebro",
+    "name:eu": "Castejon",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q4464156"
+  }
+},
+{
+  "type": "node",
+  "id": 26377011,
+  "lat": 42.0594993,
+  "lon": -1.5976655,
+  "tags": {
+    "name": "Tudela de Navarra",
+    "name:es": "Tudela de Navarra",
+    "name:eu": "Tutera",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q4464174",
+    "wikimedia_commons": "File:Tudela_-_Estación_de_ADIF_1.jpg",
+    "wikipedia": "es:Estación de Tudela de Navarra"
+  }
+},
+{
+  "type": "node",
+  "id": 26377358,
+  "lat": 41.9970724,
+  "lon": -1.5154793,
+  "tags": {
+    "name": "Ribaforada",
+    "name:es": "Ribaforada",
+    "name:eu": "Erripazuloaga",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q4464130"
+  }
+},
+{
+  "type": "node",
+  "id": 26377368,
+  "lat": 41.8670941,
+  "lon": -1.3213259,
+  "tags": {
+    "name": "Gallur",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "81206",
+    "ref:EU:PLC": "ES81206",
+    "train": "yes",
+    "uic_ref": "7181206",
+    "wikidata": "Q5846278",
+    "wikipedia": "es:Estación de Gallur"
+  }
+},
+{
+  "type": "node",
+  "id": 81326544,
+  "lat": 41.7716254,
+  "lon": -1.1126082,
+  "tags": {
+    "name": "Alagón",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "81202",
+    "ref:EU:PLC": "ES81202",
+    "uic_ref": "7181202",
+    "wikidata": "Q5845603"
+  }
+},
+{
+  "type": "node",
+  "id": 81326546,
+  "lat": 41.7883119,
+  "lon": -1.1684037,
+  "tags": {
+    "name": "Cabañas de Ebro",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "81209",
+    "ref:EU:PLC": "ES81209",
+    "uic_ref": "7181209",
+    "wikidata": "Q5845883"
+  }
+},
+{
+  "type": "node",
+  "id": 81326548,
+  "lat": 41.8050976,
+  "lon": -1.2019377,
+  "tags": {
+    "name": "Pedrola",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 244184062,
+  "lat": 42.5257510,
+  "lon": -1.6712149,
+  "tags": {
+    "name": "Tafalla",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q4464200",
+    "wikipedia": "es:Estación de Tafalla"
+  }
+},
+{
+  "type": "node",
+  "id": 257347410,
+  "lat": 41.7553456,
+  "lon": -2.4756125,
+  "tags": {
+    "name": "Soria",
+    "name:ar": "سريا",
+    "name:es": "Soria",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "82100",
+    "ref:EU:PLC": "ES82100",
+    "train": "yes",
+    "uic_ref": "7182100",
+    "website": "https://www.adif.es/w/82100-soria",
+    "wikidata": "Q5847274",
+    "wikipedia": "es:Estación de Soria"
+  }
+},
+{
+  "type": "node",
+  "id": 287467020,
+  "lat": 42.3347126,
+  "lon": -1.7172237,
+  "tags": {
+    "name": "Marcilla de Navarra",
+    "name:es": "Marcilla de Navarra",
+    "name:eu": "Martzilla",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wheelchair": "yes",
+    "wikidata": "Q4464165"
+  }
+},
+{
+  "type": "node",
+  "id": 448128332,
+  "lat": 41.7227337,
+  "lon": -1.0204905,
+  "tags": {
+    "name": "Casetas",
+    "network": "Cercanías Zaragoza",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "70800",
+    "ref:EU:PLC": "ES70800",
+    "uic_ref": "7170800",
+    "wikidata": "Q8779516"
+  }
+},
+{
+  "type": "node",
+  "id": 1974345183,
+  "lat": 41.7109202,
+  "lon": -0.9984922,
+  "tags": {
+    "alt_name": "Utebo-Pueblo",
+    "name": "Utebo",
+    "network": "Cercanías Zaragoza",
+    "network:wikidata": "Q1054798",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:position": "330",
+    "ref": "70801",
+    "ref:EU:PLC": "ES70801",
+    "uic_ref": "7170801",
+    "wikidata": "Q3324045"
+  }
+},
+{
+  "type": "node",
+  "id": 2089759574,
+  "lat": 42.4498521,
+  "lon": -2.3369894,
+  "tags": {
+    "name": "Recajo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5557379",
+    "wikimedia_commons": "File:Estación de Recajo.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 2089761594,
+  "lat": 42.4435543,
+  "lon": -2.2916700,
+  "tags": {
+    "name": "Agoncillo",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "station",
+    "wikidata": "Q5845592",
+    "wikipedia": "es:Estación de Agoncillo"
+  }
+},
+{
+  "type": "node",
+  "id": 2090074703,
+  "lat": 42.4075920,
+  "lon": -2.1219746,
+  "tags": {
+    "name": "Alcanadre",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "station",
+    "wikidata": "Q5793405"
+  }
+},
+{
+  "type": "node",
+  "id": 2090086360,
+  "lat": 42.4308609,
+  "lon": -2.2560781,
+  "tags": {
+    "name": "Arrúbal",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q6432955"
+  }
+},
+{
+  "type": "node",
+  "id": 2090101642,
+  "lat": 42.4111574,
+  "lon": -2.0980062,
+  "tags": {
+    "name": "Féculas-Navarra",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q4464116"
+  }
+},
+{
+  "type": "node",
+  "id": 2090104052,
+  "lat": 42.3806467,
+  "lon": -2.0712762,
+  "tags": {
+    "name": "Lodosa",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "station",
+    "wikidata": "Q93359510",
+    "wikipedia": "eu:Lodosako geralekua"
+  }
+},
+{
+  "type": "node",
+  "id": 2091426364,
+  "lat": 42.3106958,
+  "lon": -1.9578188,
+  "tags": {
+    "name": "Calahorra",
+    "name:ar": "قلهرة",
+    "name:es": "Calahorra",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845894"
+  }
+},
+{
+  "type": "node",
+  "id": 2091429119,
+  "lat": 42.2300474,
+  "lon": -1.8478614,
+  "tags": {
+    "name": "Rincón de Soto",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "station",
+    "wikidata": "Q5847063"
+  }
+},
+{
+  "type": "node",
+  "id": 2091431019,
+  "lat": 42.1866089,
+  "lon": -1.7481374,
+  "tags": {
+    "name": "Alfaro",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845640"
+  }
+},
+{
+  "type": "node",
+  "id": 2091462887,
+  "lat": 42.7546944,
+  "lon": -1.6362064,
+  "tags": {
+    "name": "Noain-Aeropuerto / Aireportua",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2121281730,
+  "lat": 42.4851261,
+  "lon": -1.6497603,
+  "tags": {
+    "name": "Olite",
+    "name:es": "Olite",
+    "name:eu": "Erriberri",
+    "operator": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5846826",
+    "wikipedia": "es:Estación de Olite"
+  }
+},
+{
+  "type": "node",
+  "id": 2381701827,
+  "lat": 42.8463131,
+  "lon": -2.3888912,
+  "tags": {
+    "addr:city": "Agurain / Salvatierra",
+    "addr:postcode": "01200",
+    "addr:street": "Trebiño kalea",
+    "name": "Agurain-Salvatierra de Álava",
+    "name:es": "Salvatierra de Álava",
+    "name:eu": "Agurain",
+    "nohousenumber": "yes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11212",
+    "ref:EU:PLC": "ES11212",
+    "train": "yes",
+    "uic_ref": "7111212",
+    "wikidata": "Q3381133",
+    "wikipedia": "es:Estación de Salvatierra de Álava"
+  }
+},
+{
+  "type": "node",
+  "id": 2459459539,
+  "lat": 42.4575743,
+  "lon": -2.4408195,
+  "tags": {
+    "name": "Logroño",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "81100",
+    "ref:EU:PLC": "ES81100",
+    "station": "train",
+    "toilets:wheelchair": "yes",
+    "train": "yes",
+    "uic_ref": "7181100",
+    "wheelchair": "yes",
+    "wheelchair:description": "[En: Step-free from street. Lifts down to platforms. Access from platform to train not checked.]"
+  }
+},
+{
+  "type": "node",
+  "id": 2961586517,
+  "lat": 41.9153579,
+  "lon": -1.4208711,
+  "tags": {
+    "name": "Cortes de Navarra",
+    "name:es": "Cortes de Navarra",
+    "name:eu": "Cortes",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "81205",
+    "ref:EU:PLC": "ES81205",
+    "train": "yes",
+    "uic_ref": "7181205",
+    "wikidata": "Q4464111"
+  }
+},
+{
+  "type": "node",
+  "id": 4179891043,
+  "lat": 41.6439153,
+  "lon": -0.8913425,
+  "tags": {
+    "location": "underground",
+    "name": "Zaragoza-Goya",
+    "network": "Cercanías Zaragoza",
+    "network:wikidata": "Q1054798",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "70807",
+    "ref:EU:PLC": "ES70807",
+    "ref:ibnr": "7170807",
+    "train": "yes",
+    "uic_ref": "7170807",
+    "wheelchair": "yes",
+    "wikidata": "Q2838310"
+  }
+},
+{
+  "type": "node",
+  "id": 4586239561,
+  "lat": 41.6527421,
+  "lon": -0.8959046,
+  "tags": {
+    "name": "Zaragoza-Portillo",
+    "network": "Cercanías Zaragoza",
+    "network:wikidata": "Q1054798",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "70806",
+    "ref:EU:PLC": "ES70806",
+    "ref:ibnr": "7100177",
+    "train": "yes",
+    "uic_ref": "7170806",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4813092198,
+  "lat": 41.6585732,
+  "lon": -0.9113881,
+  "tags": {
+    "addr:housenumber": "33",
+    "addr:street": "Calle de la Rioja",
+    "departures_board": "realtime",
+    "iata": "XZZ",
+    "name": "Zaragoza-Delicias",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif AV",
+    "owner:wikidata": "Q115684403",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "ZGD",
+    "railway:station_category": "1",
+    "ref": "04040",
+    "ref:EU:PLC": "ES04040",
+    "ref:ibnr": "7175506",
+    "uic_ref": "7104040",
+    "website": "https://www.adif.es/w/04040-zaragoza-delicias",
+    "wheelchair": "yes",
+    "wikidata": "Q801660"
+  }
+},
+{
+  "type": "node",
+  "id": 6186096066,
+  "lat": 41.7452588,
+  "lon": -1.1658454,
+  "tags": {
+    "name": "Grisén",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "70706",
+    "ref:EU:PLC": "ES70706",
+    "uic_ref": "7170706",
+    "wikidata": "Q5846325"
+  }
+},
+{
+  "type": "node",
+  "id": 6245732030,
+  "lat": 41.8261552,
+  "lon": -1.2440052,
+  "tags": {
+    "name": "Luceni",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "81207",
+    "ref:EU:PLC": "ES81207",
+    "uic_ref": "7181207",
+    "wikidata": "Q5663073"
+  }
+},
+{
+  "type": "node",
+  "id": 7508510461,
+  "lat": 42.3809548,
+  "lon": -1.6452932,
+  "tags": {
+    "name": "Caparroso",
+    "note": "Sin servicio de viajeros.",
+    "operator": "Adif",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 11757382798,
+  "lat": 42.8250496,
+  "lon": -1.6614867,
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:postcode": "31012",
+    "addr:street": "Parking de la Estación",
+    "image": "https://www.adif.es/documents/34234/3078361/a80100.jpg/cac3c2a0-9ba5-6497-3bdb-0da9a6ff8f66",
+    "name": "Pamplona / Iruña",
+    "nohousenumber": "yes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "platforms": "3",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "80100",
+    "ref:EU:PLC": "ES80100",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7180100",
+    "website": "https://www.adif.es/w/80100-pamplona/iru%C3%B1a",
+    "wheelchair": "yes",
+    "wikidata": "Q3394058",
+    "wikipedia": "es:Estación de Pamplona"
+  }
+},
+{
+  "type": "node",
+  "id": 12117550962,
+  "lat": 41.6392150,
+  "lon": -1.2816817,
+  "tags": {
+    "name": "Rueda de Jalón-Lumpiaque",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "70704",
+    "ref:EU:PLC": "ES70704",
+    "train": "yes",
+    "uic_ref": "7170704",
+    "wikidata": "Q5847080",
+    "wikipedia": "de:Estación de Rueda de Jalón-Lumpiaque"
+  }
+},
+{
+  "type": "node",
+  "id": 12550996847,
+  "lat": 41.6896227,
+  "lon": -1.2343583,
+  "tags": {
+    "name": "Plasencia de Jalón",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "70705",
+    "ref:EU:PLC": "ES70705",
+    "train": "yes",
+    "uic_ref": "7170705"
+  }
+},
+{
+  "type": "node",
+  "id": 12848969845,
+  "lat": 42.1059160,
+  "lon": -1.7713134,
+  "tags": {
+    "name": "Corella",
+    "railway": "service_station",
+    "was:railway": "station"
+  }
+},
+{
+  "type": "way",
+  "id": 239755730,
+  "center": {
+    "lat": 41.6421172,
+    "lon": -1.0453429
+  },
+  "nodes": [
+    2475258162,
+    2475258154,
+    2475258130,
+    9548444240,
+    9548444239,
+    2475258113,
+    2475258073,
+    2475258001,
+    9548444238,
+    9548444237,
+    9548444236,
+    9548444235,
+    9548444234,
+    9548444231,
+    2475257982,
+    9548444232,
+    9548444233,
+    2475257969,
+    9548444217,
+    9548434516,
+    9548434514,
+    9548434515,
+    9548434513,
+    9548434512,
+    9548434511,
+    9548444218,
+    9548434510,
+    9548434509,
+    9548434508,
+    9548434507,
+    9548434506,
+    9548434505,
+    9548434504,
+    9548434503,
+    9548444219,
+    9548444220,
+    9548444221,
+    9548444222,
+    9548444223,
+    9548444224,
+    9548444225,
+    9548444226,
+    9548444227,
+    9548444228,
+    9548444229,
+    9548444230,
+    2475257964,
+    9548444241,
+    9548444242,
+    9548444243,
+    9548444244,
+    8636369349,
+    2475257989,
+    8636369350,
+    8636369351,
+    9548444245,
+    9548444246,
+    9548444247,
+    9548444248,
+    9548444249,
+    9548444250,
+    2475258060,
+    9548444251,
+    2475258094,
+    9548444252,
+    9548444253,
+    2475258128,
+    9548444254,
+    9548444255,
+    9548444256,
+    9548444257,
+    9548444258,
+    9548444262,
+    9548444259,
+    9548444260,
+    9548444261,
+    9548444263,
+    9548444264,
+    2475258137,
+    9548444265,
+    9548444266,
+    9548444267,
+    2475258160,
+    2475258162
+  ],
+  "tags": {
+    "landuse": "railway",
+    "name": "Zaragoza-Plaza",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "railway": "yard",
+    "railway:ref:DB": "XEZP",
+    "ref": "70805",
+    "ref:EU:PLC": "ES70805",
+    "uic_ref": "7170805"
+  }
+},
+{
+  "type": "way",
+  "id": 548172753,
+  "center": {
+    "lat": 42.5988785,
+    "lon": -1.6500836
+  },
+  "nodes": [
+    5295930494,
+    5295930495,
+    5295930496,
+    5295930497,
+    5295930494
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Garinoain",
+    "operator": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 692649047,
+  "center": {
+    "lat": 42.6527869,
+    "lon": -1.6455933
+  },
+  "nodes": [
+    6502747153,
+    6502747150,
+    6502747152,
+    6502747151,
+    6502747153
+  ],
+  "tags": {
+    "addr:city": "Carrascal / Artederreta",
+    "addr:housenumber": "1",
+    "addr:postcode": "31396",
+    "addr:street": "Carretera de Pamplona",
+    "building": "yes",
+    "name": "Carrascal",
+    "operator": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1272417645,
+  "center": {
+    "lat": 41.6762502,
+    "lon": -0.9416028
+  },
+  "nodes": [
+    11815638387,
+    11815616062,
+    11815616061,
+    11815616060,
+    11815638386,
+    11815638385,
+    11815638384,
+    11815638383,
+    11815638382,
+    11815638381,
+    11815638380,
+    11815638379,
+    11815638378,
+    11815638377,
+    11815638376,
+    7589854172,
+    7589854173,
+    2885063272,
+    11815616055,
+    11815616054,
+    1914265818,
+    11815638375,
+    11815616056,
+    11815616057,
+    11815616058,
+    11815616059,
+    11815638374,
+    11815638373,
+    11815638372,
+    11815638371,
+    11815638370,
+    11815638369,
+    11815616068,
+    11815616067,
+    11815616066,
+    11815616065,
+    11815616064,
+    11815616063,
+    11815638387
+  ],
+  "tags": {
+    "landuse": "railway",
+    "name": "C.I.M. Zaragoza",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:traffic_mode": "mixed",
+    "ref": "70803",
+    "ref:EU:PLC": "ES70803",
+    "train": "yes",
+    "uic_ref": "7170803"
+  }
+},
+{
+  "type": "way",
+  "id": 1342433987,
+  "center": {
+    "lat": 42.6898839,
+    "lon": -1.6524042
+  },
+  "nodes": [
+    12420233741,
+    12420233742,
+    12420233743,
+    12420233744,
+    12420233741
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Biurrun Campanas",
+    "network": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+}
+
+  ]
+}

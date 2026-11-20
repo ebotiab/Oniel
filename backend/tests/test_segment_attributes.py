@@ -291,6 +291,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     dt.date(2026, 11, 17),
                     dt.date(2026, 11, 18),
                     dt.date(2026, 11, 19),
+                    dt.date(2026, 11, 20),
                 )
 
 

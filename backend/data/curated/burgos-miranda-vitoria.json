@@ -209,7 +209,7 @@
       "id": "conv-miranda-logrono",
       "node_id": "miranda-de-ebro",
       "name": "Línea Casetas – Bilbao",
-      "towards": "Haro, Logroño, Castejón y Zaragoza",
+      "towards": "Haro y Logroño, donde empieza la línea cargada hacia Castejón y Zaragoza",
       "status": "no_cargada",
       "sketch": [
         [
@@ -221,8 +221,8 @@
           42.583635
         ],
         [
-          -2.442193,
-          42.457459
+          -2.4408195,
+          42.4575743
         ]
       ]
     },

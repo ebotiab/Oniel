@@ -17,6 +17,7 @@ from conftest import (
     BURGOS_VITORIA_SPEC,
     BYPASS_LLEIDA_SPEC,
     BYPASS_ZARAGOZA_SPEC,
+    CASTEJON_PAMPLONA_SPEC,
     CONV_SPEC,
     DATA_DIR,
     EJE_ATLANTICO_SPEC,
@@ -51,6 +52,7 @@ from conftest import (
     TARRAGONA_BARCELONA_SPEC,
     TOLEDO_SPEC,
     VALENCIA_ALICANTE_SPEC,
+    ZARAGOZA_LOGRONO_SPEC,
 )
 from pydantic import ValidationError
 
@@ -729,6 +731,14 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         },
         # la de Palencia a Santander no tiene reglas: todos sus trenes la recorren entera
         PALENCIA_SANTANDER_SPEC.name: {},
+        # en la de Zaragoza a Logroño, los regionales de Calatayud, que dejan la línea en Casetas,
+        # y los trenes que siguen de Logroño a Miranda de Ebro; la de Pamplona no tiene reglas
+        ZARAGOZA_LOGRONO_SPEC.name: {
+            "regionales-de-calatayud-por-utebo": 9,
+            "regionales-de-calatayud-por-casetas": 14,
+            "miranda-por-logrono": 22,
+        },
+        CASTEJON_PAMPLONA_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

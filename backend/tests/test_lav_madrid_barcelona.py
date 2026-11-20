@@ -217,10 +217,10 @@ def test_continuations_are_connections_not_loaded_and_the_bypasses_no_longer_are
 ) -> None:
     by_node = {c.id: c.node_id for c in bcn_spec.connections}
     # los dos baipases ya no son conexiones a trazos: son líneas cargadas
+    # ni la salida de Zaragoza hacia Tudela: es la línea de Zaragoza a Castejón y Logroño
     assert by_node == {
         "enlace-vallecas-perales-del-rio": "bif-vallecas-av",
         "convencional-plasencia-de-jalon-tudela": "cambiador-plasencia-de-jalon",
-        "convencional-zaragoza-norte": "zaragoza-delicias",
     }
     # de Barcelona-Sants ya no sale una conexión a trazos: la continuación es la línea de
     # Barcelona a Figueres, y Girona y Figueres-Vilafant llevan el camino por ella
