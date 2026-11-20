@@ -260,6 +260,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # Casetas. Los otros 129 de sus 213 viajes, los Alvia e Intercity de Madrid y de Barcelona y los
     # regionales de Miranda de Ebro que llegan por Vitoria, ya estaban en otra línea
     trips += 84
+    # Con la de Miranda de Ebro a Bilbao entran 4: los Intercity que el horario trae de Miranda de
+    # Ebro a Bilbao por Llodio. Los otros 24 de sus 28 viajes, los Alvia de Madrid y de Barcelona,
+    # ya estaban en otra línea
+    trips += 4
     # Con la de León a Gijón entran 33: los 25 regionales de León y de Valladolid a Gijón, que
     # suben el puerto de Pajares por la vía antigua, y 8 Media Distancia de León a Gijón. Los
     # otros 108 de sus 141 viajes ya estaban en la de Valladolid a León
@@ -501,8 +505,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # Toledo y de Huesca, la de Barcelona a Portbou y la de Tarragona a Barcelona por la costa
     # y la de València a Alicante por Xàtiva y la de Madrid a Valladolid por Ávila
     # y la de Palencia a Santander
-    # y las de Zaragoza a Logroño y de Castejón a Pamplona
-    assert c["lines"] == 14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2
+    # y las de Zaragoza a Logroño y de Castejón a Pamplona, y la de Miranda de Ebro a Bilbao
+    assert c["lines"] == (
+        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1
+    )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
     # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final,
@@ -545,6 +551,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 27  # la de Madrid a Valladolid por Ávila
         + 21  # la de Palencia a Santander
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
+        + 3  # la de Miranda de Ebro a Bilbao
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -575,6 +582,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 372 + 993  # la de Palencia a Santander
     renfe_passes += 471 + 1515  # la de Zaragoza a Logroño
     renfe_passes += 192 + 448  # la de Castejón a Pamplona
+    renfe_passes += 18 + 66  # la de Miranda de Ebro a Bilbao
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -715,6 +723,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 27  # la de Madrid a Valladolid por Ávila
         + 21  # la de Palencia a Santander
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
+        + 3  # la de Miranda de Ebro a Bilbao
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -755,6 +764,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "palencia-santander",
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
+        # de Miranda de Ebro a Orduña
+        "miranda-bilbao",
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -829,6 +840,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "palencia-santander",
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
+        "miranda-bilbao",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -921,6 +933,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 27  # la de Madrid a Valladolid por Ávila
         + 21  # la de Palencia a Santander
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
+        + 3  # la de Miranda de Ebro a Bilbao
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1468,6 +1481,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 26  # la de Madrid a Valladolid por Ávila: de Madrid-Ramón y Cajal a Viana
             + 21  # la de Palencia a Santander: de Monzón de Campos a Santander
             + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
+            + 3  # la de Miranda de Ebro a Bilbao: Orduña, Llodio y Bilbao-Abando
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1505,9 +1519,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y 5 más con la de Palencia a Santander: los regionales de Valladolid a Santander de ese día
     # y 39 más con las de Zaragoza a Logroño y de Castejón a Pamplona: los regionales de Zaragoza,
     # de Logroño y de Calatayud de ese día que no pasan por ninguna otra línea cargada
+    # y 2 más con la de Miranda de Ebro a Bilbao: los Intercity de Miranda de Ebro a Bilbao de ese día
     assert (
         cov["service_count"]
-        == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56 + 57 + 107 + 5 + 39
+        == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56 + 57 + 107 + 5 + 39 + 2
     )
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
@@ -1575,8 +1590,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # artículo de Wikipedia de la línea y las cuatro fuentes del proyecto de Palencia a Aguilar
     # Y 6 de las de Zaragoza a Logroño y de Castejón a Pamplona: tres relaciones de OSM, el fichero
     # de sus estaciones y los artículos de Wikipedia de las líneas 700 y 710
+    # Y 1 de la de Miranda de Ebro a Bilbao: el fichero de sus estaciones; su relación de OSM y el
+    # artículo de la línea 700 ya estaban
     assert len(cov["sources"]) == (
-        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 4 + 3 + 9 + 4 + 7 + 6
+        72 + 10 + 6 + 2 + 23 + 3 + 2 + 2 + 9 + 5 + 4 + 6 + 2 + 2 + 1 + 5 + 4 + 3 + 9 + 4 + 7 + 6 + 1
     )
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
@@ -1600,7 +1617,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional Valencia – Xàtiva – Alicante" in cov["notice"]
     assert "la línea convencional Palencia – Santander" in cov["notice"]
     assert "la línea convencional Zaragoza – Castejón – Logroño" in cov["notice"]
-    assert "y la línea convencional Castejón – Pamplona" in cov["notice"]
+    assert "la línea convencional Castejón – Pamplona" in cov["notice"]
+    assert "y la línea convencional Miranda de Ebro – Orduña – Bilbao" in cov["notice"]
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
@@ -1647,6 +1665,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "palencia-santander",
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
+        "miranda-bilbao",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1716,6 +1735,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "palencia-santander": ["renfe"],
         "zaragoza-castejon-logrono": ["renfe"],
         "castejon-pamplona": ["renfe"],
+        "miranda-bilbao": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
@@ -2457,6 +2477,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "palencia-santander",
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
+        "miranda-bilbao",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -2504,6 +2525,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         + 27
         + 21
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
+        + 3  # la de Miranda de Ebro a Bilbao
     )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
@@ -2605,6 +2627,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "palencia-santander",
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
+        "miranda-bilbao",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

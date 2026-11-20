@@ -99,7 +99,6 @@ def test_nodes_stations_and_dashed_branches(line: BuiltNetwork) -> None:
     assert line.node("miranda-de-ebro").spec.adif_code == MIRANDA
     assert line.node("vitoria-gasteiz").spec.adif_code == VITORIA
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "conv-miranda-bilbao": "miranda-de-ebro",
         "conv-miranda-logrono": "miranda-de-ebro",
         "conv-vitoria-altsasu": "vitoria-gasteiz",
     }

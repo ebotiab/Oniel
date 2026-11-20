@@ -1,0 +1,24 @@
+{
+  "descripcion": "Registro de las consultas hechas el 20 de noviembre de 2026 para ver si la línea convencional Miranda de Ebro – Orduña – Bilbao, que se carga ese día, tiene alguna interrupción vigente.",
+  "consultado_el": "2026-11-20",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-20 09:54",
+      "resumen": "Leída hacia las 12:25 con la hora de página 9:54. Tres avisos en la pestaña general: una avería de un tren en Recoletos, en las cercanías de Madrid; la circulación restablecida por una vía entre Robledo de Chavela y Zarzalejo, en la línea de Madrid a Ávila, y la interrupción de la alta velocidad Madrid – Andalucía desde el 28 de octubre. Nada del País Vasco ni de Miranda de Ebro.",
+      "que_aporta": "Que no hay ninguna incidencia anunciada en la línea."
+    },
+    {
+      "source_id": null,
+      "titulo": "Avisos",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "fecha_de_la_pagina": "2026-11-20 12:27",
+      "resumen": "Catorce avisos. Uno toca a los trenes de la línea, fuera de ella: el de las obras entre Miranda de Ebro y Logroño, que interrumpe el tráfico entre las dos estaciones algunos fines de semana hasta mediados de diciembre y nombra el País Vasco entre las comunidades afectadas, porque por ese trecho llegan a Miranda los trenes de Barcelona y Zaragoza a Bilbao. El texto entero del aviso no se abrió. Los demás son de Cataluña, Asturias, Córdoba – Santa Cruz de Mudela, Redondela – O Porriño, Murcia – Almería, Huércal-Viator – Almería, Xàtiva – Alcoi, Guadalajara – Plasencia de Jalón, Zaragoza – Teruel – Sagunt y las cercanías de València y Madrid. Ninguno nombra Orduña, Llodio ni Bilbao.",
+      "que_aporta": "Que no hay obras anunciadas que corten la línea de Miranda de Ebro a Bilbao. Las de Miranda de Ebro a Logroño afectan a la continuación por la que llegan los trenes de Barcelona y Zaragoza, que no está cargada. No se abrió ningún panel de estación."
+    }
+  ]
+}

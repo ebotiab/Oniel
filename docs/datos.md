@@ -62,11 +62,12 @@
 | `osm-relation-4220975` | Geometría de la línea 160 de Palencia a Santander (relación de servicio de una pieza) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-19 |
 | `osm-instalaciones-palencia-santander` | Coordenadas de las estaciones de Monzón de Campos a Santander y vía de entrada a la estación de Santander | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-19 |
 | `wikipedia-linea-palencia-santander` | Número de línea, PK de Palencia, Aguilar de Campoo, Reinosa, Torrelavega y Santander, vía, electrificación, bloqueo y velocidades de la línea 160 (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-19 |
-| `osm-relation-9277501` | Geometría de la línea 700 de Casetas a Logroño y arranque de la de Pamplona en Castejón (relación de infraestructura) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-20 |
+| `osm-relation-9277501` | Geometría de la línea 700 de Casetas a Logroño y de Miranda de Ebro a Bilbao, y arranque de la de Pamplona en Castejón (relación de infraestructura) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-20 |
 | `osm-relation-6205861` | Geometría de Zaragoza-Delicias a Casetas, por las vías de la línea 200 (relación de servicio del Cercanías C-1) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-20 |
 | `osm-relation-9392199` | Geometría de la línea 710 de Castejón de Ebro a Pamplona (relación de infraestructura) | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-20 |
 | `osm-instalaciones-zaragoza-logrono-pamplona` | Coordenadas de las estaciones de Utebo a Logroño y de Villafranca de Navarra a Pamplona, y de Grisén y Plasencia de Jalón | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-20 |
-| `wikipedia-linea-casetas-bilbao` | Número de línea, PK de las estaciones de Casetas a Agoncillo, vía, electrificación e historia de la línea 700, y camino de los Alvia de Madrid por Plasencia de Jalón (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-20 |
+| `osm-instalaciones-miranda-bilbao` | Coordenadas de las estaciones de Orduña y Llodio, y de las demás de la línea de Miranda de Ebro a Bilbao | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-20 |
+| `wikipedia-linea-casetas-bilbao` | Número de línea, PK de las estaciones de Casetas a Agoncillo y de Miranda de Ebro a Llodio, vía, electrificación e historia de la línea 700, y camino de los Alvia de Madrid por Plasencia de Jalón (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-20 |
 | `wikipedia-linea-castejon-alsasua` | Número de línea, PK de Castejón a Pamplona, vía, electrificación, bloqueo y velocidad de la línea 710 (verificación) | Colaboradores de Wikipedia | CC BY-SA 4.0 | 2026-11-20 |
 | `osm-relation-4777980` | Geometría de la línea de alta velocidad Olmedo–Zamora–Ourense, de la bifurcación Medina a Zamora y de la bifurcación Valorio a Taboadela ; dónde hay una vía y dónde dos; coordenadas de sus estaciones. Desde el 18 de noviembre, también la geometría de la línea de alta velocidad Ourense–Santiago, de la bifurcación Coto da Torre a Santiago | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-14 |
 | `osm-relation-11109438` | Vías de la línea convencional Zamora–A Coruña por las que la alta velocidad sale de Zamora y llega a Ourense desde Taboadela; su ancho mixto. Desde el 18 de noviembre, también el kilómetro de la estación de Ourense a la bifurcación Coto da Torre | Colaboradores de OpenStreetMap | ODbL 1.0 | 2026-11-14 |
@@ -152,7 +153,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 | Operador | Líneas | Horarios | Fuente |
 |---|---|---|---|
-| Renfe Viajeros (`renfe`) | las treinta y seis y los dos baipases | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
+| Renfe Viajeros (`renfe`) | las treinta y siete y los dos baipases | Cargados | `renfe-gtfs-av-ld-md`, CC BY 4.0 |
 | Ouigo España (`ouigo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona, LAV Madrid – Cuenca – Valencia, LAV Albacete – Alicante, LAV Monforte del Cid – Murcia y LAV Madrid – Segovia – Valladolid | Cargados | `ouigo-gtfs-nap`, licencia de datos abiertos del Ministerio de Transportes |
 | Iryo (`iryo`) | LAV Madrid – Sevilla, LAV Córdoba – Málaga, LAV Madrid – Zaragoza – Barcelona, LAV Madrid – Cuenca – Valencia y LAV Albacete – Alicante | Cargados de una compilación no oficial (`timetable: "no_oficial"`) | `iryo-gtfs-no-oficial`, CC BY 4.0 solo sobre la compilación |
 
@@ -201,6 +202,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 | Convencional Palencia – Santander (Adif 160) | `palencia-santander` | 217,0 km | 22 (1 compartido) | 21 (los 21 de vía única) | 65 (28 Alvia, 20 Regional Exprés, 9 Intercity y 8 MD) |
 | Convencional Zaragoza – Castejón – Logroño (Adif 200 hasta Casetas y 700 de Casetas a Logroño) | `zaragoza-castejon-logrono` | 165,7 km | 19 (1 compartido) | 18 (7 de vía única) | 208 (97 Alvia, 33 Regional Exprés, 33 MD, 23 Regional y 22 Intercity) |
 | Convencional Castejón – Pamplona (Adif 710; sale de la de Zaragoza a Logroño en Castejón de Ebro) | `castejon-pamplona` | 87,3 km | 6 (1 compartido) | 5 (los 5 de vía única) | 128 (77 Alvia, 22 Intercity, 21 Regional Exprés y 8 MD) |
+| Convencional Miranda de Ebro – Orduña – Bilbao (Adif 700; sale de la de Burgos a Vitoria en Miranda de Ebro) | `miranda-bilbao` | 104,0 km | 4 (1 compartido) | 3 (1 de vía única) | 28 (24 Alvia y 4 Intercity) |
 
 | Alta velocidad La Sagra – Toledo (Adif 020; sale de la de Sevilla en la bifurcación La Sagra) | `lav-la-sagra-toledo` | 22,2 km | 2 (1 compartido) | 1 | 132 (Avant) |
 | Alta velocidad Zaragoza – Huesca (Adif 070; sale de la de Barcelona en la bifurcación Huesca) | `lav-zaragoza-huesca` | 79,3 km | 3 (1 compartido) | 2 (los 2 de vía única) | 11 (AVE), que ya contaban en la línea de Barcelona |
@@ -1362,7 +1364,7 @@ De los 141, 108 ya estaban en la línea de Valladolid a León. Los otros 33 son 
 
 Une Burgos-Rosa Manzano, donde acaba la alta velocidad de Venta de Baños, con Vitoria-Gasteiz por Miranda de Ebro. Es un trecho de la línea 100 de Adif, de Madrid a Hendaya, y el camino de todos los trenes de Madrid al País Vasco mientras no esté la alta velocidad de Burgos a Vitoria.
 
-**Qué se carga.** De Burgos-Rosa Manzano a Vitoria-Gasteiz: 117,3 km, de vía doble, ancho ibérico y 3 kV. Es una sola línea: por toda ella circula solo Renfe. El alcance se decidió al tomar la tarea (#177): lo que pide su «Hecha cuando», Vitoria en el mapa, y una línea por PR. Quedan a trazos tres ramas. En Miranda de Ebro, la de Bilbao por Orduña y Llodio (#219) y la de Haro y Logroño (#213), las dos de la línea 700, Casetas – Bilbao. En Vitoria, la continuación de la línea 100 hacia Altsasu, de donde salen la de San Sebastián e Irún (#220) y la de Pamplona (#213). La conexión a trazos `conv-burgos-miranda-vitoria` de la línea de Venta de Baños a Burgos se retira.
+**Qué se carga.** De Burgos-Rosa Manzano a Vitoria-Gasteiz: 117,3 km, de vía doble, ancho ibérico y 3 kV. Es una sola línea: por toda ella circula solo Renfe. El alcance se decidió al tomar la tarea (#177): lo que pide su «Hecha cuando», Vitoria en el mapa, y una línea por PR. Quedan a trazos tres ramas. En Miranda de Ebro, la de Bilbao por Orduña y Llodio (#219) y la de Haro y Logroño (#213), las dos de la línea 700, Casetas – Bilbao; la de Bilbao se cargó después como línea propia, y su conexión a trazos se retiró. En Vitoria, la continuación de la línea 100 hacia Altsasu, de donde salen la de San Sebastián e Irún (#220) y la de Pamplona (#213). La conexión a trazos `conv-burgos-miranda-vitoria` de la línea de Venta de Baños a Burgos se retira.
 
 **Burgos-Rosa Manzano es el mismo nodo.** Lo define la línea de Venta de Baños a Burgos, que va antes en `line_ids`: esta lo incorpora con `shared: true` y sus mismas coordenadas. Miranda de Ebro y Vitoria pasan a llevar `via` hacia esta línea en las de Burgos, León y Madrid, un trecho más al final del que ya tenían. Las demás paradas del norte (Bilbao, San Sebastián, Irún, Logroño) siguen como salidas sin camino cargado: un `via` exige que la parada sea un nodo de la última línea que nombra.
 
@@ -1385,7 +1387,7 @@ Verificación:
 
 **Dos caminos a Burgos que el horario no separa.** Los Alvia llegan a Burgos por la alta velocidad y los trenes de Madrid-Príncipe Pío, por la línea convencional de Venta de Baños, que no está cargada. Las paradas de Valladolid, Segovia y Madrid-Chamartín llevan `via` por la alta velocidad; las de la línea convencional (Venta de Baños, Villaquirán, Ávila, Madrid-Príncipe Pío), no. Palencia y León tampoco: los Alvia de Galicia llegan a Burgos por el ramal de Soto de Cerrato, que no está cargado. Como todos los trenes paran en Burgos, esto no cambia los recuentos de esta línea.
 
-**Trenes que siguen fuera de la red cargada.** Desde Miranda de Ebro, los de Bilbao y Logroño; desde Vitoria, los de Altsasu, Pamplona, Zaragoza, Barcelona, San Sebastián e Irún. Oniel cuenta su paso por esta línea y nombra sus destinos en la ficha de cada estación.
+**Trenes que siguen fuera de la red cargada.** Desde Miranda de Ebro, los de Logroño (los de Bilbao, desde que está cargada su línea, llevan `via` por ella); desde Vitoria, los de Altsasu, Pamplona, Zaragoza, Barcelona, San Sebastián e Irún. Oniel cuenta su paso por esta línea y nombra sus destinos en la ficha de cada estación.
 
 **Lo que enseña el comparador.** De Madrid-Chamartín a Vitoria-Gasteiz, 420,5 km y 1 h 56 min estimados sin paradas, por las líneas de Valladolid, León y Burgos; a Miranda de Ebro, 387,2 km y 1 h 40 min. De Burgos a Vitoria, 117,3 km.
 
@@ -1733,6 +1735,44 @@ Verificación:
 **Interrupciones.** El 20 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en los tramos cargados (`raw/interrupciones/consultas_2026-11-20_zaragoza_logrono_pamplona.json`). Dos avisos de obras tocan a sus trenes fuera de lo cargado y no se registran como anotación: el de Miranda de Ebro a Logroño, que interrumpe el tráfico entre las dos estaciones algunos fines de semana hasta mediados de diciembre, en la continuación que queda a trazos, y el de Guadalajara a Plasencia de Jalón, en la línea convencional de Madrid a Zaragoza, interrumpida desde el 1 de abril de 2025, de la que vienen los regionales de Calatayud. No se abrió ningún panel de estación.
 
 **Proyectos.** No entra ninguno con esta tarea.
+
+## Cómo se construyó la línea Miranda de Ebro–Orduña–Bilbao
+
+Lleva a Bilbao los trenes de largo recorrido de Madrid y de Barcelona (#219). Entra como `miranda-bilbao`, la trigésima séptima, la última en `line_ids`. Con ella Bilbao está en el mapa, en el buscador y en el comparador.
+
+**Qué se carga.** El último trecho de la línea 700 de Adif, de Miranda de Ebro a Bilbao-Abando por Orduña y Llodio: 104,0 km, de ancho ibérico y 3 kV. Es una sola línea: por toda ella circula solo Renfe. Los trenes de Cercanías de Bilbao a Orduña usan sus vías y no están en los horarios cargados: no se cargan, como pide la tarea. No sale nada a trazos de ella. De la línea de Burgos a Vitoria se retira la conexión a trazos `conv-miranda-bilbao`, y sus descripciones dejan de decir que la rama de Bilbao no está cargada; la de Logroño sigue a trazos.
+
+**Miranda de Ebro es el mismo nodo.** Lo define la línea de Burgos a Vitoria, que va antes en `line_ids`: esta línea lo incorpora con `shared: true` y sus mismas coordenadas. Llodio y Bilbao (paradas 13106 y 13200) pasan a llevar `via` por esta línea desde Miranda de Ebro en las de Burgos a Vitoria, Venta de Baños a Burgos, Valladolid a León y Madrid a Valladolid, al final del camino que ya llevaba Miranda. En la línea del Ebro y en la alta velocidad de Barcelona siguen saliendo por Logroño y por Zaragoza-Delicias sin `via`, como Miranda de Ebro: el trecho de Logroño a Miranda no está cargado.
+
+**Geometría.** La otra pieza de la relación `9277501` («Línea Bilbao-Casetas», `ref=700`), la misma que dio el trazado de Casetas a Logroño, sin volver a descargarla: va seguida desde la estación de Miranda de Ebro hasta los andenes de Abando, de una pieza. Las coordenadas de Orduña y Llodio son las de sus nodos de estación en OSM (`raw/osm/instalaciones_miranda_bilbao_2026-11-20.json`, pedidos a `overpass.kumi.systems` porque overpass-api.de estaba saturado; su base era del 24 de julio de 2026). Bilbao-Abando se sitúa en las coordenadas de la parada 13200 del GTFS de Renfe, a 20 m del centro del área de la estación en OSM: es el punto en el que acaba el esbozo de la «Y» vasca, que así llega a la estación de la línea. Ninguna queda a más de 24 m del trazado.
+
+Verificación:
+
+1. **Longitud y puntos kilométricos.** El trazado mide 104,0 km. Los puntos kilométricos salen de los artículos de Wikipedia de las estaciones, en la numeración de Castejón a Bilbao: Miranda de Ebro es el 145,2 y la línea lo lleva como origen (`pk_origin_km`); Orduña (208,9) y Llodio (227,5) quedan a 0,02 y 0,07 km del suyo, y también cuadran Izarra (179,8) y Amurrio (215,6), que no son nodos. El artículo de Abando no da el punto kilométrico de la estación en esta línea, y el nodo no lo lleva.
+2. **Número de vías.** Una de Miranda de Ebro a Orduña y dos de Orduña a Bilbao. Lo dicen las etiquetas `passenger_lines` de las vías de OSM, que cambian 300 m antes de la estación de Orduña, el trazo del mapa 4 de la Declaración sobre la Red y Wikipedia, que fecha el desdoblamiento de Orduña a Bilbao en 1931. Orduña es nodo por eso: en ella no para ningún tren de los horarios cargados.
+3. **Velocidad.** La de las vías de OSM, que la traen en todos los tramos salvo en los últimos 200 m antes de los andenes de Abando: entre 85 y 135 km/h de Miranda a Orduña, con 65 y 70 en la bajada del puerto de Orduña; hasta 140 de Orduña a Llodio y hasta 115 de Llodio a Bilbao.
+4. **Electrificación y ancho.** 3 kV de corriente continua y 1.668 mm, según las etiquetas de las vías y Wikipedia, que fecha la electrificación de Miranda a Bilbao en 1956, a 1.500 V, y el paso a 3.000 V en 1984.
+
+**Nodos.** Cuatro: Miranda de Ebro, compartida; Orduña, secundaria, donde empieza la vía doble, y Llodio y Bilbao-Abando, donde paran los trenes. Las demás estaciones del recorrido (Pobes, Zuazo de Cuartango, Izarra, Inoso-Oiardo, Amurrio y los apeaderos de Cercanías del valle del Nervión) no tienen parada en los horarios cargados y no se cargan.
+
+**Zona.** «Asturias, Cantabria y País Vasco», con `sort_order: 43`.
+
+**Operadores.** Solo Renfe. Ouigo e Iryo no llegan a Bilbao.
+
+**Trenes.** El filtro pide que el viaje pare en dos estaciones de la línea, y todos los que la recorren paran en Miranda de Ebro y en Bilbao: los Alvia e Intercity de Madrid y de Miranda a Bilbao, que entre las dos solo paran en Llodio, y los de Barcelona y Zaragoza a Bilbao, que van sin parar de Miranda a Bilbao. No hay ningún otro tren que pare en dos de sus estaciones. Con el fichero de las pruebas son 28 viajes (24 Alvia y 4 Intercity), y los 28 recorren la línea entera. Los 24 Alvia ya contaban en otras líneas cargadas: los de Madrid en la alta velocidad y en la de Burgos a Vitoria, y los de Barcelona en la alta velocidad de Barcelona y en la del Ebro. Los 4 nuevos son los Intercity que el horario trae de Miranda de Ebro a Bilbao, por Llodio, y el total de Renfe pasa de 5.208 a 5.212 viajes. Son 8 trenes distintos: el horario trae algunos en dos o tres viajes con el mismo número (los de Barcelona repiten aparte el trecho de Bilbao a Miranda de Ebro, y uno de Madrid se parte en uno hasta Madrid y otro hasta Valladolid), y el lector los une por el número, como los AVE internacionales de Figueres. Todos se resuelven, ningún paso queda indeterminado y no hace falta ninguna regla de recorrido. Las salidas:
+
+- **Burgos, Valladolid, Segovia y Madrid-Chamartín** salen por Miranda de Ebro con `via` por la línea de Burgos a Vitoria y la alta velocidad, como en ella.
+- **Haro, Logroño y lo que sigue hacia Zaragoza y Barcelona** salen por Miranda de Ebro sin `via`: el trecho de Miranda a Logroño no está cargado.
+
+**Lo que enseña el comparador.** De Madrid-Chamartín a Bilbao-Abando, 491,1 km y 3 h 1 min estimados sin paradas por la alta velocidad hasta Burgos y por Miranda de Ebro, y 562,8 km por la convencional de Ávila; a Llodio, 469,6 km. De Burgos a Bilbao, 187,9 km, y de Vitoria a Bilbao, 137,3 km, por Miranda de Ebro. De Zaragoza a Bilbao no da ningún camino, porque el trecho de Logroño a Miranda de Ebro no está cargado.
+
+**Tramos sin otro camino.** Los tres: a Bilbao solo llega ella. Con ellos son 195 de los 413 tramos con trenes. El día de referencia (viernes 20 de noviembre de 2026) llevan 8 trenes cada uno. Los recuentos de las demás líneas no cambian.
+
+**Señalización.** El mapa 4 dibuja de Miranda a Orduña el trazo naranja de «BAU ctc» y de Orduña a Bilbao A.I.P. el marrón de «BAB ctc», con círculos de «Tren tierra y ASFA conv.» junto a Miranda y junto a Bilbao: `asfa` y `ctc` en los tres tramos, `bau` en el de vía única y `bab` en los dos de vía doble.
+
+**Interrupciones.** El 20 de noviembre de 2026 ni el estado de la red ni los avisos de Adif anuncian ninguna en la línea ni en sus estaciones (`raw/interrupciones/consultas_2026-11-20_miranda_bilbao.json`). El aviso de obras entre Miranda de Ebro y Logroño, que interrumpe el tráfico algunos fines de semana hasta mediados de diciembre, toca a los trenes de Barcelona y Zaragoza a Bilbao en el trecho que queda a trazos, y no se registra como anotación. No se abrió ningún panel de estación.
+
+**Proyectos.** No entra ninguno. La «Y» vasca, en obras, ya estaba en la capa de proyectos, y su esbozo acaba en el punto de la estación de Bilbao-Abando.
 
 ## Límites y avisos
 
@@ -2200,6 +2240,8 @@ Con la trigésimo tercera (Madrid – Ávila – Medina del Campo – Valladolid
 Con la trigésimo cuarta (Palencia – Santander, 217,0 km y veintiún tramos), medido el 19 de noviembre de 2026 de la misma manera sobre las treinta y tres anteriores (6.298,0 km y 388 tramos en total): `index.json` pasa de 675,2 a 707,5 KB (de 101,2 a 105,6 KB comprimido) y `lines/palencia-santander.json` pesa 121,0 KB (27,4 KB comprimido). `alternatives.json` pasa de 1.244,6 a 1.276,6 KB (de 36,2 a 37,0 KB comprimido). Las anotaciones, con el proyecto de la alta velocidad de Palencia a Aguilar de Campoo, pasan de 75,3 a 79,1 KB, dentro del tope de 85 KB de `e2e/carga.spec.ts`; la red del índice, de 554,5 a 580,7 KB, también dentro de su tope.
 
 Con la trigésima quinta y la trigésima sexta (Zaragoza – Castejón – Logroño, 165,7 km y dieciocho tramos, y Castejón – Pamplona, 87,3 km y cinco tramos), medido el 20 de noviembre de 2026 sobre las treinta y cuatro anteriores (6.551,0 km y 411 tramos en total): `index.json` pasa de 707,5 a 724,1 KB (de 105,6 a 107,2 KB comprimido), `lines/zaragoza-castejon-logrono.json` pesa 64,6 KB (11,8 KB comprimido) y `lines/castejon-pamplona.json`, 29,4 KB (7,2 KB comprimido). `alternatives.json` pasa de 1.276,6 a 1.291,5 KB (de 37,0 a 37,4 KB comprimido). Las anotaciones no cambian, y los topes de `e2e/carga.spec.ts` tampoco.
+
+Con la trigésima séptima (Miranda de Ebro – Orduña – Bilbao, 104,0 km y tres tramos), medido el 20 de noviembre de 2026 de la misma manera sobre las treinta y seis anteriores (6.655,1 km y 414 tramos en total): `index.json` pasa de 724,1 a 730,9 KB (de 107,2 a 108,5 KB comprimido) y `lines/miranda-bilbao.json` pesa 81,4 KB (23,1 KB comprimido). `alternatives.json` pasa de 1.291,5 a 1.301,2 KB (de 37,4 a 37,9 KB comprimido). Las anotaciones no cambian, y los topes de `e2e/carga.spec.ts` tampoco.
 
 ## Atributos de tramo
 
