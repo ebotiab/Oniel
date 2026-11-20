@@ -337,6 +337,8 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "valencia-xativa-alicante",
         "madrid-avila-valladolid",
         "palencia-santander",
+        "zaragoza-castejon-logrono",
+        "castejon-pamplona",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -389,6 +391,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 20  # la de València a Alicante por Xàtiva
         + 27  # la de Madrid a Valladolid por Ávila
         + 21  # la de Palencia a Santander
+        + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -444,8 +447,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # sin él para una parte
     # La de Palencia a Santander acaba en Santander, adonde no llega otra línea cargada: sus
     # veintiún tramos quedan sin otro camino para todos sus trenes
+    # Las de Zaragoza a Logroño y de Castejón a Pamplona son el único camino cargado entre
+    # Zaragoza, Logroño y Pamplona: sus veintitrés tramos quedan sin otro camino para todos
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23 - 5 + 4 + 21,
+        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23 - 5 + 4 + 21 + 23,
         121
         + 29
         + 4
@@ -467,7 +472,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 20
         - 1
         + 27
-        + 21,
+        + 21
+        + 23,
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -506,6 +512,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # recorren de punta a punta
     santander = {k: n for k, n in none.items() if k.startswith("palencia-santander:")}
     assert len(santander) == 21 and set(santander.values()) == {13}
+    # las de Zaragoza a Logroño y de Castejón a Pamplona, enteras: son el único camino cargado
+    # entre Zaragoza, Logroño y Pamplona; los 28 trenes de Pamplona de ese día recorren la suya
+    # de punta a punta
+    ebro = {k: n for k, n in none.items() if k.startswith("zaragoza-castejon-logrono:")}
+    pamplona = {k: n for k, n in none.items() if k.startswith("castejon-pamplona:")}
+    assert len(ebro) == 18 and len(pamplona) == 5 and set(pamplona.values()) == {28}
     extremadura_lines = (
         f"{MADRID_PLASENCIA}:",
         f"{LAV_BADAJOZ}:",
@@ -533,6 +545,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV_VALLADOLID}:",
         f"{LINK}:",
         "palencia-santander:",
+        "zaragoza-castejon-logrono:",
+        "castejon-pamplona:",
         *extremadura_lines,
     )
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {

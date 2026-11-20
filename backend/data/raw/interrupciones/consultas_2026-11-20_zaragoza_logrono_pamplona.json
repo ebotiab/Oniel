@@ -1,0 +1,24 @@
+{
+  "descripcion": "Registro de las consultas hechas el 20 de noviembre de 2026 para ver si las líneas convencionales Zaragoza – Castejón – Logroño y Castejón – Pamplona, que se cargan ese día, tienen alguna interrupción vigente.",
+  "consultado_el": "2026-11-20",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-20 09:54",
+      "resumen": "Tres avisos en la pestaña general: una avería de un tren en Recoletos, en las cercanías de Madrid; la circulación restablecida por una vía entre Robledo de Chavela y Zarzalejo, en la línea de Madrid a Ávila, y la interrupción de la alta velocidad Madrid – Andalucía desde el 28 de octubre. Nada de Aragón, Navarra ni La Rioja.",
+      "que_aporta": "Que no hay ninguna incidencia anunciada en las dos líneas."
+    },
+    {
+      "source_id": null,
+      "titulo": "Avisos",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "fecha_de_la_pagina": "2026-11-20 09:58",
+      "resumen": "Quince avisos. Dos tocan los trenes de estas líneas, los dos fuera de lo que se carga. El de las obras entre Miranda de Ebro y Logroño dice que hasta mediados de diciembre el tráfico entre las dos estaciones se interrumpe algunos fines de semana; el resumen del listado nombra los del 24 y 25 de octubre y el del 21 y 22 de un mes que queda cortado, y el texto entero del aviso no se abrió. El de las obras entre Guadalajara y Plasencia de Jalón dice que el tráfico en la línea convencional de Madrid a Zaragoza está interrumpido entre esas dos estaciones desde el 1 de abril de 2025, con un plan de transporte alternativo. Los demás son de Cataluña, Asturias, Córdoba – Santa Cruz de Mudela, Redondela – O Porriño, Murcia – Almería, Huércal-Viator – Almería, Xàtiva – Alcoi, Zaragoza – Teruel – Sagunt y las cercanías de València y Madrid.",
+      "que_aporta": "Que no hay obras anunciadas que corten ninguno de los tramos cargados, de Zaragoza-Delicias a Logroño y de Castejón de Ebro a Pamplona. Las de Miranda de Ebro a Logroño afectan a la continuación de la línea, que queda a trazos, y las de Guadalajara a Plasencia de Jalón, a la línea de la que vienen los regionales de Calatayud, que dejan la línea cargada en Casetas. No se abrió ningún panel de estación."
+    }
+  ]
+}

@@ -262,6 +262,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 426
         + 475
         + 20  # los regionales de Valladolid a Santander
+        + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
     )
     assert (
         await _count(conn, "services", NEWER_ID)
@@ -289,6 +290,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 426
         + 475
         + 20  # los regionales de Valladolid a Santander
+        + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -325,6 +327,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 2028 + 4255  # la de València a Alicante por Xàtiva, publicados y estimados
     passes += 2463 + 2915  # la de Madrid a Valladolid por Ávila, publicados y estimados
     passes += 372 + 993  # la de Palencia a Santander, publicados y estimados
+    passes += 471 + 1515  # la de Zaragoza a Logroño, publicados y estimados
+    passes += 192 + 448  # la de Castejón a Pamplona, publicados y estimados
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -651,29 +655,37 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 426
         + 475
         + 20  # los regionales de Valladolid a Santander
+        + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
     )
-    assert await conn.fetchval("SELECT count(*) FROM services") == 768 + 767 + 2 * (
-        37
-        + 555
-        + 8
-        + 13
-        + 465
-        + 92
-        + 181
-        + 661
-        + 409
-        + 66
-        + 33
-        + 77
-        + 293
-        + 136
-        + 114
-        + 115
-        + 117
-        + 63
-        + 426
-        + 475
-        + 20  # los regionales de Valladolid a Santander
+    assert (
+        await conn.fetchval("SELECT count(*) FROM services")
+        == 768
+        + 767
+        + 2
+        * (
+            37
+            + 555
+            + 8
+            + 13
+            + 465
+            + 92
+            + 181
+            + 661
+            + 409
+            + 66
+            + 33
+            + 77
+            + 293
+            + 136
+            + 114
+            + 115
+            + 117
+            + 63
+            + 426
+            + 475
+            + 20  # los regionales de Valladolid a Santander
+            + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+        )
     )
 
 
@@ -706,52 +718,57 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     result = await run(both, tmp_path)
     assert [g["dataset"]["id"] for g in result["gtfs"]] == [FEED_DATASET_ID, NEWER_ID]
     # los 409 del final son los de las cuatro líneas de Extremadura que no estaban en otra
-    assert [g["trips_imported"] for g in result["gtfs"]] == [
-        768
-        + 37
-        + 555
-        + 8
-        + 13
-        + 465
-        + 92
-        + 181
-        + 661
-        + 409
-        + 66
-        + 33
-        + 77
-        + 293
-        + 136
-        + 114
-        + 115
-        + 117
-        + 63
-        + 426
-        + 475
-        + 20,  # los regionales de Valladolid a Santander
-        767
-        + 37
-        + 555
-        + 8
-        + 13
-        + 465
-        + 92
-        + 181
-        + 661
-        + 409
-        + 66
-        + 33
-        + 77
-        + 293
-        + 136
-        + 114
-        + 115
-        + 117
-        + 63
-        + 426
-        + 475
-        + 20,  # los regionales de Valladolid a Santander
-    ]
+    assert (
+        [g["trips_imported"] for g in result["gtfs"]]
+        == [
+            768
+            + 37
+            + 555
+            + 8
+            + 13
+            + 465
+            + 92
+            + 181
+            + 661
+            + 409
+            + 66
+            + 33
+            + 77
+            + 293
+            + 136
+            + 114
+            + 115
+            + 117
+            + 63
+            + 426
+            + 475
+            + 20  # los regionales de Valladolid a Santander
+            + 84,  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+            767
+            + 37
+            + 555
+            + 8
+            + 13
+            + 465
+            + 92
+            + 181
+            + 661
+            + 409
+            + 66
+            + 33
+            + 77
+            + 293
+            + 136
+            + 114
+            + 115
+            + 117
+            + 63
+            + 426
+            + 475
+            + 20  # los regionales de Valladolid a Santander
+            + 84,  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+        ]
+    )
     assert result["datasets_removed"] == []
     # la instantánea lleva el estado actual (el conjunto activo) y un recuento compacto por conjunto
     coverage = json.loads((tmp_path / "coverage.json").read_text(encoding="utf-8"))
@@ -790,29 +807,33 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     # un conjunto que deja de estar declarado se retira, también de la instantánea
     result = await run(both[:1], tmp_path)
     assert result["datasets_removed"] == [NEWER_ID]
-    assert await conn.fetchval("SELECT count(*) FROM services") == (
-        768
-        + 37
-        + 555
-        + 8
-        + 13
-        + 465
-        + 92
-        + 181
-        + 661
-        + 409
-        + 66
-        + 33
-        + 77
-        + 293
-        + 136
-        + 114
-        + 115
-        + 117
-        + 63
-        + 426
-        + 475
-        + 20  # los regionales de Valladolid a Santander
+    assert (
+        await conn.fetchval("SELECT count(*) FROM services")
+        == (
+            768
+            + 37
+            + 555
+            + 8
+            + 13
+            + 465
+            + 92
+            + 181
+            + 661
+            + 409
+            + 66
+            + 33
+            + 77
+            + 293
+            + 136
+            + 114
+            + 115
+            + 117
+            + 63
+            + 426
+            + 475
+            + 20  # los regionales de Valladolid a Santander
+            + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
+        )
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(
         [FEED_DATASET_ID, "nodes", "segments"]
