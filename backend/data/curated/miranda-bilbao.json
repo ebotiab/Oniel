@@ -1,0 +1,292 @@
+{
+  "line": {
+    "id": "miranda-bilbao",
+    "name": "Línea convencional Miranda de Ebro – Orduña – Bilbao",
+    "short_name": "700",
+    "sort_order": 43,
+    "zone": "cantabrico",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 140,
+    "tracks": 1,
+    "pk_origin_km": 145.2,
+    "status": "disponible",
+    "description": "Une Miranda de Ebro con Bilbao por Orduña y Llodio. Es el camino de los trenes de largo recorrido que llegan a Bilbao desde Madrid, Barcelona y el valle del Ebro.\n\nEs el último trecho de la línea 700 de Adif, que viene de Zaragoza por Logroño y Haro. La abrió en 1863 la compañía del ferrocarril de Tudela a Bilbao, el primero que unió Bilbao con el valle del Ebro. Sale de Miranda hacia el norte por los valles de Álava, baja el puerto de Orduña y sigue por el valle del Nervión, por Amurrio, Llodio y Arrigorriaga, hasta la estación de Abando, en el centro de Bilbao. De Miranda a Orduña es de vía única; de Orduña a Bilbao tiene dos vías desde 1931.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Bilbao, que llegan a Miranda por la alta velocidad hasta Burgos y por la línea de Burgos a Vitoria, y los de Barcelona y Zaragoza a Bilbao, que llegan a Miranda por Logroño y Haro, por un trecho que no está cargado. Entre Miranda y Bilbao solo paran en Llodio. Los trenes de Cercanías de Bilbao a Orduña usan también sus vías, pero no están en los horarios cargados.\n\nLa alta velocidad de Vitoria a Bilbao, la «Y» vasca, está en obras: el mapa la dibuja como proyecto.",
+    "geometry_source": {
+      "source_id": "osm-relation-9277501",
+      "parts": [
+        {
+          "source_id": "osm-relation-9277501",
+          "file": "raw/osm/relation_9277501_linea_700_casetas_bilbao_2026-11-20.json",
+          "relation_id": 9277501,
+          "from": [
+            -2.9410258,
+            42.6905962
+          ],
+          "to": [
+            -2.927682,
+            43.26056
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-casetas-bilbao"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "miranda-de-ebro",
+      "name": "Miranda de Ebro",
+      "kind": "estacion",
+      "adif_code": "11200",
+      "shared": true,
+      "position": {
+        "lon": -2.941139,
+        "lat": 42.6907987
+      }
+    },
+    {
+      "id": "orduna",
+      "name": "Orduña",
+      "kind": "estacion",
+      "rank": "secundario",
+      "adif_code": "13100",
+      "position": {
+        "lon": -3.0159761,
+        "lat": 42.9946628
+      },
+      "reference_pk_km": 208.9,
+      "description": "Estación donde empieza la vía doble hacia Bilbao. Solo paran en ella los trenes de Cercanías de Bilbao, de los que es la última estación hacia el sur; no están en los horarios cargados."
+    },
+    {
+      "id": "llodio",
+      "name": "Llodio",
+      "kind": "estacion",
+      "adif_code": "13106",
+      "position": {
+        "lon": -2.9605007,
+        "lat": 43.1422527
+      },
+      "reference_pk_km": 227.5,
+      "description": "La única estación entre Miranda de Ebro y Bilbao en la que paran trenes de largo recorrido: algunos de los Alvia e Intercity de Madrid y de Miranda a Bilbao."
+    },
+    {
+      "id": "bilbao-abando",
+      "name": "Bilbao-Abando Indalecio Prieto",
+      "kind": "estacion",
+      "adif_code": "13200",
+      "position": {
+        "lon": -2.9285592,
+        "lat": 43.2601304
+      },
+      "description": "La estación de Abando, en el centro de Bilbao, donde acaba la línea. Llegan a ella los trenes de largo recorrido de Madrid y de Barcelona y los de Cercanías de Bilbao, que no están en los horarios cargados."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "miranda-de-ebro",
+      "to_node": "orduna",
+      "value": 1,
+      "source_id": "osm-relation-9277501",
+      "checked_on": "2026-11-20",
+      "note": "Vía única de Miranda de Ebro a Orduña: las vías de OSM llevan passenger_lines=1 hasta 300 m antes de la estación de Orduña. Coincide con el mapa 4 de la Declaración sobre la Red, que dibuja una sola vía, y con el artículo de Izarra en Wikipedia («el tramo es de vía única»)."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "orduna",
+      "to_node": "bilbao-abando",
+      "value": 2,
+      "source_id": "osm-relation-9277501",
+      "checked_on": "2026-11-20",
+      "note": "Vía doble de Orduña a Bilbao: las vías de OSM llevan passenger_lines=2 y el mapa 4 dibuja dos vías. Wikipedia fecha el desdoblamiento entre Orduña y Bilbao en 1931."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "miranda-de-ebro",
+      "to_node": "bilbao-abando",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a Miranda y junto a Bilbao A.I.P.; ningún símbolo de ERTMS en la línea."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "miranda-de-ebro",
+      "to_node": "orduna",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo naranja discontinuo y rótulo «BAU ctc» de Miranda a Orduña."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "orduna",
+      "to_node": "bilbao-abando",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo marrón discontinuo y rótulo «BAB ctc» de Orduña a Bilbao A.I.P."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "miranda-de-ebro",
+      "to_node": "bilbao-abando",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea, «BAU ctc» y «BAB ctc»."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "11200": {
+      "node": "miranda-de-ebro"
+    },
+    "13106": {
+      "node": "llodio"
+    },
+    "13200": {
+      "node": "bilbao-abando"
+    },
+    "11014": {
+      "exits": [
+        "miranda-de-ebro"
+      ],
+      "via": {
+        "line": "burgos-miranda-vitoria",
+        "node": "miranda-de-ebro"
+      }
+    },
+    "10600": {
+      "exits": [
+        "miranda-de-ebro"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "miranda-de-ebro"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        }
+      ]
+    },
+    "08004": {
+      "exits": [
+        "miranda-de-ebro"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "miranda-de-ebro"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "17000": {
+      "exits": [
+        "miranda-de-ebro"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "miranda-de-ebro"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "81002": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "81100": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "81108": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "81200": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "04040": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "04104": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    },
+    "71801": {
+      "exits": [
+        "miranda-de-ebro"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos o más estaciones de la línea. Todos los trenes que la recorren paran en Miranda de Ebro y en Bilbao: los Alvia e Intercity de Madrid y de Miranda a Bilbao y los de Barcelona y Zaragoza a Bilbao. No hay ningún otro tren que pare en dos de sus estaciones.",
+    "min_node_stops": 2
+  },
+  "route_overrides": []
+}

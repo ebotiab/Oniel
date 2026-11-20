@@ -42,6 +42,7 @@ from conftest import (
     MADRID_AVILA_VALLADOLID_SPEC,
     MADRID_PLASENCIA_SPEC,
     MEDITERRANEO_SPEC,
+    MIRANDA_BILBAO_SPEC,
     MONFRAGUE_CACERES_SPEC,
     MZCR_SPEC,
     PALENCIA_SANTANDER_SPEC,
@@ -739,6 +740,8 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "miranda-por-logrono": 22,
         },
         CASTEJON_PAMPLONA_SPEC.name: {},
+        # la de Miranda de Ebro a Bilbao tampoco: todos sus trenes paran en Miranda y en Bilbao
+        MIRANDA_BILBAO_SPEC.name: {},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

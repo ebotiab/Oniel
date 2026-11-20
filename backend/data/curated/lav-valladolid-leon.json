@@ -679,11 +679,39 @@
     "13106": {
       "exits": [
         "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "miranda-bilbao",
+          "node": "miranda-de-ebro"
+        }
       ]
     },
     "13200": {
       "exits": [
         "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "miranda-bilbao",
+          "node": "miranda-de-ebro"
+        }
       ]
     },
     "81002": {
