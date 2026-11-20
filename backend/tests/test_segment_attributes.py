@@ -249,6 +249,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "leon-oviedo-gijon": 1,
             "sevilla-cadiz": 6,
             "lav-zaragoza-huesca": 1,
+            # los once de Sevilla a Huelva, del mapa 3
+            "sevilla-huelva": 11,
         }
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(

@@ -73,7 +73,7 @@ test.describe('Tramos sin otro camino', () => {
     await abrirPanel(page)
     // lo esencial, a la vista: cuántos trenes, si tienen otro camino y dónde se ha buscado
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 136 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (51, entre Madrid-Puerta de Atocha y Sevilla-Santa Justa), 97 km y 1 h 46 min más.',
+      'Si este tramo se cortara, sus 136 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (49, entre Madrid-Puerta de Atocha y Sevilla-Santa Justa), 97 km y 1 h 46 min más.',
     )
     const detalle = page.getByTestId('tramo-alternativa-detalle')
     await expect(detalle).toBeHidden()
@@ -83,10 +83,12 @@ test.describe('Tramos sin otro camino', () => {
     // los de Málaga, los de Algeciras, los de Granada y los de Almería son grupos distintos: unos
     // llegan a Málaga, otros dejan la red cargada en Antequera-Santa Ana y los demás llegan a
     // Granada o siguen hacia Moreda; los de Cádiz siguen por la línea de Sevilla a Cádiz
-    // con los trenes de Iryo son 15: los suyos de Málaga a Barcelona forman un grupo más
-    await expect(grupos).toHaveCount(15)
+    // con los trenes de Iryo son 15: los suyos de Málaga a Barcelona forman un grupo más. Desde la
+    // línea de Sevilla a Huelva son 16: los 2 Intercity de Madrid a Huelva que paran en Santa Justa
+    // siguen por ella y dejan el grupo de Madrid a Sevilla
+    await expect(grupos).toHaveCount(16)
     await expect(grupos.first()).toHaveText(
-      '51 trenes entre Madrid-Puerta de Atocha y Sevilla-Santa Justa: otro camino por la línea convencional Madrid – Alcázar de San Juan – Córdoba y la línea de alta velocidad Madrid – Sevilla, 97 km y 1 h 46 min más (567,3 km en vez de 470,3).',
+      '49 trenes entre Madrid-Puerta de Atocha y Sevilla-Santa Justa: otro camino por la línea convencional Madrid – Alcázar de San Juan – Córdoba y la línea de alta velocidad Madrid – Sevilla, 97 km y 1 h 46 min más (567,3 km en vez de 470,3).',
     )
     // para los de Granada el otro camino, por Moreda, es más corto
     await expect(grupos.nth(2)).toContainText('8 trenes entre Madrid-Puerta de Atocha y Cádiz')
@@ -94,8 +96,8 @@ test.describe('Tramos sin otro camino', () => {
     await expect(grupos.nth(3)).toContainText('82 km')
     // los desviados por Manzanares ya dan un rodeo: para ellos el otro camino añade poco. El 20 de
     // noviembre quedan 2 a Málaga y 2 a Sevilla
-    await expect(grupos.nth(12)).toContainText('2 trenes entre Madrid-Puerta de Atocha y Málaga-María Zambrano')
-    await expect(grupos.nth(12)).toContainText('7 km y 38 min más')
+    await expect(grupos.nth(13)).toContainText('2 trenes entre Madrid-Puerta de Atocha y Málaga-María Zambrano')
+    await expect(grupos.nth(13)).toContainText('7 km y 38 min más')
     // el detalle dice qué significa y qué no mira el cálculo
     await expect(detalle).toContainText('no hay otro camino en las líneas que Oniel tiene cargadas, no que no exista en la red real')
     await expect(detalle).toContainText('no mira si el tren cabe por él')
@@ -112,7 +114,8 @@ test.describe('Tramos sin otro camino', () => {
     await expect(page.getByTestId('tramo-operadores-no-oficiales')).toContainText('Iryo')
     await page.getByTestId('mas-detalle').locator('summary').click()
     const grupos = page.getByTestId('tramo-alternativa-detalle').locator('li')
-    await expect(grupos).toHaveCount(9)
+    // desde la línea de Sevilla a Huelva, los 2 Intercity de Madrid a Huelva que paran en Santa Justa son un grupo aparte
+    await expect(grupos).toHaveCount(10)
     for (const grupo of await grupos.all()) await expect(grupo).toContainText('sin otro camino en las líneas cargadas.')
   })
 

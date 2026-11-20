@@ -89,7 +89,12 @@ def test_nodes_and_main_stations(line: BuiltNetwork) -> None:
     junctions = {n.spec.id for n in line.nodes if n.spec.kind == "bifurcacion"}
     assert junctions == {"bif-los-naranjos", "bif-cartuja", "huelva-mercancias"}
     principal = {n.spec.id for n in line.nodes if n.spec.rank == "principal"}
-    assert principal == {"sevilla-santa-justa", "bif-los-naranjos", "la-palma-del-condado", "huelva"}
+    assert principal == {
+        "sevilla-santa-justa",
+        "bif-los-naranjos",
+        "la-palma-del-condado",
+        "huelva",
+    }
     assert line.node("huelva").spec.adif_code == HUELVA
     assert line.node("la-palma-del-condado").spec.adif_code == LA_PALMA
     assert {c.id: c.node_id for c in line.spec.connections} == {
@@ -155,7 +160,8 @@ def test_sources_and_operators_are_registered(spec: NetworkSpec) -> None:
         assert source.license == "ODbL 1.0"
         assert source.file == part.file and (DATA_DIR / part.file).exists()
     for source_id in ("osm-instalaciones-sevilla-huelva", "osm-relation-11375073"):
-        assert sources[source_id].file and (DATA_DIR / sources[source_id].file).exists()
+        file = sources[source_id].file
+        assert file and (DATA_DIR / file).exists()
     assert spec.line.verification_source_id == "wikipedia-linea-sevilla-huelva"
     for section in spec.attribute_sections:
         assert section.source_id in sources
@@ -213,7 +219,12 @@ def test_each_family_counts_where_it_runs(feed: GtfsFeed, line: BuiltNetwork) ->
             assert SANTA_JUSTA in stops and LA_PALMA not in stops
             assert passes == ["sevilla-santa-justa:bif-los-naranjos"], trip.train_number
             seen["hacia Córdoba"] += 1
-    assert seen == {"entera": 16, "por Los Naranjos": 12, "Zafra y Jabugo": 13, "hacia Córdoba": 171}
+    assert seen == {
+        "entera": 16,
+        "por Los Naranjos": 12,
+        "Zafra y Jabugo": 13,
+        "hacia Córdoba": 171,
+    }
 
 
 def test_madrid_trains_reach_the_line_through_majarabique(spec: NetworkSpec) -> None:

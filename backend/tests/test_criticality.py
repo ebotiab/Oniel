@@ -340,6 +340,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
         "miranda-bilbao",
+        "sevilla-huelva",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -394,6 +395,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 21  # la de Palencia a Santander
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
         + 3  # la de Miranda de Ebro a Bilbao
+        + 11  # la de Sevilla a Huelva
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -453,8 +455,30 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # Zaragoza, Logroño y Pamplona: sus veintitrés tramos quedan sin otro camino para todos
     # La de Miranda de Ebro a Bilbao acaba en Bilbao, adonde no llega otra línea cargada: sus tres
     # tramos quedan sin otro camino para todos sus trenes
+    # La de Sevilla a Huelva acaba en Huelva, adonde no llega otra línea cargada: sus once tramos
+    # quedan sin otro camino para todos sus trenes
     assert (len(none), len(without)) == (
-        54 + 29 + 8 + 13 + 4 + 11 + 7 + 3 + 15 + 16 + 2 + 3 + 12 - 5 - 23 - 5 + 4 + 21 + 23 + 3,
+        54
+        + 29
+        + 8
+        + 13
+        + 4
+        + 11
+        + 7
+        + 3
+        + 15
+        + 16
+        + 2
+        + 3
+        + 12
+        - 5
+        - 23
+        - 5
+        + 4
+        + 21
+        + 23
+        + 3
+        + 11,
         121
         + 29
         + 4
@@ -478,7 +502,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 27
         + 21
         + 23
-        + 3,
+        + 3
+        + 11,
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -527,6 +552,9 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # recorren de punta a punta
     bilbao = {k: n for k, n in none.items() if k.startswith("miranda-bilbao:")}
     assert len(bilbao) == 3 and set(bilbao.values()) == {8}
+    # la de Sevilla a Huelva, entera: a Huelva solo llega ella
+    huelva = {k: n for k, n in none.items() if k.startswith("sevilla-huelva:")}
+    assert len(huelva) == 11
     extremadura_lines = (
         f"{MADRID_PLASENCIA}:",
         f"{LAV_BADAJOZ}:",
@@ -557,6 +585,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         "zaragoza-castejon-logrono:",
         "castejon-pamplona:",
         "miranda-bilbao:",
+        "sevilla-huelva:",
         *extremadura_lines,
     )
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
@@ -856,9 +885,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     assert _of(exported.segments, f"{LAV_MALAGA}:bif-malaga:la-marota").trains == 77
     # entre la estación de Moreda y la bifurcación no pasa ningún tren de los horarios
     assert _of(exported.segments, f"{LBMG}:moreda:bif-almeria").trains == 0
-    # el grupo más numeroso de Adamuz – Córdoba: los 39 trenes entre Madrid y Sevilla (eran 41,
-    # con los 2 Alvia de Cádiz, que siguen ahora por la línea de Sevilla a Cádiz)
+    # el grupo más numeroso de Adamuz – Córdoba: los 37 trenes entre Madrid y Sevilla (eran 41,
+    # con los 2 Alvia de Cádiz, que siguen ahora por la línea de Sevilla a Cádiz, y los 2
+    # Intercity de Huelva que paran en Santa Justa, que siguen por la línea de Sevilla a Huelva)
     top = _of(exported.segments, ADAMUZ_CORDOBA).groups[0]
-    assert (top.trains, top.from_node_id, top.to_node_id) == (39, MADRID, SEVILLA)
+    assert (top.trains, top.from_node_id, top.to_node_id) == (37, MADRID, SEVILLA)
     assert top.alternative is not None
     assert (top.alternative.extra_km, top.alternative.extra_min) == (97.0, 106)
