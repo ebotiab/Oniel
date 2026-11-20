@@ -133,6 +133,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 20  # los regionales de Valladolid a Santander, que no estaban en otra
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
+            + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
         )
         # misma huella: se salta sin tocar la base
         second = await run(if_changed=True)
@@ -195,6 +196,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 20  # los regionales de Valladolid a Santander
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
+            + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
         )
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False

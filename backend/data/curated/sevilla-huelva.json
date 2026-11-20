@@ -1,0 +1,456 @@
+{
+  "line": {
+    "id": "sevilla-huelva",
+    "name": "Línea convencional Sevilla – Huelva",
+    "short_name": "440",
+    "sort_order": 44,
+    "zone": "andalucia",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 155,
+    "tracks": 1,
+    "pk_restarts": [
+      {
+        "node": "bif-los-naranjos",
+        "pk_km": -2.2
+      }
+    ],
+    "status": "disponible",
+    "description": "Une Sevilla con Huelva: sale de Sevilla-Santa Justa hacia el norte, cruza el Guadalquivir y sigue hacia el oeste por el Aljarafe y el Condado, por Benacazón, La Palma del Condado y Niebla, hasta la estación de Huelva.\n\nEs la línea 440 de Adif, que empieza en la bifurcación Los Naranjos, al norte de Sevilla. Los primeros 6 km, de Santa Justa a esa bifurcación, son de la línea de Córdoba a Sevilla, y por ellos pasan también los regionales de Córdoba, Jaén y Extremadura. Pasada la bifurcación de Cartuja es de vía única hasta Huelva. Se abrió en 1880, y desde 2018 acaba en la estación nueva de Huelva, que sustituyó a la antigua de Huelva-Término.\n\nEn los horarios de Renfe la recorren los regionales de Sevilla a Huelva, que paran en casi todas sus estaciones, y los Alvia e Intercity de Madrid a Huelva, que llegan por la alta velocidad y paran en La Palma del Condado. Casi todos cambian de ancho de vía en Majarabique y entran en la línea por la bifurcación Los Naranjos sin pasar por Santa Justa. Los regionales de Zafra a Huelva solo recorren los últimos kilómetros, desde Huelva-Mercancías. Los trenes de Cercanías de Sevilla que usan sus vías hasta Benacazón no están en los horarios cargados.",
+    "geometry_source": {
+      "source_id": "osm-relation-2424191",
+      "parts": [
+        {
+          "source_id": "osm-relation-2424191",
+          "file": "raw/osm/relation_2424191_linea_72_sevilla_huelva_2026-11-20.json",
+          "relation_id": 2424191,
+          "from": [
+            -5.975224,
+            37.3923692
+          ],
+          "to": [
+            -6.9449039,
+            37.2524874
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-linea-sevilla-huelva"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "sevilla-santa-justa",
+      "name": "Sevilla-Santa Justa",
+      "kind": "estacion",
+      "adif_code": "51003",
+      "shared": true,
+      "position": {
+        "lon": -5.974927,
+        "lat": 37.392496
+      }
+    },
+    {
+      "id": "bif-los-naranjos",
+      "name": "Bifurcación Los Naranjos",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -5.9590381,
+        "lat": 37.4417188
+      },
+      "description": "Aquí empieza la línea 440 de Adif y se separa de la de Córdoba a Sevilla. Por ella entran en la línea los Alvia e Intercity de Madrid, que cambian de ancho de vía en el cambiador de Majarabique, a poco más de un kilómetro, y siguen hacia Huelva sin pasar por Santa Justa."
+    },
+    {
+      "id": "bif-cartuja",
+      "name": "Bifurcación Cartuja",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -5.9994981,
+        "lat": 37.4264623
+      },
+      "reference_pk_km": 3.3,
+      "description": "Punto en el que sale el ramal de Cercanías a la isla de la Cartuja, que no está cargado, y en el que acaba la vía doble: desde aquí hasta Huelva la línea es de vía única."
+    },
+    {
+      "id": "benacazon",
+      "name": "Benacazón",
+      "kind": "estacion",
+      "adif_code": "43005",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.2079862,
+        "lat": 37.3571118
+      },
+      "reference_pk_km": 27.3
+    },
+    {
+      "id": "carrion-de-los-cespedes",
+      "name": "Carrión de los Céspedes",
+      "kind": "estacion",
+      "adif_code": "43008",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.3351685,
+        "lat": 37.3688915
+      },
+      "reference_pk_km": 45.8
+    },
+    {
+      "id": "escacena",
+      "name": "Escacena",
+      "kind": "estacion",
+      "adif_code": "43009",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.3920816,
+        "lat": 37.3977195
+      },
+      "reference_pk_km": 51.8
+    },
+    {
+      "id": "la-palma-del-condado",
+      "name": "La Palma del Condado",
+      "kind": "estacion",
+      "adif_code": "43011",
+      "position": {
+        "lon": -6.5543606,
+        "lat": 37.3907939
+      },
+      "reference_pk_km": 68.6,
+      "description": "La única parada de los Alvia e Intercity de Madrid entre Sevilla y Huelva."
+    },
+    {
+      "id": "villarrasa",
+      "name": "Villarrasa",
+      "kind": "estacion",
+      "adif_code": "43012",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.5987991,
+        "lat": 37.3868365
+      },
+      "reference_pk_km": 72.6
+    },
+    {
+      "id": "niebla-puerta-del-buey",
+      "name": "Niebla-Puerta del Buey",
+      "kind": "estacion",
+      "adif_code": "43015",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.6813571,
+        "lat": 37.3584253
+      },
+      "reference_pk_km": 80.6
+    },
+    {
+      "id": "san-juan-del-puerto",
+      "name": "San Juan del Puerto",
+      "kind": "estacion",
+      "adif_code": "43021",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.8409564,
+        "lat": 37.3118607
+      },
+      "reference_pk_km": 96.1
+    },
+    {
+      "id": "huelva-mercancias",
+      "name": "Huelva-Mercancías",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.9118783,
+        "lat": 37.2665928
+      },
+      "reference_pk_km": 104.7,
+      "description": "Estación de mercancías de Huelva, sin viajeros. Aquí se une la línea de Zafra a Huelva, que no está cargada: los regionales de Zafra y de Jabugo siguen desde aquí hasta la estación de Huelva."
+    },
+    {
+      "id": "huelva",
+      "name": "Huelva",
+      "kind": "estacion",
+      "adif_code": "43019",
+      "position": {
+        "lon": -6.944851,
+        "lat": 37.2526187
+      },
+      "reference_pk_km": 108.5,
+      "description": "Final de la línea. Estación abierta en 2018, que sustituyó a la antigua de Huelva-Término, algo más al sur."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "bif-los-naranjos",
+      "value": 155,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 3 (velocidades máximas, página 7 del PDF): «155» en la línea 400 entre Majarabique y Los Rosales; el trecho de Santa Justa a Majarabique no lleva otro rótulo. Las vías de OSM traen 160 km/h; se declara lo que dice el mapa."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "bif-los-naranjos",
+      "to_node": "huelva-mercancias",
+      "value": 140,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 3: «140» entre Majarabique y la bifurcación de Cartuja y entre Aznalcázar y Huelva Mercancías. Las vías de OSM traen 120 km/h hasta Benacazón y 160 desde allí; se declara lo que dice el mapa."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "huelva-mercancias",
+      "to_node": "huelva",
+      "value": 90,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 3: «90» entre Huelva Mercancías y Huelva, lo mismo que traen las vías de OSM."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "bif-cartuja",
+      "value": 2,
+      "source_id": "wikipedia-linea-sevilla-huelva",
+      "checked_on": "2026-11-20",
+      "note": "Wikipedia da vía doble desde el arranque de la línea 440 hasta la bifurcación de Cartuja (PK 3,3) y vía única desde allí. El trecho de Santa Justa a la bifurcación Los Naranjos es de la línea 400, de vía doble. El mapa 4 de la Declaración sobre la Red dibuja los dos trechos con el trazo de «Doble a 3 kV a 1.668 mm» y la línea de Huelva, pasada la bifurcación de Cartuja, con el de «Única»."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "huelva",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: círculos verdes de «Tren tierra y ASFA conv.» junto a Majarabique, a la bifurcación de Cartuja, a Aznalcázar y a Huelva Mercancías."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "bif-cartuja",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo marrón discontinuo de «BAB ctc» de Santa Justa a Majarabique, por la línea 400, y desde allí por el trecho de vía doble hasta la bifurcación de Cartuja."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-cartuja",
+      "to_node": "benacazon",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo naranja discontinuo de «BAU ctc» desde la bifurcación de Cartuja hasta Aznalcázar, donde empieza el azul claro de «BLAU ctc». Aznalcázar-Pilas (PK 35,6 según Wikipedia), sin parada de los trenes cargados, no es un nodo: el cambio se declara en el nodo más cercano, Benacazón (PK 27,3)."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "benacazon",
+      "to_node": "huelva-mercancias",
+      "value": "blau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo azul claro discontinuo rotulado «BLAU ctc» de Aznalcázar a Huelva Mercancías. El trecho de Benacazón a Aznalcázar, unos 8 km, entra en esta sección."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "huelva-mercancias",
+      "to_node": "huelva",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: trazo naranja discontinuo rotulado «BAU ctc» de Huelva Mercancías a Huelva."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "huelva",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-20",
+      "note": "Mapa 4: «ctc» tras el rótulo de cada bloqueo, «BAB ctc», «BAU ctc» y «BLAU ctc»."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-los-naranjos-cordoba",
+      "node_id": "bif-los-naranjos",
+      "name": "Línea convencional Sevilla – Córdoba",
+      "towards": "Los Rosales, Lora del Río y Córdoba",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -5.9590381,
+          37.4417188
+        ],
+        [
+          -5.7261208,
+          37.5899718
+        ],
+        [
+          -5.5295514,
+          37.6613212
+        ]
+      ]
+    },
+    {
+      "id": "conv-huelva-zafra",
+      "node_id": "huelva-mercancias",
+      "name": "Línea Zafra – Huelva",
+      "towards": "Gibraleón, Calañas, Jabugo y Zafra",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -6.9118783,
+          37.2665928
+        ],
+        [
+          -6.96207,
+          37.36852
+        ],
+        [
+          -6.875841,
+          37.652007
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "51003": {
+      "node": "sevilla-santa-justa"
+    },
+    "43005": {
+      "node": "benacazon"
+    },
+    "43008": {
+      "node": "carrion-de-los-cespedes"
+    },
+    "43009": {
+      "node": "escacena"
+    },
+    "43011": {
+      "node": "la-palma-del-condado"
+    },
+    "43012": {
+      "node": "villarrasa"
+    },
+    "43015": {
+      "node": "niebla-puerta-del-buey"
+    },
+    "43021": {
+      "node": "san-juan-del-puerto"
+    },
+    "43019": {
+      "node": "huelva"
+    },
+    "50500": {
+      "exits": [
+        "bif-los-naranjos"
+      ],
+      "via": {
+        "line": "lav-madrid-sevilla",
+        "node": "majarabique"
+      }
+    },
+    "60000": {
+      "exits": [
+        "bif-los-naranjos"
+      ],
+      "via": {
+        "line": "lav-madrid-sevilla",
+        "node": "majarabique"
+      }
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en dos estaciones de la línea o más: los regionales de Sevilla a Huelva y los Alvia e Intercity de Madrid a Huelva. Quedan fuera los que solo paran en una, Sevilla-Santa Justa o Huelva; de ellos, cuatro reglas de recorrido recogen a los que recorren un trecho de la línea: los regionales de Córdoba, Jaén, Cádiz y Extremadura, de Santa Justa a la bifurcación Los Naranjos, y los de Zafra y Jabugo, de Huelva-Mercancías a Huelva.",
+    "min_node_stops": 2
+  },
+  "route_overrides": [
+    {
+      "id": "regionales-por-lora-del-rio",
+      "description": "Regionales de Sevilla a Córdoba y Jaén, y de Cádiz a Córdoba y Jaén, que paran en Santa Justa y en Lora del Río: de Santa Justa a la bifurcación Los Naranjos van por esta línea y siguen por la línea convencional de Córdoba, que no está cargada.",
+      "consecutive_stop_ids": [
+        "51003",
+        "50600"
+      ],
+      "from_stop_id": "51003",
+      "to_stop_id": "50600",
+      "stop_mappings": {
+        "50600": {
+          "exits": [
+            "bif-los-naranjos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "regionales-por-los-rosales",
+      "description": "Regionales de Sevilla a Mérida, Cáceres y Madrid por Zafra, que paran en Santa Justa y en Los Rosales: de Santa Justa a la bifurcación Los Naranjos van por esta línea y siguen por la línea de Córdoba hasta Los Rosales, donde toman la de Mérida; ninguna de las dos está cargada.",
+      "consecutive_stop_ids": [
+        "51003",
+        "50700"
+      ],
+      "from_stop_id": "51003",
+      "to_stop_id": "50700",
+      "stop_mappings": {
+        "50700": {
+          "exits": [
+            "bif-los-naranjos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "regionales-de-zafra-por-los-rosales",
+      "description": "Regionales de Sevilla a Zafra que van de Santa Justa a Zafra sin parar en Los Rosales: salen igual por la bifurcación Los Naranjos.",
+      "consecutive_stop_ids": [
+        "51003",
+        "40100"
+      ],
+      "from_stop_id": "51003",
+      "to_stop_id": "40100",
+      "stop_mappings": {
+        "40100": {
+          "exits": [
+            "bif-los-naranjos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "regionales-de-zafra-y-jabugo",
+      "description": "Regionales de Huelva a Zafra y a Jabugo-Galaroza, que paran en Huelva y en Gibraleón: de Huelva a Huelva-Mercancías van por esta línea y siguen por la de Zafra a Huelva, que no está cargada.",
+      "consecutive_stop_ids": [
+        "43019",
+        "42020"
+      ],
+      "from_stop_id": "43019",
+      "to_stop_id": "42020",
+      "stop_mappings": {
+        "42020": {
+          "exits": [
+            "huelva-mercancias"
+          ]
+        }
+      }
+    }
+  ]
+}

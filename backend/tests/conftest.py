@@ -61,6 +61,7 @@ ZARAGOZA_LOGRONO_SPEC = DATA_DIR / "curated" / "zaragoza-castejon-logrono.json"
 CASTEJON_PAMPLONA_SPEC = DATA_DIR / "curated" / "castejon-pamplona.json"
 #: La línea de Miranda de Ebro a Bilbao por Orduña y Llodio.
 MIRANDA_BILBAO_SPEC = DATA_DIR / "curated" / "miranda-bilbao.json"
+SEVILLA_HUELVA_SPEC = DATA_DIR / "curated" / "sevilla-huelva.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -103,6 +104,7 @@ SPECS = [
     ZARAGOZA_LOGRONO_SPEC,
     CASTEJON_PAMPLONA_SPEC,
     MIRANDA_BILBAO_SPEC,
+    SEVILLA_HUELVA_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

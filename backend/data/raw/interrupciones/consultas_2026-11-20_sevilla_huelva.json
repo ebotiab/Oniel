@@ -1,0 +1,24 @@
+{
+  "descripcion": "Registro de las consultas hechas el 20 de noviembre de 2026 para ver si la línea Sevilla – Huelva, que se carga ese día, tiene alguna interrupción vigente.",
+  "consultado_el": "2026-11-20",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-20 13:40",
+      "resumen": "Dos avisos: la circulación restablecida por una vía entre Robledo de Chavela y Zarzalejo, en la línea de Madrid a Ávila, y la interrupción de la alta velocidad Madrid – Andalucía desde el 28 de octubre, ya registrada. La pestaña de Andalucía solo trae esta última. Nada de la línea de Sevilla a Huelva.",
+      "que_aporta": "Que no hay ninguna interrupción anunciada en la línea. Los Alvia de Madrid a Huelva llegan por la alta velocidad Madrid – Andalucía, que es la que tiene la interrupción."
+    },
+    {
+      "source_id": null,
+      "titulo": "Avisos",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "fecha_de_la_pagina": "2026-11-20 13:45",
+      "resumen": "Avisos de obras en Cataluña (R3 y R7 de Rodalies), Asturias (vía estrecha de Pola de Siero a Ribadesella), Miranda de Ebro – Logroño, la autopista ferroviaria Algeciras – Zaragoza (Córdoba – Santa Cruz de Mudela y Algeciras – Bobadilla – Córdoba), Redondela – O Porriño, Murcia – Almería, Huércal-Viator – Almería, Xàtiva – Alcoi, Guadalajara – Plasencia de Jalón, Zaragoza – Teruel – Sagunt y cercanías de València y Madrid. Ninguno de la línea de Sevilla a Huelva.",
+      "que_aporta": "Que no hay obras anunciadas que corten la línea."
+    }
+  ]
+}

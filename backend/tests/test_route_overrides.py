@@ -48,6 +48,7 @@ from conftest import (
     PALENCIA_SANTANDER_SPEC,
     RAMAL_MERIDA_SPEC,
     SEVILLA_CADIZ_SPEC,
+    SEVILLA_HUELVA_SPEC,
     SPEC,
     SPECS,
     TARRAGONA_BARCELONA_SPEC,
@@ -742,6 +743,14 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         CASTEJON_PAMPLONA_SPEC.name: {},
         # la de Miranda de Ebro a Bilbao tampoco: todos sus trenes paran en Miranda y en Bilbao
         MIRANDA_BILBAO_SPEC.name: {},
+        # en la de Sevilla a Huelva, los regionales que solo recorren su primer tramo, hacia Córdoba y
+        # Extremadura, y los de Zafra y Jabugo, que solo recorren el último
+        SEVILLA_HUELVA_SPEC.name: {
+            "regionales-por-lora-del-rio": 113,
+            "regionales-por-los-rosales": 41,
+            "regionales-de-zafra-por-los-rosales": 17,
+            "regionales-de-zafra-y-jabugo": 13,
+        },
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin

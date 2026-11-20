@@ -68,6 +68,7 @@ class Settings(BaseSettings):
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
         "miranda-bilbao",
+        "sevilla-huelva",
     ]
 
 

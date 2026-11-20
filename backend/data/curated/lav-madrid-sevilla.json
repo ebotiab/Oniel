@@ -77,8 +77,7 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."}
   ],
   "connections": [
-    {"id": "majarabique-huelva", "node_id": "majarabique", "name": "Red convencional por Majarabique", "towards": "Huelva", "status": "no_cargada", "sketch": [[-6.1, 37.45], [-6.55, 37.39]]},
-    {"id": "sevilla-huelva", "node_id": "sevilla-santa-justa", "name": "Red convencional Sevilla–Huelva", "towards": "Huelva", "status": "no_cargada", "sketch": [[-5.974927, 37.392496], [-6.15, 37.42], [-6.45, 37.4]]}
+    {"id": "majarabique-los-naranjos", "node_id": "majarabique", "name": "Enlace del cambiador de Majarabique con la línea de Huelva", "towards": "Bifurcación Los Naranjos", "status": "no_cargada", "sketch": [[-5.9604, 37.453815], [-5.9590381, 37.4417188]]}
   ],
   "stop_mappings": {
     "60000": {"node": "madrid-puerta-de-atocha"},
@@ -105,8 +104,8 @@
     "55007": {"exits": ["bif-malaga"]},
     "55020": {"exits": ["bif-malaga"]},
     "55018": {"exits": ["bif-malaga"]},
-    "43019": {"exits": ["majarabique", "sevilla-santa-justa"]},
-    "43011": {"exits": ["majarabique", "sevilla-santa-justa"]},
+    "43019": {"exits": ["majarabique", "sevilla-santa-justa"], "via": {"line": "sevilla-huelva", "node": "bif-los-naranjos"}},
+    "43011": {"exits": ["majarabique", "sevilla-santa-justa"], "via": {"line": "sevilla-huelva", "node": "bif-los-naranjos"}},
     "51300": {"exits": ["sevilla-santa-justa"], "via": {"line": "sevilla-cadiz", "node": "sevilla-santa-justa"}},
     "51400": {"exits": ["sevilla-santa-justa"], "via": {"line": "sevilla-cadiz", "node": "sevilla-santa-justa"}},
     "51406": {"exits": ["sevilla-santa-justa"], "via": {"line": "sevilla-cadiz", "node": "sevilla-santa-justa"}},
