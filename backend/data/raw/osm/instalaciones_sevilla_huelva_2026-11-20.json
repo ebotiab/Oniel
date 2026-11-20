@@ -1,0 +1,251 @@
+{
+ "version": "0.6",
+ "generator": "oniel (extracto de api.openstreetmap.org)",
+ "copyright": "OpenStreetMap and contributors",
+ "license": "http://opendatacommons.org/licenses/odbl/1-0/",
+ "elements": [
+  {
+   "type": "node",
+   "id": 243997912,
+   "lat": 37.4534725,
+   "lon": -5.9605976,
+   "timestamp": "2024-04-12T09:22:15Z",
+   "version": 5,
+   "changeset": 149900740,
+   "user": "Claudius Henrichs",
+   "uid": 18069,
+   "tags": {
+    "railway": "gauge_conversion"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1336831385,
+   "lat": 37.3571118,
+   "lon": -6.2079862,
+   "timestamp": "2026-03-05T10:30:33Z",
+   "version": 6,
+   "changeset": 179389588,
+   "user": "Robot8A",
+   "uid": 393359,
+   "tags": {
+    "name": "Benacazón",
+    "name:ar": "بناكاثون",
+    "name:es": "Benacazón",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779386"
+   }
+  },
+  {
+   "type": "node",
+   "id": 3221905598,
+   "lat": 37.3118607,
+   "lon": -6.8409564,
+   "timestamp": "2021-09-28T09:34:02Z",
+   "version": 7,
+   "changeset": 111808487,
+   "user": "kapazao",
+   "uid": 7543375,
+   "tags": {
+    "name": "San Juan del Puerto",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q96912864",
+    "wikipedia": "es:Estación de San Juan del Puerto"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5580567331,
+   "lat": 37.2526187,
+   "lon": -6.944851,
+   "timestamp": "2021-08-16T21:20:16Z",
+   "version": 5,
+   "changeset": 109773232,
+   "user": "Fonz Pelae",
+   "uid": 13937481,
+   "tags": {
+    "name": "Huelva",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q5846375"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6334139263,
+   "lat": 37.4532434,
+   "lon": -5.9607335,
+   "timestamp": "2024-04-12T09:22:15Z",
+   "version": 3,
+   "changeset": 149900740,
+   "user": "Claudius Henrichs",
+   "uid": 18069,
+   "tags": {
+    "railway": "gauge_conversion"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7776577078,
+   "lat": 37.4264623,
+   "lon": -5.9994981,
+   "timestamp": "2020-08-02T19:07:23Z",
+   "version": 2,
+   "changeset": 88848614,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Bifurcación Cartuja",
+    "operator": "Adif",
+    "railway": "junction"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7779095181,
+   "lat": 37.3688915,
+   "lon": -6.3351685,
+   "timestamp": "2020-08-02T19:07:23Z",
+   "version": 1,
+   "changeset": 88848614,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Carrión de los Céspedes",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q5845975"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7779139634,
+   "lat": 37.3977195,
+   "lon": -6.3920816,
+   "timestamp": "2020-08-02T19:07:23Z",
+   "version": 1,
+   "changeset": 88848614,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Escacena",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779735"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7779139644,
+   "lat": 37.3907939,
+   "lon": -6.5543606,
+   "timestamp": "2020-08-02T19:07:23Z",
+   "version": 1,
+   "changeset": 88848614,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "La Palma del Condado",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779976"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7779139774,
+   "lat": 37.4431168,
+   "lon": -5.968424,
+   "timestamp": "2020-08-02T19:07:23Z",
+   "version": 1,
+   "changeset": 88848614,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Bifurcación San Jerónimo",
+    "operator": "Adif",
+    "railway": "junction"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7779139775,
+   "lat": 37.4417188,
+   "lon": -5.9590381,
+   "timestamp": "2020-08-02T19:07:23Z",
+   "version": 1,
+   "changeset": 88848614,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Bifurcación Los Naranjos",
+    "operator": "Adif",
+    "railway": "junction"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7788690572,
+   "lat": 37.2665928,
+   "lon": -6.9118783,
+   "timestamp": "2020-08-06T01:13:20Z",
+   "version": 1,
+   "changeset": 89005544,
+   "user": "Patrick1977Bln",
+   "uid": 259536,
+   "tags": {
+    "name": "Huelva-Mercancías",
+    "operator": "Adif",
+    "railway": "yard",
+    "wikidata": "Q78779715"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9218095129,
+   "lat": 37.3868365,
+   "lon": -6.5987991,
+   "timestamp": "2021-11-02T09:33:18Z",
+   "version": 1,
+   "changeset": 113273844,
+   "user": "kapazao",
+   "uid": 7543375,
+   "tags": {
+    "name": "Villarrasa",
+    "public_transport": "stop_position",
+    "railway": "stop",
+    "train": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9783898163,
+   "lat": 37.3584253,
+   "lon": -6.6813571,
+   "timestamp": "2024-07-17T20:35:36Z",
+   "version": 2,
+   "changeset": 154074737,
+   "user": "ginnyTheCat",
+   "uid": 16278787,
+   "tags": {
+    "name": "Niebla-Puerta del Buey",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "halt",
+    "wikidata": "Q96912588"
+   }
+  }
+ ]
+}

@@ -67,6 +67,7 @@ class Settings(BaseSettings):
         "palencia-santander",
         "zaragoza-castejon-logrono",
         "castejon-pamplona",
+        "sevilla-huelva",
     ]
 
 

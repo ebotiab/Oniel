@@ -59,6 +59,7 @@ PALENCIA_SANTANDER_SPEC = DATA_DIR / "curated" / "palencia-santander.json"
 #: Las dos líneas del valle del Ebro: de Zaragoza a Logroño por Castejón y de Castejón a Pamplona.
 ZARAGOZA_LOGRONO_SPEC = DATA_DIR / "curated" / "zaragoza-castejon-logrono.json"
 CASTEJON_PAMPLONA_SPEC = DATA_DIR / "curated" / "castejon-pamplona.json"
+SEVILLA_HUELVA_SPEC = DATA_DIR / "curated" / "sevilla-huelva.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -100,6 +101,7 @@ SPECS = [
     PALENCIA_SANTANDER_SPEC,
     ZARAGOZA_LOGRONO_SPEC,
     CASTEJON_PAMPLONA_SPEC,
+    SEVILLA_HUELVA_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

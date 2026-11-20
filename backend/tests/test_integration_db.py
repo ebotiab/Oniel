@@ -2692,7 +2692,7 @@ async def test_a_connection_dropped_from_a_spec_goes_away_even_on_a_shared_node(
         await import_network(conn, SPEC, SOURCES, DATA_DIR)
         assert await conn.fetchval(count) == before
     # las de la otra línea que comparte el nodo y las del resto siguen en su sitio
-    assert {"enlace-blancales-lav-sevilla", "sevilla-huelva"} <= ids
+    assert {"enlace-blancales-lav-sevilla", "majarabique-los-naranjos"} <= ids
 
 
 # --- Lo leído de la base, guardado en memoria mientras los datos no cambien (`oniel.repo.cache`) ---
