@@ -2262,7 +2262,7 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
     assert r.status_code == 200
     body = r.json()
     assert body["scenario_code"] == ""
-    assert (body["max_changes"], body["max_ratio"]) == (5, 2)
+    assert (body["max_changes"], body["max_ratio"]) == (None, 2)
     # la vuelta por Córdoba (613,5 km) pasa del doble del más corto y no se devuelve
     assert [route["line_ids"] for route in body["routes"]] == [[LAV], [CONV, MZCR]]
     assert [route["length_km"] for route in body["routes"]] == [170.8, 260.5]

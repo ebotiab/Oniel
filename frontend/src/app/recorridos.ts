@@ -369,3 +369,25 @@ export function trenesDirectos(enOrigen: NodeCall[], enDestino: NodeCall[]): Tre
 export function trenesDelRecorrido(recorrido: Recorrido, trenes: TrenDirecto[], pasos: Map<string, Set<string>>): TrenDirecto[] {
   return trenes.filter((t) => recorrido.tramosClave.every((id) => pasos.get(id)?.has(t.service_id)))
 }
+
+/**
+ * De los trenes directos, cuántos no siguen ninguno de los recorridos. El comparador solo conoce las
+ * líneas cargadas: un tren que va, aunque sea en parte, por una vía que no lo está (la línea de Mérida
+ * a Sevilla por Zafra, el enlace por el que los trenes de Madrid a Pamplona evitan Zaragoza) para en
+ * las dos estaciones y no pasa por los tramos de ningún recorrido.
+ */
+export function trenesFueraDeLosRecorridos(recorridos: Recorrido[], trenes: TrenDirecto[], pasos: Map<string, Set<string>>): number {
+  return trenes.filter((t) => !recorridos.some((r) => trenesDelRecorrido(r, [t], pasos).length > 0)).length
+}
+
+/** Lo anterior, en una frase para poner tras «Hay N trenes directos…»; nada si todos siguen algún recorrido. */
+export function fraseTrenesFuera(fuera: number, directos: number, recorridos: number): string | null {
+  if (fuera <= 0 || directos <= 0) return null
+  const estos = recorridos === 1 ? 'este recorrido' : 'ninguno de estos recorridos'
+  const porque = `${fuera === 1 ? 'sigue' : 'siguen'}, al menos en parte, una vía que Oniel no tiene cargada`
+  if (fuera >= directos) {
+    if (directos === 1) return `No va por ${estos}: ${porque}.`
+    return recorridos === 1 ? `Ninguno va por este recorrido: ${porque}.` : `Ninguno va por estos recorridos: ${porque}.`
+  }
+  return `De ellos, ${fuera} no ${fuera === 1 ? 'va' : 'van'} por ${estos}: ${porque}.`
+}

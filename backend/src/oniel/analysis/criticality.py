@@ -53,6 +53,12 @@ METHOD = (
     " las interrupciones vigentes: cada tramo se cierra por separado sobre la red completa."
 )
 
+#: Cambios de línea con los que se busca primero el otro camino de un grupo de trenes. El
+#: comparador ya no tiene tope (``DEFAULT_MAX_CHANGES``); aquí se conserva el que tenía, cinco,
+#: porque esta búsqueda se repite miles de veces y casi siempre basta: solo si no da ningún camino
+#: se repite sin tope.
+FIRST_MAX_CHANGES = 5
+
 
 @dataclass(frozen=True)
 class ServicePath:
@@ -175,11 +181,18 @@ def segment_alternatives(
             own = route_along(graph, start, path_ids)
             # Se buscan todos, sin el descarte del comparador (que compara caminos entre sí), y
             # el tope se aplica contra el recorrido del propio tren.
-            others = find_routes(graph, own.from_node_id, own.to_node_id, closed, max_ratio=None)
+            others = find_routes(
+                graph,
+                own.from_node_id,
+                own.to_node_id,
+                closed,
+                max_changes=FIRST_MAX_CHANGES,
+                max_ratio=None,
+            )
             if not others:
                 # Ni por número de líneas: un tren que cruza Madrid de una línea a otra (de
-                # Valladolid a Valencia) puede necesitar más cambios de línea de los que admite
-                # el comparador para rodear un tramo, y ese rodeo también es otro camino.
+                # Valladolid a Valencia) puede necesitar más cambios de línea de los de la primera
+                # búsqueda para rodear un tramo, y ese rodeo también es otro camino.
                 others = find_routes(
                     graph,
                     own.from_node_id,

@@ -24,9 +24,11 @@ from pydantic import BaseModel
 
 from oniel.routing.scenario import Scenario, ScenarioError
 
-#: Veces que un recorrido pasa de una línea a otra si no se pide otra cosa. Es un freno técnico
-#: (hasta seis líneas encadenadas), no un criterio: lo que descarta recorridos es ``max_ratio``.
-DEFAULT_MAX_CHANGES = 5
+#: Veces que un recorrido puede pasar de una línea a otra si no se pide otra cosa: sin tope. Lo que
+#: descarta recorridos es ``max_ratio``. Hasta noviembre de 2026 el tope eran cinco pasos, como
+#: freno técnico; con treinta y ocho líneas dejaba sin recorrido a parejas de estaciones que lo
+#: tienen (de Madrid-Puerta de Atocha a Bilbao se encadenan siete líneas).
+DEFAULT_MAX_CHANGES: int | None = None
 #: Un recorrido se descarta si, donde se aparta de otro más corto, su rodeo mide más de estas
 #: veces lo que el otro recorre entre los mismos dos puntos (``_strays``).
 DEFAULT_MAX_RATIO = 2.0

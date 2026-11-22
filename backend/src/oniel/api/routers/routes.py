@@ -51,8 +51,11 @@ async def get_routes(
         Query(description="Con fecha: cierra además los tramos interrumpidos ese día"),
     ] = False,
     max_changes: Annotated[
-        int,
-        Query(ge=0, le=6, description="Veces que un recorrido puede pasar de una línea a otra"),
+        int | None,
+        Query(
+            ge=0,
+            description="Veces que un recorrido puede pasar de una línea a otra; sin valor, sin tope",
+        ),
     ] = DEFAULT_MAX_CHANGES,
     max_ratio: Annotated[
         float,

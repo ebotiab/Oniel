@@ -14,7 +14,7 @@ const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 // genera y comprueba `backend/tests/test_routing.py`; aquí el cliente tiene que dar lo mismo sobre
 // la instantánea estática: le basta el índice, que lleva todas las líneas, nodos y tramos.
 interface Paridad {
-  routes: { from: string; to: string; scenario: string; max_changes: number; max_ratio: number | null; expected: Route[] }[]
+  routes: { from: string; to: string; scenario: string; max_changes: number | null; max_ratio: number | null; expected: Route[] }[]
   detours: { segment_id: string; scenario: string; expected: ClosureDetours }[]
 }
 const leer = <T>(ruta: string) => JSON.parse(readFileSync(new URL(ruta, import.meta.url), 'utf-8')) as T
@@ -62,7 +62,7 @@ test.describe('Grafo de rutas en el cliente', () => {
   test('la API da lo mismo que el cliente', async ({ request }) => {
     test.skip(estatico, 'compara con la API')
     const caso = paridad.routes[3]!
-    const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, max_changes: caso.max_changes, max_ratio: 100 } })
+    const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, ...(caso.max_changes === null ? {} : { max_changes: caso.max_changes }), max_ratio: 100 } })
     expect(respuesta.ok()).toBe(true)
     const cuerpo = (await respuesta.json()) as { routes: (Route & { interruptions?: unknown })[]; scenario_code: string }
     expect(cuerpo.scenario_code).toBe(caso.scenario)

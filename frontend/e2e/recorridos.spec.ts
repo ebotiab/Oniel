@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test'
 import { irA } from './navegar.ts'
 
 import { activeInterruptions, bySegment } from '../src/app/interruptions.ts'
-import { compararRecorridos, formatDuracion, minutosEntre, trenesDelRecorrido, trenesDirectos } from '../src/app/recorridos.ts'
+import { compararRecorridos, formatDuracion, fraseTrenesFuera, minutosEntre, trenesDelRecorrido, trenesDirectos, trenesFueraDeLosRecorridos } from '../src/app/recorridos.ts'
 import { parseRoute, routePath } from '../src/app/state.ts'
 import { composeNetwork } from '../src/data/network.ts'
 import type { NetworkIndexOut, NodeCall } from '../src/data/types.ts'
@@ -113,6 +113,37 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
     expect(porRecorrido[0]!.length + porRecorrido[1]!.length).toBe(directos.length)
     expect(porRecorrido[0]!.length).toBeGreaterThan(porRecorrido[1]!.length)
     expect(porRecorrido[2]).toHaveLength(0)
+    // todos siguen alguno de los recorridos: no hay nada que explicar
+    expect(trenesFueraDeLosRecorridos(c.recorridos, directos, pasos)).toBe(0)
+  })
+
+  test('los recorridos no tienen tope de líneas: de Madrid-Puerta de Atocha a Bilbao hay recorrido', () => {
+    // Encadena siete líneas. Hasta noviembre de 2026 el comparador paraba en seis y decía que no había ninguno.
+    const c = compararRecorridos(grafo, red, MADRID, 'bilbao-abando', sinCortes)
+    expect(c.recorridos.length).toBeGreaterThan(0)
+    expect(c.recorridos[0]!.route.line_ids).toHaveLength(7)
+    expect(c.recorridos[0]!.route.line_ids.at(-1)).toBe('miranda-bilbao')
+  })
+
+  test('los trenes directos que no siguen ningún recorrido van por una vía que no está cargada, y se dice', () => {
+    const paradas = (nodo: string) => leer<{ calls: NodeCall[] }>(`../public/data/nodes/${nodo}.json`).calls
+    // De Mérida a Sevilla los trenes van por Zafra, una línea que no está cargada: los recorridos dan la vuelta por Madrid.
+    const directos = trenesDirectos(paradas('merida'), paradas('sevilla-santa-justa'))
+    expect(directos.length).toBeGreaterThan(0)
+    const c = compararRecorridos(grafo, red, 'merida', 'sevilla-santa-justa', sinCortes)
+    const pasos = new Map(
+      [...new Set(c.recorridos.flatMap((r) => r.tramosClave))].map((id) => [
+        id,
+        new Set(leer<{ passes: { service: { id: string } }[] }>(`../public/data/segments/${id.replaceAll(':', '--')}.json`).passes.map((p) => p.service.id)),
+      ]),
+    )
+    expect(trenesFueraDeLosRecorridos(c.recorridos, directos, pasos)).toBe(directos.length)
+    expect(fraseTrenesFuera(3, 3, 3)).toBe('Ninguno va por estos recorridos: siguen, al menos en parte, una vía que Oniel no tiene cargada.')
+    expect(fraseTrenesFuera(3, 3, 1)).toBe('Ninguno va por este recorrido: siguen, al menos en parte, una vía que Oniel no tiene cargada.')
+    expect(fraseTrenesFuera(1, 1, 2)).toBe('No va por ninguno de estos recorridos: sigue, al menos en parte, una vía que Oniel no tiene cargada.')
+    expect(fraseTrenesFuera(4, 9, 2)).toBe('De ellos, 4 no van por ninguno de estos recorridos: siguen, al menos en parte, una vía que Oniel no tiene cargada.')
+    expect(fraseTrenesFuera(1, 9, 1)).toBe('De ellos, 1 no va por este recorrido: sigue, al menos en parte, una vía que Oniel no tiene cargada.')
+    expect(fraseTrenesFuera(0, 9, 2)).toBeNull()
   })
 })
 
@@ -217,6 +248,22 @@ test.describe('Comparador de recorridos: la vista', () => {
     // la vuelta por Madrid, de 666,4 km, no se enseña
     await expect(page.getByTestId('comparador')).not.toContainText('666,4')
     await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Dos recorridos, del más corto al más largo\. No hay trenes directos en este sentido en el horario del .+\.$/)
+  })
+
+  test('Mérida – Sevilla: los trenes directos van por una línea que no está cargada, y el comparador lo dice', async ({ page }) => {
+    await page.goto('/recorridos/merida/sevilla-santa-justa')
+    await expect(page.getByTestId('recorridos-resumen')).toContainText(/Hay \d+ trenes directos en este sentido/)
+    await expect(page.getByTestId('recorridos-trenes-fuera')).toHaveText(/^Ninguno va por est(e|os) recorridos?: siguen, al menos en parte, una vía que Oniel no tiene cargada\.$/)
+    // donde todos los trenes directos siguen algún recorrido, la frase no sale
+    await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
+    await expect(page.getByTestId('recorridos-resumen')).toContainText(/Hay \d+ trenes directos en este sentido/)
+    await expect(page.getByTestId('recorridos-trenes-fuera')).toHaveCount(0)
+  })
+
+  test('de Madrid-Puerta de Atocha a Bilbao hay recorrido, aunque encadene siete líneas', async ({ page }) => {
+    await page.goto('/recorridos/madrid-puerta-de-atocha/bilbao-abando')
+    await expect(page.getByTestId('recorrido').first()).toContainText('Recorre siete líneas')
+    await expect(page.getByTestId('comparador')).not.toContainText('No hay ningún recorrido')
   })
 
   test('la ficha de una estación abre el comparador con ella como salida', async ({ page }) => {
