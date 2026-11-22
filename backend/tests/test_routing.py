@@ -222,10 +222,19 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         704.6,  # lo mismo al revés: por Alcázar a Albacete y vuelta por Cuenca
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
         910.9,  # por Cuenca, Albacete y Alcázar, y de allí por Linares-Baeza y Córdoba
+        # los cuatro siguientes encadenan siete u ocho líneas: con el tope de cinco pasos de una
+        # línea a otra que hubo hasta noviembre de 2026 no salían
+        982.8,  # por Cuenca, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares
+        1129.4,  # lo mismo al revés
+        1183.0,  # por Cuenca, Albacete, Alcázar, Linares-Baeza, Granada, Antequera y Córdoba
+        1252.2,  # por Barcelona, la costa, València, Cuenca, Albacete, Alcázar y Manzanares
         1289.1,  # por Barcelona, Camp de Tarragona, la costa y Valencia
-        1468.3,  # lo mismo, pero de Barcelona a La Feredat por la costa de Tarragona
-        1561.7,  # por Barcelona, la costa, Xàtiva, Alicante y Albacete
     ]
+    # sin tope de líneas no queda ninguna pareja de estaciones unidas sin recorrido: de
+    # Madrid-Puerta de Atocha a Bilbao se encadenan siete líneas
+    to_bilbao = find_routes(graph, MADRID, "bilbao-abando")
+    assert [len(r.line_ids) for r in to_bilbao[:1]] == [7]
+    assert not find_routes(graph, MADRID, "bilbao-abando", max_changes=5)
     # Madrid – Andújar: hay un recorrido que pasa tres veces de una línea a otra
     to_andujar = find_routes(graph, MADRID, "andujar")
     assert [r.length_km for r in to_andujar] == [361.9, 401.0, 422.4, 512.1]

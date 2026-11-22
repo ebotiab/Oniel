@@ -48,7 +48,7 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 **Datos que el visor da mal.**
 
-- [#260](https://github.com/ebotiab/Oniel/issues/260) Análisis: el comparador da recorridos imposibles por Madrid y deja parejas de ciudades sin recorrido. De Madrid-Puerta de Atocha a Madrid-Chamartín enseña 65,2 km doblando en Torrejón de Velasco, y de Madrid-Puerta de Atocha a Bilbao dice que no hay recorrido, porque encadena siete líneas y el tope es de seis: pasa en 169 de 1.035 parejas de ciudades principales.
+- [#260](https://github.com/ebotiab/Oniel/issues/260) Análisis: el comparador da recorridos imposibles por Madrid. De Madrid-Puerta de Atocha a Madrid-Chamartín enseña 65,2 km doblando en Torrejón de Velasco. Hecha la primera parte: el comparador ya no tiene tope de líneas (de Madrid-Puerta de Atocha a Bilbao decía que no había recorrido, y pasaba en 169 de 1.035 parejas de ciudades principales) y dice cuándo los trenes directos van por una vía que no está cargada. Queda la regla de giro en las bifurcaciones, que está medida (`docs/simulacion.md`, «Giros en las bifurcaciones») y pide antes invertir la marcha en las estaciones y cargar tres vías cortas: los túneles de Atocha a Chamartín, la de Aljucén a La Garrovilla y el ramal de Soto de Cerrato.
 - [#261](https://github.com/ebotiab/Oniel/issues/261) Análisis: trenes repetidos al filo de la medianoche. En seis tramos la ficha dice una cifra en el título y otra más abajo, y lista un tren dos veces; es el origen del aviso de claves repetidas.
 - [#262](https://github.com/ebotiab/Oniel/issues/262) Infraestructura: `/api/alternatives` de otro día reinicia la API en producción. Una sola petición devolvió un 502 a los 48 segundos. Comparte la búsqueda con #260.
 

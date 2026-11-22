@@ -951,7 +951,7 @@
       "from": "madrid-puerta-de-atocha",
       "to": "cordoba",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -1316,7 +1316,7 @@
       "from": "madrid-puerta-de-atocha",
       "to": "ciudad-real",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -1445,7 +1445,7 @@
       "from": "madrid-puerta-de-atocha",
       "to": "andujar",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -1833,7 +1833,7 @@
       "from": "sevilla-santa-justa",
       "to": "manzanares",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -1996,7 +1996,7 @@
       "from": "madrid-puerta-de-atocha",
       "to": "barcelona-sants",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -3580,7 +3580,7 @@
       "from": "madrid-puerta-de-atocha",
       "to": "barcelona-sants",
       "scenario": "c~baipas-zaragoza:bif-moncasi:bif-canal-imperial",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -5174,7 +5174,7 @@
       "from": "lleida-pirineus",
       "to": "madrid-puerta-de-atocha",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -5650,7 +5650,7 @@
       "from": "alicante-terminal",
       "to": "murcia-del-carmen",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {
@@ -5725,7 +5725,7 @@
       "from": "madrid-puerta-de-atocha",
       "to": "murcia-del-carmen",
       "scenario": "",
-      "max_changes": 5,
+      "max_changes": null,
       "max_ratio": 2.0,
       "expected": [
         {

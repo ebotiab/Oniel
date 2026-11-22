@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { fetchNodeServices, fetchSegmentServices } from '../data/api'
 import type { NetworkOut, Source } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/annotations'
-import { diferenciaConSupuesto, enumerar, formatDuracion, lineaRecta, trenesDelRecorrido, trenesDirectos, velocidadesHabituales, type Comparacion, type Recorrido, type TrenDirecto } from '../app/recorridos'
+import { diferenciaConSupuesto, enumerar, formatDuracion, fraseTrenesFuera, lineaRecta, trenesDelRecorrido, trenesDirectos, trenesFueraDeLosRecorridos, velocidadesHabituales, type Comparacion, type Recorrido, type TrenDirecto } from '../app/recorridos'
 import { emptyScenario, scenarioFromCode, scenarioToCode, type Scenario, type SketchLink } from '../routing/scenario'
 import { formatDayShort, formatKm, shortStop, type Comparador } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
@@ -273,6 +273,8 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
       </Tarjeta>
     )
   }
+  // Los trenes directos que no siguen ninguno de los recorridos van por una vía que no está cargada.
+  const fuera = trenes ? fraseTrenesFuera(trenesFueraDeLosRecorridos(recorridos, trenes.directos, trenes.pasos), trenes.directos.length, recorridos.length) : null
   const todos = [...recorridos, ...supuestos]
   const lineasUsadas = new Set(todos.flatMap((r) => r.route.line_ids))
   const fuentes = [...new Set(network.lines.filter((l) => lineasUsadas.has(l.id)).map((l) => l.source_id))].map((id) => sources.find((s) => s.id === id))
@@ -334,6 +336,11 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             {recorridos.length === 1 ? 'Un solo recorrido con las líneas cargadas.' : `${recorridos.length === 2 ? 'Dos' : recorridos.length === 3 ? 'Tres' : 'Cuatro'} recorridos, del más corto al más largo.`}
             {trenes && ` ${trenes.directos.length === 0 ? 'No hay trenes directos' : trenes.directos.length === 1 ? 'Hay 1 tren directo' : `Hay ${trenes.directos.length} trenes directos`} en este sentido en el horario del ${dia}.`}
           </p>
+          {fuera && (
+            <p className="suave" data-testid="recorridos-trenes-fuera">
+              {fuera}
+            </p>
+          )}
           {via && (
             <h3 className="via-titulo hoy" data-testid="recorridos-hoy">
               Hoy

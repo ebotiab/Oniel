@@ -9,6 +9,7 @@ from typing import Any
 import pytest
 
 from oniel.analysis.criticality import (
+    FIRST_MAX_CHANGES,
     SCOPE_NOTE,
     ServicePath,
     corridor,
@@ -160,7 +161,7 @@ def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparat
     """Un tren de Valencia a Valladolid cruza Madrid por Chamartín. Con un tramo cerrado entre
     Torrejón de Velasco y la bifurcación de Albacete, su otro camino baja a Albacete, sube por
     Alcázar de San Juan a Madrid-Puerta de Atocha y vuelve a Torrejón de Velasco para tomar el
-    túnel: seis cambios de línea, uno más de los que el comparador enumera por defecto. Se
+    túnel: seis cambios de línea, uno más de los de la primera búsqueda (``FIRST_MAX_CHANGES``). Se
     prueba sin la línea de València a Camp de Tarragona, que da a ese tren un rodeo más corto
     en cambios de línea por Barcelona."""
     index = NetworkIndexOut.model_validate(_read("index.json"))
@@ -174,7 +175,13 @@ def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparat
     closed_segment = f"{LAV_VALENCIA}:horcajada:cuenca-fernando-zobel"
     own = _path(graph, valencia, valladolid)
     assert closed_segment in own
-    assert not find_routes(graph, valencia, valladolid, Scenario(closures=[closed_segment]))
+    assert not find_routes(
+        graph,
+        valencia,
+        valladolid,
+        Scenario(closures=[closed_segment]),
+        max_changes=FIRST_MAX_CHANGES,
+    )
     segment = _of(segment_alternatives(graph, [ServicePath("ave-1", "renfe", own)]), closed_segment)
     assert (segment.with_alternative, segment.without_alternative) == (1, 0)
     alternative = segment.groups[0].alternative

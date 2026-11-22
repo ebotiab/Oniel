@@ -11,10 +11,12 @@ import type { LineSummary, NodeOut, Route, RouteLeg, SegmentOut } from '../data/
 import { ScenarioError, emptyScenario, linkId, withClosures, type Scenario } from './scenario.ts'
 
 /**
- * Veces que un recorrido pasa de una línea a otra si no se pide otra cosa. Es un freno técnico
- * (hasta seis líneas encadenadas), no un criterio: lo que descarta recorridos es `maxRatio`.
+ * Veces que un recorrido puede pasar de una línea a otra si no se pide otra cosa: sin tope. Lo que
+ * descarta recorridos es `maxRatio`. Hasta noviembre de 2026 el tope eran cinco pasos, como freno
+ * técnico; con treinta y ocho líneas dejaba sin recorrido a parejas de estaciones que lo tienen (de
+ * Madrid-Puerta de Atocha a Bilbao se encadenan siete líneas).
  */
-export const DEFAULT_MAX_CHANGES = 5
+export const DEFAULT_MAX_CHANGES: number | null = null
 /**
  * Un recorrido se descarta si, donde se aparta de otro más corto, su rodeo mide más de estas veces
  * lo que el otro recorre entre los mismos dos puntos (`strays`).
