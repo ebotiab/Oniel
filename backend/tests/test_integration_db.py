@@ -2281,6 +2281,9 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
         558.0,
         613.5,
         910.9,
+        # por Cuenca, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares: ocho líneas, que
+        # con el tope de cinco pasos de una línea a otra que hubo hasta noviembre de 2026 no salía
+        982.8,
     ]
     assert body["routes"][0]["time_min"] == 39
     assert "velocidad habitual" in body["method"]
