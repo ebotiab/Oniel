@@ -1,6 +1,6 @@
 # Hoja de ruta de Oniel
 
-Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 18 de noviembre de 2026.
+Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 22 de noviembre de 2026.
 
 Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
 
@@ -35,12 +35,37 @@ Oniel tiene que entenderse sin saber de ferrocarril y crecer durante años. Esto
 
 ## Orden
 
-Aparte de las líneas que quedan por cargar, que van en «Ampliar la red», hay dos tareas abiertas, y las dos esperan a algo de fuera:
+Lo primero es «Pulir lo cargado», el apartado siguiente: va antes que cualquier línea nueva. Aparte de eso y de las líneas que quedan por cargar, que van en «Ampliar la red», hay dos tareas abiertas, y las dos esperan a algo de fuera:
 
 - **Sustituir mypy y pyright por ty** ([#243](https://github.com/ebotiab/Oniel/issues/243), `infraestructura`). No se empieza hasta que ty, el comprobador de tipos de Astral, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.0.106, todavía en beta: sus diagnósticos cambian de una versión a otra y no tiene modo estricto (de nueve errores de prueba dio cuatro, y mypy los nueve). Las medidas y lo que hay que repetir antes de migrar están en la incidencia.
 - **Formatear el visor con oxfmt** ([#247](https://github.com/ebotiab/Oniel/issues/247), `infraestructura`). No se empieza hasta que oxfmt, el formateador de la familia de oxlint, publique su versión estable. Se evaluó el 18 de noviembre de 2026 con la 0.79.0, en beta. El código ya es uniforme, así que la ganancia hoy es pequeña, y adoptarlo pide un reformateo único de entre 49 y 93 ficheros según el ancho de línea, que decide el usuario. Se hace sin ninguna PR del visor abierta. Las medidas están en la incidencia.
 
 Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Cómo se usa».
+
+## Pulir lo cargado
+
+En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distinta. Antes de seguir ampliando, lo cargado se pule. El 22 de noviembre de 2026 se revisó entero, sobre `main` (commit `0f4c9d7`) y sobre producción, en escritorio y en el móvil: las 879 fichas de línea, estación y tramo, los recuentos de trenes de un tramo al siguiente, el comparador entre 46 ciudades, las conexiones a trazos y la documentación. Lo que salió está en ocho incidencias, de lo más grave a lo menos:
+
+**Datos que el visor da mal.**
+
+- [#260](https://github.com/ebotiab/Oniel/issues/260) Análisis: el comparador da recorridos imposibles por Madrid y deja parejas de ciudades sin recorrido. De Madrid-Puerta de Atocha a Madrid-Chamartín enseña 65,2 km doblando en Torrejón de Velasco, y de Madrid-Puerta de Atocha a Bilbao dice que no hay recorrido, porque encadena siete líneas y el tope es de seis: pasa en 169 de 1.035 parejas de ciudades principales.
+- [#261](https://github.com/ebotiab/Oniel/issues/261) Análisis: trenes repetidos al filo de la medianoche. En seis tramos la ficha dice una cifra en el título y otra más abajo, y lista un tren dos veces; es el origen del aviso de claves repetidas.
+- [#262](https://github.com/ebotiab/Oniel/issues/262) Infraestructura: `/api/alternatives` de otro día reinicia la API en producción. Una sola petición devolvió un 502 a los 48 segundos. Comparte la búsqueda con #260.
+
+**Lo que confunde a quien llega.**
+
+- [#264](https://github.com/ebotiab/Oniel/issues/264) Datos: costuras entre líneas. Catorce conexiones a trazos declaradas en un solo extremo, regionales de Valladolid a Burgos contados en la alta velocidad, nombres de conexiones con el nombre de Adif y textos de nodos compartidos que dicen «final de la línea».
+- [#263](https://github.com/ebotiab/Oniel/issues/263) Datos: rótulos de tren y nombres de estación. Desde el fichero de Renfe del 17 de noviembre las listas dicen «Intercity» y «Regional» donde las descripciones dicen «Alvia» y «Media Distancia», y la misma estación sale con dos nombres.
+- [#266](https://github.com/ebotiab/Oniel/issues/266) Visor: encuadre de las líneas, lista de zonas y textos sueltos. En el móvil, más de la mitad de las líneas dejan una cabecera fuera de lo que se ve; «Madrid y Castilla-La Mancha» no nombra Madrid ni lleva a sus líneas; el texto de los regionales por Cañaveral.
+
+**Incoherencias entre líneas y documentación.**
+
+- [#265](https://github.com/ebotiab/Oniel/issues/265) Datos: un solo criterio de velocidades, electrificación, fuentes y descripciones. Dos líneas cuya velocidad máxima es menor que la de uno de sus tramos, tres escrituras de la electrificación, la descripción de Madrid – Sevilla, cinco veces más corta que las demás.
+- [#267](https://github.com/ebotiab/Oniel/issues/267) Documentación: recuentos y referencias que se han quedado atrás.
+
+Cómo se reparten: #263, #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera; #261 también la regenera, porque cambia lo que se exporta. #260 y #262 son de código y comparten la búsqueda de recorridos: se hacen seguidas o en la misma sesión. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
+
+No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). #264 las deja bien dibujadas por los dos extremos; cargarlas es ampliar la red.
 
 ## Ampliar la red
 
