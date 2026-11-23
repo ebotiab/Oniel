@@ -1844,6 +1844,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "castejon-pamplona": ["renfe"],
         "miranda-bilbao": ["renfe"],
         "sevilla-huelva": ["renfe"],
+        "enlace-soto-de-cerrato": ["renfe"],
+        "enlace-aljucen-la-garrovilla": ["renfe"],
+        "enlace-atocha-chamartin": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
