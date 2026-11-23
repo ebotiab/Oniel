@@ -2,7 +2,7 @@
 
 ## Brief resumido
 
-Oniel es una web en español para descubrir cómo está conectada la red ferroviaria española. Su función principal es explorar la red en un mapa interactivo; la simulación de cierres es una herramienta secundaria. La primera versión cubre la línea de alta velocidad Madrid–Sevilla (Adif, línea 010), que en 2026 ha sufrido dos accidentes graves (Adamuz, enero; Urda, octubre). El tono debe ser sobrio, preciso y respetuoso.
+Oniel es una web en español para descubrir cómo está conectada la red ferroviaria española. Su función principal es explorar la red en un mapa interactivo; la simulación de cierres es una herramienta secundaria. Empezó por la línea de alta velocidad Madrid–Sevilla (Adif, línea 010), que en 2026 ha sufrido dos accidentes graves (Adamuz, enero; Urda, octubre), y hoy cubre buena parte de la red de viajeros de la península: las líneas cargadas están en `docs/datos.md`, «Líneas cargadas». El tono debe ser sobrio, preciso y respetuoso.
 
 ## Referencias
 
