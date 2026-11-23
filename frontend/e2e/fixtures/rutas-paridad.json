@@ -60,7 +60,8 @@
             "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
             "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
             "lav-madrid-sevilla:adamuz:cordoba"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -150,7 +151,8 @@
             "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
             "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
             "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -202,7 +204,8 @@
             "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -279,7 +282,8 @@
             "manzanares-ciudad-real:manzanares:daimiel",
             "manzanares-ciudad-real:daimiel:almagro",
             "manzanares-ciudad-real:almagro:ciudad-real"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -392,7 +396,8 @@
             "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
             "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
             "lav-madrid-sevilla:ciudad-real:puertollano"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -463,7 +468,8 @@
             "lav-madrid-sevilla:cordoba:bif-malaga",
             "lav-madrid-sevilla:bif-malaga:majarabique",
             "lav-madrid-sevilla:majarabique:sevilla-santa-justa"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -570,7 +576,8 @@
             "lav-madrid-sevilla:cordoba:bif-malaga",
             "lav-madrid-sevilla:bif-malaga:majarabique",
             "lav-madrid-sevilla:majarabique:sevilla-santa-justa"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -679,7 +686,8 @@
             "lav-madrid-sevilla:cordoba:bif-malaga",
             "lav-madrid-sevilla:bif-malaga:majarabique",
             "lav-madrid-sevilla:majarabique:sevilla-santa-justa"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -753,7 +761,8 @@
             "convencional-madrid-alcazar-cordoba:villacanas:quero",
             "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
             "enlace:alcazar-de-san-juan:ciudad-real"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -830,7 +839,8 @@
             "manzanares-ciudad-real:manzanares:daimiel",
             "manzanares-ciudad-real:daimiel:almagro",
             "manzanares-ciudad-real:almagro:ciudad-real"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -943,7 +953,8 @@
             "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
             "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
             "lav-madrid-sevilla:ciudad-real:puertollano"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -1007,7 +1018,8 @@
             "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
             "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
             "lav-madrid-sevilla:adamuz:cordoba"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1107,7 +1119,8 @@
             "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
             "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
             "lav-madrid-sevilla:adamuz:cordoba"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1197,7 +1210,8 @@
             "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
             "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
             "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1308,7 +1322,8 @@
             "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
             "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
             "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -1360,7 +1375,8 @@
             "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
             "lav-madrid-sevilla:bif-la-sagra:urda",
             "lav-madrid-sevilla:urda:ciudad-real"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1437,7 +1453,8 @@
             "manzanares-ciudad-real:manzanares:daimiel",
             "manzanares-ciudad-real:daimiel:almagro",
             "manzanares-ciudad-real:almagro:ciudad-real"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -1525,7 +1542,8 @@
             "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
             "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
             "convencional-madrid-alcazar-cordoba:espeluy:andujar"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1625,7 +1643,8 @@
             "convencional-madrid-alcazar-cordoba:vadollano:linares-baeza",
             "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
             "convencional-madrid-alcazar-cordoba:espeluy:andujar"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1703,7 +1722,8 @@
             "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
             "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
             "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -1825,7 +1845,8 @@
             "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
             "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
             "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -1904,7 +1925,8 @@
             "manzanares-ciudad-real:almagro:ciudad-real",
             "manzanares-ciudad-real:daimiel:almagro",
             "manzanares-ciudad-real:manzanares:daimiel"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "sevilla-santa-justa",
@@ -1988,7 +2010,8 @@
             "convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques",
             "convencional-madrid-alcazar-cordoba:valdepenas:santa-cruz-de-mudela",
             "convencional-madrid-alcazar-cordoba:manzanares:valdepenas"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -2066,15 +2089,16 @@
             "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
             "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
             "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
           "from_name": "Madrid-Puerta de Atocha",
           "to_node_id": "barcelona-sants",
           "to_name": "Barcelona-Sants",
-          "length_km": 632.0,
-          "time_min": 148,
+          "length_km": 648.5,
+          "time_min": 153,
           "single_track_km": 1.4,
           "line_ids": [
             "lav-madrid-barcelona",
@@ -2098,10 +2122,21 @@
               "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
               "from_node_id": "camp-de-tarragona",
               "from_name": "Camp de Tarragona",
+              "to_node_id": "cambrils",
+              "to_name": "Cambrils",
+              "length_km": 24.3,
+              "time_min": 7,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "valencia-castello-tarragona",
+              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
+              "from_node_id": "cambrils",
+              "from_name": "Cambrils",
               "to_node_id": "bif-la-feredat",
               "to_name": "Bifurcación La Feredat",
-              "length_km": 16.1,
-              "time_min": 5,
+              "length_km": 8.3,
+              "time_min": 2,
               "single_track_km": 0.0
             },
             {
@@ -2120,6 +2155,7 @@
             "Guadalajara-Yebes",
             "Calatayud",
             "Camp de Tarragona",
+            "Cambrils",
             "Tarragona",
             "Sant Vicenç de Calders",
             "Vilanova i la Geltrú"
@@ -2141,6 +2177,8 @@
             "l-espluga-de-francoli",
             "camp-de-tarragona",
             "cambiador-la-boella",
+            "bif-la-feredat",
+            "cambrils",
             "bif-la-feredat",
             "bif-vila-seca",
             "vila-seca",
@@ -2168,6 +2206,8 @@
             "lav-madrid-barcelona:l-espluga-de-francoli:camp-de-tarragona",
             "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona",
             "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
+            "valencia-castello-tarragona:cambrils:bif-la-feredat",
+            "valencia-castello-tarragona:cambrils:bif-la-feredat",
             "tarragona-barcelona:bif-la-feredat:bif-vila-seca",
             "tarragona-barcelona:bif-vila-seca:vila-seca",
             "tarragona-barcelona:vila-seca:tarragona",
@@ -2176,6 +2216,9 @@
             "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
             "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
             "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
+          ],
+          "reverse_node_ids": [
+            "cambrils"
           ]
         },
         {
@@ -2366,7 +2409,8 @@
             "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
             "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
             "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -2548,469 +2592,8 @@
             "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
             "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
             "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
-        },
-        {
-          "from_node_id": "madrid-puerta-de-atocha",
-          "from_name": "Madrid-Puerta de Atocha",
-          "to_node_id": "barcelona-sants",
-          "to_name": "Barcelona-Sants",
-          "length_km": 844.6,
-          "time_min": 266,
-          "single_track_km": 1.4,
-          "line_ids": [
-            "convencional-madrid-alcazar-cordoba",
-            "alcazar-albacete",
-            "lav-albacete-alicante",
-            "lav-madrid-valencia",
-            "valencia-castello-tarragona",
-            "tarragona-barcelona"
           ],
-          "legs": [
-            {
-              "line_id": "convencional-madrid-alcazar-cordoba",
-              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-              "from_node_id": "madrid-puerta-de-atocha",
-              "from_name": "Madrid-Puerta de Atocha",
-              "to_node_id": "alcazar-de-san-juan",
-              "to_name": "Alcázar de San Juan",
-              "length_km": 146.9,
-              "time_min": 61,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "alcazar-albacete",
-              "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-              "from_node_id": "alcazar-de-san-juan",
-              "from_name": "Alcázar de San Juan",
-              "to_node_id": "albacete-los-llanos",
-              "to_name": "Albacete-Los Llanos",
-              "length_km": 130.7,
-              "time_min": 45,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-albacete-alicante",
-              "line_name": "Línea de alta velocidad Albacete – Alicante",
-              "from_node_id": "albacete-los-llanos",
-              "from_name": "Albacete-Los Llanos",
-              "to_node_id": "bif-albacete",
-              "to_name": "Bifurcación Albacete",
-              "length_km": 72.8,
-              "time_min": 15,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-valencia",
-              "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-              "from_node_id": "bif-albacete",
-              "from_name": "Bifurcación Albacete",
-              "to_node_id": "valencia-joaquin-sorolla",
-              "to_name": "València-Joaquín Sorolla",
-              "length_km": 148.9,
-              "time_min": 30,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "valencia-castello-tarragona",
-              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-              "from_node_id": "valencia-joaquin-sorolla",
-              "from_name": "València-Joaquín Sorolla",
-              "to_node_id": "bif-la-feredat",
-              "to_name": "Bifurcación La Feredat",
-              "length_km": 249.6,
-              "time_min": 77,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "tarragona-barcelona",
-              "line_name": "Línea convencional Tarragona – Vilanova i la Geltrú – Barcelona",
-              "from_node_id": "bif-la-feredat",
-              "from_name": "Bifurcación La Feredat",
-              "to_node_id": "barcelona-sants",
-              "to_name": "Barcelona-Sants",
-              "length_km": 95.6,
-              "time_min": 38,
-              "single_track_km": 1.4
-            }
-          ],
-          "via": [
-            "Aranjuez",
-            "Alcázar de San Juan",
-            "Socuéllamos",
-            "Villarrobledo",
-            "La Roda de Albacete",
-            "Albacete-Los Llanos",
-            "Requena-Utiel",
-            "València-Joaquín Sorolla",
-            "Sagunt",
-            "Castelló de la Plana",
-            "Benicàssim",
-            "Orpesa",
-            "Benicarló-Peñíscola",
-            "Vinaròs",
-            "L'Aldea-Amposta-Tortosa",
-            "Cambrils",
-            "Tarragona",
-            "Sant Vicenç de Calders",
-            "Vilanova i la Geltrú"
-          ],
-          "node_ids": [
-            "madrid-puerta-de-atocha",
-            "bif-planetario",
-            "aranjuez",
-            "castillejo-anover",
-            "villasequilla",
-            "tembleque",
-            "el-romeral",
-            "villacanas",
-            "quero",
-            "alcazar-de-san-juan",
-            "campo-de-criptana",
-            "socuellamos",
-            "villarrobledo",
-            "minaya",
-            "la-roda-de-albacete",
-            "la-gineta",
-            "albacete-los-llanos",
-            "pozorrubielos",
-            "bif-albacete",
-            "iniesta",
-            "requena-utiel",
-            "siete-aguas-av",
-            "valencia-joaquin-sorolla",
-            "valencia-la-font-de-sant-lluis",
-            "valencia-cabanyal",
-            "roca-cuper",
-            "albuixech",
-            "massalfassar",
-            "el-puig",
-            "pucol",
-            "sagunt",
-            "les-valls",
-            "almenara",
-            "la-llosa",
-            "xilxes",
-            "moncofa",
-            "nules-la-vilavella",
-            "burriana-alquerias-del-nino-perdido",
-            "vila-real",
-            "almassora",
-            "castello-de-la-plana",
-            "benicassim",
-            "orpesa",
-            "torreblanca",
-            "alcala-de-xivert",
-            "benicarlo-peniscola",
-            "vinaros",
-            "ulldecona-alcanar-la-senia",
-            "l-aldea-amposta-tortosa",
-            "camarles-deltebre",
-            "l-ampolla-el-perello-deltebre",
-            "l-ametlla-de-mar",
-            "l-hospitalet-de-l-infant",
-            "cambrils",
-            "bif-la-feredat",
-            "bif-vila-seca",
-            "vila-seca",
-            "tarragona",
-            "altafulla-tamarit",
-            "torredembarra",
-            "sant-vicenc-de-calders",
-            "vilanova-i-la-geltru",
-            "barcelona-sants"
-          ],
-          "segment_ids": [
-            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-            "convencional-madrid-alcazar-cordoba:villacanas:quero",
-            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-            "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-            "alcazar-albacete:campo-de-criptana:socuellamos",
-            "alcazar-albacete:socuellamos:villarrobledo",
-            "alcazar-albacete:villarrobledo:minaya",
-            "alcazar-albacete:minaya:la-roda-de-albacete",
-            "alcazar-albacete:la-roda-de-albacete:la-gineta",
-            "alcazar-albacete:la-gineta:albacete-los-llanos",
-            "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-            "lav-albacete-alicante:bif-albacete:pozorrubielos",
-            "lav-madrid-valencia:bif-albacete:iniesta",
-            "lav-madrid-valencia:iniesta:requena-utiel",
-            "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-            "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-            "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-            "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-            "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-            "valencia-castello-tarragona:roca-cuper:albuixech",
-            "valencia-castello-tarragona:albuixech:massalfassar",
-            "valencia-castello-tarragona:massalfassar:el-puig",
-            "valencia-castello-tarragona:el-puig:pucol",
-            "valencia-castello-tarragona:pucol:sagunt",
-            "valencia-castello-tarragona:sagunt:les-valls",
-            "valencia-castello-tarragona:les-valls:almenara",
-            "valencia-castello-tarragona:almenara:la-llosa",
-            "valencia-castello-tarragona:la-llosa:xilxes",
-            "valencia-castello-tarragona:xilxes:moncofa",
-            "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-            "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-            "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-            "valencia-castello-tarragona:vila-real:almassora",
-            "valencia-castello-tarragona:almassora:castello-de-la-plana",
-            "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-            "valencia-castello-tarragona:benicassim:orpesa",
-            "valencia-castello-tarragona:orpesa:torreblanca",
-            "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-            "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-            "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-            "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-            "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-            "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-            "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-            "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-            "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-            "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-            "valencia-castello-tarragona:cambrils:bif-la-feredat",
-            "tarragona-barcelona:bif-la-feredat:bif-vila-seca",
-            "tarragona-barcelona:bif-vila-seca:vila-seca",
-            "tarragona-barcelona:vila-seca:tarragona",
-            "tarragona-barcelona:tarragona:altafulla-tamarit",
-            "tarragona-barcelona:altafulla-tamarit:torredembarra",
-            "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
-            "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
-            "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-          ]
-        },
-        {
-          "from_node_id": "madrid-puerta-de-atocha",
-          "from_name": "Madrid-Puerta de Atocha",
-          "to_node_id": "barcelona-sants",
-          "to_name": "Barcelona-Sants",
-          "length_km": 864.8,
-          "time_min": 252,
-          "single_track_km": 0.0,
-          "line_ids": [
-            "convencional-madrid-alcazar-cordoba",
-            "alcazar-albacete",
-            "lav-albacete-alicante",
-            "lav-madrid-valencia",
-            "valencia-castello-tarragona",
-            "lav-madrid-barcelona"
-          ],
-          "legs": [
-            {
-              "line_id": "convencional-madrid-alcazar-cordoba",
-              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-              "from_node_id": "madrid-puerta-de-atocha",
-              "from_name": "Madrid-Puerta de Atocha",
-              "to_node_id": "alcazar-de-san-juan",
-              "to_name": "Alcázar de San Juan",
-              "length_km": 146.9,
-              "time_min": 61,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "alcazar-albacete",
-              "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-              "from_node_id": "alcazar-de-san-juan",
-              "from_name": "Alcázar de San Juan",
-              "to_node_id": "albacete-los-llanos",
-              "to_name": "Albacete-Los Llanos",
-              "length_km": 130.7,
-              "time_min": 45,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-albacete-alicante",
-              "line_name": "Línea de alta velocidad Albacete – Alicante",
-              "from_node_id": "albacete-los-llanos",
-              "from_name": "Albacete-Los Llanos",
-              "to_node_id": "bif-albacete",
-              "to_name": "Bifurcación Albacete",
-              "length_km": 72.8,
-              "time_min": 15,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-valencia",
-              "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-              "from_node_id": "bif-albacete",
-              "from_name": "Bifurcación Albacete",
-              "to_node_id": "valencia-joaquin-sorolla",
-              "to_name": "València-Joaquín Sorolla",
-              "length_km": 148.9,
-              "time_min": 30,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "valencia-castello-tarragona",
-              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-              "from_node_id": "valencia-joaquin-sorolla",
-              "from_name": "València-Joaquín Sorolla",
-              "to_node_id": "camp-de-tarragona",
-              "to_name": "Camp de Tarragona",
-              "length_km": 265.7,
-              "time_min": 82,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-barcelona",
-              "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
-              "from_node_id": "camp-de-tarragona",
-              "from_name": "Camp de Tarragona",
-              "to_node_id": "barcelona-sants",
-              "to_name": "Barcelona-Sants",
-              "length_km": 99.7,
-              "time_min": 20,
-              "single_track_km": 0.0
-            }
-          ],
-          "via": [
-            "Aranjuez",
-            "Alcázar de San Juan",
-            "Socuéllamos",
-            "Villarrobledo",
-            "La Roda de Albacete",
-            "Albacete-Los Llanos",
-            "Requena-Utiel",
-            "València-Joaquín Sorolla",
-            "Sagunt",
-            "Castelló de la Plana",
-            "Benicàssim",
-            "Orpesa",
-            "Benicarló-Peñíscola",
-            "Vinaròs",
-            "L'Aldea-Amposta-Tortosa",
-            "Cambrils",
-            "Camp de Tarragona"
-          ],
-          "node_ids": [
-            "madrid-puerta-de-atocha",
-            "bif-planetario",
-            "aranjuez",
-            "castillejo-anover",
-            "villasequilla",
-            "tembleque",
-            "el-romeral",
-            "villacanas",
-            "quero",
-            "alcazar-de-san-juan",
-            "campo-de-criptana",
-            "socuellamos",
-            "villarrobledo",
-            "minaya",
-            "la-roda-de-albacete",
-            "la-gineta",
-            "albacete-los-llanos",
-            "pozorrubielos",
-            "bif-albacete",
-            "iniesta",
-            "requena-utiel",
-            "siete-aguas-av",
-            "valencia-joaquin-sorolla",
-            "valencia-la-font-de-sant-lluis",
-            "valencia-cabanyal",
-            "roca-cuper",
-            "albuixech",
-            "massalfassar",
-            "el-puig",
-            "pucol",
-            "sagunt",
-            "les-valls",
-            "almenara",
-            "la-llosa",
-            "xilxes",
-            "moncofa",
-            "nules-la-vilavella",
-            "burriana-alquerias-del-nino-perdido",
-            "vila-real",
-            "almassora",
-            "castello-de-la-plana",
-            "benicassim",
-            "orpesa",
-            "torreblanca",
-            "alcala-de-xivert",
-            "benicarlo-peniscola",
-            "vinaros",
-            "ulldecona-alcanar-la-senia",
-            "l-aldea-amposta-tortosa",
-            "camarles-deltebre",
-            "l-ampolla-el-perello-deltebre",
-            "l-ametlla-de-mar",
-            "l-hospitalet-de-l-infant",
-            "cambrils",
-            "bif-la-feredat",
-            "cambiador-la-boella",
-            "camp-de-tarragona",
-            "l-arboc",
-            "vilafranca-del-penedes",
-            "barcelona-sants"
-          ],
-          "segment_ids": [
-            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-            "convencional-madrid-alcazar-cordoba:villacanas:quero",
-            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-            "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-            "alcazar-albacete:campo-de-criptana:socuellamos",
-            "alcazar-albacete:socuellamos:villarrobledo",
-            "alcazar-albacete:villarrobledo:minaya",
-            "alcazar-albacete:minaya:la-roda-de-albacete",
-            "alcazar-albacete:la-roda-de-albacete:la-gineta",
-            "alcazar-albacete:la-gineta:albacete-los-llanos",
-            "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-            "lav-albacete-alicante:bif-albacete:pozorrubielos",
-            "lav-madrid-valencia:bif-albacete:iniesta",
-            "lav-madrid-valencia:iniesta:requena-utiel",
-            "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-            "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-            "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-            "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-            "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-            "valencia-castello-tarragona:roca-cuper:albuixech",
-            "valencia-castello-tarragona:albuixech:massalfassar",
-            "valencia-castello-tarragona:massalfassar:el-puig",
-            "valencia-castello-tarragona:el-puig:pucol",
-            "valencia-castello-tarragona:pucol:sagunt",
-            "valencia-castello-tarragona:sagunt:les-valls",
-            "valencia-castello-tarragona:les-valls:almenara",
-            "valencia-castello-tarragona:almenara:la-llosa",
-            "valencia-castello-tarragona:la-llosa:xilxes",
-            "valencia-castello-tarragona:xilxes:moncofa",
-            "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-            "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-            "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-            "valencia-castello-tarragona:vila-real:almassora",
-            "valencia-castello-tarragona:almassora:castello-de-la-plana",
-            "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-            "valencia-castello-tarragona:benicassim:orpesa",
-            "valencia-castello-tarragona:orpesa:torreblanca",
-            "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-            "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-            "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-            "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-            "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-            "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-            "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-            "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-            "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-            "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-            "valencia-castello-tarragona:cambrils:bif-la-feredat",
-            "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
-            "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona",
-            "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
-            "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
-            "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -3295,7 +2878,8 @@
             "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
             "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
             "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -3572,7 +3156,8 @@
             "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
             "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
             "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -3655,15 +3240,16 @@
             "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
             "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
             "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
           "from_name": "Madrid-Puerta de Atocha",
           "to_node_id": "barcelona-sants",
           "to_name": "Barcelona-Sants",
-          "length_km": 636.9,
-          "time_min": 154,
+          "length_km": 653.5,
+          "time_min": 159,
           "single_track_km": 1.4,
           "line_ids": [
             "lav-madrid-barcelona",
@@ -3687,10 +3273,21 @@
               "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
               "from_node_id": "camp-de-tarragona",
               "from_name": "Camp de Tarragona",
+              "to_node_id": "cambrils",
+              "to_name": "Cambrils",
+              "length_km": 24.3,
+              "time_min": 7,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "valencia-castello-tarragona",
+              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
+              "from_node_id": "cambrils",
+              "from_name": "Cambrils",
               "to_node_id": "bif-la-feredat",
               "to_name": "Bifurcación La Feredat",
-              "length_km": 16.1,
-              "time_min": 5,
+              "length_km": 8.3,
+              "time_min": 2,
               "single_track_km": 0.0
             },
             {
@@ -3710,6 +3307,7 @@
             "Calatayud",
             "Zaragoza-Delicias",
             "Camp de Tarragona",
+            "Cambrils",
             "Tarragona",
             "Sant Vicenç de Calders",
             "Vilanova i la Geltrú"
@@ -3733,6 +3331,8 @@
             "l-espluga-de-francoli",
             "camp-de-tarragona",
             "cambiador-la-boella",
+            "bif-la-feredat",
+            "cambrils",
             "bif-la-feredat",
             "bif-vila-seca",
             "vila-seca",
@@ -3762,6 +3362,8 @@
             "lav-madrid-barcelona:l-espluga-de-francoli:camp-de-tarragona",
             "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona",
             "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
+            "valencia-castello-tarragona:cambrils:bif-la-feredat",
+            "valencia-castello-tarragona:cambrils:bif-la-feredat",
             "tarragona-barcelona:bif-la-feredat:bif-vila-seca",
             "tarragona-barcelona:bif-vila-seca:vila-seca",
             "tarragona-barcelona:vila-seca:tarragona",
@@ -3770,6 +3372,9 @@
             "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
             "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
             "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
+          ],
+          "reverse_node_ids": [
+            "cambrils"
           ]
         },
         {
@@ -3960,7 +3565,8 @@
             "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
             "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
             "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -4142,469 +3748,8 @@
             "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
             "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
             "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
-        },
-        {
-          "from_node_id": "madrid-puerta-de-atocha",
-          "from_name": "Madrid-Puerta de Atocha",
-          "to_node_id": "barcelona-sants",
-          "to_name": "Barcelona-Sants",
-          "length_km": 844.6,
-          "time_min": 266,
-          "single_track_km": 1.4,
-          "line_ids": [
-            "convencional-madrid-alcazar-cordoba",
-            "alcazar-albacete",
-            "lav-albacete-alicante",
-            "lav-madrid-valencia",
-            "valencia-castello-tarragona",
-            "tarragona-barcelona"
           ],
-          "legs": [
-            {
-              "line_id": "convencional-madrid-alcazar-cordoba",
-              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-              "from_node_id": "madrid-puerta-de-atocha",
-              "from_name": "Madrid-Puerta de Atocha",
-              "to_node_id": "alcazar-de-san-juan",
-              "to_name": "Alcázar de San Juan",
-              "length_km": 146.9,
-              "time_min": 61,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "alcazar-albacete",
-              "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-              "from_node_id": "alcazar-de-san-juan",
-              "from_name": "Alcázar de San Juan",
-              "to_node_id": "albacete-los-llanos",
-              "to_name": "Albacete-Los Llanos",
-              "length_km": 130.7,
-              "time_min": 45,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-albacete-alicante",
-              "line_name": "Línea de alta velocidad Albacete – Alicante",
-              "from_node_id": "albacete-los-llanos",
-              "from_name": "Albacete-Los Llanos",
-              "to_node_id": "bif-albacete",
-              "to_name": "Bifurcación Albacete",
-              "length_km": 72.8,
-              "time_min": 15,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-valencia",
-              "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-              "from_node_id": "bif-albacete",
-              "from_name": "Bifurcación Albacete",
-              "to_node_id": "valencia-joaquin-sorolla",
-              "to_name": "València-Joaquín Sorolla",
-              "length_km": 148.9,
-              "time_min": 30,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "valencia-castello-tarragona",
-              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-              "from_node_id": "valencia-joaquin-sorolla",
-              "from_name": "València-Joaquín Sorolla",
-              "to_node_id": "bif-la-feredat",
-              "to_name": "Bifurcación La Feredat",
-              "length_km": 249.6,
-              "time_min": 77,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "tarragona-barcelona",
-              "line_name": "Línea convencional Tarragona – Vilanova i la Geltrú – Barcelona",
-              "from_node_id": "bif-la-feredat",
-              "from_name": "Bifurcación La Feredat",
-              "to_node_id": "barcelona-sants",
-              "to_name": "Barcelona-Sants",
-              "length_km": 95.6,
-              "time_min": 38,
-              "single_track_km": 1.4
-            }
-          ],
-          "via": [
-            "Aranjuez",
-            "Alcázar de San Juan",
-            "Socuéllamos",
-            "Villarrobledo",
-            "La Roda de Albacete",
-            "Albacete-Los Llanos",
-            "Requena-Utiel",
-            "València-Joaquín Sorolla",
-            "Sagunt",
-            "Castelló de la Plana",
-            "Benicàssim",
-            "Orpesa",
-            "Benicarló-Peñíscola",
-            "Vinaròs",
-            "L'Aldea-Amposta-Tortosa",
-            "Cambrils",
-            "Tarragona",
-            "Sant Vicenç de Calders",
-            "Vilanova i la Geltrú"
-          ],
-          "node_ids": [
-            "madrid-puerta-de-atocha",
-            "bif-planetario",
-            "aranjuez",
-            "castillejo-anover",
-            "villasequilla",
-            "tembleque",
-            "el-romeral",
-            "villacanas",
-            "quero",
-            "alcazar-de-san-juan",
-            "campo-de-criptana",
-            "socuellamos",
-            "villarrobledo",
-            "minaya",
-            "la-roda-de-albacete",
-            "la-gineta",
-            "albacete-los-llanos",
-            "pozorrubielos",
-            "bif-albacete",
-            "iniesta",
-            "requena-utiel",
-            "siete-aguas-av",
-            "valencia-joaquin-sorolla",
-            "valencia-la-font-de-sant-lluis",
-            "valencia-cabanyal",
-            "roca-cuper",
-            "albuixech",
-            "massalfassar",
-            "el-puig",
-            "pucol",
-            "sagunt",
-            "les-valls",
-            "almenara",
-            "la-llosa",
-            "xilxes",
-            "moncofa",
-            "nules-la-vilavella",
-            "burriana-alquerias-del-nino-perdido",
-            "vila-real",
-            "almassora",
-            "castello-de-la-plana",
-            "benicassim",
-            "orpesa",
-            "torreblanca",
-            "alcala-de-xivert",
-            "benicarlo-peniscola",
-            "vinaros",
-            "ulldecona-alcanar-la-senia",
-            "l-aldea-amposta-tortosa",
-            "camarles-deltebre",
-            "l-ampolla-el-perello-deltebre",
-            "l-ametlla-de-mar",
-            "l-hospitalet-de-l-infant",
-            "cambrils",
-            "bif-la-feredat",
-            "bif-vila-seca",
-            "vila-seca",
-            "tarragona",
-            "altafulla-tamarit",
-            "torredembarra",
-            "sant-vicenc-de-calders",
-            "vilanova-i-la-geltru",
-            "barcelona-sants"
-          ],
-          "segment_ids": [
-            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-            "convencional-madrid-alcazar-cordoba:villacanas:quero",
-            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-            "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-            "alcazar-albacete:campo-de-criptana:socuellamos",
-            "alcazar-albacete:socuellamos:villarrobledo",
-            "alcazar-albacete:villarrobledo:minaya",
-            "alcazar-albacete:minaya:la-roda-de-albacete",
-            "alcazar-albacete:la-roda-de-albacete:la-gineta",
-            "alcazar-albacete:la-gineta:albacete-los-llanos",
-            "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-            "lav-albacete-alicante:bif-albacete:pozorrubielos",
-            "lav-madrid-valencia:bif-albacete:iniesta",
-            "lav-madrid-valencia:iniesta:requena-utiel",
-            "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-            "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-            "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-            "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-            "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-            "valencia-castello-tarragona:roca-cuper:albuixech",
-            "valencia-castello-tarragona:albuixech:massalfassar",
-            "valencia-castello-tarragona:massalfassar:el-puig",
-            "valencia-castello-tarragona:el-puig:pucol",
-            "valencia-castello-tarragona:pucol:sagunt",
-            "valencia-castello-tarragona:sagunt:les-valls",
-            "valencia-castello-tarragona:les-valls:almenara",
-            "valencia-castello-tarragona:almenara:la-llosa",
-            "valencia-castello-tarragona:la-llosa:xilxes",
-            "valencia-castello-tarragona:xilxes:moncofa",
-            "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-            "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-            "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-            "valencia-castello-tarragona:vila-real:almassora",
-            "valencia-castello-tarragona:almassora:castello-de-la-plana",
-            "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-            "valencia-castello-tarragona:benicassim:orpesa",
-            "valencia-castello-tarragona:orpesa:torreblanca",
-            "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-            "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-            "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-            "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-            "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-            "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-            "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-            "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-            "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-            "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-            "valencia-castello-tarragona:cambrils:bif-la-feredat",
-            "tarragona-barcelona:bif-la-feredat:bif-vila-seca",
-            "tarragona-barcelona:bif-vila-seca:vila-seca",
-            "tarragona-barcelona:vila-seca:tarragona",
-            "tarragona-barcelona:tarragona:altafulla-tamarit",
-            "tarragona-barcelona:altafulla-tamarit:torredembarra",
-            "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
-            "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
-            "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-          ]
-        },
-        {
-          "from_node_id": "madrid-puerta-de-atocha",
-          "from_name": "Madrid-Puerta de Atocha",
-          "to_node_id": "barcelona-sants",
-          "to_name": "Barcelona-Sants",
-          "length_km": 864.8,
-          "time_min": 252,
-          "single_track_km": 0.0,
-          "line_ids": [
-            "convencional-madrid-alcazar-cordoba",
-            "alcazar-albacete",
-            "lav-albacete-alicante",
-            "lav-madrid-valencia",
-            "valencia-castello-tarragona",
-            "lav-madrid-barcelona"
-          ],
-          "legs": [
-            {
-              "line_id": "convencional-madrid-alcazar-cordoba",
-              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-              "from_node_id": "madrid-puerta-de-atocha",
-              "from_name": "Madrid-Puerta de Atocha",
-              "to_node_id": "alcazar-de-san-juan",
-              "to_name": "Alcázar de San Juan",
-              "length_km": 146.9,
-              "time_min": 61,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "alcazar-albacete",
-              "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-              "from_node_id": "alcazar-de-san-juan",
-              "from_name": "Alcázar de San Juan",
-              "to_node_id": "albacete-los-llanos",
-              "to_name": "Albacete-Los Llanos",
-              "length_km": 130.7,
-              "time_min": 45,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-albacete-alicante",
-              "line_name": "Línea de alta velocidad Albacete – Alicante",
-              "from_node_id": "albacete-los-llanos",
-              "from_name": "Albacete-Los Llanos",
-              "to_node_id": "bif-albacete",
-              "to_name": "Bifurcación Albacete",
-              "length_km": 72.8,
-              "time_min": 15,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-valencia",
-              "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-              "from_node_id": "bif-albacete",
-              "from_name": "Bifurcación Albacete",
-              "to_node_id": "valencia-joaquin-sorolla",
-              "to_name": "València-Joaquín Sorolla",
-              "length_km": 148.9,
-              "time_min": 30,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "valencia-castello-tarragona",
-              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-              "from_node_id": "valencia-joaquin-sorolla",
-              "from_name": "València-Joaquín Sorolla",
-              "to_node_id": "camp-de-tarragona",
-              "to_name": "Camp de Tarragona",
-              "length_km": 265.7,
-              "time_min": 82,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-barcelona",
-              "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
-              "from_node_id": "camp-de-tarragona",
-              "from_name": "Camp de Tarragona",
-              "to_node_id": "barcelona-sants",
-              "to_name": "Barcelona-Sants",
-              "length_km": 99.7,
-              "time_min": 20,
-              "single_track_km": 0.0
-            }
-          ],
-          "via": [
-            "Aranjuez",
-            "Alcázar de San Juan",
-            "Socuéllamos",
-            "Villarrobledo",
-            "La Roda de Albacete",
-            "Albacete-Los Llanos",
-            "Requena-Utiel",
-            "València-Joaquín Sorolla",
-            "Sagunt",
-            "Castelló de la Plana",
-            "Benicàssim",
-            "Orpesa",
-            "Benicarló-Peñíscola",
-            "Vinaròs",
-            "L'Aldea-Amposta-Tortosa",
-            "Cambrils",
-            "Camp de Tarragona"
-          ],
-          "node_ids": [
-            "madrid-puerta-de-atocha",
-            "bif-planetario",
-            "aranjuez",
-            "castillejo-anover",
-            "villasequilla",
-            "tembleque",
-            "el-romeral",
-            "villacanas",
-            "quero",
-            "alcazar-de-san-juan",
-            "campo-de-criptana",
-            "socuellamos",
-            "villarrobledo",
-            "minaya",
-            "la-roda-de-albacete",
-            "la-gineta",
-            "albacete-los-llanos",
-            "pozorrubielos",
-            "bif-albacete",
-            "iniesta",
-            "requena-utiel",
-            "siete-aguas-av",
-            "valencia-joaquin-sorolla",
-            "valencia-la-font-de-sant-lluis",
-            "valencia-cabanyal",
-            "roca-cuper",
-            "albuixech",
-            "massalfassar",
-            "el-puig",
-            "pucol",
-            "sagunt",
-            "les-valls",
-            "almenara",
-            "la-llosa",
-            "xilxes",
-            "moncofa",
-            "nules-la-vilavella",
-            "burriana-alquerias-del-nino-perdido",
-            "vila-real",
-            "almassora",
-            "castello-de-la-plana",
-            "benicassim",
-            "orpesa",
-            "torreblanca",
-            "alcala-de-xivert",
-            "benicarlo-peniscola",
-            "vinaros",
-            "ulldecona-alcanar-la-senia",
-            "l-aldea-amposta-tortosa",
-            "camarles-deltebre",
-            "l-ampolla-el-perello-deltebre",
-            "l-ametlla-de-mar",
-            "l-hospitalet-de-l-infant",
-            "cambrils",
-            "bif-la-feredat",
-            "cambiador-la-boella",
-            "camp-de-tarragona",
-            "l-arboc",
-            "vilafranca-del-penedes",
-            "barcelona-sants"
-          ],
-          "segment_ids": [
-            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-            "convencional-madrid-alcazar-cordoba:villacanas:quero",
-            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-            "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-            "alcazar-albacete:campo-de-criptana:socuellamos",
-            "alcazar-albacete:socuellamos:villarrobledo",
-            "alcazar-albacete:villarrobledo:minaya",
-            "alcazar-albacete:minaya:la-roda-de-albacete",
-            "alcazar-albacete:la-roda-de-albacete:la-gineta",
-            "alcazar-albacete:la-gineta:albacete-los-llanos",
-            "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-            "lav-albacete-alicante:bif-albacete:pozorrubielos",
-            "lav-madrid-valencia:bif-albacete:iniesta",
-            "lav-madrid-valencia:iniesta:requena-utiel",
-            "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-            "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-            "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-            "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-            "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-            "valencia-castello-tarragona:roca-cuper:albuixech",
-            "valencia-castello-tarragona:albuixech:massalfassar",
-            "valencia-castello-tarragona:massalfassar:el-puig",
-            "valencia-castello-tarragona:el-puig:pucol",
-            "valencia-castello-tarragona:pucol:sagunt",
-            "valencia-castello-tarragona:sagunt:les-valls",
-            "valencia-castello-tarragona:les-valls:almenara",
-            "valencia-castello-tarragona:almenara:la-llosa",
-            "valencia-castello-tarragona:la-llosa:xilxes",
-            "valencia-castello-tarragona:xilxes:moncofa",
-            "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-            "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-            "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-            "valencia-castello-tarragona:vila-real:almassora",
-            "valencia-castello-tarragona:almassora:castello-de-la-plana",
-            "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-            "valencia-castello-tarragona:benicassim:orpesa",
-            "valencia-castello-tarragona:orpesa:torreblanca",
-            "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-            "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-            "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-            "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-            "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-            "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-            "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-            "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-            "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-            "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-            "valencia-castello-tarragona:cambrils:bif-la-feredat",
-            "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
-            "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona",
-            "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
-            "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
-            "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -4889,7 +4034,8 @@
             "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
             "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
             "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -5166,7 +4312,8 @@
             "lav-madrid-barcelona:camp-de-tarragona:l-arboc",
             "lav-madrid-barcelona:l-arboc:vilafranca-del-penedes",
             "lav-madrid-barcelona:vilafranca-del-penedes:barcelona-sants"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -5233,7 +4380,8 @@
             "lav-madrid-barcelona:guadalajara-yebes:las-inviernas",
             "lav-madrid-barcelona:bif-vallecas-av:guadalajara-yebes",
             "lav-madrid-barcelona:madrid-puerta-de-atocha:bif-vallecas-av"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "lleida-pirineus",
@@ -5415,234 +4563,8 @@
             "lav-madrid-valencia:bif-torrejon-de-velasco:bif-blancales",
             "lav-madrid-sevilla:bif-los-gavilanes:bif-torrejon-de-velasco",
             "lav-madrid-sevilla:madrid-puerta-de-atocha:bif-los-gavilanes"
-          ]
-        },
-        {
-          "from_node_id": "lleida-pirineus",
-          "from_name": "Lleida-Pirineus",
-          "to_node_id": "madrid-puerta-de-atocha",
-          "to_name": "Madrid-Puerta de Atocha",
-          "length_km": 845.8,
-          "time_min": 249,
-          "single_track_km": 0.0,
-          "line_ids": [
-            "lav-madrid-barcelona",
-            "valencia-castello-tarragona",
-            "lav-madrid-valencia",
-            "lav-albacete-alicante",
-            "alcazar-albacete",
-            "convencional-madrid-alcazar-cordoba"
           ],
-          "legs": [
-            {
-              "line_id": "lav-madrid-barcelona",
-              "line_name": "Línea de alta velocidad Madrid – Zaragoza – Barcelona",
-              "from_node_id": "lleida-pirineus",
-              "from_name": "Lleida-Pirineus",
-              "to_node_id": "camp-de-tarragona",
-              "to_name": "Camp de Tarragona",
-              "length_km": 80.7,
-              "time_min": 17,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "valencia-castello-tarragona",
-              "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-              "from_node_id": "camp-de-tarragona",
-              "from_name": "Camp de Tarragona",
-              "to_node_id": "valencia-joaquin-sorolla",
-              "to_name": "València-Joaquín Sorolla",
-              "length_km": 265.7,
-              "time_min": 82,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-madrid-valencia",
-              "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-              "from_node_id": "valencia-joaquin-sorolla",
-              "from_name": "València-Joaquín Sorolla",
-              "to_node_id": "bif-albacete",
-              "to_name": "Bifurcación Albacete",
-              "length_km": 148.9,
-              "time_min": 30,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "lav-albacete-alicante",
-              "line_name": "Línea de alta velocidad Albacete – Alicante",
-              "from_node_id": "bif-albacete",
-              "from_name": "Bifurcación Albacete",
-              "to_node_id": "albacete-los-llanos",
-              "to_name": "Albacete-Los Llanos",
-              "length_km": 72.8,
-              "time_min": 15,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "alcazar-albacete",
-              "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-              "from_node_id": "albacete-los-llanos",
-              "from_name": "Albacete-Los Llanos",
-              "to_node_id": "alcazar-de-san-juan",
-              "to_name": "Alcázar de San Juan",
-              "length_km": 130.7,
-              "time_min": 45,
-              "single_track_km": 0.0
-            },
-            {
-              "line_id": "convencional-madrid-alcazar-cordoba",
-              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-              "from_node_id": "alcazar-de-san-juan",
-              "from_name": "Alcázar de San Juan",
-              "to_node_id": "madrid-puerta-de-atocha",
-              "to_name": "Madrid-Puerta de Atocha",
-              "length_km": 146.9,
-              "time_min": 61,
-              "single_track_km": 0.0
-            }
-          ],
-          "via": [
-            "Camp de Tarragona",
-            "Cambrils",
-            "L'Aldea-Amposta-Tortosa",
-            "Vinaròs",
-            "Benicarló-Peñíscola",
-            "Orpesa",
-            "Benicàssim",
-            "Castelló de la Plana",
-            "Sagunt",
-            "València-Joaquín Sorolla",
-            "Requena-Utiel",
-            "Albacete-Los Llanos",
-            "La Roda de Albacete",
-            "Villarrobledo",
-            "Socuéllamos",
-            "Alcázar de San Juan",
-            "Aranjuez"
-          ],
-          "node_ids": [
-            "lleida-pirineus",
-            "bif-artesa-de-lleida",
-            "l-espluga-de-francoli",
-            "camp-de-tarragona",
-            "cambiador-la-boella",
-            "bif-la-feredat",
-            "cambrils",
-            "l-hospitalet-de-l-infant",
-            "l-ametlla-de-mar",
-            "l-ampolla-el-perello-deltebre",
-            "camarles-deltebre",
-            "l-aldea-amposta-tortosa",
-            "ulldecona-alcanar-la-senia",
-            "vinaros",
-            "benicarlo-peniscola",
-            "alcala-de-xivert",
-            "torreblanca",
-            "orpesa",
-            "benicassim",
-            "castello-de-la-plana",
-            "almassora",
-            "vila-real",
-            "burriana-alquerias-del-nino-perdido",
-            "nules-la-vilavella",
-            "moncofa",
-            "xilxes",
-            "la-llosa",
-            "almenara",
-            "les-valls",
-            "sagunt",
-            "pucol",
-            "el-puig",
-            "massalfassar",
-            "albuixech",
-            "roca-cuper",
-            "valencia-cabanyal",
-            "valencia-la-font-de-sant-lluis",
-            "valencia-joaquin-sorolla",
-            "siete-aguas-av",
-            "requena-utiel",
-            "iniesta",
-            "bif-albacete",
-            "pozorrubielos",
-            "albacete-los-llanos",
-            "la-gineta",
-            "la-roda-de-albacete",
-            "minaya",
-            "villarrobledo",
-            "socuellamos",
-            "campo-de-criptana",
-            "alcazar-de-san-juan",
-            "quero",
-            "villacanas",
-            "el-romeral",
-            "tembleque",
-            "villasequilla",
-            "castillejo-anover",
-            "aranjuez",
-            "bif-planetario",
-            "madrid-puerta-de-atocha"
-          ],
-          "segment_ids": [
-            "lav-madrid-barcelona:lleida-pirineus:bif-artesa-de-lleida",
-            "lav-madrid-barcelona:bif-artesa-de-lleida:l-espluga-de-francoli",
-            "lav-madrid-barcelona:l-espluga-de-francoli:camp-de-tarragona",
-            "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona",
-            "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
-            "valencia-castello-tarragona:cambrils:bif-la-feredat",
-            "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-            "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-            "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-            "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-            "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-            "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-            "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-            "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-            "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-            "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-            "valencia-castello-tarragona:orpesa:torreblanca",
-            "valencia-castello-tarragona:benicassim:orpesa",
-            "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-            "valencia-castello-tarragona:almassora:castello-de-la-plana",
-            "valencia-castello-tarragona:vila-real:almassora",
-            "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-            "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-            "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-            "valencia-castello-tarragona:xilxes:moncofa",
-            "valencia-castello-tarragona:la-llosa:xilxes",
-            "valencia-castello-tarragona:almenara:la-llosa",
-            "valencia-castello-tarragona:les-valls:almenara",
-            "valencia-castello-tarragona:sagunt:les-valls",
-            "valencia-castello-tarragona:pucol:sagunt",
-            "valencia-castello-tarragona:el-puig:pucol",
-            "valencia-castello-tarragona:massalfassar:el-puig",
-            "valencia-castello-tarragona:albuixech:massalfassar",
-            "valencia-castello-tarragona:roca-cuper:albuixech",
-            "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-            "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-            "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-            "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-            "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-            "lav-madrid-valencia:iniesta:requena-utiel",
-            "lav-madrid-valencia:bif-albacete:iniesta",
-            "lav-albacete-alicante:bif-albacete:pozorrubielos",
-            "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-            "alcazar-albacete:la-gineta:albacete-los-llanos",
-            "alcazar-albacete:la-roda-de-albacete:la-gineta",
-            "alcazar-albacete:minaya:la-roda-de-albacete",
-            "alcazar-albacete:villarrobledo:minaya",
-            "alcazar-albacete:socuellamos:villarrobledo",
-            "alcazar-albacete:campo-de-criptana:socuellamos",
-            "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-            "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-            "convencional-madrid-alcazar-cordoba:villacanas:quero",
-            "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-            "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-            "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-            "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-            "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-            "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-            "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario"
-          ]
+          "reverse_node_ids": []
         }
       ]
     },
@@ -5717,7 +4639,8 @@
             "lav-monforte-murcia:orihuela-miguel-hernandez:beniel",
             "lav-monforte-murcia:beniel:bif-el-regueron",
             "lav-monforte-murcia:bif-el-regueron:murcia-del-carmen"
-          ]
+          ],
+          "reverse_node_ids": []
         }
       ]
     },
@@ -5863,7 +4786,8 @@
             "lav-monforte-murcia:orihuela-miguel-hernandez:beniel",
             "lav-monforte-murcia:beniel:bif-el-regueron",
             "lav-monforte-murcia:bif-el-regueron:murcia-del-carmen"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -5988,7 +4912,8 @@
             "lav-monforte-murcia:orihuela-miguel-hernandez:beniel",
             "lav-monforte-murcia:beniel:bif-el-regueron",
             "lav-monforte-murcia:bif-el-regueron:murcia-del-carmen"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -6156,7 +5081,8 @@
             "lav-monforte-murcia:orihuela-miguel-hernandez:beniel",
             "lav-monforte-murcia:beniel:bif-el-regueron",
             "lav-monforte-murcia:bif-el-regueron:murcia-del-carmen"
-          ]
+          ],
+          "reverse_node_ids": []
         },
         {
           "from_node_id": "madrid-puerta-de-atocha",
@@ -6349,6 +5275,304 @@
             "lav-monforte-murcia:orihuela-miguel-hernandez:beniel",
             "lav-monforte-murcia:beniel:bif-el-regueron",
             "lav-monforte-murcia:bif-el-regueron:murcia-del-carmen"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "sevilla-santa-justa",
+      "to": "malaga-maria-zambrano",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "sevilla-santa-justa",
+          "from_name": "Sevilla-Santa Justa",
+          "to_node_id": "malaga-maria-zambrano",
+          "to_name": "Málaga-María Zambrano",
+          "length_km": 295.8,
+          "time_min": 73,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "lav-cordoba-malaga"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "sevilla-santa-justa",
+              "from_name": "Sevilla-Santa Justa",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "bif-malaga",
+              "to_name": "Bifurcación Málaga-Alta Velocidad",
+              "length_km": 14.4,
+              "time_min": 3,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "bif-malaga",
+              "from_name": "Bifurcación Málaga-Alta Velocidad",
+              "to_node_id": "malaga-maria-zambrano",
+              "to_name": "Málaga-María Zambrano",
+              "length_km": 154.7,
+              "time_min": 36,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Córdoba",
+            "Puente Genil-Herrera",
+            "Antequera-Santa Ana"
+          ],
+          "node_ids": [
+            "sevilla-santa-justa",
+            "majarabique",
+            "bif-malaga",
+            "cordoba",
+            "bif-malaga",
+            "la-marota",
+            "santaella",
+            "puente-genil-herrera",
+            "antequera-santa-ana",
+            "bif-gobantes",
+            "pb-alora",
+            "paet-los-prados",
+            "malaga-maria-zambrano"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-cordoba-malaga:bif-malaga:la-marota",
+            "lav-cordoba-malaga:la-marota:santaella",
+            "lav-cordoba-malaga:santaella:puente-genil-herrera",
+            "lav-cordoba-malaga:puente-genil-herrera:antequera-santa-ana",
+            "lav-cordoba-malaga:antequera-santa-ana:bif-gobantes",
+            "lav-cordoba-malaga:bif-gobantes:pb-alora",
+            "lav-cordoba-malaga:pb-alora:paet-los-prados",
+            "lav-cordoba-malaga:paet-los-prados:malaga-maria-zambrano"
+          ],
+          "reverse_node_ids": [
+            "cordoba"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "madrid-chamartin",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "madrid-chamartin",
+          "to_name": "Madrid-Chamartín",
+          "length_km": 7.6,
+          "time_min": 8,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "enlace-atocha-chamartin"
+          ],
+          "legs": [
+            {
+              "line_id": "enlace-atocha-chamartin",
+              "line_name": "Túnel de Atocha a Chamartín por Recoletos",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "madrid-chamartin",
+              "to_name": "Madrid-Chamartín",
+              "length_km": 7.6,
+              "time_min": 8,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "madrid-recoletos",
+            "madrid-nuevos-ministerios",
+            "madrid-chamartin"
+          ],
+          "segment_ids": [
+            "enlace-atocha-chamartin:madrid-puerta-de-atocha:madrid-recoletos",
+            "enlace-atocha-chamartin:madrid-recoletos:madrid-nuevos-ministerios",
+            "enlace-atocha-chamartin:madrid-nuevos-ministerios:madrid-chamartin"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "merida",
+      "to": "badajoz",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "merida",
+          "from_name": "Mérida",
+          "to_node_id": "badajoz",
+          "to_name": "Badajoz",
+          "length_km": 58.9,
+          "time_min": 21,
+          "single_track_km": 48.4,
+          "line_ids": [
+            "ramal-merida",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "ramal-merida",
+              "line_name": "Línea convencional Aljucén – Mérida",
+              "from_node_id": "merida",
+              "from_name": "Mérida",
+              "to_node_id": "aljucen",
+              "to_name": "Aljucén",
+              "length_km": 5.7,
+              "time_min": 3,
+              "single_track_km": 5.7
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "aljucen",
+              "from_name": "Aljucén",
+              "to_node_id": "badajoz",
+              "to_name": "Badajoz",
+              "length_km": 53.2,
+              "time_min": 17,
+              "single_track_km": 42.6
+            }
+          ],
+          "via": [
+            "Montijo"
+          ],
+          "node_ids": [
+            "merida",
+            "aljucen",
+            "garrovilla-las-vegas",
+            "montijo",
+            "montijo-el-molino",
+            "guadiana",
+            "bif-san-nicolas",
+            "badajoz"
+          ],
+          "segment_ids": [
+            "ramal-merida:aljucen:merida",
+            "enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas",
+            "lav-plasencia-badajoz:garrovilla-las-vegas:montijo",
+            "lav-plasencia-badajoz:montijo:montijo-el-molino",
+            "lav-plasencia-badajoz:montijo-el-molino:guadiana",
+            "lav-plasencia-badajoz:guadiana:bif-san-nicolas",
+            "lav-plasencia-badajoz:bif-san-nicolas:badajoz"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "valladolid-campo-grande",
+      "to": "zamora",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "valladolid-campo-grande",
+          "from_name": "Valladolid-Campo Grande",
+          "to_node_id": "zamora",
+          "to_name": "Zamora",
+          "length_km": 274.6,
+          "time_min": 58,
+          "single_track_km": 67.8,
+          "line_ids": [
+            "lav-madrid-valladolid",
+            "lav-olmedo-ourense"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-valladolid",
+              "line_name": "Línea de alta velocidad Madrid – Segovia – Valladolid",
+              "from_node_id": "valladolid-campo-grande",
+              "from_name": "Valladolid-Campo Grande",
+              "to_node_id": "segovia-guiomar",
+              "to_name": "Segovia-Guiomar",
+              "length_km": 110.8,
+              "time_min": 22,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-valladolid",
+              "line_name": "Línea de alta velocidad Madrid – Segovia – Valladolid",
+              "from_node_id": "segovia-guiomar",
+              "from_name": "Segovia-Guiomar",
+              "to_node_id": "bif-medina",
+              "to_name": "Bifurcación Medina",
+              "length_km": 65.4,
+              "time_min": 13,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-olmedo-ourense",
+              "line_name": "Línea de alta velocidad Olmedo – Zamora – Ourense",
+              "from_node_id": "bif-medina",
+              "from_name": "Bifurcación Medina",
+              "to_node_id": "zamora",
+              "to_name": "Zamora",
+              "length_km": 98.4,
+              "time_min": 22,
+              "single_track_km": 67.8
+            }
+          ],
+          "via": [
+            "Segovia-Guiomar",
+            "Medina del Campo Alta Velocidad"
+          ],
+          "node_ids": [
+            "valladolid-campo-grande",
+            "bif-medina",
+            "garcillan",
+            "segovia-guiomar",
+            "garcillan",
+            "bif-medina",
+            "medina-del-campo-av",
+            "toro-av",
+            "coreses",
+            "zamora"
+          ],
+          "segment_ids": [
+            "lav-madrid-valladolid:bif-medina:valladolid-campo-grande",
+            "lav-madrid-valladolid:garcillan:bif-medina",
+            "lav-madrid-valladolid:segovia-guiomar:garcillan",
+            "lav-madrid-valladolid:segovia-guiomar:garcillan",
+            "lav-madrid-valladolid:garcillan:bif-medina",
+            "lav-olmedo-ourense:bif-medina:medina-del-campo-av",
+            "lav-olmedo-ourense:medina-del-campo-av:toro-av",
+            "lav-olmedo-ourense:toro-av:coreses",
+            "lav-olmedo-ourense:coreses:zamora"
+          ],
+          "reverse_node_ids": [
+            "segovia-guiomar"
           ]
         }
       ]
@@ -6436,7 +5660,8 @@
                 "manzanares-ciudad-real:manzanares:daimiel",
                 "manzanares-ciudad-real:daimiel:almagro",
                 "manzanares-ciudad-real:almagro:ciudad-real"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 170.8
           },
@@ -6529,7 +5754,8 @@
                 "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
                 "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
                 "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 343.6
           }
@@ -6604,7 +5830,8 @@
                 "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
                 "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
                 "lav-madrid-sevilla:adamuz:cordoba"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 244.6
           },
@@ -6662,7 +5889,8 @@
                 "lav-madrid-sevilla:puertollano:villanueva-de-cordoba",
                 "lav-madrid-sevilla:villanueva-de-cordoba:adamuz",
                 "lav-madrid-sevilla:adamuz:cordoba"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 440.7
           }
@@ -6755,7 +5983,8 @@
                 "lav-madrid-sevilla:bif-yeles:bif-la-sagra",
                 "lav-madrid-sevilla:bif-la-sagra:urda",
                 "lav-madrid-sevilla:urda:ciudad-real"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 64.4
           }
@@ -6896,7 +6125,8 @@
                 "lav-cordoba-malaga:santaella:puente-genil-herrera",
                 "lav-cordoba-malaga:la-marota:santaella",
                 "lav-cordoba-malaga:bif-malaga:la-marota"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 14.4
           },
@@ -7051,7 +6281,8 @@
                 "lav-cordoba-malaga:santaella:puente-genil-herrera",
                 "lav-cordoba-malaga:la-marota:santaella",
                 "lav-cordoba-malaga:bif-malaga:la-marota"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 187.2
           },
@@ -7210,7 +6441,8 @@
                 "lav-cordoba-malaga:santaella:puente-genil-herrera",
                 "lav-cordoba-malaga:la-marota:santaella",
                 "lav-cordoba-malaga:bif-malaga:la-marota"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 358.0
           }
@@ -7336,7 +6568,8 @@
                 "lav-antequera-granada:loja:bif-tocon",
                 "lav-antequera-granada:bif-tocon:bif-la-chana",
                 "lav-antequera-granada:bif-la-chana:granada"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 173.7
           }
@@ -7381,7 +6614,8 @@
               ],
               "segment_ids": [
                 "baipas-zaragoza:bif-moncasi:bif-canal-imperial"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 25.6
           },
@@ -7547,7 +6781,8 @@
                 "valencia-castello-tarragona:cambrils:bif-la-feredat",
                 "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
                 "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 527.2
           },
@@ -7740,456 +6975,8 @@
                 "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
                 "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
                 "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-              ]
-            },
-            "closed_line_length_km": 627.0
-          },
-          {
-            "route": {
-              "from_node_id": "madrid-puerta-de-atocha",
-              "from_name": "Madrid-Puerta de Atocha",
-              "to_node_id": "camp-de-tarragona",
-              "to_name": "Camp de Tarragona",
-              "length_km": 765.1,
-              "time_min": 232,
-              "single_track_km": 0.0,
-              "line_ids": [
-                "convencional-madrid-alcazar-cordoba",
-                "alcazar-albacete",
-                "lav-albacete-alicante",
-                "lav-madrid-valencia",
-                "valencia-castello-tarragona"
               ],
-              "legs": [
-                {
-                  "line_id": "convencional-madrid-alcazar-cordoba",
-                  "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-                  "from_node_id": "madrid-puerta-de-atocha",
-                  "from_name": "Madrid-Puerta de Atocha",
-                  "to_node_id": "alcazar-de-san-juan",
-                  "to_name": "Alcázar de San Juan",
-                  "length_km": 146.9,
-                  "time_min": 61,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "alcazar-albacete",
-                  "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-                  "from_node_id": "alcazar-de-san-juan",
-                  "from_name": "Alcázar de San Juan",
-                  "to_node_id": "albacete-los-llanos",
-                  "to_name": "Albacete-Los Llanos",
-                  "length_km": 130.7,
-                  "time_min": 45,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "lav-albacete-alicante",
-                  "line_name": "Línea de alta velocidad Albacete – Alicante",
-                  "from_node_id": "albacete-los-llanos",
-                  "from_name": "Albacete-Los Llanos",
-                  "to_node_id": "bif-albacete",
-                  "to_name": "Bifurcación Albacete",
-                  "length_km": 72.8,
-                  "time_min": 15,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "lav-madrid-valencia",
-                  "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-                  "from_node_id": "bif-albacete",
-                  "from_name": "Bifurcación Albacete",
-                  "to_node_id": "valencia-joaquin-sorolla",
-                  "to_name": "València-Joaquín Sorolla",
-                  "length_km": 148.9,
-                  "time_min": 30,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "valencia-castello-tarragona",
-                  "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-                  "from_node_id": "valencia-joaquin-sorolla",
-                  "from_name": "València-Joaquín Sorolla",
-                  "to_node_id": "camp-de-tarragona",
-                  "to_name": "Camp de Tarragona",
-                  "length_km": 265.7,
-                  "time_min": 82,
-                  "single_track_km": 0.0
-                }
-              ],
-              "via": [
-                "Aranjuez",
-                "Alcázar de San Juan",
-                "Socuéllamos",
-                "Villarrobledo",
-                "La Roda de Albacete",
-                "Albacete-Los Llanos",
-                "Requena-Utiel",
-                "València-Joaquín Sorolla",
-                "Sagunt",
-                "Castelló de la Plana",
-                "Benicàssim",
-                "Orpesa",
-                "Benicarló-Peñíscola",
-                "Vinaròs",
-                "L'Aldea-Amposta-Tortosa",
-                "Cambrils"
-              ],
-              "node_ids": [
-                "madrid-puerta-de-atocha",
-                "bif-planetario",
-                "aranjuez",
-                "castillejo-anover",
-                "villasequilla",
-                "tembleque",
-                "el-romeral",
-                "villacanas",
-                "quero",
-                "alcazar-de-san-juan",
-                "campo-de-criptana",
-                "socuellamos",
-                "villarrobledo",
-                "minaya",
-                "la-roda-de-albacete",
-                "la-gineta",
-                "albacete-los-llanos",
-                "pozorrubielos",
-                "bif-albacete",
-                "iniesta",
-                "requena-utiel",
-                "siete-aguas-av",
-                "valencia-joaquin-sorolla",
-                "valencia-la-font-de-sant-lluis",
-                "valencia-cabanyal",
-                "roca-cuper",
-                "albuixech",
-                "massalfassar",
-                "el-puig",
-                "pucol",
-                "sagunt",
-                "les-valls",
-                "almenara",
-                "la-llosa",
-                "xilxes",
-                "moncofa",
-                "nules-la-vilavella",
-                "burriana-alquerias-del-nino-perdido",
-                "vila-real",
-                "almassora",
-                "castello-de-la-plana",
-                "benicassim",
-                "orpesa",
-                "torreblanca",
-                "alcala-de-xivert",
-                "benicarlo-peniscola",
-                "vinaros",
-                "ulldecona-alcanar-la-senia",
-                "l-aldea-amposta-tortosa",
-                "camarles-deltebre",
-                "l-ampolla-el-perello-deltebre",
-                "l-ametlla-de-mar",
-                "l-hospitalet-de-l-infant",
-                "cambrils",
-                "bif-la-feredat",
-                "cambiador-la-boella",
-                "camp-de-tarragona"
-              ],
-              "segment_ids": [
-                "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-                "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-                "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-                "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-                "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-                "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-                "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-                "convencional-madrid-alcazar-cordoba:villacanas:quero",
-                "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-                "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-                "alcazar-albacete:campo-de-criptana:socuellamos",
-                "alcazar-albacete:socuellamos:villarrobledo",
-                "alcazar-albacete:villarrobledo:minaya",
-                "alcazar-albacete:minaya:la-roda-de-albacete",
-                "alcazar-albacete:la-roda-de-albacete:la-gineta",
-                "alcazar-albacete:la-gineta:albacete-los-llanos",
-                "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-                "lav-albacete-alicante:bif-albacete:pozorrubielos",
-                "lav-madrid-valencia:bif-albacete:iniesta",
-                "lav-madrid-valencia:iniesta:requena-utiel",
-                "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-                "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-                "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-                "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-                "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-                "valencia-castello-tarragona:roca-cuper:albuixech",
-                "valencia-castello-tarragona:albuixech:massalfassar",
-                "valencia-castello-tarragona:massalfassar:el-puig",
-                "valencia-castello-tarragona:el-puig:pucol",
-                "valencia-castello-tarragona:pucol:sagunt",
-                "valencia-castello-tarragona:sagunt:les-valls",
-                "valencia-castello-tarragona:les-valls:almenara",
-                "valencia-castello-tarragona:almenara:la-llosa",
-                "valencia-castello-tarragona:la-llosa:xilxes",
-                "valencia-castello-tarragona:xilxes:moncofa",
-                "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-                "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-                "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-                "valencia-castello-tarragona:vila-real:almassora",
-                "valencia-castello-tarragona:almassora:castello-de-la-plana",
-                "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-                "valencia-castello-tarragona:benicassim:orpesa",
-                "valencia-castello-tarragona:orpesa:torreblanca",
-                "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-                "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-                "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-                "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-                "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-                "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-                "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-                "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-                "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-                "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-                "valencia-castello-tarragona:cambrils:bif-la-feredat",
-                "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
-                "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona"
-              ]
-            },
-            "closed_line_length_km": 527.2
-          },
-          {
-            "route": {
-              "from_node_id": "madrid-puerta-de-atocha",
-              "from_name": "Madrid-Puerta de Atocha",
-              "to_node_id": "barcelona-sants",
-              "to_name": "Barcelona-Sants",
-              "length_km": 844.6,
-              "time_min": 266,
-              "single_track_km": 1.4,
-              "line_ids": [
-                "convencional-madrid-alcazar-cordoba",
-                "alcazar-albacete",
-                "lav-albacete-alicante",
-                "lav-madrid-valencia",
-                "valencia-castello-tarragona",
-                "tarragona-barcelona"
-              ],
-              "legs": [
-                {
-                  "line_id": "convencional-madrid-alcazar-cordoba",
-                  "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
-                  "from_node_id": "madrid-puerta-de-atocha",
-                  "from_name": "Madrid-Puerta de Atocha",
-                  "to_node_id": "alcazar-de-san-juan",
-                  "to_name": "Alcázar de San Juan",
-                  "length_km": 146.9,
-                  "time_min": 61,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "alcazar-albacete",
-                  "line_name": "Línea convencional Alcázar de San Juan – Albacete",
-                  "from_node_id": "alcazar-de-san-juan",
-                  "from_name": "Alcázar de San Juan",
-                  "to_node_id": "albacete-los-llanos",
-                  "to_name": "Albacete-Los Llanos",
-                  "length_km": 130.7,
-                  "time_min": 45,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "lav-albacete-alicante",
-                  "line_name": "Línea de alta velocidad Albacete – Alicante",
-                  "from_node_id": "albacete-los-llanos",
-                  "from_name": "Albacete-Los Llanos",
-                  "to_node_id": "bif-albacete",
-                  "to_name": "Bifurcación Albacete",
-                  "length_km": 72.8,
-                  "time_min": 15,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "lav-madrid-valencia",
-                  "line_name": "Línea de alta velocidad Madrid – Cuenca – Valencia",
-                  "from_node_id": "bif-albacete",
-                  "from_name": "Bifurcación Albacete",
-                  "to_node_id": "valencia-joaquin-sorolla",
-                  "to_name": "València-Joaquín Sorolla",
-                  "length_km": 148.9,
-                  "time_min": 30,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "valencia-castello-tarragona",
-                  "line_name": "Línea convencional Valencia – Castellón – Camp de Tarragona",
-                  "from_node_id": "valencia-joaquin-sorolla",
-                  "from_name": "València-Joaquín Sorolla",
-                  "to_node_id": "bif-la-feredat",
-                  "to_name": "Bifurcación La Feredat",
-                  "length_km": 249.6,
-                  "time_min": 77,
-                  "single_track_km": 0.0
-                },
-                {
-                  "line_id": "tarragona-barcelona",
-                  "line_name": "Línea convencional Tarragona – Vilanova i la Geltrú – Barcelona",
-                  "from_node_id": "bif-la-feredat",
-                  "from_name": "Bifurcación La Feredat",
-                  "to_node_id": "barcelona-sants",
-                  "to_name": "Barcelona-Sants",
-                  "length_km": 95.6,
-                  "time_min": 38,
-                  "single_track_km": 1.4
-                }
-              ],
-              "via": [
-                "Aranjuez",
-                "Alcázar de San Juan",
-                "Socuéllamos",
-                "Villarrobledo",
-                "La Roda de Albacete",
-                "Albacete-Los Llanos",
-                "Requena-Utiel",
-                "València-Joaquín Sorolla",
-                "Sagunt",
-                "Castelló de la Plana",
-                "Benicàssim",
-                "Orpesa",
-                "Benicarló-Peñíscola",
-                "Vinaròs",
-                "L'Aldea-Amposta-Tortosa",
-                "Cambrils",
-                "Tarragona",
-                "Sant Vicenç de Calders",
-                "Vilanova i la Geltrú"
-              ],
-              "node_ids": [
-                "madrid-puerta-de-atocha",
-                "bif-planetario",
-                "aranjuez",
-                "castillejo-anover",
-                "villasequilla",
-                "tembleque",
-                "el-romeral",
-                "villacanas",
-                "quero",
-                "alcazar-de-san-juan",
-                "campo-de-criptana",
-                "socuellamos",
-                "villarrobledo",
-                "minaya",
-                "la-roda-de-albacete",
-                "la-gineta",
-                "albacete-los-llanos",
-                "pozorrubielos",
-                "bif-albacete",
-                "iniesta",
-                "requena-utiel",
-                "siete-aguas-av",
-                "valencia-joaquin-sorolla",
-                "valencia-la-font-de-sant-lluis",
-                "valencia-cabanyal",
-                "roca-cuper",
-                "albuixech",
-                "massalfassar",
-                "el-puig",
-                "pucol",
-                "sagunt",
-                "les-valls",
-                "almenara",
-                "la-llosa",
-                "xilxes",
-                "moncofa",
-                "nules-la-vilavella",
-                "burriana-alquerias-del-nino-perdido",
-                "vila-real",
-                "almassora",
-                "castello-de-la-plana",
-                "benicassim",
-                "orpesa",
-                "torreblanca",
-                "alcala-de-xivert",
-                "benicarlo-peniscola",
-                "vinaros",
-                "ulldecona-alcanar-la-senia",
-                "l-aldea-amposta-tortosa",
-                "camarles-deltebre",
-                "l-ampolla-el-perello-deltebre",
-                "l-ametlla-de-mar",
-                "l-hospitalet-de-l-infant",
-                "cambrils",
-                "bif-la-feredat",
-                "bif-vila-seca",
-                "vila-seca",
-                "tarragona",
-                "altafulla-tamarit",
-                "torredembarra",
-                "sant-vicenc-de-calders",
-                "vilanova-i-la-geltru",
-                "barcelona-sants"
-              ],
-              "segment_ids": [
-                "convencional-madrid-alcazar-cordoba:madrid-puerta-de-atocha:bif-planetario",
-                "convencional-madrid-alcazar-cordoba:bif-planetario:aranjuez",
-                "convencional-madrid-alcazar-cordoba:aranjuez:castillejo-anover",
-                "convencional-madrid-alcazar-cordoba:castillejo-anover:villasequilla",
-                "convencional-madrid-alcazar-cordoba:villasequilla:tembleque",
-                "convencional-madrid-alcazar-cordoba:tembleque:el-romeral",
-                "convencional-madrid-alcazar-cordoba:el-romeral:villacanas",
-                "convencional-madrid-alcazar-cordoba:villacanas:quero",
-                "convencional-madrid-alcazar-cordoba:quero:alcazar-de-san-juan",
-                "alcazar-albacete:alcazar-de-san-juan:campo-de-criptana",
-                "alcazar-albacete:campo-de-criptana:socuellamos",
-                "alcazar-albacete:socuellamos:villarrobledo",
-                "alcazar-albacete:villarrobledo:minaya",
-                "alcazar-albacete:minaya:la-roda-de-albacete",
-                "alcazar-albacete:la-roda-de-albacete:la-gineta",
-                "alcazar-albacete:la-gineta:albacete-los-llanos",
-                "lav-albacete-alicante:pozorrubielos:albacete-los-llanos",
-                "lav-albacete-alicante:bif-albacete:pozorrubielos",
-                "lav-madrid-valencia:bif-albacete:iniesta",
-                "lav-madrid-valencia:iniesta:requena-utiel",
-                "lav-madrid-valencia:requena-utiel:siete-aguas-av",
-                "lav-madrid-valencia:siete-aguas-av:valencia-joaquin-sorolla",
-                "valencia-castello-tarragona:valencia-joaquin-sorolla:valencia-la-font-de-sant-lluis",
-                "valencia-castello-tarragona:valencia-la-font-de-sant-lluis:valencia-cabanyal",
-                "valencia-castello-tarragona:valencia-cabanyal:roca-cuper",
-                "valencia-castello-tarragona:roca-cuper:albuixech",
-                "valencia-castello-tarragona:albuixech:massalfassar",
-                "valencia-castello-tarragona:massalfassar:el-puig",
-                "valencia-castello-tarragona:el-puig:pucol",
-                "valencia-castello-tarragona:pucol:sagunt",
-                "valencia-castello-tarragona:sagunt:les-valls",
-                "valencia-castello-tarragona:les-valls:almenara",
-                "valencia-castello-tarragona:almenara:la-llosa",
-                "valencia-castello-tarragona:la-llosa:xilxes",
-                "valencia-castello-tarragona:xilxes:moncofa",
-                "valencia-castello-tarragona:moncofa:nules-la-vilavella",
-                "valencia-castello-tarragona:nules-la-vilavella:burriana-alquerias-del-nino-perdido",
-                "valencia-castello-tarragona:burriana-alquerias-del-nino-perdido:vila-real",
-                "valencia-castello-tarragona:vila-real:almassora",
-                "valencia-castello-tarragona:almassora:castello-de-la-plana",
-                "valencia-castello-tarragona:castello-de-la-plana:benicassim",
-                "valencia-castello-tarragona:benicassim:orpesa",
-                "valencia-castello-tarragona:orpesa:torreblanca",
-                "valencia-castello-tarragona:torreblanca:alcala-de-xivert",
-                "valencia-castello-tarragona:alcala-de-xivert:benicarlo-peniscola",
-                "valencia-castello-tarragona:benicarlo-peniscola:vinaros",
-                "valencia-castello-tarragona:vinaros:ulldecona-alcanar-la-senia",
-                "valencia-castello-tarragona:ulldecona-alcanar-la-senia:l-aldea-amposta-tortosa",
-                "valencia-castello-tarragona:l-aldea-amposta-tortosa:camarles-deltebre",
-                "valencia-castello-tarragona:camarles-deltebre:l-ampolla-el-perello-deltebre",
-                "valencia-castello-tarragona:l-ampolla-el-perello-deltebre:l-ametlla-de-mar",
-                "valencia-castello-tarragona:l-ametlla-de-mar:l-hospitalet-de-l-infant",
-                "valencia-castello-tarragona:l-hospitalet-de-l-infant:cambrils",
-                "valencia-castello-tarragona:cambrils:bif-la-feredat",
-                "tarragona-barcelona:bif-la-feredat:bif-vila-seca",
-                "tarragona-barcelona:bif-vila-seca:vila-seca",
-                "tarragona-barcelona:vila-seca:tarragona",
-                "tarragona-barcelona:tarragona:altafulla-tamarit",
-                "tarragona-barcelona:altafulla-tamarit:torredembarra",
-                "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
-                "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
-                "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-              ]
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 627.0
           },
@@ -8450,7 +7237,8 @@
                 "valencia-castello-tarragona:cambrils:bif-la-feredat",
                 "valencia-castello-tarragona:bif-la-feredat:cambiador-la-boella",
                 "valencia-castello-tarragona:cambiador-la-boella:camp-de-tarragona"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 527.2
           },
@@ -8738,12 +7526,13 @@
                 "tarragona-barcelona:torredembarra:sant-vicenc-de-calders",
                 "tarragona-barcelona:sant-vicenc-de-calders:vilanova-i-la-geltru",
                 "tarragona-barcelona:vilanova-i-la-geltru:barcelona-sants"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 627.0
           }
         ],
-        "omitted": 26
+        "omitted": 28
       }
     },
     {
@@ -8787,7 +7576,8 @@
               "segment_ids": [
                 "lav-madrid-barcelona:bif-les-torres-de-sanui:lleida-pirineus",
                 "lav-madrid-barcelona:lleida-pirineus:bif-artesa-de-lleida"
-              ]
+              ],
+              "reverse_node_ids": []
             },
             "closed_line_length_km": 14.3
           }

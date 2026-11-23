@@ -46,10 +46,6 @@ Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Có
 
 En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distinta. Antes de seguir ampliando, lo cargado se pule. El 22 de noviembre de 2026 se revisó entero, sobre `main` (commit `0f4c9d7`) y sobre producción, en escritorio y en el móvil: las 879 fichas de línea, estación y tramo, los recuentos de trenes de un tramo al siguiente, el comparador entre 46 ciudades, las conexiones a trazos y la documentación. Lo que salió está en ocho incidencias, de lo más grave a lo menos:
 
-**Datos que el visor da mal.**
-
-- [#260](https://github.com/ebotiab/Oniel/issues/260) Análisis: el comparador da recorridos imposibles por Madrid. De Madrid-Puerta de Atocha a Madrid-Chamartín enseña 65,2 km doblando en Torrejón de Velasco. Hecha la primera parte: el comparador ya no tiene tope de líneas (de Madrid-Puerta de Atocha a Bilbao decía que no había recorrido, y pasaba en 169 de 1.035 parejas de ciudades principales) y dice cuándo los trenes directos van por una vía que no está cargada. Queda la regla de giro en las bifurcaciones, que está medida (`docs/simulacion.md`, «Giros en las bifurcaciones») y pide antes invertir la marcha en las estaciones. Hecha también la carga de las tres vías cortas que pedía (23 de noviembre de 2026): el túnel de Atocha a Chamartín por Recoletos, la de Aljucén a La Garrovilla y el ramal de Soto de Cerrato son enlaces (`docs/datos.md`, «Cómo se cargaron los enlaces de Soto de Cerrato, de Aljucén a La Garrovilla y de Atocha a Chamartín»), y de Madrid-Puerta de Atocha a Madrid-Chamartín el comparador da ya el túnel.
-
 **Lo que confunde a quien llega.**
 
 - [#264](https://github.com/ebotiab/Oniel/issues/264) Datos: costuras entre líneas. Catorce conexiones a trazos declaradas en un solo extremo, regionales de Valladolid a Burgos contados en la alta velocidad, nombres de conexiones con el nombre de Adif y textos de nodos compartidos que dicen «final de la línea».
@@ -58,7 +54,7 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 - [#265](https://github.com/ebotiab/Oniel/issues/265) Datos: un solo criterio de velocidades, electrificación, fuentes y descripciones. Dos líneas cuya velocidad máxima es menor que la de uno de sus tramos, tres escrituras de la electrificación, la descripción de Madrid – Sevilla, cinco veces más corta que las demás.
 
-Cómo se reparten: #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera. #260 es de código, pero regenera la instantánea al aplicar la regla de giro, y va cuando estén cargadas las tres vías cortas que pide. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
+Cómo se reparten: #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
 
 No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). #264 las deja bien dibujadas por los dos extremos; cargarlas es ampliar la red.
 

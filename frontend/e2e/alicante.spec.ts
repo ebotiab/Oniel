@@ -53,7 +53,7 @@ test.describe('La línea de alta velocidad Albacete – Alicante', () => {
     // el convencional es más corto; el de alta velocidad, por Cuenca, más rápido
     await expect(recorridos.nth(0)).toContainText('Por Alcázar de San Juan')
     await expect(recorridos.nth(0)).toContainText('277,6 km · 1 h 46 min sin paradas')
-    await expect(recorridos.nth(1)).toContainText('Por Bifurcación Torrejón de Velasco y Bifurcación Albacete')
+    await expect(recorridos.nth(1).locator('.recorrido-titulo')).toHaveText('Por Cuenca')
     await expect(recorridos.nth(1)).toContainText('313,6 km · 1 h 5 min sin paradas')
     await expect(recorridos.nth(1)).toContainText('Pasa por Cuenca.')
   })
@@ -65,7 +65,7 @@ test.describe('La línea de alta velocidad Albacete – Alicante', () => {
     // el primero, más corto, junta la línea convencional hasta Albacete con la alta velocidad
     // desde allí; el segundo es el de alta velocidad entero, por Cuenca
     const porCuenca = recorridos.nth(1)
-    await expect(porCuenca).toContainText('Por Bifurcación Torrejón de Velasco y Bifurcación Albacete')
+    await expect(porCuenca.locator('.recorrido-titulo')).toHaveText('Por Cuenca y Albacete')
     await expect(porCuenca).toContainText('478,4 km · 1 h 42 min sin paradas')
     await expect(porCuenca).toContainText('Pasa por Cuenca, Albacete y Villena Alta Velocidad.')
     await expect(porCuenca).toContainText('Recorre tres líneas')

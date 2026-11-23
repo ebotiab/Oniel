@@ -15,6 +15,7 @@ from oniel.routing import (
     DEFAULT_MAX_CHANGES,
     DEFAULT_MAX_RATIO,
     Graph,
+    Route,
     Scenario,
     ScenarioError,
     SketchLink,
@@ -79,18 +80,19 @@ class Red:
     lines: list[LineSummary]
     nodes: list[NodeIndexOut]
     segments: list[SegmentOut]
+    turns: dict[str, dict[str, int]]
 
 
 @pytest.fixture(scope="module")
 def network() -> Red:
     index = NetworkIndexOut.model_validate(json.loads(SNAPSHOT.read_text(encoding="utf-8")))
     segments = [SegmentOut(id=f.id, **f.properties) for f in index.segment_features.features]
-    return Red(lines=index.lines, nodes=index.nodes, segments=segments)
+    return Red(lines=index.lines, nodes=index.nodes, segments=segments, turns=index.turns)
 
 
 @pytest.fixture(scope="module")
 def graph(network: Red) -> Graph:
-    return build_graph(network.lines, network.nodes, network.segments)
+    return build_graph(network.lines, network.nodes, network.segments, network.turns)
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:
@@ -223,16 +225,19 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         260.5,
         558.0,  # por Cuenca hasta Albacete y vuelta por Alcázar de San Juan y Manzanares
         613.5,
-        704.6,  # lo mismo al revés: por Alcázar a Albacete y vuelta por Cuenca
+        # (el mismo al revés, por Alcázar a Albacete y vuelta por Cuenca, ya no sale: en Torrejón
+        # de Velasco las vías no dejan girar hacia Ciudad Real, y la estación en la que invertir
+        # la marcha es la de salida)
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
         910.9,  # por Cuenca, Albacete y Alcázar, y de allí por Linares-Baeza y Córdoba
-        # los cuatro siguientes encadenan siete u ocho líneas: con el tope de cinco pasos de una
-        # línea a otra que hubo hasta noviembre de 2026 no salían
+        # los siguientes encadenan siete líneas o más: con el tope de cinco pasos de una línea a
+        # otra que hubo hasta noviembre de 2026 no salían
         982.8,  # por Cuenca, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares
-        1129.4,  # lo mismo al revés
         1183.0,  # por Cuenca, Albacete, Alcázar, Linares-Baeza, Granada, Antequera y Córdoba
-        1252.2,  # por Barcelona, la costa, València, Cuenca, Albacete, Alcázar y Manzanares
-        1289.1,  # por Barcelona, Camp de Tarragona, la costa y Valencia
+        1335.7,  # por València, Xàtiva, Alicante, Albacete, Alcázar, Linares-Baeza y Córdoba
+        1358.3,  # por Barcelona y València, invirtiendo la marcha en Cuenca para bajar a Albacete
+        1379.2,  # por Barcelona, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares
+        1537.5,  # el de 1.358,3 km, por Barcelona-Sants y la costa de Tarragona
     ]
     # sin tope de líneas no queda ninguna pareja de estaciones unidas sin recorrido: de
     # Madrid-Puerta de Atocha a Bilbao se encadenan seis líneas desde que el túnel de Atocha a
@@ -536,6 +541,113 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
         assert ring.route.length_km > 300
 
 
+def _turns_made(graph: Graph, route: Route) -> list[tuple[str, str, str]]:
+    """Los pasos de un recorrido por un nodo que no es estación: nodo, tramo de llegada y de salida."""
+    made = []
+    for node_id, before, after in zip(
+        route.node_ids[1:-1], route.segment_ids[:-1], route.segment_ids[1:], strict=True
+    ):
+        if graph.nodes[node_id].kind != "estacion":
+            made.append((node_id, before, after))
+    return made
+
+
+def test_the_network_tells_which_way_each_segment_leaves_every_junction(graph: Graph) -> None:
+    """Los lados de cada nodo que no es estación viajan en el índice de la red (``turns``)."""
+    stations = {n for n, node in graph.nodes.items() if node.kind == "estacion"}
+    assert graph.turns and not stations & set(graph.turns)
+    # cada tramo del grafo tiene lado en sus dos extremos, salvo donde el extremo es una estación
+    for edge in graph.edges:
+        for node_id in (edge.a, edge.b):
+            assert node_id in stations or edge.id in graph.turns[node_id]
+    # la bifurcación de Málaga: la línea de Málaga y la de Sevilla salen juntas hacia el sur, y
+    # el tramo de Córdoba, hacia el otro lado
+    sides = graph.turns["bif-malaga"]
+    to_malaga, to_sevilla, to_cordoba = (
+        f"{LAV_MALAGA}:bif-malaga:la-marota",
+        f"{LAV}:bif-malaga:majarabique",
+        f"{LAV}:cordoba:bif-malaga",
+    )
+    assert sides[to_malaga] == sides[to_sevilla] != sides[to_cordoba]
+    # y la de Torrejón de Velasco: las dos líneas de Madrid llegan juntas por el norte
+    sides = graph.turns["bif-torrejon-de-velasco"]
+    from_atocha = f"{LAV}:bif-los-gavilanes:bif-torrejon-de-velasco"
+    from_chamartin = f"{LAV_VALENCIA}:paso-bajo-atocha:bif-torrejon-de-velasco"
+    assert sides[from_atocha] == sides[from_chamartin]
+
+
+def test_from_sevilla_to_malaga_the_train_reverses_in_cordoba(graph: Graph) -> None:
+    """En la bifurcación de Málaga no se puede pasar de la línea de Sevilla a la de Málaga: el
+    recorrido sigue hasta Córdoba, invierte la marcha y vuelve (295,8 km, no los 266,9 que daba
+    el giro). Es lo que hacen los trenes."""
+    sevilla, malaga = "sevilla-santa-justa", "malaga-maria-zambrano"
+    route = find_routes(graph, sevilla, malaga)[0]
+    assert (route.length_km, route.reverse_node_ids) == (295.8, [CORDOBA])
+    assert route.line_ids == [LAV, LAV_MALAGA]
+    # tres trechos: hasta Córdoba, de vuelta a la bifurcación y la línea de Málaga
+    assert [(leg.line_id, leg.to_node_id) for leg in route.legs] == [
+        (LAV, CORDOBA),
+        (LAV, "bif-malaga"),
+        (LAV_MALAGA, malaga),
+    ]
+    assert sum(leg.length_km for leg in route.legs) == pytest.approx(295.8, abs=0.11)
+    # el tramo entre la bifurcación y Córdoba se recorre dos veces, y Córdoba cuenta una vez
+    between = f"{LAV}:cordoba:bif-malaga"
+    assert route.segment_ids.count(between) == 2 and route.via.count("Córdoba") == 1
+    # en sentido contrario, lo mismo
+    back = find_routes(graph, malaga, sevilla)[0]
+    assert (back.length_km, back.reverse_node_ids) == (295.8, [CORDOBA])
+    assert back.segment_ids == route.segment_ids[::-1]
+    # con el tramo hasta Córdoba cerrado no hay dónde invertir la marcha: no hay recorrido corto
+    closed = find_routes(graph, sevilla, malaga, Scenario(closures=[between]))
+    assert all(r.length_km > 2 * 295.8 for r in closed)
+    assert shortest_route(graph, sevilla, malaga) == route
+
+
+def test_no_route_turns_where_the_tracks_do_not_let_it(graph: Graph) -> None:
+    """Entre las estaciones principales que son nudo o cabecera, ninguna pareja se queda sin recorrido y
+    ningún recorrido encadena, en un nodo que no es estación, dos tramos que salen de él por el
+    mismo lado: o salen por lados opuestos, o es el mismo tramo y el nodo es la estación en la
+    que se invierte la marcha."""
+    cities = sorted(
+        node_id
+        for node_id, node in graph.nodes.items()
+        if node.kind == "estacion"
+        and node.rank == "principal"
+        # los nudos, donde se juntan dos líneas, y las cabeceras, donde acaba una
+        and (
+            len({e.line_id for e in graph.edges_at(node_id)}) > 1
+            or len(graph.edges_at(node_id)) == 1
+        )
+    )
+    assert len(cities) > 40
+    reversing = 0
+    for i, start in enumerate(cities):
+        for end in cities[i + 1 :]:
+            route = shortest_route(graph, start, end)
+            assert route is not None, (start, end)
+            reversing += bool(route.reverse_node_ids)
+            for node_id, before, after in _turns_made(graph, route):
+                assert before != after, (start, end, node_id)
+                sides = graph.turns[node_id]
+                assert sides[before] != sides[after], (start, end, node_id)
+            for node_id in route.reverse_node_ids:
+                assert graph.nodes[node_id].kind == "estacion"
+    assert reversing > 0
+    # y lo mismo los que enseña el comparador, en unas cuantas parejas que cruzan Madrid
+    for start, end in (
+        (MADRID, "bilbao-abando"),
+        ("barcelona-sants", "valladolid-campo-grande"),
+        ("sevilla-santa-justa", "malaga-maria-zambrano"),
+        ("merida", "sevilla-santa-justa"),
+    ):
+        found = find_routes(graph, start, end)
+        assert found
+        for route in found:
+            for node_id, before, after in _turns_made(graph, route):
+                assert graph.turns[node_id][before] != graph.turns[node_id][after]
+
+
 def _ends(graph: Graph, segment_id: str) -> tuple[str, str]:
     edge = graph.edge(segment_id)
     assert edge is not None
@@ -652,10 +764,10 @@ def test_detours_of_a_closure_between_madrid_and_ciudad_real(graph: Graph) -> No
         954.1,
         967.0,
         1134.2,
-        1252.2,
+        1358.3,  # invierte la marcha en Cuenca: en la bifurcación de Albacete no se puede girar
         1379.2,
         1391.8,
-        1431.4,
+        1537.5,
     ]
     assert (
         LAV_ALICANTE in everything[2].route.line_ids
@@ -714,7 +826,7 @@ def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph
     assert by_cordoba.route.length_km == 417.4 and "Córdoba" in by_cordoba.route.via
     # la vuelta por Granada y Córdoba (689,5 km) se aparta del de Córdoba en Linares-Baeza y
     # recorre 399,1 km para lo que aquel hace en 127: más del doble, se omite; y lo mismo la
-    # vuelta por Alcázar de San Juan, Albacete y Cuenca (606,9 km) y las dos que suben a Barcelona
+    # vuelta por Alcázar de San Juan, Albacete y Cuenca (664,3 km, invirtiendo la marcha en Madrid) y las dos que suben a Barcelona
     # y bajan por la costa y por Valencia, y otras dos que van de Barcelona a La Feredat por la
     # costa de Tarragona, y las que pasan por Xàtiva: son trece, y sin descartar ninguno se
     # listan doce
@@ -723,20 +835,20 @@ def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph
     assert [d.route.length_km for d in everything] == [
         366.9,
         417.4,
-        606.9,
+        664.3,  # por Albacete y Cuenca, invirtiendo la marcha en Madrid-Puerta de Atocha
         689.5,
-        1031.7,
-        1358.6,
-        1485.2,
+        1089.1,
+        1464.7,
         1485.5,
-        1537.8,
-        1664.4,
+        1542.6,
+        1643.9,
         1664.7,
-        1757.8,
+        1721.8,
+        1815.2,
     ]
     by_granada, by_barcelona = everything[3], everything[6]
     assert by_granada.route.length_km == 689.5 and "Granada" in by_granada.route.via
-    assert by_barcelona.route.length_km == 1485.2
+    assert by_barcelona.route.length_km == 1485.5
     assert {"Calatayud", "Castelló de la Plana"} <= set(by_barcelona.route.via)
 
 
@@ -781,13 +893,15 @@ def test_a_route_that_strays_far_from_a_shorter_one_is_dropped(graph: Graph) -> 
 
     Mide 666,4 km frente a 363,9 km, menos del doble, pero desde Ciudad Real, donde se aparta del
     más corto, recorre 366,9 km para lo que el otro hace en 64,4 km. Lo mismo el que baja de la
-    bifurcación de Málaga a Granada y vuelve por Moreda (614,4 km).
+    bifurcación de Málaga a Granada y vuelve por Moreda (643,3 km: para tomar la línea de
+    Málaga en su bifurcación tiene que llegar a Córdoba e invertir la marcha).
     """
     sevilla = "sevilla-santa-justa"
     assert [r.length_km for r in find_routes(graph, sevilla, MANZANARES)] == [363.9, 371.2]
     unfiltered = find_routes(graph, sevilla, MANZANARES, max_ratio=None)
-    assert [r.length_km for r in unfiltered][:4] == [363.9, 371.2, 614.4, 666.4]
+    assert [r.length_km for r in unfiltered][:4] == [363.9, 371.2, 643.3, 666.4]
     assert "granada" in unfiltered[2].node_ids
+    assert unfiltered[2].reverse_node_ids == [CORDOBA]
     assert MADRID in unfiltered[3].node_ids and CIUDAD_REAL in unfiltered[3].node_ids
     # los dos caminos que se apartan en Córdoba se conservan: 244,6 km frente a 237,2 km
     assert [r.length_km for r in find_routes(graph, MADRID, CORDOBA)] == [
@@ -828,13 +942,16 @@ def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
         )
         assert route.via == ["Guadalajara-Yebes", "Calatayud", "Camp de Tarragona"]
     # en sentido contrario, lo mismo
-    there, by_tarragona, _, by_valencia, _, by_albacete, _, by_xativa = find_routes(
-        graph, MADRID, BARCELONA
-    )
+    there, by_tarragona, _, by_valencia, _, by_xativa = find_routes(graph, MADRID, BARCELONA)
     assert by_xativa.length_km == 991.8 and "Alicante-Terminal" in by_xativa.via
     back, *_ = find_routes(graph, BARCELONA, MADRID)
-    assert by_tarragona.length_km == 632.0 and by_tarragona.line_ids == [BCN, MED, COSTA]
-    assert by_albacete.length_km == 864.8 and "Albacete-Los Llanos" in by_albacete.via
+    # por la costa de Tarragona: de Camp de Tarragona se baja por la línea de València hasta
+    # Cambrils, se invierte la marcha y se sube a Tarragona, porque en la bifurcación de La
+    # Feredat las dos líneas salen hacia el mismo lado (648,5 km; sin la regla de giro, 632,0)
+    assert by_tarragona.length_km == 648.5 and by_tarragona.line_ids == [BCN, MED, COSTA]
+    assert by_tarragona.reverse_node_ids == ["cambrils"]
+    # los que iban por Alcázar y Albacete a València (844,6 y 864,8 km) ya no salen: giraban en
+    # la bifurcación de Albacete
     assert by_valencia.length_km == 755.1 and "València-Joaquín Sorolla" in by_valencia.via
     assert (back.length_km, back.segment_ids) == (620.1, there.segment_ids[::-1])
     # con el baipás de Zaragoza cerrado el recorrido entra en la estación, 4,9 km más; con un
@@ -845,11 +962,9 @@ def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
     closed = Scenario(closures=[f"{BCN}:zaragoza-delicias:bif-huesca"])
     assert [r.length_km for r in find_routes(graph, MADRID, BARCELONA, closed)] == [
         620.1,
-        632.0,
+        648.5,
         734.8,
         755.1,
-        844.6,
-        864.8,
         971.5,
         991.8,
     ]
@@ -859,7 +974,8 @@ def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
     # (y desde que está la línea de la costa de Tarragona, por Camp de Tarragona y La Feredat)
     onwards, by_coast = find_routes(graph, ZARAGOZA, BARCELONA)
     assert onwards.length_km == 318.5 and AROUND_LLEIDA in onwards.segment_ids
-    assert (by_coast.length_km, by_coast.line_ids) == (330.4, [BCN, MED, COSTA])
+    assert (by_coast.length_km, by_coast.line_ids) == (347.0, [BCN, MED, COSTA])
+    assert by_coast.reverse_node_ids == ["cambrils"]
     assert to_zaragoza.length_km + onwards.length_km == pytest.approx(625.0)
     # un trecho que va entero por un baipás es del baipás
     (only,) = find_routes(graph, "bif-moncasi", "bif-canal-imperial")
@@ -883,9 +999,10 @@ def test_a_closed_station_stretch_is_saved_by_its_bypass_and_the_other_way_round
         # vuelta de Madrid a Camp de Tarragona por València, por Cuenca o por Albacete, y desde
         # que está la de Tarragona a Barcelona, la de Madrid a Barcelona-Sants por València y la
         # costa, por Cuenca o por Albacete, y las dos que pasan por Alicante y Xàtiva; otros
-        # veintiséis, más largos, se omiten
-        detour, ring, by_coast, by_albacete, _, by_xativa, _ = found.detours
-        assert found.omitted == 26 and by_albacete.route.length_km == 765.1
+        # veintiocho, más largos, se omiten (los que giraban en la bifurcación de Albacete ya no
+        # se enseñan: ahora invierten la marcha en una estación y quedan entre los largos)
+        detour, ring, by_coast, by_xativa, _ = found.detours
+        assert found.omitted == 28
         assert by_xativa.route.length_km == 892.1
         assert (by_coast.route.to_node_id, by_coast.route.length_km) == (BARCELONA, 734.8)
         assert (ring.route.from_node_id, ring.route.to_node_id) == (MADRID, "camp-de-tarragona")
@@ -907,7 +1024,8 @@ def test_a_closed_station_stretch_is_saved_by_its_bypass_and_the_other_way_round
         "camp-de-tarragona",
         BARCELONA,
     )
-    assert (by_coast.route.length_km, by_coast.route.line_ids) == (111.6, [MED, COSTA])
+    # (invirtiendo la marcha en Cambrils: 128,2 km; sin la regla de giro eran 111,6)
+    assert (by_coast.route.length_km, by_coast.route.line_ids) == (128.2, [MED, COSTA])
 
 
 def test_inverting_the_direction_gives_the_same_routes(graph: Graph) -> None:
@@ -951,6 +1069,13 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         # de su triángulo: de Alicante a Murcia hay uno, por el enlace
         {"from": "alicante-terminal", "to": MURCIA, "scenario": "", **DEFAULTS},
         {"from": MADRID, "to": MURCIA, "scenario": "", **DEFAULTS},
+        # la regla de giro: de Sevilla a Málaga se invierte la marcha en Córdoba, porque las vías
+        # de la bifurcación de Málaga no dejan girar; de Atocha a Chamartín se va por el túnel y
+        # no doblando en Torrejón de Velasco; de Mérida a Badajoz, por la vía de Aljucén
+        {"from": "sevilla-santa-justa", "to": "malaga-maria-zambrano", "scenario": "", **DEFAULTS},
+        {"from": MADRID, "to": "madrid-chamartin", "scenario": "", **DEFAULTS},
+        {"from": "merida", "to": "badajoz", "scenario": "", **DEFAULTS},
+        {"from": "valladolid-campo-grande", "to": "zamora", "scenario": "", **DEFAULTS},
     ]
     detours: list[dict[str, Any]] = [
         {"segment_id": URDA_CIUDAD_REAL, "scenario": ""},

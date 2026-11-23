@@ -258,6 +258,7 @@ def validate_cmd(
         validate_attributes,
         validate_operators,
         validate_products,
+        validate_turns,
         validate_zones,
     )
 
@@ -301,6 +302,8 @@ def validate_cmd(
     reports.append(validate_operators(context, sources, settings.data_dir))
     # La zona en la que el visor lista cada línea tiene que estar en el registro.
     reports.append(validate_zones(context, settings.data_dir))
+    # En cada bifurcación tiene que saberse de qué lado sale cada tramo: de ahí sale la regla de giro.
+    reports.append(validate_turns(context, settings.data_dir))
     # Las descripciones nombran los trenes con los rótulos de los ficheros vigentes.
     reports.append(validate_products(context, _declared_feeds(sources), settings.data_dir))
     reports.append(attributes)

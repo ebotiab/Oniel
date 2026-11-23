@@ -266,6 +266,10 @@ class NetworkIndexOut(WithAnnotations):
     connection_features: FeatureCollection
     #: Tolerancia con la que se ha simplificado la geometría de los tramos, en metros.
     simplify_tolerance_m: float
+    #: Por cada nodo que no es estación, el lado (0 o 1) por el que sale cada uno de sus tramos:
+    #: dos del mismo lado no se pueden encadenar allí. Se calcula con la geometría completa
+    #: (``oniel.routing.turns``) y viaja aquí para que el visor no tenga que medir ángulos.
+    turns: dict[str, dict[str, int]] = Field(default_factory=dict)
 
 
 class LineDetailOut(WithAnnotations):

@@ -76,10 +76,14 @@ test.describe('Las líneas de Extremadura', () => {
     // por el trazado antiguo de Monfragüe a Cáceres, por Cañaveral: kilómetro y medio menos
     await expect(recorridos.nth(0)).toContainText('444,9 km')
     await expect(recorridos.nth(0)).toContainText('Recorre cuatro líneas')
-    // por la bifurcación San Esteban y la línea de alta velocidad, que es por donde van casi todos los trenes
-    await expect(recorridos.nth(1)).toContainText('446,4 km')
-    await expect(recorridos.nth(1)).toContainText('Bifurcación San Esteban')
-    await expect(recorridos.nth(1)).toContainText('Recorre tres líneas')
+    // por la línea de alta velocidad, entrando en Plasencia: en la bifurcación San Esteban las vías no dejan
+    // pasar de la línea de Madrid a la de Cáceres, y el recorrido llega a Plasencia e invierte la marcha, como
+    // los trenes que paran allí (461,3 km; girando en la bifurcación eran 446,4). Los que no paran van por el
+    // enlace de El Chaparral a Arroyo de la Herrera, que no está cargado
+    await expect(recorridos.nth(1)).toContainText('461,3 km')
+    await expect(recorridos.nth(1).locator('.recorrido-titulo')).toHaveText('Por Plasencia')
+    await expect(recorridos.nth(1).getByTestId('recorrido-inversion')).toHaveText('Invierte la marcha en Plasencia.')
+    await expect(recorridos.nth(1)).toContainText('Recorre cuatro líneas')
   })
 
   test('de Cáceres a Badajoz hay un solo recorrido, por la alta velocidad', async ({ page }) => {

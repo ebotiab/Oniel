@@ -282,6 +282,51 @@ def validate_attributes(
     return {"attributes": lines, "problems": problems}
 
 
+def validate_turns(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+    """Comprueba que en cada nodo que no es estación se sabe de qué lado sale cada tramo.
+
+    De ahí sale la regla de giro del comparador y de los tramos sin otro camino
+    (``oniel.routing.turns``). Un nodo de tres tramos o más en el que dos de ellos no salen ni
+    juntos ni enfrentados no se puede clasificar: es un problema, porque allí los recorridos
+    girarían sin regla. Las líneas que no se pueden construir ya las señala ``validate_attributes``.
+    """
+    from dataclasses import dataclass
+
+    from oniel.routing.turns import turn_sides
+
+    @dataclass(frozen=True)
+    class Leaving:
+        id: str
+        from_node_id: str
+        to_node_id: str
+        status: str
+
+    segments: list[tuple[Leaving, dict[str, Any]]] = []
+    stations: set[str] = set()
+    for path in spec_paths:
+        spec = load_network_spec(path)
+        try:
+            net = build_network(spec, data_dir)
+        except ValueError:
+            continue
+        stations.update(n.spec.id for n in net.nodes if n.spec.kind == "estacion")
+        segments.extend(
+            (
+                Leaving(s.id, s.from_node.spec.id, s.to_node.spec.id, spec.line.status),
+                {"type": "LineString", "coordinates": [list(c) for c in s.coords]},
+            )
+            for s in net.segments
+        )
+    turns, problems = turn_sides(segments, stations)
+    return {
+        "turns": {
+            "nodes": len(turns),
+            "junctions": sum(1 for sides in turns.values() if len(sides) > 2),
+        },
+        "problems": [f"{p.node_id}: no se sabe qué giros permite ({p.detail})" for p in problems],
+    }
+
+
 def unused_route_overrides(reports: Sequence[dict[str, Any]]) -> list[str]:
     """Reglas de recorrido que no encajan con ningún viaje de ninguno de los ficheros validados."""
     used: Counter[tuple[str, str]] = Counter()

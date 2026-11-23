@@ -201,6 +201,11 @@ function Tarjeta({ r, activo, masLargo, onElegir, supuesto, children }: { r: Rec
         </p>
       ))}
       {route.via.length > 0 && <p className="suave">Pasa por {enumerar(route.via.map(shortStop))}.</p>}
+      {r.inversion && (
+        <p className="suave" data-testid="recorrido-inversion">
+          {r.inversion}
+        </p>
+      )}
       {r.baipases && (
         <p className="suave" data-testid="recorrido-baipases">
           {r.baipases}
