@@ -50,7 +50,6 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 - [#260](https://github.com/ebotiab/Oniel/issues/260) Análisis: el comparador da recorridos imposibles por Madrid. De Madrid-Puerta de Atocha a Madrid-Chamartín enseña 65,2 km doblando en Torrejón de Velasco. Hecha la primera parte: el comparador ya no tiene tope de líneas (de Madrid-Puerta de Atocha a Bilbao decía que no había recorrido, y pasaba en 169 de 1.035 parejas de ciudades principales) y dice cuándo los trenes directos van por una vía que no está cargada. Queda la regla de giro en las bifurcaciones, que está medida (`docs/simulacion.md`, «Giros en las bifurcaciones») y pide antes invertir la marcha en las estaciones y cargar tres vías cortas: los túneles de Atocha a Chamartín, la de Aljucén a La Garrovilla y el ramal de Soto de Cerrato.
 - [#261](https://github.com/ebotiab/Oniel/issues/261) Análisis: trenes repetidos al filo de la medianoche. En seis tramos la ficha dice una cifra en el título y otra más abajo, y lista un tren dos veces; es el origen del aviso de claves repetidas.
-- [#262](https://github.com/ebotiab/Oniel/issues/262) Infraestructura: `/api/alternatives` de otro día reinicia la API en producción. Una sola petición devolvió un 502 a los 48 segundos. Comparte la búsqueda con #260.
 
 **Lo que confunde a quien llega.**
 
@@ -61,7 +60,7 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 - [#265](https://github.com/ebotiab/Oniel/issues/265) Datos: un solo criterio de velocidades, electrificación, fuentes y descripciones. Dos líneas cuya velocidad máxima es menor que la de uno de sus tramos, tres escrituras de la electrificación, la descripción de Madrid – Sevilla, cinco veces más corta que las demás.
 
-Cómo se reparten: #263, #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera; #261 también la regenera, porque cambia lo que se exporta. #260 y #262 son de código y comparten la búsqueda de recorridos: se hacen seguidas o en la misma sesión. #267 es de solo documentación: puede ir en paralelo con las demás.
+Cómo se reparten: #263, #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera; #261 también la regenera, porque cambia lo que se exporta. #260 es de código, pero regenera la instantánea al aplicar la regla de giro, y va cuando estén cargadas las tres vías cortas que pide. #267 es de solo documentación: puede ir en paralelo con las demás.
 
 No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). #264 las deja bien dibujadas por los dos extremos; cargarlas es ampliar la red.
 

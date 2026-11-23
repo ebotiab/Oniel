@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import datetime as dt
 import json
 from collections.abc import Sequence
@@ -587,8 +588,14 @@ async def fetch_segment_alternatives(
     if day is None:
         _, _, day = await feed_bounds(conn)
     # El cálculo tarda segundos (`docs/simulacion.md`, «Tramos sin alternativa»): el de cada día se
-    # guarda mientras los datos no cambien.
-    return await cache.remember(("alternatives", day), lambda: _segment_alternatives(conn, day))
+    # guarda mientras los datos no cambien. De uno en uno: si llegan dos peticiones del mismo día
+    # antes de que esté guardado, la segunda espera y lo encuentra hecho.
+    async with _alternatives_lock:
+        return await cache.remember(("alternatives", day), lambda: _segment_alternatives(conn, day))
+
+
+#: Solo un cálculo de los tramos sin otro camino a la vez (`fetch_segment_alternatives`).
+_alternatives_lock = asyncio.Lock()
 
 
 async def _segment_alternatives(conn: asyncpg.Connection, day: dt.date | None) -> AlternativesOut:
@@ -596,6 +603,9 @@ async def _segment_alternatives(conn: asyncpg.Connection, day: dt.date | None) -
     running = {operator_id for line in lines for operator_id in line.operator_ids}
     graph = await fetch_graph(conn)
     paths = await services_repo.service_paths(conn, day) if day else []
+    # Es cálculo puro y dura segundos: en otro hilo, para que la API siga contestando mientras
+    # tanto. Dentro del bucle, `/healthz` no respondía y Render daba la instancia por caída (#262).
+    segments = await asyncio.to_thread(criticality.segment_alternatives, graph, paths)
     return AlternativesOut(
         date=day,
         line_ids=[line.id for line in lines],
@@ -606,7 +616,7 @@ async def _segment_alternatives(conn: asyncpg.Connection, day: dt.date | None) -
         ],
         scope_note=criticality.SCOPE_NOTE,
         method=criticality.METHOD,
-        segments=criticality.segment_alternatives(graph, paths),
+        segments=segments,
     )
 
 
