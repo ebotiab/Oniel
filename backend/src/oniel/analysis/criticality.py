@@ -53,12 +53,6 @@ METHOD = (
     " las interrupciones vigentes: cada tramo se cierra por separado sobre la red completa."
 )
 
-#: Cambios de línea con los que se busca primero el otro camino de un grupo de trenes. El
-#: comparador ya no tiene tope (``DEFAULT_MAX_CHANGES``); aquí se conserva el que tenía, cinco,
-#: porque esta búsqueda se repite miles de veces y casi siempre basta: solo si no da ningún camino
-#: se repite sin tope.
-FIRST_MAX_CHANGES = 5
-
 
 @dataclass(frozen=True)
 class ServicePath:
@@ -190,14 +184,9 @@ def segment_alternatives(
         group_outs: list[SegmentTrainGroupOut] = []
         for (start, path_ids), operators in groups.items():
             own = route_along(graph, start, path_ids)
-            # El más corto, sin el descarte del comparador (que compara caminos entre sí): el
-            # tope se aplica contra el recorrido del propio tren. Si no hay ninguno con los
-            # cambios de línea de la primera búsqueda, se busca sin tope: un tren que cruza Madrid
-            # de una línea a otra (de Valladolid a Valencia) puede necesitar más para rodear un
-            # tramo, y ese rodeo también es otro camino.
-            shortest = shortest_route(
-                graph, own.from_node_id, own.to_node_id, closed, max_changes=FIRST_MAX_CHANGES
-            ) or shortest_route(graph, own.from_node_id, own.to_node_id, closed, max_changes=None)
+            # El más corto, sin el descarte del comparador (que compara caminos entre sí) y sin
+            # tope de cambios de línea: el tope se aplica contra el recorrido del propio tren.
+            shortest = shortest_route(graph, own.from_node_id, own.to_node_id, closed)
             other = other_way(own, [shortest] if shortest is not None else [], max_ratio)
             group_outs.append(
                 SegmentTrainGroupOut(

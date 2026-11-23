@@ -5279,6 +5279,303 @@
           "reverse_node_ids": []
         }
       ]
+    },
+    {
+      "from": "sevilla-santa-justa",
+      "to": "malaga-maria-zambrano",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "sevilla-santa-justa",
+          "from_name": "Sevilla-Santa Justa",
+          "to_node_id": "malaga-maria-zambrano",
+          "to_name": "Málaga-María Zambrano",
+          "length_km": 295.8,
+          "time_min": 73,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "lav-cordoba-malaga"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "sevilla-santa-justa",
+              "from_name": "Sevilla-Santa Justa",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "bif-malaga",
+              "to_name": "Bifurcación Málaga-Alta Velocidad",
+              "length_km": 14.4,
+              "time_min": 3,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "bif-malaga",
+              "from_name": "Bifurcación Málaga-Alta Velocidad",
+              "to_node_id": "malaga-maria-zambrano",
+              "to_name": "Málaga-María Zambrano",
+              "length_km": 154.7,
+              "time_min": 36,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Córdoba",
+            "Puente Genil-Herrera",
+            "Antequera-Santa Ana"
+          ],
+          "node_ids": [
+            "sevilla-santa-justa",
+            "majarabique",
+            "bif-malaga",
+            "cordoba",
+            "bif-malaga",
+            "la-marota",
+            "santaella",
+            "puente-genil-herrera",
+            "antequera-santa-ana",
+            "bif-gobantes",
+            "pb-alora",
+            "paet-los-prados",
+            "malaga-maria-zambrano"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-cordoba-malaga:bif-malaga:la-marota",
+            "lav-cordoba-malaga:la-marota:santaella",
+            "lav-cordoba-malaga:santaella:puente-genil-herrera",
+            "lav-cordoba-malaga:puente-genil-herrera:antequera-santa-ana",
+            "lav-cordoba-malaga:antequera-santa-ana:bif-gobantes",
+            "lav-cordoba-malaga:bif-gobantes:pb-alora",
+            "lav-cordoba-malaga:pb-alora:paet-los-prados",
+            "lav-cordoba-malaga:paet-los-prados:malaga-maria-zambrano"
+          ],
+          "reverse_node_ids": [
+            "cordoba"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "madrid-puerta-de-atocha",
+      "to": "madrid-chamartin",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "madrid-puerta-de-atocha",
+          "from_name": "Madrid-Puerta de Atocha",
+          "to_node_id": "madrid-chamartin",
+          "to_name": "Madrid-Chamartín",
+          "length_km": 7.6,
+          "time_min": 8,
+          "single_track_km": 0.0,
+          "line_ids": [
+            "enlace-atocha-chamartin"
+          ],
+          "legs": [
+            {
+              "line_id": "enlace-atocha-chamartin",
+              "line_name": "Túnel de Atocha a Chamartín por Recoletos",
+              "from_node_id": "madrid-puerta-de-atocha",
+              "from_name": "Madrid-Puerta de Atocha",
+              "to_node_id": "madrid-chamartin",
+              "to_name": "Madrid-Chamartín",
+              "length_km": 7.6,
+              "time_min": 8,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [],
+          "node_ids": [
+            "madrid-puerta-de-atocha",
+            "madrid-recoletos",
+            "madrid-nuevos-ministerios",
+            "madrid-chamartin"
+          ],
+          "segment_ids": [
+            "enlace-atocha-chamartin:madrid-puerta-de-atocha:madrid-recoletos",
+            "enlace-atocha-chamartin:madrid-recoletos:madrid-nuevos-ministerios",
+            "enlace-atocha-chamartin:madrid-nuevos-ministerios:madrid-chamartin"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "merida",
+      "to": "badajoz",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "merida",
+          "from_name": "Mérida",
+          "to_node_id": "badajoz",
+          "to_name": "Badajoz",
+          "length_km": 58.9,
+          "time_min": 21,
+          "single_track_km": 48.4,
+          "line_ids": [
+            "ramal-merida",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "ramal-merida",
+              "line_name": "Línea convencional Aljucén – Mérida",
+              "from_node_id": "merida",
+              "from_name": "Mérida",
+              "to_node_id": "aljucen",
+              "to_name": "Aljucén",
+              "length_km": 5.7,
+              "time_min": 3,
+              "single_track_km": 5.7
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "aljucen",
+              "from_name": "Aljucén",
+              "to_node_id": "badajoz",
+              "to_name": "Badajoz",
+              "length_km": 53.2,
+              "time_min": 17,
+              "single_track_km": 42.6
+            }
+          ],
+          "via": [
+            "Montijo"
+          ],
+          "node_ids": [
+            "merida",
+            "aljucen",
+            "garrovilla-las-vegas",
+            "montijo",
+            "montijo-el-molino",
+            "guadiana",
+            "bif-san-nicolas",
+            "badajoz"
+          ],
+          "segment_ids": [
+            "ramal-merida:aljucen:merida",
+            "enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas",
+            "lav-plasencia-badajoz:garrovilla-las-vegas:montijo",
+            "lav-plasencia-badajoz:montijo:montijo-el-molino",
+            "lav-plasencia-badajoz:montijo-el-molino:guadiana",
+            "lav-plasencia-badajoz:guadiana:bif-san-nicolas",
+            "lav-plasencia-badajoz:bif-san-nicolas:badajoz"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "valladolid-campo-grande",
+      "to": "zamora",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "valladolid-campo-grande",
+          "from_name": "Valladolid-Campo Grande",
+          "to_node_id": "zamora",
+          "to_name": "Zamora",
+          "length_km": 274.6,
+          "time_min": 58,
+          "single_track_km": 67.8,
+          "line_ids": [
+            "lav-madrid-valladolid",
+            "lav-olmedo-ourense"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-valladolid",
+              "line_name": "Línea de alta velocidad Madrid – Segovia – Valladolid",
+              "from_node_id": "valladolid-campo-grande",
+              "from_name": "Valladolid-Campo Grande",
+              "to_node_id": "segovia-guiomar",
+              "to_name": "Segovia-Guiomar",
+              "length_km": 110.8,
+              "time_min": 22,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-valladolid",
+              "line_name": "Línea de alta velocidad Madrid – Segovia – Valladolid",
+              "from_node_id": "segovia-guiomar",
+              "from_name": "Segovia-Guiomar",
+              "to_node_id": "bif-medina",
+              "to_name": "Bifurcación Medina",
+              "length_km": 65.4,
+              "time_min": 13,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-olmedo-ourense",
+              "line_name": "Línea de alta velocidad Olmedo – Zamora – Ourense",
+              "from_node_id": "bif-medina",
+              "from_name": "Bifurcación Medina",
+              "to_node_id": "zamora",
+              "to_name": "Zamora",
+              "length_km": 98.4,
+              "time_min": 22,
+              "single_track_km": 67.8
+            }
+          ],
+          "via": [
+            "Segovia-Guiomar",
+            "Medina del Campo Alta Velocidad"
+          ],
+          "node_ids": [
+            "valladolid-campo-grande",
+            "bif-medina",
+            "garcillan",
+            "segovia-guiomar",
+            "garcillan",
+            "bif-medina",
+            "medina-del-campo-av",
+            "toro-av",
+            "coreses",
+            "zamora"
+          ],
+          "segment_ids": [
+            "lav-madrid-valladolid:bif-medina:valladolid-campo-grande",
+            "lav-madrid-valladolid:garcillan:bif-medina",
+            "lav-madrid-valladolid:segovia-guiomar:garcillan",
+            "lav-madrid-valladolid:segovia-guiomar:garcillan",
+            "lav-madrid-valladolid:garcillan:bif-medina",
+            "lav-olmedo-ourense:bif-medina:medina-del-campo-av",
+            "lav-olmedo-ourense:medina-del-campo-av:toro-av",
+            "lav-olmedo-ourense:toro-av:coreses",
+            "lav-olmedo-ourense:coreses:zamora"
+          ],
+          "reverse_node_ids": [
+            "segovia-guiomar"
+          ]
+        }
+      ]
     }
   ],
   "detours": [
@@ -5463,7 +5760,7 @@
             "closed_line_length_km": 343.6
           }
         ],
-        "omitted": 28
+        "omitted": 19
       }
     },
     {
@@ -5598,7 +5895,7 @@
             "closed_line_length_km": 440.7
           }
         ],
-        "omitted": 9
+        "omitted": 2
       }
     },
     {
@@ -5692,7 +5989,7 @@
             "closed_line_length_km": 64.4
           }
         ],
-        "omitted": 15
+        "omitted": 10
       }
     },
     {
@@ -6150,7 +6447,7 @@
             "closed_line_length_km": 358.0
           }
         ],
-        "omitted": 9
+        "omitted": 6
       }
     },
     {
@@ -6277,7 +6574,7 @@
             "closed_line_length_km": 173.7
           }
         ],
-        "omitted": 17
+        "omitted": 12
       }
     },
     {
@@ -7235,7 +7532,7 @@
             "closed_line_length_km": 627.0
           }
         ],
-        "omitted": 44
+        "omitted": 16
       }
     },
     {
@@ -7285,7 +7582,7 @@
             "closed_line_length_km": 14.3
           }
         ],
-        "omitted": 48
+        "omitted": 32
       }
     }
   ]

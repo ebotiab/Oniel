@@ -9,7 +9,6 @@ from typing import Any
 import pytest
 
 from oniel.analysis.criticality import (
-    FIRST_MAX_CHANGES,
     SCOPE_NOTE,
     ServicePath,
     corridor,
@@ -31,6 +30,7 @@ from oniel.routing import (
     build_graph,
     find_routes,
     route_along,
+    shortest_route,
 )
 
 DATA = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
@@ -142,55 +142,44 @@ def test_towards_sevilla_there_is_no_other_way_in_the_loaded_lines(graph: Graph)
     south = _of(result, f"{LAV}:bif-malaga:majarabique")
     assert (south.trains, south.with_alternative, south.without_alternative) == (1, 0, 1)
     assert south.groups[0].alternative is None
-    # entre Córdoba y la bifurcación de Málaga sí lo hay desde que Granada está unida por los dos
-    # lados: por Linares-Baeza, Moreda, Granada y Antequera, 340 km más largo
+    # entre Córdoba y la bifurcación de Málaga tampoco. Existe la vuelta por Linares-Baeza,
+    # Moreda, Granada y Antequera, pero llega a la bifurcación de Málaga por la línea de Málaga,
+    # que sale de ella hacia el mismo lado que la de Sevilla: para seguir a Sevilla habría que
+    # llegar a Córdoba e invertir la marcha, y ese es el tramo cerrado
     first = _of(result, CORDOBA_BIF_MALAGA)
-    assert (first.with_alternative, first.without_alternative) == (1, 0)
-    assert first.groups[0].alternative is not None
-    assert first.groups[0].alternative.line_ids == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA, LAV]
-    assert first.groups[0].alternative.extra_km == 340.2
+    assert (first.with_alternative, first.without_alternative) == (0, 1)
+    assert first.groups[0].alternative is None
+    # un tren a Málaga sí la tiene: llega a su línea sin pasar por la bifurcación hacia Sevilla
+    to_malaga = [ServicePath("ave-2", "renfe", _path(graph, MADRID, "malaga-maria-zambrano"))]
+    by_granada = _of(segment_alternatives(graph, to_malaga), CORDOBA_BIF_MALAGA)
+    assert (by_granada.with_alternative, by_granada.without_alternative) == (1, 0)
+    alternative = by_granada.groups[0].alternative
+    assert alternative is not None
+    assert alternative.line_ids == [CONV, LBMG, LAV_GRANADA, LAV_MALAGA]
     # el mismo tren, al norte de Córdoba, sí tiene otro camino
     north = _of(result, ADAMUZ_CORDOBA)
     assert north.without_alternative == 0
     assert north.groups[0].to_node_id == SEVILLA
 
 
-def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparator_allows(
-    lines: list[LineSummary],
-) -> None:
-    """Un tren de Valencia a Valladolid cruza Madrid por Chamartín. Con un tramo cerrado entre
-    Torrejón de Velasco y la bifurcación de Albacete, su otro camino baja a Albacete, sube por
-    Alcázar de San Juan a Madrid-Puerta de Atocha y vuelve a Torrejón de Velasco para tomar el
-    túnel: seis cambios de línea, uno más de los de la primera búsqueda (``FIRST_MAX_CHANGES``). Se
-    prueba sin la línea de València a Camp de Tarragona, que da a ese tren un rodeo más corto
-    en cambios de línea por Barcelona, y sin el túnel de Atocha a Chamartín, que le ahorra la
-    vuelta por Torrejón de Velasco."""
-    tunnel = "enlace-atocha-chamartin"
-    index = NetworkIndexOut.model_validate(_read("index.json"))
-    segments = [
-        SegmentOut(id=f.id, **f.properties)
-        for f in index.segment_features.features
-        if not f.id.startswith((f"{MEDITERRANEO}:", f"{tunnel}:"))
-    ]
-    kept = [line for line in lines if line.id not in (MEDITERRANEO, tunnel)]
-    graph = build_graph(kept, index.nodes, segments, index.turns)
+def test_another_way_counts_however_many_lines_it_chains(graph: Graph) -> None:
+    """El otro camino de un tren es el más corto que hay, encadene las líneas que encadene.
+
+    Un tren de Valencia a Valladolid cruza Madrid por Chamartín. Con un tramo cerrado entre
+    Torrejón de Velasco y la bifurcación de Albacete, su otro camino es el más corto que da el
+    grafo con ese tramo cerrado, sin tope de cambios de línea (hasta noviembre de 2026 se buscaba
+    primero con un tope de cinco)."""
     valencia, valladolid = "valencia-joaquin-sorolla", "valladolid-campo-grande"
     closed_segment = f"{LAV_VALENCIA}:horcajada:cuenca-fernando-zobel"
     own = _path(graph, valencia, valladolid)
     assert closed_segment in own
-    assert not find_routes(
-        graph,
-        valencia,
-        valladolid,
-        Scenario(closures=[closed_segment]),
-        max_changes=FIRST_MAX_CHANGES,
-    )
+    shortest = shortest_route(graph, valencia, valladolid, Scenario(closures=[closed_segment]))
+    assert shortest is not None and len(shortest.legs) > 2
     segment = _of(segment_alternatives(graph, [ServicePath("ave-1", "renfe", own)]), closed_segment)
     assert (segment.with_alternative, segment.without_alternative) == (1, 0)
     alternative = segment.groups[0].alternative
     assert alternative is not None
-    assert ALBACETE in alternative.line_ids and CONV in alternative.line_ids
-    assert alternative.extra_km == pytest.approx(167.1, abs=0.2)
+    assert (alternative.length_km, alternative.line_ids) == (shortest.length_km, shortest.line_ids)
 
 
 def test_trains_are_grouped_by_their_way_through_the_loaded_lines(graph: Graph) -> None:

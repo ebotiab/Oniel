@@ -411,6 +411,20 @@ class ClosureDetours(BaseModel):
 _Step = tuple[Edge, str]
 
 
+def _corner(graph: Graph, previous: Edge, edge: Edge) -> bool:
+    """Si pasar de un tramo a otro es doblar una esquina del triángulo de un enlace.
+
+    Ningún recorrido lo hace (``Graph.link_sides``), tampoco invirtiendo la marcha en la estación
+    que haya en la esquina: del túnel de Atocha a Chamartín no se sale hacia el sur por la alta
+    velocidad.
+    """
+    sides = graph.link_sides()
+    if previous.id not in sides or edge.id not in sides:
+        return False
+    (link, side), (other_link, other_side) = sides[previous.id], sides[edge.id]
+    return link == other_link and side != other_side
+
+
 def _must_reverse(graph: Graph, node_id: str, previous: Edge, edge: Edge) -> bool:
     """Si para pasar de un tramo a otro en ese nodo hay que invertir la marcha.
 
@@ -462,9 +476,15 @@ def _excursion(
                 continue
             if last is None:
                 # La salida: solo por un tramo del lado opuesto al de llegada.
-                if graph.turns[node_id].get(edge.id) in (None, side):
+                if graph.turns[node_id].get(edge.id) in (None, side) or _corner(
+                    graph, previous, edge
+                ):
                     continue
-            elif edge.id == last.id or _must_reverse(graph, at, last, edge):
+            elif (
+                edge.id == last.id
+                or _corner(graph, last, edge)
+                or _must_reverse(graph, at, last, edge)
+            ):
                 continue
             heapq.heappush(queue, (length + edge.length_km, (*ids, edge.id), edge.other(at)))
     return None
@@ -526,13 +546,17 @@ def _walk(
             if nxt in visited or not edge_ok(edge):
                 continue
             previous = path[-1][0] if path else None
+            if previous is not None and _corner(graph, previous, edge):
+                continue
             added: list[_Step] = [(edge, nxt)]
             if previous is not None and _must_reverse(graph, node_id, previous, edge):
                 key = (node_id, previous.id)
                 if key not in excursions:
                     excursions[key] = _excursion(graph, node_id, previous, edge_ok)
                 excursion = excursions[key]
-                if excursion is None:
+                # Una ida y vuelta que pasa por el origen o por una meta no es otro recorrido: es
+                # el mismo viaje empezado antes o acabado después.
+                if excursion is None or any(n == start or is_goal(n) for _, n in excursion):
                     continue
                 added = [*excursion, (edge, nxt)]
             total = changes
@@ -850,7 +874,7 @@ def _shortest_walk(
         for edge in graph.edges_at(node_id):
             added: Sequence[_Step] = ((edge, edge.other(node_id)),)
             if previous is not None:
-                if edge.id == previous.id:
+                if edge.id == previous.id or _corner(graph, previous, edge):
                     continue
                 if _must_reverse(graph, node_id, previous, edge):
                     key = ("excursion", node_id, previous.id)

@@ -70,6 +70,13 @@ export interface Graph {
    * estación e invertir la marcha (`excursion`).
    */
   turns: Turns
+  /**
+   * De cada tramo que es lado del triángulo de un enlace, de qué enlace y qué lado: el enlace (0) y
+   * el trecho de cada una de las dos líneas desde un extremo del enlace hasta el nodo en el que se
+   * juntan. Las vías de un triángulo así no dejan doblar sus esquinas: de un lado a otro solo se
+   * pasa invirtiendo la marcha, y un recorrido no lo hace.
+   */
+  linkSides: Map<string, readonly [string, number]>
   adjacent: Map<string, Edge[]>
 }
 
@@ -107,7 +114,49 @@ function makeGraph(
       else adjacent.set(end, [edge])
     }
   }
-  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, turns, adjacent }
+  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, turns, linkSides: linkSides(edges, lineKm, bypassOf, linkOf), adjacent }
+}
+
+/** Los lados del triángulo de cada enlace, con la misma regla que el servidor (`Graph.link_sides`). */
+function linkSides(edges: Edge[], lineKm: Graph['lineKm'], bypassOf: Graph['bypassOf'], linkOf: Graph['linkOf']): Graph['linkSides'] {
+  const sides = new Map<string, readonly [string, number]>()
+  for (const [lineId, parent] of linkOf) {
+    const own = lineKm.get(lineId)
+    const onParent = lineKm.get(parent)
+    if (!own || own.size < 2 || !onParent) continue
+    const ids = [...own.keys()]
+    const ends = [ids.reduce((x, y) => (own.get(y)! < own.get(x)! ? y : x)), ids.reduce((x, y) => (own.get(y)! > own.get(x)! ? y : x))]
+    const joins = ends.filter((n) => onParent.has(n))
+    const away = ends.filter((n) => !onParent.has(n))
+    if (joins.length !== 1 || away.length !== 1) continue
+    const [join, far] = [joins[0]!, away[0]!]
+    let best: { around: number; other: string; apex: string } | null = null
+    for (const other of [...lineKm.keys()].sort()) {
+      const km = lineKm.get(other)!
+      if (other === lineId || other === parent || !km.has(far) || bypassOf.has(other) || linkOf.has(other)) continue
+      for (const apex of [...km.keys()].sort()) {
+        if (!onParent.has(apex) || apex === far || apex === join) continue
+        const around = Math.abs(km.get(apex)! - km.get(far)!) + Math.abs(onParent.get(apex)! - onParent.get(join)!)
+        if (best === null || around < best.around) best = { around, other, apex }
+      }
+    }
+    if (best === null) continue
+    for (const edge of edges) if (edge.line_id === lineId) sides.set(edge.id, [lineId, 0])
+    const others: [string, string, string][] = [
+      [best.other, far, best.apex],
+      [parent, best.apex, join],
+    ]
+    others.forEach(([side, a, b], i) => {
+      const km = lineKm.get(side)!
+      const [lo, hi] = [Math.min(km.get(a)!, km.get(b)!), Math.max(km.get(a)!, km.get(b)!)]
+      for (const edge of edges) {
+        if (edge.line_id !== side || !km.has(edge.a) || !km.has(edge.b)) continue
+        const [near, beyond] = [Math.min(km.get(edge.a)!, km.get(edge.b)!), Math.max(km.get(edge.a)!, km.get(edge.b)!)]
+        if (lo - KM_TOLERANCE <= near && beyond <= hi + KM_TOLERANCE) sides.set(edge.id, [lineId, i + 1])
+      }
+    })
+  }
+  return sides
 }
 
 /**
@@ -194,6 +243,15 @@ function mustReverse(graph: Graph, node: string, previous: Edge, edge: Edge): bo
   return side !== undefined && side === graph.turns[node]?.[edge.id]
 }
 
+/**
+ * Si pasar de un tramo a otro es doblar una esquina del triángulo de un enlace. Ningún recorrido lo
+ * hace, tampoco invirtiendo la marcha en la estación que haya en la esquina.
+ */
+function corner(graph: Graph, previous: Edge, edge: Edge): boolean {
+  const [from, to] = [graph.linkSides.get(previous.id), graph.linkSides.get(edge.id)]
+  return from !== undefined && to !== undefined && from[0] === to[0] && from[1] !== to[1]
+}
+
 /** El orden del servidor: la longitud y, a igualdad, la lista de tramos. */
 function before(x: { length: number; ids: string[] }, y: { length: number; ids: string[] }): boolean {
   if (x.length !== y.length) return x.length < y.length
@@ -232,8 +290,8 @@ function excursion(graph: Graph, node: string, previous: Edge, edgeOk: (edge: Ed
       if (!edgeOk(edge)) continue
       if (!last) {
         // La salida: solo por un tramo del lado opuesto al de llegada.
-        if (sides[edge.id] === undefined || sides[edge.id] === side) continue
-      } else if (edge.id === last.id || mustReverse(graph, at, last, edge)) continue
+        if (sides[edge.id] === undefined || sides[edge.id] === side || corner(graph, previous, edge)) continue
+      } else if (edge.id === last.id || corner(graph, last, edge) || mustReverse(graph, at, last, edge)) continue
       const next = edge.a === at ? edge.b : edge.a
       queue.push({ length: length + edge.length_km, ids: [...ids, edge.id], steps: [...steps, [edge, next]], at: next })
     }
@@ -268,12 +326,15 @@ function walk(
       const next = edge.a === node ? edge.b : edge.a
       if (visited.has(next) || !edgeOk(edge)) continue
       const previous = path.at(-1)?.[0]
+      if (previous !== undefined && corner(graph, previous, edge)) continue
       let added: Step[] = [[edge, next]]
       if (previous !== undefined && mustReverse(graph, node, previous, edge)) {
         const key = `${node}|${previous.id}`
         if (!excursions.has(key)) excursions.set(key, excursion(graph, node, previous, edgeOk))
         const out = excursions.get(key)
-        if (!out) continue
+        // Una ida y vuelta que pasa por el origen o por una meta no es otro recorrido: es el mismo
+        // viaje empezado antes o acabado después.
+        if (!out || out.some(([, n]) => n === start || isGoal(n))) continue
         added = [...out, [edge, next]]
       }
       let total = changes
