@@ -141,7 +141,7 @@
     "35207": {"node": "casatejada"},
     "30000": {"node": "monfrague"},
     "18000": {"exits": ["bif-planetario"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}},
-    "17000": {"exits": ["bif-planetario"]},
+    "17000": {"exits": ["bif-planetario"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "30002": {"exits": ["bif-san-esteban"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-san-esteban"}},
     "35400": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
     "37500": {"exits": ["bif-el-chaparral"], "via": [{"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},

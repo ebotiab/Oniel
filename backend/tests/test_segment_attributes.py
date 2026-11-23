@@ -251,6 +251,9 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "lav-zaragoza-huesca": 1,
             # los once de Sevilla a Huelva, del mapa 3
             "sevilla-huelva": 11,
+            # los dos enlaces que acaban con unos metros de vía de la línea vecina
+            "enlace-soto-de-cerrato": 1,
+            "enlace-aljucen-la-garrovilla": 1,
         }
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(
@@ -294,6 +297,8 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     dt.date(2026, 11, 18),
                     dt.date(2026, 11, 19),
                     dt.date(2026, 11, 20),
+                    # los tres enlaces de #260
+                    dt.date(2026, 11, 23),
                 )
 
 

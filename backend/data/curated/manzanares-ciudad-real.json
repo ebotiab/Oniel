@@ -63,7 +63,7 @@
     "60301": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
     "60400": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
     "50002": {"exits": ["manzanares"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}},
-    "17000": {"exits": ["manzanares"]},
+    "17000": {"exits": ["manzanares"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "60402": {"exits": ["manzanares"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}, {"line": "alcazar-albacete", "node": "alcazar-de-san-juan"}]},
     "60406": {"exits": ["manzanares"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}, {"line": "alcazar-albacete", "node": "alcazar-de-san-juan"}]},
     "60500": {"exits": ["manzanares"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "manzanares"}, {"line": "alcazar-albacete", "node": "alcazar-de-san-juan"}]},

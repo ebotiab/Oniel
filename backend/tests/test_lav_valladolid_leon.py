@@ -379,5 +379,6 @@ def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> Non
     assert rule.from_stop_id == BURGOS
     assert rule.stop_mappings[BURGOS].exits == ["bif-cerrato"]
     assert [(v.line, v.node) for v in rule.stop_mappings[BURGOS].via] == [
-        ("lav-venta-de-banos-burgos", "bif-soto-de-cerrato")
+        ("enlace-soto-de-cerrato", "bif-cerrato"),
+        ("lav-venta-de-banos-burgos", "bif-soto-de-cerrato"),
     ]

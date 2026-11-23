@@ -265,6 +265,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
         + 4  # los Intercity de Miranda de Ebro a Bilbao
         + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+        + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
     )
     assert (
         await _count(conn, "services", NEWER_ID)
@@ -295,6 +296,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
         + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
         + 4  # los Intercity de Miranda de Ebro a Bilbao
         + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+        + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
     )
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
     # Madrid-Atocha Cercanías y la bifurcación Planetario)
@@ -335,6 +337,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 192 + 448  # la de Castejón a Pamplona, publicados y estimados
     passes += 18 + 66  # la de Miranda de Ebro a Bilbao, publicados y estimados
     passes += 48 + 432  # la de Sevilla a Huelva, publicados y estimados
+    # los tres enlaces de #260: Soto de Cerrato, Aljucén a La Garrovilla y el túnel de Madrid
+    passes += 6 + 128 + (555 + 423)
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
@@ -664,6 +668,7 @@ async def test_importing_the_same_file_again_duplicates_nothing(
         + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
         + 4  # los Intercity de Miranda de Ebro a Bilbao
         + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+        + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
     )
     assert (
         await conn.fetchval("SELECT count(*) FROM services")
@@ -695,6 +700,7 @@ async def test_importing_the_same_file_again_duplicates_nothing(
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
             + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
         )
     )
 
@@ -755,7 +761,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
             + 20  # los regionales de Valladolid a Santander
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
-            + 32,  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 12,  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
             767
             + 37
             + 555
@@ -780,7 +787,8 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
             + 20  # los regionales de Valladolid a Santander
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
-            + 32,  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 12,  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
         ]
     )
     assert result["datasets_removed"] == []
@@ -849,6 +857,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
             + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
         )
     )
     assert sorted(p.name for p in (tmp_path / "historico").iterdir()) == sorted(

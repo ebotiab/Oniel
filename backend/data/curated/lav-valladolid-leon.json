@@ -769,10 +769,16 @@
           "exits": [
             "bif-cerrato"
           ],
-          "via": {
-            "line": "lav-venta-de-banos-burgos",
-            "node": "bif-soto-de-cerrato"
-          }
+          "via": [
+            {
+              "line": "enlace-soto-de-cerrato",
+              "node": "bif-cerrato"
+            },
+            {
+              "line": "lav-venta-de-banos-burgos",
+              "node": "bif-soto-de-cerrato"
+            }
+          ]
         }
       }
     },

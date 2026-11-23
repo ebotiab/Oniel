@@ -15,6 +15,7 @@ from conftest import (
     LAV_MURCIA_SPEC,
     LAV_VALENCIA_SPEC,
     LAV_VALLADOLID_SPEC,
+    LINK_CERRATO_SPEC,
     SOURCES,
 )
 
@@ -123,15 +124,14 @@ def test_nodes_station_junctions_and_passing_loops(line: BuiltNetwork) -> None:
         "rio-arlanzon",
         "estepar",
     }
-    assert {c.id: c.node_id for c in line.spec.connections} == {
-        "ramal-soto-de-cerrato-cerrato": "bif-soto-de-cerrato",
-    }
+    # el ramal de Soto de Cerrato dejó de ir a trazos al cargarse como enlace
+    assert line.spec.connections == []
     assert all(n.offset_m < 50 for n in line.nodes)
 
 
 def test_it_starts_at_the_junction_the_leon_line_defines(line: BuiltNetwork) -> None:
     """La bifurcación Venta de Baños la define la línea de León, que va antes en la importación:
-    esta la incorpora sin moverla, y la de León ya no sale a trazos hacia Burgos. El ramal de
+    esta la incorpora sin moverla, y la de León ya no sale a trazos hacia Burgos. El enlace de
     Soto de Cerrato acaba en la bifurcación Cerrato de aquella."""
     assert {n.spec.id for n in line.nodes if n.spec.shared} == {"bif-venta-de-banos"}
     leon = load_network_spec(LAV_LEON_SPEC)
@@ -140,8 +140,10 @@ def test_it_starts_at_the_junction_the_leon_line_defines(line: BuiltNetwork) -> 
     assert not theirs.shared and ours.position == theirs.position
     assert all("burgos" not in c.id for c in leon.connections)
     cerrato = next(n for n in leon.nodes if n.id == "bif-cerrato").position
-    ramal = next(c for c in line.spec.connections if c.id == "ramal-soto-de-cerrato-cerrato")
-    assert ramal.sketch[-1] == (cerrato.lon, cerrato.lat)
+    link = load_network_spec(LINK_CERRATO_SPEC)
+    assert link.line.link_of == LINE
+    assert [n.id for n in link.nodes] == ["bif-soto-de-cerrato", "bif-cerrato"]
+    assert link.nodes[-1].position == cerrato
 
 
 def test_kilometre_points_continue_those_of_line_080(line: BuiltNetwork) -> None:
@@ -308,12 +310,13 @@ def test_stops_on_each_side_leave_by_the_right_node(spec: NetworkSpec) -> None:
         ("lav-valladolid-leon", "bif-venta-de-banos"),
         ("lav-madrid-valladolid", "valladolid-campo-grande"),
     ]
-    # hacia Palencia y León, por el ramal, que entra en la línea de León por la bifurcación
-    # Cerrato; las de Galicia, sin camino cargado
+    # hacia Palencia y León, por el enlace de Soto de Cerrato, que entra en la línea de León por
+    # la bifurcación Cerrato; las de Galicia, sin camino cargado
     for stop_id in (PALENCIA, LEON):
         assert sm[stop_id].exits == ["bif-soto-de-cerrato"]
         assert [(v.line, v.node) for v in sm[stop_id].via] == [
-            ("lav-valladolid-leon", "bif-cerrato")
+            ("enlace-soto-de-cerrato", "bif-soto-de-cerrato"),
+            ("lav-valladolid-leon", "bif-cerrato"),
         ]
     for stop_id in ("20200", "22100", "31400", "08223"):
         assert sm[stop_id].exits == ["bif-soto-de-cerrato"] and not sm[stop_id].via
