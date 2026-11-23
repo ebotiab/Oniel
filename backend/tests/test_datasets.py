@@ -792,7 +792,7 @@ async def test_import_all_takes_several_files_and_drops_undeclared_datasets(
     assert {d["date"] for d in lines} == {REFERENCE.isoformat()}
     current = {
         "date": REFERENCE.isoformat(),
-        "counts": {k: v for d in lines for k, v in d["counts"].items()},
+        "counts": {k: v for d in lines for k, v in d["counts"].items() if v},
     }
     history = {
         p.parent.name: json.loads(p.read_text(encoding="utf-8"))

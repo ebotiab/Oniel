@@ -561,7 +561,8 @@ async def fetch_line_detail(
         connections=[c for c, _ in await fetch_connections(conn) if c.node_id in node_ids],
         annotations=await fetch_annotations(conn, line_id=line_id),
         date=day,
-        counts={k: v for k, v in counts.items() if k in segment_ids},
+        # Todos los tramos de la línea, también el que no lleva ningún tren ese día: figura con 0.
+        counts={s.id: counts.get(s.id, 0) for s, _ in segments} if day else {},
         counts_by_operator={k: v for k, v in by_operator.items() if k in segment_ids},
         network_max_count=max(counts.values(), default=0),
     )

@@ -25,7 +25,7 @@ Está implementado en `backend/src/oniel/sim/passes.py` y se precalcula en la im
 
 ## Cómo se decide si un tren está afectado
 
-Está en `backend/src/oniel/sim/closure.py`. Para cada tren que recorre el tramo el día elegido (y los del día anterior que terminan después de medianoche) comparamos la ventana con su intervalo de paso:
+Está en `backend/src/oniel/sim/closure.py`. Para cada tren que recorre el tramo el día elegido comparamos la ventana con su intervalo de paso. Un tren es del día en que sale, y esos son los que cuenta la ficha del tramo. El del día anterior que sigue en el tramo pasada la medianoche, margen incluido, se compara también, pero solo entra en el resultado si el cierre lo alcanza, y entonces va rotulado «salió el día anterior»: con un cierre de madrugada aparece, y con uno a mediodía la simulación lista los mismos trenes que la ficha. La comparación:
 
 - Si ni siquiera con los márgenes se tocan → **no afectado**.
 - Si se solapan aun descontando los márgenes → **afectado** (publicado o estimado, según el origen del dato).
