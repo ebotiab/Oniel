@@ -18,7 +18,7 @@
       }
     ],
     "status": "disponible",
-    "description": "Une Sevilla con Huelva: sale de Sevilla-Santa Justa hacia el norte, cruza el Guadalquivir y sigue hacia el oeste por el Aljarafe y el Condado, por Benacazón, La Palma del Condado y Niebla, hasta la estación de Huelva.\n\nEs la línea 440 de Adif, que empieza en la bifurcación Los Naranjos, al norte de Sevilla. Los primeros 6 km, de Santa Justa a esa bifurcación, son de la línea de Córdoba a Sevilla, y por ellos pasan también los regionales de Córdoba, Jaén y Extremadura. Pasada la bifurcación de Cartuja es de vía única hasta Huelva. Se abrió en 1880, y desde 2018 acaba en la estación nueva de Huelva, que sustituyó a la antigua de Huelva-Término.\n\nEn los horarios de Renfe la recorren los regionales de Sevilla a Huelva, que paran en casi todas sus estaciones, y los Alvia e Intercity de Madrid a Huelva, que llegan por la alta velocidad y paran en La Palma del Condado. Casi todos cambian de ancho de vía en Majarabique y entran en la línea por la bifurcación Los Naranjos sin pasar por Santa Justa. Los regionales de Zafra a Huelva solo recorren los últimos kilómetros, desde Huelva-Mercancías. Los trenes de Cercanías de Sevilla que usan sus vías hasta Benacazón no están en los horarios cargados.",
+    "description": "Une Sevilla con Huelva: sale de Sevilla-Santa Justa hacia el norte, cruza el Guadalquivir y sigue hacia el oeste por el Aljarafe y el Condado, por Benacazón, La Palma del Condado y Niebla, hasta la estación de Huelva.\n\nEs la línea 440 de Adif, que empieza en la bifurcación Los Naranjos, al norte de Sevilla. Los primeros 6 km, de Santa Justa a esa bifurcación, son de la línea de Córdoba a Sevilla, y por ellos pasan también los regionales de Córdoba, Jaén y Extremadura. Pasada la bifurcación de Cartuja es de vía única hasta Huelva. Se abrió en 1880, y desde 2018 acaba en la estación nueva de Huelva, que sustituyó a la antigua de Huelva-Término.\n\nEn los horarios de Renfe la recorren los regionales de Sevilla a Huelva, que paran en casi todas sus estaciones, y los Intercity de Madrid a Huelva, que llegan por la alta velocidad y paran en La Palma del Condado. Casi todos cambian de ancho de vía en Majarabique y entran en la línea por la bifurcación Los Naranjos sin pasar por Santa Justa. Los regionales de Zafra a Huelva solo recorren los últimos kilómetros, desde Huelva-Mercancías. Los trenes de Cercanías de Sevilla que usan sus vías hasta Benacazón no están en los horarios cargados.",
     "geometry_source": {
       "source_id": "osm-relation-2424191",
       "parts": [
@@ -73,7 +73,7 @@
         "lon": -5.9590381,
         "lat": 37.4417188
       },
-      "description": "Aquí empieza la línea 440 de Adif y se separa de la de Córdoba a Sevilla. Por ella entran en la línea los Alvia e Intercity de Madrid, que cambian de ancho de vía en el cambiador de Majarabique, a poco más de un kilómetro, y siguen hacia Huelva sin pasar por Santa Justa."
+      "description": "Aquí empieza la línea 440 de Adif y se separa de la de Córdoba a Sevilla. Por ella entran en la línea los Intercity de Madrid, que cambian de ancho de vía en el cambiador de Majarabique, a poco más de un kilómetro, y siguen hacia Huelva sin pasar por Santa Justa."
     },
     {
       "id": "bif-cartuja",
@@ -133,7 +133,7 @@
         "lat": 37.3907939
       },
       "reference_pk_km": 68.6,
-      "description": "La única parada de los Alvia e Intercity de Madrid entre Sevilla y Huelva."
+      "description": "La única parada de los Intercity de Madrid entre Sevilla y Huelva."
     },
     {
       "id": "villarrasa",
@@ -380,7 +380,7 @@
     }
   },
   "corridor_filter": {
-    "description": "Se importan los viajes del GTFS que paran en dos estaciones de la línea o más: los regionales de Sevilla a Huelva y los Alvia e Intercity de Madrid a Huelva. Quedan fuera los que solo paran en una, Sevilla-Santa Justa o Huelva; de ellos, cuatro reglas de recorrido recogen a los que recorren un trecho de la línea: los regionales de Córdoba, Jaén, Cádiz y Extremadura, de Santa Justa a la bifurcación Los Naranjos, y los de Zafra y Jabugo, de Huelva-Mercancías a Huelva.",
+    "description": "Se importan los viajes del GTFS que paran en dos estaciones de la línea o más: los regionales de Sevilla a Huelva y los Intercity de Madrid a Huelva. Quedan fuera los que solo paran en una, Sevilla-Santa Justa o Huelva; de ellos, cuatro reglas de recorrido recogen a los que recorren un trecho de la línea: los regionales de Córdoba, Jaén, Cádiz y Extremadura, de Santa Justa a la bifurcación Los Naranjos, y los de Zafra y Jabugo, de Huelva-Mercancías a Huelva.",
     "min_node_stops": 2
   },
   "route_overrides": [

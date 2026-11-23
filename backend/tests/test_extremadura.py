@@ -152,10 +152,16 @@ CURVE = "bif-granja-las-encinas:garrovilla-las-vegas"
 #: Los viajes del fichero de pruebas por línea: cuántos son y de qué producto («PROXIMDAD» es
 #: como lo escribe el fichero de Renfe).
 PRODUCTS = {
-    MADRID: {"MD": 92, "PROXIMDAD": 64, "ALVIA": 55, "REGIONAL": 30, "REG.EXP.": 26},
-    LAV: {"MD": 190, "REG.EXP.": 71, "ALVIA": 55, "REGIONAL": 14},
-    MERIDA: {"MD": 89, "REG.EXP.": 58, "ALVIA": 37, "REGIONAL": 14},
-    OLD: {"REG.EXP.": 13},
+    MADRID: {
+        "Media Distancia": 92,
+        "Proximidad": 64,
+        "Alvia": 55,
+        "Regional": 30,
+        "Regional Exprés": 26,
+    },
+    LAV: {"Media Distancia": 190, "Regional Exprés": 71, "Alvia": 55, "Regional": 14},
+    MERIDA: {"Media Distancia": 89, "Regional Exprés": 58, "Alvia": 37, "Regional": 14},
+    OLD: {"Regional Exprés": 13},
 }
 #: Cuántos viajes casa cada regla de recorrido.
 RULES = {

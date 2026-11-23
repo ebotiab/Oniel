@@ -300,18 +300,18 @@ def test_the_filter_takes_every_train_with_two_stops_on_the_line(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 141
     assert Counter(t.product for t in trips) == {
-        "ALVIA": 50,
+        "Alvia": 50,
         "AVE": 39,
-        "REGIONAL": 25,
+        "Regional": 25,
         "AVLO": 16,
-        "MD": 11,
+        "Media Distancia": 11,
     }
     selected = {t.trip_id for t in trips}
     stations = {n.spec.adif_code for n in line.nodes if n.spec.adif_code}
     left_out = [t for t in feed.trips.values() if OVIEDO in _stops(t) and t.trip_id not in selected]
     assert len(left_out) == 14
     for trip in left_out:
-        assert trip.product == "REGIONAL" and set(_stops(trip)) & stations == {OVIEDO}
+        assert trip.product == "Regional" and set(_stops(trip)) & stations == {OVIEDO}
     assert select_trips_for_spec(ouigo_feed, spec) == []
 
 
@@ -324,13 +324,13 @@ def test_regional_trains_leave_the_line_to_climb_the_pass(
         mapping = spec.stop_mappings[stop_id]
         assert mapping.exits == ["bif-pajares", "pola-de-lena"] and mapping.aside
     trips = select_trips_for_spec(feed, spec)
-    regional = [t for t in trips if t.product == "REGIONAL"]
+    regional = [t for t in trips if t.product == "Regional"]
     assert len(regional) == 25
     for trip in regional:
         assert set(PASS_STOPS) <= set(_stops(trip))
         assert _short(_passes(trip, feed, line)) == ALL_SEGMENTS[:1] + ALL_SEGMENTS[4:]
     for trip in trips:
-        if trip.product != "REGIONAL":
+        if trip.product != "Regional":
             assert not set(PASS_STOPS) & set(_stops(trip))
 
 
@@ -344,7 +344,7 @@ def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNe
         per_segment.update(passes)
         if AVILES in _stops(trip):
             assert passes == ALL_SEGMENTS[:9]
-        elif trip.product != "REGIONAL":
+        elif trip.product != "Regional":
             assert passes == ALL_SEGMENTS
     assert sum(1 for t in trips if AVILES in _stops(t)) == 20
     assert [per_segment[s] for s in ALL_SEGMENTS] == [

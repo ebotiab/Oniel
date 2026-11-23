@@ -248,25 +248,25 @@ def test_the_filters_take_the_trains_that_run_on_each_line(
     Intercity de Madrid-Chamartín a Logroño por Burgos, que solo tocan Logroño, quedan fuera."""
     trips = select_trips_for_spec(feed, ebro.spec)
     assert Counter(t.product for t in trips) == {
-        "ALVIA": 97,
-        "REG.EXP.": 33,
-        "MD": 33,
-        "REGIONAL": 23,
+        "Alvia": 97,
+        "Regional Exprés": 33,
+        "Media Distancia": 33,
+        "Regional": 23,
         "Intercity": 22,
     }
     assert not any(CHAMARTIN in _stops(t) for t in trips)
     to_pamplona = select_trips_for_spec(feed, navarra.spec)
     assert Counter(t.product for t in to_pamplona) == {
-        "ALVIA": 77,
+        "Alvia": 77,
         "Intercity": 22,
-        "REG.EXP.": 21,
-        "MD": 8,
+        "Regional Exprés": 21,
+        "Media Distancia": 8,
     }
     assert all(PAMPLONA in _stops(t) or TAFALLA in _stops(t) for t in to_pamplona)
     # los que no están en la línea del Ebro son los regionales de Vitoria que acaban en Castejón
     only_here = [t for t in to_pamplona if t.trip_id not in {x.trip_id for x in trips}]
     assert only_here and all(CASTEJON in (_stops(t)[0], _stops(t)[-1]) for t in only_here)
-    assert all(t.product == "REG.EXP." for t in only_here)
+    assert all(t.product == "Regional Exprés" for t in only_here)
     for spec in (ebro.spec, navarra.spec):
         assert select_trips_for_spec(ouigo_feed, spec) == []
 
@@ -310,7 +310,7 @@ def test_madrid_trains_join_at_cabanas_de_ebro(feed: GtfsFeed, ebro: BuiltNetwor
         "miranda-por-logrono": 22,
     }
     regionals = [t for t in select_trips_for_spec(feed, spec) if GRISEN in _stops(t)]
-    assert len(regionals) == 23 and all(t.product == "REGIONAL" for t in regionals)
+    assert len(regionals) == 23 and all(t.product == "Regional" for t in regionals)
 
 
 def test_miranda_is_reached_by_two_ways(ebro: BuiltNetwork) -> None:

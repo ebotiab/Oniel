@@ -182,10 +182,10 @@ def test_the_filter_takes_the_trains_to_santander(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 65
     assert Counter(t.product for t in trips) == {
-        "ALVIA": 28,
-        "REG.EXP.": 20,
+        "Alvia": 28,
+        "Regional Exprés": 20,
         "Intercity": 9,
-        "MD": 8,
+        "Media Distancia": 8,
     }
     assert all(SANTANDER in _stops(t) for t in trips)
     assert select_trips_for_spec(ouigo_feed, spec) == []

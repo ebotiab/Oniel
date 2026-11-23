@@ -201,37 +201,24 @@ export const KIND_LABEL: Record<string, string> = {
 }
 
 const SHORT_STOP_NAMES: Record<string, string> = {
-  'Madrid-Puerta de Atocha-Almudena Grandes': 'Madrid-Puerta de Atocha',
-  'Madrid-Atocha Cercanías': 'Madrid-Atocha',
-  'Córdoba-Julio Anguita': 'Córdoba',
-  'Málaga María Zambrano': 'Málaga',
-  // el fichero de Ouigo escribe los nombres sin tildes
-  'Malaga Maria Zambrano': 'Málaga',
-  'Cordoba-Central': 'Córdoba',
   'Villanueva de Córdoba-Los Pedroches': 'Villanueva de Córdoba',
-  'Madrid-Chamartín-Clara Campoamor': 'Madrid-Chamartín',
   'Cuenca-Fernando Zóbel': 'Cuenca',
   'Albacete-Los Llanos': 'Albacete',
   'San Fernando-Bahía Sur': 'San Fernando',
-  'Alicante/Alacant-Terminal': 'Alicante',
   'València-Estació del Nord': 'Valencia',
   'Campus Universitario de Rabanales': 'Rabanales',
   'Almuradiel-Viso del Marqués': 'Almuradiel',
 }
 
-/** Nombre corto de una parada para listas densas. */
+/**
+ * Nombre corto de una parada para listas densas. Las paradas que son un nodo llegan ya con el
+ * nombre del nodo; aquí solo se acortan los nombres de nodo más largos.
+ */
 export function shortStop(name: string | null | undefined): string {
   if (!name) return ''
   return SHORT_STOP_NAMES[name] ?? name
 }
 
-const PRODUCT_LABELS: Record<string, string> = {
-  'REG.EXP.': 'Regional Exprés',
-  PROXIMDAD: 'Proximidad',
-  REGIONAL: 'Regional',
-}
-
-/** Nombre del producto comercial tal y como lo entiende un visitante. */
 /** «Iryo», «Iryo y Ouigo», «Renfe, Iryo y Ouigo». */
 export function listaEs(items: string[]): string {
   return new Intl.ListFormat('es', { style: 'long', type: 'conjunction' }).format(items)
@@ -240,10 +227,6 @@ export function listaEs(items: string[]): string {
 /** Frase que avisa de que los trenes de esos operadores no salen de una fuente oficial. */
 export function notaNoOficial(nombres: string[]): string {
   return `Los trenes de ${listaEs(nombres)} salen de una compilación no oficial de sus horarios, que no publica${nombres.length > 1 ? 'n esos operadores' : ' el operador'}.`
-}
-
-export function productLabel(product: string): string {
-  return PRODUCT_LABELS[product] ?? product
 }
 
 /** «Línea de alta velocidad Madrid – Sevilla» → «Madrid – Sevilla». */

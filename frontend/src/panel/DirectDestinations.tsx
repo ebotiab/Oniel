@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import type { Destination, NetworkOut, Operator } from '../data/types'
-import { formatDate, listaEs, notaNoOficial, productLabel, shortStop } from '../app/state'
+import { formatDate, listaEs, notaNoOficial, shortStop } from '../app/state'
 
 /** Destinos a la vista antes de «Ver los … restantes»: los más frecuentes caben sin desplazar el panel. */
 const A_LA_VISTA = 6
@@ -70,7 +70,7 @@ export function DirectDestinations({ destinations, date, network, operators, mis
                     <strong>{shortStop(d.name)}</strong>
                   )}
                   <span className="suave">
-                    {listaEs(d.products.map(productLabel))} · {horas(d)}
+                    {listaEs(d.products)} · {horas(d)}
                     {variosOperadores ? ` · ${d.operators.map((o) => (d.operators.length > 1 ? `${operatorName(o.operator_id)} ${o.trains}` : operatorName(o.operator_id))).join(', ')}` : ''}
                   </span>
                 </span>

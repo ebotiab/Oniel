@@ -27,7 +27,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Alta velocidad')
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
     await expect(page.getByTestId('lista-servicios').locator('li').first()).toBeVisible()
-    await expect(page.getByTestId('lista-servicios')).toContainText(/AVE|AVLO|ALVIA|Intercity/)
+    await expect(page.getByTestId('lista-servicios')).toContainText(/AVE|AVLO|Intercity/)
     await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:ciudad-real:puertollano/)
   })
 
@@ -82,7 +82,7 @@ test.describe('Explorar la red', () => {
     await expect(lista).toContainText(/Regional \d{5}/)
     // el Intercity 10080 se explica con kilómetros por las líneas, no en línea recta
     const intercity = lista.locator('li', { hasText: 'Intercity 10080' }).first()
-    await expect(intercity).toContainText('Madrid-Atocha → Sevilla-Santa Justa')
+    await expect(intercity).toContainText('Madrid-Puerta de Atocha → Sevilla-Santa Justa')
     const porque = intercity.locator('.senal')
     await expect(porque).toHaveText('estimado')
     await expect(porque).toHaveAttribute('title', /entra en esta línea por Manzanares.*64 km por la línea y, desde Manzanares, 196 km por esa línea/)

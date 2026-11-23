@@ -151,7 +151,11 @@ def test_the_filter_selects_the_trains_that_run_along_the_line(
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in albacete.segments]
     trips = select_trips_for_spec(feed, albacete_spec)
     assert len(trips) == 142
-    assert Counter(t.product for t in trips) == {"MD": 105, "REG.EXP.": 29, "ALVIA": 8}
+    assert Counter(t.product for t in trips) == {
+        "Media Distancia": 105,
+        "Regional Exprés": 29,
+        "Alvia": 8,
+    }
     by_segment = dict.fromkeys((s.id for s in albacete.segments), 0)
     kinds: Counter[str] = Counter()
     for trip in trips:

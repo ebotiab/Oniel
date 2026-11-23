@@ -11,7 +11,7 @@ def _stop(
     departure_s: float,
     *,
     node: bool = True,
-    product: str = "MD",
+    product: str = "Media Distancia",
     operator: str = "renfe",
     stop_id: str | None = None,
 ) -> DirectStop:
@@ -44,13 +44,13 @@ def test_a_destination_carries_products_operators_and_first_and_last_departure()
             _stop("a", "cordoba", 21 * 3600 + 20 * 60, product="AVE"),
             _stop("b", "cordoba", 6 * 3600, product="AVE"),
             _stop("c", "cordoba", 10 * 3600 + 5 * 60, product="Ouigo", operator="ouigo"),
-            _stop("d", "cordoba", 9 * 3600, product="ALVIA"),
+            _stop("d", "cordoba", 9 * 3600, product="Alvia"),
         ]
     )
     (cordoba,) = out
     assert cordoba.node_id == "cordoba" and cordoba.trains == 4
     # del tipo de servicio y del operador con más trenes al que menos; a igualdad, por nombre
-    assert cordoba.products == ["AVE", "ALVIA", "Ouigo"]
+    assert cordoba.products == ["AVE", "Alvia", "Ouigo"]
     assert [(o.operator_id, o.trains) for o in cordoba.operators] == [("renfe", 3), ("ouigo", 1)]
     assert (cordoba.first_departure, cordoba.last_departure) == ("06:00", "21:20")
 

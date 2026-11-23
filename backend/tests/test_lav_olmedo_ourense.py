@@ -293,7 +293,7 @@ def test_the_filter_takes_the_trains_of_the_line_and_leaves_the_conventional_one
     assert spec.corridor_filter.any_of_stop_ids == [MEDINA, SANABRIA, GUDINA]
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 210
-    assert Counter(t.product for t in trips) == {"AVE": 106, "ALVIA": 58, "AVLO": 46}
+    assert Counter(t.product for t in trips) == {"AVE": 106, "Alvia": 58, "AVLO": 46}
     selected = {t.trip_id for t in trips}
     # todo tren que para en una estación propia de la línea, o que va de Zamora a Ourense sin
     # paradas, está dentro

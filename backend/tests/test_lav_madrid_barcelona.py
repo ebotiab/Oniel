@@ -240,12 +240,12 @@ def test_the_filter_takes_high_speed_trains_and_leaves_out_the_regional_ones(
     assert len(trips) == 571
     assert Counter(t.product for t in trips) == {
         "AVE": 264,
-        "ALVIA": 105,
-        "AVANT": 84,
-        "AVE INT": 55,
-        "EUROMED": 37,
+        "Alvia": 105,
+        "Avant": 84,
+        "AVE internacional": 55,
+        "Euromed": 37,
         "Intercity": 24,
-        "AVANT EXP": 2,
+        "Avant Exprés": 2,
     }
     # los regionales que comparten estaciones (Calatayud – Zaragoza, Zaragoza – Lleida, Lleida –
     # Barcelona) quedan fuera por las paradas que solo ellos tienen
@@ -255,7 +255,7 @@ def test_the_filter_takes_high_speed_trains_and_leaves_out_the_regional_ones(
     regional = [
         t
         for t in feed.trips.values()
-        if t.product in {"MD", "REGIONAL", "REG.EXP."}
+        if t.product in {"Media Distancia", "Regional", "Regional Exprés"}
         and len(feed.stop_ids_of(t) & node_stops) >= 2
     ]
     assert len(regional) == 77 and all(feed.stop_ids_of(t) & excluded for t in regional)

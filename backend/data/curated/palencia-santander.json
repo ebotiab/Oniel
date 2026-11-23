@@ -13,7 +13,7 @@
     "tracks": 1,
     "pk_origin_km": 297.3,
     "status": "disponible",
-    "description": "Une la meseta con la costa de Cantabria: sale de Palencia hacia el norte por Tierra de Campos, sube a Aguilar de Campoo y Reinosa, cruza la cordillera Cantábrica y baja por el valle del Besaya hasta Torrelavega y Santander.\n\nEs la línea 160 de Adif y el único camino de ancho ibérico entre Cantabria y la meseta. El trecho de Alar del Rey a Santander se terminó en 1866 y fue uno de los primeros ferrocarriles de largo recorrido de España. Entre Reinosa y Bárcena, en la montaña, el trazado sigue siendo casi el original, con muchos túneles y curvas cerradas, y los trenes van más despacio.\n\nEn los horarios de Renfe la recorren los Alvia de Madrid a Santander, que llegan por la alta velocidad y cambian de ancho de vía poco antes de Palencia; los de Alicante a Santander, que cruzan Madrid, y los regionales de Valladolid a Santander, que van de Valladolid a Palencia por la línea convencional, que no está cargada, y paran en casi todas las estaciones. Los trenes de Cercanías de Santander a Reinosa usan también sus vías, pero no están en los horarios cargados.\n\nLa alta velocidad de Palencia a Aguilar de Campoo está en obras; mientras no se termine, todos los trenes de Santander van por esta línea.",
+    "description": "Une la meseta con la costa de Cantabria: sale de Palencia hacia el norte por Tierra de Campos, sube a Aguilar de Campoo y Reinosa, cruza la cordillera Cantábrica y baja por el valle del Besaya hasta Torrelavega y Santander.\n\nEs la línea 160 de Adif y el único camino de ancho ibérico entre Cantabria y la meseta. El trecho de Alar del Rey a Santander se terminó en 1866 y fue uno de los primeros ferrocarriles de largo recorrido de España. Entre Reinosa y Bárcena, en la montaña, el trazado sigue siendo casi el original, con muchos túneles y curvas cerradas, y los trenes van más despacio.\n\nEn los horarios de Renfe la recorren los Intercity de Madrid a Santander, que llegan por la alta velocidad y cambian de ancho de vía poco antes de Palencia; los de Alicante a Santander, que cruzan Madrid, y los regionales de Valladolid a Santander, que van de Valladolid a Palencia por la línea convencional, que no está cargada, y paran en casi todas las estaciones. Los trenes de Cercanías de Santander a Reinosa usan también sus vías, pero no están en los horarios cargados.\n\nLa alta velocidad de Palencia a Aguilar de Campoo está en obras; mientras no se termine, todos los trenes de Santander van por esta línea.",
     "geometry_source": {
       "source_id": "osm-relation-4220975",
       "parts": [
@@ -180,7 +180,7 @@
         "lat": 42.785268
       },
       "reference_pk_km": 394.8,
-      "description": "La estación de Aguilar de Campoo, la principal del norte de Palencia. Paran en ella los Alvia de Madrid a Santander y los regionales. La alta velocidad que se construye desde Palencia llegará hasta aquí."
+      "description": "La estación de Aguilar de Campoo, la principal del norte de Palencia. Paran en ella los Intercity de Madrid a Santander y los regionales. La alta velocidad que se construye desde Palencia llegará hasta aquí."
     },
     {
       "id": "quintanilla-de-las-torres",
@@ -249,7 +249,7 @@
         "lat": 43.327441
       },
       "reference_pk_km": 485.1,
-      "description": "La estación de Torrelavega, la segunda ciudad de Cantabria. Paran en ella los Alvia y los regionales. Los trenes de vía estrecha de Santander a Oviedo paran en otra estación, Torrelavega-Centro."
+      "description": "La estación de Torrelavega, la segunda ciudad de Cantabria. Paran en ella los Intercity y los regionales. Los trenes de vía estrecha de Santander a Oviedo paran en otra estación, Torrelavega-Centro."
     },
     {
       "id": "renedo",

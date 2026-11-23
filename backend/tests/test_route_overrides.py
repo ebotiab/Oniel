@@ -321,7 +321,7 @@ def test_the_diverted_trains_enter_the_three_lines(
         & {t.trip_id for t in mzcr_trips}
     )
     assert len(diverted) == 22
-    assert {feed.trips[t].product for t in diverted} == {"Intercity", "ALVIA"}
+    assert {feed.trips[t].product for t in diverted} == {"Intercity", "Alvia"}
 
 
 def test_intercity_10270_runs_madrid_manzanares_on_the_conventional_line(

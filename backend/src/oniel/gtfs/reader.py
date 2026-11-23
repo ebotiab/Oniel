@@ -114,6 +114,39 @@ def train_number(short_name: str, product: str) -> str:
 #: Palabras que van en minúscula dentro del nombre de una estación.
 _LOWERCASE_WORDS = {"de", "del", "la", "las", "el", "los", "y"}
 
+#: Cómo se escribe cada tipo de tren. Los ficheros de Renfe lo traen en ``route_short_name`` con
+#: abreviaturas y mayúsculas que cambian de un fichero a otro («AVANT», «REG.EXP.», «PROXIMDAD»):
+#: aquí se les da una sola escritura, que es la que se guarda y la que enseña el visor. No se
+#: cambia un tipo por otro: «Intercity» y «Regional» son los del fichero que los trae. Un rótulo
+#: que no está en la tabla se deja como viene.
+PRODUCT_NAMES = {
+    "AVANT": "Avant",
+    "AVANT EXP": "Avant Exprés",
+    "ALVIA": "Alvia",
+    "AVE INT": "AVE internacional",
+    "EUROMED": "Euromed",
+    "MD": "Media Distancia",
+    "PROXIMDAD": "Proximidad",
+    "REG.EXP.": "Regional Exprés",
+    "REGIONAL": "Regional",
+    "TRENCELTA": "Trencelta",
+}
+
+
+def product_name(label: str) -> str:
+    """El tipo de tren con su escritura única: «AVANT» → «Avant», «REG.EXP.» → «Regional Exprés»."""
+    return PRODUCT_NAMES.get(label, label)
+
+
+def feed_products(path: Path) -> set[str]:
+    """Los tipos de tren que rotula un fichero, con su escritura única (solo lee ``routes.txt``)."""
+    with zipfile.ZipFile(path) as zf:
+        return {
+            product_name(label)
+            for r in _rows(zf, "routes.txt")
+            if (label := r.get("route_short_name") or r.get("route_long_name"))
+        }
+
 
 def stop_name(name: str) -> str:
     """Nombre de parada legible: uno escrito todo en mayúsculas pasa a mayúscula inicial.
@@ -126,6 +159,16 @@ def stop_name(name: str) -> str:
     return "".join(
         w if i and w in _LOWERCASE_WORDS else w[:1].upper() + w[1:] for i, w in enumerate(words)
     )
+
+
+#: Nombre corregido de algunas estaciones de fuera de la red cargada, por su código de Adif. Las
+#: que son un nodo llevan el nombre del nodo (lo pone el importador); estas no tienen nodo, y el
+#: fichero las escribe sin tilde o sin el guion que llevan las demás.
+STOP_NAMES = {
+    "10610": "Valladolid-Universidad",
+    "11600": "Irún",
+    "79400": "Barcelona-Estació de França",
+}
 
 
 def rename_stops(feed: GtfsFeed, names: Mapping[str, str]) -> None:
@@ -164,7 +207,7 @@ def read_feed(
         stops = {
             stop_id(r["stop_id"]): GtfsStop(
                 stop_id(r["stop_id"]),
-                stop_name(r["stop_name"]),
+                STOP_NAMES.get(stop_id(r["stop_id"])) or stop_name(r["stop_name"]),
                 float(r["stop_lon"]),
                 float(r["stop_lat"]),
             )
@@ -180,7 +223,7 @@ def read_feed(
                 route_id=r["route_id"],
                 service_id=r["service_id"],
                 train_number=train_number(r.get("trip_short_name") or r["trip_id"], product),
-                product=product,
+                product=product_name(product),
             )
         for r in _rows(zf, "stop_times.txt"):
             trip = trips.get(r["trip_id"])

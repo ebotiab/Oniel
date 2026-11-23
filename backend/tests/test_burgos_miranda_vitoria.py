@@ -176,10 +176,10 @@ def test_the_filter_takes_every_train_that_runs_on_the_line(
     assert len(trips) == 182
     assert Counter(t.product for t in trips) == {
         "Intercity": 54,
-        "REG.EXP.": 45,
-        "ALVIA": 38,
-        "MD": 33,
-        "REGIONAL": 12,
+        "Regional Exprés": 45,
+        "Alvia": 38,
+        "Media Distancia": 33,
+        "Regional": 12,
     }
     codes = {n.adif_code for n in spec.nodes}
     selected = {t.trip_id for t in trips}
@@ -251,4 +251,4 @@ def test_briviesca_only_sees_the_conventional_trains(feed: GtfsFeed, spec: Netwo
     velocidad de Burgos los deja fuera por eso mismo."""
     trips = [t for t in select_trips_for_spec(feed, spec) if BRIVIESCA in _stops(t)]
     assert trips
-    assert {t.product for t in trips} <= {"MD", "REG.EXP.", "REGIONAL"}
+    assert {t.product for t in trips} <= {"Media Distancia", "Regional Exprés", "Regional"}

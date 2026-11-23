@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -21,6 +22,7 @@ from oniel.gtfs.trips import (
 from oniel.network.annotations import check_annotations
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import (
+    FeedSpec,
     OperatorSpec,
     load_annotations,
     load_feeds,
@@ -111,6 +113,62 @@ def validate_zones(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]
             if zone not in zones
         ],
     }
+
+
+def cited_products(text: str, known: Sequence[str]) -> list[str]:
+    """Los tipos de tren que nombra un texto, de entre los conocidos.
+
+    Se busca primero el más largo, para que «Regional Exprés» no cuente además como «Regional», y
+    con la mayúscula del rótulo: «trenes de media distancia» o «los regionales» son palabras
+    corrientes, no el tipo de tren.
+    """
+    found: list[str] = []
+    for label in sorted(known, key=len, reverse=True):
+        pattern = re.compile(rf"(?<!\w){re.escape(label)}(?!\w)")
+        if pattern.search(text):
+            found.append(label)
+            text = pattern.sub(" ", text)
+    return sorted(found)
+
+
+def validate_products(
+    spec_paths: Sequence[Path], feeds: Sequence[FeedSpec], data_dir: Path
+) -> dict[str, Any]:
+    """Comprueba que las descripciones nombran los trenes como el fichero de horarios vigente.
+
+    Renfe cambia los rótulos de un fichero a otro (el del 17 de noviembre de 2026 dejó de traer
+    «Alvia» y «Media Distancia»). La descripción de una línea o de una estación, que es lo que lee
+    el visitante junto a las listas de trenes, no puede nombrar un tipo que ya no rotula el fichero
+    vigente de ningún operador. Vale citar la última palabra de un rótulo vigente («Euromed» por
+    «AVE Euromed»).
+    """
+    from oniel.gtfs.reader import PRODUCT_NAMES, feed_products
+
+    latest: dict[str, FeedSpec] = {}
+    for feed in feeds:  # vienen del más antiguo al más reciente
+        latest[feed.source_id] = feed
+    current: set[str] = set()
+    known: set[str] = set(PRODUCT_NAMES.values())
+    for feed in feeds:
+        labels = {feed.product} if feed.product else feed_products(data_dir / feed.file)
+        known |= labels
+        if latest[feed.source_id] is feed:
+            current |= labels
+    allowed = current | {label.split()[-1] for label in current}
+    problems: list[str] = []
+    for path in spec_paths:
+        spec = load_network_spec(path)
+        texts = [("la línea", spec.line.description)] + [
+            (f"el nodo {n.id}", n.description) for n in spec.nodes
+        ]
+        for where, text in texts:
+            stale = [c for c in cited_products(text or "", sorted(known)) if c not in allowed]
+            if stale:
+                problems.append(
+                    f"{spec.line.id}: la descripción de {where} nombra {', '.join(stale)},"
+                    " que no rotula ningún fichero de horarios vigente"
+                )
+    return {"products": sorted(current), "problems": problems}
 
 
 def validate_operators(

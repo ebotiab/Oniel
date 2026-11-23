@@ -49,7 +49,7 @@
        ]
      }},
     {"id": "ciudad-real", "name": "Ciudad Real", "kind": "estacion", "adif_code": "37200", "position": {"lon": -3.913633, "lat": 38.9853}, "reference_pk_km": 170.7,
-     "description": "Primera estación con parada comercial al sur de Madrid. Da servicio a Castilla-La Mancha con AVE, AVLO, Alvia e Intercity. También llega aquí la línea convencional desde Manzanares, que sigue hacia Puertollano, Mérida y Badajoz."},
+     "description": "Primera estación con parada comercial al sur de Madrid. Da servicio a Castilla-La Mancha con AVE, AVLO e Intercity. También llega aquí la línea convencional desde Manzanares, que sigue hacia Puertollano, Mérida y Badajoz."},
     {"id": "puertollano", "name": "Puertollano", "kind": "estacion", "adif_code": "37300", "position": {"lon": -4.111655, "lat": 38.69128}, "reference_pk_km": 209.4,
      "description": "Estación en el límite sur de la meseta, antes de que la línea cruce Sierra Morena."},
     {"id": "villanueva-de-cordoba", "name": "Villanueva de Córdoba-Los Pedroches", "kind": "estacion", "adif_code": "37704", "position": {"lon": -4.570952, "lat": 38.2554}, "reference_pk_km": 285.2,
