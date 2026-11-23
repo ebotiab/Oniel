@@ -47,7 +47,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
       'Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de Moreda y en la de Bifurcación Almería.',
     )
     // ni un recuento a cero ni la frase de la alternativa
-    await expect(page.getByTestId('tramo-horas')).toHaveCount(0)
+    await expect(page.getByTestId('tramo-hora-de-paso')).toHaveCount(0)
     await expect(page.getByTestId('tramo-alternativa')).toHaveCount(0)
     await sinTrenes.getByRole('button', { name: 'Bifurcación Almería' }).click()
     await expect(page).toHaveURL(/\/nodo\/bif-almeria$/)

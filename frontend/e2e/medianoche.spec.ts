@@ -46,9 +46,8 @@ test.describe('Trenes al filo de la medianoche', () => {
     await expect(ficha.getByRole('heading', { name: /Trenes que lo recorren/ })).toContainText(`· ${n} el `)
     await expect(page.getByTestId('lista-servicios').locator('li')).toHaveCount(n)
     await expect(page.getByTestId('lista-servicios').locator('li').filter({ hasText: 'AVE 02210' })).toHaveCount(1)
-    // ningún tren para en los dos extremos: todas las horas son estimadas, y la frase dice por qué
-    await expect(page.getByTestId('tramo-horas')).toContainText(`La hora de paso es estimada en ${n}, porque no paran en los dos extremos del tramo.`)
-    await expect(page.getByTestId('tramo-horas')).not.toContainText(' en 0')
+    // ningún tren para en los dos extremos: todas las horas son calculadas, y la frase lo dice sin ceros
+    await expect(page.getByTestId('tramo-hora-de-paso')).toHaveText('Ninguno para en los dos extremos del tramo: la hora a la que pasan está calculada.')
     await expect(page.getByTestId('tramo-alternativa')).toContainText(`${analisis.without_alternative} trenes no tendrían otro camino`)
     expect(analisis.without_alternative).toBe(n)
     // React avisa en la consola cuando dos renglones de una lista llevan la misma clave

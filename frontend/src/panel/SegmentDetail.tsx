@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
 import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
@@ -68,41 +68,6 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
     .map(([id, passes]) => ({ id, name: operatorName(id), passes }))
     .sort((a, b) => b.passes.length - a.passes.length || a.name.localeCompare(b.name, 'es'))
 
-  // De dónde sale la hora de paso de los trenes de la lista; solo las clases que tienen alguno.
-  const c = services?.counts
-  const horas = [
-    c?.publicado
-      ? {
-          id: 'publicado',
-          texto: (
-            <>
-              sale del <Termino id="paso-publicado">horario publicado</Termino> en {c.publicado}
-            </>
-          ),
-        }
-      : null,
-    c?.estimado
-      ? {
-          id: 'estimado',
-          texto: (
-            <>
-              es <Termino id="paso-estimado">estimada</Termino> en {c.estimado}, porque no para{c.estimado > 1 ? 'n' : ''} en los dos extremos del tramo
-            </>
-          ),
-        }
-      : null,
-    c?.indeterminado
-      ? {
-          id: 'indeterminado',
-          texto: (
-            <>
-              <Termino id="paso-indeterminado">no se puede fijar</Termino> en {c.indeterminado}
-            </>
-          ),
-        }
-      : null,
-  ].filter((h) => h !== null)
-
   // Operadores que circulan por la línea y no publican sus horarios: sus trenes no están en la lista.
   const missing = operators.filter((o) => o.timetable === 'no_publicado' && line?.operator_ids?.includes(o.id))
   // Operadores de la lista cuyos trenes salen de una compilación que no publican ellos.
@@ -171,7 +136,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
-        <FuentesAtributos segment={segment} line={line} sources={sources} />
+        <FuentesAtributos segment={segment} line={line} sources={sources} trazado={segment.source_id} />
         {alternativa && alternativa.trains > 0 && (
           <section data-testid="tramo-alternativa-detalle">
             <p className="sobre">Si este tramo se cortara</p>
@@ -276,15 +241,8 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
               .
             </p>
           ) : (
-            <p className="suave" data-testid="tramo-horas">
-              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. La hora de paso{' '}
-              {horas.map((h, i) => (
-                <Fragment key={h.id}>
-                  {i > 0 && (i === horas.length - 1 ? ' y ' : ', ')}
-                  {h.texto}
-                </Fragment>
-              ))}
-              .
+            <p className="suave">
+              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. <HoraDePaso counts={services.counts} />
             </p>
           )}
           <div data-testid="lista-servicios">
@@ -317,5 +275,40 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
         </>
       )}
     </section>
+  )
+}
+
+/**
+ * De dónde sale la hora a la que cada tren recorre el tramo, dicho sin ceros y sin dar por sabido qué es un
+ * paso estimado: la del horario si para en los dos extremos, calculada si no (docs/diseno.md, «Selección de ficha»).
+ */
+function HoraDePaso({ counts }: { counts: Record<'publicado' | 'estimado' | 'indeterminado', number> }) {
+  const { publicado, estimado, indeterminado } = counts
+  const delHorario = <Termino id="paso-publicado">la del horario</Termino>
+  const calculada = <Termino id="paso-estimado">calculada</Termino>
+  const uno = publicado + estimado === 1
+  return (
+    <span data-testid="tramo-hora-de-paso">
+      {publicado > 0 && estimado === 0 && (
+        <>
+          {uno ? 'Para' : 'Todos paran'} en los dos extremos del tramo: la hora a la que {uno ? 'pasa' : 'pasan'} es {delHorario}.
+        </>
+      )}
+      {publicado === 0 && estimado > 0 && (
+        <>
+          {uno ? 'No para' : 'Ninguno para'} en los dos extremos del tramo: la hora a la que {uno ? 'pasa' : 'pasan'} está {calculada}.
+        </>
+      )}
+      {publicado > 0 && estimado > 0 && (
+        <>
+          {publicado} {publicado === 1 ? 'para' : 'paran'} en los dos extremos del tramo y su hora es {delHorario}; la de {estimado === 1 ? 'el otro' : `los otros ${estimado}`} está {calculada}.
+        </>
+      )}
+      {indeterminado > 0 && (
+        <>
+          {publicado + estimado > 0 ? ' ' : ''}De {indeterminado} no se puede saber la hora: su paso es <Termino id="paso-indeterminado">indeterminado</Termino>.
+        </>
+      )}
+    </span>
   )
 }

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { FICHA_RED, lineasDeLista, zonas } from './instantanea.ts'
+import { FICHA_RED, zonas } from './instantanea.ts'
 import { abrirLinea, abrirZonas, irA } from './navegar.ts'
 
 test.describe('Explorar la red', () => {
@@ -61,7 +61,8 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await abrirZonas(page)
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(lineasDeLista.length)
+    // una línea sale en cada zona en la que para: los renglones son los de todas las zonas sumados
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(zonas.reduce((n, z) => n + z.lineas.length, 0))
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()

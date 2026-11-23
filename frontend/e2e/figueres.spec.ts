@@ -53,8 +53,11 @@ test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', (
     if (await asa.isVisible()) await asa.click()
     await ficha.getByTestId('mas-detalle').locator('summary').click()
     const pie = ficha.getByTestId('pie-fuente').first()
-    await expect(pie.locator('p')).toHaveCount(3)
-    await expect(pie.locator('p').filter({ hasText: '11082425' })).toHaveCount(1)
+    // y las tres son de OpenStreetMap: un solo párrafo, con el editor una vez y el trazado de cada línea detrás
+    await expect(pie.locator('p')).toHaveCount(1)
+    await expect(pie).toContainText(/^Fuentes del trazado: Colaboradores de OpenStreetMap/)
+    expect((await pie.innerText()).match(/Colaboradores de OpenStreetMap/g)).toHaveLength(1)
+    expect((await pie.innerText()).match(/osm-relation-11082425/g)).toHaveLength(1)
   })
 
   test('el final de la línea dice que la sección internacional no está cargada', async ({ page }) => {

@@ -56,8 +56,10 @@ test.describe('Ancho de vía: el tramo de ancho mixto lo dice', () => {
     if (await asa.isVisible()) await asa.click()
     await page.getByTestId('mas-detalle').locator('summary').click()
     const fuente = page.getByTestId('atributos-fuente')
-    await expect(fuente).toContainText(/Ancho de vía: Colaboradores de OpenStreetMap, comprobado el 12 de noviembre de 2026/)
-    await expect(fuente).toContainText('osm-relation-2869549')
+    // sale de la misma fuente que el trazado, citada justo encima: no repite su párrafo ni su identificador
+    await expect(fuente).toContainText(/Ancho de vía: la misma fuente que el trazado, comprobado el 12 de noviembre de 2026/)
+    await expect(fuente).not.toContainText('osm-relation-2869549')
+    await expect(page.getByTestId('mas-detalle').getByText('osm-relation-2869549')).toHaveCount(1)
     await expect(fuente.locator('p').first()).toContainText('Ancho de vía')
   })
 

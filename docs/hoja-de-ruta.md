@@ -55,7 +55,6 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 - [#264](https://github.com/ebotiab/Oniel/issues/264) Datos: costuras entre líneas. Catorce conexiones a trazos declaradas en un solo extremo, regionales de Valladolid a Burgos contados en la alta velocidad, nombres de conexiones con el nombre de Adif y textos de nodos compartidos que dicen «final de la línea».
 - [#263](https://github.com/ebotiab/Oniel/issues/263) Datos: rótulos de tren y nombres de estación. Desde el fichero de Renfe del 17 de noviembre las listas dicen «Intercity» y «Regional» donde las descripciones dicen «Alvia» y «Media Distancia», y la misma estación sale con dos nombres.
-- [#266](https://github.com/ebotiab/Oniel/issues/266) Visor: encuadre de las líneas, lista de zonas y textos sueltos. En el móvil, más de la mitad de las líneas dejan una cabecera fuera de lo que se ve; «Madrid y Castilla-La Mancha» no nombra Madrid ni lleva a sus líneas; el texto de los regionales por Cañaveral.
 
 **Incoherencias entre líneas y documentación.**
 
