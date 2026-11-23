@@ -19,6 +19,11 @@ export function NetworkOverview({ network, coverage, annotations, onPickLine, on
   const notas = new Map(
     network.lines.map((l) => [l.id, capasDe(annotations.filter((a) => a.line_id === l.id && a.segment_ids.length > 0))] as const),
   )
+  const tramos = network.segment_features.features.map((f) => ({
+    line_id: String(f.properties.line_id),
+    from_node_id: String(f.properties.from_node_id),
+    to_node_id: String(f.properties.to_node_id),
+  }))
   const ficha = [networkCount(network.lines), coverage ? `${formatCount(coverage.station_count)} estaciones` : null].filter((d): d is string => Boolean(d))
   return (
     <section className="vista-red" aria-labelledby="red-titulo" data-testid="vista-red">
@@ -36,7 +41,7 @@ export function NetworkOverview({ network, coverage, annotations, onPickLine, on
         </p>
       </div>
       <h3 className="subtitulo">Líneas</h3>
-      <LineList lines={network.lines} nodes={network.nodes} notes={notas} onPick={onPickLine} onHighlight={onHighlightLines} />
+      <LineList lines={network.lines} nodes={network.nodes} segments={tramos} notes={notas} onPick={onPickLine} onHighlight={onHighlightLines} />
     </section>
   )
 }

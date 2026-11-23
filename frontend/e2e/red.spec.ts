@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { cabeceraDeZona, estacionesDeLaRed, lineasDeLista, recuentoDeLaRed, zona, zonas } from './instantanea.ts'
+import { cabeceraDeZona, estacionesDeLaRed, indice, lineasDeLista, recuentoDeLaRed, renglonDe, zona, zonas } from './instantanea.ts'
 import { abrirLinea, abrirZonas, irA } from './navegar.ts'
 
 /** En el móvil la hoja empieza plegada: se amplía para ver la lista entera. */
@@ -53,7 +53,7 @@ test.describe('Elegir línea sin pestañas', () => {
     for (const z of zonas) {
       const filas = page.getByTestId(`zona-${z.zona.id}`).locator('.fila-linea')
       await expect(filas).toHaveCount(z.lineas.length)
-      expect(await filas.evaluateAll((els) => els.map((e) => e.getAttribute('data-testid'))), z.zona.name).toEqual(z.lineas.map((l) => `linea-${l.id}`))
+      expect(await filas.evaluateAll((els) => els.map((e) => e.getAttribute('data-testid'))), z.zona.name).toEqual(z.lineas.map((l) => renglonDe(l, z.zona.id)))
       await expect(filas.locator('.fila-linea-km')).toHaveText(z.lineas.map((l) => `${Math.round(l.length_km)} km`))
     }
     // el renglón de una línea: su tipo, su nombre corto, sus kilómetros y, si lo tiene, el tramo sin circulación
@@ -171,10 +171,10 @@ test.describe('Elegir línea sin pestañas', () => {
     await page.getByTestId('linea-lav-madrid-barcelona').hover()
     await expect(mapa).toHaveAttribute('data-lineas-resaltadas', 'lav-madrid-barcelona|baipas-zaragoza|baipas-lleida')
     await page.getByTestId('zona-madrid-castilla-la-mancha').locator('.zona-cabecera').hover()
-    // las tres de la zona, en cualquier orden
-    await expect
-      .poll(async () => (await mapa.getAttribute('data-lineas-resaltadas'))?.split('|').sort())
-      .toEqual(['alcazar-albacete', 'lav-la-sagra-toledo', 'manzanares-ciudad-real'])
+    // las de la zona, con las que llegan a ella desde otra y los baipases de todas, en cualquier orden
+    const deLaZona = zona('madrid-castilla-la-mancha').lineas.flatMap((l) => [l.id, ...indice.lines.filter((b) => (b.bypass_of ?? b.link_of) === l.id).map((b) => b.id)])
+    expect(deLaZona).toEqual(expect.arrayContaining(['alcazar-albacete', 'lav-la-sagra-toledo', 'manzanares-ciudad-real', 'lav-madrid-sevilla']))
+    await expect.poll(async () => (await mapa.getAttribute('data-lineas-resaltadas'))?.split('|').sort()).toEqual(deLaZona.sort())
     await page.getByTestId('ficha-red').hover()
     await expect(mapa).not.toHaveAttribute('data-lineas-resaltadas')
     // al elegir una línea no queda nada resaltado, ni al volver a la red

@@ -136,7 +136,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
-        <FuentesAtributos segment={segment} line={line} sources={sources} />
+        <FuentesAtributos segment={segment} line={line} sources={sources} trazado={segment.source_id} />
         {alternativa && alternativa.trains > 0 && (
           <section data-testid="tramo-alternativa-detalle">
             <p className="sobre">Si este tramo se cortara</p>
@@ -234,14 +234,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
             </p>
           ) : (
             <p className="suave">
-              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
-              {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
-              {services.counts.indeterminado > 0 && (
-                <>
-                  , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
-                </>
-              )}
-              .
+              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. <HoraDePaso counts={services.counts} />
             </p>
           )}
           <div data-testid="lista-servicios">
@@ -274,5 +267,40 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
         </>
       )}
     </section>
+  )
+}
+
+/**
+ * De dónde sale la hora a la que cada tren recorre el tramo, dicho sin ceros y sin dar por sabido qué es un
+ * paso estimado: la del horario si para en los dos extremos, calculada si no (docs/diseno.md, «Selección de ficha»).
+ */
+function HoraDePaso({ counts }: { counts: Record<'publicado' | 'estimado' | 'indeterminado', number> }) {
+  const { publicado, estimado, indeterminado } = counts
+  const delHorario = <Termino id="paso-publicado">la del horario</Termino>
+  const calculada = <Termino id="paso-estimado">calculada</Termino>
+  const uno = publicado + estimado === 1
+  return (
+    <span data-testid="tramo-hora-de-paso">
+      {publicado > 0 && estimado === 0 && (
+        <>
+          {uno ? 'Para' : 'Todos paran'} en los dos extremos del tramo: la hora a la que {uno ? 'pasa' : 'pasan'} es {delHorario}.
+        </>
+      )}
+      {publicado === 0 && estimado > 0 && (
+        <>
+          {uno ? 'No para' : 'Ninguno para'} en los dos extremos del tramo: la hora a la que {uno ? 'pasa' : 'pasan'} está {calculada}.
+        </>
+      )}
+      {publicado > 0 && estimado > 0 && (
+        <>
+          {publicado} {publicado === 1 ? 'para' : 'paran'} en los dos extremos del tramo y su hora es {delHorario}; la de {estimado === 1 ? 'el otro' : `los otros ${estimado}`} está {calculada}.
+        </>
+      )}
+      {indeterminado > 0 && (
+        <>
+          {publicado + estimado > 0 ? ' ' : ''}De {indeterminado} no se puede saber la hora: su paso es <Termino id="paso-indeterminado">indeterminado</Termino>.
+        </>
+      )}
+    </span>
   )
 }

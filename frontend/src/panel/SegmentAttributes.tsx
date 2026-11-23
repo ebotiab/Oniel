@@ -36,15 +36,22 @@ function enumerar(etiquetas: string[]): string {
 /**
  * De dónde salen los atributos que la ficha enseña, a la vista o plegados, y cuándo se comprobaron: un
  * renglón por fuente, al pie de «Más detalle». No usa `PieFuente` porque la fecha es la de comprobación de
- * cada valor, no la de descarga de la fuente.
+ * cada valor, no la de descarga de la fuente. Una fuente que la ficha ya ha citado justo encima (la del
+ * trazado, de la que sale también el ancho de vía) no repite su párrafo: se dice que es la misma.
  */
-export function FuentesAtributos({ segment, line, sources }: Omit<Props, 'lugar'> & { sources: Source[] }) {
+export function FuentesAtributos({ segment, line, sources, trazado = null }: Omit<Props, 'lugar'> & { sources: Source[]; trazado?: string | null }) {
   const fuentes = attributeSources([...attributeRows(segment, line, 'esencial'), ...attributeRows(segment, line, 'detalle')])
   if (!fuentes.length) return null
   return (
     <div className="pie-fuente" data-testid="atributos-fuente">
       {fuentes.map((f) => {
         const fuente = sources.find((s) => s.id === f.sourceId)
+        if (f.sourceId === trazado)
+          return (
+            <p key={f.sourceId} className="suave">
+              {enumerar(f.etiquetas)}: la misma fuente que el trazado{f.checkedOn ? `, comprobado el ${formatDateLong(f.checkedOn)}` : ''}.
+            </p>
+          )
         return (
           <p key={f.sourceId} className="suave">
             {enumerar(f.etiquetas)}: {fuente?.url ? (

@@ -13,7 +13,7 @@
     "tracks": 1,
     "pk_origin_km": 251.6,
     "status": "disponible",
-    "description": "El trazado antiguo de Madrid a Cáceres: de Monfragüe a la bifurcación Casa de la Torre, a las puertas de Cáceres, por Mirabel y Cañaveral.\n\nDesde 2022 casi todos los trenes van por la línea nueva, que corre cerca. Por aquí siguen pasando los regionales que paran en Mirabel, Casas de Millán y Cañaveral.\n\nEs de vía única y sin electrificar. Para Adif es el último trecho de su línea 500, la misma por la que se llega de Madrid a Monfragüe.",
+    "description": "El trazado antiguo de Madrid a Cáceres: de Monfragüe a la bifurcación Casa de la Torre, a las puertas de Cáceres, por Mirabel y Cañaveral.\n\nDesde 2022 casi todos los trenes van por la línea nueva, que corre cerca. Por aquí sigue pasando un tren regional al día en cada sentido, entre Madrid y Cáceres, que para en Mirabel, Casas de Millán y Cañaveral y entra también en Plasencia.\n\nEs de vía única y sin electrificar. Para Adif es el último trecho de su línea 500, la misma por la que se llega de Madrid a Monfragüe.",
     "geometry_source": {
       "source_id": "osm-relation-11717892",
       "parts": [

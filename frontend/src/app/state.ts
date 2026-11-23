@@ -130,8 +130,9 @@ export function annotationHref(a: { kind: string; id: string }): string | null {
   return routePath({ selection: { type: 'anotacion', kind: a.kind, id: a.id }, simulacion: false })
 }
 
+/** Kilómetros con un decimal y el punto de los millares, como los recuentos: 6772,1 → «6.772,1». */
 export function formatKm(km: number): string {
-  return km.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  return km.toLocaleString('es-ES', { useGrouping: 'always', minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
 /** Un recuento con el punto de los millares: 1170 → «1.170». */
