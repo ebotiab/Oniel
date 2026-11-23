@@ -357,12 +357,12 @@ def test_the_lines_meet_at_shared_nodes(
     assert "conv-madrid-extremadura" not in {c.id for c in conv_spec.connections}
     assert all(c.node_id != "bif-planetario" for c in conv_spec.connections)
     # lo que sigue sin cargar: el enlace de El Chaparral, las líneas de Valencia de Alcántara y de
-    # Elvas, la de Aljucén a La Garrovilla y las de Mérida a Zafra y a Ciudad Real
+    # Elvas y las de Mérida a Zafra y a Ciudad Real; la de Aljucén a La Garrovilla es un enlace
+    # desde el 23 de noviembre de 2026
     assert {(line, c.node_id) for line, net in nets.items() for c in net.spec.connections} == {
         (MADRID, "bif-el-chaparral"),
         (LAV, "caceres"),
         (LAV, "badajoz"),
-        (MERIDA, "aljucen"),
         (MERIDA, "merida"),
     }
 

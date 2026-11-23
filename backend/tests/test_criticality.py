@@ -163,14 +163,17 @@ def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparat
     Alcázar de San Juan a Madrid-Puerta de Atocha y vuelve a Torrejón de Velasco para tomar el
     túnel: seis cambios de línea, uno más de los de la primera búsqueda (``FIRST_MAX_CHANGES``). Se
     prueba sin la línea de València a Camp de Tarragona, que da a ese tren un rodeo más corto
-    en cambios de línea por Barcelona."""
+    en cambios de línea por Barcelona, y sin el túnel de Atocha a Chamartín, que le ahorra la
+    vuelta por Torrejón de Velasco."""
+    tunnel = "enlace-atocha-chamartin"
     index = NetworkIndexOut.model_validate(_read("index.json"))
     segments = [
         SegmentOut(id=f.id, **f.properties)
         for f in index.segment_features.features
-        if not f.id.startswith(f"{MEDITERRANEO}:")
+        if not f.id.startswith((f"{MEDITERRANEO}:", f"{tunnel}:"))
     ]
-    graph = build_graph([line for line in lines if line.id != MEDITERRANEO], index.nodes, segments)
+    kept = [line for line in lines if line.id not in (MEDITERRANEO, tunnel)]
+    graph = build_graph(kept, index.nodes, segments)
     valencia, valladolid = "valencia-joaquin-sorolla", "valladolid-campo-grande"
     closed_segment = f"{LAV_VALENCIA}:horcajada:cuenca-fernando-zobel"
     own = _path(graph, valencia, valladolid)
@@ -348,6 +351,9 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "castejon-pamplona",
         "miranda-bilbao",
         "sevilla-huelva",
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
+        "enlace-atocha-chamartin",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -403,6 +409,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
+        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -485,7 +492,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 21
         + 23
         + 3
-        + 11,
+        + 11
+        # los enlaces de Soto de Cerrato y de Aljucén quedan sin otro camino para todos, y los dos
+        # tramos de la línea de Valencia de Chamartín a Torrejón de Velasco dejan de estarlo: sus
+        # trenes tienen el túnel de Atocha a Chamartín y la línea convencional
+        + 2
+        - 2,
         121
         + 29
         + 4
@@ -510,7 +522,11 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 21
         + 23
         + 3
-        + 11,
+        + 11
+        # los dos enlaces y los tres tramos del túnel, sin él para una parte de sus trenes, menos
+        # los dos de la línea de Valencia
+        + 5
+        - 2,
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -593,8 +609,14 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         "castejon-pamplona:",
         "miranda-bilbao:",
         "sevilla-huelva:",
+        "enlace-soto-de-cerrato:",
+        "enlace-aljucen-la-garrovilla:",
         *extremadura_lines,
     )
+    # los enlaces de Soto de Cerrato y de Aljucén a La Garrovilla, sin otro camino para sus trenes:
+    # los otros dos lados de cada triángulo obligarían a invertir la marcha
+    assert none["enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato"] == 2
+    assert none["enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas"] == 16
     assert {k: n for k, n in none.items() if not k.startswith(apart)} == {
         f"{LAV}:bif-malaga:majarabique": 89,
         f"{LAV}:majarabique:sevilla-santa-justa": 87,
@@ -654,10 +676,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         (52, 10),
         (52, 10),
     ]
-    assert {s: n for s, n in none.items() if s.startswith(f"{LAV_VALENCIA}:")} == {
-        f"{LAV_VALENCIA}:madrid-chamartin:paso-bajo-atocha": 74,
-        f"{LAV_VALENCIA}:paso-bajo-atocha:bif-torrejon-de-velasco": 74,
-    }
+    # los dos tramos de Madrid-Chamartín a Torrejón de Velasco dejaron de estar sin otro camino
+    # al cargarse el túnel de Atocha a Chamartín: sus trenes lo tienen por él y la convencional
+    assert {s: n for s, n in none.items() if s.startswith(f"{LAV_VALENCIA}:")} == {}
+    assert [(s.trains, s.without_alternative) for s in valencia[:2]] == [(74, 0), (74, 0)]
     # y en la de Albacete a Alicante, los siete que van de Albacete a Alicante: 42 trenes hasta
     # la bifurcación de Murcia, 36 de allí a Monforte del Cid (los 6 de Madrid a Murcia que no
     # entran en Alicante ya han salido) y 56 de Monforte del Cid a Alicante, con los 20 Avant de

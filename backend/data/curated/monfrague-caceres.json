@@ -69,7 +69,7 @@
     "35206": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
     "35207": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
     "18000": {"exits": ["monfrague"], "via": [{"line": "madrid-plasencia", "node": "monfrague"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
-    "17000": {"exits": ["monfrague"]},
+    "17000": {"exits": ["monfrague"], "via": [{"line": "madrid-plasencia", "node": "monfrague"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "35400": {"exits": ["bif-casa-de-la-torre"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-casa-de-la-torre"}},
     "37500": {"exits": ["bif-casa-de-la-torre"], "via": [{"line": "lav-plasencia-badajoz", "node": "bif-casa-de-la-torre"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},
     "40002": {"exits": ["bif-casa-de-la-torre"]},

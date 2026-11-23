@@ -94,7 +94,7 @@
     "94002": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
     "94004": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
     "37200": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
-    "17000": {"exits": ["alcazar-de-san-juan"]},
+    "17000": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "60800": {"exits": ["albacete-los-llanos"]},
     "60900": {"exits": ["albacete-los-llanos"]},
     "60901": {"exits": ["albacete-los-llanos"]},

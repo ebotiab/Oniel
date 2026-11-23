@@ -1,0 +1,318 @@
+{
+  "line": {
+    "id": "enlace-aljucen-la-garrovilla",
+    "name": "Enlace de Aljucén a La Garrovilla",
+    "short_name": "520",
+    "sort_order": 46,
+    "zone": "extremadura",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 120,
+    "tracks": 1,
+    "status": "disponible",
+    "link_of": "lav-plasencia-badajoz",
+    "description": "El camino de Mérida a Badajoz: una vía de la línea convencional de Ciudad Real a Badajoz que va de Aljucén a La Garrovilla, donde se une a la línea nueva. La toman los trenes que salen de Mérida hacia Montijo y Badajoz, y los que vienen de Cáceres, entran en Mérida y siguen a Badajoz tras cambiar de sentido en la estación.\n\nTiene una sola vía. Deja la línea antigua en la bifurcación La Isla y llega a la vía nueva unos 400 m antes del apeadero de Garrovilla-Las Vegas.\n\nSus últimos metros, hasta el apeadero, son vía de la línea nueva: Oniel los cuenta también aquí para que el enlace acabe en una estación de esa línea.",
+    "geometry_source": {
+      "source_id": "osm-relation-6759731",
+      "parts": [
+        {
+          "source_id": "osm-relation-6759731",
+          "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json",
+          "relation_id": 6759731,
+          "trim": true,
+          "from": [
+            -6.4041086,
+            38.9356355
+          ],
+          "to": [
+            -6.4772095,
+            38.9153684
+          ]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "aljucen",
+      "name": "Aljucén",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "shared": true,
+      "position": {
+        "lon": -6.4041086,
+        "lat": 38.9356355
+      }
+    },
+    {
+      "id": "garrovilla-las-vegas",
+      "name": "Garrovilla-Las Vegas",
+      "kind": "estacion",
+      "adif_code": "37611",
+      "rank": "secundario",
+      "shared": true,
+      "position": {
+        "lon": -6.4772095,
+        "lat": 38.9153684
+      }
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "aljucen",
+      "to_node": "garrovilla-las-vegas",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-23",
+      "note": "Mapa 4: círculo verde de «Tren tierra y ASFA conv.» junto a Aljucén y entre la bifurcación La Isla y Montijo, sobre el trazo de la línea 520. Las vías de OSM (ref=520) llevan railway:asfa=yes."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "aljucen",
+      "to_node": "garrovilla-las-vegas",
+      "value": "bau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-23",
+      "note": "Mapa 4: trazo naranja discontinuo y rótulo «BAU ctc» bajo la línea 520 entre Aljucén y la bifurcación La Isla."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "aljucen",
+      "to_node": "garrovilla-las-vegas",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-23",
+      "note": "Mapa 4: el rótulo del bloqueo entre Aljucén y la bifurcación La Isla es «BAU ctc»."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "aljucen",
+      "to_node": "garrovilla-las-vegas",
+      "value": 120,
+      "source_id": "osm-relation-6759731",
+      "checked_on": "2026-11-23",
+      "note": "Las vías de la línea 520 entre Aljucén y la bifurcación La Isla llevan maxspeed=100 y 120 en OSM. Los últimos metros del trazado son vía de la línea nueva, con maxspeed=200: no es la velocidad del enlace."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "37611": {
+      "node": "garrovilla-las-vegas"
+    },
+    "17000": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "18000": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "30000": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "35001": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "35105": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "35200": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "35203": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "35206": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "35400": {
+      "exits": [
+        "aljucen"
+      ],
+      "via": [
+        {
+          "line": "ramal-merida",
+          "node": "aljucen"
+        },
+        {
+          "line": "lav-plasencia-badajoz",
+          "node": "bif-granja-las-encinas"
+        }
+      ]
+    },
+    "37200": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37300": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37302": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37305": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37308": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37311": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37400": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37402": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37404": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37406": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37407": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37409": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37410": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37500": {
+      "exits": [
+        "aljucen"
+      ],
+      "via": {
+        "line": "ramal-merida",
+        "node": "aljucen"
+      }
+    },
+    "50100": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "60400": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "94002": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "94004": {
+      "exits": [
+        "aljucen"
+      ]
+    },
+    "37603": {
+      "exits": [
+        "garrovilla-las-vegas"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "garrovilla-las-vegas"
+      }
+    },
+    "37604": {
+      "exits": [
+        "garrovilla-las-vegas"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "garrovilla-las-vegas"
+      }
+    },
+    "37606": {
+      "exits": [
+        "garrovilla-las-vegas"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "garrovilla-las-vegas"
+      }
+    },
+    "37608": {
+      "exits": [
+        "garrovilla-las-vegas"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "garrovilla-las-vegas"
+      }
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Mérida y en alguna estación del lado de Badajoz (Garrovilla-Las Vegas, Montijo, Montijo-El Molino, Guadiana o Badajoz): entre Mérida y esas estaciones no hay otra vía que esta. Entran los regionales de Badajoz a Mérida y más allá, y los trenes de Cáceres a Badajoz que entran en Mérida.",
+    "required_stop_ids": [
+      "37500"
+    ],
+    "any_of_stop_ids": [
+      "37611",
+      "37603",
+      "37608",
+      "37604",
+      "37606"
+    ]
+  }
+}

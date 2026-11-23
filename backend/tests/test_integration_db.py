@@ -270,6 +270,10 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # Córdoba a Sevilla por Lora del Río que no estaban en otra. Los otros 180 de sus 212 viajes, los
     # Alvia e Intercity de Madrid y los regionales de Cádiz, Jaén y Extremadura, ya estaban en otra línea
     trips += 32
+    # Con el túnel de Atocha a Chamartín entran 12: los regionales de Madrid-Chamartín a Sigüenza,
+    # que no pasan por ninguna otra línea cargada. Los enlaces de Soto de Cerrato y de Aljucén a
+    # La Garrovilla no añaden ninguno: sus viajes ya estaban en las líneas que unen
+    trips += 12
     # Con la de León a Gijón entran 33: los 25 regionales de León y de Valladolid a Gijón, que
     # suben el puerto de Pajares por la vía antigua, y 8 Media Distancia de León a Gijón. Los
     # otros 108 de sus 141 viajes ya estaban en la de Valladolid a León
@@ -512,9 +516,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # y la de València a Alicante por Xàtiva y la de Madrid a Valladolid por Ávila
     # y la de Palencia a Santander
     # y las de Zaragoza a Logroño y de Castejón a Pamplona, y la de Miranda de Ebro a Bilbao
-    # y la de Sevilla a Huelva
+    # y la de Sevilla a Huelva, y los tres enlaces de #260
     assert c["lines"] == (
-        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1
+        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 3
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -560,6 +564,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
+        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -592,6 +597,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 192 + 448  # la de Castejón a Pamplona
     renfe_passes += 18 + 66  # la de Miranda de Ebro a Bilbao
     renfe_passes += 48 + 432  # la de Sevilla a Huelva
+    # los tres enlaces de #260: Soto de Cerrato, Aljucén a La Garrovilla y el túnel de Madrid
+    renfe_passes += 6 + 128 + (555 + 423)
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -734,6 +741,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
+        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -778,6 +786,9 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "miranda-bilbao",
         # de la bifurcación de Cartuja a Huelva
         "sevilla-huelva",
+        # los enlaces de Soto de Cerrato y de Aljucén a La Garrovilla, de vía única
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -854,6 +865,9 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "castejon-pamplona",
         "miranda-bilbao",
         "sevilla-huelva",
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
+        "enlace-atocha-chamartin",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -948,6 +962,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
+        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -993,6 +1008,9 @@ async def test_segments_carry_their_attributes_with_source_and_date(
             ]
         },
         "sevilla-huelva:huelva-mercancias:huelva": 90,
+        # los dos enlaces que acaban con unos metros de vía de la línea vecina, más rápida
+        "enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato": 160,
+        "enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas": 120,
     }
     # la electrificación, solo donde no es la de su línea: el último tramo de la línea de
     # Valencia a Camp de Tarragona, que va a 25 kV en una línea de 3 kV, y la salida de Madrid de
@@ -1515,6 +1533,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
             + 3  # la de Miranda de Ebro a Bilbao: Orduña, Llodio y Bilbao-Abando
             + 8  # la de Sevilla a Huelva: de Benacazón a Huelva
+            + 2  # el túnel de Atocha a Chamartín: Recoletos y Nuevos Ministerios
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1555,9 +1574,28 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y 2 más con la de Miranda de Ebro a Bilbao: los Intercity de Miranda de Ebro a Bilbao de ese día
     # y 12 más con la de Sevilla a Huelva: los regionales de Sevilla a Huelva, los de Huelva a Zafra
     # y a Jabugo y los Media Distancia de Córdoba a Sevilla de ese día que no estaban en otra línea
+    # y 3 más con el túnel de Atocha a Chamartín: los regionales de Chamartín a Sigüenza de ese día
     assert (
         cov["service_count"]
-        == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56 + 57 + 107 + 5 + 39 + 2 + 12
+        == 619
+        + 117
+        + 61
+        + 18
+        + 5
+        + 30
+        + 72
+        + 37
+        + 33
+        + 26
+        + 62
+        + 56
+        + 57
+        + 107
+        + 5
+        + 39
+        + 2
+        + 12
+        + 3
     )
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
@@ -1629,31 +1667,35 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # artículo de la línea 700 ya estaban
     # Y 4 de la de Sevilla a Huelva: sus dos relaciones de OSM, el fichero de sus estaciones y el
     # artículo de la línea 440
-    assert len(cov["sources"]) == (
-        72
-        + 10
-        + 6
-        + 2
-        + 23
-        + 3
-        + 2
-        + 2
-        + 9
-        + 5
-        + 4
-        + 6
-        + 2
-        + 2
-        + 1
-        + 5
-        + 4
-        + 3
-        + 9
-        + 4
-        + 7
-        + 6
-        + 1
-        + 4
+    assert (
+        len(cov["sources"])
+        == (
+            72
+            + 10
+            + 6
+            + 2
+            + 23
+            + 3
+            + 2
+            + 2
+            + 9
+            + 5
+            + 4
+            + 6
+            + 2
+            + 2
+            + 1
+            + 5
+            + 4
+            + 3
+            + 9
+            + 4
+            + 7
+            + 6
+            + 1
+            + 4
+            + 1  # la relación de OSM del túnel de Atocha a Chamartín; los otros dos enlaces usan ficheros ya registrados
+        )
     )
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]
@@ -1728,6 +1770,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "castejon-pamplona",
         "miranda-bilbao",
         "sevilla-huelva",
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
+        "enlace-atocha-chamartin",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1799,6 +1844,9 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "castejon-pamplona": ["renfe"],
         "miranda-bilbao": ["renfe"],
         "sevilla-huelva": ["renfe"],
+        "enlace-soto-de-cerrato": ["renfe"],
+        "enlace-aljucen-la-garrovilla": ["renfe"],
+        "enlace-atocha-chamartin": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
@@ -2637,6 +2685,9 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "castejon-pamplona",
         "miranda-bilbao",
         "sevilla-huelva",
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
+        "enlace-atocha-chamartin",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -2686,6 +2737,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
+        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
     )
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
@@ -2790,6 +2842,9 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "castejon-pamplona",
         "miranda-bilbao",
         "sevilla-huelva",
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
+        "enlace-atocha-chamartin",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]
