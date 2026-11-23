@@ -230,7 +230,15 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           {/* un tramo puede no llevar ningún tren de los horarios: se dice, en vez de un recuento a cero */}
           {services.passes.length === 0 ? (
             <p className="suave" data-testid="tramo-sin-trenes">
-              Ningún tren de los horarios cargados recorre este tramo ese día.
+              Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de{' '}
+              <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.from_node_id)}>
+                {segment.from_name}
+              </button>{' '}
+              y en la de{' '}
+              <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.to_node_id)}>
+                {segment.to_name}
+              </button>
+              .
             </p>
           ) : (
             <p className="suave">
