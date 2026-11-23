@@ -75,7 +75,7 @@
     "50407": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
     "50417": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
     "50500": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
-    "17000": {"exits": ["espeluy"]},
+    "17000": {"exits": ["espeluy"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "50504": {"exits": ["espeluy"]},
     "50506": {"exits": ["espeluy"]},
     "50507": {"exits": ["espeluy"]},

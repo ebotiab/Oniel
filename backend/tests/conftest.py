@@ -62,6 +62,11 @@ CASTEJON_PAMPLONA_SPEC = DATA_DIR / "curated" / "castejon-pamplona.json"
 #: La línea de Miranda de Ebro a Bilbao por Orduña y Llodio.
 MIRANDA_BILBAO_SPEC = DATA_DIR / "curated" / "miranda-bilbao.json"
 SEVILLA_HUELVA_SPEC = DATA_DIR / "curated" / "sevilla-huelva.json"
+#: Los tres enlaces cargados el 23 de noviembre de 2026: el ramal de Soto de Cerrato, la vía de
+#: Aljucén a La Garrovilla y el túnel de Atocha a Chamartín por Recoletos.
+LINK_CERRATO_SPEC = DATA_DIR / "curated" / "enlace-soto-de-cerrato.json"
+LINK_ALJUCEN_SPEC = DATA_DIR / "curated" / "enlace-aljucen-la-garrovilla.json"
+LINK_MADRID_SPEC = DATA_DIR / "curated" / "enlace-atocha-chamartin.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -105,6 +110,9 @@ SPECS = [
     CASTEJON_PAMPLONA_SPEC,
     MIRANDA_BILBAO_SPEC,
     SEVILLA_HUELVA_SPEC,
+    LINK_CERRATO_SPEC,
+    LINK_ALJUCEN_SPEC,
+    LINK_MADRID_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los
