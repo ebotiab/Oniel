@@ -331,28 +331,8 @@ export function onielLayers(): LayerSpecification[] {
         'circle-stroke-width': ['case', ['boolean', ['feature-state', 'seleccionado'], false], 3.5, ['case', isSecondary, 1.8, 2.5]],
       },
     },
-    {
-      id: LAYER.nodeLabels,
-      type: 'symbol',
-      source: SRC.nodes,
-      filter: ['!', isSecondary],
-      layout: {
-        'text-field': ['get', 'short_name'],
-        'text-font': ['case', isStation, ['literal', ['Noto Sans Bold']], ['literal', ['Noto Sans Regular']]],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 5, ['case', isStation, 11.5, 10.5], 10, ['case', isStation, 14, 11.5]],
-        'text-offset': [0.9, 0],
-        'text-anchor': 'left',
-        'text-justify': 'left',
-        'text-optional': true,
-        'symbol-sort-key': ['case', isStation, 0, 1],
-      },
-      minzoom: 5.5,
-      paint: {
-        'text-color': ['case', isStation, TINTA, '#4B5551'],
-        'text-halo-color': PAPEL,
-        'text-halo-width': 1.8,
-      },
-    },
+    // Los rótulos secundarios van debajo de los principales: MapLibre coloca primero los de la capa de más
+    // arriba, y así una bifurcación vecina no le quita el sitio al rótulo de una estación.
     {
       id: LAYER.nodeLabelsSecondary,
       type: 'symbol',
@@ -373,6 +353,28 @@ export function onielLayers(): LayerSpecification[] {
         'text-color': '#4B5551',
         'text-halo-color': PAPEL,
         'text-halo-width': 1.6,
+      },
+    },
+    {
+      id: LAYER.nodeLabels,
+      type: 'symbol',
+      source: SRC.nodes,
+      filter: ['!', isSecondary],
+      layout: {
+        'text-field': ['get', 'short_name'],
+        'text-font': ['case', isStation, ['literal', ['Noto Sans Bold']], ['literal', ['Noto Sans Regular']]],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 5, ['case', isStation, 11.5, 10.5], 10, ['case', isStation, 14, 11.5]],
+        'text-offset': [0.9, 0],
+        'text-anchor': 'left',
+        'text-justify': 'left',
+        'text-optional': true,
+        'symbol-sort-key': ['case', isStation, 0, 1],
+      },
+      minzoom: 5.5,
+      paint: {
+        'text-color': ['case', isStation, TINTA, '#4B5551'],
+        'text-halo-color': PAPEL,
+        'text-halo-width': 1.8,
       },
     },
   ]

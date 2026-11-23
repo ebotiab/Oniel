@@ -56,14 +56,13 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 - [#264](https://github.com/ebotiab/Oniel/issues/264) Datos: costuras entre líneas. Catorce conexiones a trazos declaradas en un solo extremo, regionales de Valladolid a Burgos contados en la alta velocidad, nombres de conexiones con el nombre de Adif y textos de nodos compartidos que dicen «final de la línea».
 - [#263](https://github.com/ebotiab/Oniel/issues/263) Datos: rótulos de tren y nombres de estación. Desde el fichero de Renfe del 17 de noviembre las listas dicen «Intercity» y «Regional» donde las descripciones dicen «Alvia» y «Media Distancia», y la misma estación sale con dos nombres.
-- [#266](https://github.com/ebotiab/Oniel/issues/266) Visor: encuadre de las líneas, lista de zonas y textos sueltos. En el móvil, más de la mitad de las líneas dejan una cabecera fuera de lo que se ve; «Madrid y Castilla-La Mancha» no nombra Madrid ni lleva a sus líneas; el texto de los regionales por Cañaveral.
 
 **Incoherencias entre líneas y documentación.**
 
 - [#265](https://github.com/ebotiab/Oniel/issues/265) Datos: un solo criterio de velocidades, electrificación, fuentes y descripciones. Dos líneas cuya velocidad máxima es menor que la de uno de sus tramos, tres escrituras de la electrificación, la descripción de Madrid – Sevilla, cinco veces más corta que las demás.
 - [#267](https://github.com/ebotiab/Oniel/issues/267) Documentación: recuentos y referencias que se han quedado atrás.
 
-Cómo se reparten: #263, #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera; #261 también la regenera, porque cambia lo que se exporta. #260 y #262 son de código y comparten la búsqueda de recorridos: se hacen seguidas o en la misma sesión. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
+Cómo se reparten: #263, #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera; #261 también la regenera, porque cambia lo que se exporta. #260 y #262 son de código y comparten la búsqueda de recorridos: se hacen seguidas o en la misma sesión. #267 es de solo documentación: puede ir en paralelo con las demás.
 
 No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). #264 las deja bien dibujadas por los dos extremos; cargarlas es ampliar la red.
 

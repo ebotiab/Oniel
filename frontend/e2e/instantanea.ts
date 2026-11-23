@@ -57,34 +57,53 @@ const esAltaVelocidad = (l: LineSummary) => l.gauge_mm === 1435 || /alta velocid
 
 export interface ZonaDeLista {
   zona: ZoneOut
-  /** Sus líneas en el orden de la lista: primero la alta velocidad y, en cada tipo, de la más larga a la más corta. */
+  /**
+   * Las líneas que la lista enseña en la zona, en su orden: primero la alta velocidad y, en cada tipo, de la
+   * más larga a la más corta. Son las suyas y las de otra zona que paran en una de sus ciudades.
+   */
   lineas: LineSummary[]
-  /** Las ciudades de la zona con estación en alguna de sus líneas: las que dice la zona cuando está plegada. */
+  /** Las ciudades de la zona con estación en alguna de esas líneas: las que dice la zona cuando está plegada. */
   ciudades: string[]
 }
 
-/** Las zonas de la lista de líneas, de norte a sur, cada una con sus líneas y sus ciudades. */
+/** Las estaciones por las que pasa cada línea, sin acentos: las suyas y las de otra línea que tocan sus tramos. */
+const paradas: Map<string, Set<string>> = (() => {
+  const nombre = new Map(indice.nodes.filter((n) => n.kind === 'estacion').map((n) => [n.id, sinAcentos(n.name)]))
+  const out = new Map<string, Set<string>>()
+  const anotar = (linea: string, texto: string | undefined) => {
+    if (texto) out.set(linea, (out.get(linea) ?? new Set<string>()).add(texto))
+  }
+  for (const n of indice.nodes) anotar(n.line_id, nombre.get(n.id))
+  for (const f of indice.segment_features.features) for (const id of [f.properties.from_node_id, f.properties.to_node_id]) anotar(String(f.properties.line_id), nombre.get(String(id)))
+  return out
+})()
+
+/** Si una línea para en una ciudad: alguna de sus estaciones empieza por su nombre. */
+export const paraEn = (lineId: string, ciudad: string) => [...(paradas.get(lineId) ?? [])].some((e) => e.startsWith(sinAcentos(ciudad)))
+
+/**
+ * Las zonas de la lista de líneas, de norte a sur, cada una con sus líneas y sus ciudades. Una línea está
+ * en la zona que declara y en cada otra zona en la que para en una de sus ciudades (docs/diseno.md,
+ * «Elegir línea»).
+ */
 export const zonas: ZonaDeLista[] = (() => {
   const porId = new Map<string, ZonaDeLista>()
   for (const linea of lineasDeLista) {
     if (!linea.zone) throw new Error(`La línea ${linea.id} no declara zona`)
-    const z = porId.get(linea.zone.id) ?? { zona: linea.zone, lineas: [], ciudades: [] }
-    z.lineas.push(linea)
-    porId.set(linea.zone.id, z)
+    if (!porId.has(linea.zone.id)) porId.set(linea.zone.id, { zona: linea.zone, lineas: [], ciudades: [] })
   }
-  const estaciones = indice.nodes.filter((n) => n.kind === 'estacion')
+  for (const z of porId.values()) z.lineas = lineasDeLista.filter((l) => l.zone!.id === z.zona.id || z.zona.cities.some((c) => paraEn(l.id, c)))
   return [...porId.values()]
     .sort((a, b) => a.zona.sort_order - b.zona.sort_order)
-    .map((z) => {
-      const ids = new Set(z.lineas.map((l) => l.id))
-      const nombres = estaciones.filter((n) => ids.has(n.line_id)).map((n) => sinAcentos(n.name))
-      return {
-        ...z,
-        lineas: z.lineas.sort((a, b) => Number(esAltaVelocidad(b)) - Number(esAltaVelocidad(a)) || b.length_km - a.length_km),
-        ciudades: z.zona.cities.filter((c) => nombres.some((n) => n.startsWith(sinAcentos(c)))),
-      }
-    })
+    .map((z) => ({
+      ...z,
+      lineas: z.lineas.sort((a, b) => Number(esAltaVelocidad(b)) - Number(esAltaVelocidad(a)) || b.length_km - a.length_km),
+      ciudades: z.zona.cities.filter((c) => z.lineas.some((l) => paraEn(l.id, c))),
+    }))
 })()
+
+/** El identificador de prueba del renglón de una línea en una zona: el de otra zona lleva la zona detrás. */
+export const renglonDe = (linea: LineSummary, zonaId: string) => (linea.zone?.id === zonaId ? `linea-${linea.id}` : `linea-${linea.id}--${zonaId}`)
 
 /** Una zona de la lista, por su id (`zone.id` en la especificación de sus líneas). */
 export function zona(id: string): ZonaDeLista {
