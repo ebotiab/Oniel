@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
 import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
@@ -67,6 +67,41 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
   const groups = [...byOperator.entries()]
     .map(([id, passes]) => ({ id, name: operatorName(id), passes }))
     .sort((a, b) => b.passes.length - a.passes.length || a.name.localeCompare(b.name, 'es'))
+
+  // De dónde sale la hora de paso de los trenes de la lista; solo las clases que tienen alguno.
+  const c = services?.counts
+  const horas = [
+    c?.publicado
+      ? {
+          id: 'publicado',
+          texto: (
+            <>
+              sale del <Termino id="paso-publicado">horario publicado</Termino> en {c.publicado}
+            </>
+          ),
+        }
+      : null,
+    c?.estimado
+      ? {
+          id: 'estimado',
+          texto: (
+            <>
+              es <Termino id="paso-estimado">estimada</Termino> en {c.estimado}, porque no para{c.estimado > 1 ? 'n' : ''} en los dos extremos del tramo
+            </>
+          ),
+        }
+      : null,
+    c?.indeterminado
+      ? {
+          id: 'indeterminado',
+          texto: (
+            <>
+              <Termino id="paso-indeterminado">no se puede fijar</Termino> en {c.indeterminado}
+            </>
+          ),
+        }
+      : null,
+  ].filter((h) => h !== null)
 
   // Operadores que circulan por la línea y no publican sus horarios: sus trenes no están en la lista.
   const missing = operators.filter((o) => o.timetable === 'no_publicado' && line?.operator_ids?.includes(o.id))
@@ -230,17 +265,25 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           {/* un tramo puede no llevar ningún tren de los horarios: se dice, en vez de un recuento a cero */}
           {services.passes.length === 0 ? (
             <p className="suave" data-testid="tramo-sin-trenes">
-              Ningún tren de los horarios cargados recorre este tramo ese día.
+              Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de{' '}
+              <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.from_node_id)}>
+                {segment.from_name}
+              </button>{' '}
+              y en la de{' '}
+              <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.to_node_id)}>
+                {segment.to_name}
+              </button>
+              .
             </p>
           ) : (
-            <p className="suave">
-              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
-              {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
-              {services.counts.indeterminado > 0 && (
-                <>
-                  , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
-                </>
-              )}
+            <p className="suave" data-testid="tramo-horas">
+              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. La hora de paso{' '}
+              {horas.map((h, i) => (
+                <Fragment key={h.id}>
+                  {i > 0 && (i === horas.length - 1 ? ' y ' : ', ')}
+                  {h.texto}
+                </Fragment>
+              ))}
               .
             </p>
           )}

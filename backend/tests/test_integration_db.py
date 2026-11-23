@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+from collections import Counter
 from collections.abc import AsyncIterator, Iterator
 from pathlib import Path
 from typing import Any
@@ -2440,6 +2441,82 @@ async def test_snapshot_history_matches_the_api(
     assert counts["date"] == "2026-07-17"
 
 
+async def test_every_segment_lists_each_train_once_and_all_its_counts_agree(
+    client: httpx.AsyncClient, dsn: str, tmp_path: Path
+) -> None:
+    """En cada tramo de la instantánea la lista lleva cada tren una vez y tantos como las cifras.
+
+    Un tren es del día en que sale: el de la víspera que roza la medianoche no se repite en la
+    lista. La cifra del título (los renglones), la del esquema (``counts`` de la línea), la de
+    «Tramos sin otro camino» (``alternatives.json``) y la del histórico salen de la misma regla.
+    """
+    from oniel.db.pool import connect
+    from oniel.export.snapshot import export_snapshot, safe_name
+
+    async with connect(dsn) as conn:
+        result = await export_snapshot(conn, tmp_path)
+    day = result["date"]
+    read = lambda path: json.loads((tmp_path / path).read_text("utf-8"))  # noqa: E731
+    scheme: dict[str, int] = {}
+    for line_id in result["lines"]:
+        scheme |= read(f"lines/{safe_name(line_id)}.json")["counts"]
+    alternatives = {s["segment_id"]: s for s in read("alternatives.json")["segments"]}
+    files = sorted((tmp_path / "segments").iterdir())
+    assert len(files) == result["segments"] == len(scheme) == len(alternatives)
+    midnight = 0
+    for file in files:
+        body = json.loads(file.read_text("utf-8"))
+        segment_id = body["segment"]["id"]
+        ids = [p["service"]["id"] for p in body["passes"]]
+        assert len(ids) == len(set(ids)), segment_id
+        assert sum(body["counts"].values()) == len(ids), segment_id
+        assert scheme[segment_id] == len(ids), segment_id
+        assert alternatives[segment_id]["trains"] == len(ids), segment_id
+        by_operator = Counter(p["service"]["operator_id"] for p in body["passes"])
+        assert alternatives[segment_id]["by_operator"] == dict(by_operator), segment_id
+        history = read(f"historico/segments/{file.name}")["points"]
+        for point in history:
+            if point["date"] == day:
+                assert point["trains"] == by_operator[point["operator_id"]], segment_id
+        midnight += any(p["exit"] and "(+1)" in p["exit"] for p in body["passes"])
+    # la comprobación pasa por tramos con trenes que terminan pasada la medianoche
+    assert midnight > 0
+
+
+async def test_a_train_of_the_day_before_only_enters_a_closure_that_reaches_it(
+    client: httpx.AsyncClient,
+) -> None:
+    """El AVE 02210 entra en Bifurcación Málaga – Majarabique a las 23:09 y sale a las 23:53 ± 8 min.
+
+    El de la víspera no es un tren del día: no está en la ficha del tramo, y en la simulación solo
+    aparece cuando la franja del cierre lo alcanza, rotulado como salido el día anterior.
+    """
+    segment_id = f"{LAV}:bif-malaga:majarabique"
+    services = (
+        await client.get(f"/api/segments/{segment_id}/services", params={"date": "2026-11-13"})
+    ).json()
+    assert [p["service"]["train_number"] for p in services["passes"]].count("02210") == 1
+    closure = {"segment_id": segment_id, "date": "2026-11-13"}
+    by_day = (
+        await client.post(
+            "/api/simulations/closure", json={**closure, "start": "10:00", "end": "12:00"}
+        )
+    ).json()
+    assert len(by_day["items"]) == len(services["passes"])
+    assert not any(i["from_previous_day"] for i in by_day["items"])
+    at_midnight = (
+        await client.post(
+            "/api/simulations/closure", json={**closure, "start": "00:00", "end": "01:00"}
+        )
+    ).json()
+    previous = [i for i in at_midnight["items"] if i["from_previous_day"]]
+    assert [(i["service"]["train_number"], i["status"]) for i in previous] == [
+        ("02210", "indeterminado")
+    ]
+    assert len(at_midnight["items"]) == len(services["passes"]) + 1
+    assert sum(at_midnight["counts"].values()) == len(at_midnight["items"])
+
+
 async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncClient) -> None:
     network = (await client.get("/api/network")).json()
     index = (await client.get("/api/lines")).json()
@@ -2487,14 +2564,18 @@ async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncCli
         merged |= detail["counts"]
         # el reparto por operador de cada tramo suma su recuento, y hoy todo es de Renfe
         assert detail["counts_by_operator"] == {
-            s: counts["by_operator"][s] for s in detail["counts"]
+            s: counts["by_operator"][s] for s, n in detail["counts"].items() if n
         }
+        # todos los tramos de la línea figuran en el recuento, también el que no lleva trenes
+        assert set(detail["counts"]) == {s["id"] for s in detail["segments"]}
     assert {s: sum(by.values()) for s, by in counts["by_operator"].items()} == counts["counts"]
     # las líneas, juntas, suman lo mismo que la red entera
     assert nodes == network["nodes"]
     assert segments == network["segments"]
     assert features == network["segment_features"]["features"]
-    assert merged == counts["counts"]
+    assert {s: n for s, n in merged.items() if n} == counts["counts"]
+    # entre Moreda y la bifurcación de Almería no pasa ningún tren: figura con 0, no falta
+    assert merged[f"{LBMG}:moreda:bif-almeria"] == 0
 
     other_day = (await client.get(f"/api/lines/{MZCR}", params={"date": "2026-11-14"})).json()
     assert other_day["date"] == "2026-11-14"
@@ -2715,7 +2796,9 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         assert d["date"] == counts["date"]
         merged |= d["counts"]
         by_operator |= d["counts_by_operator"]
-    assert merged == counts["counts"]
+    assert {s: n for s, n in merged.items() if n} == counts["counts"]
+    # entre Moreda y la bifurcación de Almería no pasa ningún tren: figura con 0, no falta
+    assert merged[f"{LBMG}:moreda:bif-almeria"] == 0
     assert by_operator == counts["by_operator"]
     assert {s: sum(by.values()) for s, by in by_operator.items()} == counts["counts"]
     # el índice pesa una fracción de la red entera: es lo que el visor descarga al arrancar. Las
