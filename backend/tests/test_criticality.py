@@ -748,9 +748,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     }
     # entre Monfragüe y Cáceres hay dos caminos, la línea nueva y el trazado antiguo, y cada uno
     # es el otro camino del otro mientras no pase del doble del recorrido del tren. En el tramo
-    # largo de la línea nueva, de Arroyo de la Herrera a El Palmeral, lo tienen sus 20 trenes
+    # largo de la línea nueva, de Arroyo de la Herrera a El Palmeral, lo tienen 10 de sus 20
+    # trenes: los otros 10 lo tenían girando en una bifurcación, y con la regla de giro ya no
     new_line = _of(exported.segments, f"{LAV_BADAJOZ}:arroyo-de-la-herrera:bif-el-palmeral")
-    assert (new_line.trains, new_line.without_alternative) == (20, 0)
+    assert (new_line.trains, new_line.without_alternative) == (20, 10)
     # en los tramos cortos junto a las bifurcaciones solo lo tienen los trenes cuyo recorrido
     # sigue más allá: 8 de los 20 de Monfragüe a El Chaparral (los de Madrid que no entran en
     # Plasencia), 2 de los 12 de San Esteban a Arroyo de la Herrera y 10 de los 20 de El Palmeral
@@ -785,13 +786,15 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # la de Madrid a Valladolid entera: 122 trenes hasta Segovia, 111 hasta la bifurcación Medina,
     # donde salen los de Galicia, y 81 hasta Valladolid. Desde que está la convencional por Ávila
     # casi todos tienen otro camino por ella; no lo tienen los 11 de Segovia-Guiomar ni los 8 de
-    # Medina del Campo AV, para los que la vuelta mide más del doble
+    # Medina del Campo AV, para los que la vuelta mide más del doble. Con la regla de giro
+    # tampoco los 22 de Galicia en los dos tramos de Segovia-Guiomar a la bifurcación Medina: de
+    # la convencional por Ávila no se pasa a la línea de Zamora sin invertir la marcha
     valladolid = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALLADOLID}:")]
     assert [(s.trains, s.without_alternative) for s in valladolid] == [
         (122, 19),
         (122, 19),
-        (111, 8),
-        (111, 8),
+        (111, 30),
+        (111, 30),
         (81, 0),
     ]
     # y la de Valladolid a León, que la continúa: 53 trenes hasta la bifurcación Venta de Baños,
@@ -818,8 +821,11 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     camp_sants = _of(exported.segments, f"{BCN}:camp-de-tarragona:l-arboc")
     assert (camp_sants.trains, camp_sants.without_alternative) == (108, 0)
     assert _of(exported.segments, f"{BCN}:madrid-puerta-de-atocha:bif-vallecas-av").trains == 74
-    # los cinco que entran y salen de Zaragoza-Delicias y de Lleida-Pirineus sí lo tienen: el
-    # baipás. Y solo llevan los trenes que paran en la estación o salen de la línea por ella
+    # los cinco que entran y salen de Zaragoza-Delicias y de Lleida-Pirineus tienen el baipás, y
+    # solo llevan los trenes que paran en la estación o salen de la línea por ella. Con la regla
+    # de giro, el baipás no vale para los trenes que acaban en la estación o salen de ella hacia
+    # el otro lado: desde el baipás no se entra en ella sin invertir la marcha. Son 8 y 4 en la
+    # entrada a Zaragoza-Delicias y 16 en la salida de Lleida-Pirineus
     stations = {
         f"{BCN}:bif-moncasi:zaragoza-delicias": 56,
         f"{BCN}:zaragoza-delicias:bif-huesca": 55,
@@ -827,9 +833,17 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{BCN}:bif-les-torres-de-sanui:lleida-pirineus": 31,
         f"{BCN}:lleida-pirineus:bif-artesa-de-lleida": 47,
     }
+    without_bypass = {
+        f"{BCN}:bif-moncasi:zaragoza-delicias": 8,
+        f"{BCN}:zaragoza-delicias:bif-huesca": 4,
+        f"{BCN}:lleida-pirineus:bif-artesa-de-lleida": 16,
+    }
     for s in barcelona:
         if s.segment_id in stations:
-            assert (s.trains, s.without_alternative) == (stations[s.segment_id], 0)
+            assert (s.trains, s.without_alternative) == (
+                stations[s.segment_id],
+                without_bypass.get(s.segment_id, 0),
+            )
     # los baipases llevan los que no paran: 22 el de Zaragoza y 42 el de Lleida. Con el baipás
     # cortado entrarían en la estación, 4,9 km y 6 minutos más en Zaragoza
     around_zaragoza = _of(exported.segments, "baipas-zaragoza:bif-moncasi:bif-canal-imperial")
@@ -892,9 +906,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # Granada queda unida por los dos lados (la convencional de Moreda y la alta velocidad de
     # Antequera), así que ni la alta velocidad de Granada ni Córdoba – bifurcación de Málaga
     # figuran ya: sus trenes de largo recorrido tienen otro camino, aunque sea por una línea de
-    # otro ancho. Los de recorrido corto (los Avant de Sevilla, Málaga y Granada), no
+    # otro ancho. Los de recorrido corto (los Avant de Sevilla, Málaga y Granada), no. Y desde
+    # la regla de giro, tampoco los que siguen de Córdoba a Sevilla: la vuelta por Granada llega
+    # a la bifurcación de Málaga por la línea de Málaga, y para tomar la de Sevilla habría que
+    # invertir la marcha en Córdoba
     first = _of(exported.segments, CORDOBA_BIF_MALAGA)
-    assert (first.trains, first.without_alternative) == (146, 22)
+    assert (first.trains, first.without_alternative) == (146, 89)
     loja = _of(exported.segments, f"{LAV_GRANADA}:loja:bif-tocon")
     assert (loja.trains, loja.without_alternative) == (24, 14)
     # para los 6 trenes de Madrid a Granada (los dos Alvia que siguen a Almería cuentan con
