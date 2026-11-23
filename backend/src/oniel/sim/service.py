@@ -76,7 +76,9 @@ async def simulate_closure(
         start=req.start.isoformat(),
         end=req.end.isoformat(),
     ):
-        dated: list[DatedPass] = await passes_on_segment(conn, segment.id, req.date)
+        dated: list[DatedPass] = await passes_on_segment(
+            conn, segment.id, req.date, with_previous_day=True
+        )
         # El cierre es un escenario de una modificación sobre el grafo de todas las líneas.
         active = await fetch_interruptions(conn, day=req.date)
         detours, omitted = alternatives(
@@ -87,6 +89,11 @@ async def simulate_closure(
         counts: Counter[str] = Counter()
         for d in dated:
             verdict = classify(d.segment_pass, window, -86400 if d.from_previous_day else 0)
+            # Un tren es del día en que sale. El de ayer que sigue en el tramo pasada la medianoche
+            # solo entra en el resultado si el cierre lo alcanza: así, cuando no lo alcanza, la
+            # simulación cuenta los mismos trenes que la ficha del tramo.
+            if d.from_previous_day and verdict.status == "no_afectado":
+                continue
             counts[verdict.status] += 1
             enter, exit_ = shifted_times(d.segment_pass, d.from_previous_day)
             items.append(
