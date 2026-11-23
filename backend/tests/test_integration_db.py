@@ -516,9 +516,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # y la de València a Alicante por Xàtiva y la de Madrid a Valladolid por Ávila
     # y la de Palencia a Santander
     # y las de Zaragoza a Logroño y de Castejón a Pamplona, y la de Miranda de Ebro a Bilbao
-    # y la de Sevilla a Huelva
+    # y la de Sevilla a Huelva, y los tres enlaces de #260
     assert c["lines"] == (
-        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1
+        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 3
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -1574,9 +1574,28 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # y 2 más con la de Miranda de Ebro a Bilbao: los Intercity de Miranda de Ebro a Bilbao de ese día
     # y 12 más con la de Sevilla a Huelva: los regionales de Sevilla a Huelva, los de Huelva a Zafra
     # y a Jabugo y los Media Distancia de Córdoba a Sevilla de ese día que no estaban en otra línea
+    # y 3 más con el túnel de Atocha a Chamartín: los regionales de Chamartín a Sigüenza de ese día
     assert (
         cov["service_count"]
-        == 619 + 117 + 61 + 18 + 5 + 30 + 72 + 37 + 33 + 26 + 62 + 56 + 57 + 107 + 5 + 39 + 2 + 12
+        == 619
+        + 117
+        + 61
+        + 18
+        + 5
+        + 30
+        + 72
+        + 37
+        + 33
+        + 26
+        + 62
+        + 56
+        + 57
+        + 107
+        + 5
+        + 39
+        + 2
+        + 12
+        + 3
     )
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
@@ -1648,31 +1667,35 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     # artículo de la línea 700 ya estaban
     # Y 4 de la de Sevilla a Huelva: sus dos relaciones de OSM, el fichero de sus estaciones y el
     # artículo de la línea 440
-    assert len(cov["sources"]) == (
-        72
-        + 10
-        + 6
-        + 2
-        + 23
-        + 3
-        + 2
-        + 2
-        + 9
-        + 5
-        + 4
-        + 6
-        + 2
-        + 2
-        + 1
-        + 5
-        + 4
-        + 3
-        + 9
-        + 4
-        + 7
-        + 6
-        + 1
-        + 4
+    assert (
+        len(cov["sources"])
+        == (
+            72
+            + 10
+            + 6
+            + 2
+            + 23
+            + 3
+            + 2
+            + 2
+            + 9
+            + 5
+            + 4
+            + 6
+            + 2
+            + 2
+            + 1
+            + 5
+            + 4
+            + 3
+            + 9
+            + 4
+            + 7
+            + 6
+            + 1
+            + 4
+            + 1  # la relación de OSM del túnel de Atocha a Chamartín; los otros dos enlaces usan ficheros ya registrados
+        )
     )
     assert "línea convencional" in cov["notice"]
     assert "la línea convencional Manzanares – Ciudad Real" in cov["notice"]

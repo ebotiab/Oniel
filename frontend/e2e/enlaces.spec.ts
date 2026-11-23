@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { cabeceraDeZona, FICHA_RED, zona } from './instantanea.ts'
+import { cabeceraDeZona, FICHA_RED, fraseOtroCamino, zona } from './instantanea.ts'
 import { abrirLinea, abrirZona } from './navegar.ts'
 
 const ENLACE = 'enlace-monforte-del-cid:monforte-del-cid-av:bif-vinalopo'
@@ -27,7 +27,7 @@ test.describe('El enlace de Monforte del Cid', () => {
     await expect(enlaces).toHaveText([/^Enlace de Monforte del Cid2 km$/])
     // el filtro encuentra la línea de Murcia por el nombre de su enlace
     const filtro = page.getByTestId('filtro-lineas')
-    await filtro.fill('enlace')
+    await filtro.fill('enlace de monforte')
     await expect(red.locator('.fila-linea')).toHaveText([/Monforte del Cid – Murcia68 km$/])
     await filtro.fill('')
     // y el enlace tiene su ficha de línea
@@ -102,8 +102,11 @@ test.describe('El enlace de Monforte del Cid', () => {
   test('de Madrid a Murcia sigue habiendo los mismos recorridos: ninguno dobla una esquina del triángulo', async ({ page }) => {
     await page.goto('/recorridos/madrid-chamartin/murcia-del-carmen')
     const recorridos = page.getByTestId('recorrido')
-    await expect(recorridos.first()).toContainText('529,5 km · 2 h 3 min sin paradas')
-    await expect(recorridos.first()).toContainText('Recorre tres líneas')
+    // el de alta velocidad entero es el segundo desde que está cargado el túnel de Atocha a Chamartín: el
+    // más corto en kilómetros baja por él a Atocha y sigue por la línea convencional hasta Albacete
+    await expect(recorridos.first()).toContainText('493,4 km')
+    const altaVelocidad = recorridos.filter({ hasText: '529,5 km · 2 h 3 min sin paradas' })
+    await expect(altaVelocidad).toContainText('Recorre tres líneas')
     // Solo pasa por el enlace el recorrido que llega antes a Alicante, por València y Xàtiva (#208): entra
     // en él desde Alicante-Terminal, como los trenes de Alicante a Murcia, y no dobla ninguna esquina
     for (const recorrido of await recorridos.all()) {
@@ -111,5 +114,77 @@ test.describe('El enlace de Monforte del Cid', () => {
       if (texto.includes('Alicante-Terminal')) expect(texto).toContain('Xàtiva')
       else expect(texto).not.toContain('Monforte del Cid')
     }
+  })
+})
+
+// Los tres enlaces cargados el 23 de noviembre de 2026 (#260): eran conexiones a trazos, y el comparador
+// daba rodeos que ningún tren hace (docs/datos.md, «Cómo se cargaron los enlaces de Soto de Cerrato, de
+// Aljucén a La Garrovilla y de Atocha a Chamartín»).
+test.describe('Los enlaces de Soto de Cerrato y de Aljucén y el túnel de Atocha a Chamartín', () => {
+  const TUNEL = 'enlace-atocha-chamartin'
+  const ALJUCEN = 'enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas'
+  const CERRATO = 'enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato'
+
+  test('cada uno cuelga de su línea en la lista y tiene su ficha', async ({ page }) => {
+    await page.goto('/')
+    await abrirPanel(page)
+    await expect(page.getByTestId('ficha-red')).toContainText(FICHA_RED)
+    for (const [id, nombre, km] of [
+      ['enlace-soto-de-cerrato', 'Enlace de Soto de Cerrato', '5,2 km'],
+      ['enlace-aljucen-la-garrovilla', 'Enlace de Aljucén a La Garrovilla', '7,1 km'],
+      [TUNEL, 'Túnel de Atocha a Chamartín por Recoletos', '7,7 km'],
+    ]) {
+      await page.goto('/')
+      await abrirPanel(page)
+      await abrirLinea(page, id)
+      await expect(page).toHaveURL(new RegExp(`/linea/${id}$`))
+      await expect(page.getByRole('heading', { name: nombre })).toBeVisible()
+      await expect(page.getByTestId('ficha-linea')).toContainText(km)
+    }
+  })
+
+  test('el buscador encuentra el túnel por su nombre', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByTestId('vista-red')).toBeVisible()
+    const lupa = page.getByTestId('buscador-abrir')
+    if (await lupa.isVisible()) await lupa.click()
+    const campo = page.getByRole('combobox', { name: 'Buscar una estación o una línea' })
+    await campo.fill('túnel de atocha')
+    const primero = page.getByRole('option').first()
+    await expect(primero).toContainText('Túnel de Atocha a Chamartín por Recoletos')
+    await expect(primero).toContainText('Enlace convencional · 7,7 km')
+    await campo.press('Enter')
+    await expect(page).toHaveURL(new RegExp(`/linea/${TUNEL}$`))
+  })
+
+  test('sus tramos llevan los trenes que los recorren', async ({ page }) => {
+    for (const [tramo, rotulo, km] of [
+      [ALJUCEN, 'Tramo 1 de 1 · Enlace de Aljucén a La Garrovilla', '7,1 km'],
+      [CERRATO, 'Tramo 1 de 1 · Enlace de Soto de Cerrato', '5,2 km'],
+      [`${TUNEL}:madrid-recoletos:madrid-nuevos-ministerios`, 'Tramo 2 de 3 · Túnel de Atocha a Chamartín por Recoletos', '2,7 km'],
+    ]) {
+      await page.goto(`/tramo/${tramo}`)
+      await abrirPanel(page)
+      const ficha = page.getByTestId('detalle-tramo')
+      await expect(ficha).toContainText(rotulo)
+      await expect(ficha).toContainText(km)
+      await expect(page.getByTestId('tramo-alternativa')).toContainText(fraseOtroCamino(tramo))
+    }
+  })
+
+  test('el comparador va de Atocha a Chamartín por el túnel, y no por Torrejón de Velasco', async ({ page }) => {
+    await page.goto('/recorridos/madrid-puerta-de-atocha/madrid-chamartin')
+    const recorridos = page.getByTestId('recorrido')
+    await expect(recorridos).toHaveCount(1)
+    // 7,6 km: eran 65,2 cuando el único recorrido doblaba en la bifurcación de Torrejón de Velasco
+    await expect(recorridos.first()).toContainText('7,6 km · 8 min sin paradas')
+    await expect(recorridos.first()).not.toContainText('Torrejón de Velasco')
+  })
+
+  test('de Mérida a Badajoz y de Palencia a Burgos el comparador va por los enlaces', async ({ page }) => {
+    await page.goto('/recorridos/merida/badajoz')
+    await expect(page.getByTestId('recorrido').first()).toContainText('58,9 km')
+    await page.goto('/recorridos/palencia/burgos-rosa-manzano')
+    await expect(page.getByTestId('recorrido').first()).toContainText('93,7 km')
   })
 })

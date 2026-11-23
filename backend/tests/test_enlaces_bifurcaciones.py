@@ -25,6 +25,7 @@ from conftest import (
     MADRID_PLASENCIA_SPEC,
     RAMAL_MERIDA_SPEC,
     SOURCES,
+    SPEC,
     SPECS,
 )
 
@@ -71,7 +72,7 @@ def test_each_link_hangs_from_one_line_and_ends_on_another(
         CERRATO: (LAV_BURGOS_SPEC, "bif-soto-de-cerrato", LAV_LEON_SPEC, "bif-cerrato"),
         ALJUCEN: (LAV_BADAJOZ_SPEC, "garrovilla-las-vegas", RAMAL_MERIDA_SPEC, "aljucen"),
         MADRID: (
-            CONV_SPEC,
+            SPEC,
             "madrid-puerta-de-atocha",
             MADRID_AVILA_VALLADOLID_SPEC,
             "madrid-chamartin",
@@ -137,7 +138,7 @@ def test_sources_and_signalling(specs: dict[str, NetworkSpec]) -> None:
     }
     for line, spec in specs.items():
         used = {p.source_id for p in spec.line.geometry_source.parts}
-        used |= {t.source_id for t in spec.attribute_sections}
+        used |= {t.source_id for t in spec.attribute_sections if t.source_id}
         assert used <= set(sources), line
         values = {t.attribute: t.value for t in spec.attribute_sections}
         assert {k: values[k] for k in signalling[line]} == signalling[line]

@@ -232,10 +232,12 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         1289.1,  # por Barcelona, Camp de Tarragona, la costa y Valencia
     ]
     # sin tope de líneas no queda ninguna pareja de estaciones unidas sin recorrido: de
-    # Madrid-Puerta de Atocha a Bilbao se encadenan siete líneas
+    # Madrid-Puerta de Atocha a Bilbao se encadenan seis líneas desde que el túnel de Atocha a
+    # Chamartín está cargado (eran siete cuando había que ir por Torrejón de Velasco)
     to_bilbao = find_routes(graph, MADRID, "bilbao-abando")
-    assert [len(r.line_ids) for r in to_bilbao[:1]] == [7]
-    assert not find_routes(graph, MADRID, "bilbao-abando", max_changes=5)
+    assert [len(r.line_ids) for r in to_bilbao[:1]] == [6]
+    assert to_bilbao[0].line_ids[0] == "enlace-atocha-chamartin"
+    assert not find_routes(graph, MADRID, "bilbao-abando", max_changes=4)
     # Madrid – Andújar: hay un recorrido que pasa tres veces de una línea a otra
     to_andujar = find_routes(graph, MADRID, "andujar")
     assert [r.length_km for r in to_andujar] == [361.9, 401.0, 422.4, 512.1]
@@ -298,9 +300,12 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     )
     # los últimos 21,5 km, desde Orihuela, son de vía única
     assert high_speed.single_track_km == 21.5
-    # desde Madrid-Chamartín, de donde salen casi todos sus trenes, el de alta velocidad entero es
-    # el primero: por la línea de Valencia, la de Albacete a Alicante y esta
-    from_chamartin = find_routes(graph, "madrid-chamartin", MURCIA)[0]
+    # desde Madrid-Chamartín, de donde salen casi todos sus trenes, el de alta velocidad entero
+    # (por la línea de Valencia, la de Albacete a Alicante y esta) es el segundo desde que el túnel
+    # de Atocha a Chamartín está cargado: el más corto baja por él a Atocha y sigue como el de allí
+    by_tunnel, from_chamartin = find_routes(graph, "madrid-chamartin", MURCIA)[:2]
+    assert by_tunnel.line_ids == ["enlace-atocha-chamartin", *to_murcia[0].line_ids]
+    assert by_tunnel.length_km == 493.4
     assert from_chamartin.line_ids == [LAV_VALENCIA, LAV_ALICANTE, LAV_MURCIA]
     assert (from_chamartin.length_km, from_chamartin.time_min) == (529.5, 123)
     # de Alicante a Murcia el recorrido va por el enlace de Monforte del Cid, como los trenes:
@@ -444,10 +449,14 @@ def test_ourense_and_zamora_are_reached_from_madrid(graph: Graph) -> None:
         ("madrid-chamartin", "bif-medina"),
         ("bif-medina", "ourense"),
     ]
-    # los trenes de Ourense a Alicante: por Chamartín, sin pasar por Atocha
+    # los trenes de Ourense a Alicante van por Chamartín, sin pasar por Atocha: es el segundo
+    # recorrido (947,5 km). El más corto en kilómetros (911,4 km) cruza Madrid por el túnel de
+    # Atocha a Chamartín y sigue por la convencional hasta Albacete; el grafo no mira el ancho
     to_alicante = find_routes(graph, "ourense", "alicante-terminal")
-    assert "madrid-chamartin" in to_alicante[0].node_ids
-    assert "madrid-puerta-de-atocha" not in to_alicante[0].node_ids
+    assert [r.length_km for r in to_alicante[:2]] == [911.4, 947.5]
+    assert "enlace-atocha-chamartin" in to_alicante[0].line_ids
+    assert "madrid-chamartin" in to_alicante[1].node_ids
+    assert "madrid-puerta-de-atocha" not in to_alicante[1].node_ids
     assert graph.edges_at("bif-medina") and {
         e.line_id for e in graph.edges_at("bif-medina")
     } == set(lines)
@@ -455,15 +464,52 @@ def test_ourense_and_zamora_are_reached_from_madrid(graph: Graph) -> None:
 
 def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     """El enlace de Monforte del Cid cierra un triángulo con la línea de Alicante y la de Murcia,
-    y de un lado a otro solo se pasa invirtiendo la marcha: ningún recorrido lo hace."""
-    assert graph.link_of == {"enlace-monforte-del-cid": LAV_MURCIA}
+    y de un lado a otro solo se pasa invirtiendo la marcha: ningún recorrido lo hace. Lo mismo
+    los otros tres enlaces: el de Soto de Cerrato, el de Aljucén a La Garrovilla y el túnel de
+    Atocha a Chamartín, que cierra el suyo con las dos líneas de alta velocidad que se juntan en
+    la bifurcación de Torrejón de Velasco."""
+    assert graph.link_of == {
+        "enlace-monforte-del-cid": LAV_MURCIA,
+        "enlace-soto-de-cerrato": "lav-venta-de-banos-burgos",
+        "enlace-aljucen-la-garrovilla": "lav-plasencia-badajoz",
+        "enlace-atocha-chamartin": LAV,
+    }
     side_alicante = f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av"
     side_murcia = f"{LAV_MURCIA}:bif-murcia:bif-vinalopo"
-    assert graph.link_sides() == {
+    all_sides = graph.link_sides()
+    assert {s: side for s, side in all_sides.items() if side[0] == "enlace-monforte-del-cid"} == {
         LINK: ("enlace-monforte-del-cid", 0),
         side_alicante: ("enlace-monforte-del-cid", 1),
         side_murcia: ("enlace-monforte-del-cid", 2),
     }
+    tunnel = "enlace-atocha-chamartin"
+    assert {s: n for s, (link, n) in all_sides.items() if link != "enlace-monforte-del-cid"} == {
+        "enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato": 0,
+        "lav-valladolid-leon:bif-venta-de-banos:bif-cerrato": 1,
+        "lav-venta-de-banos-burgos:bif-venta-de-banos:bif-soto-de-cerrato": 2,
+        "enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas": 0,
+        "ramal-merida:bif-granja-las-encinas:aljucen": 1,
+        "lav-plasencia-badajoz:bif-granja-las-encinas:garrovilla-las-vegas": 2,
+        f"{tunnel}:madrid-puerta-de-atocha:madrid-recoletos": 0,
+        f"{tunnel}:madrid-recoletos:madrid-nuevos-ministerios": 0,
+        f"{tunnel}:madrid-nuevos-ministerios:madrid-chamartin": 0,
+        f"{LAV_VALENCIA}:madrid-chamartin:paso-bajo-atocha": 1,
+        f"{LAV_VALENCIA}:paso-bajo-atocha:bif-torrejon-de-velasco": 1,
+        f"{LAV}:madrid-puerta-de-atocha:bif-los-gavilanes": 2,
+        f"{LAV}:bif-los-gavilanes:bif-torrejon-de-velasco": 2,
+    }
+    # de Madrid-Puerta de Atocha a Madrid-Chamartín se va por el túnel (7,6 km), y ya no por la
+    # bifurcación de Torrejón de Velasco (65,2 km), que era doblar una esquina; de Mérida a Badajoz
+    # y de Palencia a Burgos, por sus enlaces
+    assert [(r.length_km, r.line_ids) for r in find_routes(graph, MADRID, "madrid-chamartin")] == [
+        (7.6, [tunnel])
+    ]
+    assert find_routes(graph, "merida", "badajoz")[0].length_km == 58.9
+    assert find_routes(graph, "palencia", "burgos-rosa-manzano")[0].length_km == 93.7
+    # y ningún recorrido pasa del túnel a una de las dos líneas de alta velocidad hacia el sur
+    out_of_atocha = f"{LAV}:madrid-puerta-de-atocha:bif-los-gavilanes"
+    for route in find_routes(graph, "madrid-chamartin", CORDOBA):
+        assert tunnel not in route.line_ids or out_of_atocha not in route.segment_ids
     sides = {LINK, side_alicante, side_murcia}
     for start, end in (
         (MADRID, MURCIA),

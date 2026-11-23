@@ -118,10 +118,11 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
   })
 
   test('los recorridos no tienen tope de líneas: de Madrid-Puerta de Atocha a Bilbao hay recorrido', () => {
-    // Encadena siete líneas. Hasta noviembre de 2026 el comparador paraba en seis y decía que no había ninguno.
+    // Encadenaba siete líneas, y hasta noviembre de 2026 el comparador paraba en seis y decía que no había
+    // ninguno. Con el túnel de Atocha a Chamartín cargado son seis.
     const c = compararRecorridos(grafo, red, MADRID, 'bilbao-abando', sinCortes)
     expect(c.recorridos.length).toBeGreaterThan(0)
-    expect(c.recorridos[0]!.route.line_ids).toHaveLength(7)
+    expect(c.recorridos[0]!.route.line_ids).toHaveLength(6)
     expect(c.recorridos[0]!.route.line_ids.at(-1)).toBe('miranda-bilbao')
   })
 
@@ -260,9 +261,10 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(page.getByTestId('recorridos-trenes-fuera')).toHaveCount(0)
   })
 
-  test('de Madrid-Puerta de Atocha a Bilbao hay recorrido, aunque encadene siete líneas', async ({ page }) => {
+  test('de Madrid-Puerta de Atocha a Bilbao hay recorrido, aunque encadene seis líneas', async ({ page }) => {
+    // eran siete hasta que se cargó el túnel de Atocha a Chamartín, que cuenta como parte de la línea de Sevilla
     await page.goto('/recorridos/madrid-puerta-de-atocha/bilbao-abando')
-    await expect(page.getByTestId('recorrido').first()).toContainText('Recorre siete líneas')
+    await expect(page.getByTestId('recorrido').first()).toContainText('Recorre seis líneas')
     await expect(page.getByTestId('comparador')).not.toContainText('No hay ningún recorrido')
   })
 

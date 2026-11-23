@@ -337,6 +337,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 192 + 448  # la de Castejón a Pamplona, publicados y estimados
     passes += 18 + 66  # la de Miranda de Ebro a Bilbao, publicados y estimados
     passes += 48 + 432  # la de Sevilla a Huelva, publicados y estimados
+    # los tres enlaces de #260: Soto de Cerrato, Aljucén a La Garrovilla y el túnel de Madrid
+    passes += 6 + 128 + (555 + 423)
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 
