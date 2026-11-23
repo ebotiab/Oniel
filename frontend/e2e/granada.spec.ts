@@ -78,7 +78,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await expect(recorridos.nth(0).getByTestId('recorrido-trenes')).toContainText('Ningún tren directo')
     // el otro camino, por la alta velocidad: más largo y, sin paradas, mucho más rápido
     const alta = recorridos.filter({ hasText: '569,0 km' })
-    await expect(alta).toContainText('Por Bifurcación Málaga-Alta Velocidad y Antequera-Santa Ana')
+    await expect(alta).toContainText('Por Ciudad Real, Córdoba y Antequera-Santa Ana')
     await expect(alta).toContainText('Recorre tres líneas')
     await expect(alta).toContainText('2 h 17 min sin paradas')
     await expect(alta).toContainText('81,0 km de vía única')

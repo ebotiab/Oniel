@@ -56,7 +56,7 @@ test.describe('La línea de alta velocidad Monforte del Cid – Murcia', () => {
     // el primero, más corto, junta la línea convencional hasta Albacete con la alta velocidad
     // desde allí; el segundo es el de alta velocidad entero, por Cuenca
     const porCuenca = recorridos.nth(1)
-    await expect(porCuenca).toContainText('Por Bifurcación Torrejón de Velasco, Bifurcación Albacete y Bifurcación Murcia')
+    await expect(porCuenca.locator('.recorrido-titulo')).toHaveText('Por Cuenca')
     await expect(porCuenca).toContainText('521,7 km · 1 h 58 min sin paradas')
     await expect(porCuenca).toContainText('Recorre cuatro líneas')
     await expect(porCuenca).not.toContainText('Alicante-Terminal')
