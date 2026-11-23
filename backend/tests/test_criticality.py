@@ -348,6 +348,9 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "castejon-pamplona",
         "miranda-bilbao",
         "sevilla-huelva",
+        "enlace-soto-de-cerrato",
+        "enlace-aljucen-la-garrovilla",
+        "enlace-atocha-chamartin",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador

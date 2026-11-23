@@ -138,6 +138,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
             + 3  # la de Miranda de Ebro a Bilbao
             + 11  # la de Sevilla a Huelva
+            + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
