@@ -124,7 +124,7 @@ test.describe('Tramos sin otro camino', () => {
     await abrirPanel(page)
     // los 4 regionales de Ciudad Real a Alcázar de San Juan no tienen otro camino: el que hay mide más del doble
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, 4 de sus 14 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 183 km más y 2 min menos.',
+      'Si este tramo se cortara, 4 de sus 14 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 204 km y 54 min más.',
     )
     // los desviados de Madrid a Málaga que quedan el 20 de noviembre: su otro camino es más corto
     await page.getByTestId('mas-detalle').locator('summary').click()
@@ -187,12 +187,13 @@ test.describe('Tramos sin otro camino', () => {
     await expect(otros.first()).toContainText('162 trenes')
     await expect(otros.first()).toContainText('30 sin él')
     await expect(otros.first()).toContainText('+90 km · +1 h 8 min')
-    // de Córdoba a la bifurcación de Málaga pasan también los que no paran en Madrid; los Avant que solo recorren
-    // ese tramo no tienen otro camino: la fila lo dice
+    // de Córdoba a la bifurcación de Málaga pasan también los que no paran en Madrid. Los que siguen a Sevilla no
+    // tienen otro camino: la vuelta por Granada llega a la bifurcación por la línea de Málaga, y para tomar la de
+    // Sevilla habría que invertir la marcha en Córdoba, que es lo cortado. Los de Málaga sí lo tienen
     const cordoba = otros.filter({ hasText: 'Córdoba – Bifurcación Málaga-Alta Velocidad' })
     await expect(cordoba).toContainText('158 trenes')
-    await expect(cordoba).toContainText('22 sin él')
-    await expect(cordoba).toContainText('+340 km · +3 h 2 min')
+    await expect(cordoba).toContainText('97 sin él')
+    await expect(cordoba).toContainText('+147 km · +2 h 23 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(vista).not.toContainText('Moreda – Bifurcación Almería')

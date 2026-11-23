@@ -81,7 +81,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     )
   })
 
-  test('la entrada a Zaragoza-Delicias solo lleva los trenes que paran allí, y su otro camino es el baipás', async ({ page }) => {
+  test('la entrada a Zaragoza-Delicias solo lleva los trenes que paran allí, y el baipás es el otro camino de los que siguen', async ({ page }) => {
     await page.goto(`/tramo/${ENTRADA_ZARAGOZA}`)
     await abrirPanel(page)
     const ficha = page.getByTestId('detalle-tramo')
@@ -89,7 +89,9 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     // por aquí (74, con los 18 de Iryo que paran en Zaragoza) o por el baipás (35)
     await expect(ficha).toContainText('74 el viernes, 20 de noviembre de 2026')
     await expect(page.getByTestId('lista-servicios').locator('li')).toHaveCount(74)
-    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 74 trenes tendrían otro camino en las líneas que Oniel tiene cargadas')
+    // los que siguen hacia Barcelona tienen el baipás; los 8 que acaban en Zaragoza o salen de ella no: desde el
+    // baipás no se entra en la estación sin invertir la marcha, y la estación más cercana para hacerlo queda lejos
+    await expect(page.getByTestId('tramo-alternativa')).toContainText('8 de sus 74 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas')
     // la ficha de la bifurcación enseña los dos caminos que salen de ella
     await page.goto('/nodo/bif-moncasi')
     await abrirPanel(page)

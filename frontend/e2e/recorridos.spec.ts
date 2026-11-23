@@ -251,6 +251,42 @@ test.describe('Comparador de recorridos: la vista', () => {
     await expect(page.getByTestId('recorridos-resumen')).toHaveText(/^Dos recorridos, del más corto al más largo\. No hay trenes directos en este sentido en el horario del .+\.$/)
   })
 
+  test('de Madrid-Puerta de Atocha a Madrid-Chamartín se va por el túnel, y no doblando en Torrejón de Velasco', async ({ page }) => {
+    await page.goto('/recorridos/madrid-puerta-de-atocha/madrid-chamartin')
+    const recorridos = page.getByTestId('recorrido')
+    await expect(recorridos).toHaveCount(1)
+    await expect(recorridos.first()).toContainText('7,6 km')
+    await expect(page.getByTestId('comparador')).not.toContainText('Torrejón de Velasco')
+    await expect(page.getByTestId('comparador')).not.toContainText('65,2')
+  })
+
+  test('de Sevilla a Málaga el recorrido invierte la marcha en Córdoba, y lo dice', async ({ page }) => {
+    await page.goto('/recorridos/sevilla-santa-justa/malaga-maria-zambrano')
+    const corto = page.getByTestId('recorrido').first()
+    await expect(corto.locator('.recorrido-titulo')).toHaveText('Por Córdoba')
+    await expect(corto).toContainText('295,8 km')
+    await expect(corto.getByTestId('recorrido-inversion')).toHaveText('Invierte la marcha en Córdoba.')
+    // donde no hace falta invertirla, la frase no sale
+    await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
+    await expect(page.getByTestId('recorrido').first()).toContainText('343,6 km')
+    await expect(page.getByTestId('recorrido-inversion')).toHaveCount(0)
+  })
+
+  test('los recorridos se nombran por ciudades y estaciones, nunca por bifurcaciones', async ({ page }) => {
+    await page.goto('/recorridos/madrid-chamartin/bilbao-abando')
+    const titulos = page.locator('.recorrido-titulo')
+    await expect(titulos.nth(0)).toHaveText('Por Segovia')
+    await expect(titulos.nth(1)).toHaveText('Por Ávila')
+    for (const ruta of ['/recorridos/caceres/madrid-puerta-de-atocha', '/recorridos/valencia-joaquin-sorolla/barcelona-sants', '/recorridos/merida/sevilla-santa-justa']) {
+      await page.goto(ruta)
+      await expect(page.getByTestId('recorrido').first()).toBeVisible()
+      for (const titulo of await page.locator('.recorrido-titulo').allTextContents()) {
+        expect(titulo).toMatch(/^Por /)
+        expect(titulo).not.toMatch(/Bifurcación|Bif\./)
+      }
+    }
+  })
+
   test('Mérida – Sevilla: los trenes directos van por una línea que no está cargada, y el comparador lo dice', async ({ page }) => {
     await page.goto('/recorridos/merida/sevilla-santa-justa')
     await expect(page.getByTestId('recorridos-resumen')).toContainText(/Hay \d+ trenes directos en este sentido/)

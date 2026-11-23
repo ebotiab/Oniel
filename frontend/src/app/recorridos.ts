@@ -171,6 +171,13 @@ function nombrar(recorridos: Recorrido[], graph: Graph, lines: Map<string, LineS
     const propios = otros.length ? mios.filter((n) => !otros.every((o) => o.includes(n))) : mios
     const nombres = repartidos(propios.length ? propios : mios)
     r.titulo = nombres.length ? `Por ${enumerar(nombres)}` : porTipoDeLinea(r.route, lines)
+    // Si todos sus nombres están también en los demás («Por Córdoba», cuando todos pasan por
+    // Córdoba), se le añade el tipo de la línea que solo recorre él.
+    if (mios.length && !propios.length && otros.length) {
+      const propia = r.route.line_ids.find((id) => recorridos.every((o) => o === r || !o.route.line_ids.includes(id)))
+      const line = propia ? lines.get(propia) : undefined
+      if (line) r.titulo += lineKind(line) === 'alta velocidad' ? ' y la alta velocidad' : ' y la línea convencional'
+    }
   })
   // Dos recorridos con el mismo nombre se distinguen por el tipo de la línea que solo recorre uno.
   for (const r of recorridos) {
