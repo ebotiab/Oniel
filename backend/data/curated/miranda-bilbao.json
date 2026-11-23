@@ -13,7 +13,7 @@
     "tracks": 1,
     "pk_origin_km": 145.2,
     "status": "disponible",
-    "description": "Une Miranda de Ebro con Bilbao por Orduña y Llodio. Es el camino de los trenes de largo recorrido que llegan a Bilbao desde Madrid, Barcelona y el valle del Ebro.\n\nEs el último trecho de la línea 700 de Adif, que viene de Zaragoza por Logroño y Haro. La abrió en 1863 la compañía del ferrocarril de Tudela a Bilbao, el primero que unió Bilbao con el valle del Ebro. Sale de Miranda hacia el norte por los valles de Álava, baja el puerto de Orduña y sigue por el valle del Nervión, por Amurrio, Llodio y Arrigorriaga, hasta la estación de Abando, en el centro de Bilbao. De Miranda a Orduña es de vía única; de Orduña a Bilbao tiene dos vías desde 1931.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Bilbao, que llegan a Miranda por la alta velocidad hasta Burgos y por la línea de Burgos a Vitoria, y los de Barcelona y Zaragoza a Bilbao, que llegan a Miranda por Logroño y Haro, por un trecho que no está cargado. Entre Miranda y Bilbao solo paran en Llodio. Los trenes de Cercanías de Bilbao a Orduña usan también sus vías, pero no están en los horarios cargados.\n\nLa alta velocidad de Vitoria a Bilbao, la «Y» vasca, está en obras: el mapa la dibuja como proyecto.",
+    "description": "Une Miranda de Ebro con Bilbao por Orduña y Llodio. Es el camino de los trenes de largo recorrido que llegan a Bilbao desde Madrid, Barcelona y el valle del Ebro.\n\nEs el último trecho de la línea 700 de Adif, que viene de Zaragoza por Logroño y Haro. La abrió en 1863 la compañía del ferrocarril de Tudela a Bilbao, el primero que unió Bilbao con el valle del Ebro. Sale de Miranda hacia el norte por los valles de Álava, baja el puerto de Orduña y sigue por el valle del Nervión, por Amurrio, Llodio y Arrigorriaga, hasta la estación de Abando, en el centro de Bilbao. De Miranda a Orduña es de vía única; de Orduña a Bilbao tiene dos vías desde 1931.\n\nEn los horarios de Renfe la recorren los Intercity de Madrid a Bilbao, que llegan a Miranda por la alta velocidad hasta Burgos y por la línea de Burgos a Vitoria, y los de Barcelona y Zaragoza a Bilbao, que llegan a Miranda por Logroño y Haro, por un trecho que no está cargado. Entre Miranda y Bilbao solo paran en Llodio. Los trenes de Cercanías de Bilbao a Orduña usan también sus vías, pero no están en los horarios cargados.\n\nLa alta velocidad de Vitoria a Bilbao, la «Y» vasca, está en obras: el mapa la dibuja como proyecto.",
     "geometry_source": {
       "source_id": "osm-relation-9277501",
       "parts": [
@@ -83,7 +83,7 @@
         "lat": 43.1422527
       },
       "reference_pk_km": 227.5,
-      "description": "La única estación entre Miranda de Ebro y Bilbao en la que paran trenes de largo recorrido: algunos de los Alvia e Intercity de Madrid y de Miranda a Bilbao."
+      "description": "La única estación entre Miranda de Ebro y Bilbao en la que paran trenes de largo recorrido: algunos de los Intercity de Madrid y de Miranda a Bilbao."
     },
     {
       "id": "bilbao-abando",

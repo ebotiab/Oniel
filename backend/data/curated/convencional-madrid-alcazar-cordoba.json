@@ -45,7 +45,7 @@
     {"id": "bif-planetario", "name": "Bifurcación Planetario", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -3.677554, "lat": 40.385577}, "reference_pk_km": 3.7,
      "description": "Punto donde la línea convencional de Extremadura, por Talavera de la Reina y Plasencia, se separa de la de Andalucía, a la salida de Madrid."},
     {"id": "aranjuez", "name": "Aranjuez", "kind": "estacion", "adif_code": "60200", "position": {"lon": -3.6182534, "lat": 40.0350257}, "reference_pk_km": 48.7,
-     "description": "Final del primer ferrocarril de Madrid (1851). Estación de Cercanías y de Media Distancia; de aquí la línea sigue por la vega del Tajo hacia Castillejo."},
+     "description": "Final del primer ferrocarril de Madrid (1851). Estación de Cercanías y de trenes regionales; de aquí la línea sigue por la vega del Tajo hacia Castillejo."},
     {"id": "castillejo-anover", "name": "Castillejo-Añover", "kind": "estacion", "adif_code": "60202", "rank": "secundario", "position": {"lon": -3.738593, "lat": 39.949573}, "reference_pk_km": 64.2,
      "description": "Antiguo empalme con el ramal de Toledo, cerrado al tráfico de viajeros al abrirse la alta velocidad a Toledo en 2005."},
     {"id": "villasequilla", "name": "Villasequilla", "kind": "estacion", "adif_code": "60203", "rank": "secundario", "position": {"lon": -3.728489, "lat": 39.879523}, "reference_pk_km": 73.2},

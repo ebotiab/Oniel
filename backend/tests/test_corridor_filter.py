@@ -36,11 +36,11 @@ def test_conventional_filter_selects_the_trains_that_use_the_line(
     # Cercanías a la bifurcación Planetario: 92 Media Distancia, 64 de Proximidad a Illescas, 55
     # Alvia, 26 Regional Exprés y 30 Regional, 267 en total. De los Regional, 7 no paran en
     # Leganés y entran por la regla de los que tienen Fuenlabrada como primera parada
-    assert products["MD"] == 290 + 92 and products["PROXIMDAD"] == 98 + 64
-    assert (products["REG.EXP."], products["REGIONAL"]) == (14 + 26, 30)
+    assert products["Media Distancia"] == 290 + 92 and products["Proximidad"] == 98 + 64
+    assert (products["Regional Exprés"], products["Regional"]) == (14 + 26, 30)
     # 8 Alvia Barcelona–Córdoba por el filtro de corredor; 2 Alvia y 20 Intercity Madrid-Atocha
     # Cercanías–Andalucía por las reglas de recorrido (van por esta línea hasta Manzanares)
-    assert products["ALVIA"] == 8 + 2 + 55 and products["Intercity"] == 20
+    assert products["Alvia"] == 8 + 2 + 55 and products["Intercity"] == 20
     assert "AVE" not in products and "AVLO" not in products
     names = {
         _stop_names(feed, t.trip_id)[0] + " → " + _stop_names(feed, t.trip_id)[-1] for t in trips
@@ -102,10 +102,10 @@ def test_high_speed_filter_also_takes_the_trains_that_do_not_stop_in_madrid(
     madrid = {"60000", "17000", "18000"}
     away = [t for t in trips if not madrid & {st.stop_id for st in t.stop_times}]
     assert len(away) == 47
-    assert {t.product for t in away} == {"AVANT", "AVE"}
-    assert sum(t.product == "AVANT" for t in away) == 27
+    assert {t.product for t in away} == {"Avant", "AVE"}
+    assert sum(t.product == "Avant" for t in away) == 27
     # ningún Media Distancia de la línea convencional de Córdoba a Sevilla: todos paran entre las dos
-    assert not any(t.product == "MD" for t in trips)
+    assert not any(t.product == "Media Distancia" for t in trips)
     # sin las paradas seguidas, los Avant se quedan fuera
     plain = spec.model_copy(
         update={

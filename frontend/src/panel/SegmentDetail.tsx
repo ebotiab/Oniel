@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
 import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
 import { coste, fraseTramo, porLineas, trenes } from '../app/alternativas'
-import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, productLabel, shortStop } from '../app/state'
+import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, shortStop } from '../app/state'
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
@@ -58,7 +58,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
   const alternativa = alternativas?.segments.find((s) => s.segment_id === segment.id)
 
   const byProduct = new Map<string, number>()
-  for (const p of services?.passes ?? []) byProduct.set(productLabel(p.service.product), (byProduct.get(productLabel(p.service.product)) ?? 0) + 1)
+  for (const p of services?.passes ?? []) byProduct.set(p.service.product, (byProduct.get(p.service.product) ?? 0) + 1)
 
   // Los trenes de cada operador, del que más tiene al que menos; dentro, por hora de paso.
   const operatorName = (id: string) => operators.find((o) => o.id === id)?.name ?? id
@@ -259,7 +259,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
                       <span className="hora datos">{p.enter ?? '—'}</span>
                       <span className="tren">
                         <strong>
-                          {productLabel(p.service.product)} {p.service.train_number}
+                          {p.service.product} {p.service.train_number}
                         </strong>{' '}
                         <span className="suave">
                           {shortStop(p.service.origin_name)} → {shortStop(p.service.destination_name)}

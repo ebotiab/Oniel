@@ -174,6 +174,9 @@ async def import_gtfs(
         if product:
             for trip in feed.trips.values():
                 trip.product = product
+        # El nombre y la posición que el fichero da a cada parada, antes de cambiar ninguno: es lo
+        # que se guarda con la asignación de la parada.
+        own_stops = dict(feed.stops)
         if not names_stops:
             # Sus paradas llevan el código de Adif con otro nombre: se muestran con el que ya les
             # han puesto los ficheros oficiales.
@@ -181,6 +184,13 @@ async def import_gtfs(
                 "SELECT stop_id, stop_name FROM stop_mappings WHERE stop_name IS NOT NULL"
             )
             rename_stops(feed, {r["stop_id"]: r["stop_name"] for r in named})
+        # Una parada que es un nodo cargado se llama como el nodo, sea de quien sea el fichero: así
+        # la cabecera, el destino y las paradas de un tren llevan el nombre que la estación tiene
+        # en el mapa y en su ficha, y no «Vigo Urzaiz» en un renglón y «Vigo-Urzáiz» en otro.
+        node_names = await conn.fetch(
+            "SELECT m.stop_id, n.name FROM stop_mappings m JOIN nodes n ON n.id = m.node_id"
+        )
+        rename_stops(feed, {r["stop_id"]: r["name"] for r in node_names})
         plans: dict[str, _TripPlan] = {}
         per_line: dict[str, dict[str, Any]] = {}
         unmapped: Counter[str] = Counter()
@@ -274,7 +284,7 @@ async def import_gtfs(
                     (stop_id, stop.name, stop.lon, stop.lat, source_id)
                     for spec in ([] if stop_id_prefix or not names_stops else specs)
                     for stop_id in spec.stop_mappings
-                    if (stop := feed.stops.get(stop_id))
+                    if (stop := own_stops.get(stop_id))
                 ],
             )
             all_kinds: Counter[str] = Counter()

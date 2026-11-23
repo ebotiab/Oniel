@@ -223,7 +223,12 @@ def test_the_filter_takes_the_high_speed_trains_to_burgos(
     assert set(f.exclude_stop_ids) == EXCLUDED
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 130
-    assert Counter(t.product for t in trips) == {"Intercity": 48, "ALVIA": 38, "AVE": 25, "MD": 19}
+    assert Counter(t.product for t in trips) == {
+        "Intercity": 48,
+        "Alvia": 38,
+        "AVE": 25,
+        "Media Distancia": 19,
+    }
     selected = {t.trip_id for t in trips}
     # todo tren que va de Valladolid o de Palencia a Burgos sin paradas está dentro, salvo los
     # que van por la convencional: los de Zaragoza a Valladolid y los de Madrid-Príncipe Pío a

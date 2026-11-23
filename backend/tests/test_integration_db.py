@@ -609,6 +609,52 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert (gtfs1["dataset"]["reused"], gtfs2["dataset"]["reused"]) == (False, True)
 
 
+async def test_la_cabecera_y_el_destino_llevan_el_nombre_del_nodo(
+    imported: dict[str, Any], dsn: str
+) -> None:
+    """Una parada que es un nodo cargado se llama como el nodo, en el fichero que sea (#263)."""
+    from oniel.db.pool import connect
+
+    async with connect(dsn) as conn:
+        ends = await conn.fetch(
+            """
+            WITH ends AS (
+                SELECT origin_stop_id AS stop_id, origin_name AS name FROM services
+                UNION ALL
+                SELECT destination_stop_id, destination_name FROM services
+            )
+            SELECT e.stop_id, e.name, n.name AS node_name, count(*) AS trains
+            FROM ends e
+            LEFT JOIN stop_mappings m ON m.stop_id = e.stop_id
+            LEFT JOIN nodes n ON n.id = m.node_id
+            GROUP BY 1, 2, 3
+            """
+        )
+        stops = await conn.fetch(
+            """
+            SELECT DISTINCT ss.stop_id, ss.stop_name, n.name AS node_name
+            FROM service_stops ss
+            JOIN stop_mappings m ON m.stop_id = ss.stop_id
+            JOIN nodes n ON n.id = m.node_id
+            WHERE ss.stop_name <> n.name
+            """
+        )
+    at_nodes = [r for r in ends if r["node_name"] is not None]
+    assert len(at_nodes) > 50
+    assert [dict(r) for r in at_nodes if r["name"] != r["node_name"]] == []
+    # y lo mismo cada parada intermedia
+    assert [dict(r) for r in stops] == []
+    # ninguna estación, de dentro o de fuera de la red, sale con dos nombres
+    names: dict[str, set[str]] = {}
+    for r in ends:
+        names.setdefault(r["stop_id"], set()).add(r["name"])
+    assert {k: v for k, v in names.items() if len(v) > 1} == {}
+    by_id = {r["stop_id"]: r["name"] for r in ends}
+    assert by_id["17000"] == "Madrid-Chamartín"
+    assert by_id["18000"] == by_id["60000"] == "Madrid-Puerta de Atocha"
+    assert by_id["11600"] == "Irún"
+
+
 async def test_interruptions_import_is_repeatable_and_survives_a_network_reimport(
     imported: dict[str, Any],
 ) -> None:
@@ -1695,6 +1741,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 1
             + 4
             + 1  # la relación de OSM del túnel de Atocha a Chamartín; los otros dos enlaces usan ficheros ya registrados
+            + 1  # la noticia que explica el cambio de rótulos del fichero de Renfe (#263)
         )
     )
     assert "línea convencional" in cov["notice"]
@@ -2016,13 +2063,13 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     assert (dest[0]["node_id"], dest[0]["name"], dest[0]["trains"]) == ("cordoba", "Córdoba", 25)
     # cuatro de ellos, los AVE de Barcelona a Sevilla, a Málaga y a Granada, que no pasan por
     # Madrid
-    assert dest[0]["products"] == ["Intercity", "AVE", "AVLO", "ALVIA"]
+    assert dest[0]["products"] == ["Intercity", "AVE", "AVLO", "Alvia"]
     assert dest[0]["operators"] == [{"operator_id": "renfe", "trains": 25}]
     assert (dest[0]["first_departure"], dest[0]["last_departure"]) == ("07:55", "22:01")
     # Por Ciudad Real pasan 23 trenes hacia Madrid, pero 11 solo dejan viajeros allí (los
     # Intercity y un Alvia que vienen de Andalucía): a Madrid se puede ir en 12
     assert by_node["madrid-puerta-de-atocha"]["trains"] == 12
-    assert by_node["alcazar-de-san-juan"]["products"] == ["MD"]
+    assert by_node["alcazar-de-san-juan"]["products"] == ["Media Distancia"]
     # Málaga es ya una estación de la red; fuera de ella, el destino lleva el nombre de la parada
     assert by_node["malaga-maria-zambrano"]["trains"] == 9
     outside = {d["name"]: d["trains"] for d in dest if d["node_id"] is None}
@@ -2115,13 +2162,13 @@ async def test_diverted_trains_run_along_manzanares_ciudad_real(client: httpx.As
     assert body["segment"]["tracks"] == 1
     passes = {p["service"]["train_number"]: p for p in body["passes"]}
     products = {p["service"]["product"] for p in body["passes"]}
-    assert products == {"MD", "Intercity", "ALVIA"}
+    assert products == {"Media Distancia", "Intercity", "Alvia"}
     assert body["counts"]["indeterminado"] == 0 and body["counts"]["publicado"] > 0
     intercity = passes["10270"]
     assert intercity["kind"] == "estimado"
     assert intercity["enter"] == "08:09" and intercity["exit"] == "08:22"
     assert "entra en esta línea por Manzanares" in intercity["basis"]
-    assert "196 km por esa línea hasta Madrid-Atocha Cercanías" in intercity["basis"]
+    assert "196 km por esa línea hasta Madrid-Puerta de Atocha" in intercity["basis"]
     assert not any("línea recta" in p["basis"] for p in body["passes"])
     alvia = passes["09366"]
     assert alvia["kind"] == "estimado" and "sin parar en ella" in alvia["basis"]
@@ -2154,7 +2201,7 @@ async def test_closure_between_manzanares_and_ciudad_real_affects_the_diverted_t
     assert items["10270"]["status"] == "afectado_estimado"
     assert items["10270"]["enter"] == "08:22" and items["10270"]["exit"] == "08:35"
     affected = [i for i in res["items"] if i["status"].startswith("afectado")]
-    assert {"Intercity", "MD"} <= {i["service"]["product"] for i in affected}
+    assert {"Intercity", "Media Distancia"} <= {i["service"]["product"] for i in affected}
     assert any(i["status"] == "afectado_publicado" for i in affected)
     assert sum(res["counts"].values()) == len(res["items"])
     # ninguna línea sola une los dos lados del tramo; el grafo encuentra el rodeo por dos:
@@ -2229,7 +2276,11 @@ async def test_closure_on_the_conventional_line_points_back_to_high_speed(
     assert r.status_code == 200
     res = r.json()
     assert res["segment"]["tracks"] == 1
-    assert {i["service"]["product"] for i in res["items"]} <= {"MD", "ALVIA", "REG.EXP."}
+    assert {i["service"]["product"] for i in res["items"]} <= {
+        "Media Distancia",
+        "Alvia",
+        "Regional Exprés",
+    }
     # de Manzanares a Córdoba por Ciudad Real (237,2 km frente a 244,6) y Madrid – Córdoba
     assert [a["line_ids"] for a in res["alternatives"]] == [[MZCR, LAV], [LAV]]
     for a in res["alternatives"]:
@@ -2407,7 +2458,7 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
         "products": [
             {"product": "AVE", "trains": 66},
             {"product": "Intercity", "trains": 22},
-            {"product": "ALVIA", "trains": 14},
+            {"product": "Alvia", "trains": 14},
             {"product": "AVLO", "trains": 10},
         ],
         # con un solo fichero de la fuente no hay anterior con el que comparar

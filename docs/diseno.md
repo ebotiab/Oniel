@@ -311,4 +311,5 @@ Principios
 - El esquema de línea y el mapa son la misma cosa vista de dos formas: siempre sincronizados.
 - Todo lo que se muestra dice de dónde viene (fuente, licencia, fecha).
 - Los textos hablan al visitante que sabe poco de ferrocarril: "tramo", "estación", "cierre", no jerga.
+- Un tren y una estación se llaman igual en todas partes (#263, decidido el 23 de noviembre de 2026). El tipo de tren es el que rotula el fichero de horarios vigente, con una sola escritura («Avant», «Avant Exprés», «Intercity», «Regional», «AVE Euromed»), también en las descripciones: no se usa un nombre que el fichero ya no trae, como «Alvia» o «Media Distancia». Una estación que es un nodo lleva el nombre del nodo en las listas de trenes, aunque el fichero la escriba de otra manera; Madrid-Atocha Cercanías sale como «Madrid-Puerta de Atocha», el nodo que comparten. La regla está en `docs/datos.md`, «Rótulos de tren y nombres de estación».
 - Lo esencial primero y el detalle plegado: cada ficha sigue el «Patrón de ficha».

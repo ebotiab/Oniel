@@ -13,7 +13,7 @@
     "tracks": 1,
     "pk_origin_km": 93.7,
     "status": "disponible",
-    "description": "Sale de Castejón de Ebro, en la línea de Zaragoza a Logroño, y sube hacia el norte por Tafalla hasta Pamplona.\n\nEs el único camino del tren a Pamplona desde Zaragoza, Madrid y Barcelona. Tiene una sola vía en todo el recorrido. Para Adif es parte de la línea 710, de Castejón a Altsasu, que se abrió entre 1860 y 1865 para unir Zaragoza con Pamplona.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Pamplona, que llegan por la alta velocidad hasta el cambiador de Plasencia de Jalón; los de Barcelona a Pamplona, San Sebastián y Galicia, que cambian de ancho en Zaragoza, y los regionales de Zaragoza a Pamplona y Vitoria.\n\nMás allá de Pamplona la línea sigue hasta Altsasu, donde se une a la de Madrid a Irún; ese trecho no está cargado.",
+    "description": "Sale de Castejón de Ebro, en la línea de Zaragoza a Logroño, y sube hacia el norte por Tafalla hasta Pamplona.\n\nEs el único camino del tren a Pamplona desde Zaragoza, Madrid y Barcelona. Tiene una sola vía en todo el recorrido. Para Adif es parte de la línea 710, de Castejón a Altsasu, que se abrió entre 1860 y 1865 para unir Zaragoza con Pamplona.\n\nEn los horarios de Renfe la recorren los Intercity de Madrid a Pamplona, que llegan por la alta velocidad hasta el cambiador de Plasencia de Jalón; los de Barcelona a Pamplona, San Sebastián y Galicia, que cambian de ancho en Zaragoza, y los regionales de Zaragoza a Pamplona y Vitoria.\n\nMás allá de Pamplona la línea sigue hasta Altsasu, donde se une a la de Madrid a Irún; ese trecho no está cargado.",
     "geometry_source": {
       "source_id": "osm-relation-9392199",
       "parts": [

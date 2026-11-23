@@ -112,7 +112,7 @@ def test_the_filter_selects_the_regional_trains_that_stop_on_the_line(
         t for t in select_trips_for_spec(feed, mzcr_spec) if route_for_trip(mzcr_spec, t) is None
     ]
     assert len(regional) == 124
-    assert {t.product for t in regional} == {"MD", "REG.EXP."}
+    assert {t.product for t in regional} == {"Media Distancia", "Regional Exprés"}
     for trip in regional:
         calls = calls_for_trip(trip, feed, mzcr_spec)
         assert all(c.node_id or c.exit_node_ids for c in calls), trip.train_number

@@ -244,14 +244,14 @@ def test_the_filter_takes_high_speed_trains_and_leaves_the_conventional_ones(
     convencionales y quedan fuera."""
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 111
-    assert Counter(t.product for t in trips) == {"AVANT": 72, "AVE": 32, "AVLO": 7}
+    assert Counter(t.product for t in trips) == {"Avant": 72, "AVE": 32, "AVLO": 7}
     selected = {t.trip_id for t in trips}
     for trip in trips:
         assert not set(_stops(trip)) & CONVENTIONAL, trip.train_number
         assert set(_stops(trip)) & ONLY_THIS_LINE, trip.train_number
     outside = [t for t in feed.trips.values() if "61200" in _stops(t) and t.trip_id not in selected]
     assert outside and all(not set(_stops(t)) & ONLY_THIS_LINE for t in outside)
-    assert {t.product for t in outside} >= {"MD", "Intercity"}
+    assert {t.product for t in outside} >= {"Media Distancia", "Intercity"}
     assert set(spec.corridor_filter.any_of_stop_ids) == ONLY_THIS_LINE
 
 
@@ -265,7 +265,7 @@ def test_trains_join_at_one_of_two_junctions(
     first = "bif-murcia:bif-vinalopo"
     trips = select_trips_for_spec(feed, spec)
     # los Avant de Alicante a Murcia: los 7 tramos desde Vinalopó
-    avant = [t for t in trips if t.product == "AVANT"]
+    avant = [t for t in trips if t.product == "Avant"]
     assert len(avant) == 72
     for trip in avant[:6]:
         short = _short(_passes(trip, feed, line, lines))

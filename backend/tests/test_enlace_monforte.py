@@ -152,7 +152,7 @@ def test_it_carries_the_trains_between_alicante_and_the_murcia_line(
     Avant de Alicante a Murcia y los de Madrid a Murcia que entran en Alicante. Son los de la
     línea de Murcia menos los que la toman en la bifurcación de Murcia."""
     trips = select_trips_for_spec(feed, spec)
-    assert Counter(t.product for t in trips) == {"AVANT": 72, "AVE": 12, "AVLO": 7}
+    assert Counter(t.product for t in trips) == {"Avant": 72, "AVE": 12, "AVLO": 7}
     assert all(ALICANTE_STOP in _stops(t) and ONLY_MURCIA_LINE & set(_stops(t)) for t in trips)
     on_murcia = select_trips_for_spec(feed, load_network_spec(LAV_MURCIA_SPEC))
     not_by_alicante = [t for t in on_murcia if ALICANTE_STOP not in _stops(t)]

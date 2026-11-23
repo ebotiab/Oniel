@@ -200,17 +200,22 @@ def test_the_filter_takes_the_trains_that_stop_at_figueres_vilafant(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 208
     assert Counter(t.product for t in trips) == {
-        "AVANT": 104,
-        "AVE INT": 54,
+        "Avant": 104,
+        "AVE internacional": 54,
         "AVE": 41,
-        "EUROMED": 9,
+        "Euromed": 9,
     }
     selected = {t.trip_id for t in trips}
     at_girona = [t for t in feed.trips.values() if GIRONA in _stops(t)]
     left_out = [t for t in at_girona if t.trip_id not in selected]
     # los que se quedan fuera son todos regionales, que paran en Barcelona-Passeig de Gràcia o
     # en alguna estación de la línea convencional
-    assert left_out and not {t.product for t in left_out} & {"AVE", "AVE INT", "AVANT", "EUROMED"}
+    assert left_out and not {t.product for t in left_out} & {
+        "AVE",
+        "AVE internacional",
+        "Avant",
+        "Euromed",
+    }
     assert all(FIGUERES not in _stops(t) for t in left_out)
     assert not spec.route_overrides
     assert select_trips_for_spec(ouigo_feed, spec) == []

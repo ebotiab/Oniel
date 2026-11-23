@@ -104,7 +104,7 @@ def test_the_filter_selects_the_trains_of_jaen_and_mengibar(
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in jaen.segments]
     trips = select_trips_for_spec(feed, jaen_spec)
     assert len(trips) == 123
-    assert {t.product for t in trips} == {"MD"}
+    assert {t.product for t in trips} == {"Media Distancia"}
     first, second = (s.id for s in jaen.segments)
     by_segment = {first: 0, second: 0}
     published = 0

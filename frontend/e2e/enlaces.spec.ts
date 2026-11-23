@@ -125,23 +125,23 @@ test.describe('Los enlaces de Soto de Cerrato y de Aljucén y el túnel de Atoch
   const ALJUCEN = 'enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas'
   const CERRATO = 'enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato'
 
-  test('cada uno cuelga de su línea en la lista y tiene su ficha', async ({ page }) => {
-    await page.goto('/')
-    await abrirPanel(page)
-    await expect(page.getByTestId('ficha-red')).toContainText(FICHA_RED)
-    for (const [id, nombre, km] of [
-      ['enlace-soto-de-cerrato', 'Enlace de Soto de Cerrato', '5,2 km'],
-      ['enlace-aljucen-la-garrovilla', 'Enlace de Aljucén a La Garrovilla', '7,1 km'],
-      [TUNEL, 'Túnel de Atocha a Chamartín por Recoletos', '7,7 km'],
-    ]) {
+  // Una prueba por enlace: las tres seguidas, con cuatro cargas de la página, no cabían en el
+  // minuto que da el CI a cada prueba en el móvil.
+  for (const [id, nombre, km] of [
+    ['enlace-soto-de-cerrato', 'Enlace de Soto de Cerrato', '5,2 km'],
+    ['enlace-aljucen-la-garrovilla', 'Enlace de Aljucén a La Garrovilla', '7,1 km'],
+    [TUNEL, 'Túnel de Atocha a Chamartín por Recoletos', '7,7 km'],
+  ]) {
+    test(`${nombre}: cuelga de su línea en la lista y tiene su ficha`, async ({ page }) => {
       await page.goto('/')
       await abrirPanel(page)
+      await expect(page.getByTestId('ficha-red')).toContainText(FICHA_RED)
       await abrirLinea(page, id)
       await expect(page).toHaveURL(new RegExp(`/linea/${id}$`))
       await expect(page.getByRole('heading', { name: nombre })).toBeVisible()
       await expect(page.getByTestId('ficha-linea')).toContainText(km)
-    }
-  })
+    })
+  }
 
   test('el buscador encuentra el túnel por su nombre', async ({ page }) => {
     await page.goto('/')

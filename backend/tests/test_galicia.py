@@ -218,11 +218,11 @@ def test_ourense_santiago_takes_the_trains_of_the_new_line(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 288
     assert Counter(t.product for t in trips) == {
-        "AVANT": 138,
+        "Avant": 138,
         "AVE": 92,
         "AVLO": 46,
-        "ALVIA": 6,
-        "MD": 6,
+        "Alvia": 6,
+        "Media Distancia": 6,
     }
     selected = {t.trip_id for t in trips}
     # los regionales de la línea antigua quedan fuera, aunque paren en Ourense y en Santiago
@@ -367,12 +367,12 @@ def test_the_eje_takes_every_train_that_stops_twice_on_it(
     trips = select_trips_for_spec(feed, eje_spec)
     assert len(trips) == 432
     assert Counter(t.product for t in trips) == {
-        "AVANT": 133,
+        "Avant": 133,
         "AVE": 92,
-        "MD": 89,
-        "REGIONAL": 66,
+        "Media Distancia": 89,
+        "Regional": 66,
         "AVLO": 46,
-        "ALVIA": 6,
+        "Alvia": 6,
     }
     selected = {t.trip_id for t in trips}
     # quedan fuera los que de la línea solo tocan una estación: los de Ferrol, Lugo y Monforte

@@ -153,7 +153,7 @@ def test_no_train_runs_the_whole_line(
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat) for n in lbmg.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in lbmg.segments]
     trips = select_trips_for_spec(feed, lbmg_spec)
-    assert Counter(t.product for t in trips) == {"MD": 26, "ALVIA": 12}
+    assert Counter(t.product for t in trips) == {"Media Distancia": 26, "Alvia": 12}
     by_route: Counter[tuple[str, ...]] = Counter()
     kinds: Counter[str] = Counter()
     for trip in trips:
@@ -178,7 +178,7 @@ def test_trains_to_almeria_that_stop_at_moreda_leave_through_the_station(
     feed: GtfsFeed, lbmg_spec: NetworkSpec
 ) -> None:
     by_moreda = [t for t in select_trips_for_spec(feed, lbmg_spec) if route_for_trip(lbmg_spec, t)]
-    assert len(by_moreda) == 4 and {t.product for t in by_moreda} == {"MD"}
+    assert len(by_moreda) == 4 and {t.product for t in by_moreda} == {"Media Distancia"}
     for trip in by_moreda:
         route = route_for_trip(lbmg_spec, trip)
         calls = {c.stop_id: c for c in calls_for_trip(trip, feed, lbmg_spec, route=route)}
