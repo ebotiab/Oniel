@@ -515,7 +515,12 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         # los dos enlaces y los tres tramos del túnel, sin él para una parte de sus trenes, menos
         # los dos de la línea de Valencia
         + 5
-        - 2,
+        - 2
+        # con la regla de giro, cuatro en los que antes tenían otro camino todos: los dos de la
+        # entrada a Zaragoza-Delicias y el de la salida de Lleida-Pirineus, porque desde el baipás
+        # no se entra en la estación sin invertir la marcha, y el de Arroyo de la Herrera a la
+        # bifurcación El Palmeral
+        + 4,
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou

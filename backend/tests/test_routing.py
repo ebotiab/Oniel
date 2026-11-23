@@ -999,9 +999,10 @@ def test_a_closed_station_stretch_is_saved_by_its_bypass_and_the_other_way_round
         # vuelta de Madrid a Camp de Tarragona por València, por Cuenca o por Albacete, y desde
         # que está la de Tarragona a Barcelona, la de Madrid a Barcelona-Sants por València y la
         # costa, por Cuenca o por Albacete, y las dos que pasan por Alicante y Xàtiva; otros
-        # dieciséis, más largos, se omiten (los que giraban en la bifurcación de Albacete no salen)
+        # veintiocho, más largos, se omiten (los que giraban en la bifurcación de Albacete ya no
+        # se enseñan: ahora invierten la marcha en una estación y quedan entre los largos)
         detour, ring, by_coast, by_xativa, _ = found.detours
-        assert found.omitted == 16
+        assert found.omitted == 28
         assert by_xativa.route.length_km == 892.1
         assert (by_coast.route.to_node_id, by_coast.route.length_km) == (BARCELONA, 734.8)
         assert (ring.route.from_node_id, ring.route.to_node_id) == (MADRID, "camp-de-tarragona")

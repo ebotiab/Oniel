@@ -442,14 +442,20 @@ def _must_reverse(graph: Graph, node_id: str, previous: Edge, edge: Edge) -> boo
 
 
 def _excursion(
-    graph: Graph, node_id: str, previous: Edge, edge_ok: Callable[[Edge], bool]
+    graph: Graph,
+    node_id: str,
+    previous: Edge,
+    edge_ok: Callable[[Edge], bool],
+    node_ok: Callable[[str], bool],
 ) -> list[_Step] | None:
     """Ida y vuelta desde un nodo hasta la estación más cercana en la que invertir la marcha.
 
     Quien llega a ``node_id`` por ``previous`` y quiere seguir por un tramo del mismo lado no
     puede girar: sigue de frente, por un tramo del lado opuesto, hasta la primera estación,
     invierte la marcha allí y vuelve. Devuelve esos pasos (la ida y la vuelta), o ``None`` si por
-    ese lado no hay ninguna estación a la que se llegue sin girar donde no se puede.
+    ese lado no hay ninguna estación a la que se llegue sin girar donde no se puede. Solo va por
+    los tramos y los nodos que ``edge_ok`` y ``node_ok`` admiten: el rodeo de un cierre no toca su
+    línea tampoco para invertir la marcha.
     """
     side = graph.turns[node_id][previous.id]
     queue: list[tuple[float, tuple[str, ...], str]] = [(0.0, (), node_id)]
@@ -486,7 +492,8 @@ def _excursion(
                 or _must_reverse(graph, at, last, edge)
             ):
                 continue
-            heapq.heappush(queue, (length + edge.length_km, (*ids, edge.id), edge.other(at)))
+            if node_ok(edge.other(at)):
+                heapq.heappush(queue, (length + edge.length_km, (*ids, edge.id), edge.other(at)))
     return None
 
 
@@ -552,7 +559,7 @@ def _walk(
             if previous is not None and _must_reverse(graph, node_id, previous, edge):
                 key = (node_id, previous.id)
                 if key not in excursions:
-                    excursions[key] = _excursion(graph, node_id, previous, edge_ok)
+                    excursions[key] = _excursion(graph, node_id, previous, edge_ok, may_pass)
                 excursion = excursions[key]
                 # Una ida y vuelta que pasa por el origen o por una meta no es otro recorrido: es
                 # el mismo viaje empezado antes o acabado después.
@@ -880,7 +887,9 @@ def _shortest_walk(
                 if _must_reverse(graph, node_id, previous, edge):
                     key = ("excursion", node_id, previous.id)
                     if key not in graph._memo:
-                        graph._memo[key] = _excursion(graph, node_id, previous, lambda e: True)
+                        graph._memo[key] = _excursion(
+                            graph, node_id, previous, lambda e: True, lambda n: True
+                        )
                     excursion: list[_Step] | None = graph._memo[key]
                     if excursion is None:
                         continue

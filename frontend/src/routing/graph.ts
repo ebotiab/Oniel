@@ -268,7 +268,7 @@ function before(x: { length: number; ids: string[] }, y: { length: number; ids: 
  * vuelve. Devuelve esos pasos (la ida y la vuelta), o `null` si por ese lado no hay ninguna estación
  * a la que se llegue sin girar donde no se puede. Es el mismo cálculo que `_excursion` en el servidor.
  */
-function excursion(graph: Graph, node: string, previous: Edge, edgeOk: (edge: Edge) => boolean): Step[] | null {
+function excursion(graph: Graph, node: string, previous: Edge, edgeOk: (edge: Edge) => boolean, nodeOk: (node: string) => boolean): Step[] | null {
   const sides = graph.turns[node]!
   const side = sides[previous.id]
   const queue: { length: number; ids: string[]; steps: Step[]; at: string }[] = [{ length: 0, ids: [], steps: [], at: node }]
@@ -293,6 +293,8 @@ function excursion(graph: Graph, node: string, previous: Edge, edgeOk: (edge: Ed
         if (sides[edge.id] === undefined || sides[edge.id] === side || corner(graph, previous, edge)) continue
       } else if (edge.id === last.id || corner(graph, last, edge) || mustReverse(graph, at, last, edge)) continue
       const next = edge.a === at ? edge.b : edge.a
+      // Solo por los nodos que admite quien la pide: el rodeo de un cierre no toca su línea tampoco para invertir la marcha.
+      if (!nodeOk(next)) continue
       queue.push({ length: length + edge.length_km, ids: [...ids, edge.id], steps: [...steps, [edge, next]], at: next })
     }
   }
@@ -330,7 +332,7 @@ function walk(
       let added: Step[] = [[edge, next]]
       if (previous !== undefined && mustReverse(graph, node, previous, edge)) {
         const key = `${node}|${previous.id}`
-        if (!excursions.has(key)) excursions.set(key, excursion(graph, node, previous, edgeOk))
+        if (!excursions.has(key)) excursions.set(key, excursion(graph, node, previous, edgeOk, mayPass))
         const out = excursions.get(key)
         // Una ida y vuelta que pasa por el origen o por una meta no es otro recorrido: es el mismo
         // viaje empezado antes o acabado después.
