@@ -155,7 +155,7 @@ def test_cerrato_carries_the_trains_between_palencia_and_burgos(
     Galicia. Los regionales que llevan las dos paradas van por la línea convencional, paran en
     Venta de Baños y quedan fuera."""
     trips = select_trips_for_spec(feed, specs[CERRATO])
-    assert Counter(t.product for t in trips) == {"ALVIA": 6}
+    assert Counter(t.product for t in trips) == {"Alvia": 6}
     for trip in trips:
         stops = [st.stop_id for st in trip.stop_times]
         assert abs(stops.index(PALENCIA) - stops.index(BURGOS)) == 1
@@ -168,10 +168,10 @@ def test_aljucen_carries_the_trains_between_merida_and_badajoz(
     Badajoz. Todos están también en la línea de Aljucén a Mérida."""
     trips = select_trips_for_spec(feed, specs[ALJUCEN])
     assert Counter(t.product for t in trips) == {
-        "MD": 55,
-        "ALVIA": 37,
-        "REG.EXP.": 22,
-        "REGIONAL": 14,
+        "Media Distancia": 55,
+        "Alvia": 37,
+        "Regional Exprés": 22,
+        "Regional": 14,
     }
     for trip in trips:
         stops = [st.stop_id for st in trip.stop_times]
@@ -190,10 +190,10 @@ def test_madrid_carries_the_trains_that_stop_at_atocha_and_chamartin(
     Recoletos y Nuevos Ministerios. Ninguno es de alta velocidad."""
     trips = select_trips_for_spec(feed, specs[MADRID])
     assert Counter(t.product for t in trips) == {
-        "REGIONAL": 141,
-        "MD": 122,
-        "ALVIA": 55,
-        "REG.EXP.": 8,
+        "Regional": 141,
+        "Media Distancia": 122,
+        "Alvia": 55,
+        "Regional Exprés": 8,
     }
     for trip in trips:
         stops = [st.stop_id for st in trip.stop_times]
