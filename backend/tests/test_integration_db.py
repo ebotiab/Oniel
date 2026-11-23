@@ -2120,7 +2120,7 @@ async def test_diverted_trains_run_along_manzanares_ciudad_real(client: httpx.As
     assert intercity["kind"] == "estimado"
     assert intercity["enter"] == "08:09" and intercity["exit"] == "08:22"
     assert "entra en esta línea por Manzanares" in intercity["basis"]
-    assert "196 km por esa línea hasta Madrid-Atocha Cercanías" in intercity["basis"]
+    assert "196 km por esa línea hasta Madrid-Puerta de Atocha" in intercity["basis"]
     assert not any("línea recta" in p["basis"] for p in body["passes"])
     alvia = passes["09366"]
     assert alvia["kind"] == "estimado" and "sin parar en ella" in alvia["basis"]
