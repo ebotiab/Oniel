@@ -2456,7 +2456,10 @@ async def test_every_segment_lists_each_train_once_and_all_its_counts_agree(
     async with connect(dsn) as conn:
         result = await export_snapshot(conn, tmp_path)
     day = result["date"]
-    read = lambda path: json.loads((tmp_path / path).read_text("utf-8"))  # noqa: E731
+
+    def read(path: str) -> Any:
+        return json.loads((tmp_path / path).read_text("utf-8"))
+
     scheme: dict[str, int] = {}
     for line_id in result["lines"]:
         scheme |= read(f"lines/{safe_name(line_id)}.json")["counts"]
