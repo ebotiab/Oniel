@@ -22,6 +22,7 @@ from oniel.routing import (
     build_graph,
     closure_detours,
     find_routes,
+    shortest_route,
 )
 from oniel.routing.graph import MAX_ROUTES
 from oniel.sim.closure import alternatives
@@ -31,6 +32,8 @@ REPO = Path(__file__).resolve().parents[2]
 SNAPSHOT = REPO / "frontend" / "public" / "data" / "index.json"
 #: Casos que el cliente (``frontend/e2e/rutas.spec.ts``) tiene que resolver igual que el servidor.
 PARITY = REPO / "frontend" / "e2e" / "fixtures" / "rutas-paridad.json"
+#: Los trenes de cada tramo el día de referencia, con los extremos de cada grupo de trenes.
+ALTERNATIVES = REPO / "frontend" / "public" / "data" / "alternatives.json"
 
 LAV, CONV, MZCR = (
     "lav-madrid-sevilla",
@@ -990,3 +993,71 @@ def test_parity_cases_match_the_fixture_shared_with_the_client(graph: Graph) -> 
     assert cases == json.loads(PARITY.read_text(encoding="utf-8"))
     assert all(case["expected"] for case in cases["routes"])
     assert all(case["expected"]["detours"] for case in cases["detours"])
+
+
+def _first(
+    graph: Graph, a: str, b: str, scenario: Scenario | None, max_changes: int | None
+) -> object:
+    """El más corto por la enumeración: lo que ``shortest_route`` tiene que dar sin enumerar."""
+    found = find_routes(graph, a, b, scenario, max_changes=max_changes, max_ratio=None)
+    return found[0] if found else None
+
+
+def test_the_shortest_route_is_the_first_of_the_enumeration(graph: Graph) -> None:
+    """``shortest_route`` no enumera los caminos, pero da el mismo que encabeza ``find_routes``.
+
+    Se comprueba con los casos de paridad y con una muestra de lo que pide el cálculo de los
+    tramos sin otro camino: los extremos de un grupo de trenes con su tramo cerrado, con el tope
+    de cambios de línea de ese cálculo y sin tope.
+    """
+    cases: list[tuple[str, str, Scenario | None]] = [
+        (case["from"], case["to"], Scenario.from_code(case["scenario"]))
+        for case in _parity_cases(graph)["routes"]
+    ]
+    alternatives = json.loads(ALTERNATIVES.read_text(encoding="utf-8"))
+    groups = sorted(
+        {
+            (segment["segment_id"], group["from_node_id"], group["to_node_id"])
+            for segment in alternatives["segments"]
+            for group in segment["groups"]
+        }
+    )
+    assert len(groups) > 2000
+    cases += [(a, b, Scenario(closures=[closed])) for closed, a, b in groups[::40]]
+    for a, b, scenario in cases:
+        for max_changes in (5, None):
+            expected = _first(graph, a, b, scenario, max_changes)
+            assert shortest_route(graph, a, b, scenario, max_changes=max_changes) == expected, (
+                a,
+                b,
+                scenario,
+                max_changes,
+            )
+
+
+def test_the_shortest_route_respects_the_cap_on_line_changes(graph: Graph) -> None:
+    """Con tope, el más corto es el más corto de los que lo cumplen, aunque haya otro más corto."""
+    free = shortest_route(graph, MADRID, CORDOBA, Scenario(closures=[URDA_CIUDAD_REAL]))
+    assert free is not None and len(free.legs) > 1
+    capped = shortest_route(
+        graph, MADRID, CORDOBA, Scenario(closures=[URDA_CIUDAD_REAL]), max_changes=0
+    )
+    assert capped == _first(graph, MADRID, CORDOBA, Scenario(closures=[URDA_CIUDAD_REAL]), 0)
+    assert capped is not None and len(capped.legs) == 1
+    assert capped.length_km > free.length_km
+
+
+def test_the_shortest_route_uses_a_sketched_link_and_knows_when_there_is_none(graph: Graph) -> None:
+    link = SketchLink(from_node_id=MADRID, to_node_id=CORDOBA, length_km=10, speed_kmh=100)
+    sketched = shortest_route(graph, MADRID, CORDOBA, Scenario(links=[link]))
+    assert sketched is not None and sketched.length_km == 10
+    assert shortest_route(graph, MADRID, MADRID) is None
+    with pytest.raises(ScenarioError):
+        shortest_route(graph, MADRID, "no-existe")
+    # Al sur de Córdoba no hay otra línea cargada: con el tramo cerrado, Sevilla queda aislada.
+    isolated = next(
+        e.id for e in graph.edges if e.line_id == LAV and "sevilla-santa-justa" in (e.a, e.b)
+    )
+    assert (
+        shortest_route(graph, MADRID, "sevilla-santa-justa", Scenario(closures=[isolated])) is None
+    )

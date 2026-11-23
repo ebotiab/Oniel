@@ -31,8 +31,8 @@ from oniel.routing import (
     Graph,
     Route,
     Scenario,
-    find_routes,
     route_along,
+    shortest_route,
 )
 
 #: Lo que el resultado dice siempre de su alcance.
@@ -81,20 +81,26 @@ def corridor(graph: Graph, segment_ids: Iterable[str], through: str) -> tuple[st
     asked = graph.edge(through)
     if asked is None:
         raise ValueError(f"No hay ningún tramo con id {through}")
-    own = {e.id: e for e in graph.edges if e.id in set(segment_ids)}
+    wanted = set(segment_ids)
+    own = {e.id: e for e in graph.edges if e.id in wanted}
     own[asked.id] = asked
     order = {node_id: i for i, node_id in enumerate(graph.nodes)}
 
     def joined_to_asked(edges: dict[str, Edge]) -> tuple[dict[str, Edge], list[str], bool]:
         """Los tramos unidos al pedido, sus dos extremos y si forman un camino sin bifurcaciones."""
+        at_node: dict[str, list[Edge]] = {}
+        for other in edges.values():
+            at_node.setdefault(other.a, []).append(other)
+            at_node.setdefault(other.b, []).append(other)
         joined: dict[str, Edge] = {asked.id: asked}
         frontier = [asked]
         while frontier:
             edge = frontier.pop()
-            for other in edges.values():
-                if other.id not in joined and {other.a, other.b} & {edge.a, edge.b}:
-                    joined[other.id] = other
-                    frontier.append(other)
+            for node_id in (edge.a, edge.b):
+                for other in at_node.get(node_id, []):
+                    if other.id not in joined:
+                        joined[other.id] = other
+                        frontier.append(other)
         degree: Counter[str] = Counter()
         for edge in joined.values():
             degree[edge.a] += 1
@@ -170,38 +176,29 @@ def segment_alternatives(
             continue
         # Trenes del tramo por recorrido: (origen, tramos en orden) → operadores, uno por tren.
         groups: dict[tuple[str, tuple[str, ...]], list[str]] = {}
+        # Muchos trenes recorren los mismos tramos: el recorrido se saca una vez por cada conjunto.
+        corridors: dict[frozenset[str], tuple[str, tuple[str, ...]]] = {}
         for service in services:
             if edge.id not in service.segment_ids:
                 continue
-            start, path = corridor(graph, service.segment_ids, edge.id)
-            groups.setdefault((start, tuple(e.id for e in path)), []).append(service.operator_id)
+            key = corridors.get(service.segment_ids)
+            if key is None:
+                start, path = corridor(graph, service.segment_ids, edge.id)
+                key = corridors[service.segment_ids] = (start, tuple(e.id for e in path))
+            groups.setdefault(key, []).append(service.operator_id)
         closed = Scenario(closures=[edge.id])
         group_outs: list[SegmentTrainGroupOut] = []
         for (start, path_ids), operators in groups.items():
             own = route_along(graph, start, path_ids)
-            # Se buscan todos, sin el descarte del comparador (que compara caminos entre sí), y
-            # el tope se aplica contra el recorrido del propio tren.
-            others = find_routes(
-                graph,
-                own.from_node_id,
-                own.to_node_id,
-                closed,
-                max_changes=FIRST_MAX_CHANGES,
-                max_ratio=None,
-            )
-            if not others:
-                # Ni por número de líneas: un tren que cruza Madrid de una línea a otra (de
-                # Valladolid a Valencia) puede necesitar más cambios de línea de los de la primera
-                # búsqueda para rodear un tramo, y ese rodeo también es otro camino.
-                others = find_routes(
-                    graph,
-                    own.from_node_id,
-                    own.to_node_id,
-                    closed,
-                    max_changes=None,
-                    max_ratio=None,
-                )
-            other = other_way(own, others, max_ratio)
+            # El más corto, sin el descarte del comparador (que compara caminos entre sí): el
+            # tope se aplica contra el recorrido del propio tren. Si no hay ninguno con los
+            # cambios de línea de la primera búsqueda, se busca sin tope: un tren que cruza Madrid
+            # de una línea a otra (de Valladolid a Valencia) puede necesitar más para rodear un
+            # tramo, y ese rodeo también es otro camino.
+            shortest = shortest_route(
+                graph, own.from_node_id, own.to_node_id, closed, max_changes=FIRST_MAX_CHANGES
+            ) or shortest_route(graph, own.from_node_id, own.to_node_id, closed, max_changes=None)
+            other = other_way(own, [shortest] if shortest is not None else [], max_ratio)
             group_outs.append(
                 SegmentTrainGroupOut(
                     from_node_id=own.from_node_id,
