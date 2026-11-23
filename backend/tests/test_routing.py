@@ -79,18 +79,19 @@ class Red:
     lines: list[LineSummary]
     nodes: list[NodeIndexOut]
     segments: list[SegmentOut]
+    turns: dict[str, dict[str, int]]
 
 
 @pytest.fixture(scope="module")
 def network() -> Red:
     index = NetworkIndexOut.model_validate(json.loads(SNAPSHOT.read_text(encoding="utf-8")))
     segments = [SegmentOut(id=f.id, **f.properties) for f in index.segment_features.features]
-    return Red(lines=index.lines, nodes=index.nodes, segments=segments)
+    return Red(lines=index.lines, nodes=index.nodes, segments=segments, turns=index.turns)
 
 
 @pytest.fixture(scope="module")
 def graph(network: Red) -> Graph:
-    return build_graph(network.lines, network.nodes, network.segments)
+    return build_graph(network.lines, network.nodes, network.segments, network.turns)
 
 
 def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red) -> None:

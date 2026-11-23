@@ -100,7 +100,7 @@ def lines() -> list[LineSummary]:
 def graph(lines: list[LineSummary]) -> Graph:
     index = NetworkIndexOut.model_validate(_read("index.json"))
     segments = [SegmentOut(id=f.id, **f.properties) for f in index.segment_features.features]
-    return build_graph(lines, index.nodes, segments)
+    return build_graph(lines, index.nodes, segments, index.turns)
 
 
 def _path(graph: Graph, from_node: str, to_node: str, nth: int = 0) -> frozenset[str]:
@@ -170,7 +170,9 @@ def test_another_way_counts_even_if_it_changes_line_more_often_than_the_comparat
         for f in index.segment_features.features
         if not f.id.startswith(f"{MEDITERRANEO}:")
     ]
-    graph = build_graph([line for line in lines if line.id != MEDITERRANEO], index.nodes, segments)
+    graph = build_graph(
+        [line for line in lines if line.id != MEDITERRANEO], index.nodes, segments, index.turns
+    )
     valencia, valladolid = "valencia-joaquin-sorolla", "valladolid-campo-grande"
     closed_segment = f"{LAV_VALENCIA}:horcajada:cuenca-fernando-zobel"
     own = _path(graph, valencia, valladolid)

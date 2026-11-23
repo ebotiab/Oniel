@@ -237,7 +237,16 @@ export interface NetworkOut {
   connection_features: FeatureCollection
   /** Todas las anotaciones registradas, vigentes o no; el visor decide por fecha. */
   annotations: AnnotationOut[]
+  /** Los lados de cada nodo que no es estación (`NetworkIndexOut.turns`). */
+  turns: Turns
 }
+
+/**
+ * Por cada nodo que no es estación, el lado (0 o 1) por el que sale cada uno de sus tramos. Dos
+ * tramos del mismo lado no se pueden encadenar allí: las vías no dejan girar. Lo calcula el servidor
+ * con la geometría completa de los tramos.
+ */
+export type Turns = Record<string, Record<string, number>>
 
 /** Un nodo en el índice: sin descripción ni detalles, que llegan con su línea. */
 export type NodeIndexOut = Omit<NodeOut, 'description' | 'details'>
@@ -255,6 +264,8 @@ export interface NetworkIndexOut {
   /** Alias temporal de las anotaciones de tipo `interrupcion`. */
   interruptions?: LegacyInterruption[]
   simplify_tolerance_m: number
+  /** Falta en las respuestas de una API anterior a la regla de giro: sin ella, se deja girar. */
+  turns?: Turns
 }
 
 /** El detalle de una línea: nodos con sus textos, geometría completa y pasos por tramo. */
@@ -434,6 +445,8 @@ export interface Route {
   via: string[]
   node_ids: string[]
   segment_ids: string[]
+  /** Estaciones en las que el recorrido invierte la marcha: llega y vuelve por donde vino. */
+  reverse_node_ids: string[]
 }
 
 /**

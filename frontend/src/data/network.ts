@@ -63,5 +63,6 @@ export function composeNetwork(index: NetworkIndexOut, details: LineDetails): Ne
     node_features: { type: 'FeatureCollection', features: nodeFeatures },
     connection_features: index.connection_features,
     annotations: annotationsOf(index),
+    turns: index.turns ?? {},
   }
 }

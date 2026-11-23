@@ -38,6 +38,7 @@ from oniel.geo import simplify
 from oniel.repo import cache, datasets_repo, services_repo
 from oniel.repo.datasets_repo import CURRENT_IDS_SQL
 from oniel.routing import Graph, build_graph
+from oniel.routing.turns import Turns, turn_sides
 
 
 def _listed(names: list[str]) -> str:
@@ -531,6 +532,7 @@ async def _build_index(conn: asyncpg.Connection, tolerance_m: float) -> NetworkI
         connection_features=_connection_features(connections),
         annotations=await fetch_annotations(conn),
         simplify_tolerance_m=tolerance_m,
+        turns=await fetch_turns(conn),
     )
 
 
@@ -569,6 +571,17 @@ async def fetch_line_detail(
     )
 
 
+async def fetch_turns(conn: asyncpg.Connection) -> Turns:
+    """Los lados de cada nodo que no es estación, sacados de la geometría completa de los tramos."""
+
+    async def load() -> Turns:
+        stations = {n.id for n in await fetch_nodes(conn) if n.kind == "estacion"}
+        turns, _ = turn_sides(await fetch_segments(conn), stations)
+        return turns
+
+    return await cache.remember("turns", load)
+
+
 async def fetch_graph(conn: asyncpg.Connection) -> Graph:
     """Grafo de rutas de todas las líneas cargadas (``oniel.routing``)."""
 
@@ -577,6 +590,7 @@ async def fetch_graph(conn: asyncpg.Connection) -> Graph:
             await fetch_lines(conn),
             await fetch_nodes(conn),
             [s for s, _ in await fetch_segments(conn)],
+            await fetch_turns(conn),
         )
 
     return await cache.remember("graph", load)
