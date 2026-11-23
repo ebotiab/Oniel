@@ -2407,15 +2407,26 @@ async def test_history_gives_one_point_per_dataset_on_its_own_reference_day(
     assert (await client.get("/api/segments/no-existe/history")).status_code == 404
 
 
+@pytest_asyncio.fixture(loop_scope="module", scope="module")
+async def snapshot(
+    client: httpx.AsyncClient, dsn: str, tmp_path_factory: pytest.TempPathFactory
+) -> tuple[Path, dict[str, Any]]:
+    """La instantánea exportada una sola vez para las pruebas que la leen: carpeta y resumen."""
+    from oniel.db.pool import connect
+    from oniel.export.snapshot import export_snapshot
+
+    out = tmp_path_factory.mktemp("instantanea")
+    async with connect(dsn) as conn:
+        return out, await export_snapshot(conn, out)
+
+
 async def test_snapshot_history_matches_the_api(
-    client: httpx.AsyncClient, dsn: str, tmp_path: Path
+    client: httpx.AsyncClient, snapshot: tuple[Path, dict[str, Any]]
 ) -> None:
     """`historico/` lleva, por nodo y por tramo, lo mismo que responde `/history`."""
-    from oniel.db.pool import connect
-    from oniel.export.snapshot import export_snapshot, safe_name
+    from oniel.export.snapshot import safe_name
 
-    async with connect(dsn) as conn:
-        await export_snapshot(conn, tmp_path)
+    tmp_path, _ = snapshot
     network = (await client.get("/api/network")).json()
     node_ids = {n["id"] for n in network["nodes"]}
     segment_ids = {s["id"] for s in network["segments"]}
@@ -2442,7 +2453,7 @@ async def test_snapshot_history_matches_the_api(
 
 
 async def test_every_segment_lists_each_train_once_and_all_its_counts_agree(
-    client: httpx.AsyncClient, dsn: str, tmp_path: Path
+    snapshot: tuple[Path, dict[str, Any]],
 ) -> None:
     """En cada tramo de la instantánea la lista lleva cada tren una vez y tantos como las cifras.
 
@@ -2450,11 +2461,9 @@ async def test_every_segment_lists_each_train_once_and_all_its_counts_agree(
     lista. La cifra del título (los renglones), la del esquema (``counts`` de la línea), la de
     «Tramos sin otro camino» (``alternatives.json``) y la del histórico salen de la misma regla.
     """
-    from oniel.db.pool import connect
-    from oniel.export.snapshot import export_snapshot, safe_name
+    from oniel.export.snapshot import safe_name
 
-    async with connect(dsn) as conn:
-        result = await export_snapshot(conn, tmp_path)
+    tmp_path, result = snapshot
     day = result["date"]
 
     def read(path: str) -> Any:
