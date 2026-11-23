@@ -801,7 +801,8 @@ def find_routes(
 ) -> list[Route]:
     """Recorridos distintos entre dos nodos con la red del escenario, del más corto al más largo.
 
-    Son los caminos que no pasan dos veces por el mismo nodo, cambian de línea como mucho
+    Son los caminos que no pasan dos veces por el mismo nodo (salvo la ida y vuelta a una estación
+    para invertir la marcha donde las vías no dejan girar, ``_excursion``), cambian de línea como mucho
     ``max_changes`` veces (``None``, sin tope) y no dan un rodeo de más de ``max_ratio`` veces
     respecto a otro más corto, medido donde se apartan de él (``_strays``; ``None``, sin descartar
     ninguno por largo). Un baipás es parte de su línea: de los caminos que solo se distinguen por
