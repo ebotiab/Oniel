@@ -78,8 +78,11 @@ const paradas: Map<string, Set<string>> = (() => {
   return out
 })()
 
-/** Si una línea para en una ciudad: alguna de sus estaciones empieza por su nombre. */
-export const paraEn = (lineId: string, ciudad: string) => [...(paradas.get(lineId) ?? [])].some((e) => e.startsWith(sinAcentos(ciudad)))
+/** Si una línea pasa por una ciudad: alguna de sus estaciones empieza por su nombre, o la línea la nombra. */
+export const paraEn = (lineId: string, ciudad: string) => {
+  const nombre = sinAcentos(indice.lines.find((l) => l.id === lineId)?.name ?? '').replace(/[^a-z0-9ñ]+/g, ' ')
+  return [...(paradas.get(lineId) ?? [])].some((e) => e.startsWith(sinAcentos(ciudad))) || ` ${nombre} `.includes(` ${sinAcentos(ciudad)} `)
+}
 
 /**
  * Las zonas de la lista de líneas, de norte a sur, cada una con sus líneas y sus ciudades. Una línea está

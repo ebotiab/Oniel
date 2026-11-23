@@ -26,7 +26,7 @@ test.describe('La lista de zonas', () => {
       await expect(seccion.getByTestId(`linea-${id}--madrid-castilla-la-mancha`)).toBeVisible()
     // y la regla: toda línea con estación en Madrid está en la zona
     const deMadrid = lineasDeLista.filter((l) => paraEn(l.id, 'Madrid'))
-    expect(deMadrid.length).toBeGreaterThan(5)
+    expect(deMadrid.length).toBeGreaterThan(6)
     for (const l of deMadrid) await expect(seccion.getByTestId(renglonDe(l, 'madrid-castilla-la-mancha'))).toBeVisible()
     await expect(seccion.locator('.fila-linea')).toHaveCount(madrid.lineas.length)
     // el renglón abre la línea, como el de su zona
@@ -49,7 +49,7 @@ test.describe('La lista de zonas', () => {
   test('filtrando, una línea que está en varias zonas sale una sola vez', async ({ page }) => {
     await page.goto('/')
     await abrirHoja(page)
-    await page.getByTestId('filtro-lineas').fill('barcelona por zaragoza')
+    await page.getByTestId('filtro-lineas').fill('lleida')
     await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(1)
     await expect(page.getByTestId('linea-lav-madrid-barcelona')).toBeVisible()
   })

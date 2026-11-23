@@ -81,7 +81,12 @@ export function LineList({ lines: todas, nodes, segments, notes, onPick, onHighl
     for (const s of segments) for (const id of [s.from_node_id, s.to_node_id]) anotar(s.line_id, nombre.get(id))
     return out
   }, [nodes, segments])
-  const paraEn = (linea: LineSummary, ciudad: string) => [...(paradas.get(linea.id) ?? [])].some((e) => e.startsWith(normalize(ciudad)))
+  // Una línea pasa por una ciudad si para en ella o si la nombra: la de Madrid a Plasencia, tal como está
+  // cargada, empieza en una bifurcación de Madrid y no en una de sus estaciones.
+  const paraEn = (linea: LineSummary, ciudad: string) => {
+    const c = normalize(ciudad)
+    return [...(paradas.get(linea.id) ?? [])].some((e) => e.startsWith(c)) || ` ${normalize(linea.name)} `.includes(` ${c} `)
+  }
 
   const tokens = normalize(query).split(' ').filter(Boolean)
   const filtrando = tokens.length > 0
