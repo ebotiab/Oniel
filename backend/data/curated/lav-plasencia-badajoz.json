@@ -159,7 +159,7 @@
     "35207": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
     "30000": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
     "18000": {"exits": ["arroyo-de-la-herrera"], "via": [{"line": "madrid-plasencia", "node": "bif-el-chaparral"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
-    "17000": {"exits": ["arroyo-de-la-herrera"]},
+    "17000": {"exits": ["arroyo-de-la-herrera"], "via": [{"line": "madrid-plasencia", "node": "bif-el-chaparral"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "37500": {"exits": ["bif-granja-las-encinas", "garrovilla-las-vegas"], "via": {"line": "ramal-merida", "node": "aljucen"}, "aside": true},
     "35301": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},
     "35302": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},

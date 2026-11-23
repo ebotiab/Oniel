@@ -641,17 +641,29 @@
     "18000": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "enlace-atocha-chamartin",
+        "node": "madrid-chamartin"
+      }
     },
     "18001": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "enlace-atocha-chamartin",
+        "node": "madrid-chamartin"
+      }
     },
     "18002": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "enlace-atocha-chamartin",
+        "node": "madrid-chamartin"
+      }
     },
     "10000": {
       "exits": [

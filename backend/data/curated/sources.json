@@ -375,7 +375,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-14",
-      "coverage": "Los 127,6 km de la relación entre la bifurcación Venta de Baños y la estación de León, por Palencia; velocidad máxima por tramo. Con los 38,4 km de la relación 4777557 entre Valladolid-Campo Grande y la bifurcación, forma la línea de Valladolid a León (166,0 km).",
+      "coverage": "Los 127,6 km de la relación entre la bifurcación Venta de Baños y la estación de León, por Palencia; velocidad máxima por tramo. Con los 38,4 km de la relación 4777557 entre Valladolid-Campo Grande y la bifurcación, forma la línea de Valladolid a León (166,0 km). Desde el 23 de noviembre de 2026, también los últimos 0,8 km del enlace de Soto de Cerrato, del desvío en el que el ramal se une a esta línea (nodo 1546433140) a la bifurcación Cerrato.",
       "notes": "Descargado por la API de OpenStreetMap (api.openstreetmap.org, relation/5546933/full.json) el 14 de noviembre de 2026, porque ese día Overpass no respondía; el formato es el mismo, con los nodos y las vías de la relación. La relación es de infraestructura («Línea de Alta Velocidad Venta de Baños-León», ref=084, operator=Adif AV, 158 vías) y es de una pieza entre sus extremos: se traza el camino más corto por el grafo de vías, sin huecos. Empieza en dos nodos que comparte con la relación 4777557 (uno por vía), donde la línea de Burgos se separa: el trazado usa el de la vía por la que llega desde Valladolid (-4.4877585, 41.9242256), que es además el nodo de la bifurcación Venta de Baños. Trae la segunda vía solo donde la hay: acaba junto a Palencia (la bifurcación Cerrato), vuelve entre los kilómetros 80,9 y 118,1 del trazado (de Las Barreras a Las Arenas) y otra vez desde Vilecha hasta León; los nodos de las bifurcaciones Cerrato, Las Arenas y Vilecha son los puntos de la relación donde se juntan las dos vías. Todas sus vías llevan gauge=1435, voltage=25000 y railway:etcs=2, y todas traen velocidad máxima (300 km/h la más repetida). Las coordenadas de las estaciones de Palencia y León son las de sus nodos en OSM (raw/osm/estaciones_palencia_leon_2026-11-14.json, nodos 1939943099 y 5299078295, descargados el mismo día por la misma API); sus códigos (14100 y 15100) coinciden con las paradas del GTFS de Renfe. La longitud y los puntos kilométricos se contrastaron con Wikipedia.",
       "file": "raw/osm/relation_5546933_lav_venta_de_banos_leon_2026-11-14.json"
     },
@@ -409,7 +409,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-15",
-      "coverage": "Las tres vías del ramal de vía única que une la línea de León, junto a la bifurcación Cerrato, con la de Burgos en la bifurcación Soto de Cerrato, y los dos desvíos de la línea de Burgos junto a esa bifurcación. Sirven para situar la bifurcación Soto de Cerrato y para el esbozo del ramal, que no se carga.",
+      "coverage": "Las tres vías del ramal de vía única que une la línea de León, junto a la bifurcación Cerrato, con la de Burgos en la bifurcación Soto de Cerrato, y los dos desvíos de la línea de Burgos junto a esa bifurcación. Sirven para situar la bifurcación Soto de Cerrato y, desde el 23 de noviembre de 2026, son el trazado del enlace de Soto de Cerrato (4,4 km de los 5,2 km del enlace); velocidad máxima.",
       "notes": "Descargado por la API de OpenStreetMap (ways.json y nodes.json) el 15 de noviembre de 2026; el fichero junta las vías 502928576, 165188466 y 165188468 con sus nodos y los desvíos 4932732113 y 4932732118. Ninguna relación de infraestructura recoge el ramal: sus vías llevan ref=170, gauge=1435, voltage=25000, railway:etcs=2 y maxspeed=160. Se une a la relación 4777557 en el desvío 4932732113, que es el nodo de la bifurcación Soto de Cerrato.",
       "file": "raw/osm/ramal_soto_de_cerrato_2026-11-15.json"
     },
@@ -1273,7 +1273,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "De la bifurcación Casa de la Torre a la aguja del km 82,2 por la estación de Cáceres (10,1 km) y del final de la vía nueva a Badajoz por la bifurcación San Nicolás (16,1 km), en la línea Plasencia – Badajoz; velocidad máxima.",
+      "coverage": "De la bifurcación Casa de la Torre a la aguja del km 82,2 por la estación de Cáceres (10,1 km) y del final de la vía nueva a Badajoz por la bifurcación San Nicolás (16,1 km), en la línea Plasencia – Badajoz; velocidad máxima. Desde el 23 de noviembre de 2026, también los 7,1 km del enlace de Aljucén a La Garrovilla: las vías de la línea 520 de Aljucén a la bifurcación La Isla, la vía sin ref que sigue hasta la vía nueva y los metros de esta hasta el apeadero de Garrovilla-Las Vegas, con su velocidad máxima, su electrificación y la etiqueta railway:asfa.",
       "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es una relación de servicio, no de infraestructura, y tiene huecos (empieza cerca de Talavera de la Reina y no enlaza Monfragüe con el resto), pero trae seguidas las vías que les faltan a las relaciones de infraestructura: de la bifurcación Casa de la Torre a la estación de Cáceres y a la aguja del km 82,2, y de la bifurcación San Nicolás a Badajoz, por la vía de la línea 520.",
       "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json"
     },
@@ -2078,6 +2078,18 @@
       "coverage": "Licitación, el 7 de agosto de 2024, de las obras de vía y electrificación para explotar en ancho mixto, con tercer carril, los 75 km entre las conexiones con el nudo de La Encina y la entrada a la estación de Alicante; vías de apartado para trenes de 750 m en Caudete, Sax y Monforte del Cid; la catenaria sigue a 3 kV.",
       "notes": "Publicada el 7 de agosto de 2024; se leyó en un navegador el 18 de noviembre de 2026. El Consejo de Ministros había autorizado la licitación el 23 de julio de 2024, por un valor estimado de 183,6 millones de euros (nota del Ministerio de Transportes de ese día). Oniel no ha buscado la adjudicación ni el comienzo de las obras.",
       "file": "raw/proyectos/consultas_2026-11-18_valencia_alicante.json"
+    },
+    {
+      "id": "osm-relation-18369025",
+      "name": "Trazado de la línea 900 de Adif entre Madrid-Atocha Cercanías y Madrid-Chamartín por Recoletos (relación OSM 18369025)",
+      "url": "https://www.openstreetmap.org/relation/18369025",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-23",
+      "coverage": "Los 7,7 km del túnel entre Madrid-Atocha Cercanías y Madrid-Chamartín por Recoletos y Nuevos Ministerios; velocidad máxima por tramo; puntos de parada de Recoletos y de Nuevos Ministerios.",
+      "notes": "Descargado por la API de OpenStreetMap (api.openstreetmap.org, relation/18369025/full.json) el 23 de noviembre de 2026. La relación es de infraestructura («Línea 900 Túnel de la Risa I», ref=900, 33 vías) y trae las dos vías por separado, cada una de una pieza: se traza el camino más corto por una de ellas, de un punto de parada de Atocha Cercanías a los andenes de Chamartín. Sus vías llevan gauge=1668, voltage=3000, passenger_lines=2 y maxspeed de 30 a 60 km/h. Las coordenadas de Recoletos y de Nuevos Ministerios son las de sus puntos de parada en la vía 1 (nodos 4999319330 y 4998691473, railway=stop), que vienen en el mismo fichero; sus códigos (18001 y 18002) son los de las paradas del GTFS de Renfe. La relación no trae puntos kilométricos ni fecha de apertura, y no se han buscado en otra fuente: el enlace va sin ellos.",
+      "file": "raw/osm/relation_18369025_linea_900_tunel_recoletos_2026-11-23.json"
     },
     {
       "id": "osm-relation-18369027",

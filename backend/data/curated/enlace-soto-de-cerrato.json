@@ -1,0 +1,297 @@
+{
+  "line": {
+    "id": "enlace-soto-de-cerrato",
+    "name": "Enlace de Soto de Cerrato",
+    "short_name": "170",
+    "sort_order": 45,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 160,
+    "tracks": 1,
+    "status": "disponible",
+    "link_of": "lav-venta-de-banos-burgos",
+    "description": "Vía corta que une la línea de alta velocidad de Venta de Baños a Burgos con la de Valladolid a León, cerca de Palencia. La toman los trenes que van de Burgos a Palencia y León, y al revés: así no tienen que bajar hasta la bifurcación Venta de Baños y cambiar de sentido.\n\nSale de la línea de Burgos en la bifurcación Soto de Cerrato y se une a la de León poco antes de la bifurcación Cerrato. Tiene una sola vía y se recorre a 160 km/h.\n\nSus últimos 800 m, hasta la bifurcación Cerrato, son vía de la línea de León: Oniel los cuenta también aquí para que el enlace acabe en un punto de esa línea.",
+    "geometry_source": {
+      "source_id": "osm-ramal-soto-de-cerrato",
+      "parts": [
+        {
+          "source_id": "osm-ramal-soto-de-cerrato",
+          "file": "raw/osm/ramal_soto_de_cerrato_2026-11-15.json",
+          "way_ref": "170",
+          "from": [
+            -4.4360807,
+            41.9450869
+          ],
+          "to": [
+            -4.4771812,
+            41.9619892
+          ]
+        },
+        {
+          "source_id": "osm-relation-5546933",
+          "file": "raw/osm/relation_5546933_lav_venta_de_banos_leon_2026-11-14.json",
+          "relation_id": 5546933,
+          "from": [
+            -4.4771812,
+            41.9619892
+          ],
+          "to": [
+            -4.4820799,
+            41.9680494
+          ]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-soto-de-cerrato",
+      "name": "Bifurcación Soto de Cerrato",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "shared": true,
+      "position": {
+        "lon": -4.4360807,
+        "lat": 41.9450869
+      }
+    },
+    {
+      "id": "bif-cerrato",
+      "name": "Bifurcación Cerrato",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "shared": true,
+      "position": {
+        "lon": -4.4820799,
+        "lat": 41.9680494
+      }
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-soto-de-cerrato",
+      "to_node": "bif-cerrato",
+      "value": "ertms_n2_asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-23",
+      "note": "El mapa 4 no dibuja el enlace aparte: entre Venta de Baños, Palencia y Magaz rotula «BCA» con los símbolos «ERTMS N2», «ASFA - AV» y «GSMR», lo que llevan las dos líneas que une. Las vías del enlace en OSM (ref=170) llevan railway:etcs=2."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-soto-de-cerrato",
+      "to_node": "bif-cerrato",
+      "value": "bca",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-23",
+      "note": "El mapa 4 no dibuja el enlace aparte: rótulo «BCA» y trazo rosa discontinuo en las dos líneas que une, a un lado y a otro de la bifurcación Venta de Baños."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-soto-de-cerrato",
+      "to_node": "bif-cerrato",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-23",
+      "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "bif-soto-de-cerrato",
+      "to_node": "bif-cerrato",
+      "value": 160,
+      "source_id": "osm-ramal-soto-de-cerrato",
+      "checked_on": "2026-11-23",
+      "note": "Las tres vías del enlace llevan maxspeed=160 en OSM (ref=170). Los últimos 800 m del trazado son vía de la línea de León, con otra velocidad: no es la del enlace."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "08223": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "bif-cerrato"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "bif-cerrato"
+      }
+    },
+    "15100": {
+      "exits": [
+        "bif-cerrato"
+      ],
+      "via": {
+        "line": "lav-valladolid-leon",
+        "node": "bif-cerrato"
+      }
+    },
+    "20100": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "bif-cerrato"
+      ]
+    },
+    "04040": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "04104": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ],
+      "via": {
+        "line": "lav-venta-de-banos-burgos",
+        "node": "bif-soto-de-cerrato"
+      }
+    },
+    "11200": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-soto-de-cerrato"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
+      ]
+    },
+    "11208": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-soto-de-cerrato"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
+      ]
+    },
+    "71801": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "80100": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "80108": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "81200": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "bif-soto-de-cerrato"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Se importan los viajes del GTFS que paran en Palencia y en Burgos-Rosa Manzano y en ninguna de las paradas que delatan a los trenes de la línea convencional (Venta de Baños, Villaquirán y Briviesca): los Alvia e Intercity que unen León y Galicia con el País Vasco, Navarra y Barcelona. Entre Palencia y Burgos no hay otro camino de alta velocidad que no pase por la bifurcación Venta de Baños, donde tendrían que cambiar de sentido.",
+    "required_stop_ids": [
+      "14100",
+      "11014"
+    ],
+    "exclude_stop_ids": [
+      "11000",
+      "11009",
+      "11109"
+    ]
+  }
+}

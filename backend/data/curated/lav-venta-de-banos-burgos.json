@@ -147,37 +147,7 @@
       "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
     }
   ],
-  "connections": [
-    {
-      "id": "ramal-soto-de-cerrato-cerrato",
-      "node_id": "bif-soto-de-cerrato",
-      "name": "Ramal Soto de Cerrato – Cerrato",
-      "towards": "Palencia y León, sin pasar por Venta de Baños",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.4360807,
-          41.9450869
-        ],
-        [
-          -4.45525,
-          41.94424
-        ],
-        [
-          -4.46831,
-          41.95098
-        ],
-        [
-          -4.47718,
-          41.96199
-        ],
-        [
-          -4.4820799,
-          41.9680494
-        ]
-      ]
-    }
-  ],
+  "connections": [],
   "stop_mappings": {
     "11014": {
       "node": "burgos-rosa-manzano"
@@ -325,19 +295,31 @@
       "exits": [
         "bif-soto-de-cerrato"
       ],
-      "via": {
-        "line": "lav-valladolid-leon",
-        "node": "bif-cerrato"
-      }
+      "via": [
+        {
+          "line": "enlace-soto-de-cerrato",
+          "node": "bif-soto-de-cerrato"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-cerrato"
+        }
+      ]
     },
     "15100": {
       "exits": [
         "bif-soto-de-cerrato"
       ],
-      "via": {
-        "line": "lav-valladolid-leon",
-        "node": "bif-cerrato"
-      }
+      "via": [
+        {
+          "line": "enlace-soto-de-cerrato",
+          "node": "bif-soto-de-cerrato"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-cerrato"
+        }
+      ]
     },
     "20100": {
       "exits": [
