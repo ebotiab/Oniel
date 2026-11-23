@@ -47,7 +47,7 @@
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/",
       "retrieved_on": "2026-11-17",
-      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant), larga distancia (Alvia, Intercity, Euromed) y media distancia (MD, Regional Exprés, Regional, Proximidad) de toda España; Oniel importa los que recorren las líneas cargadas. Validez del fichero del 16 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
+      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant, Avant Exprés), AVE Euromed, Intercity y Regional de toda España, con esos rótulos desde el fichero del 17 de noviembre de 2026; los anteriores rotulaban además Alvia, Euromed, AVE internacional, Trencelta, Media Distancia, Regional Exprés y Proximidad. Oniel importa los que recorren las líneas cargadas. Validez del fichero del 16 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
       "notes": "Fichero google_transit.zip publicado el 17 de noviembre de 2026. Son horarios planificados: no reflejan las interrupciones registradas en interrupciones.json (la de la alta velocidad Madrid–Andalucía, desde el 28 de octubre de 2026, y la de la línea convencional por obras, desde el 6 de septiembre de 2026) ni otras alteraciones del servicio.",
       "file": "raw/renfe/google_transit_av_ld_md_2026-11-17.zip"
     },
@@ -748,6 +748,18 @@
       "coverage": "Qué trenes circulan y cuáles hacen parte del recorrido por carretera el día de la consulta: sirve para fijar hasta qué estación llegan los trenes a cada lado de una interrupción.",
       "notes": "Paneles en tiempo real, sin histórico; las páginas consultadas cada día y lo que mostraban están en los registros de consultas (raw/interrupciones/consultas_2026-11-10.json, consultas_2026-11-12.json y consultas_2026-11-13.json). El 13 de noviembre de 2026 se leyeron los de Ciudad Real, Puertollano, Santa Cruz de Mudela y Jaén; el de Córdoba no devolvió información de circulación.",
       "file": "raw/interrupciones/consultas_2026-11-13.json"
+    },
+    {
+      "id": "merca2-marcas-renfe-2026-11",
+      "name": "Noticia «Renfe estrena nueva imagen en 2027: AVE, Cercanías y Media Distancia cambian de marca»",
+      "publisher": "Merca2",
+      "url": "https://www.merca2.es/2026/11/15/nueva-imagen-renfe-2027-2506342/",
+      "license": "Consulta pública; © Merca2",
+      "license_url": null,
+      "retrieved_on": "2026-11-23",
+      "coverage": "Que Renfe reorganiza sus marcas comerciales: según la noticia, Alvia, Regional Exprés y Media Distancia desaparecen de determinados servicios el 25 de enero de 2027 y se integran en Intercity, AVE o Regionales.",
+      "notes": "Publicada el 15 de noviembre de 2026. Es prensa, no una nota de Renfe, y no habla de los horarios publicados: se cita como explicación verosímil de por qué el fichero del 17 de noviembre de 2026 ya no rotula Alvia ni Media Distancia. No se encontró una nota de Renfe sobre el cambio.",
+      "file": "raw/operadores/consultas_2026-11-23_rotulos.json"
     },
     {
       "id": "renfe-nota-md-jaen-madrid-2026-09",

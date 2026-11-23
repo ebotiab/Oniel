@@ -15,7 +15,7 @@
     "reference_length_km": 64.5,
     "pk_origin_km": 197.319,
     "status": "disponible",
-    "description": "Une la línea de Andalucía, en Manzanares, con Ciudad Real por Daimiel y Almagro, en vía única.\n\nSe abrió por tramos entre octubre de 1860 y marzo de 1861, como parte del ferrocarril de Alcázar de San Juan a Ciudad Real. Para Adif es la línea 522, y sus puntos kilométricos continúan los de la línea desde Madrid: Manzanares es el 197,3 y Ciudad Real, el 261,8.\n\nEn Ciudad Real comparte estación con la línea de alta velocidad Madrid – Sevilla y enlaza con la línea convencional hacia Puertollano, Mérida y Badajoz. La recorren los trenes de Media Distancia de Alcázar de San Juan a Ciudad Real y Badajoz y los que unen Ciudad Real con Albacete, Alicante y Valencia.",
+    "description": "Une la línea de Andalucía, en Manzanares, con Ciudad Real por Daimiel y Almagro, en vía única.\n\nSe abrió por tramos entre octubre de 1860 y marzo de 1861, como parte del ferrocarril de Alcázar de San Juan a Ciudad Real. Para Adif es la línea 522, y sus puntos kilométricos continúan los de la línea desde Madrid: Manzanares es el 197,3 y Ciudad Real, el 261,8.\n\nEn Ciudad Real comparte estación con la línea de alta velocidad Madrid – Sevilla y enlaza con la línea convencional hacia Puertollano, Mérida y Badajoz. La recorren los regionales de Alcázar de San Juan a Ciudad Real y Badajoz y los que unen Ciudad Real con Albacete, Alicante y Valencia.",
     "geometry_source": {
       "source_id": "osm-relation-6759901",
       "parts": [
@@ -37,9 +37,9 @@
   "nodes": [
     {"id": "manzanares", "name": "Manzanares", "kind": "estacion", "adif_code": "50100", "shared": true, "position": {"lon": -3.370597, "lat": 39.005896}, "reference_pk_km": 197.319},
     {"id": "daimiel", "name": "Daimiel", "kind": "estacion", "adif_code": "94002", "position": {"lon": -3.6040793, "lat": 39.0614095}, "reference_pk_km": 218.799,
-     "description": "Estación con trenes de Media Distancia. El tramo de Manzanares a Daimiel fue el primero de la línea en abrirse, el 1 de octubre de 1860."},
+     "description": "Estación con trenes regionales. El tramo de Manzanares a Daimiel fue el primero de la línea en abrirse, el 1 de octubre de 1860."},
     {"id": "almagro", "name": "Almagro", "kind": "estacion", "adif_code": "94004", "position": {"lon": -3.7096502, "lat": 38.8955125}, "reference_pk_km": 240.112,
-     "description": "Estación con trenes de Media Distancia. El ferrocarril llegó desde Daimiel el 21 de enero de 1861 y siguió hasta Ciudad Real el 14 de marzo."},
+     "description": "Estación con trenes regionales. El ferrocarril llegó desde Daimiel el 21 de enero de 1861 y siguió hasta Ciudad Real el 14 de marzo."},
     {"id": "ciudad-real", "name": "Ciudad Real", "kind": "estacion", "adif_code": "37200", "shared": true, "position": {"lon": -3.913633, "lat": 38.9853}, "reference_pk_km": 261.783}
   ],
   "attribute_sections": [

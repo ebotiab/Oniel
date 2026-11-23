@@ -66,7 +66,7 @@ test.describe('Simular un cierre', () => {
     await fila.getByText('Por qué').click()
     await expect(fila).toContainText(/dentro de la ventana/)
     await expect(fila).toContainText(/entra en esta línea por Manzanares/)
-    await expect(fila).toContainText(/196 km por esa línea hasta Madrid-Atocha Cercanías/)
+    await expect(fila).toContainText(/196 km por esa línea hasta Madrid-Puerta de Atocha/)
     await expect(fila).not.toContainText(/línea recta/)
     await expect(resultado).toContainText(/Regional \d{5}/)
     // ninguna línea sola une los dos lados de este tramo; el rodeo encadena dos

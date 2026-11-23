@@ -5,7 +5,7 @@ import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, ClosureStatus, InterruptionOut, RouteLeg, SegmentOut } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/annotations'
 import type { Franja } from '../app/meta'
-import { formatKm, productLabel, shortStop, todayIso } from '../app/state'
+import { formatKm, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
 import { STATUS } from './labels'
 import { Termino } from './Termino'
@@ -216,7 +216,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
                         </span>
                         <span className="tren">
                           <strong>
-                            {productLabel(i.service.product)} {i.service.train_number}
+                            {i.service.product} {i.service.train_number}
                           </strong>{' '}
                           <span className="suave">
                             {shortStop(i.service.origin_name)} → {shortStop(i.service.destination_name)}

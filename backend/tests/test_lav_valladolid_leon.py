@@ -271,10 +271,10 @@ def test_the_filter_takes_the_high_speed_trains_and_leaves_the_conventional_ones
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 387
     assert Counter(t.product for t in trips) == {
-        "ALVIA": 116,
+        "Alvia": 116,
         "AVE": 114,
         "Intercity": 75,
-        "MD": 66,
+        "Media Distancia": 66,
         "AVLO": 16,
     }
     selected = {t.trip_id for t in trips}
@@ -295,7 +295,12 @@ def test_the_filter_takes_the_high_speed_trains_and_leaves_the_conventional_ones
         if len(nodes & set(_stops(t))) >= 2 and t.trip_id not in selected
     ]
     assert left_out and all(set(_stops(t)) & CONVENTIONAL for t in left_out)
-    assert {t.product for t in left_out} == {"MD", "PROXIMDAD", "REG.EXP.", "REGIONAL"}
+    assert {t.product for t in left_out} == {
+        "Media Distancia",
+        "Proximidad",
+        "Regional Exprés",
+        "Regional",
+    }
     # de Valladolid a Burgos sin paradas quedan fuera los que paran en Zaragoza: los Intercity
     # de Zaragoza a Valladolid y Salamanca, que van por la línea convencional
     burgos = [t for t in feed.trips.values() if (VALLADOLID, BURGOS) in _pairs(t)]

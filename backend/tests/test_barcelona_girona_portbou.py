@@ -206,7 +206,7 @@ def test_the_filter_takes_the_regional_trains_only(
     de Cerbère a Portbou, que solo paran en una."""
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 117
-    assert Counter(t.product for t in trips) == {"MD": 78, "REGIONAL": 39}
+    assert Counter(t.product for t in trips) == {"Media Distancia": 78, "Regional": 39}
     assert all(FIGUERES_VILAFANT not in _stops(t) for t in trips)
     selected = {t.trip_id for t in trips}
     for trip in feed.trips.values():

@@ -245,7 +245,7 @@ def test_the_filter_takes_high_speed_trains_and_leaves_the_conventional_ones(
     las líneas convencionales, y ningún tren con parada en Villena AV o en Elche AV queda fuera."""
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 307
-    assert Counter(t.product for t in trips) == {"AVE": 173, "AVANT": 96, "ALVIA": 24, "AVLO": 14}
+    assert Counter(t.product for t in trips) == {"AVE": 173, "Avant": 96, "Alvia": 24, "AVLO": 14}
     selected = {t.trip_id for t in trips}
     for trip in trips:
         assert not {s.stop_id for s in trip.stop_times} & CONVENTIONAL, trip.train_number
@@ -322,7 +322,7 @@ def test_trains_to_murcia_leave_by_one_of_two_junctions(
             assert mapping.track_km is None
     trips = select_trips_for_spec(feed, spec)
     # los Avant de Alicante a Murcia solo recorren el último tramo
-    avant = [t for t in trips if t.product == "AVANT" and "61200" in _stops(t)]
+    avant = [t for t in trips if t.product == "Avant" and "61200" in _stops(t)]
     assert len(avant) == 72
     for trip in avant[:5]:
         assert _short(_passes(trip, feed, line, lines)) == ["monforte-del-cid-av:alicante-terminal"]

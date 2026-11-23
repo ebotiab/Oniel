@@ -93,7 +93,7 @@ def test_toledo_trains_are_the_avant_and_they_also_run_on_the_sevilla_line(
     ahora entran en ella por una regla de recorrido y cuentan de Madrid a La Sagra."""
     trips = select_trips_for_spec(feed, toledo.spec)
     assert len(trips) == 132
-    assert Counter(t.product for t in trips) == {"AVANT": 132}
+    assert Counter(t.product for t in trips) == {"Avant": 132}
     assert select_trips_for_spec(ouigo_feed, toledo.spec) == []
     sevilla = build_network(load_network_spec(SPEC), DATA_DIR)
     on_sevilla = {t.trip_id for t in select_trips_for_spec(feed, sevilla.spec)}
@@ -173,7 +173,7 @@ def test_huesca_takes_the_ave_and_leaves_the_regional_trains_out(
     for trip in feed.trips.values():
         stops = set(_stops(trip))
         if trip.trip_id not in selected and stops & {TARDIENTA, HUESCA}:
-            assert trip.product not in {"AVE", "AVLO", "ALVIA"}, trip.train_number
+            assert trip.product not in {"AVE", "AVLO", "Alvia"}, trip.train_number
     for trip in trips:
         calls = _stops(trip)
         assert DELICIAS in calls

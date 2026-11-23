@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
 import type { AnnotationOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
-import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, productLabel, shortStop } from '../app/state'
+import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, shortStop } from '../app/state'
 import { capasDe } from '../app/annotationLayers'
 import { isInterruption } from '../app/annotations'
 import { AnnotationNotice } from './AnnotationNotice'
@@ -234,7 +234,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
                   <span className="hora datos">{c.departure ?? c.arrival ?? '—'}</span>
                   <span className="tren">
                     <strong>
-                      {productLabel(c.product)} {c.train_number}
+                      {c.product} {c.train_number}
                     </strong>{' '}
                     <span className="suave">
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}

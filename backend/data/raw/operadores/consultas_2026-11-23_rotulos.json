@@ -1,0 +1,22 @@
+{
+  "descripcion": "Registro de las consultas hechas el 23 de noviembre de 2026 para saber por qué el fichero de horarios de Renfe del 17 de noviembre rotula sus trenes con otros nombres que el del día 12. Las páginas consultadas cambian, así que aquí queda qué decía cada una ese día, resumido con palabras propias (no se reproduce el texto original).",
+  "consultado_el": "2026-11-23",
+  "consultas": [
+    {
+      "source_id": "renfe-gtfs-av-ld-md",
+      "titulo": "Rótulos de `route_short_name` en los ficheros del 12 y del 17 de noviembre de 2026",
+      "editor": "Renfe Viajeros (data.renfe.com)",
+      "url": "https://data.renfe.com/dataset/horarios-de-alta-velocidad-larga-distancia-y-media-distancia",
+      "resumen": "El fichero del 12 de noviembre rotula sus rutas MD (138), REGIONAL (102), REG.EXP. (102), AVE (82), ALVIA (78), Intercity (53), AVANT (37), PROXIMDAD (36), AVLO (24), AVE INT (10), EUROMED (7), TRENCELTA (2) y AVANT EXP (2). El del 17 de noviembre, Regional (380), Intercity (129), AVE (92), AVANT (37), AVLO (24), AVE Euromed (7) y AVANT EXP (2). Comparando los trenes por su número: los 82 números ALVIA y los 4 TRENCELTA pasan a Intercity; los MD (301), PROXIMDAD (149), REG.EXP. (191) y REGIONAL (297), a Regional; los 13 EUROMED, a AVE Euromed, y los 4 AVE INT, a AVE. Los demás conservan su rótulo. Ningún otro campo del fichero nuevo (color, tipo o nombre largo de la ruta) distingue un antiguo Alvia de un Intercity ni un Media Distancia de un Regional.",
+      "que_aporta": "Que el cambio es de rótulos y no de trenes, y que con el fichero vigente no se puede saber qué trenes eran Alvia o Media Distancia: Oniel enseña los rótulos del fichero vigente."
+    },
+    {
+      "source_id": "merca2-marcas-renfe-2026-11",
+      "titulo": "Noticia «Renfe estrena nueva imagen en 2027: AVE, Cercanías y Media Distancia cambian de marca»",
+      "editor": "Merca2",
+      "url": "https://www.merca2.es/2026/11/15/nueva-imagen-renfe-2027-2506342/",
+      "resumen": "Publicada el 15 de noviembre de 2026. Cuenta que Renfe reorganiza sus marcas comerciales: nombres como Alvia, Regional Exprés y Media Distancia desaparecerán de determinados servicios el 25 de enero de 2027 y se integrarán en categorías como Intercity, AVE o Regionales; quien busque un Alvia tendrá que buscarlo como Intercity o como AVE, según el corredor. Atribuye a Renfe el objetivo de reducir el número de marcas y dice que ese mismo día estará en servicio su nuevo sistema de venta. No enlaza ninguna nota de Renfe, no asigna cada marca a su categoría y no habla de los horarios publicados como datos abiertos.",
+      "que_aporta": "Una explicación verosímil del cambio de rótulos del fichero, que se adelanta a la fecha que da la noticia. No es una fuente de Renfe: el mismo día se buscó una nota de prensa de Renfe sobre el cambio de marcas y no se encontró, y la página «Marca» de su web corporativa (grupo.renfe.com/es/es/conoce-renfe/sobre-nosotros/marca) habla del logotipo y de los colores, no de los nombres de los trenes."
+    }
+  ]
+}

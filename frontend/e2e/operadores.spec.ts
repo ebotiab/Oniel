@@ -29,7 +29,7 @@ test.describe('Trenes por operador', () => {
     await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(96)
     await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(12)
     await expect(page.getByTestId('trenes-ouigo').locator('li').first()).toContainText('Ouigo 6476')
-    await expect(page.getByTestId('trenes-ouigo')).toContainText('Madrid-Puerta de Atocha → Málaga')
+    await expect(page.getByTestId('trenes-ouigo')).toContainText('Madrid-Puerta de Atocha → Málaga-María Zambrano')
     await expect(page.getByTestId('trenes-iryo').locator('li')).toHaveCount(28)
     // sus trenes llevan el nombre de las estaciones que usa el resto, no el del fichero
     await expect(page.getByTestId('trenes-iryo').locator('li').first()).toContainText(/Iryo 06\d{3}/)
