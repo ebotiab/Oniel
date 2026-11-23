@@ -140,7 +140,9 @@ La red y los horarios solo cambian al importar, pero cada petición volvía a le
 
 Medido en local el 18 de noviembre de 2026, con 30 líneas y la API ya caliente: `/api/lines/{line_id}` pasa de 105 ms y 10 consultas a 3 ms y una (la de la versión); `/api/lines`, de 115 ms a 5 ms; `/api/coverage`, de 75 ms a 4 ms; `/api/segments/{segment_id}/services`, de 62 ms a 19 ms. La primera petición tras arrancar o tras una importación sigue pagando las lecturas. Las respuestas son idénticas byte a byte. Las consultas que quedan usan sus índices (`EXPLAIN ANALYZE`): no hizo falta ninguno nuevo. En producción la diferencia es mayor, porque allí cada consulta cuesta además el viaje a la base y, tras un rato sin tráfico, la de los pasos por tramo de toda la red tardaba más de un segundo.
 
-`/api/alternatives` es el cálculo más largo (15 s en local para un día; `docs/simulacion.md`, «Tramos sin alternativa»). El visor lee el del día de referencia de la instantánea; el de otro día se calcula la primera vez que se pide y queda guardado.
+`/api/alternatives` es el cálculo más largo (unos 5 s en local para un día; `docs/simulacion.md`, «Tramos sin alternativa», «Lo que tarda»). El visor lee el del día de referencia de la instantánea; el de otro día se calcula la primera vez que se pide y queda guardado. Es cálculo puro, sin esperas, y se lanza en otro hilo (`asyncio.to_thread`, en `network_repo`), de uno en uno: si llegan dos peticiones del mismo día, la segunda espera a la primera y lo encuentra hecho.
+
+Hasta el 23 de noviembre de 2026 corría dentro del bucle de la API y tardaba minutos (#262): mientras duraba, la API no contestaba a nada, tampoco a `/healthz`, y Render daba la instancia por caída y la reiniciaba. Una sola petición de otro día bastaba. No era la memoria: el día del fallo (22 de noviembre) el proceso usaba 93 MB de los 512 del plan, y el evento de Render dice «HTTP health check failed (timed out after 5 seconds)». De ahí la regla para cualquier cálculo largo de la API: fuera del bucle, y medido. En local, con el cálculo en marcha, `/healthz` contesta en menos de 0,1 s.
 
 ### Mantener la API despierta
 

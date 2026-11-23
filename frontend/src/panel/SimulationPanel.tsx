@@ -209,7 +209,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
                 {isOpen && (
                   <ol className="lista-servicios">
                     {items.map((i) => (
-                      <li key={`${i.service.id}-${i.enter}`}>
+                      <li key={`${i.service.id}-${i.from_previous_day ? 'ayer' : 'hoy'}`}>
                         <span className="hora datos">
                           {i.enter ?? '—'}
                           {i.exit ? `–${i.exit}` : ''}

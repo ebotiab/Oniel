@@ -4,6 +4,7 @@ Los nodos del grafo son los de la red (un nodo común a dos líneas es uno solo)
 los tramos. Sobre el grafo se aplica un escenario (``oniel.routing.scenario``) y se piden:
 
 * ``find_routes``: los recorridos distintos entre dos nodos, del más corto al más largo.
+* ``shortest_route``: solo el más corto, sin enumerar los demás.
 * ``closure_detours``: los rodeos que salvan un tramo cerrado saliendo de su línea.
 * ``route_along``: lo que cuesta un camino ya conocido, tramo a tramo.
 
@@ -15,10 +16,12 @@ tienen que dar lo mismo (``backend/tests/test_routing.py`` y ``frontend/e2e/ruta
 
 from __future__ import annotations
 
+import heapq
+import itertools
 import math
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, field, replace
-from typing import Protocol
+from typing import Any, Protocol
 
 from pydantic import BaseModel
 
@@ -81,6 +84,9 @@ class Graph:
     #: a un nodo de otra línea, y con las dos forma un triángulo (``link_sides``).
     link_of: dict[str, str] = field(default_factory=dict)
     _adjacent: dict[str, list[Edge]] = field(default_factory=dict, compare=False, repr=False)
+    #: Lo que se calcula la primera vez que se pide y no cambia: los lados de los triángulos de los
+    #: enlaces, los tramos por id, las distancias a un nodo y el grafo del último escenario.
+    _memo: dict[Any, Any] = field(default_factory=dict, compare=False, repr=False)
 
     def __post_init__(self) -> None:
         for edge in self.edges:
@@ -91,7 +97,33 @@ class Graph:
         return self._adjacent.get(node_id, [])
 
     def edge(self, edge_id: str) -> Edge | None:
-        return next((e for e in self.edges if e.id == edge_id), None)
+        by_id: dict[str, Edge] | None = self._memo.get("by_id")
+        if by_id is None:
+            by_id = self._memo["by_id"] = {e.id: e for e in self.edges}
+        return by_id.get(edge_id)
+
+    def distances_to(self, node_id: str) -> dict[str, float]:
+        """Kilómetros del camino más corto de cada nodo a ``node_id``, sin ninguna regla de giro.
+
+        Es lo menos que puede medir un recorrido hasta ese nodo, y solo están los nodos desde los
+        que se llega: ``_shortest_walk`` lo usa para no alejarse del destino.
+        """
+        key = ("distances", node_id)
+        found: dict[str, float] | None = self._memo.get(key)
+        if found is None:
+            found = {}
+            queue = [(0.0, node_id)]
+            while queue:
+                km, at = heapq.heappop(queue)
+                if at in found:
+                    continue
+                found[at] = km
+                for edge in self.edges_at(at):
+                    nxt = edge.other(at)
+                    if nxt not in found:
+                        heapq.heappush(queue, (km + edge.length_km, nxt))
+            self._memo[key] = found
+        return found
 
     def line_key(self, edge: Edge) -> str:
         """La línea por la que cuenta un tramo: la suya o, si es de un baipás o de un enlace, la
@@ -114,6 +146,12 @@ class Graph:
         no dejan doblar sus esquinas: de un lado a otro solo se pasa invirtiendo la marcha, y un
         recorrido no lo hace (``_walk``).
         """
+        sides: dict[str, tuple[str, int]] | None = self._memo.get("sides")
+        if sides is None:
+            sides = self._memo["sides"] = self._link_sides()
+        return sides
+
+    def _link_sides(self) -> dict[str, tuple[str, int]]:
         sides: dict[str, tuple[str, int]] = {}
         for line_id, parent in self.link_of.items():
             own = self.line_km.get(line_id, {})
@@ -168,7 +206,17 @@ class Graph:
         return spans
 
     def apply(self, scenario: Scenario) -> Graph:
-        """El grafo con las modificaciones del escenario: cierres, velocidades y enlaces."""
+        """El grafo con las modificaciones del escenario: cierres, velocidades y enlaces.
+
+        El del último escenario se guarda: quien pide varios recorridos con el mismo (los grupos
+        de trenes de un tramo cerrado) no lo vuelve a montar.
+        """
+        last: tuple[Scenario, Graph] | None = self._memo.get("applied")
+        if last is None or last[0] != scenario:
+            last = self._memo["applied"] = (scenario.model_copy(deep=True), self._apply(scenario))
+        return last[1]
+
+    def _apply(self, scenario: Scenario) -> Graph:
         known = {e.id for e in self.edges}
         for segment_id in [*scenario.closures, *(v.segment_id for v in scenario.speeds)]:
             if segment_id not in known:
@@ -621,6 +669,125 @@ def find_routes(
                 kept.append(candidate)
         ordered = kept
     return [_route(g, start, steps) for start, steps in ordered[:MAX_ROUTES]]
+
+
+#: Holgura, en kilómetros, con la que dos caminos se dan por igual de largos al buscar el más
+#: corto: muy por encima del error de sumar decimales y muy por debajo de cualquier tramo.
+_TIE_KM = 1e-9
+
+
+def _shortest_walk(
+    graph: Graph,
+    start: str,
+    goal: str,
+    max_changes: int | None,
+    lower: dict[str, float],
+) -> list[_Step] | None:
+    """El camino más corto de ``start`` a ``goal`` con las reglas de ``_walk``, sin enumerar los demás.
+
+    Es una búsqueda del camino más corto sobre el par (nodo, tramo por el que se llega), porque lo
+    que un camino puede hacer en un nodo depende del tramo por el que llegó (el triángulo de un
+    enlace); con ``max_changes`` el estado lleva además los cambios de línea hechos. ``lower`` es
+    lo menos que queda desde cada nodo hasta el destino (``Graph.distances_to``): con ello la
+    búsqueda va hacia el destino en vez de abrirse en todas direcciones. El orden es el de ``_sorted``: la longitud y, a igualdad, la lista de tramos. Lo
+    único que no impide es pasar dos veces por un nodo: quien la llama lo comprueba
+    (``shortest_route``).
+    """
+    sides = graph.link_sides()
+    #: Longitud más lo que queda como mínimo, tramos recorridos (la lista es única), longitud,
+    #: cambios de línea hechos (solo se cuentan si hay tope) y el nodo al que se ha llegado.
+    queue: list[tuple[float, tuple[str, ...], float, int, str]] = [(0.0, (), 0.0, 0, start)]
+    settled: set[tuple[str, str | None, int]] = set()
+    best: tuple[float, tuple[str, ...]] | None = None
+    while queue:
+        reach, ids, length, changes, node_id = heapq.heappop(queue)
+        if best is not None and reach > best[0] + _TIE_KM:
+            break
+        previous = graph.edge(ids[-1]) if ids else None
+        state = (node_id, previous.id if previous is not None else None, changes)
+        if state in settled:
+            continue
+        settled.add(state)
+        if node_id == goal and ids:
+            # No se para en la primera llegada: otra igual de larga puede ir antes por sus tramos.
+            if best is None or (length, ids) < best:
+                best = (length, ids)
+            continue
+        for edge in graph.edges_at(node_id):
+            total = changes
+            if previous is not None:
+                if edge.id == previous.id:
+                    continue
+                if previous.id in sides and edge.id in sides:
+                    (link, side), (other_link, other_side) = sides[previous.id], sides[edge.id]
+                    if link == other_link and side != other_side:
+                        continue
+                if max_changes is not None:
+                    total += graph.line_key(previous) != graph.line_key(edge)
+                    if total > max_changes:
+                        continue
+            nxt = edge.other(node_id)
+            km = length + edge.length_km
+            heapq.heappush(queue, (km + lower[nxt], (*ids, edge.id), km, total, nxt))
+    if best is None:
+        return None
+    steps: list[_Step] = []
+    at = start
+    for edge_id in best[1]:
+        taken = graph.edge(edge_id)
+        assert taken is not None
+        at = taken.other(at)
+        steps.append((taken, at))
+    return steps
+
+
+def shortest_route(
+    graph: Graph,
+    from_node_id: str,
+    to_node_id: str,
+    scenario: Scenario | None = None,
+    *,
+    max_changes: int | None = DEFAULT_MAX_CHANGES,
+) -> Route | None:
+    """El recorrido más corto entre dos nodos con la red del escenario, o ``None`` si no hay ninguno.
+
+    Es el primero de ``find_routes`` con ``max_ratio=None``, sin enumerar los demás: sirve a quien
+    solo quiere el más corto y lo pide miles de veces (``oniel.analysis.criticality``).
+    """
+    for node_id in (from_node_id, to_node_id):
+        if node_id not in graph.nodes:
+            raise ScenarioError(f"No hay ningún nodo con id {node_id}")
+    if from_node_id == to_node_id:
+        return None
+    g = graph.apply(scenario) if scenario is not None else graph
+
+    def simple(steps: list[_Step]) -> bool:
+        return len({from_node_id, *(n for _, n in steps)}) == len(steps) + 1
+
+    def changes(steps: list[_Step]) -> int:
+        return sum(g.line_key(a) != g.line_key(b) for (a, _), (b, _) in itertools.pairwise(steps))
+
+    # Lo menos que queda hasta el destino desde cada nodo, sin reglas de giro. Si el origen no
+    # está, no hay camino de ninguna clase y no hace falta buscarlo.
+    lower = g.distances_to(to_node_id)
+    if from_node_id not in lower:
+        return None
+    # Sin tope primero: si el más corto de todos cumple el tope, es también el más corto con tope.
+    steps = _shortest_walk(g, from_node_id, to_node_id, None, lower)
+    if steps is None:
+        return None
+    if max_changes is not None and simple(steps) and changes(steps) > max_changes:
+        steps = _shortest_walk(g, from_node_id, to_node_id, max_changes, lower)
+        if steps is None:
+            return None
+    if not simple(steps):
+        # La búsqueda no impide repetir nodo. Si lo más corto que cumple las reglas lo repite (solo
+        # puede pasar junto al triángulo de un enlace), se recurre a la enumeración.
+        found = find_routes(
+            graph, from_node_id, to_node_id, scenario, max_changes=max_changes, max_ratio=None
+        )
+        return found[0] if found else None
+    return _route(g, from_node_id, steps)
 
 
 def _along(graph: Graph, line_id: str, a: str, b: str) -> list[_Step]:
