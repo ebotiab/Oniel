@@ -45,7 +45,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
   const segments = network.segments.filter((s) => s.line_id === lineId)
   const line = network.lines.find((l) => l.id === lineId)
   const highSpeed = line ? lineKind(line) === 'alta velocidad' : false
-  const withConnections = new Set(network.connections.map((c) => c.node_id))
+  const withConnections = new Set(network.connections.flatMap((c) => (c.to_node_id ? [c.node_id, c.to_node_id] : [c.node_id])))
   const kmMax = Math.max(...nodes.map((n) => n.km))
   const top = 22
   const principal = nodes.filter((n) => n.rank === 'principal').length

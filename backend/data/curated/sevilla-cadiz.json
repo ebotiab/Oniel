@@ -304,8 +304,9 @@
     {
       "id": "conv-bif-utrera-marchena",
       "node_id": "bif-utrera",
-      "name": "Línea Utrera – Fuente de Piedra",
+      "name": "Línea convencional Utrera – Bobadilla – Málaga",
       "towards": "Arahal, Marchena, Osuna, Bobadilla y Málaga",
+      "official_name": "Línea Utrera – Fuente de Piedra",
       "status": "no_cargada",
       "sketch": [
         [

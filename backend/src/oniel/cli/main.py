@@ -256,6 +256,7 @@ def validate_cmd(
         validate_all,
         validate_annotations,
         validate_attributes,
+        validate_connections,
         validate_operators,
         validate_products,
         validate_turns,
@@ -306,6 +307,9 @@ def validate_cmd(
     reports.append(validate_turns(context, settings.data_dir))
     # Las descripciones nombran los trenes con los rótulos de los ficheros vigentes.
     reports.append(validate_products(context, _declared_feeds(sources), settings.data_dir))
+    # Las conexiones a trazos se declaran en sus dos extremos y los nodos compartidos no hablan
+    # desde una sola línea.
+    reports.append(validate_connections(context, settings.data_dir))
     reports.append(attributes)
     _echo_json(reports)
     if any(r["problems"] for r in reports):

@@ -46,17 +46,13 @@ Las que vengan se añaden aquí como incidencias nuevas, con el formato de «Có
 
 En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distinta. Antes de seguir ampliando, lo cargado se pule. El 22 de noviembre de 2026 se revisó entero, sobre `main` (commit `0f4c9d7`) y sobre producción, en escritorio y en el móvil: las 879 fichas de línea, estación y tramo, los recuentos de trenes de un tramo al siguiente, el comparador entre 46 ciudades, las conexiones a trazos y la documentación. Lo que salió está en ocho incidencias, de lo más grave a lo menos:
 
-**Lo que confunde a quien llega.**
-
-- [#264](https://github.com/ebotiab/Oniel/issues/264) Datos: costuras entre líneas. Catorce conexiones a trazos declaradas en un solo extremo, regionales de Valladolid a Burgos contados en la alta velocidad, nombres de conexiones con el nombre de Adif y textos de nodos compartidos que dicen «final de la línea».
-
 **Incoherencias entre líneas y documentación.**
 
 - [#265](https://github.com/ebotiab/Oniel/issues/265) Datos: un solo criterio de velocidades, electrificación, fuentes y descripciones. Dos líneas cuya velocidad máxima es menor que la de uno de sus tramos, tres escrituras de la electrificación, la descripción de Madrid – Sevilla, cinco veces más corta que las demás.
 
-Cómo se reparten: #264 y #265 regeneran la instantánea y van de una en una, en ese orden o en el que el usuario prefiera. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
+Cómo se reparten: #265 regenera la instantánea y va sola. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
 
-No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). #264 las deja bien dibujadas por los dos extremos; cargarlas es ampliar la red.
+No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). Desde #264 están dibujadas por los dos extremos y salen en la ficha de los dos nodos; cargarlas es ampliar la red.
 
 ## Ampliar la red
 

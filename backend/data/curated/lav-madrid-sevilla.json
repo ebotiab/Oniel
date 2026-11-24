@@ -30,7 +30,7 @@
   ],
   "nodes": [
     {"id": "madrid-puerta-de-atocha", "name": "Madrid-Puerta de Atocha", "kind": "estacion", "adif_code": "60000", "position": {"lon": -3.690886, "lat": 40.406442}, "reference_pk_km": 0.0,
-     "description": "Cabecera de la línea. Estación término de la alta velocidad hacia Andalucía y Cataluña. Los trenes de Levante salen casi todos de Madrid-Chamartín desde 2022 y pasan por un túnel bajo esta estación, sin andén ni parada. Forma un mismo complejo con Madrid-Atocha Cercanías, de donde salen los trenes de la línea convencional por Aranjuez y Alcázar de San Juan."},
+     "description": "Estación término de la alta velocidad hacia Andalucía y Cataluña. Los trenes de Levante salen casi todos de Madrid-Chamartín desde 2022 y pasan por un túnel bajo esta estación, sin andén ni parada. Forma un mismo complejo con Madrid-Atocha Cercanías, de donde salen los trenes de la línea convencional por Aranjuez y Alcázar de San Juan y los que cruzan Madrid hasta Chamartín por el túnel de Recoletos."},
     {"id": "bif-los-gavilanes", "name": "Bifurcación Los Gavilanes", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 13.445}, "reference_pk_km": 13.445,
      "description": "Punto donde se incorporan a la línea los trenes que vienen de Zaragoza y Barcelona sin pasar por Madrid-Puerta de Atocha."},
     {"id": "bif-torrejon-de-velasco", "name": "Bifurcación Torrejón de Velasco", "kind": "bifurcacion", "position": {"lon": -3.75006, "lat": 40.19457}, "reference_pk_km": 27.4,
@@ -69,7 +69,7 @@
     {"id": "majarabique", "name": "Cambiador de Majarabique", "kind": "cambiador", "position": {"km": 462.5}, "reference_pk_km": 462.5,
      "description": "Cambiador de ancho a la entrada de Sevilla. Los trenes de ancho variable hacia Huelva pasan aquí a la red convencional sin entrar en Santa Justa."},
     {"id": "sevilla-santa-justa", "name": "Sevilla-Santa Justa", "kind": "estacion", "adif_code": "51003", "position": {"lon": -5.974927, "lat": 37.392496}, "reference_pk_km": 470.5,
-     "description": "Final de la línea. Estación pasante que conecta con la red convencional hacia Cádiz, Huelva y Málaga."}
+     "description": "La estación de Sevilla. A ella llega la alta velocidad de Madrid y de ella salen las líneas convencionales de Cádiz y de Huelva; los trenes de Málaga van por la de Cádiz hasta la bifurcación Utrera. Es una estación pasante: las vías siguen a un lado y a otro."}
   ],
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "lzb_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos de LZB y de ASFA de alta velocidad a lo largo de toda la línea. El mapa los sitúa por línea, no tramo a tramo."},
@@ -77,7 +77,7 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."}
   ],
   "connections": [
-    {"id": "majarabique-los-naranjos", "node_id": "majarabique", "name": "Enlace del cambiador de Majarabique con la línea de Huelva", "towards": "Bifurcación Los Naranjos", "status": "no_cargada", "sketch": [[-5.9604, 37.453815], [-5.9590381, 37.4417188]]}
+    {"id": "majarabique-los-naranjos", "node_id": "majarabique", "name": "Enlace de Majarabique", "towards": "la bifurcación Los Naranjos y Huelva", "to_node_id": "bif-los-naranjos", "towards_back": "el cambiador de Majarabique y la alta velocidad a Madrid", "status": "no_cargada", "sketch": [[-5.9604, 37.453815], [-5.9590381, 37.4417188]]}
   ],
   "stop_mappings": {
     "60000": {"node": "madrid-puerta-de-atocha"},

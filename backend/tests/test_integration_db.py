@@ -237,11 +237,13 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # recorrido (432 + 267 = 699), sin sumar viajes: son los mismos.
     # Con la de Madrid a Valladolid entran 661: sus 761 viajes menos los 100 que cruzan Madrid y
     # siguen a Levante, que ya estaban en la de Valencia.
-    # Con la de Valladolid a León entran 66, los Media Distancia que empiezan o acaban en
-    # Valladolid y van por la alta velocidad: de sus 387 viajes, 315 ya estaban en la de Madrid a
-    # Valladolid y 6, los Alvia de Barcelona a León y Galicia, en la de Barcelona
+    # Con la de Valladolid a León entran 60, los Media Distancia que empiezan o acaban en
+    # Valladolid y van por la alta velocidad: de sus 381 viajes, 315 ya estaban en la de Madrid a
+    # Valladolid y 6, los Alvia de Barcelona a León y Galicia, en la de Barcelona. Eran 66 con
+    # los 6 regionales de Valladolid a Burgos y Miranda de Ebro, que van por la línea
+    # convencional y entran ahora con la de Burgos a Vitoria
     trips = 317 + 432 - 22 + 26 + 15 + 37 + 571 - 16 + 8 + 13 + 465 + 92 + 181 + 661 + 425 - 16
-    trips += 66
+    trips += 60
     # Con la de València a Alicante por Xàtiva entran 426: los regionales de València a Alcoi, a
     # Alicante y a Albacete y los de Villena a Alicante. Los otros 130 de sus 556 viajes ya
     # estaban en otra línea
@@ -278,11 +280,12 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # suben el puerto de Pajares por la vía antigua, y 8 Media Distancia de León a Gijón. Los
     # otros 108 de sus 141 viajes ya estaban en la de Valladolid a León
     trips += 33
-    # Con la de Burgos a Vitoria entran 77: los regionales de Miranda de Ebro a Vitoria, Altsasu,
+    # Con la de Burgos a Vitoria entran 83: los 6 de Valladolid a Burgos y Miranda de Ebro, que
+    # ya no cuentan en la alta velocidad, y otros 77, los regionales de Miranda de Ebro a Vitoria, Altsasu,
     # Pamplona y San Sebastián, los de Madrid-Príncipe Pío a Vitoria e Irún, que llegan a Burgos
     # por la línea convencional, y los Intercity de Salamanca a Zaragoza por Pamplona. Los otros
-    # 105 de sus 182 viajes ya estaban en las líneas de alta velocidad
-    trips += 77
+    # 99 de sus 182 viajes ya estaban en las líneas de alta velocidad
+    trips += 83
     # Con la de Sevilla a Cádiz entran 136: 126 de sus 202 viajes (los Media Distancia de Sevilla y
     # de Córdoba a Cádiz, los de Sevilla a Osuna y a Málaga y 13 Alvia de Madrid a Cádiz que no paran
     # en Córdoba) y 10 AVE sin paradas de Madrid a Sevilla, que con los 13 Alvia entran también en
@@ -352,8 +355,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][MONFRAGUE_CACERES]["passes"] == {"estimado": 26, "publicado": 26}
     assert gtfs1["lines"][RAMAL_MERIDA]["route_overrides"] == {}
     assert gtfs1["lines"][MONFRAGUE_CACERES]["route_overrides"] == {}
-    assert gtfs1["lines"][LAV_LEON]["trips"] == 387
-    assert gtfs1["lines"][LAV_LEON]["passes"] == {"estimado": 2154}
+    assert gtfs1["lines"][LAV_LEON]["trips"] == 381
+    assert gtfs1["lines"][LAV_LEON]["passes"] == {"estimado": 2142}
     assert gtfs1["lines"][LAV_LEON]["route_overrides"] == {
         "burgos-palencia-leon": 6,
         "madrid-leon-sin-parada": 4,
@@ -577,9 +580,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += (2051 + 582) + (2247 + 134) + 344 + (26 + 26)
     renfe_passes += 3409  # la de Madrid a Valladolid, todos estimados
     renfe_passes += 91  # el enlace de Monforte del Cid
-    renfe_passes += 2154  # la de Valladolid a León, todos estimados
+    renfe_passes += 2142  # la de Valladolid a León, todos estimados
     renfe_passes += 2130  # la de Olmedo a Ourense, todos estimados
-    renfe_passes += 514  # la de Venta de Baños a Burgos, todos estimados
+    renfe_passes += 490  # la de Venta de Baños a Burgos, todos estimados
     renfe_passes += 1311 + 125  # la de León a Gijón
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
     renfe_passes += 854  # la de Ourense a Santiago
@@ -795,6 +798,21 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     connections = {c["id"]: c["node_id"] for c in data["connections"]}
     assert "conv-manzanares-ciudad-real" not in connections
     assert connections["conv-ciudad-real-badajoz"] == "ciudad-real"
+    # esa conexión llega a Mérida, que también está cargada: lleva sus dos extremos, dice adónde
+    # lleva desde cada uno y su trazo acaba en la estación de Mérida
+    (to_merida,) = [c for c in data["connections"] if c["id"] == "conv-ciudad-real-badajoz"]
+    assert to_merida["to_node_id"] == "merida"
+    assert to_merida["towards"].endswith("y Mérida")
+    assert to_merida["towards_back"].endswith("y Ciudad Real")
+    (drawn,) = [
+        f for f in data["connection_features"]["features"] if f["id"] == "conv-ciudad-real-badajoz"
+    ]
+    merida = next(n for n in data["nodes"] if n["id"] == "merida")
+    assert drawn["geometry"]["coordinates"][-1] == pytest.approx(
+        [merida["lon"], merida["lat"]], abs=1e-4
+    )
+    one_end = [c for c in data["connections"] if c["to_node_id"] is None]
+    assert one_end and all(c["towards_back"] is None for c in one_end)
     # Córdoba y Atocha están en las dos líneas: una fila por línea, un solo punto en el mapa
     cordoba = [n for n in data["nodes"] if n["id"] == "cordoba"]
     assert sorted(n["line_id"] for n in cordoba) == [
@@ -2664,7 +2682,9 @@ async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncCli
         assert detail["network_max_count"] == max(counts["counts"].values())
         node_ids = {n["id"] for n in detail["nodes"]}
         assert detail["connections"] == [
-            c for c in network["connections"] if c["node_id"] in node_ids
+            c
+            for c in network["connections"]
+            if c["node_id"] in node_ids or c["to_node_id"] in node_ids
         ]
         assert detail["interruptions"] == [
             i for i in network["interruptions"] if i["line_id"] == line["id"]

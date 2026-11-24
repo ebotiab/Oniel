@@ -290,31 +290,11 @@
   ],
   "connections": [
     {
-      "id": "conv-los-naranjos-cordoba",
-      "node_id": "bif-los-naranjos",
-      "name": "Línea convencional Sevilla – Córdoba",
-      "towards": "Los Rosales, Lora del Río y Córdoba",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -5.9590381,
-          37.4417188
-        ],
-        [
-          -5.7261208,
-          37.5899718
-        ],
-        [
-          -5.5295514,
-          37.6613212
-        ]
-      ]
-    },
-    {
       "id": "conv-huelva-zafra",
       "node_id": "huelva-mercancias",
-      "name": "Línea Zafra – Huelva",
+      "name": "Línea convencional Huelva – Zafra",
       "towards": "Gibraleón, Calañas, Jabugo y Zafra",
+      "official_name": "Línea Zafra – Huelva",
       "status": "no_cargada",
       "sketch": [
         [

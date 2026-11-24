@@ -26,6 +26,7 @@ from oniel.gtfs.trips import (
     calls_on_line,
     route_for_trip,
     select_trips_for_spec,
+    takes_parallel_track,
 )
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import NetworkSpec, load_network_spec, load_sources
@@ -215,32 +216,39 @@ def test_sources_and_operators_are_registered(spec: NetworkSpec) -> None:
 def test_the_filter_takes_the_high_speed_trains_to_burgos(
     feed: GtfsFeed, ouigo_feed: GtfsFeed, spec: NetworkSpec
 ) -> None:
-    """Entran 130 viajes de Renfe y ninguno de Ouigo: los que paran en Burgos y en Valladolid o
-    Palencia, salvo los que delatan la línea convencional."""
+    """Entran 124 viajes de Renfe y ninguno de Ouigo: los que paran en Burgos y en Valladolid o
+    Palencia, salvo los que delatan la línea convencional por sus paradas o por lo que tardan."""
     f = spec.corridor_filter
     assert f.required_stop_ids == [BURGOS]
     assert set(f.any_of_stop_ids) == {VALLADOLID, PALENCIA}
     assert set(f.exclude_stop_ids) == EXCLUDED
     trips = select_trips_for_spec(feed, spec)
-    assert len(trips) == 130
+    (slow,) = f.slow_runs
+    assert (set(slow.stop_ids), slow.min_minutes) == ({VALLADOLID, BURGOS}, 60)
+    assert len(trips) == 124
     assert Counter(t.product for t in trips) == {
         "Intercity": 48,
         "Alvia": 38,
         "AVE": 25,
-        "Media Distancia": 19,
+        "Media Distancia": 13,
     }
     selected = {t.trip_id for t in trips}
     # todo tren que va de Valladolid o de Palencia a Burgos sin paradas está dentro, salvo los
-    # que van por la convencional: los de Zaragoza a Valladolid y los de Madrid-Príncipe Pío a
-    # Irún, que siguen a Briviesca
+    # que van por la convencional: los de Zaragoza a Valladolid, los de Madrid-Príncipe Pío a
+    # Irún, que siguen a Briviesca, y los regionales de Valladolid a Burgos y Miranda de Ebro,
+    # que no paran en ninguna estación que los delate y tardan 67 o 72 minutos de Valladolid a
+    # Burgos, frente a los 36 a 47 de los demás
     direct = [
         t for t in feed.trips.values() if _pairs(t) & {(VALLADOLID, BURGOS), (PALENCIA, BURGOS)}
     ]
+    slow_ones = {t.trip_id for t in direct if takes_parallel_track(f.slow_runs, t)}
     for trip in direct:
-        if not EXCLUDED & set(_stops(trip)):
+        if not EXCLUDED & set(_stops(trip)) and trip.trip_id not in slow_ones:
             assert trip.trip_id in selected, trip.train_number
     left_out = [t for t in direct if t.trip_id not in selected]
-    assert left_out and all(EXCLUDED & set(_stops(t)) for t in left_out)
+    assert left_out and all(EXCLUDED & set(_stops(t)) or t.trip_id in slow_ones for t in left_out)
+    regionals = [t for t in left_out if not EXCLUDED & set(_stops(t))]
+    assert {t.train_number for t in regionals} == {"37631", "37632"} and len(regionals) == 6
     # de los que paran en alguna de esas, solo entran, por una regla, los Alvia de Barcelona, que
     # paran en Zaragoza y llegan de Palencia
     by_rule = [t for t in trips if EXCLUDED & set(_stops(t))]

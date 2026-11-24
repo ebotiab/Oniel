@@ -12,10 +12,11 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from itertools import pairwise
 
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip, select_corridor_trips
-from oniel.network.spec import NetworkSpec, RouteOverride, StopMapping
+from oniel.network.spec import NetworkSpec, RouteOverride, SlowRun, StopMapping
 from oniel.sim.passes import Bypass, BypassPiece, ExitDistance, LineNode, LineSegment, StopCall
 
 
@@ -84,6 +85,21 @@ def route_for_trip(spec: NetworkSpec, trip: GtfsTrip) -> MatchedRoute | None:
     return None
 
 
+def takes_parallel_track(runs: Sequence[SlowRun], trip: GtfsTrip) -> bool:
+    """Si el viaje tarda entre dos paradas seguidas lo que se tarda por una vía paralela.
+
+    Cuenta de la salida de una a la llegada a la otra, en cualquiera de los dos sentidos.
+    """
+    if not runs:
+        return False
+    limits = {frozenset(run.stop_ids): run.min_minutes * 60 for run in runs}
+    for a, b in pairwise(trip.stop_times):
+        limit = limits.get(frozenset((a.stop_id, b.stop_id)))
+        if limit is not None and b.arrival_s - a.departure_s >= limit:
+            return True
+    return False
+
+
 def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
     """Viajes que recorren la línea: los del filtro de corredor, los que llevan seguidas las paradas
     que el filtro declara y los de las reglas de recorrido.
@@ -102,6 +118,7 @@ def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
         node_stop_ids=spec.node_stop_ids,
         exclude_stop_ids=f.exclude_stop_ids,
     )
+    selected = [t for t in selected if not takes_parallel_track(f.slow_runs, t)]
     if spec.route_overrides or f.consecutive_stop_ids:
         chosen = {t.trip_id for t in selected}
         excluded = set(f.exclude_stop_ids)
@@ -109,8 +126,10 @@ def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
             if trip.trip_id in chosen:
                 continue
             stop_ids = [st.stop_id for st in trip.stop_times]
-            in_a_row = not excluded.intersection(stop_ids) and any(
-                match_run(run, stop_ids) is not None for run in f.consecutive_stop_ids
+            in_a_row = (
+                not excluded.intersection(stop_ids)
+                and any(match_run(run, stop_ids) is not None for run in f.consecutive_stop_ids)
+                and not takes_parallel_track(f.slow_runs, trip)
             )
             if in_a_row or route_for_trip(spec, trip) is not None:
                 selected.append(trip)

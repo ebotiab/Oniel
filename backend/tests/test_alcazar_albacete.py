@@ -77,11 +77,12 @@ def test_alcazar_is_the_station_of_the_main_line(
     assert all(n.offset_m < 100 for n in albacete.nodes)
     # con la línea cargada, de Alcázar ya no sale una conexión a trazos hacia Levante...
     assert all(c.node_id != "alcazar-de-san-juan" for c in conv_spec.connections)
-    # ...y de Albacete sale una: la línea convencional hacia La Encina. La de alta velocidad
-    # está cargada desde que entró la línea de Albacete a Alicante
-    assert {c.id: c.node_id for c in albacete.spec.connections} == {
-        "conv-albacete-levante": "albacete-los-llanos",
-    }
+    # ...y de Albacete sale una, la línea convencional hacia La Encina, que declara la línea de
+    # Valencia a Alicante con sus dos extremos: la bifurcación de La Encina y Albacete
+    assert albacete.spec.connections == []
+    xativa = load_network_spec(DATA_DIR / "curated" / "valencia-xativa-alicante.json")
+    (to_albacete,) = [c for c in xativa.connections if c.to_node_id == "albacete-los-llanos"]
+    assert (to_albacete.id, to_albacete.node_id) == ("conv-la-encina-albacete", "bif-la-encina")
 
 
 def test_adif_kilometre_points_continue_those_of_madrid_alcazar(albacete: BuiltNetwork) -> None:

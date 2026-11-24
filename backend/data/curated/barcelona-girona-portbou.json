@@ -446,7 +446,7 @@
     {
       "id": "conv-macanet-maresme",
       "node_id": "macanet-massanes",
-      "name": "Línea Barcelona – Mataró – Maçanet-Massanes",
+      "name": "Línea convencional Maçanet-Massanes – Mataró – Barcelona",
       "towards": "Blanes, Mataró y Barcelona por la costa del Maresme",
       "status": "no_cargada",
       "sketch": [
@@ -471,7 +471,7 @@
     {
       "id": "conv-portbou-cerbere",
       "node_id": "portbou",
-      "name": "Línea Portbou – Cerbère",
+      "name": "Línea convencional Portbou – Cerbère",
       "towards": "Cerbère y la red francesa",
       "status": "no_cargada",
       "sketch": [

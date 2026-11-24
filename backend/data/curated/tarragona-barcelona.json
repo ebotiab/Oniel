@@ -208,7 +208,7 @@
     {
       "id": "reus-caspe-zaragoza",
       "node_id": "bif-vila-seca",
-      "name": "Línea de Reus a Zaragoza por Caspe y a Lleida por La Plana-Picamoixons",
+      "name": "Línea convencional Vila-seca – Reus – Zaragoza",
       "towards": "Reus, Móra la Nova, Caspe, Zaragoza y Lleida",
       "status": "no_cargada",
       "sketch": [
@@ -250,7 +250,7 @@
     {
       "id": "sant-vicenc-valls",
       "node_id": "sant-vicenc-de-calders",
-      "name": "Línea de Sant Vicenç de Calders a Valls y La Plana-Picamoixons",
+      "name": "Línea convencional Sant Vicenç de Calders – Valls – Lleida",
       "towards": "Roda de Mar, Valls y Lleida",
       "status": "no_cargada",
       "sketch": [
@@ -275,7 +275,7 @@
     {
       "id": "sant-vicenc-vilafranca",
       "node_id": "sant-vicenc-de-calders",
-      "name": "Línea de Sant Vicenç de Calders a Barcelona por Vilafranca del Penedès",
+      "name": "Línea convencional Sant Vicenç de Calders – Vilafranca del Penedès – Barcelona",
       "towards": "L'Arboç, Vilafranca del Penedès y Barcelona",
       "status": "no_cargada",
       "sketch": [

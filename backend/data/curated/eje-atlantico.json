@@ -269,7 +269,7 @@
     {
       "id": "conv-a-coruna-betanzos",
       "node_id": "a-coruna",
-      "name": "Línea de A Coruña a Betanzos",
+      "name": "Línea convencional A Coruña – Betanzos",
       "towards": "Betanzos, Ferrol y Lugo",
       "status": "no_cargada",
       "sketch": [
@@ -292,6 +292,8 @@
       "node_id": "bif-angueira",
       "name": "Vía antigua por Padrón y Catoira",
       "towards": "Padrón, Pontecesures y Catoira",
+      "to_node_id": "vilagarcia-de-arousa",
+      "towards_back": "Catoira, Pontecesures y Padrón",
       "status": "no_cargada",
       "sketch": [
         [
@@ -311,8 +313,8 @@
           42.672265
         ],
         [
-          -8.762284,
-          42.6019723
+          -8.761994,
+          42.602051
         ]
       ]
     },

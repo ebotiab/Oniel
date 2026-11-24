@@ -434,8 +434,9 @@
     {
       "id": "conv-pinar-principe-pio",
       "node_id": "pinar-de-las-rozas",
-      "name": "Línea Atocha – Pinar de las Rozas",
+      "name": "Línea convencional Pinar de las Rozas – Madrid-Príncipe Pío",
       "towards": "Las Rozas, Pozuelo y Madrid-Príncipe Pío",
+      "official_name": "Línea Atocha – Pinar de las Rozas",
       "status": "no_cargada",
       "sketch": [
         [
@@ -459,7 +460,7 @@
     {
       "id": "conv-villalba-segovia",
       "node_id": "villalba-de-guadarrama",
-      "name": "Línea Villalba – Segovia",
+      "name": "Línea convencional Villalba – Segovia",
       "towards": "Cercedilla y Segovia",
       "status": "no_cargada",
       "sketch": [
@@ -488,7 +489,7 @@
     {
       "id": "conv-avila-salamanca",
       "node_id": "avila",
-      "name": "Línea Ávila – Salamanca",
+      "name": "Línea convencional Ávila – Salamanca",
       "towards": "Peñaranda de Bracamonte y Salamanca",
       "status": "no_cargada",
       "sketch": [
@@ -513,7 +514,7 @@
     {
       "id": "conv-medina-salamanca",
       "node_id": "medina-del-campo",
-      "name": "Línea Medina del Campo – Salamanca",
+      "name": "Línea convencional Medina del Campo – Salamanca",
       "towards": "Cantalapiedra y Salamanca",
       "status": "no_cargada",
       "sketch": [
@@ -530,8 +531,11 @@
     {
       "id": "conv-valladolid-venta-de-banos",
       "node_id": "valladolid-campo-grande",
-      "name": "Línea Madrid – Hendaya",
-      "towards": "Venta de Baños, Burgos y el País Vasco",
+      "name": "Línea convencional Valladolid – Venta de Baños – Burgos",
+      "towards": "Venta de Baños y Burgos",
+      "to_node_id": "burgos-rosa-manzano",
+      "towards_back": "Venta de Baños y Valladolid",
+      "official_name": "Línea Madrid – Hendaya",
       "status": "no_cargada",
       "sketch": [
         [
@@ -549,6 +553,22 @@
         [
           -4.495844,
           41.91736
+        ],
+        [
+          -4.432114,
+          41.976561
+        ],
+        [
+          -4.19858,
+          42.079974
+        ],
+        [
+          -3.999396,
+          42.215717
+        ],
+        [
+          -3.666334,
+          42.371196
         ]
       ]
     }

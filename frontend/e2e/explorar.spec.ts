@@ -96,7 +96,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('nodo-lineas')).toContainText(/Madrid – Sevilla\s*alta velocidad\s*Manzanares – Ciudad Real\s*convencional/)
     await expect(page.getByRole('button', { name: 'Almagro – Ciudad Real' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Ciudad Real – Puertollano' })).toBeVisible()
-    await expect(page.getByText(/Línea convencional Ciudad Real–Badajoz hacia Puertollano/)).toBeVisible()
+    await expect(page.getByText(/Línea convencional Ciudad Real – Mérida hacia Puertollano/)).toBeVisible()
     await page.goto('/nodo/manzanares')
     await expect(page.getByRole('heading', { name: 'Manzanares' })).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
