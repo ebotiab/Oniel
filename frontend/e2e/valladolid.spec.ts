@@ -32,7 +32,7 @@ test.describe('La línea de alta velocidad Madrid – Segovia – Valladolid', (
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Valladolid-Campo Grande' })).toBeVisible()
     // aquí empieza la línea de Palencia y León, y la ficha lo dice
-    await expect(ficha).toContainText('empieza la de alta velocidad a Palencia y León')
+    await expect(ficha).toContainText('Aquí acaba la alta velocidad que viene de Madrid por Segovia y empieza la de Palencia y León')
     // destinos directos del día de referencia: los de la red, con León y Palencia entre ellos
     await expect(ficha).toContainText('Madrid-Chamartín')
     await expect(ficha).toContainText('Segovia-Guiomar')
