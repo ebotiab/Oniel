@@ -123,6 +123,10 @@ class ConnectionOut(BaseModel):
     node_id: str
     name: str
     towards: str
+    #: El otro nodo cargado al que llega la conexión, si llega a alguno, y adónde lleva vista
+    #: desde él.
+    to_node_id: str | None = None
+    towards_back: str | None = None
     status: Literal["no_cargada", "disponible"]
     line_id: str | None = None
 

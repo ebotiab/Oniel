@@ -62,9 +62,9 @@
     {"attribute": "mando", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
   ],
   "connections": [
-    {"id": "conv-murcia-cartagena", "node_id": "bif-el-regueron", "name": "Línea convencional Murcia–Cartagena", "towards": "Balsicas-Mar Menor, Torre-Pacheco y Cartagena", "status": "no_cargada", "sketch": [[-1.058278, 37.9911527], [-1.02, 37.92], [-0.950891, 37.81884], [-0.967078, 37.746905], [-0.975122, 37.604967]]},
-    {"id": "conv-murcia-lorca-aguilas", "node_id": "murcia-del-carmen", "name": "Línea convencional Murcia–Lorca–Águilas", "towards": "Alhama de Murcia, Totana, Lorca y Águilas; por aquí seguirá la línea de alta velocidad a Almería, en obras", "status": "no_cargada", "sketch": [[-1.130589, 37.974506], [-1.4145141, 37.8494024], [-1.4956153, 37.7635424], [-1.6962305, 37.6721129]]},
-    {"id": "conv-murcia-albacete-por-cieza", "node_id": "murcia-del-carmen", "name": "Línea convencional Chinchilla–Murcia", "towards": "Archena, Cieza, Hellín y Albacete", "status": "no_cargada", "sketch": [[-1.130589, 37.974506], [-1.236037, 38.13132], [-1.421702, 38.246609], [-1.688437, 38.508776]]}
+    {"id": "conv-murcia-cartagena", "node_id": "bif-el-regueron", "name": "Línea convencional Murcia – Cartagena", "towards": "Balsicas-Mar Menor, Torre-Pacheco y Cartagena", "status": "no_cargada", "sketch": [[-1.058278, 37.9911527], [-1.02, 37.92], [-0.950891, 37.81884], [-0.967078, 37.746905], [-0.975122, 37.604967]]},
+    {"id": "conv-murcia-lorca-aguilas", "node_id": "murcia-del-carmen", "name": "Línea convencional Murcia – Lorca – Águilas", "towards": "Alhama de Murcia, Totana, Lorca y Águilas; por aquí seguirá la línea de alta velocidad a Almería, en obras", "status": "no_cargada", "sketch": [[-1.130589, 37.974506], [-1.4145141, 37.8494024], [-1.4956153, 37.7635424], [-1.6962305, 37.6721129]]},
+    {"id": "conv-murcia-albacete-por-cieza", "node_id": "murcia-del-carmen", "name": "Línea convencional Murcia – Cieza – Albacete", "towards": "Archena, Cieza, Hellín y Albacete", "official_name": "Línea Chinchilla – Murcia", "status": "no_cargada", "sketch": [[-1.130589, 37.974506], [-1.236037, 38.13132], [-1.421702, 38.246609], [-1.688437, 38.508776]]}
   ],
   "stop_mappings": {
     "03410": {"node": "elche-av"},

@@ -75,10 +75,10 @@
     {"attribute": "mando", "from_node": "valencia-estacio-del-nord", "to_node": "alicante-terminal", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea, «BAB ctc» y «BAU ctc»."}
   ],
   "connections": [
-    {"id": "conv-xativa-alcoi", "node_id": "xativa", "name": "Línea Xàtiva – Alcoi", "towards": "Benigànim, Albaida, Ontinyent y Alcoi", "status": "no_cargada", "sketch": [[-0.5245402, 38.992148], [-0.453424, 38.938499], [-0.518129, 38.845645], [-0.602457, 38.809692], [-0.470247, 38.709349]]},
-    {"id": "conv-la-encina-albacete", "node_id": "bif-la-encina", "name": "Línea convencional La Encina – Albacete", "towards": "La Encina, Almansa y Albacete", "status": "no_cargada", "sketch": [[-0.9264679, 38.7591849], [-0.954244, 38.765344], [-1.105446, 38.867822], [-1.84845, 38.999384]]},
-    {"id": "conv-caudete-la-encina", "node_id": "caudete", "name": "Línea La Encina – Caudete", "towards": "La Encina, Almansa y Albacete", "status": "no_cargada", "sketch": [[-0.959727, 38.716163], [-0.954244, 38.765344]]},
-    {"id": "conv-alicante-murcia", "node_id": "alicante-terminal", "name": "Línea convencional Alicante – Murcia", "towards": "Elche, Orihuela y Murcia", "status": "no_cargada", "sketch": [[-0.4955241, 38.3447127], [-0.5086866, 38.3290647], [-0.6952193, 38.2717809], [-0.944606, 38.0779321], [-1.131508, 37.9748243]]}
+    {"id": "conv-xativa-alcoi", "node_id": "xativa", "name": "Línea convencional Xàtiva – Alcoi", "towards": "Benigànim, Albaida, Ontinyent y Alcoi", "status": "no_cargada", "sketch": [[-0.5245402, 38.992148], [-0.453424, 38.938499], [-0.518129, 38.845645], [-0.602457, 38.809692], [-0.470247, 38.709349]]},
+    {"id": "conv-la-encina-albacete", "node_id": "bif-la-encina", "name": "Línea convencional La Encina – Albacete", "towards": "La Encina, Almansa y Albacete", "to_node_id": "albacete-los-llanos", "towards_back": "Almansa y La Encina, donde se une a la línea de Valencia a Alicante", "status": "no_cargada", "sketch": [[-0.9264679, 38.7591849], [-0.954244, 38.765344], [-1.105446, 38.867822], [-1.847591, 38.999872]]},
+    {"id": "conv-caudete-la-encina", "node_id": "caudete", "name": "Línea convencional Caudete – La Encina", "towards": "La Encina, Almansa y Albacete", "status": "no_cargada", "sketch": [[-0.959727, 38.716163], [-0.954244, 38.765344]]},
+    {"id": "conv-alicante-murcia", "node_id": "alicante-terminal", "name": "Línea convencional Alicante – Murcia", "towards": "Elche, Orihuela y Murcia", "to_node_id": "murcia-del-carmen", "towards_back": "Orihuela, Elche y Alicante", "status": "no_cargada", "sketch": [[-0.4955241, 38.3447127], [-0.5086866, 38.3290647], [-0.6952193, 38.2717809], [-0.944606, 38.0779321], [-1.130582, 37.974629]]}
   ],
   "stop_mappings": {
     "65000": {"node": "valencia-estacio-del-nord"},

@@ -303,6 +303,8 @@
       "node_id": "bif-pajares",
       "name": "Línea antigua por el puerto de Pajares",
       "towards": "La Robla, Busdongo, Puente de los Fierros y Pola de Lena",
+      "to_node_id": "pola-de-lena",
+      "towards_back": "Puente de los Fierros, Busdongo, La Robla y León",
       "status": "no_cargada",
       "sketch": [
         [
@@ -370,16 +372,17 @@
           43.10762
         ],
         [
-          -5.83075,
-          43.1617
+          -5.831187,
+          43.158643
         ]
       ]
     },
     {
       "id": "conv-villabona-san-juan-de-nieva",
       "node_id": "villabona-de-asturias",
-      "name": "Línea Villabona de Asturias–San Juan de Nieva",
+      "name": "Línea convencional Villabona de Asturias – Avilés",
       "towards": "Avilés y San Juan de Nieva",
+      "official_name": "Línea Villabona de Asturias – San Juan de Nieva",
       "status": "no_cargada",
       "sketch": [
         [

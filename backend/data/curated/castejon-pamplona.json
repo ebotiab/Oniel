@@ -167,8 +167,9 @@
     {
       "id": "conv-pamplona-altsasu",
       "node_id": "pamplona",
-      "name": "Línea Castejón – Altsasu",
+      "name": "Línea convencional Pamplona – Altsasu",
       "towards": "Altsasu, y de allí a Vitoria o a San Sebastián e Irún",
+      "official_name": "Línea Castejón – Altsasu",
       "status": "no_cargada",
       "sketch": [
         [

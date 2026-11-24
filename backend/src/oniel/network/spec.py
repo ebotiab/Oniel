@@ -52,12 +52,36 @@ class NodeSpec(BaseModel):
 
 
 class ConnectionSpec(BaseModel):
+    """Una vía que no está cargada y se dibuja a trazos desde un nodo de la línea.
+
+    ``name`` dice qué es y adónde lleva con los nombres que conoce el visitante; el nombre que le
+    da Adif, cuando es otro, va en ``official_name`` y no se enseña. Si la conexión llega a otro
+    nodo cargado, de esta línea o de otra, lo declara en ``to_node_id`` y dice en
+    ``towards_back`` adónde lleva vista desde él: así sale también en su ficha y en su esquema.
+    El croquis (``sketch``) acaba entonces en ese nodo; `oniel-data validate` lo comprueba.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
     id: str
     node_id: str
     name: str
     towards: str
+    to_node_id: str | None = None
+    towards_back: str | None = None
+    official_name: str | None = None
     status: Literal["no_cargada", "disponible"] = "no_cargada"
     sketch: list[tuple[float, float]] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _both_ends_or_one(self) -> ConnectionSpec:
+        if (self.to_node_id is None) != (self.towards_back is None):
+            raise ValueError(
+                f"la conexión {self.id} declara to_node_id y towards_back a la vez o ninguno"
+            )
+        if self.to_node_id == self.node_id:
+            raise ValueError(f"la conexión {self.id} empieza y acaba en el mismo nodo")
+        return self
 
 
 class ViaLine(BaseModel):
@@ -286,6 +310,20 @@ class LineSpec(BaseModel):
     link_of: str | None = None
 
 
+class SlowRun(BaseModel):
+    """Dos paradas seguidas entre las que hay otra vía, paralela y más lenta, que no está cargada.
+
+    Un viaje que las lleva seguidas y tarda ``min_minutes`` o más de una a otra va por esa otra
+    vía: no recorre esta línea (de Valladolid a Burgos, 36 a 47 minutos por la alta velocidad y
+    67 o más por la convencional).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    stop_ids: tuple[str, str]
+    min_minutes: int = Field(gt=0)
+
+
 class CorridorFilter(BaseModel):
     description: str = ""
     required_stop_ids: list[str] = Field(default_factory=list)
@@ -298,6 +336,11 @@ class CorridorFilter(BaseModel):
     #: la línea entre dos estaciones sin parar entre ellas, cuando eso los distingue de los de una
     #: línea paralela (de Sevilla a Córdoba sin paradas solo se va por la alta velocidad).
     consecutive_stop_ids: list[list[str]] = Field(default_factory=list)
+    #: Parejas de paradas seguidas que, si el viaje tarda demasiado entre ellas, lo dejan fuera:
+    #: va por una vía paralela que no está cargada. Se aplica a lo que entra por el filtro y por
+    #: ``consecutive_stop_ids``; una regla de recorrido manda sobre ello, como sobre las paradas
+    #: excluidas.
+    slow_runs: list[SlowRun] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _runs_have_two_stops(self) -> CorridorFilter:

@@ -8,6 +8,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+from oniel.geo import haversine_km
 from oniel.gtfs.reader import read_feed
 from oniel.gtfs.trips import (
     LoadedLine,
@@ -22,6 +23,7 @@ from oniel.gtfs.trips import (
 from oniel.network.annotations import check_annotations
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import (
+    ConnectionSpec,
     FeedSpec,
     OperatorSpec,
     load_annotations,
@@ -324,6 +326,100 @@ def validate_turns(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]
             "junctions": sum(1 for sides in turns.values() if len(sides) > 2),
         },
         "problems": [f"{p.node_id}: no se sabe qué giros permite ({p.detail})" for p in problems],
+    }
+
+
+#: Distancia a la que el final del croquis de una conexión se da por llegado a un nodo cargado.
+CONNECTION_END_M = 300.0
+
+#: Con qué puede seguir «Línea» en el nombre de una conexión.
+_LINE_KINDS = ("convencional ", "antigua ", "de alta velocidad ")
+
+#: Lo que el texto de un nodo de varias líneas no puede decir: se lee igual desde todas.
+_ONE_LINE_PHRASES = ("esta línea", "final de la línea", "cabecera de la línea")
+
+
+def connection_name_problem(name: str) -> str | None:
+    """Qué incumple el nombre de una conexión del criterio de «Añadir otra línea», si algo."""
+    if re.search(r"\S–|–\S", name):
+        return "lleva una raya sin espacios («A – B», no «A–B»)"
+    if name.startswith("Línea ") and not name.removeprefix("Línea ").startswith(_LINE_KINDS):
+        return "empieza por «Línea» sin decir si es convencional, antigua o de alta velocidad"
+    return None
+
+
+def validate_connections(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+    """Comprueba las costuras entre líneas: las conexiones a trazos y los nodos compartidos.
+
+    Una conexión cuyo croquis acaba en un nodo cargado tiene que declararlo (``to_node_id``):
+    si no, en ese nodo los trenes aparecen o desaparecen sin trazo que lo explique. La que lo
+    declara tiene que acabar en él. Los nombres siguen un solo criterio, y la descripción de un
+    nodo de varias líneas no habla de «esta línea». Las líneas que no se pueden construir ya las
+    señala ``validate_attributes``.
+    """
+    nodes: dict[str, tuple[float, float]] = {}
+    lines_of: dict[str, set[str]] = {}
+    descriptions: dict[str, list[str]] = {}
+    connections: list[tuple[str, ConnectionSpec]] = []
+    for path in spec_paths:
+        spec = load_network_spec(path)
+        try:
+            net = build_network(spec, data_dir)
+        except ValueError:
+            continue
+        for n in net.nodes:
+            nodes.setdefault(n.spec.id, (n.lon, n.lat))
+            lines_of.setdefault(n.spec.id, set()).add(spec.line.id)
+            if n.spec.description:
+                descriptions.setdefault(n.spec.id, []).append(n.spec.description)
+        connections.extend((spec.line.id, c) for c in spec.connections)
+
+    problems: list[str] = []
+    both_ends = 0
+    for line_id, c in connections:
+        label = f"la conexión {c.id} de {line_id}"
+        if problem := connection_name_problem(c.name):
+            problems.append(f"{label}: el nombre «{c.name}» {problem}")
+        if c.to_node_id is not None and c.to_node_id not in nodes:
+            problems.append(f"{label} llega a un nodo que no está cargado, {c.to_node_id}")
+            continue
+        if not c.sketch:
+            if c.to_node_id is not None:
+                problems.append(f"{label} declara que llega a {c.to_node_id} y no lleva croquis")
+            continue
+        end = c.sketch[-1]
+        if c.to_node_id is not None:
+            both_ends += 1
+            off_m = haversine_km(end, nodes[c.to_node_id]) * 1000
+            if off_m > CONNECTION_END_M:
+                problems.append(
+                    f"{label}: el croquis acaba a {off_m:.0f} m de {c.to_node_id}, el nodo al que"
+                    " dice llegar"
+                )
+            continue
+        near = sorted(
+            (haversine_km(end, at) * 1000, node_id)
+            for node_id, at in nodes.items()
+            if node_id != c.node_id
+        )
+        if near and near[0][0] <= CONNECTION_END_M:
+            problems.append(
+                f"{label} acaba en {near[0][1]}, que está cargado, y solo se declara en"
+                f" {c.node_id}: falta to_node_id y towards_back"
+            )
+    for node_id, texts in sorted(descriptions.items()):
+        if len(lines_of[node_id]) < 2:
+            continue
+        for text in texts:
+            for phrase in _ONE_LINE_PHRASES:
+                if phrase in text.lower():
+                    problems.append(
+                        f"el nodo {node_id} es de {len(lines_of[node_id])} líneas y su descripción"
+                        f" dice «{phrase}»: se lee igual desde todas"
+                    )
+    return {
+        "connections": {"total": len(connections), "both_ends": both_ends},
+        "problems": problems,
     }
 
 

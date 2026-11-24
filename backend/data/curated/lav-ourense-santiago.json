@@ -163,8 +163,10 @@
     {
       "id": "conv-ourense-santiago",
       "node_id": "bif-a-grandeira",
-      "name": "Línea convencional Ourense–Santiago por Lalín",
-      "towards": "Lalín y O Carballiño",
+      "name": "Línea convencional Santiago – Lalín – Ourense",
+      "towards": "Lalín, O Carballiño y Ourense",
+      "to_node_id": "bif-coto-da-torre",
+      "towards_back": "O Carballiño, Lalín y Santiago de Compostela",
       "status": "no_cargada",
       "sketch": [
         [
@@ -188,8 +190,10 @@
     {
       "id": "enlace-conxo",
       "node_id": "bif-a-grandeira",
-      "name": "Enlace de Conxo a la línea de Vigo",
-      "towards": "Vilagarcía de Arousa y Vigo",
+      "name": "Enlace de Conxo",
+      "towards": "Vilagarcía de Arousa y Vigo, sin entrar en Santiago de Compostela",
+      "to_node_id": "bif-rio-sar",
+      "towards_back": "Ourense, sin entrar en Santiago de Compostela",
       "status": "no_cargada",
       "sketch": [
         [

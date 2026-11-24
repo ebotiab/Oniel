@@ -358,8 +358,9 @@
     {
       "id": "conv-casetas-calatayud",
       "node_id": "casetas",
-      "name": "Línea convencional Madrid – Zaragoza",
+      "name": "Línea convencional Casetas – Calatayud – Madrid",
       "towards": "Grisén, Ricla-La Almunia, Calatayud y Madrid",
+      "official_name": "Línea Madrid – Zaragoza",
       "status": "no_cargada",
       "sketch": [
         [

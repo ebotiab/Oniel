@@ -48,7 +48,7 @@
     {"id": "minaya", "name": "Minaya", "kind": "estacion", "adif_code": "60503", "rank": "secundario", "position": {"lon": -2.348403, "lat": 39.240738}, "reference_pk_km": 226.1},
     {"id": "la-roda-de-albacete", "name": "La Roda de Albacete", "kind": "estacion", "adif_code": "60505", "position": {"lon": -2.162547, "lat": 39.199594}, "reference_pk_km": 242.9},
     {"id": "la-gineta", "name": "La Gineta", "kind": "estacion", "adif_code": "60507", "rank": "secundario", "position": {"lon": -2.000155, "lat": 39.111665}, "reference_pk_km": 260.2},
-    {"id": "albacete-los-llanos", "name": "Albacete-Los Llanos", "kind": "estacion", "adif_code": "60600", "position": {"lon": -1.84845, "lat": 38.999384}, "reference_pk_km": 278.7, "description": "La estación de Albacete. Tiene vías de dos anchos: a las de ancho ibérico llegan los trenes de esta línea y a las de ancho estándar, los de alta velocidad de Madrid por Cuenca y los de Alicante. La línea convencional sigue desde aquí hacia Almansa, Valencia y Alicante."}
+    {"id": "albacete-los-llanos", "name": "Albacete-Los Llanos", "kind": "estacion", "adif_code": "60600", "position": {"lon": -1.84845, "lat": 38.999384}, "reference_pk_km": 278.7, "description": "La estación de Albacete. Tiene vías de dos anchos: a las de ancho ibérico llegan los trenes de la línea convencional de Alcázar de San Juan y a las de ancho estándar, los de alta velocidad de Madrid por Cuenca y los de Alicante. La línea convencional sigue desde aquí hacia Almansa, Valencia y Alicante."}
   ],
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "alcazar-de-san-juan", "to_node": "albacete-los-llanos", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos «Tren tierra y ASFA conv.» junto a la línea, entre Alcázar y Albacete. Las vías de OSM dicen railway:asfa=yes."},
@@ -58,9 +58,7 @@
     {"attribute": "mando", "from_node": "alcazar-de-san-juan", "to_node": "la-roda-de-albacete", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: los rótulos «BAB» y «BAD» de Alcázar a La Roda no llevan «ctc», y la leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD»: el mapa dice que no hay control de tráfico centralizado. No dice desde dónde se gobierna el tramo."},
     {"attribute": "mando", "from_node": "la-roda-de-albacete", "to_node": "albacete-los-llanos", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
   ],
-  "connections": [
-    {"id": "conv-albacete-levante", "node_id": "albacete-los-llanos", "name": "Línea convencional Albacete–La Encina", "towards": "Almansa, La Encina, Valencia, Alicante y Murcia", "status": "no_cargada", "sketch": [[-1.84845, 38.999384], [-1.6, 38.93], [-1.35, 38.9], [-1.105446, 38.867822]]}
-  ],
+  "connections": [],
   "stop_mappings": {
     "60400": {"node": "alcazar-de-san-juan"},
     "60402": {"node": "campo-de-criptana"},

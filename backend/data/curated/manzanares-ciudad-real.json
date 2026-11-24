@@ -49,7 +49,7 @@
     {"attribute": "mando", "from_node": "manzanares", "to_node": "ciudad-real", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: trazo de bloqueo automático con CTC."}
   ],
   "connections": [
-    {"id": "conv-ciudad-real-badajoz", "node_id": "ciudad-real", "name": "Línea convencional Ciudad Real–Badajoz", "towards": "Puertollano, Mérida y Badajoz", "status": "no_cargada", "sketch": [[-3.913633, 38.9853], [-3.975, 38.955], [-4.035, 38.9], [-4.1, 38.83]]}
+    {"id": "conv-ciudad-real-badajoz", "node_id": "ciudad-real", "name": "Línea convencional Ciudad Real – Mérida", "towards": "Puertollano, Cabeza del Buey, Villanueva de la Serena, Don Benito y Mérida", "to_node_id": "merida", "towards_back": "Don Benito, Villanueva de la Serena, Cabeza del Buey, Puertollano y Ciudad Real", "official_name": "Línea Ciudad Real – Badajoz", "status": "no_cargada", "sketch": [[-3.913633, 38.9853], [-3.975, 38.955], [-4.035, 38.9], [-4.1, 38.83], [-4.111655, 38.69128], [-4.730387, 38.740578], [-4.929771, 38.69921], [-5.227067, 38.72389], [-5.541637, 38.735021], [-5.7965, 38.96886], [-5.862923, 38.96695], [-6.1288, 38.8967], [-6.3187, 38.905], [-6.343119, 38.921515]]}
   ],
   "stop_mappings": {
     "50100": {"node": "manzanares"},

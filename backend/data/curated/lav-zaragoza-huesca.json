@@ -48,7 +48,7 @@
     {"attribute": "mando", "from_node": "bif-huesca", "to_node": "huesca", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
   ],
   "connections": [
-    {"id": "tardienta-lleida", "node_id": "tardienta", "name": "Línea convencional Zaragoza – Tardienta – Lleida", "towards": "Monzón y Lleida", "status": "no_cargada", "sketch": [[-0.5384281, 41.9755672], [-0.369329, 41.938033], [-0.17076, 41.817529], [0.196939, 41.913679]]},
+    {"id": "tardienta-lleida", "node_id": "tardienta", "name": "Línea convencional Tardienta – Lleida", "towards": "Monzón y Lleida", "official_name": "Línea Zaragoza – Tardienta – Lleida", "status": "no_cargada", "sketch": [[-0.5384281, 41.9755672], [-0.369329, 41.938033], [-0.17076, 41.817529], [0.196939, 41.913679]]},
     {"id": "huesca-canfranc", "node_id": "huesca", "name": "Línea convencional Huesca – Canfranc", "towards": "Jaca y Canfranc", "status": "no_cargada", "sketch": [[-0.4098509, 42.1327508], [-0.682569, 42.27561], [-0.539231, 42.578303], [-0.514641, 42.751471]]}
   ],
   "stop_mappings": {

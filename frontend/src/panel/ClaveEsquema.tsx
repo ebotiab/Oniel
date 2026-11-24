@@ -39,7 +39,7 @@ export function ClaveEsquema({ nodes, connections }: Props) {
   const tipos = new Set(nodes.map((n) => n.kind))
   const puestos = PUESTOS.filter(([kind]) => tipos.has(kind))
   const enLinea = new Set(nodes.map((n) => n.id))
-  const conConexion = tipos.has('bifurcacion') || connections.some((c) => enLinea.has(c.node_id))
+  const conConexion = tipos.has('bifurcacion') || connections.some((c) => enLinea.has(c.node_id) || (c.to_node_id != null && enLinea.has(c.to_node_id)))
   return (
     <ul className="clave-esquema" aria-label="Símbolos del esquema" data-testid="clave-esquema">
       {tipos.has('estacion') && (

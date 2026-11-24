@@ -36,7 +36,10 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
-  const connections = network.connections.filter((c) => c.node_id === node.id)
+  // Una conexión a trazos sale en la ficha de sus dos extremos, y en cada uno dice adónde lleva desde él.
+  const connections = network.connections.flatMap((c) =>
+    c.node_id === node.id ? [{ id: c.id, name: c.name, towards: c.towards }] : c.to_node_id === node.id && c.towards_back ? [{ id: c.id, name: c.name, towards: c.towards_back }] : [],
+  )
   const station = node.kind === 'estacion'
   // Un nodo puede pertenecer a varias líneas (Madrid y Córdoba): su kilómetro en cada una.
   const memberships = network.nodes

@@ -98,7 +98,6 @@ def test_nodes_and_main_stations(line: BuiltNetwork) -> None:
     assert line.node("huelva").spec.adif_code == HUELVA
     assert line.node("la-palma-del-condado").spec.adif_code == LA_PALMA
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "conv-los-naranjos-cordoba": "bif-los-naranjos",
         "conv-huelva-zafra": "huelva-mercancias",
     }
 

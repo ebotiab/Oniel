@@ -48,7 +48,7 @@
     {"id": "bif-moncasi", "name": "Bifurcación Moncasi", "kind": "bifurcacion", "position": {"lon": -1.0270992, "lat": 41.6346471}, "reference_pk_km": 294.897,
      "description": "Aquí se separan dos caminos: el que entra en Zaragoza-Delicias y el baipás, que rodea la ciudad por el sur y lo toman los trenes que no paran en ella."},
     {"id": "zaragoza-delicias", "name": "Zaragoza-Delicias", "kind": "estacion", "adif_code": "04040", "position": {"lon": -0.9113881, "lat": 41.6585732}, "reference_pk_km": 306.7,
-     "description": "Estación de Zaragoza, abierta en 2003 con la línea. Paran en ella los trenes de alta velocidad y los de la red convencional; un cambiador de ancho deja pasar de una a otra a los que siguen hacia Pamplona, Logroño, Bilbao o Galicia."},
+     "description": "Estación de Zaragoza, abierta en 2003 con la alta velocidad. Paran en ella los trenes de alta velocidad y los de la red convencional; un cambiador de ancho deja pasar de una a otra a los que siguen hacia Pamplona, Logroño, Bilbao o Galicia."},
     {"id": "bif-huesca", "name": "Bifurcación Huesca", "kind": "bifurcacion", "adif_code": "86144", "position": {"lon": -0.8679639, "lat": 41.6327417}, "reference_pk_km": 311.688,
      "description": "Punto, junto a la estación de Zaragoza-Miraflores, donde sale la línea hacia Tardienta y Huesca, preparada para trenes de ancho estándar."},
     {"id": "bif-canal-imperial", "name": "Bifurcación Canal Imperial", "kind": "bifurcacion", "position": {"lon": -0.7975476, "lat": 41.5731304},
@@ -83,8 +83,8 @@
     {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "barcelona-sants", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."}
   ],
   "connections": [
-    {"id": "enlace-vallecas-perales-del-rio", "node_id": "bif-vallecas-av", "name": "Enlace con la alta velocidad de Sevilla", "towards": "Córdoba, Sevilla y Málaga sin pasar por Madrid-Puerta de Atocha", "status": "no_cargada", "sketch": [[-3.6215531, 40.3375843], [-3.6583785, 40.3061689]]},
-    {"id": "convencional-plasencia-de-jalon-tudela", "node_id": "cambiador-plasencia-de-jalon", "name": "Vía de ancho ibérico por Grisén", "towards": "Cabañas de Ebro, donde se une a la línea de Zaragoza a Castejón y Logroño", "status": "no_cargada", "sketch": [[-1.2343583, 41.6896227], [-1.1658454, 41.7452588], [-1.1684037, 41.7883119]]}
+    {"id": "enlace-vallecas-perales-del-rio", "node_id": "bif-vallecas-av", "name": "Enlace de Perales del Río", "towards": "Córdoba, Sevilla y Málaga sin pasar por Madrid-Puerta de Atocha", "to_node_id": "bif-los-gavilanes", "towards_back": "Zaragoza y Barcelona sin pasar por Madrid-Puerta de Atocha", "status": "no_cargada", "sketch": [[-3.6215531, 40.3375843], [-3.662444, 40.303269]]},
+    {"id": "convencional-plasencia-de-jalon-tudela", "node_id": "cambiador-plasencia-de-jalon", "name": "Vía de ancho ibérico por Grisén", "towards": "Cabañas de Ebro, donde se une a la línea de Zaragoza a Castejón y Logroño", "to_node_id": "cabanas-de-ebro", "towards_back": "el cambiador de Plasencia de Jalón, donde empieza la alta velocidad a Madrid", "status": "no_cargada", "sketch": [[-1.2343583, 41.6896227], [-1.1658454, 41.7452588], [-1.1684037, 41.7883119]]}
   ],
   "stop_mappings": {
     "60000": {"node": "madrid-puerta-de-atocha"},

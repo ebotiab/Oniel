@@ -61,8 +61,7 @@
     {"attribute": "mando", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
   ],
   "connections": [
-    {"id": "merida-zafra-sevilla", "node_id": "merida", "name": "Línea Mérida–Los Rosales", "towards": "Almendralejo, Zafra y Sevilla", "status": "no_cargada", "sketch": [[-6.3430521, 38.9215856], [-6.3644, 38.9173], [-6.383, 38.8869], [-6.3998, 38.6847], [-6.352, 38.5644], [-6.4051, 38.4136]]},
-    {"id": "merida-ciudad-real", "node_id": "merida", "name": "Línea convencional Ciudad Real–Badajoz", "towards": "Don Benito, Villanueva de la Serena, Cabeza del Buey, Puertollano y Ciudad Real", "status": "no_cargada", "sketch": [[-6.3430521, 38.9215856], [-6.3187, 38.905], [-6.1288, 38.8967], [-5.8629, 38.967], [-5.7965, 38.9689]]}
+    {"id": "merida-zafra-sevilla", "node_id": "merida", "name": "Línea convencional Mérida – Zafra – Sevilla", "towards": "Almendralejo, Zafra y Sevilla", "official_name": "Línea Mérida – Los Rosales", "status": "no_cargada", "sketch": [[-6.3430521, 38.9215856], [-6.3644, 38.9173], [-6.383, 38.8869], [-6.3998, 38.6847], [-6.352, 38.5644], [-6.4051, 38.4136]]}
   ],
   "stop_mappings": {
     "37500": {"node": "merida"},

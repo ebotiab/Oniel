@@ -110,7 +110,7 @@
     {"id": "casatejada", "name": "Casatejada", "kind": "estacion", "adif_code": "35207", "rank": "secundario", "position": {"lon": -5.6776371, "lat": 39.8919896}, "reference_pk_km": 211.7},
     {"id": "monfrague", "name": "Monfragüe", "kind": "estacion", "adif_code": "30000", "position": {"lon": -6.1012466, "lat": 39.937619}, "reference_pk_km": 251.6, "description": "Estación de enlace en mitad del campo, junto al parque nacional del que toma el nombre. Aquí se separan el camino de Plasencia y de la línea nueva y el trazado antiguo a Cáceres por Mirabel y Cañaveral."},
     {"id": "bif-el-chaparral", "name": "Bifurcación El Chaparral", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.1475609, "lat": 39.9554043}, "description": "Aquí sale el enlace por el que los trenes que no paran en Plasencia pasan directamente a la línea de alta velocidad, en Arroyo de la Herrera."},
-    {"id": "bif-san-esteban", "name": "Bifurcación San Esteban", "kind": "bifurcacion", "position": {"lon": -6.1493221, "lat": 39.9745627}, "description": "Final de la línea convencional: aquí se une a la línea de alta velocidad, a 7 km de la estación de Plasencia. Los trenes de Madrid que paran en Plasencia siguen hasta la estación y allí cambian de sentido para continuar hacia Cáceres."}
+    {"id": "bif-san-esteban", "name": "Bifurcación San Esteban", "kind": "bifurcacion", "position": {"lon": -6.1493221, "lat": 39.9745627}, "description": "Aquí la línea convencional de Madrid se une a la de alta velocidad de Extremadura, a 7 km de la estación de Plasencia. Los trenes de Madrid que paran en Plasencia siguen hasta la estación y allí cambian de sentido para continuar hacia Cáceres."}
   ],
   "attribute_sections": [
     {"attribute": "tracks", "from_node": "bif-planetario", "to_node": "humanes", "value": 2, "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Única (salvo entre Madrid y Humanes que es doble)». El mapa 4 de la Declaración sobre la Red dibuja ese trecho como vía doble a 3 kV."},
@@ -126,7 +126,7 @@
     {"attribute": "mando", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU» sin «ctc»; la leyenda distingue «BAU ctc» (naranja) de «BAU» (verde)."}
   ],
   "connections": [
-    {"id": "enlace-el-chaparral-arroyo-de-la-herrera", "node_id": "bif-el-chaparral", "name": "Enlace El Chaparral–Arroyo de la Herrera", "towards": "Cáceres, Mérida y Badajoz sin entrar en Plasencia", "status": "no_cargada", "sketch": [[-6.1475609, 39.9554043], [-6.15, 39.962], [-6.165, 39.9635], [-6.178, 39.956], [-6.19109, 39.94645]]}
+    {"id": "enlace-el-chaparral-arroyo-de-la-herrera", "node_id": "bif-el-chaparral", "name": "Enlace El Chaparral – Arroyo de la Herrera", "towards": "Cáceres, Mérida y Badajoz sin entrar en Plasencia", "to_node_id": "arroyo-de-la-herrera", "towards_back": "Navalmoral de la Mata, Talavera de la Reina y Madrid sin entrar en Plasencia", "status": "no_cargada", "sketch": [[-6.1475609, 39.9554043], [-6.15, 39.962], [-6.165, 39.9635], [-6.178, 39.956], [-6.19109, 39.94645]]}
   ],
   "stop_mappings": {
     "35001": {"node": "leganes"},

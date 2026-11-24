@@ -95,7 +95,7 @@
         "lat": 42.6907987
       },
       "reference_pk_km": 458.913,
-      "description": "Nudo ferroviario donde la línea de Madrid a Hendaya se cruza con la de Casetas a Bilbao por Logroño. De aquí sale hacia el norte la línea de Bilbao, por Orduña y Llodio, y hacia el sureste la rama de Haro, Logroño y Zaragoza, que no está cargada."
+      "description": "Nudo ferroviario donde se cruzan dos caminos: el de Madrid y Burgos a Vitoria y la frontera, y el de Zaragoza y Logroño a Bilbao. De aquí sale hacia el norte la línea de Bilbao, por Orduña y Llodio, y hacia el sureste la de Haro y Logroño, que no está cargada."
     },
     {
       "id": "manzanos",
@@ -179,8 +179,11 @@
     {
       "id": "conv-miranda-logrono",
       "node_id": "miranda-de-ebro",
-      "name": "Línea Casetas – Bilbao",
-      "towards": "Haro y Logroño, donde empieza la línea cargada hacia Castejón y Zaragoza",
+      "name": "Línea convencional Miranda de Ebro – Logroño",
+      "towards": "Haro y Logroño",
+      "to_node_id": "logrono",
+      "towards_back": "Haro y Miranda de Ebro",
+      "official_name": "Línea Casetas – Bilbao",
       "status": "no_cargada",
       "sketch": [
         [
@@ -200,8 +203,9 @@
     {
       "id": "conv-vitoria-altsasu",
       "node_id": "vitoria-gasteiz",
-      "name": "Línea Madrid – Hendaya",
+      "name": "Línea convencional Vitoria – Altsasu",
       "towards": "Altsasu, San Sebastián e Irún, y Pamplona",
+      "official_name": "Línea Madrid – Hendaya",
       "status": "no_cargada",
       "sketch": [
         [

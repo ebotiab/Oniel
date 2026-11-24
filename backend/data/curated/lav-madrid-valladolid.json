@@ -111,7 +111,7 @@
         "km": 133.134
       },
       "reference_pk_km": 133.884,
-      "description": "Punto cercano a Olmedo (Valladolid) donde sale de esta línea la de alta velocidad a Medina del Campo, Zamora y Ourense. Los trenes de Madrid a Galicia y a Salamanca dejan aquí la línea de Valladolid. Menos de un kilómetro antes está el puesto de adelantamiento de Olmedo, que no se ha cargado como nodo."
+      "description": "Punto cercano a Olmedo (Valladolid) donde sale de la línea de Madrid a Valladolid la de alta velocidad a Medina del Campo, Zamora y Ourense. Los trenes de Madrid a Galicia y a Salamanca dejan aquí la línea de Valladolid. Menos de un kilómetro antes está el puesto de adelantamiento de Olmedo, que no se ha cargado como nodo."
     },
     {
       "id": "valladolid-campo-grande",
@@ -123,7 +123,7 @@
         "lat": 41.6421265
       },
       "reference_pk_km": 179.309,
-      "description": "La estación de Valladolid, donde acaba esta línea y empieza la de alta velocidad a Palencia y León. La comparten la alta velocidad y la línea convencional de Madrid a Irún."
+      "description": "La estación de Valladolid. Aquí acaba la alta velocidad que viene de Madrid por Segovia y empieza la de Palencia y León. Llega también la línea convencional de Madrid por Ávila y Medina del Campo, que sigue hacia Venta de Baños y Burgos."
     }
   ],
   "attribute_sections": [

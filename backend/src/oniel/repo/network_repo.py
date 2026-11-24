@@ -305,6 +305,8 @@ async def _load_connections(
                 node_id=r["node_id"],
                 name=r["name"],
                 towards=r["towards"],
+                to_node_id=r["to_node_id"],
+                towards_back=r["towards_back"],
                 status=r["status"],
                 line_id=r["line_id"],
             ),
@@ -561,7 +563,11 @@ async def fetch_line_detail(
                 for s, g in segments
             ]
         ),
-        connections=[c for c, _ in await fetch_connections(conn) if c.node_id in node_ids],
+        connections=[
+            c
+            for c, _ in await fetch_connections(conn)
+            if c.node_id in node_ids or c.to_node_id in node_ids
+        ],
         annotations=await fetch_annotations(conn, line_id=line_id),
         date=day,
         # Todos los tramos de la línea, también el que no lleva ningún tren ese día: figura con 0.

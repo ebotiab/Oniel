@@ -298,8 +298,10 @@ async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> N
         )
         await conn.execute(
             """
-            INSERT INTO connections (id, node_id, name, towards, status, line_id, geometry, declared_by)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+            INSERT INTO connections
+              (id, node_id, name, towards, status, line_id, geometry, declared_by,
+               to_node_id, towards_back)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
             """,
             c.id,
             c.node_id,
@@ -309,6 +311,8 @@ async def _replace_connections(conn: asyncpg.Connection, net: BuiltNetwork) -> N
             None,
             geometry,
             line_id,
+            c.to_node_id,
+            c.towards_back,
         )
 
 

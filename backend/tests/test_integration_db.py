@@ -795,6 +795,21 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     connections = {c["id"]: c["node_id"] for c in data["connections"]}
     assert "conv-manzanares-ciudad-real" not in connections
     assert connections["conv-ciudad-real-badajoz"] == "ciudad-real"
+    # esa conexión llega a Mérida, que también está cargada: lleva sus dos extremos, dice adónde
+    # lleva desde cada uno y su trazo acaba en la estación de Mérida
+    (to_merida,) = [c for c in data["connections"] if c["id"] == "conv-ciudad-real-badajoz"]
+    assert to_merida["to_node_id"] == "merida"
+    assert to_merida["towards"].endswith("y Mérida")
+    assert to_merida["towards_back"].endswith("y Ciudad Real")
+    (drawn,) = [
+        f for f in data["connection_features"]["features"] if f["id"] == "conv-ciudad-real-badajoz"
+    ]
+    merida = next(n for n in data["nodes"] if n["id"] == "merida")
+    assert drawn["geometry"]["coordinates"][-1] == pytest.approx(
+        [merida["lon"], merida["lat"]], abs=1e-4
+    )
+    one_end = [c for c in data["connections"] if c["to_node_id"] is None]
+    assert one_end and all(c["towards_back"] is None for c in one_end)
     # Córdoba y Atocha están en las dos líneas: una fila por línea, un solo punto en el mapa
     cordoba = [n for n in data["nodes"] if n["id"] == "cordoba"]
     assert sorted(n["line_id"] for n in cordoba) == [
@@ -2664,7 +2679,9 @@ async def test_lines_endpoints_serve_the_network_in_parts(client: httpx.AsyncCli
         assert detail["network_max_count"] == max(counts["counts"].values())
         node_ids = {n["id"] for n in detail["nodes"]}
         assert detail["connections"] == [
-            c for c in network["connections"] if c["node_id"] in node_ids
+            c
+            for c in network["connections"]
+            if c["node_id"] in node_ids or c["to_node_id"] in node_ids
         ]
         assert detail["interruptions"] == [
             i for i in network["interruptions"] if i["line_id"] == line["id"]

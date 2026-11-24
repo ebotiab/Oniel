@@ -128,6 +128,9 @@ export interface ConnectionOut {
   node_id: string
   name: string
   towards: string
+  /** El otro nodo cargado al que llega, si llega a alguno, y adónde lleva vista desde él. Una API anterior no los trae. */
+  to_node_id?: string | null
+  towards_back?: string | null
   status: 'no_cargada' | 'disponible'
   line_id: string | null
 }
