@@ -313,9 +313,9 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 677 + 120  # la de Monforte del Cid a Murcia
     passes += 4223 + 2107  # la de Valencia a Camp de Tarragona
     passes += 3409  # la de Madrid a Valladolid, todos estimados
-    passes += 2154  # la de Valladolid a León, todos estimados
+    passes += 2142  # la de Valladolid a León, todos estimados
     passes += 2130  # la de Olmedo a Ourense, todos estimados
-    passes += 514  # la de Venta de Baños a Burgos, todos estimados
+    passes += 490  # la de Venta de Baños a Burgos, todos estimados
     passes += 1311 + 125  # la de León a Gijón
     passes += 715 + 209  # la de Burgos a Vitoria
     passes += 854  # la de Ourense a Santiago, sin estaciones intermedias: todos estimados

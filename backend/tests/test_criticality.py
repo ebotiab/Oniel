@@ -426,10 +426,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # y los ocho de la línea de Valladolid a León, la única cargada al norte de Valladolid
     # y los trece de la de Olmedo a Ourense, el único camino cargado a Zamora y a Galicia
     # y los cuatro de la de Venta de Baños a Burgos, el único camino cargado a Burgos
-    # la de Burgos, entera: los 20 que dejan la línea de León en Venta de Baños y, desde Soto de
-    # Cerrato, 22 con los 2 que llegan de Palencia por el ramal
+    # la de Burgos, entera: los 18 que dejan la línea de León en Venta de Baños y, desde Soto de
+    # Cerrato, 20 con los 2 que llegan de Palencia por el ramal
     burgos = {k: n for k, n in none.items() if k.startswith(f"{LAV_BURGOS}:")}
-    assert len(burgos) == 4 and sorted(set(burgos.values())) == [20, 22]
+    assert len(burgos) == 4 and sorted(set(burgos.values())) == [18, 20]
     # y los once de la de León a Gijón, la única cargada al norte de León, y los siete de la de
     # Burgos a Vitoria, el único camino cargado a Miranda de Ebro y a Vitoria
     # y los dieciséis de la de Sevilla a Cádiz, el único camino cargado a Jerez y a Cádiz
@@ -797,13 +797,13 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         (111, 30),
         (81, 0),
     ]
-    # y la de Valladolid a León, que la continúa: 53 trenes hasta la bifurcación Venta de Baños,
-    # donde salen los 20 de Burgos; 35 de la bifurcación Cerrato a Palencia, con los 2 que llegan
+    # y la de Valladolid a León, que la continúa: 51 trenes hasta la bifurcación Venta de Baños,
+    # donde salen los 18 de Burgos; 35 de la bifurcación Cerrato a Palencia, con los 2 que llegan
     # de Burgos, y 26 de Palencia a León
     leon = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_LEON}:")]
     assert [(s.trains, s.without_alternative) for s in leon] == [
-        (53, 53),
-        (53, 53),
+        (51, 51),
+        (51, 51),
         (33, 33),
         (35, 35),
         (26, 26),
