@@ -10,6 +10,7 @@ import { StripDiagram } from './StripDiagram'
 import { Termino } from './Termino'
 
 interface Props {
+  notice?: ReactNode
   network: NetworkOut
   coverage: CoverageOut | null
   counts: Record<string, number> | null
@@ -30,7 +31,7 @@ interface Props {
   leyenda?: ReactNode
 }
 
-export function LineOverview({ network, coverage, counts, countsMax, lineId, onShowNetwork, selection, hoverId, closedSegmentId, annotations, onSelect, onHover, compact, leyenda = null }: Props) {
+export function LineOverview({ notice, network, coverage, counts, countsMax, lineId, onShowNetwork, selection, hoverId, closedSegmentId, annotations, onSelect, onHover, compact, leyenda = null }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -73,6 +74,7 @@ export function LineOverview({ network, coverage, counts, countsMax, lineId, onS
             {entrada}
           </p>
         )}
+        {notice}
         <Plegable>
           {parrafos.map((p) => (
             <p key={p} className="texto">

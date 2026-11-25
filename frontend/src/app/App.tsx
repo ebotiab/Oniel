@@ -87,6 +87,7 @@ export default function App() {
   const [near, setNear] = useState<readonly string[]>([])
   const requested = useRef(new Set<string>())
   const [coverage, setCoverage] = useState<CoverageOut | null>(null)
+  const [coverageError, setCoverageError] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [highlight, setHighlight] = useState<Trazo | null>(null)
   // Trazo que la leyenda pide encuadrar en el mapa al fijarlo.
@@ -109,20 +110,31 @@ export default function App() {
   useEffect(() => {
     let cancelled = false
     let fromApi = false
+    let coverageFromApi = false
     let staticFailed = false
     const fail = () => setLoadError('No se ha podido cargar la red. Comprueba la conexión o el servidor de Oniel.')
-    const load = async (source: DataMode) => {
-      const [index, cov] = await Promise.all([fetchIndex(source), fetchCoverage(source)])
-      return { index, cov, source }
-    }
-    const apply = (d: Awaited<ReturnType<typeof load>>) => {
-      setLoaded({ index: d.index, source: d.source })
-      setCoverage(d.cov)
+    const apply = (index: NetworkIndexOut, source: DataMode) => {
+      setLoaded({ index, source })
       setLoadError(null)
     }
-    load('estatico')
-      .then((d) => {
-        if (!cancelled && !fromApi) apply(d)
+    // La cobertura complementa las fichas; nunca bloquea el índice ni su error.
+    // Cada recurso conserva por separado la prioridad de la API frente a una instantánea tardía.
+    const loadCoverage = (source: DataMode) => {
+      void fetchCoverage(source)
+        .then((cov) => {
+          if (cancelled || (source === 'estatico' && coverageFromApi)) return
+          if (source === 'api') coverageFromApi = true
+          setCoverage(cov)
+          setCoverageError(false)
+        })
+        .catch(() => {
+          if (!cancelled && source === 'estatico' && !coverageFromApi) setCoverageError(true)
+        })
+    }
+    loadCoverage('estatico')
+    fetchIndex('estatico')
+      .then((index) => {
+        if (!cancelled && !fromApi) apply(index, 'estatico')
       })
       .catch(() => {
         staticFailed = true
@@ -131,11 +143,12 @@ export default function App() {
     const onStatus = (s: ApiStatus) => {
       if (cancelled) return
       if (s === 'disponible') {
-        load('api')
-          .then((d) => {
+        loadCoverage('api')
+        fetchIndex('api')
+          .then((index) => {
             if (cancelled) return
             fromApi = true
-            apply(d)
+            apply(index, 'api')
           })
           .catch(() => {
             if (!cancelled && staticFailed) fail()
@@ -344,6 +357,12 @@ export default function App() {
     mobile && network ? (
       <LeyendaTrazos lines={network.lines} singleTrack={network.segments.some((s) => s.tracks === 1)} highlight={highlight} onHighlight={setHighlight} onPin={pinTrazo} />
     ) : null
+  const coverageNotice = !coverage ? (
+    <p className={coverageError ? 'aviso' : 'suave'} role="status" data-testid="estado-cobertura">
+      {coverageError ? 'No se han podido cargar la cobertura y las fuentes.' : 'Cargando la cobertura y las fuentes…'}{' '}
+      Faltan las fuentes, la información de los operadores y la vigencia de los horarios. Puedes seguir explorando la red y sus fichas.
+    </p>
+  ) : null
   // La lista de líneas solo existe en la vista de la red: fuera de ella no queda nada resaltado.
   const enVistaRed = Boolean(network) && !comparador && !segment && !node && !annotation && !lineId
   let panel: React.ReactNode = null
@@ -398,6 +417,7 @@ export default function App() {
     panel = (
       <SegmentDetail
         key={`${segment.id}@${referenceDate}`}
+        notice={coverageNotice}
         segment={segment}
         network={network}
         sources={coverage?.sources ?? []}
@@ -415,6 +435,7 @@ export default function App() {
       <NodeDetail
         key={`${node.id}@${referenceDate}`}
         node={node}
+        notice={coverageNotice}
         network={network}
         sources={coverage?.sources ?? []}
         operators={coverage?.operators ?? []}
@@ -430,10 +451,11 @@ export default function App() {
   else if (annotation)
     panel = <AnnotationDetail key={annotation.id} annotation={annotation} onSelectSegment={(id) => select({ type: 'tramo', id })} onBack={() => showLine(null)} />
   else if (!lineId)
-    panel = <NetworkOverview network={network} coverage={coverage} annotations={annotations} onPickLine={showLine} onHighlightLines={setLineasResaltadas} />
+    panel = <NetworkOverview network={network} coverage={coverage} notice={coverageNotice} annotations={annotations} onPickLine={showLine} onHighlightLines={setLineasResaltadas} />
   else
     panel = (
       <LineOverview
+        notice={coverageNotice}
         network={network}
         coverage={coverage}
         counts={lineDetail?.counts ?? null}
@@ -576,6 +598,7 @@ export default function App() {
           </button>
         )}
         <div className="panel-contenido">
+          {network && !loadError && (comparador || route.sinOtroCamino || route.simulacion || annotation) && coverageNotice}
           {panel}
           {pie}
         </div>
@@ -594,6 +617,14 @@ export default function App() {
       )}
       {route.guia && <GuidePage position={guidePosition} />}
       {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} />}
+      {showCoverage && !route.glosario && (!coverage || !network) && (
+        <div className="pagina" data-testid="pagina-cobertura">
+          <main className="pagina-columna cobertura" aria-labelledby="cob-titulo">
+            <h1 id="cob-titulo" className="pagina-titulo">Cobertura y fuentes</h1>
+            {loadError ? <p className="aviso">{loadError}</p> : coverageNotice ?? <p className="suave">Cargando la red…</p>}
+          </main>
+        </div>
+      )}
       {showCoverage && !route.glosario && coverage && network && (
         <CoveragePage
           today={today}
