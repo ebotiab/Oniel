@@ -119,7 +119,7 @@
         "lat": 42.0157277
       },
       "reference_pk_km": 230.627,
-      "description": "La estación de Palencia, la única intermedia de la línea. La comparten la alta velocidad y las líneas convencionales. Aquí dejan la alta velocidad los trenes de Santander: poco antes de la estación cambian de ancho de vía y siguen por la línea convencional de Palencia a Santander."
+      "description": "La estación de Palencia, entre Valladolid y León. La comparten la alta velocidad y las líneas convencionales. Aquí dejan la alta velocidad los trenes de Santander: poco antes de la estación cambian de ancho de vía y siguen por la línea convencional de Palencia a Santander."
     },
     {
       "id": "bif-las-barreras",
@@ -223,13 +223,40 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-14",
       "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-las-pajareras",
+      "to_node": "bif-cerrato",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-las-barreras",
+      "to_node": "bif-las-arenas",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-vilecha",
+      "to_node": "leon",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "conv-leon-galicia",
       "node_id": "leon",
-      "name": "Línea convencional León–A Coruña",
+      "name": "Línea convencional León – A Coruña",
       "towards": "Astorga, Ponferrada y Galicia",
       "status": "no_cargada",
       "sketch": [
@@ -726,7 +753,7 @@
     }
   },
   "corridor_filter": {
-    "description": "Se importan los viajes del GTFS que paran en dos de las tres estaciones de la línea (Valladolid, Palencia y León) y en ninguna estación intermedia de las líneas convencionales que van a su lado: entre dos de ellas, sin paradas, solo se va por la alta velocidad. Entran además los que van de Valladolid a Burgos sin paradas, que recorren la línea hasta la bifurcación Venta de Baños. Quedan fuera los que paran en Zaragoza: son los Intercity de Zaragoza a Valladolid y Salamanca, que van por la línea convencional; los Alvia de Barcelona a León y Galicia, que también paran en Zaragoza, entran por una regla de recorrido.",
+    "description": "Se importan los viajes del GTFS que paran en dos de las tres estaciones de la línea (Valladolid, Palencia y León) y en ninguna estación intermedia de las líneas convencionales que van a su lado: entre dos de ellas, sin paradas, solo se va por la alta velocidad. Entran además los que van de Valladolid a Burgos sin paradas, que recorren la línea hasta la bifurcación Venta de Baños. Quedan fuera los que tardan una hora o más de Valladolid a Burgos, que van por la línea convencional (por la alta velocidad se tarda de 36 a 47 minutos): los regionales de Valladolid a Burgos y Miranda de Ebro y los Intercity de Zaragoza a Valladolid y Salamanca, que además paran en Zaragoza; los Alvia de Barcelona a León y Galicia, que también paran en Zaragoza, entran por una regla de recorrido.",
     "min_node_stops": 2,
     "exclude_stop_ids": [
       "10610",
@@ -752,6 +779,15 @@
         "10600",
         "11014"
       ]
+    ],
+    "slow_runs": [
+      {
+        "stop_ids": [
+          "10600",
+          "11014"
+        ],
+        "min_minutes": 60
+      }
     ]
   },
   "route_overrides": [
@@ -769,10 +805,16 @@
           "exits": [
             "bif-cerrato"
           ],
-          "via": {
-            "line": "lav-venta-de-banos-burgos",
-            "node": "bif-soto-de-cerrato"
-          }
+          "via": [
+            {
+              "line": "enlace-soto-de-cerrato",
+              "node": "bif-cerrato"
+            },
+            {
+              "line": "lav-venta-de-banos-burgos",
+              "node": "bif-soto-de-cerrato"
+            }
+          ]
         }
       }
     },

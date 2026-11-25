@@ -4,6 +4,7 @@ hacia el norte de la de Madrid a Valladolid, con la bifurcación de la que sale 
 from __future__ import annotations
 
 from collections import Counter
+from itertools import pairwise
 
 import pytest
 from conftest import (
@@ -221,7 +222,9 @@ def test_single_and_double_track_alternate(line: BuiltNetwork) -> None:
     assert single == pytest.approx(85.174, abs=0.5)
     for section in line.spec.attribute_sections:
         if section.attribute == "tracks":
-            assert section.value == 1 and section.source_id == WIKIPEDIA
+            assert section.source_id == (
+                WIKIPEDIA if section.value == 1 else "adif-declaracion-red-2026-mapas"
+            )
     # las vías de OSM traen la velocidad en todos los tramos: ninguno queda sin ella
     assert [s.max_speed_kmh for s in line.segments] == [200, 300, 190, 150, 300, 300, 300, 300]
     assert sum(s.length_km for s in line.segments) == pytest.approx(
@@ -259,22 +262,32 @@ def test_sources_and_operators_are_registered(spec: NetworkSpec) -> None:
     assert spec.line.zone == "castilla-y-leon"
 
 
+def _minutes(trip: GtfsTrip, a: str, b: str) -> int:
+    """Minutos entre dos paradas seguidas del viaje, en el sentido en que las recorra."""
+    for x, y in pairwise(trip.stop_times):
+        if {x.stop_id, y.stop_id} == {a, b}:
+            return (y.arrival_s - x.departure_s) // 60
+    raise AssertionError(f"{trip.train_number} no lleva seguidas {a} y {b}")
+
+
 def test_the_filter_takes_the_high_speed_trains_and_leaves_the_conventional_ones(
     feed: GtfsFeed, ouigo_feed: GtfsFeed, spec: NetworkSpec
 ) -> None:
-    """Entran 387 viajes de Renfe y ninguno de Ouigo. Las tres estaciones son también de las
+    """Entran 381 viajes de Renfe y ninguno de Ouigo. Las tres estaciones son también de las
     líneas convencionales: el filtro deja fuera a los trenes que paran en alguna estación
     intermedia de esas líneas."""
     assert set(spec.corridor_filter.exclude_stop_ids) == CONVENTIONAL | {"04040"}
     assert spec.corridor_filter.min_node_stops == 2
     assert spec.corridor_filter.consecutive_stop_ids == [[VALLADOLID, BURGOS]]
+    (slow,) = spec.corridor_filter.slow_runs
+    assert (set(slow.stop_ids), slow.min_minutes) == ({VALLADOLID, BURGOS}, 60)
     trips = select_trips_for_spec(feed, spec)
-    assert len(trips) == 387
+    assert len(trips) == 381
     assert Counter(t.product for t in trips) == {
-        "ALVIA": 116,
+        "Alvia": 116,
         "AVE": 114,
         "Intercity": 75,
-        "MD": 66,
+        "Media Distancia": 60,
         "AVLO": 16,
     }
     selected = {t.trip_id for t in trips}
@@ -295,12 +308,24 @@ def test_the_filter_takes_the_high_speed_trains_and_leaves_the_conventional_ones
         if len(nodes & set(_stops(t))) >= 2 and t.trip_id not in selected
     ]
     assert left_out and all(set(_stops(t)) & CONVENTIONAL for t in left_out)
-    assert {t.product for t in left_out} == {"MD", "PROXIMDAD", "REG.EXP.", "REGIONAL"}
-    # de Valladolid a Burgos sin paradas quedan fuera los que paran en Zaragoza: los Intercity
-    # de Zaragoza a Valladolid y Salamanca, que van por la línea convencional
+    assert {t.product for t in left_out} == {
+        "Media Distancia",
+        "Proximidad",
+        "Regional Exprés",
+        "Regional",
+    }
+    # de Valladolid a Burgos sin paradas quedan fuera los que tardan lo que se tarda por la
+    # línea convencional, 67 o 72 minutos: los Intercity de Zaragoza a Valladolid y Salamanca,
+    # que además paran en Zaragoza, y los regionales de Valladolid a Burgos y Miranda de Ebro.
+    # Los que entran tardan de 36 a 47
     burgos = [t for t in feed.trips.values() if (VALLADOLID, BURGOS) in _pairs(t)]
     out = [t for t in burgos if t.trip_id not in selected]
-    assert out and all("04040" in _stops(t) and t.product == "Intercity" for t in out)
+    assert Counter(t.product for t in out) == {"Intercity": 6, "Media Distancia": 6}
+    assert {_minutes(t, VALLADOLID, BURGOS) for t in out} == {67, 72}
+    assert all("04040" in _stops(t) for t in out if t.product == "Intercity")
+    assert {t.train_number for t in out if t.product == "Media Distancia"} == {"37631", "37632"}
+    took = {_minutes(t, VALLADOLID, BURGOS) for t in burgos if t.trip_id in selected}
+    assert (min(took), max(took)) == (36, 47)
     assert select_trips_for_spec(ouigo_feed, spec) == []
 
 
@@ -374,5 +399,6 @@ def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> Non
     assert rule.from_stop_id == BURGOS
     assert rule.stop_mappings[BURGOS].exits == ["bif-cerrato"]
     assert [(v.line, v.node) for v in rule.stop_mappings[BURGOS].via] == [
-        ("lav-venta-de-banos-burgos", "bif-soto-de-cerrato")
+        ("enlace-soto-de-cerrato", "bif-cerrato"),
+        ("lav-venta-de-banos-burgos", "bif-soto-de-cerrato"),
     ]

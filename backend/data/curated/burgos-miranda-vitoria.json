@@ -13,7 +13,7 @@
     "tracks": 2,
     "pk_origin_km": 374.9,
     "status": "disponible",
-    "description": "Une Burgos con Vitoria por Miranda de Ebro. Es el camino de los trenes de Madrid al País Vasco mientras no esté la alta velocidad entre Burgos y Vitoria.\n\nEs un trecho de la línea de Madrid a Hendaya, abierta en 1862. Por ella van los Alvia de Madrid a Vitoria, San Sebastián e Irún, a Bilbao y a Logroño, que llegan a Burgos por la alta velocidad y cambian allí de ancho de vía; los Alvia e Intercity que unen Barcelona, Zaragoza y Pamplona con Burgos, León, Galicia y Salamanca, y los trenes de media distancia y regionales de Madrid-Príncipe Pío a Vitoria, San Sebastián e Irún por Ávila y Valladolid. En Briviesca y Pancorbo solo paran algunos de estos últimos.\n\nSale de Burgos hacia el noreste, cruza el desfiladero de Pancorbo y llega a Miranda de Ebro, donde se cruza con la línea de Casetas (Zaragoza) a Bilbao por Logroño: por el norte sale la línea de Bilbao, y por el sureste la rama de Haro, Logroño y Zaragoza. De Miranda a Vitoria la acompaña el río Zadorra, y entre las dos ciudades circulan además los trenes regionales que siguen a Altsasu y Pamplona.\n\nEn Vitoria la línea sigue hacia Altsasu, San Sebastián e Irún, y en Altsasu sale la de Pamplona: esos trechos, como la rama de Miranda a Logroño, no están cargados y se dibujan a trazos.",
+    "description": "Une Burgos con Vitoria por Miranda de Ebro. Es el camino de los trenes de Madrid al País Vasco mientras no esté la alta velocidad entre Burgos y Vitoria.\n\nEs un trecho de la línea de Madrid a Hendaya, abierta en 1862. Por ella van los Intercity de Madrid a Vitoria, San Sebastián e Irún, a Bilbao y a Logroño, que llegan a Burgos por la alta velocidad y cambian allí de ancho de vía; los que unen Barcelona, Zaragoza y Pamplona con Burgos, León, Galicia y Salamanca, y los regionales de Madrid-Príncipe Pío a Vitoria, San Sebastián e Irún por Ávila y Valladolid. En Briviesca y Pancorbo solo paran algunos de estos últimos.\n\nSale de Burgos hacia el noreste, cruza el desfiladero de Pancorbo y llega a Miranda de Ebro, donde se cruza con la línea de Casetas (Zaragoza) a Bilbao por Logroño: por el norte sale la línea de Bilbao, y por el sureste la rama de Haro, Logroño y Zaragoza. De Miranda a Vitoria la acompaña el río Zadorra, y entre las dos ciudades circulan además los trenes regionales que siguen a Altsasu y Pamplona.\n\nEn Vitoria la línea sigue hacia Altsasu, San Sebastián e Irún, y en Altsasu sale la de Pamplona: esos trechos, como la rama de Miranda a Logroño, no están cargados y se dibujan a trazos.",
     "geometry_source": {
       "source_id": "osm-relation-18347132",
       "parts": [
@@ -95,7 +95,7 @@
         "lat": 42.6907987
       },
       "reference_pk_km": 458.913,
-      "description": "Nudo ferroviario donde la línea de Madrid a Hendaya se cruza con la de Casetas a Bilbao por Logroño. De aquí sale hacia el norte la línea de Bilbao, por Orduña y Llodio, y hacia el sureste la rama de Haro, Logroño y Zaragoza, que no está cargada."
+      "description": "Nudo ferroviario donde se cruzan dos caminos: el de Madrid y Burgos a Vitoria y la frontera, y el de Zaragoza y Logroño a Bilbao. De aquí sale hacia el norte la línea de Bilbao, por Orduña y Llodio, y hacia el sureste la de Haro y Logroño, que no está cargada."
     },
     {
       "id": "manzanos",
@@ -173,14 +173,35 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-17",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "vitoria-gasteiz",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "briviesca",
+      "value": 160,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Mapa 3, página 7: 160 km/h entre Burgos y Miranda. Los 200 de la variante son de diseño según wikipedia-linea-100; OSM los trae como maxspeed. Se conserva la predominante de OSM de 155."
     }
   ],
   "connections": [
     {
       "id": "conv-miranda-logrono",
       "node_id": "miranda-de-ebro",
-      "name": "Línea Casetas – Bilbao",
-      "towards": "Haro y Logroño, donde empieza la línea cargada hacia Castejón y Zaragoza",
+      "name": "Línea convencional Miranda de Ebro – Logroño",
+      "towards": "Haro y Logroño",
+      "to_node_id": "logrono",
+      "towards_back": "Haro y Miranda de Ebro",
+      "official_name": "Línea Casetas – Bilbao",
       "status": "no_cargada",
       "sketch": [
         [
@@ -200,8 +221,9 @@
     {
       "id": "conv-vitoria-altsasu",
       "node_id": "vitoria-gasteiz",
-      "name": "Línea Madrid – Hendaya",
+      "name": "Línea convencional Vitoria – Altsasu",
       "towards": "Altsasu, San Sebastián e Irún, y Pamplona",
+      "official_name": "Línea Madrid – Hendaya",
       "status": "no_cargada",
       "sketch": [
         [

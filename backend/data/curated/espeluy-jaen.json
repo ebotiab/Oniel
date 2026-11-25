@@ -14,7 +14,7 @@
     "opened_on": "1881-07-06",
     "reference_length_km": 32.8,
     "status": "disponible",
-    "description": "Un ramal de vía única que sale de la línea de Madrid a Córdoba junto a Espelúy y termina en Jaén.\n\nUn ramal es una línea corta que se separa de otra principal y acaba en una estación de la que no sigue ninguna vía: para ir en tren de Jaén a cualquier otro sitio hay que volver primero a la línea principal. Jaén no siempre fue final de línea: el ferrocarril llegó en 1881 como parte de una línea de Linares a Puente Genil, y en 1984 se cerró la continuación desde Jaén. Lo que queda en servicio es, para Adif, la línea 402.\n\nLas vías se separan de la línea principal unos 800 metros al este de la estación de Espelúy, del lado de Linares-Baeza. Desde los años setenta los trenes de Madrid entran así al ramal sin pasar por esa estación ni cambiar de sentido en ella. Oniel dibuja la línea desde la estación de Espelúy, que es donde enlaza con la red cargada.\n\nEn los horarios de Renfe solo llegan a Jaén trenes de Media Distancia: los de Madrid, por Alcázar de San Juan y Linares-Baeza, y los de Córdoba, Sevilla y Cádiz. No tiene trenes de larga distancia ni de alta velocidad. El Ministerio de Transportes estudia un enlace entre la alta velocidad Madrid – Sevilla y la línea de Córdoba a Jaén, que figura entre los proyectos.",
+    "description": "Un ramal de vía única que sale de la línea de Madrid a Córdoba junto a Espelúy y termina en Jaén.\n\nUn ramal es una línea corta que se separa de otra principal y acaba en una estación de la que no sigue ninguna vía: para ir en tren de Jaén a cualquier otro sitio hay que volver primero a la línea principal. Jaén no siempre fue final de línea: el ferrocarril llegó en 1881 como parte de una línea de Linares a Puente Genil, y en 1984 se cerró la continuación desde Jaén. Lo que queda en servicio es, para Adif, la línea 402.\n\nLas vías se separan de la línea principal unos 800 metros al este de la estación de Espelúy, del lado de Linares-Baeza. Desde los años setenta los trenes de Madrid entran así al ramal sin pasar por esa estación ni cambiar de sentido en ella. Oniel dibuja la línea desde la estación de Espelúy, que es donde enlaza con la red cargada.\n\nEn los horarios de Renfe solo llegan a Jaén trenes regionales: los de Madrid, por Alcázar de San Juan y Linares-Baeza, y los de Córdoba, Sevilla y Cádiz. No tiene trenes de larga distancia ni de alta velocidad. El Ministerio de Transportes estudia un enlace entre la alta velocidad Madrid – Sevilla y la línea de Córdoba a Jaén, que figura entre los proyectos.",
     "geometry_source": {
       "source_id": "osm-relation-11351146",
       "parts": [
@@ -43,9 +43,9 @@
   "nodes": [
     {"id": "espeluy", "name": "Espelúy", "kind": "estacion", "adif_code": "50400", "shared": true, "position": {"lon": -3.83216, "lat": 38.010259}},
     {"id": "mengibar-artichuela", "name": "Mengíbar-Artichuela", "kind": "estacion", "adif_code": "03001", "position": {"lon": -3.8015495, "lat": 37.9778822},
-     "description": "Apeadero con trenes de Media Distancia, en un polígono industrial de Mengíbar. Sus vías sirven también para cargar mercancías."},
+     "description": "Apeadero con trenes regionales, en un polígono industrial de Mengíbar. Sus vías sirven también para cargar mercancías."},
     {"id": "jaen", "name": "Jaén", "kind": "estacion", "adif_code": "03100", "position": {"lon": -3.790798, "lat": 37.779827},
-     "description": "Estación término: las vías acaban aquí desde que en 1984 se cerró la línea que seguía hacia Puente Genil. En los horarios de Renfe solo tiene trenes de Media Distancia."}
+     "description": "Estación término: las vías acaban aquí desde que en 1984 se cerró la línea que seguía hacia Puente Genil. En los horarios de Renfe solo tiene trenes regionales."}
   ],
   "attribute_sections": [
     {"attribute": "tracks", "from_node": "espeluy", "to_node": "jaen", "value": 1, "source_id": "wikipedia-linea-402", "checked_on": "2026-11-12", "note": "Vía única en toda la línea, según Wikipedia; las vías de OSM dicen passenger_lines=1. El primer kilómetro, hasta la aguja del km 340,1, es de la línea 400, también de vía única ahí."},
@@ -75,7 +75,7 @@
     "50407": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
     "50417": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
     "50500": {"exits": ["espeluy"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}},
-    "17000": {"exits": ["espeluy"]},
+    "17000": {"exits": ["espeluy"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "espeluy"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "50504": {"exits": ["espeluy"]},
     "50506": {"exits": ["espeluy"]},
     "50507": {"exits": ["espeluy"]},

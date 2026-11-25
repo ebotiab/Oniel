@@ -233,9 +233,9 @@ def test_the_filter_takes_the_trains_of_the_line_and_leaves_the_conventional_one
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 761
     assert Counter(t.product for t in trips) == {
-        "AVANT": 232,
+        "Avant": 232,
         "AVE": 220,
-        "ALVIA": 168,
+        "Alvia": 168,
         "Intercity": 75,
         "AVLO": 66,
     }
@@ -253,10 +253,10 @@ def test_the_filter_takes_the_trains_of_the_line_and_leaves_the_conventional_one
     assert len(left_out) == 451
     assert all(CHAMARTIN not in _stops(t) for t in left_out)
     assert {t.product for t in left_out} == {
-        "MD",
-        "PROXIMDAD",
-        "REG.EXP.",
-        "REGIONAL",
+        "Media Distancia",
+        "Proximidad",
+        "Regional Exprés",
+        "Regional",
         "Intercity",
     }
     assert len(select_trips_for_spec(ouigo_feed, spec)) == 8

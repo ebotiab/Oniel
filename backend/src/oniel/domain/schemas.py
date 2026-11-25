@@ -123,6 +123,10 @@ class ConnectionOut(BaseModel):
     node_id: str
     name: str
     towards: str
+    #: El otro nodo cargado al que llega la conexión, si llega a alguno, y adónde lleva vista
+    #: desde él.
+    to_node_id: str | None = None
+    towards_back: str | None = None
     status: Literal["no_cargada", "disponible"]
     line_id: str | None = None
 
@@ -266,6 +270,10 @@ class NetworkIndexOut(WithAnnotations):
     connection_features: FeatureCollection
     #: Tolerancia con la que se ha simplificado la geometría de los tramos, en metros.
     simplify_tolerance_m: float
+    #: Por cada nodo que no es estación, el lado (0 o 1) por el que sale cada uno de sus tramos:
+    #: dos del mismo lado no se pueden encadenar allí. Se calcula con la geometría completa
+    #: (``oniel.routing.turns``) y viaja aquí para que el visor no tenga que medir ángulos.
+    turns: dict[str, dict[str, int]] = Field(default_factory=dict)
 
 
 class LineDetailOut(WithAnnotations):
@@ -459,6 +467,7 @@ class ClosureResultItem(BaseModel):
     direction_label: str
     explanation: str
     from_previous_day: bool = False
+    from_next_day: bool = False
 
 
 class ClosureAlternative(BaseModel):

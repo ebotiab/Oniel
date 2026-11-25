@@ -57,7 +57,7 @@ test.describe('La línea de alta velocidad Madrid – Cuenca – Valencia', () =
     // destinos directos del día de referencia: Valencia por Cuenca, y Albacete y Alicante
     await expect(ficha).toContainText('València-Joaquín Sorolla')
     await expect(ficha).toContainText('Cuenca-Fernando Zóbel')
-    await expect(ficha).toContainText('Alicante-Terminal')
+    await expect(ficha).toContainText('Alicante/Alacant-Terminal')
   })
 
   test('el paso bajo Atocha es un punto de la línea sin parada, y el túnel tiene su tramo', async ({ page }) => {

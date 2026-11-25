@@ -19,7 +19,7 @@
       }
     ],
     "status": "disponible",
-    "description": "El camino de siempre de Madrid a Extremadura: sale de Madrid por Leganés y Fuenlabrada y sigue por Talavera de la Reina y Navalmoral de la Mata hasta las puertas de Plasencia.\n\nCasi toda es de vía única y sin electrificar. Solo los primeros kilómetros, hasta Humanes, que comparte con los trenes de Cercanías de Madrid, tienen dos vías y catenaria.\n\nPara Adif son dos líneas: hasta Monfragüe, la 500, la de Madrid a Cáceres, abierta en 1881; y de Monfragüe a la bifurcación San Esteban, la 530, el ramal de Plasencia. Termina donde empieza la línea de alta velocidad de Plasencia a Badajoz, a 7 km de la estación de Plasencia.\n\nLa recorren los Alvia y los Media Distancia de Madrid a Cáceres, Mérida, Badajoz y Sevilla, los regionales de Madrid a Talavera de la Reina y los trenes de Proximidad de Madrid a Illescas. De los que siguen a Extremadura, unos entran en Plasencia y otros pasan a la línea nueva por un enlace que sale de la bifurcación El Chaparral, sin entrar en la ciudad.",
+    "description": "El camino de siempre de Madrid a Extremadura: sale de Madrid por Leganés y Fuenlabrada y sigue por Talavera de la Reina y Navalmoral de la Mata hasta las puertas de Plasencia.\n\nCasi toda es de vía única y sin electrificar. Solo los primeros kilómetros, hasta Humanes, que comparte con los trenes de Cercanías de Madrid, tienen dos vías y catenaria.\n\nPara Adif son dos líneas: hasta Monfragüe, la 500, la de Madrid a Cáceres, abierta en 1881; y de Monfragüe a la bifurcación San Esteban, la 530, el ramal de Plasencia. Termina donde empieza la línea de alta velocidad de Plasencia a Badajoz, a 7 km de la estación de Plasencia.\n\nLa recorren los Intercity y los regionales de Madrid a Cáceres, Mérida, Badajoz y Sevilla y los regionales de Madrid a Talavera de la Reina y a Illescas. De los que siguen a Extremadura, unos entran en Plasencia y otros pasan a la línea nueva por un enlace que sale de la bifurcación El Chaparral, sin entrar en la ciudad.",
     "geometry_source": {
       "source_id": "osm-relation-11717892",
       "parts": [
@@ -100,7 +100,7 @@
     {"id": "bif-planetario", "name": "Bifurcación Planetario", "kind": "bifurcacion", "shared": true, "position": {"lon": -3.677554, "lat": 40.385577}, "reference_pk_km": 3.7},
     {"id": "leganes", "name": "Leganés", "kind": "estacion", "adif_code": "35001", "position": {"lon": -3.7713161, "lat": 40.328643}, "description": "Estación de Cercanías de Madrid en la que paran también los trenes de Extremadura."},
     {"id": "fuenlabrada", "name": "Fuenlabrada", "kind": "estacion", "adif_code": "35002", "rank": "secundario", "position": {"lon": -3.7994429, "lat": 40.2833784}, "reference_pk_km": 18.8},
-    {"id": "humanes", "name": "Humanes", "kind": "estacion", "adif_code": "35012", "rank": "secundario", "position": {"lon": -3.8287055, "lat": 40.2558101}, "reference_pk_km": 22.8, "description": "Final de la línea C-5 de Cercanías de Madrid. Hasta aquí la línea tiene dos vías y catenaria; desde aquí hasta Extremadura es de vía única y sin electrificar. Paran en ella algunos trenes de Proximidad de Madrid a Illescas."},
+    {"id": "humanes", "name": "Humanes", "kind": "estacion", "adif_code": "35012", "rank": "secundario", "position": {"lon": -3.8287055, "lat": 40.2558101}, "reference_pk_km": 22.8, "description": "Final de la línea C-5 de Cercanías de Madrid. Hasta aquí la línea tiene dos vías y catenaria; desde aquí hasta Extremadura es de vía única y sin electrificar. Paran en ella algunos regionales de Madrid a Illescas."},
     {"id": "illescas", "name": "Illescas", "kind": "estacion", "adif_code": "35005", "rank": "secundario", "position": {"lon": -3.8422557, "lat": 40.1208535}, "reference_pk_km": 38.4},
     {"id": "torrijos", "name": "Torrijos", "kind": "estacion", "adif_code": "35105", "position": {"lon": -4.2831624, "lat": 39.9788063}, "reference_pk_km": 85.4},
     {"id": "montearagon", "name": "Montearagón", "kind": "estacion", "adif_code": "35109", "rank": "secundario", "position": {"lon": -4.6465599, "lat": 39.9607703}, "reference_pk_km": 118.3},
@@ -110,11 +110,11 @@
     {"id": "casatejada", "name": "Casatejada", "kind": "estacion", "adif_code": "35207", "rank": "secundario", "position": {"lon": -5.6776371, "lat": 39.8919896}, "reference_pk_km": 211.7},
     {"id": "monfrague", "name": "Monfragüe", "kind": "estacion", "adif_code": "30000", "position": {"lon": -6.1012466, "lat": 39.937619}, "reference_pk_km": 251.6, "description": "Estación de enlace en mitad del campo, junto al parque nacional del que toma el nombre. Aquí se separan el camino de Plasencia y de la línea nueva y el trazado antiguo a Cáceres por Mirabel y Cañaveral."},
     {"id": "bif-el-chaparral", "name": "Bifurcación El Chaparral", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.1475609, "lat": 39.9554043}, "description": "Aquí sale el enlace por el que los trenes que no paran en Plasencia pasan directamente a la línea de alta velocidad, en Arroyo de la Herrera."},
-    {"id": "bif-san-esteban", "name": "Bifurcación San Esteban", "kind": "bifurcacion", "position": {"lon": -6.1493221, "lat": 39.9745627}, "description": "Final de la línea convencional: aquí se une a la línea de alta velocidad, a 7 km de la estación de Plasencia. Los trenes de Madrid que paran en Plasencia siguen hasta la estación y allí cambian de sentido para continuar hacia Cáceres."}
+    {"id": "bif-san-esteban", "name": "Bifurcación San Esteban", "kind": "bifurcacion", "position": {"lon": -6.1493221, "lat": 39.9745627}, "description": "Aquí la línea convencional de Madrid se une a la de alta velocidad de Extremadura, a 7 km de la estación de Plasencia. Los trenes de Madrid que paran en Plasencia siguen hasta la estación y allí cambian de sentido para continuar hacia Cáceres."}
   ],
   "attribute_sections": [
     {"attribute": "tracks", "from_node": "bif-planetario", "to_node": "humanes", "value": 2, "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Única (salvo entre Madrid y Humanes que es doble)». El mapa 4 de la Declaración sobre la Red dibuja ese trecho como vía doble a 3 kV."},
-    {"attribute": "electrification", "from_node": "bif-planetario", "to_node": "humanes", "value": "3kv_cc", "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Electrificación: No (salvo entre Madrid y Humanes)», a 3000 V. El mapa 4 lo dibuja con el trazo de «Doble a 3 KV a 1.668 mm» hasta Humanes y sin electrificar desde allí; las vías de OSM dicen 3000 V hasta Humanes."},
+    {"attribute": "electrification", "from_node": "bif-planetario", "to_node": "humanes", "value": "3 kV CC", "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Electrificación: No (salvo entre Madrid y Humanes)», a 3000 V. El mapa 4 lo dibuja con el trazo de «Doble a 3 KV a 1.668 mm» hasta Humanes y sin electrificar desde allí; las vías de OSM dicen 3000 V hasta Humanes."},
     {"attribute": "max_speed_kmh", "from_node": "oropesa-de-toledo", "to_node": "navalmoral-de-la-mata", "value": 155, "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«La velocidad máxima permitida en prácticamente todo el recorrido es de 155 km/h». A la entrada de Navalmoral de la Mata los trenes van por 3,5 km de la plataforma de la línea de alta velocidad en construcción, que en OSM lleva maxspeed=300, la de proyecto; sin esta sección el tramo saldría con 300 km/h."},
     {"attribute": "proteccion_tren", "from_node": "bif-planetario", "to_node": "humanes", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto a Humanes hay símbolos del nudo de Madrid que no se pueden atribuir a esta línea."},
     {"attribute": "proteccion_tren", "from_node": "humanes", "to_node": "bif-san-esteban", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrados de «ASFA - Convencional» a lo largo de la línea, entre Humanes y Monfragüe y junto a Plasencia."},
@@ -123,10 +123,19 @@
     {"attribute": "bloqueo", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU», sin «ctc», y trazo verde entre las bifurcaciones El Chaparral y San Esteban."},
     {"attribute": "mando", "from_node": "bif-planetario", "to_node": "humanes", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el trazo marrón no lleva rótulo y el color no distingue «BAB ctc» de «BAB»."},
     {"attribute": "mando", "from_node": "humanes", "to_node": "bif-el-chaparral", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."},
-    {"attribute": "mando", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU» sin «ctc»; la leyenda distingue «BAU ctc» (naranja) de «BAU» (verde)."}
+    {"attribute": "mando", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU» sin «ctc»; la leyenda distingue «BAU ctc» (naranja) de «BAU» (verde)."},
+    {
+      "attribute": "tracks",
+      "from_node": "humanes",
+      "to_node": "bif-san-esteban",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
-    {"id": "enlace-el-chaparral-arroyo-de-la-herrera", "node_id": "bif-el-chaparral", "name": "Enlace El Chaparral–Arroyo de la Herrera", "towards": "Cáceres, Mérida y Badajoz sin entrar en Plasencia", "status": "no_cargada", "sketch": [[-6.1475609, 39.9554043], [-6.15, 39.962], [-6.165, 39.9635], [-6.178, 39.956], [-6.19109, 39.94645]]}
+    {"id": "enlace-el-chaparral-arroyo-de-la-herrera", "node_id": "bif-el-chaparral", "name": "Enlace El Chaparral – Arroyo de la Herrera", "towards": "Cáceres, Mérida y Badajoz sin entrar en Plasencia", "to_node_id": "arroyo-de-la-herrera", "towards_back": "Navalmoral de la Mata, Talavera de la Reina y Madrid sin entrar en Plasencia", "status": "no_cargada", "sketch": [[-6.1475609, 39.9554043], [-6.15, 39.962], [-6.165, 39.9635], [-6.178, 39.956], [-6.19109, 39.94645]]}
   ],
   "stop_mappings": {
     "35001": {"node": "leganes"},
@@ -141,7 +150,7 @@
     "35207": {"node": "casatejada"},
     "30000": {"node": "monfrague"},
     "18000": {"exits": ["bif-planetario"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}},
-    "17000": {"exits": ["bif-planetario"]},
+    "17000": {"exits": ["bif-planetario"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "30002": {"exits": ["bif-san-esteban"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-san-esteban"}},
     "35400": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
     "37500": {"exits": ["bif-el-chaparral"], "via": [{"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},

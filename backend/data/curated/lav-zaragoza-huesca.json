@@ -45,10 +45,19 @@
     {"attribute": "gauge", "from_node": "tardienta", "to_node": "huesca", "value": "mixto", "source_id": "osm-relation-9277290", "checked_on": "2026-11-18", "note": "En OSM, gauge=1435;1668 desde la entrada de Tardienta hasta la estación de Huesca, cuyas dos vías de andén vuelven a ser de 1435. Wikipedia: 20,7 km de vía única de triple carril al norte de Tardienta, compartida con los trenes de ancho ibérico de la línea de Canfranc."},
     {"attribute": "proteccion_tren", "from_node": "bif-huesca", "to_node": "huesca", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: junto a la línea, entre Zaragoza y Tardienta, el cuadrado amarillo de «ASFA - AV» con el cuadrado negro de tren tierra; ningún símbolo de ERTMS ni de LZB. Wikipedia dice también que la línea lleva ASFA. El valor asfa no distingue un ASFA de otro."},
     {"attribute": "bloqueo", "from_node": "bif-huesca", "to_node": "huesca", "value": "blau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: trazo azul claro rotulado «BLAU ctc» a lo largo de la vía de alta velocidad, de Zaragoza a Tardienta y de allí a Huesca. La línea convencional de Zaragoza a Lleida lleva el naranja de «BAU ctc», y la de Huesca a Canfranc, el lila de «BLAU»."},
-    {"attribute": "mando", "from_node": "bif-huesca", "to_node": "huesca", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
+    {"attribute": "mando", "from_node": "bif-huesca", "to_node": "huesca", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."},
+    {
+      "attribute": "tracks",
+      "from_node": "bif-huesca",
+      "to_node": "huesca",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
-    {"id": "tardienta-lleida", "node_id": "tardienta", "name": "Línea convencional Zaragoza – Tardienta – Lleida", "towards": "Monzón y Lleida", "status": "no_cargada", "sketch": [[-0.5384281, 41.9755672], [-0.369329, 41.938033], [-0.17076, 41.817529], [0.196939, 41.913679]]},
+    {"id": "tardienta-lleida", "node_id": "tardienta", "name": "Línea convencional Tardienta – Lleida", "towards": "Monzón y Lleida", "official_name": "Línea Zaragoza – Tardienta – Lleida", "status": "no_cargada", "sketch": [[-0.5384281, 41.9755672], [-0.369329, 41.938033], [-0.17076, 41.817529], [0.196939, 41.913679]]},
     {"id": "huesca-canfranc", "node_id": "huesca", "name": "Línea convencional Huesca – Canfranc", "towards": "Jaca y Canfranc", "status": "no_cargada", "sketch": [[-0.4098509, 42.1327508], [-0.682569, 42.27561], [-0.539231, 42.578303], [-0.514641, 42.751471]]}
   ],
   "stop_mappings": {

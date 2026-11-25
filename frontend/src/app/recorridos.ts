@@ -25,8 +25,10 @@ export interface Recorrido {
   /** Clave estable del recorrido: los tramos que recorre. */
   key: string
   route: Route
-  /** «Por la alta velocidad», «Por Manzanares y Ciudad Real», «Por Córdoba y la línea convencional». */
+  /** «Por la alta velocidad», «Por Ciudad Real», «Por Córdoba y la línea convencional». */
   titulo: string
+  /** «Invierte la marcha en Córdoba.», cuando las vías no le dejan girar y tiene que llegar a una estación y volver. */
+  inversion: string | null
   /** «Recorre tres líneas», cuando encadena más de una. */
   lineas: string | null
   /** Lo que el recorrido rodea por un baipás y cuánto más recorre el tren que entra en esas estaciones. */
@@ -110,12 +112,92 @@ function lineasDe(route: Route): string | null {
   return supuesta ? `Recorre ${n} y la vía supuesta` : `Recorre ${n}`
 }
 
-/** El nombre de un recorrido: por dónde pasa de una línea a otra o, si es una sola, qué línea es. */
-function titular(route: Route, lines: Map<string, LineSummary>): string {
-  if (route.legs.length > 1) return `Por ${enumerar(route.legs.slice(0, -1).map((leg) => shortStop(leg.to_name)))}`
-  const line = route.legs[0]?.line_id ? lines.get(route.legs[0].line_id) : undefined
+/** Ciudades o estaciones que caben en el nombre de un recorrido. */
+const NOMBRES_EN_EL_TITULO = 3
+
+/** Como mucho `NOMBRES_EN_EL_TITULO`, repartidos por el recorrido: el primero, el último y los de en medio. */
+function repartidos(nombres: string[]): string[] {
+  if (nombres.length <= NOMBRES_EN_EL_TITULO) return nombres
+  return Array.from({ length: NOMBRES_EN_EL_TITULO }, (_, i) => nombres[Math.round((i * (nombres.length - 1)) / (NOMBRES_EN_EL_TITULO - 1))]!)
+}
+
+/** «Por la alta velocidad» o «Por la línea convencional», según por dónde va la mayor parte del recorrido. */
+function porTipoDeLinea(route: Route, lines: Map<string, LineSummary>): string {
+  const largo = route.legs.reduce<Route['legs'][number] | undefined>((a, b) => (a && a.length_km >= b.length_km ? a : b), undefined)
+  const line = largo?.line_id ? lines.get(largo.line_id) : undefined
   if (!line) return 'Por la vía supuesta'
   return lineKind(line) === 'alta velocidad' ? 'Por la alta velocidad' : 'Por la línea convencional'
+}
+
+/** Un nombre sin acentos ni signos, para comparar el de una estación con el de una ciudad. */
+const llano = (texto: string) =>
+  texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+
+/**
+ * Pone nombre a los recorridos de una lista. El de una sola línea se llama por su tipo («Por la alta
+ * velocidad»). El que encadena varias, por las ciudades por las que pasa: las de las zonas (las de
+ * la lista de líneas) con estación en el recorrido y las estaciones en las que cambia de línea. De
+ * ellas se quedan las que no están en todos los demás recorridos de la lista, que son las que lo
+ * distinguen. Nunca se nombra por sus bifurcaciones: quien llega no sabe dónde están.
+ */
+function nombrar(recorridos: Recorrido[], graph: Graph, lines: Map<string, LineSummary>): void {
+  const ciudades = [...new Set([...lines.values()].flatMap((l) => l.zone?.cities ?? []))].map((c) => ({ nombre: c, clave: llano(c) }))
+  const ciudadDe = (nodeId: string): string | null => {
+    const node = graph.nodes.get(nodeId)
+    if (node?.kind !== 'estacion') return null
+    const nombre = llano(node.name)
+    return ciudades.find((c) => nombre.startsWith(c.clave))?.nombre ?? null
+  }
+  const pasos = recorridos.map(({ route }) => {
+    if (route.legs.length < 2) return []
+    const extremos = new Set([ciudadDe(route.from_node_id), ciudadDe(route.to_node_id)])
+    const cambios = new Set(route.legs.slice(0, -1).map((leg) => leg.to_node_id))
+    const hitos = route.node_ids.slice(1, -1).flatMap((id) => {
+      const ciudad = ciudadDe(id)
+      if (ciudad) return extremos.has(ciudad) ? [] : [ciudad]
+      const node = graph.nodes.get(id)
+      return cambios.has(id) && node?.kind === 'estacion' ? [shortStop(node.name)] : []
+    })
+    return [...new Set(hitos)]
+  })
+  recorridos.forEach((r, i) => {
+    const mios = pasos[i]!
+    const otros = pasos.filter((_, j) => j !== i)
+    const propios = otros.length ? mios.filter((n) => !otros.every((o) => o.includes(n))) : mios
+    const nombres = repartidos(propios.length ? propios : mios)
+    r.titulo = nombres.length ? `Por ${enumerar(nombres)}` : porTipoDeLinea(r.route, lines)
+    // Si todos sus nombres están también en los demás («Por Córdoba», cuando todos pasan por
+    // Córdoba), se le añade el tipo de la línea que solo recorre él.
+    if (mios.length && !propios.length && otros.length) {
+      const propia = r.route.line_ids.find((id) => recorridos.every((o) => o === r || !o.route.line_ids.includes(id)))
+      const line = propia ? lines.get(propia) : undefined
+      if (line) r.titulo += lineKind(line) === 'alta velocidad' ? ' y la alta velocidad' : ' y la línea convencional'
+    }
+  })
+  // Dos recorridos con el mismo nombre se distinguen por el tipo de la línea que solo recorre uno.
+  for (const r of recorridos) {
+    const iguales = recorridos.filter((o) => o !== r && o.titulo === r.titulo)
+    if (!iguales.length || !r.titulo.startsWith('Por ') || /^Por la (alta velocidad|línea convencional|vía supuesta)$/.test(r.titulo)) continue
+    const propia = r.route.line_ids.find((id) => iguales.every((o) => !o.route.line_ids.includes(id)))
+    const line = propia ? lines.get(propia) : undefined
+    if (line) r.titulo += lineKind(line) === 'alta velocidad' ? ' y la alta velocidad' : ' y la línea convencional'
+  }
+  // Y dos de una sola línea del mismo tipo (dos líneas convencionales), por el nombre de su línea.
+  for (const r of recorridos) {
+    const line = r.route.legs.length === 1 && r.route.legs[0]?.line_id ? lines.get(r.route.legs[0].line_id) : undefined
+    if (line && recorridos.some((o) => o !== r && o.titulo === r.titulo)) r.titulo = `Por la ${line.name.replace(/^Línea/, 'línea')}`
+  }
+}
+
+/** «Invierte la marcha en Córdoba.», o nada si el recorrido no la invierte. */
+function inversionDe(route: Route, graph: Graph): string | null {
+  const donde = [...new Set(route.reverse_node_ids.map((id) => shortStop(graph.nodes.get(id)?.name)))].filter(Boolean)
+  return donde.length ? `Invierte la marcha en ${enumerar(donde)}.` : null
 }
 
 /**
@@ -216,7 +298,8 @@ export function compararRecorridos(
   const presentar = (route: Route): Recorrido => ({
     key: route.segment_ids.join('|'),
     route,
-    titulo: titular(route, lines),
+    titulo: porTipoDeLinea(route, lines),
+    inversion: inversionDe(route, graph),
     lineas: lineasDe(route),
     baipases: baipasesDe(route, graph, lines, segments),
     cortes: cortesDe(route),
@@ -245,21 +328,7 @@ export function compararRecorridos(
     } else if (!libre) sinPaso = true
     if (libre) libre.alternativa = true
   }
-  // Un recorrido que cambia de línea en estaciones por las que otro también pasa se confunde con él
-  // («Por Córdoba», cuando los dos pasan por Córdoba): se le añade la línea que solo recorre él.
-  for (const r of recorridos) {
-    if (r.route.legs.length < 2) continue
-    const cambios = r.route.legs.slice(0, -1).map((leg) => leg.to_node_id)
-    const otro = recorridos.find((o) => o !== r && cambios.every((id) => o.route.node_ids.includes(id)))
-    const propia = otro && r.route.line_ids.find((id) => !otro.route.line_ids.includes(id))
-    const line = propia ? lines.get(propia) : undefined
-    if (line) r.titulo += lineKind(line) === 'alta velocidad' ? ' y la alta velocidad' : ' y la línea convencional'
-  }
-  // Dos recorridos con el mismo nombre (dos líneas convencionales) se distinguen por su línea.
-  for (const r of recorridos) {
-    const line = r.route.legs.length === 1 && r.route.legs[0]?.line_id ? lines.get(r.route.legs[0].line_id) : undefined
-    if (line && recorridos.some((o) => o !== r && o.titulo === r.titulo)) r.titulo = `Por la ${line.name.replace(/^Línea/, 'línea')}`
-  }
+  nombrar(recorridos, graph, lines)
   const escenario = [
     ...scenario.closures.map((id) => {
       const s = segments.get(id)
@@ -275,6 +344,7 @@ export function compararRecorridos(
   if (scenario.links.length) {
     const hoy = compararRecorridos(graph, network, from, to, interrupted, scenarioToCode({ ...scenario, links: [] }))
     const supuestos = found.filter((r) => r.segment_ids.some(esViaSupuesta)).slice(0, SUPUESTOS_A_LA_VISTA).map(presentar)
+    nombrar(supuestos, graph, lines)
     return { ...hoy, escenarioIlegible: ilegible, escenario, supuestos }
   }
   return { recorridos, ocultos: Math.max(0, found.length - RECORRIDOS_A_LA_VISTA), sinPaso, escenarioIlegible: ilegible, escenario, supuestos: [] }

@@ -13,7 +13,7 @@
     "tracks": 2,
     "opened_on": "2022-07-19",
     "status": "disponible",
-    "description": "La línea nueva de Extremadura: de Plasencia a Badajoz por Cáceres, con un enlace a Mérida. Es la parte en servicio de la línea de alta velocidad de Madrid a Extremadura y la frontera portuguesa.\n\nSe abrió el 19 de julio de 2022, todavía sin catenaria, que entró en servicio en diciembre de 2023. Su vía es de ancho ibérico, el de la red convencional, sobre traviesas preparadas para pasarla al ancho estándar.\n\nNo toda es nueva ni de vía doble: las entradas a Plasencia, Cáceres y Badajoz aprovechan la vía que ya había, de vía única, y entre Montijo y Badajoz solo hay una vía. La ficha de cada tramo lo dice.\n\nEntre La Garrovilla y la bifurcación San Nicolás la vía nueva corre junto a la de la línea convencional de Ciudad Real a Badajoz, en la que están las estaciones de Montijo y Guadiana. Oniel las enseña como una sola línea.\n\nLa recorren los Alvia de Madrid a Badajoz, los Media Distancia de Madrid a Cáceres, Mérida y Sevilla y los regionales de Extremadura. De Madrid se llega todavía por la línea convencional: la continuación de alta velocidad está en obras entre Talayuela y Plasencia y en estudio de allí a Madrid, y el mapa la enseña como proyecto.",
+    "description": "La línea nueva de Extremadura: de Plasencia a Badajoz por Cáceres, con un enlace a Mérida. Es la parte en servicio de la línea de alta velocidad de Madrid a Extremadura y la frontera portuguesa.\n\nSe abrió el 19 de julio de 2022, todavía sin catenaria, que entró en servicio en diciembre de 2023. Su vía es de ancho ibérico, el de la red convencional, sobre traviesas preparadas para pasarla al ancho estándar.\n\nNo toda es nueva ni de vía doble: las entradas a Plasencia, Cáceres y Badajoz aprovechan la vía que ya había, de vía única, y entre Montijo y Badajoz solo hay una vía. La ficha de cada tramo lo dice.\n\nEntre La Garrovilla y la bifurcación San Nicolás la vía nueva corre junto a la de la línea convencional de Ciudad Real a Badajoz, en la que están las estaciones de Montijo y Guadiana. Oniel las enseña como una sola línea.\n\nLa recorren los Intercity de Madrid a Badajoz y los regionales de Madrid a Cáceres, Mérida y Sevilla y los de Extremadura. De Madrid se llega todavía por la línea convencional: la continuación de alta velocidad está en obras entre Talayuela y Plasencia y en estudio de allí a Madrid, y el mapa la enseña como proyecto.",
     "geometry_source": {
       "source_id": "osm-relation-8117446",
       "parts": [
@@ -133,11 +133,38 @@
     {"attribute": "bloqueo", "from_node": "bif-penas-blancas", "to_node": "bif-granja-las-encinas", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo naranja de Peñas Blancas hacia Aljucén, con el rótulo «BAU ctc» al lado."},
     {"attribute": "bloqueo", "from_node": "bif-granja-las-encinas", "to_node": "montijo", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón en el ramal nuevo hasta Montijo."},
     {"attribute": "bloqueo", "from_node": "montijo", "to_node": "badajoz", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo naranja de Montijo a la bifurcación San Nicolás y a Badajoz, sin rótulo propio; el naranja es el color de «BAU ctc» en vía única."},
-    {"attribute": "mando", "from_node": "plasencia", "to_node": "badajoz", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»; de Montijo a Badajoz, por el color."}
+    {"attribute": "mando", "from_node": "plasencia", "to_node": "badajoz", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»; de Montijo a Badajoz, por el color."},
+    {
+      "attribute": "tracks",
+      "from_node": "arroyo-de-la-herrera",
+      "to_node": "bif-el-palmeral",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-la-aldihuela",
+      "to_node": "bif-penas-blancas",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-granja-las-encinas",
+      "to_node": "montijo",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
-    {"id": "caceres-valencia-de-alcantara", "node_id": "caceres", "name": "Línea Cáceres–Valencia de Alcántara", "towards": "Arroyo de Malpartida, San Vicente de Alcántara y Valencia de Alcántara", "status": "no_cargada", "sketch": [[-6.3857249, 39.4611766], [-6.4, 39.468], [-6.5345, 39.468], [-6.8, 39.4], [-7.117, 39.3816], [-7.2307, 39.4269]]},
-    {"id": "badajoz-elvas", "node_id": "badajoz", "name": "Línea Badajoz–Elvas", "towards": "Elvas y la red portuguesa", "status": "no_cargada", "sketch": [[-6.9816158, 38.8907326], [-7.0302, 38.9203], [-7.094, 38.9013]]}
+    {"id": "caceres-valencia-de-alcantara", "node_id": "caceres", "name": "Línea convencional Cáceres – Valencia de Alcántara", "towards": "Arroyo de Malpartida, San Vicente de Alcántara y Valencia de Alcántara", "status": "no_cargada", "sketch": [[-6.3857249, 39.4611766], [-6.4, 39.468], [-6.5345, 39.468], [-6.8, 39.4], [-7.117, 39.3816], [-7.2307, 39.4269]]},
+    {"id": "badajoz-elvas", "node_id": "badajoz", "name": "Línea convencional Badajoz – Elvas", "towards": "Elvas y la red portuguesa", "status": "no_cargada", "sketch": [[-6.9816158, 38.8907326], [-7.0302, 38.9203], [-7.094, 38.9013]]}
   ],
   "stop_mappings": {
     "30002": {"node": "plasencia"},
@@ -159,7 +186,7 @@
     "35207": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
     "30000": {"exits": ["arroyo-de-la-herrera"], "via": {"line": "madrid-plasencia", "node": "bif-el-chaparral"}},
     "18000": {"exits": ["arroyo-de-la-herrera"], "via": [{"line": "madrid-plasencia", "node": "bif-el-chaparral"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
-    "17000": {"exits": ["arroyo-de-la-herrera"]},
+    "17000": {"exits": ["arroyo-de-la-herrera"], "via": [{"line": "madrid-plasencia", "node": "bif-el-chaparral"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "37500": {"exits": ["bif-granja-las-encinas", "garrovilla-las-vegas"], "via": {"line": "ramal-merida", "node": "aljucen"}, "aside": true},
     "35301": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},
     "35302": {"exits": ["bif-san-esteban", "bif-casa-de-la-torre"], "aside": true},

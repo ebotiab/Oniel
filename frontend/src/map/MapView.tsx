@@ -18,6 +18,7 @@ import type { AnnotationOut, NetworkOut } from '../data/types'
 import type { Selection } from '../app/state'
 import { lineKind } from '../app/state'
 import { IBERIA_BOUNDS, IBERIA_BOUNDS_MOVIL, SPAIN_BOUNDS } from './bounds'
+import { type Cabecera, type Rect, encuadrarLinea, extremosDeLinea, nombreCorto } from './encuadre'
 import { CAPAS_DE_VIA, LAYER, OPACIDAD_RECORRIDOS, SRC, TIPO_ALTA_VELOCIDAD, TIPO_CONVENCIONAL, onielLayers, opacidadDeLineas, opacidadDeVia, type Trazo } from './layers'
 import baseStyle from './style/oniel-base.json'
 
@@ -91,14 +92,6 @@ function segmentBoxes(net: NetworkOut): { lineId: string; box: Caja }[] {
 
 // El worker de MapLibre se sirve como fichero propio para que funcione igual en desarrollo y en producción.
 setWorkerUrl(workerUrl)
-
-function shortName(name: string): string {
-  return name
-    .replace('Villanueva de Córdoba-Los Pedroches', 'Villanueva de Córdoba')
-    .replace('Almuradiel-Viso del Marqués', 'Almuradiel')
-    .replace('Campus Universitario de Rabanales', 'Rabanales')
-    .replace('Bifurcación ', 'Bif. ')
-}
 
 /** Tipo de la línea de un tramo, para dibujar su trazo. */
 function segmentKind(net: NetworkOut, lineId: unknown): string {
@@ -216,6 +209,9 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
       map.remove()
       mapRef.current = null
       readyRef.current = false
+      // Si el mapa se vuelve a crear (en desarrollo React monta dos veces), el nuevo arranca en la red entera:
+      // lo que encuadró el anterior ya no vale.
+      framedRef.current = 'red'
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -268,7 +264,7 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
     const nodes = withNumericIds({
       features: net.node_features.features.map((f) => ({
         ...f,
-        properties: { ...f.properties, short_name: shortName(String(f.properties.name)) },
+        properties: { ...f.properties, short_name: nombreCorto(String(f.properties.name)) },
       })),
     })
     const conns = withNumericIds(net.connection_features)
@@ -437,10 +433,47 @@ export function MapView({ network, selection, hoverId, closedSegmentId, annotate
       if (framedRef.current === key) return
       framedRef.current = key
       const b = new LngLatBounds()
-      if (lineId)
-        for (const f of network.segment_features.features)
-          if (f.properties.line_id === lineId && f.geometry.type === 'LineString') for (const c of f.geometry.coordinates) b.extend([c[0]!, c[1]!])
-      map.fitBounds(b.isEmpty() ? SPAIN_BOUNDS : b, { padding: pad, maxZoom: 10, duration: reduced ? 0 : 700 })
+      const tramos = lineId ? network.segment_features.features.filter((f) => f.properties.line_id === lineId) : []
+      for (const f of tramos) if (f.geometry.type === 'LineString') for (const c of f.geometry.coordinates) b.extend([c[0]!, c[1]!])
+      if (b.isEmpty()) {
+        map.fitBounds(SPAIN_BOUNDS, { padding: pad, maxZoom: 10, duration: reduced ? 0 : 700 })
+        return
+      }
+      // Una línea se encuadra con sus cabeceras y sus rótulos enteros, fuera de la cabecera de la página,
+      // de la leyenda y de los controles (docs/diseno.md, «Encuadre»): lo que estorba se mide en la página.
+      const marco = caja.getBoundingClientRect()
+      const estrecho = padding.left === 0
+      const borde = estrecho ? 10 : 16
+      const rect = (sel: string) => document.querySelector(sel)?.getBoundingClientRect()
+      // Abajo a la derecha van la escala y la atribución, que se despliega sola al cargar y en el móvil sube la
+      // escala a un segundo renglón: se reserva la franja entera, uno o dos renglones, y no lo que midan ahora.
+      const pie = (rect('.maplibregl-ctrl-bottom-right')?.bottom ?? marco.bottom) - marco.top - (estrecho ? 76 : 40)
+      const libre: Rect = {
+        left: padding.left + borde,
+        top: (rect('.cabecera')?.bottom ?? marco.top) - marco.top + borde,
+        right: marco.width - borde,
+        bottom: Math.min(marco.height - padding.bottom - borde, pie),
+      }
+      const estorbos: Rect[] = [...document.querySelectorAll('.leyenda, .maplibregl-ctrl-top-right .maplibregl-ctrl')]
+        .map((el) => el.getBoundingClientRect())
+        .filter((r) => r.width > 0 && r.height > 0)
+        .map((r) => ({ left: r.left - marco.left - 6, top: r.top - marco.top - 6, right: r.right - marco.left + 6, bottom: r.bottom - marco.top + 6 }))
+      const cabeceras: Cabecera[] = extremosDeLinea(tramos.map((f) => ({ from_node_id: String(f.properties.from_node_id), to_node_id: String(f.properties.to_node_id) }))).flatMap((id) => {
+        const n = network.nodes.find((x) => x.id === id)
+        return n ? [{ lon: n.lon, lat: n.lat, rotulo: nombreCorto(n.name), estacion: n.kind === 'estacion', secundario: n.rank === 'secundario' }] : []
+      })
+      const vista = encuadrarLinea({
+        ancho: marco.width,
+        alto: marco.height,
+        libre,
+        estorbos,
+        caja: b.toArray() as [[number, number], [number, number]],
+        cabeceras,
+        limites: estrecho ? IBERIA_BOUNDS_MOVIL : IBERIA_BOUNDS,
+        zoomMin: map.getMinZoom(),
+        zoomMax: 10,
+      })
+      map.easeTo({ ...vista, duration: reduced ? 0 : 700 })
       return
     }
     framedRef.current = `${selection.type}:${selection.id}`

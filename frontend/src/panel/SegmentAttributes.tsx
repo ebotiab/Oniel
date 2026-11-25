@@ -35,18 +35,32 @@ function enumerar(etiquetas: string[]): string {
 
 /**
  * De dónde salen los atributos que la ficha enseña, a la vista o plegados, y cuándo se comprobaron: un
- * renglón por fuente, al pie de «Más detalle». No usa `PieFuente` porque la fecha es la de comprobación de
- * cada valor, no la de descarga de la fuente.
+ * renglón por fuente y fecha, al pie de «Más detalle». No usa `PieFuente` porque la fecha es la de comprobación de
+ * cada valor, no la de descarga de la fuente. Una fuente que la ficha ya ha citado justo encima (la del
+ * trazado, de la que sale también el ancho de vía) no repite su párrafo: se dice que es la misma.
  */
-export function FuentesAtributos({ segment, line, sources }: Omit<Props, 'lugar'> & { sources: Source[] }) {
-  const fuentes = attributeSources([...attributeRows(segment, line, 'esencial'), ...attributeRows(segment, line, 'detalle')])
+export function FuentesAtributos({ segment, line, sources, trazado = null }: Omit<Props, 'lugar'> & { sources: Source[]; trazado?: string | null }) {
+  const fuenteVelocidad = sources.find((s) => s.id === segment.source_id)
+  const velocidad = segment.max_speed_kmh === null ? null : (segment.attributes?.max_speed_kmh ?? {
+    value: segment.max_speed_kmh, source_id: segment.source_id, checked_on: fuenteVelocidad?.retrieved_on ?? null,
+  })
+  const fuentes = attributeSources([
+    ...attributeRows(segment, line, 'esencial'), ...attributeRows(segment, line, 'detalle'),
+    { atributo: { clave: 'max_speed_kmh', etiqueta: 'Velocidad máxima', formato: String, lugar: 'esencial' }, valor: velocidad },
+  ])
   if (!fuentes.length) return null
   return (
     <div className="pie-fuente" data-testid="atributos-fuente">
       {fuentes.map((f) => {
         const fuente = sources.find((s) => s.id === f.sourceId)
+        if (f.sourceId === trazado)
+          return (
+            <p key={`${f.sourceId}:${f.checkedOn ?? ''}`} className="suave">
+              {enumerar(f.etiquetas)}: la misma fuente que el trazado{f.checkedOn ? `, comprobado el ${formatDateLong(f.checkedOn)}` : ''}.
+            </p>
+          )
         return (
-          <p key={f.sourceId} className="suave">
+          <p key={`${f.sourceId}:${f.checkedOn ?? ''}`} className="suave">
             {enumerar(f.etiquetas)}: {fuente?.url ? (
               <a href={fuente.url} target="_blank" rel="noreferrer">
                 {fuente.publisher}

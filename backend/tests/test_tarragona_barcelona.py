@@ -195,13 +195,17 @@ def test_the_filter_takes_the_regional_trains_and_leaves_the_euromed_out(
     assert spec.corridor_filter.min_node_stops == 2
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 91
-    assert Counter(t.product for t in trips) == {"REG.EXP.": 84, "Intercity": 6, "REGIONAL": 1}
+    assert Counter(t.product for t in trips) == {
+        "Regional Exprés": 84,
+        "Intercity": 6,
+        "Regional": 1,
+    }
     codes = {n.adif_code for n in spec.nodes}
     selected = {t.trip_id for t in trips}
     for trip in feed.trips.values():
         if trip.trip_id not in selected:
             assert len(codes & set(_stops(trip))) <= 1, trip.train_number
-    assert not any(t.product == "EUROMED" for t in trips)
+    assert not any(t.product == "Euromed" for t in trips)
     assert select_trips_for_spec(ouigo_feed, spec) == []
 
 

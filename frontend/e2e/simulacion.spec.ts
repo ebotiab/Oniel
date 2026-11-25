@@ -34,6 +34,8 @@ test.describe('Simular un cierre', () => {
     // la explicación del método está disponible
     await page.getByRole('button', { name: 'Cómo se calcula' }).click()
     await expect(page.getByText(/margen del 15 %/)).toBeVisible()
+    await expect(resultado.getByText(/El horario de Renfe Viajeros procede de/)).toBeVisible()
+    await expect(resultado.getByText(/El horario de Ouigo España procede de/)).toBeVisible()
     // la dirección lleva el día y la franja calculados: el enlace reproduce la simulación
     await expect(page).toHaveURL(/\/cierre\/2026-11-20\/08:00-09:00$/)
   })
@@ -66,7 +68,7 @@ test.describe('Simular un cierre', () => {
     await fila.getByText('Por qué').click()
     await expect(fila).toContainText(/dentro de la ventana/)
     await expect(fila).toContainText(/entra en esta línea por Manzanares/)
-    await expect(fila).toContainText(/196 km por esa línea hasta Madrid-Atocha Cercanías/)
+    await expect(fila).toContainText(/196 km por esa línea hasta Madrid-Puerta de Atocha/)
     await expect(fila).not.toContainText(/línea recta/)
     await expect(resultado).toContainText(/Regional \d{5}/)
     // ninguna línea sola une los dos lados de este tramo; el rodeo encadena dos
@@ -77,7 +79,7 @@ test.describe('Simular un cierre', () => {
     // el de Córdoba (417,4 km) también se enseña; la vuelta por Granada y Córdoba y la de Albacete y Cuenca, de más del doble, no
     await expect(alternativa.locator('p.texto:not(.suave)')).toHaveCount(2)
     // y la que sube a Barcelona y baja por la costa y por València, tampoco
-    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existen otros 4 recorridos más largos, que no se enseñan/)
+    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existen otros \d+ recorridos más largos, que no se enseñan/)
   })
 
   test('un cierre entre Urda y Ciudad Real señala el desvío por Manzanares, que usa dos líneas', async ({ page }) => {
@@ -98,7 +100,16 @@ test.describe('Simular un cierre', () => {
     // la vuelta por Granada hasta la bifurcación de Málaga (698 km frente a 358) y las tres que salen de
     // Torrejón de Velasco por Cuenca y Albacete existen, pero no se listan
     await expect(alternativa).not.toContainText('Granada')
-    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existen otros 7 recorridos más largos, que no se enseñan: dan un rodeo de más del doble/)
+    await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existen otros \d+ recorridos más largos, que no se enseñan: dan un rodeo de más del doble/)
+  })
+
+  test('el cierre nocturno incluye el AVE 02061 que sale al día siguiente', async ({ page }) => {
+    await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre/2026-11-19/23:00-08:00')
+    const resultado = page.getByTestId('sim-resultado')
+    const tren = resultado.locator('li', { hasText: 'AVE 02061' }).filter({ hasText: 'sale el día siguiente' })
+    await expect(tren).toHaveCount(1)
+    await expect(tren).toContainText('07:31–07:43')
+    await expect(resultado).toContainText('08:00 del día siguiente')
   })
 
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {

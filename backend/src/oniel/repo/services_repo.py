@@ -6,7 +6,7 @@ import datetime as dt
 from collections import Counter
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Literal
 
 import asyncpg
 
@@ -30,7 +30,12 @@ from oniel.sim.passes import SegmentPass
 class DatedPass:
     service: ServiceOut
     segment_pass: SegmentPass
-    from_previous_day: bool
+    dataset_id: str
+    day_offset: Literal[-1, 0, 1] = 0
+
+    @property
+    def from_previous_day(self) -> bool:
+        return self.day_offset == -1
 
 
 def _service(r: asyncpg.Record) -> ServiceOut:
@@ -73,21 +78,42 @@ PASS_SQL = f"""
 
 
 async def passes_on_segment(
-    conn: asyncpg.Connection, segment_id: str, date: dt.date
+    conn: asyncpg.Connection,
+    segment_id: str,
+    date: dt.date,
+    *,
+    with_previous_day: bool = False,
+    next_day_until_s: int = 0,
 ) -> list[DatedPass]:
-    """Pasos del día pedido más los del día anterior que terminan después de medianoche."""
+    """Pasos por un tramo de los trenes del día pedido, cada tren una sola vez.
+
+    Un tren es del día en que sale: es la regla de la ficha del tramo, de los recuentos
+    (:func:`daily_counts`), del histórico y de la instantánea. Con ``with_previous_day`` se añaden
+    los del día anterior que siguen en el tramo pasada la medianoche, margen incluido; solo la
+    simulación los pide. Si la franja continúa al día siguiente, se añaden los de ese día
+    cuya entrada más temprana cae antes de ``next_day_until_s`` segundos desde la medianoche.
+    """
     today = await conn.fetch(PASS_SQL, segment_id, date)
-    yesterday = await conn.fetch(
-        PASS_SQL + " AND p.exit_s IS NOT NULL AND p.exit_s + p.exit_margin_s >= 86400",
-        segment_id,
-        date - dt.timedelta(days=1),
-    )
-    out = [DatedPass(_service(r), _pass(r), False) for r in today]
-    out += [DatedPass(_service(r), _pass(r), True) for r in yesterday]
+    out = [DatedPass(_service(r), _pass(r), r["dataset_id"]) for r in today]
+    if with_previous_day and date > dt.date.min:
+        yesterday = await conn.fetch(
+            PASS_SQL + " AND p.exit_s + COALESCE(p.exit_margin_s, 0) >= 86400",
+            segment_id,
+            date - dt.timedelta(days=1),
+        )
+        out += [DatedPass(_service(r), _pass(r), r["dataset_id"], -1) for r in yesterday]
+    if next_day_until_s > 0 and date < dt.date.max:
+        tomorrow = await conn.fetch(
+            PASS_SQL + " AND p.enter_s - COALESCE(p.enter_margin_s, 0) < $3",
+            segment_id,
+            date + dt.timedelta(days=1),
+            next_day_until_s,
+        )
+        out += [DatedPass(_service(r), _pass(r), r["dataset_id"], 1) for r in tomorrow]
     out.sort(
         key=lambda d: (
             (d.segment_pass.enter_s if d.segment_pass.enter_s is not None else 1e9)
-            - (86400 if d.from_previous_day else 0),
+            + 86_400 * d.day_offset,
             d.service.train_number,
             d.service.id,
         )
@@ -385,18 +411,16 @@ NODE_HISTORY_SQL = f"""
     GROUP BY r.dataset_id, s.product
 """
 
-#: Trenes que recorren un tramo ($1), por conjunto y tipo de servicio: los pasos del día y los del
-#: día anterior que terminan pasada la medianoche, como :func:`passes_on_segment`.
+#: Trenes que recorren un tramo ($1), por conjunto y tipo de servicio: los del día, cada uno una
+#: vez, como :func:`passes_on_segment` y :func:`daily_counts`.
 SEGMENT_HISTORY_SQL = f"""
     WITH refs AS ({_REFS_SQL})
     SELECT r.dataset_id, s.product, count(*) AS n
     FROM refs r
     JOIN service_segment_passes p ON p.dataset_id = r.dataset_id AND p.segment_id = $1
     JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
-    JOIN service_dates d ON d.dataset_id = s.dataset_id AND d.service_id = s.id
-     AND (d.service_date = r.day
-          OR (d.service_date = r.day - 1
-              AND p.exit_s IS NOT NULL AND p.exit_s + p.exit_margin_s >= 86400))
+    JOIN service_dates d
+      ON d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = r.day
     GROUP BY r.dataset_id, s.product
 """
 

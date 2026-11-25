@@ -13,7 +13,7 @@
     "tracks": 1,
     "pk_origin_km": 251.6,
     "status": "disponible",
-    "description": "El trazado antiguo de Madrid a Cáceres: de Monfragüe a la bifurcación Casa de la Torre, a las puertas de Cáceres, por Mirabel y Cañaveral.\n\nDesde 2022 casi todos los trenes van por la línea nueva, que corre cerca. Por aquí siguen pasando los regionales que paran en Mirabel, Casas de Millán y Cañaveral.\n\nEs de vía única y sin electrificar. Para Adif es el último trecho de su línea 500, la misma por la que se llega de Madrid a Monfragüe.",
+    "description": "El trazado antiguo de Madrid a Cáceres: de Monfragüe a la bifurcación Casa de la Torre, a las puertas de Cáceres, por Mirabel y Cañaveral.\n\nDesde 2022 casi todos los trenes van por la línea nueva, que corre cerca. Por aquí sigue pasando un tren regional al día en cada sentido, entre Madrid y Cáceres, que para en Mirabel, Casas de Millán y Cañaveral y entra también en Plasencia.\n\nEs de vía única y sin electrificar. Para Adif es el último trecho de su línea 500, la misma por la que se llega de Madrid a Monfragüe.",
     "geometry_source": {
       "source_id": "osm-relation-11717892",
       "parts": [
@@ -48,7 +48,16 @@
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrado de «ASFA - Convencional» bajo la línea, entre Mirabel y Cáceres."},
     {"attribute": "bloqueo", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "blau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU», sin «ctc», y trazo lila de Monfragüe a Cáceres por Mirabel."},
-    {"attribute": "mando", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU» sin «ctc»; la leyenda distingue «BLAU ctc» (azul claro) de «BLAU» (lila)."}
+    {"attribute": "mando", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU» sin «ctc»; la leyenda distingue «BLAU ctc» (azul claro) de «BLAU» (lila)."},
+    {
+      "attribute": "tracks",
+      "from_node": "monfrague",
+      "to_node": "bif-casa-de-la-torre",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
   ],
@@ -69,7 +78,7 @@
     "35206": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
     "35207": {"exits": ["monfrague"], "via": {"line": "madrid-plasencia", "node": "monfrague"}},
     "18000": {"exits": ["monfrague"], "via": [{"line": "madrid-plasencia", "node": "monfrague"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}]},
-    "17000": {"exits": ["monfrague"]},
+    "17000": {"exits": ["monfrague"], "via": [{"line": "madrid-plasencia", "node": "monfrague"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "35400": {"exits": ["bif-casa-de-la-torre"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-casa-de-la-torre"}},
     "37500": {"exits": ["bif-casa-de-la-torre"], "via": [{"line": "lav-plasencia-badajoz", "node": "bif-casa-de-la-torre"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},
     "40002": {"exits": ["bif-casa-de-la-torre"]},

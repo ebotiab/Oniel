@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
+import datetime as dt
+import re
 from collections import Counter
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
 from typing import Any
 
-from oniel.gtfs.reader import read_feed
+from oniel.geo import haversine_km
+from oniel.gtfs.reader import GtfsFeed, read_feed
 from oniel.gtfs.trips import (
     LoadedLine,
     bypasses_of,
@@ -21,6 +26,9 @@ from oniel.gtfs.trips import (
 from oniel.network.annotations import check_annotations
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import (
+    ConnectionSpec,
+    FeedSpec,
+    NetworkSpec,
     OperatorSpec,
     load_annotations,
     load_feeds,
@@ -36,6 +44,39 @@ def loaded_line(net: BuiltNetwork) -> LoadedLine:
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat, n.spec.name) for n in net.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
     return LoadedLine(net.spec, nodes, segments)
+
+
+@dataclass(frozen=True)
+class ValidationLine:
+    """Una línea de esta validación; cada etapa prepara solo los datos que necesita."""
+
+    path: Path
+    data_dir: Path
+
+    @cached_property
+    def spec(self) -> NetworkSpec:
+        return load_network_spec(self.path)
+
+    @cached_property
+    def network(self) -> BuiltNetwork:
+        return build_network(self.spec, self.data_dir)
+
+    @cached_property
+    def loaded(self) -> LoadedLine:
+        return loaded_line(self.network)
+
+
+@dataclass(frozen=True)
+class FeedSummary:
+    """Lo que necesitan los informes globales después de liberar los viajes de un horario."""
+
+    start: dt.date
+    end: dt.date
+    products: frozenset[str]
+
+
+def _lines(paths: Sequence[Path | ValidationLine], data_dir: Path) -> list[ValidationLine]:
+    return [p if isinstance(p, ValidationLine) else ValidationLine(p, data_dir) for p in paths]
 
 
 def expected_pk_km(net: BuiltNetwork, km: float) -> float:
@@ -56,7 +97,7 @@ def expected_pk_km(net: BuiltNetwork, km: float) -> float:
 
 
 def validate_annotations(
-    path: Path, sources_path: Path, spec_paths: Sequence[Path], data_dir: Path
+    path: Path, sources_path: Path, spec_paths: Sequence[Path | ValidationLine], data_dir: Path
 ) -> dict[str, Any]:
     """Comprueba el fichero de anotaciones contra las líneas cargadas y el registro de fuentes.
 
@@ -69,8 +110,8 @@ def validate_annotations(
     except (ValueError, OSError) as error:
         return {"annotations": path.name, "entries": [], "problems": [str(error)]}
     line_nodes: dict[str, list[str]] = {}
-    for spec_path in spec_paths:
-        net = build_network(load_network_spec(spec_path), data_dir)
+    for line in _lines(spec_paths, data_dir):
+        net = line.network
         line_nodes[net.spec.line.id] = [n.spec.id for n in sorted(net.nodes, key=lambda n: n.km)]
     sources = {s.id: s.url for s in load_sources(sources_path)}
     return {
@@ -96,13 +137,13 @@ def validate_annotations(
     }
 
 
-def validate_zones(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+def validate_zones(spec_paths: Sequence[Path | ValidationLine], data_dir: Path) -> dict[str, Any]:
     """Comprueba que cada línea declara una zona del registro (data/curated/zonas.json)."""
     from oniel.network.importer import ZONES_FILE
     from oniel.network.spec import load_zones
 
     zones = {z.id: z.name for z in load_zones(data_dir / ZONES_FILE)}
-    lines = {(spec := load_network_spec(path)).line.id: spec.line.zone for path in spec_paths}
+    lines = {line.spec.line.id: line.spec.line.zone for line in _lines(spec_paths, data_dir)}
     return {
         "zones": {line_id: zones.get(zone, zone) for line_id, zone in lines.items()},
         "problems": [
@@ -113,8 +154,78 @@ def validate_zones(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]
     }
 
 
+def cited_products(text: str, known: Sequence[str]) -> list[str]:
+    """Los tipos de tren que nombra un texto, de entre los conocidos.
+
+    Se busca primero el más largo, para que «Regional Exprés» no cuente además como «Regional», y
+    con la mayúscula del rótulo: «trenes de media distancia» o «los regionales» son palabras
+    corrientes, no el tipo de tren.
+    """
+    found: list[str] = []
+    for label in sorted(known, key=len, reverse=True):
+        pattern = re.compile(rf"(?<!\w){re.escape(label)}(?!\w)")
+        if pattern.search(text):
+            found.append(label)
+            text = pattern.sub(" ", text)
+    return sorted(found)
+
+
+def validate_products(
+    spec_paths: Sequence[Path | ValidationLine],
+    feeds: Sequence[FeedSpec],
+    data_dir: Path,
+    *,
+    summaries: Mapping[Path, FeedSummary] | None = None,
+) -> dict[str, Any]:
+    """Comprueba que las descripciones nombran los trenes como el fichero de horarios vigente.
+
+    Renfe cambia los rótulos de un fichero a otro (el del 17 de noviembre de 2026 dejó de traer
+    «Alvia» y «Media Distancia»). La descripción de una línea o de una estación, que es lo que lee
+    el visitante junto a las listas de trenes, no puede nombrar un tipo que ya no rotula el fichero
+    vigente de ningún operador. Vale citar la última palabra de un rótulo vigente («Euromed» por
+    «AVE Euromed»).
+    """
+    from oniel.gtfs.reader import PRODUCT_NAMES, feed_products
+
+    latest: dict[str, FeedSpec] = {}
+    for feed in feeds:  # vienen del más antiguo al más reciente
+        latest[feed.source_id] = feed
+    current: set[str] = set()
+    known: set[str] = set(PRODUCT_NAMES.values())
+    for feed in feeds:
+        path = (data_dir / feed.file).resolve()
+        if feed.product:
+            labels = {feed.product}
+        elif summaries is not None and path in summaries:
+            labels = set(summaries[path].products)
+        else:
+            labels = feed_products(path)
+        known |= labels
+        if latest[feed.source_id] is feed:
+            current |= labels
+    allowed = current | {label.split()[-1] for label in current}
+    problems: list[str] = []
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
+        texts = [("la línea", spec.line.description)] + [
+            (f"el nodo {n.id}", n.description) for n in spec.nodes
+        ]
+        for where, text in texts:
+            stale = [c for c in cited_products(text or "", sorted(known)) if c not in allowed]
+            if stale:
+                problems.append(
+                    f"{spec.line.id}: la descripción de {where} nombra {', '.join(stale)},"
+                    " que no rotula ningún fichero de horarios vigente"
+                )
+    return {"products": sorted(current), "problems": problems}
+
+
 def validate_operators(
-    spec_paths: Sequence[Path], sources_path: Path, data_dir: Path
+    spec_paths: Sequence[Path | ValidationLine],
+    sources_path: Path,
+    data_dir: Path,
+    *,
+    summaries: Mapping[Path, FeedSummary] | None = None,
 ) -> dict[str, Any]:
     """Comprueba los operadores de trenes de las líneas contra los ficheros de horarios declarados.
 
@@ -125,8 +236,8 @@ def validate_operators(
     """
     problems: list[str] = []
     operators: dict[str, OperatorSpec] = {}
-    for path in spec_paths:
-        for op in load_network_spec(path).operators:
+    for line in _lines(spec_paths, data_dir):
+        for op in line.spec.operators:
             if op.role != "operador":
                 continue
             known = operators.setdefault(op.id, op)
@@ -155,8 +266,13 @@ def validate_operators(
     current = {f.source_id: f for f in feeds}
     windows = []
     for feed in current.values():
-        read = read_feed(data_dir / feed.file)
-        windows.append((feed, read.feed_start, read.feed_end))
+        path = (data_dir / feed.file).resolve()
+        if summaries is not None and path in summaries:
+            summary = summaries[path]
+            windows.append((feed, summary.start, summary.end))
+        else:
+            read = read_feed(path)
+            windows.append((feed, read.feed_start, read.feed_end))
     common: list[str] | None = None
     if windows:
         start, end = max(w[1] for w in windows), min(w[2] for w in windows)
@@ -186,7 +302,7 @@ def validate_operators(
 
 
 def validate_attributes(
-    spec_paths: Sequence[Path], sources_path: Path, data_dir: Path
+    spec_paths: Sequence[Path | ValidationLine], sources_path: Path, data_dir: Path
 ) -> dict[str, Any]:
     """Comprueba los atributos de tramo de las líneas: reparto, cobertura y fuentes.
 
@@ -198,8 +314,12 @@ def validate_attributes(
     problems: list[str] = []
     sources = {s.id for s in load_sources(sources_path)}
     lines: list[dict[str, Any]] = []
-    for path in spec_paths:
-        spec = load_network_spec(path)
+    for line in _lines(spec_paths, data_dir):
+        try:
+            spec = line.spec
+        except (ValueError, OSError) as error:
+            problems.append(f"{line.path.name}: {error}")
+            continue
         for section in spec.attribute_sections:
             if section.source_id is not None and section.source_id not in sources:
                 problems.append(
@@ -208,10 +328,21 @@ def validate_attributes(
                     f" ({section.source_id})"
                 )
         try:
-            net = build_network(spec, data_dir)
+            net = line.network
         except ValueError as error:
             problems.append(str(error))
             continue
+        speeds = [s.max_speed_kmh for s in net.segments if s.max_speed_kmh is not None]
+        maximum = max(speeds) if speeds else None
+        if spec.line.max_speed_kmh != maximum:
+            problems.append(
+                f"{spec.line.id}: velocidad máxima de línea {spec.line.max_speed_kmh!r};"
+                f" la máxima documentada de sus tramos es {maximum!r}"
+            )
+        for segment in net.segments:
+            tracks = segment.attributes["tracks"]
+            if tracks.source_id not in sources or tracks.checked_on is None:
+                problems.append(f"{segment.id}: número de vías sin fuente registrada y fecha")
         covered: Counter[str] = Counter(k for s in net.segments for k in s.attributes)
         lines.append(
             {
@@ -222,6 +353,145 @@ def validate_attributes(
             }
         )
     return {"attributes": lines, "problems": problems}
+
+
+def validate_turns(spec_paths: Sequence[Path | ValidationLine], data_dir: Path) -> dict[str, Any]:
+    """Comprueba que en cada nodo que no es estación se sabe de qué lado sale cada tramo.
+
+    De ahí sale la regla de giro del comparador y de los tramos sin otro camino
+    (``oniel.routing.turns``). Un nodo de tres tramos o más en el que dos de ellos no salen ni
+    juntos ni enfrentados no se puede clasificar: es un problema, porque allí los recorridos
+    girarían sin regla. Las líneas que no se pueden construir ya las señala ``validate_attributes``.
+    """
+    from oniel.routing.turns import turn_sides
+
+    @dataclass(frozen=True)
+    class Leaving:
+        id: str
+        from_node_id: str
+        to_node_id: str
+        status: str
+
+    segments: list[tuple[Leaving, dict[str, Any]]] = []
+    stations: set[str] = set()
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
+        try:
+            net = line.network
+        except ValueError:
+            continue
+        stations.update(n.spec.id for n in net.nodes if n.spec.kind == "estacion")
+        segments.extend(
+            (
+                Leaving(s.id, s.from_node.spec.id, s.to_node.spec.id, spec.line.status),
+                {"type": "LineString", "coordinates": [list(c) for c in s.coords]},
+            )
+            for s in net.segments
+        )
+    turns, problems = turn_sides(segments, stations)
+    return {
+        "turns": {
+            "nodes": len(turns),
+            "junctions": sum(1 for sides in turns.values() if len(sides) > 2),
+        },
+        "problems": [f"{p.node_id}: no se sabe qué giros permite ({p.detail})" for p in problems],
+    }
+
+
+#: Distancia a la que el final del croquis de una conexión se da por llegado a un nodo cargado.
+CONNECTION_END_M = 300.0
+
+#: Con qué puede seguir «Línea» en el nombre de una conexión.
+_LINE_KINDS = ("convencional ", "antigua ", "de alta velocidad ")
+
+#: Lo que el texto de un nodo de varias líneas no puede decir: se lee igual desde todas.
+_ONE_LINE_PHRASES = ("esta línea", "final de la línea", "cabecera de la línea")
+
+
+def connection_name_problem(name: str) -> str | None:
+    """Qué incumple el nombre de una conexión del criterio de «Añadir otra línea», si algo."""
+    if re.search(r"\S–|–\S", name):
+        return "lleva una raya sin espacios («A – B», no «A–B»)"
+    if name.startswith("Línea ") and not name.removeprefix("Línea ").startswith(_LINE_KINDS):
+        return "empieza por «Línea» sin decir si es convencional, antigua o de alta velocidad"
+    return None
+
+
+def validate_connections(
+    spec_paths: Sequence[Path | ValidationLine], data_dir: Path
+) -> dict[str, Any]:
+    """Comprueba las costuras entre líneas: las conexiones a trazos y los nodos compartidos.
+
+    Una conexión cuyo croquis acaba en un nodo cargado tiene que declararlo (``to_node_id``):
+    si no, en ese nodo los trenes aparecen o desaparecen sin trazo que lo explique. La que lo
+    declara tiene que acabar en él. Los nombres siguen un solo criterio, y la descripción de un
+    nodo de varias líneas no habla de «esta línea». Las líneas que no se pueden construir ya las
+    señala ``validate_attributes``.
+    """
+    nodes: dict[str, tuple[float, float]] = {}
+    lines_of: dict[str, set[str]] = {}
+    descriptions: dict[str, list[str]] = {}
+    connections: list[tuple[str, ConnectionSpec]] = []
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
+        try:
+            net = line.network
+        except ValueError:
+            continue
+        for n in net.nodes:
+            nodes.setdefault(n.spec.id, (n.lon, n.lat))
+            lines_of.setdefault(n.spec.id, set()).add(spec.line.id)
+            if n.spec.description:
+                descriptions.setdefault(n.spec.id, []).append(n.spec.description)
+        connections.extend((spec.line.id, c) for c in spec.connections)
+
+    problems: list[str] = []
+    both_ends = 0
+    for line_id, c in connections:
+        label = f"la conexión {c.id} de {line_id}"
+        if problem := connection_name_problem(c.name):
+            problems.append(f"{label}: el nombre «{c.name}» {problem}")
+        if c.to_node_id is not None and c.to_node_id not in nodes:
+            problems.append(f"{label} llega a un nodo que no está cargado, {c.to_node_id}")
+            continue
+        if not c.sketch:
+            if c.to_node_id is not None:
+                problems.append(f"{label} declara que llega a {c.to_node_id} y no lleva croquis")
+            continue
+        end = c.sketch[-1]
+        if c.to_node_id is not None:
+            both_ends += 1
+            off_m = haversine_km(end, nodes[c.to_node_id]) * 1000
+            if off_m > CONNECTION_END_M:
+                problems.append(
+                    f"{label}: el croquis acaba a {off_m:.0f} m de {c.to_node_id}, el nodo al que"
+                    " dice llegar"
+                )
+            continue
+        near = sorted(
+            (haversine_km(end, at) * 1000, node_id)
+            for node_id, at in nodes.items()
+            if node_id != c.node_id
+        )
+        if near and near[0][0] <= CONNECTION_END_M:
+            problems.append(
+                f"{label} acaba en {near[0][1]}, que está cargado, y solo se declara en"
+                f" {c.node_id}: falta to_node_id y towards_back"
+            )
+    for node_id, texts in sorted(descriptions.items()):
+        if len(lines_of[node_id]) < 2:
+            continue
+        for text in texts:
+            for phrase in _ONE_LINE_PHRASES:
+                if phrase in text.lower():
+                    problems.append(
+                        f"el nodo {node_id} es de {len(lines_of[node_id])} líneas y su descripción"
+                        f" dice «{phrase}»: se lee igual desde todas"
+                    )
+    return {
+        "connections": {"total": len(connections), "both_ends": both_ends},
+        "problems": problems,
+    }
 
 
 def unused_route_overrides(reports: Sequence[dict[str, Any]]) -> list[str]:
@@ -254,13 +524,51 @@ def validate_all(
     (:func:`unused_route_overrides`): una regla escrita para los trenes de un operador no encaja
     con el fichero de otro.
     """
-    spec = load_network_spec(spec_path)
-    net = build_network(spec, data_dir)
-    others = [
-        loaded_line(build_network(load_network_spec(p), data_dir))
-        for p in other_spec_paths
-        if p != spec_path
+    reports, _ = validate_feed(
+        [ValidationLine(spec_path, data_dir)],
+        _lines(other_spec_paths, data_dir),
+        feed_path,
+        stop_id_prefix=stop_id_prefix,
+        stop_id_aliases=stop_id_aliases,
+        require_rules=require_rules,
+    )
+    return reports[0]
+
+
+def validate_feed(
+    selected: Sequence[ValidationLine],
+    context: Sequence[ValidationLine],
+    feed_path: Path,
+    *,
+    stop_id_prefix: str | None = None,
+    stop_id_aliases: Mapping[str, str] | None = None,
+    require_rules: bool = True,
+) -> tuple[list[dict[str, Any]], FeedSummary]:
+    """Devuelve los informes y el resumen del horario sin retener sus viajes para el siguiente."""
+    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
+    reports = [
+        _validate_line(
+            line,
+            [other.loaded for other in context if other.path != line.path],
+            feed_path,
+            feed,
+            require_rules=require_rules,
+        )
+        for line in selected
     ]
+    return reports, FeedSummary(feed.feed_start, feed.feed_end, feed.route_products)
+
+
+def _validate_line(
+    line: ValidationLine,
+    others: Sequence[LoadedLine],
+    feed_path: Path,
+    feed: GtfsFeed,
+    *,
+    require_rules: bool,
+) -> dict[str, Any]:
+    spec = line.spec
+    net = line.network
     problems: list[str] = []
     length = net.line.polyline.length_km
     if (
@@ -297,8 +605,7 @@ def validate_all(
                 f"el nodo {n.spec.id} queda en el km {expected_pk:.1f} y la referencia es {ref}"
             )
 
-    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
-    own = loaded_line(net)
+    own = line.loaded
     # Los trenes de un baipás salen al resolver la línea de la que es baipás: se resuelve aquella
     # y se cuentan los viajes que pasan por los tramos de esta.
     resolved = own

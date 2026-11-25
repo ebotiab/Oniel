@@ -10,7 +10,9 @@ import { Termino } from './Termino'
 interface Props {
   lines: LineSummary[]
   /** Los nodos de la red, cada uno con su línea: de ellos salen las estaciones por las que pasa cada una. */
-  nodes: Pick<NodeOut, 'name' | 'kind' | 'line_id'>[]
+  nodes: Pick<NodeOut, 'id' | 'name' | 'kind' | 'line_id'>[]
+  /** Los tramos de la red: dicen por qué estaciones de otra línea pasa cada una (Madrid-Puerta de Atocha es de una sola). */
+  segments: { line_id: string; from_node_id: string; to_node_id: string }[]
   /** Capas de anotaciones con algo vigente hoy en cada línea, por id de línea. */
   notes: Map<string, AnnotationLayer[]>
   onPick: (id: string) => void
@@ -40,12 +42,14 @@ function porTipoYLongitud(a: LineSummary, b: LineSummary): number {
 }
 
 /**
- * Lista de las líneas cargadas, agrupada por la zona a la que llevan y pensada para decenas de líneas: cada
- * línea es un renglón, cada zona se pliega y, cuando son muchas, la lista arranca como un índice de zonas.
+ * Lista de las líneas cargadas, agrupada por zonas y pensada para decenas de líneas: cada línea es un
+ * renglón, cada zona se pliega y, cuando son muchas, la lista arranca como un índice de zonas. Una línea
+ * sale en la zona a la que lleva y, además, en cada zona en la que para en una de sus ciudades: la de
+ * Madrid a Barcelona está en Cataluña, en Aragón y en Madrid (docs/diseno.md, «Elegir línea»).
  * El filtro busca en el nombre y en las estaciones por las que pasa cada línea. Un baipás no es un
  * renglón más: va colgado de la línea de la que sale, sangrado, y no cuenta en los recuentos.
  */
-export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Props) {
+export function LineList({ lines: todas, nodes, segments, notes, onPick, onHighlight }: Props) {
   const lines = useMemo(() => mainLines(todas), [todas])
   const [query, setQuery] = useState('')
   // Las zonas que el visitante ha abierto o cerrado a mano; las demás siguen la regla general.
@@ -65,6 +69,24 @@ export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Pr
     }
     return out
   }, [nodes])
+
+  // Todas las estaciones por las que pasa cada línea, también las que son de otra: de ellas sale en qué zonas está.
+  const paradas = useMemo(() => {
+    const nombre = new Map(nodes.filter((n) => n.kind === 'estacion').map((n) => [n.id, normalize(n.name)]))
+    const out = new Map<string, Set<string>>()
+    const anotar = (linea: string, texto: string | undefined) => {
+      if (texto) out.set(linea, (out.get(linea) ?? new Set()).add(texto))
+    }
+    for (const n of nodes) anotar(n.line_id, nombre.get(n.id))
+    for (const s of segments) for (const id of [s.from_node_id, s.to_node_id]) anotar(s.line_id, nombre.get(id))
+    return out
+  }, [nodes, segments])
+  // Una línea pasa por una ciudad si para en ella o si la nombra: la de Madrid a Plasencia, tal como está
+  // cargada, empieza en una bifurcación de Madrid y no en una de sus estaciones.
+  const paraEn = (linea: LineSummary, ciudad: string) => {
+    const c = normalize(ciudad)
+    return [...(paradas.get(linea.id) ?? [])].some((e) => e.startsWith(c)) || ` ${normalize(linea.name)} `.includes(` ${c} `)
+  }
 
   const tokens = normalize(query).split(' ').filter(Boolean)
   const filtrando = tokens.length > 0
@@ -89,16 +111,19 @@ export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Pr
     const byId = new Map<string, { zone: ZoneOut; rows: typeof shown; all: LineSummary[] }>()
     for (const line of lines) {
       const zone = line.zone ?? SIN_ZONA
-      const z = byId.get(zone.id) ?? { zone, rows: [], all: [] }
-      z.all.push(line)
-      byId.set(zone.id, z)
+      if (!byId.has(zone.id)) byId.set(zone.id, { zone, rows: [], all: [] })
     }
-    for (const row of shown) byId.get((row.line.zone ?? SIN_ZONA).id)!.rows.push(row)
+    // Cada línea, en su zona y en las demás en las que para en una de sus ciudades.
+    const zonasDe = (line: LineSummary) => [...byId.values()].filter((z) => z.zone.id === (line.zone ?? SIN_ZONA).id || z.zone.cities.some((c) => paraEn(line, c)))
+    for (const line of lines) for (const z of zonasDe(line)) z.all.push(line)
+    // Filtrando, cada línea que coincide sale una sola vez, en su zona.
+    for (const row of shown) for (const z of filtrando ? [byId.get((row.line.zone ?? SIN_ZONA).id)!] : zonasDe(row.line)) z.rows.push(row)
     return [...byId.values()]
       .filter((z) => z.rows.length)
       .sort((a, b) => a.zone.sort_order - b.zone.sort_order)
       .map((z) => ({ ...z, rows: z.rows.sort((a, b) => porTipoYLongitud(a.line, b.line)) }))
-  }, [lines, shown])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lines, shown, paradas, filtrando])
 
   const tipos = TIPOS.filter((t) => lines.some((l) => (lineKind(l) === 'alta velocidad') === (t.trazo === 'alta-velocidad')))
   const resaltar = (ids: string[] | null) => ({
@@ -137,7 +162,7 @@ export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Pr
         const abierta = filtrando || (tocadas[zone.id] ?? !plegadas)
         const conNota = [...new Set(all.flatMap((l) => notes.get(l.id) ?? []))].filter((capa) => capa.lista)
         // Las ciudades de la zona que tienen estación en alguna de sus líneas.
-        const ciudades = zone.cities.filter((c) => all.some((l) => estaciones.get(l.id)?.some((e) => e.text.startsWith(normalize(c)))))
+        const ciudades = zone.cities.filter((c) => all.some((l) => paraEn(l, c)))
         return (
           <section key={zone.id} className="zona-lineas" aria-label={zone.name} data-testid={`zona-${zone.id}`}>
             <h4>
@@ -175,14 +200,17 @@ export function LineList({ lines: todas, nodes, notes, onPick, onHighlight }: Pr
                 {rows.map(({ line: l, por }) => {
                   const senales = notes.get(l.id)?.filter((capa) => capa.lista) ?? []
                   const av = lineKind(l) === 'alta velocidad'
-                  const baipases = bypassesOf(todas, l.id)
+                  // La línea de otra zona que pasa por esta lleva la zona en su identificador de prueba, y sus
+                  // baipases y enlaces cuelgan de ella solo en la suya.
+                  const propia = (l.zone ?? SIN_ZONA).id === zone.id
+                  const baipases = propia ? bypassesOf(todas, l.id) : []
                   return (
                     <li key={l.id}>
                       <button
                         type="button"
                         className="fila-linea"
                         onClick={() => onPick(l.id)}
-                        data-testid={`linea-${l.id}`}
+                        data-testid={propia ? `linea-${l.id}` : `linea-${l.id}--${zone.id}`}
                         {...resaltar([l.id, ...baipases.map((b) => b.id)])}
                       >
                         <span className="fila-linea-trazo" title={av ? 'Alta velocidad' : 'Línea convencional'}>

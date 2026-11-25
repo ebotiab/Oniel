@@ -22,7 +22,7 @@
       }
     ],
     "status": "disponible",
-    "description": "Sigue el valle del Ebro aguas arriba: sale de Zaragoza hacia Tudela y Castejón, en Navarra, y continúa por Calahorra hasta Logroño.\n\nEs el camino del tren entre Aragón, Navarra y La Rioja. Hasta Castejón tiene dos vías; de Castejón a Logroño, una sola. En Castejón sale de ella la línea de Pamplona, que va aparte.\n\nPara Adif son dos líneas: los primeros kilómetros, hasta Casetas, son de la línea de Madrid a Barcelona por Calatayud, y el resto, de la línea de Casetas a Bilbao, que se abrió entre 1861 y 1863. Oniel las enseña juntas porque los trenes las recorren seguidas.\n\nEn los horarios de Renfe la usan tres familias de trenes. Los Alvia e Intercity de Madrid a Pamplona y a Logroño dejan la alta velocidad en el cambiador de ancho de Plasencia de Jalón, antes de Zaragoza, y entran en la línea junto a Cabañas de Ebro, sin pasar por la ciudad. Los de Barcelona a Pamplona, San Sebastián, Bilbao y Galicia cambian de ancho en Zaragoza-Delicias y la recorren desde el principio. Y los regionales de Zaragoza a Castejón, Logroño, Pamplona y Vitoria paran en casi todas las estaciones. De Zaragoza a Casetas pasan también los regionales de Zaragoza a Calatayud.\n\nMás allá de Logroño la línea sigue hasta Miranda de Ebro y Bilbao; ese trecho no está cargado. Los trenes de Cercanías de Zaragoza usan las vías entre Delicias y Casetas, pero no están en los horarios cargados.",
+    "description": "Sigue el valle del Ebro aguas arriba: sale de Zaragoza hacia Tudela y Castejón, en Navarra, y continúa por Calahorra hasta Logroño.\n\nEs el camino del tren entre Aragón, Navarra y La Rioja. Hasta Castejón tiene dos vías; de Castejón a Logroño, una sola. En Castejón sale de ella la línea de Pamplona, que va aparte.\n\nPara Adif son dos líneas: los primeros kilómetros, hasta Casetas, son de la línea de Madrid a Barcelona por Calatayud, y el resto, de la línea de Casetas a Bilbao, que se abrió entre 1861 y 1863. Oniel las enseña juntas porque los trenes las recorren seguidas.\n\nEn los horarios de Renfe la usan tres familias de trenes. Los Intercity de Madrid a Pamplona y a Logroño dejan la alta velocidad en el cambiador de ancho de Plasencia de Jalón, antes de Zaragoza, y entran en la línea junto a Cabañas de Ebro, sin pasar por la ciudad. Los de Barcelona a Pamplona, San Sebastián, Bilbao y Galicia cambian de ancho en Zaragoza-Delicias y la recorren desde el principio. Y los regionales de Zaragoza a Castejón, Logroño, Pamplona y Vitoria paran en casi todas las estaciones. De Zaragoza a Casetas pasan también los regionales de Zaragoza a Calatayud.\n\nMás allá de Logroño la línea sigue hasta Miranda de Ebro y Bilbao; ese trecho no está cargado. Los trenes de Cercanías de Zaragoza usan las vías entre Delicias y Casetas, pero no están en los horarios cargados.",
     "geometry_source": {
       "source_id": "osm-relation-9277501",
       "parts": [
@@ -200,7 +200,7 @@
         "lat": 42.0594993
       },
       "reference_pk_km": 77.4,
-      "description": "La estación de Tudela, la segunda ciudad de Navarra. Paran en ella casi todos los trenes de la línea, también los Alvia de Madrid a Pamplona y a Logroño."
+      "description": "La estación de Tudela, la segunda ciudad de Navarra. Paran en ella casi todos los trenes de la línea, también los Intercity de Madrid a Pamplona y a Logroño."
     },
     {
       "id": "castejon-de-ebro",
@@ -248,7 +248,7 @@
         "lat": 42.3106958
       },
       "reference_pk_km": 27.7,
-      "description": "La estación de Calahorra, la segunda ciudad de La Rioja. Paran en ella los Alvia de Madrid a Logroño, los de Barcelona a Bilbao y los regionales."
+      "description": "La estación de Calahorra, la segunda ciudad de La Rioja. Paran en ella los Intercity de Madrid a Logroño, los de Barcelona a Bilbao y los regionales."
     },
     {
       "id": "feculas-navarra",
@@ -358,8 +358,9 @@
     {
       "id": "conv-casetas-calatayud",
       "node_id": "casetas",
-      "name": "Línea convencional Madrid – Zaragoza",
+      "name": "Línea convencional Casetas – Calatayud – Madrid",
       "towards": "Grisén, Ricla-La Almunia, Calatayud y Madrid",
+      "official_name": "Línea Madrid – Zaragoza",
       "status": "no_cargada",
       "sketch": [
         [

@@ -41,10 +41,16 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await expect(ficha).toBeVisible()
     await expect(ficha).toContainText('Moreda – Bifurcación Almería')
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía única')
-    await expect(page.getByTestId('tramo-sin-trenes')).toHaveText('Ningún tren de los horarios cargados recorre este tramo ese día.')
+    // dice dónde mirar por qué: las fichas de sus dos extremos
+    const sinTrenes = page.getByTestId('tramo-sin-trenes')
+    await expect(sinTrenes).toHaveText(
+      'Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de Moreda y en la de Bifurcación Almería.',
+    )
     // ni un recuento a cero ni la frase de la alternativa
-    await expect(ficha).not.toContainText('estimado en 0')
+    await expect(page.getByTestId('tramo-hora-de-paso')).toHaveCount(0)
     await expect(page.getByTestId('tramo-alternativa')).toHaveCount(0)
+    await sinTrenes.getByRole('button', { name: 'Bifurcación Almería' }).click()
+    await expect(page).toHaveURL(/\/nodo\/bif-almeria$/)
   })
 
   test('los trenes de Granada a Almería recorren la línea hasta la bifurcación', async ({ page }) => {
@@ -72,7 +78,7 @@ test.describe('Línea convencional Linares-Baeza – Moreda – Granada', () => 
     await expect(recorridos.nth(0).getByTestId('recorrido-trenes')).toContainText('Ningún tren directo')
     // el otro camino, por la alta velocidad: más largo y, sin paradas, mucho más rápido
     const alta = recorridos.filter({ hasText: '569,0 km' })
-    await expect(alta).toContainText('Por Bifurcación Málaga-Alta Velocidad y Antequera-Santa Ana')
+    await expect(alta).toContainText('Por Ciudad Real, Córdoba y Antequera-Santa Ana')
     await expect(alta).toContainText('Recorre tres líneas')
     await expect(alta).toContainText('2 h 17 min sin paradas')
     await expect(alta).toContainText('81,0 km de vía única')

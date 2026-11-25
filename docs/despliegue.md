@@ -44,7 +44,9 @@ El visor lee además dos variables que Vercel da a toda compilación, `VERCEL_EN
 
 Las direcciones del visor son limpias (`/tramo/<id>`, `/glosario/<entrada>`) y las resuelve el propio visor, así que `frontend/vercel.json` lleva además una regla (`rewrites`) que sirve `index.html` para cualquier ruta que no sea un fichero. Deja fuera `/data/` y `/assets/`: un fichero de datos que no existe tiene que dar 404 y no la página del visor. Deja fuera también `/_vercel/`, de donde Vercel sirve el script que cuenta las visitas («Visitas del visor»). Los ficheros que existen (`/favicon.svg`, la instantánea) se sirven antes de mirar la regla. Tras tocarla conviene abrir en la vista previa de la PR una dirección profunda directamente y recargarla. En local, el servidor de desarrollo de Vite y `vite preview` hacen lo mismo sin configuración.
 
-Desde el 18 de noviembre de 2026 la compilación escribe además una página estática por vista principal (`dist/linea/<id>/index.html`, `dist/tramo/<id>/index.html`, `dist/nodo/<id>/index.html`, `dist/cobertura/index.html`…): el mismo `index.html` con el título y las etiquetas de enlace compartido de esa vista, para los rastreadores que no ejecutan JavaScript (`docs/diseno.md`, «Citar una vista»). Como son ficheros que existen, Vercel los sirve antes de mirar la regla; si alguno no se sirviera, la regla devuelve `index.html` y solo se pierde la tarjeta propia. Se comprueba con `curl -s https://oniel.vercel.app/linea/lav-madrid-sevilla | grep '<title>'`, que tiene que dar el título de la línea.
+La compilación guarda cada ficha como `<ruta>.html`; tanto `vite preview` como Vercel (con `cleanUrls`) la sirven al abrir la dirección sin extensión. Hay una página HTML por vista principal (`/linea/<id>`, `/tramo/<id>`, `/nodo/<id>`, `/cobertura`…) con su título, descripción, dirección canónica y etiquetas para compartir. La portada también contiene enlaces a todas las líneas de la instantánea. Se puede seguir un enlace y leer la descripción de la ficha antes de que arranque React o con JavaScript desactivado.
+
+De esa misma lista de páginas se genera `/sitemap.xml` con las direcciones de producción. Las simulaciones y las comparaciones elegidas por el visitante quedan fuera. El fichero `/robots.txt` anuncia el sitemap. Ambas direcciones están excluidas de la regla del visor. Al publicar, se puede comprobar el contenido con `curl -fsS https://oniel.vercel.app/robots.txt` y `curl -fsS https://oniel.vercel.app/sitemap.xml`. En Google Search Console, la propiedad con prefijo `https://oniel.vercel.app/` permite enviar el sitemap e inspeccionar el estado de la portada o de una ficha.
 
 ### Visitas del visor
 
@@ -113,7 +115,9 @@ También puede lanzarse desde cualquier máquina con `uv` y acceso a la base. La
 cd backend && ONIEL_DATABASE_URL='<External Database URL>' uv run oniel-data import all
 ```
 
-La importación es repetible: crea el esquema si falta, sustituye los servicios de la fuente dentro de una transacción y registra la ejecución en `import_runs`. También regenera la instantánea estática de `frontend/public/data`, que conviene subir junto con los cambios.
+La red, los horarios, el registro de ejecuciones y la huella se confirman juntos en PostgreSQL. Si la importación se interrumpe, la base conserva los datos y la huella anteriores. Al reintentar se vuelve a cargar el cambio pendiente. Si arrancan dos importaciones a la vez, la segunda espera a la primera antes de comparar la huella.
+
+En local la orden también regenera la instantánea de `frontend/public/data`. Si falla al escribir los ficheros, corrige la causa y repite `oniel-data import all` antes de subirlos.
 
 **Cuánto tarda y por qué importa.** Render da por fallido («Timed Out») un despliegue que no responde en unos 15 minutos, y la API no responde hasta que la importación termina. El 15 de noviembre de 2026, con 25 líneas y tres ficheros de horarios, tardó 474 s en producción (commit `0f4f589`): unos 35 s las 25 redes, 129 s y 136 s los dos ficheros de Renfe, 4 s el de Ouigo y 166 s la exportación de la instantánea. Desde el 17 de noviembre de 2026 hace menos trabajo, con el mismo resultado en la base:
 
@@ -140,7 +144,9 @@ La red y los horarios solo cambian al importar, pero cada petición volvía a le
 
 Medido en local el 18 de noviembre de 2026, con 30 líneas y la API ya caliente: `/api/lines/{line_id}` pasa de 105 ms y 10 consultas a 3 ms y una (la de la versión); `/api/lines`, de 115 ms a 5 ms; `/api/coverage`, de 75 ms a 4 ms; `/api/segments/{segment_id}/services`, de 62 ms a 19 ms. La primera petición tras arrancar o tras una importación sigue pagando las lecturas. Las respuestas son idénticas byte a byte. Las consultas que quedan usan sus índices (`EXPLAIN ANALYZE`): no hizo falta ninguno nuevo. En producción la diferencia es mayor, porque allí cada consulta cuesta además el viaje a la base y, tras un rato sin tráfico, la de los pasos por tramo de toda la red tardaba más de un segundo.
 
-`/api/alternatives` es el cálculo más largo (15 s en local para un día; `docs/simulacion.md`, «Tramos sin alternativa»). El visor lee el del día de referencia de la instantánea; el de otro día se calcula la primera vez que se pide y queda guardado.
+`/api/alternatives` es el cálculo más largo (unos 5 s en local para un día; `docs/simulacion.md`, «Tramos sin alternativa», «Lo que tarda»). El visor lee el del día de referencia de la instantánea; el de otro día se calcula la primera vez que se pide y queda guardado. Es cálculo puro, sin esperas, y se lanza en otro hilo (`asyncio.to_thread`, en `network_repo`), de uno en uno: si llegan dos peticiones del mismo día, la segunda espera a la primera y lo encuentra hecho.
+
+Hasta el 23 de noviembre de 2026 corría dentro del bucle de la API y tardaba minutos (#262): mientras duraba, la API no contestaba a nada, tampoco a `/healthz`, y Render daba la instancia por caída y la reiniciaba. Una sola petición de otro día bastaba. No era la memoria: el día del fallo (22 de noviembre) el proceso usaba 93 MB de los 512 del plan, y el evento de Render dice «HTTP health check failed (timed out after 5 seconds)». De ahí la regla para cualquier cálculo largo de la API: fuera del bucle, y medido. En local, con el cálculo en marcha, `/healthz` contesta en menos de 0,1 s. En producción, el 23 de noviembre de 2026 y ya con el arreglo desplegado, la primera petición de otro día tardó 16,7 s y la segunda, 0,3 s; `/healthz` contestó las 60 veces que se le pidió mientras tanto (la más lenta, en 0,33 s) y la API no se reinició.
 
 ### Mantener la API despierta
 

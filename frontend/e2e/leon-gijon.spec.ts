@@ -57,6 +57,7 @@ test.describe('La línea León – Oviedo – Gijón por la variante de Pajares'
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(page.getByTestId('mas-detalle')).toContainText('25 kV 50 Hz')
     await expect(page.getByTestId('atributos-fuente')).toContainText(/Ancho de vía, electrificación, protección del tren, bloqueo y mando: Adif Alta Velocidad; Adif, comprobado el 15 de noviembre de 2026/)
+    await expect(page.getByTestId('atributos-fuente')).toContainText(/Vías: Adif Alta Velocidad; Adif, comprobado el 25 de noviembre de 2026/)
   })
 
   test('fuera de la variante el tramo es de ancho ibérico, a 3 kV, y no enseña la fila del ancho', async ({ page }) => {

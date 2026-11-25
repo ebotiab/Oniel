@@ -246,7 +246,7 @@
         "lat": 42.350692
       },
       "reference_pk_km": 462.533,
-      "description": "La estación de Ourense, donde acaba esta línea. De aquí sale la línea de alta velocidad a Santiago de Compostela, por la que siguen los trenes de A Coruña y de Vigo, y las líneas convencionales a Vigo y a Monforte de Lemos y Lugo, que todavía no están cargadas."
+      "description": "La estación de Ourense. Aquí acaba la alta velocidad que viene de Madrid por Zamora y empieza la de Santiago de Compostela, por la que siguen los trenes de A Coruña y de Vigo. Salen también las líneas convencionales a Vigo y a Monforte de Lemos y Lugo, que todavía no están cargadas."
     }
   ],
   "attribute_sections": [
@@ -339,6 +339,42 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-14",
       "note": "Mapa 4: trazo naranja de «BAU ctc» entre Taboadela AV y Ourense."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-medina",
+      "to_node": "medina-del-campo-av",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "coreses",
+      "to_node": "zamora",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-los-conforcos",
+      "to_node": "pedralba",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "vilavella",
+      "to_node": "taboadela",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
@@ -362,8 +398,10 @@
     {
       "id": "conv-zamora-medina-del-campo",
       "node_id": "zamora",
-      "name": "Línea convencional Medina del Campo–Zamora",
+      "name": "Línea convencional Zamora – Medina del Campo",
       "towards": "Toro y Medina del Campo",
+      "to_node_id": "medina-del-campo",
+      "towards_back": "Toro y Zamora",
       "status": "no_cargada",
       "sketch": [
         [
@@ -375,15 +413,15 @@
           41.512201
         ],
         [
-          -4.909923,
-          41.317617
+          -4.910032,
+          41.317327
         ]
       ]
     },
     {
       "id": "conv-zamora-ourense",
       "node_id": "zamora",
-      "name": "Línea convencional Zamora–Ourense",
+      "name": "Línea convencional Zamora – Ourense",
       "towards": "Puebla de Sanabria",
       "status": "no_cargada",
       "sketch": [
@@ -404,7 +442,7 @@
     {
       "id": "conv-ourense-vigo",
       "node_id": "ourense",
-      "name": "Línea convencional Ourense–Vigo",
+      "name": "Línea convencional Ourense – Vigo",
       "towards": "Ribadavia y Vigo",
       "status": "no_cargada",
       "sketch": [
@@ -425,7 +463,7 @@
     {
       "id": "conv-ourense-monforte",
       "node_id": "ourense",
-      "name": "Línea convencional Ourense–Monforte de Lemos",
+      "name": "Línea convencional Ourense – Monforte de Lemos",
       "towards": "Monforte de Lemos y Lugo",
       "status": "no_cargada",
       "sketch": [

@@ -440,13 +440,22 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: el rótulo es «BAD», sin «ctc», y la leyenda distingue «BAD» de «BAD ctc» (trazo naranja): el mapa dice que este trecho no tiene control de tráfico centralizado."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "barcelona-sants",
+      "to_node": "portbou",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "conv-macanet-maresme",
       "node_id": "macanet-massanes",
-      "name": "Línea Barcelona – Mataró – Maçanet-Massanes",
+      "name": "Línea convencional Maçanet-Massanes – Mataró – Barcelona",
       "towards": "Blanes, Mataró y Barcelona por la costa del Maresme",
       "status": "no_cargada",
       "sketch": [
@@ -471,7 +480,7 @@
     {
       "id": "conv-portbou-cerbere",
       "node_id": "portbou",
-      "name": "Línea Portbou – Cerbère",
+      "name": "Línea convencional Portbou – Cerbère",
       "towards": "Cerbère y la red francesa",
       "status": "no_cargada",
       "sketch": [

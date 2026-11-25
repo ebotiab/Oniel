@@ -221,14 +221,14 @@ def test_trains_of_the_coast_enter_and_leave_where_they_do(
         ends = _ends(passes)
         shapes[ends] = shapes.get(ends, 0) + 1
     assert products == {
-        "REGIONAL": 131,
-        "REG.EXP.": 38,
-        "EUROMED": 37,
+        "Regional": 131,
+        "Regional Exprés": 38,
+        "Euromed": 37,
         "AVE": 17,
         "Intercity": 14,
-        "ALVIA": 8,
-        "MD": 6,
-        "AVANT EXP": 2,
+        "Alvia": 8,
+        "Media Distancia": 6,
+        "Avant Exprés": 2,
     }
     assert rules == {
         "cambrils-vila-seca-por-la-feredat": 22,
@@ -282,6 +282,6 @@ def test_trains_from_madrid_join_at_joaquin_sorolla(
         assert len(passes) == 18 and _ends(passes) == (CASTELLO, SOROLLA)
         assert {p.kind for p in passes} == {"estimado"}
     # los Euromed salen de la Estació del Nord y pasan junto a Joaquín Sorolla sin parar
-    euromed = next(t for t in select_trips_for_spec(feed, coast.spec) if t.product == "EUROMED")
+    euromed = next(t for t in select_trips_for_spec(feed, coast.spec) if t.product == "Euromed")
     by_id = {p.segment_id: p for p in _passes(euromed, feed, coast, lines)}
     assert by_id[f"{LINE}:{NORD}:{SOROLLA}"].kind == "estimado"

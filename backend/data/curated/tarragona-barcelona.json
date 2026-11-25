@@ -26,7 +26,7 @@
       }
     ],
     "status": "disponible",
-    "description": "Une Tarragona con Barcelona por la costa, pasando por Sant Vicenç de Calders y Vilanova i la Geltrú. Es el camino de los regionales del sur de Cataluña y de los Intercity de València que paran en Tarragona.\n\nEmpieza en la bifurcación La Feredat, en la línea de València, de donde sale un enlace de una sola vía hasta la bifurcación Vila-seca; allí se le une la línea que viene de Reus. Los Euromed y los demás trenes de València que paran en Camp de Tarragona no pasan por aquí: siguen por la alta velocidad hasta Barcelona.\n\nEn Sant Vicenç de Calders se le unen la línea de Valls, por la que llegan regionales de Lleida, y la de Vilafranca del Penedès, que va a Barcelona por el interior. Los regionales siguen desde Barcelona-Sants por el túnel de la calle Aragó hasta Passeig de Gràcia y Estació de França.\n\nOniel cuenta los regionales e Intercity del horario de Renfe. Los trenes de Rodalies de Barcelona (R2 Sud), que paran además en Calafell, Cunit, Sitges, Castelldefels o Gavà, no están en ese horario y no se cuentan.",
+    "description": "Une Tarragona con Barcelona por la costa, pasando por Sant Vicenç de Calders y Vilanova i la Geltrú. Es el camino de los regionales del sur de Cataluña y de los Intercity de Valencia que paran en Tarragona.\n\nEmpieza en la bifurcación La Feredat, en la línea de Valencia, de donde sale un enlace de una sola vía hasta la bifurcación Vila-seca; allí se le une la línea que viene de Reus. Los Euromed y los demás trenes de Valencia que paran en Camp de Tarragona no pasan por aquí: siguen por la alta velocidad hasta Barcelona.\n\nEn Sant Vicenç de Calders se le unen la línea de Valls, por la que llegan regionales de Lleida, y la de Vilafranca del Penedès, que va a Barcelona por el interior. Los regionales siguen desde Barcelona-Sants por el túnel de la calle Aragó hasta Passeig de Gràcia y Estació de França.\n\nOniel cuenta los regionales e Intercity del horario de Renfe. Los trenes de Rodalies de Barcelona (R2 Sud), que paran además en Calafell, Cunit, Sitges, Castelldefels o Gavà, no están en ese horario y no se cuentan.",
     "geometry_source": {
       "source_id": "osm-relation-5913127",
       "parts": [
@@ -105,7 +105,7 @@
         "lat": 41.1112229
       },
       "reference_pk_km": 103.5,
-      "description": "Estación de la ciudad, junto al mar. La de alta velocidad, Camp de Tarragona, está a unos 10 km. De aquí sale además la vía de Salou-Port Aventura, el trozo que queda en servicio de la antigua línea de la costa hacia València."
+      "description": "Estación de la ciudad, junto al mar. La de alta velocidad, Camp de Tarragona, está a unos 10 km. De aquí sale además la vía de Salou-Port Aventura, el trozo que queda en servicio de la antigua línea de la costa hacia Valencia."
     },
     {
       "id": "altafulla-tamarit",
@@ -202,13 +202,22 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc», en toda la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-vila-seca",
+      "to_node": "barcelona-sants",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "reus-caspe-zaragoza",
       "node_id": "bif-vila-seca",
-      "name": "Línea de Reus a Zaragoza por Caspe y a Lleida por La Plana-Picamoixons",
+      "name": "Línea convencional Vila-seca – Reus – Zaragoza",
       "towards": "Reus, Móra la Nova, Caspe, Zaragoza y Lleida",
       "status": "no_cargada",
       "sketch": [
@@ -250,7 +259,7 @@
     {
       "id": "sant-vicenc-valls",
       "node_id": "sant-vicenc-de-calders",
-      "name": "Línea de Sant Vicenç de Calders a Valls y La Plana-Picamoixons",
+      "name": "Línea convencional Sant Vicenç de Calders – Valls – Lleida",
       "towards": "Roda de Mar, Valls y Lleida",
       "status": "no_cargada",
       "sketch": [
@@ -275,7 +284,7 @@
     {
       "id": "sant-vicenc-vilafranca",
       "node_id": "sant-vicenc-de-calders",
-      "name": "Línea de Sant Vicenç de Calders a Barcelona por Vilafranca del Penedès",
+      "name": "Línea convencional Sant Vicenç de Calders – Vilafranca del Penedès – Barcelona",
       "towards": "L'Arboç, Vilafranca del Penedès y Barcelona",
       "status": "no_cargada",
       "sketch": [

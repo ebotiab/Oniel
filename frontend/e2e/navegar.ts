@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test'
 
 import { zonaDeLinea } from './instantanea.ts'
 
-export type Seccion = 'mapa' | 'recorridos' | 'sin-otro-camino' | 'glosario' | 'cobertura'
+export type Seccion = 'mapa' | 'recorridos' | 'sin-otro-camino' | 'guia' | 'glosario' | 'cobertura'
 
 /** En el móvil los enlaces de la cabecera van tras «Menú»: lo abre si está cerrado. */
 export async function abrirMenu(page: Page) {

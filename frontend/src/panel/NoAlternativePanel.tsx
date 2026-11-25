@@ -4,6 +4,7 @@ import { conAlternativa, costeCorto, grupoPrincipal, rangoTrenes, sinAlternativa
 import { abreAparte } from '../app/navegacion'
 import { formatDate, lineKind, lineShortLabel, listaEs, notaNoOficial, routePath } from '../app/state'
 import { fetchAlternatives } from '../data/api'
+import { useApiStatus } from '../data/useApiStatus'
 import type { AlternativesOut, CoverageOut, NetworkOut, SegmentAlternatives } from '../data/types'
 import { Muestra } from './Legend'
 import { Plegable } from './Plegable'
@@ -26,8 +27,8 @@ interface Props {
  * Los demás tramos van plegados, con lo que añade su otro camino.
  */
 export function NoAlternativePanel({ network, coverage, referenceDate, onSelectSegment, onSimulate, onMapa }: Props) {
-  const [datos, setDatos] = useState<AlternativesOut | null>(null)
-  const [fallo, setFallo] = useState(false)
+  const [datos, setDatos] = useState<AlternativesOut | null>()
+  const apiAvailable = useApiStatus() === 'disponible'
   const [abierta, setAbierta] = useState<string | null>(null)
   const [elegido, setElegido] = useState<string | null>(null)
   const [encima, setEncima] = useState<string | null>(null)
@@ -35,11 +36,11 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
     let vivo = true
     fetchAlternatives(referenceDate ?? undefined)
       .then((d) => vivo && setDatos(d))
-      .catch(() => vivo && setFallo(true))
+      .catch(() => vivo && setDatos((actual) => actual ?? null))
     return () => {
       vivo = false
     }
-  }, [referenceDate])
+  }, [referenceDate, apiAvailable])
 
   const sin = useMemo(() => (datos ? sinAlternativa(datos.segments) : []), [datos])
   const con = useMemo(() => (datos ? conAlternativa(datos.segments) : []), [datos])
@@ -76,8 +77,8 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
       <h2 id="sin-camino-titulo" className="titulo">
         Tramos sin otro camino
       </h2>
-      {fallo && <p className="texto suave">No se ha podido cargar esta vista.</p>}
-      {!datos && !fallo && <p className="texto suave">Cargando…</p>}
+      {datos === null && <p className="texto suave">No se ha podido cargar esta vista.</p>}
+      {datos === undefined && <p className="texto suave">Cargando…</p>}
       {datos && (
         <div data-testid="tramos-sin-alternativa">
           <p className="entrada" data-testid="alternativa-alcance">

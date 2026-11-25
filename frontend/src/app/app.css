@@ -175,7 +175,7 @@
   margin-right: 8px;
 }
 
-/* Con la ventana estrecha, antes de pasar a la composición del móvil, los cinco enlaces se arriman para que el
+/* Con la ventana estrecha, antes de pasar a la composición del móvil, los enlaces se arriman para que el
    buscador no se quede sin sitio. */
 @media (max-width: 1000px) {
   .nav {
@@ -222,6 +222,8 @@
   right: 0;
   display: flex;
   flex-direction: column;
+  max-height: calc(100dvh - 52px);
+  overflow-y: auto;
   padding: 4px 0 10px;
   background: var(--papel);
   border-top: 1px solid var(--regla);
@@ -1653,7 +1655,7 @@
 
 /* El glosario y «Cobertura y fuentes» son páginas enteras, sin mapa: tapan el visor, que se queda montado debajo pero fuera de la
    vista, del teclado y de los lectores de pantalla. */
-.app.en-pagina > :not(.pagina):not(.cabecera) {
+.app.en-pagina > :not(.pagina):not(.cabecera):not(.salto-guia) {
   visibility: hidden;
 }
 

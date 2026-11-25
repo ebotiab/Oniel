@@ -21,7 +21,7 @@ def trip(trip_id: str, number: str, *stops: tuple[str, int]) -> GtfsTrip:
         route_id="r",
         service_id=f"s-{trip_id}",
         train_number=number,
-        product="MD",
+        product="Media Distancia",
         stop_times=[GtfsStopTime(i, stop, at, at, 0, 0) for i, (stop, at) in enumerate(stops, 1)],
     )
 

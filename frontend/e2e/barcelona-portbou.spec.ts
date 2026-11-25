@@ -48,7 +48,7 @@ test.describe('La línea Barcelona – Girona – Portbou', () => {
     await page.goto('/nodo/portbou')
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Portbou' })).toBeVisible()
-    await expect(ficha).toContainText('Línea Portbou – Cerbère')
+    await expect(ficha).toContainText('Línea convencional Portbou – Cerbère')
     await expect(ficha).toContainText('no cargada todavía')
   })
 

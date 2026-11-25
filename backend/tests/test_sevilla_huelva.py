@@ -98,7 +98,6 @@ def test_nodes_and_main_stations(line: BuiltNetwork) -> None:
     assert line.node("huelva").spec.adif_code == HUELVA
     assert line.node("la-palma-del-condado").spec.adif_code == LA_PALMA
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "conv-los-naranjos-cordoba": "bif-los-naranjos",
         "conv-huelva-zafra": "huelva-mercancias",
     }
 
@@ -180,9 +179,9 @@ def test_the_filter_and_the_rules_take_the_trains(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 212
     assert Counter(t.product for t in trips) == {
-        "MD": 172,
-        "REG.EXP.": 24,
-        "ALVIA": 12,
+        "Media Distancia": 172,
+        "Regional Exprés": 24,
+        "Alvia": 12,
         "Intercity": 4,
     }
     rules = Counter(r.override.id for t in trips if (r := route_for_trip(spec, t)))

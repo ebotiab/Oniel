@@ -14,6 +14,7 @@ from oniel.routing.graph import (
     closure_detours,
     find_routes,
     route_along,
+    shortest_route,
 )
 from oniel.routing.scenario import Scenario, ScenarioError, SketchLink, SpeedChange
 
@@ -35,4 +36,5 @@ __all__ = [
     "closure_detours",
     "find_routes",
     "route_along",
+    "shortest_route",
 ]

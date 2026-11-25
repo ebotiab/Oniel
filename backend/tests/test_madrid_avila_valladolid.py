@@ -221,10 +221,10 @@ def test_the_filter_leaves_out_the_high_speed_trains(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 502
     assert Counter(t.product for t in trips) == {
-        "MD": 160,
-        "PROXIMDAD": 150,
-        "REGIONAL": 131,
-        "REG.EXP.": 55,
+        "Media Distancia": 160,
+        "Proximidad": 150,
+        "Regional": 131,
+        "Regional Exprés": 55,
         "Intercity": 6,
     }
     assert not any("08004" in _stops(t) for t in trips)

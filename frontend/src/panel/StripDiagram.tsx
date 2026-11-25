@@ -45,7 +45,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
   const segments = network.segments.filter((s) => s.line_id === lineId)
   const line = network.lines.find((l) => l.id === lineId)
   const highSpeed = line ? lineKind(line) === 'alta velocidad' : false
-  const withConnections = new Set(network.connections.map((c) => c.node_id))
+  const withConnections = new Set(network.connections.flatMap((c) => (c.to_node_id ? [c.node_id, c.to_node_id] : [c.node_id])))
   const kmMax = Math.max(...nodes.map((n) => n.km))
   const top = 22
   const principal = nodes.filter((n) => n.rank === 'principal').length
@@ -164,7 +164,7 @@ export function StripDiagram({ network, lineId, selection, hoverId, closedSegmen
             {sel && trazo && !closed && <line x1={X} y1={y1 + inset} x2={X} y2={y2 - inset} stroke={trazo.colorCss} strokeWidth={3} strokeLinecap="round" />}
             {!compact && n !== undefined && maxCount > 0 && y2 - y1 > 14 && (
               <g className="esquema-conteo" aria-hidden="true">
-                <rect x={X + 9} y={y1 + inset + 2} width={Math.max(2, (n / maxCount) * 26)} height={Math.max(2, y2 - y1 - 2 * inset - 4)} rx={1} fill={closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : 'var(--tinta)'} opacity={sel || closed ? 0.22 : 0.1} />
+                <rect x={X + 9} y={y1 + inset + 2} width={n > 0 ? Math.max(2, (n / maxCount) * 26) : 0} height={Math.max(2, y2 - y1 - 2 * inset - 4)} rx={1} fill={closed ? 'var(--senal-roja)' : sel ? 'var(--senal-azul)' : 'var(--tinta)'} opacity={sel || closed ? 0.22 : 0.1} />
                 <text x={X + 40} y={(y1 + y2) / 2 + 3.5} fontSize={10} fill={sel ? 'var(--senal-azul)' : 'var(--tinta-3)'} className="datos">
                   {n}
                 </text>

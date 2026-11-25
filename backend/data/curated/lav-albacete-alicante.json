@@ -50,18 +50,27 @@
     {"id": "villena-av", "name": "Villena Alta Velocidad", "kind": "estacion", "adif_code": "03309", "position": {"lon": -0.873295, "lat": 38.585302}, "reference_pk_km": 435.526,
      "description": "Estación solo de alta velocidad, a unos seis kilómetros de Villena. Se abrió con la línea, en junio de 2013. La estación de Villena de la línea convencional es otra."},
     {"id": "bif-murcia", "name": "Bifurcación Murcia", "kind": "bifurcacion", "position": {"km": 213.256}, "reference_pk_km": 461.356,
-     "description": "Aquí se separa la línea de alta velocidad a Elche, Orihuela y Murcia. Los trenes de Madrid a Murcia que no entran en Alicante dejan esta línea en este punto."},
+     "description": "Aquí se separa la línea de alta velocidad a Elche, Orihuela y Murcia. Los trenes de Madrid a Murcia que no entran en Alicante dejan en este punto la línea de Albacete a Alicante."},
     {"id": "monforte-del-cid-av", "name": "Monforte del Cid", "kind": "paet", "rank": "secundario", "position": {"km": 216.549}, "reference_pk_km": 464.649,
-     "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET), sin servicio de viajeros en esta línea. Aquí se une el enlace de Monforte del Cid, una vía corta que viene de la línea de Murcia: por él pasan los trenes de Alicante a Elche, Orihuela y Murcia, sin llegar a la bifurcación de Murcia."},
-    {"id": "alicante-terminal", "name": "Alicante-Terminal", "kind": "estacion", "adif_code": "60911", "position": {"lon": -0.4955241, "lat": 38.3447127}, "reference_pk_km": 485.925,
-     "description": "La estación de Alicante, donde acaba la línea. Es una estación término: las vías no siguen, y un tren que continúa hacia Murcia tiene que salir por donde entró. A ella llegan también las líneas convencionales de La Encina y de Murcia."}
+     "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET), sin servicio de viajeros. Aquí se une el enlace de Monforte del Cid, una vía corta que viene de la línea de Murcia: por él pasan los trenes de Alicante a Elche, Orihuela y Murcia, sin llegar a la bifurcación de Murcia."},
+    {"id": "alicante-terminal", "name": "Alicante/Alacant-Terminal", "kind": "estacion", "adif_code": "60911", "position": {"lon": -0.4955241, "lat": 38.3447127}, "reference_pk_km": 485.925,
+     "description": "La estación de Alicante. Es una estación término: las vías no siguen, y un tren que continúa hacia Murcia tiene que salir por donde entró. A ella llegan la alta velocidad de Albacete y las líneas convencionales de La Encina y de Murcia."}
   ],
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "bif-albacete", "to_node": "albacete-los-llanos", "value": "ertms_n1_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: símbolos «ERTMS N1» y «ASFA - AV» junto a la línea, entre la bifurcación y Albacete."},
     {"attribute": "proteccion_tren", "from_node": "albacete-los-llanos", "to_node": "las-chozas", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: entre Albacete y La Encina no hay ningún símbolo de sistema junto a la línea. Al norte de Albacete dibuja ERTMS N1 y al sur de La Encina, ERTMS N2; el mapa no dice dónde cambia. El nodo cargado junto a La Encina es el puesto de banalización de Las Chozas."},
     {"attribute": "proteccion_tren", "from_node": "las-chozas", "to_node": "alicante-terminal", "value": "ertms_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: símbolos «ERTMS N2» y «ASFA - AV» junto a la línea, entre La Encina y Villena A.V., y otra vez junto a la bifurcación de Murcia. Las vías de OSM dicen railway:etcs=2 en toda la relación."},
     {"attribute": "bloqueo", "from_node": "bif-albacete", "to_node": "alicante-terminal", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BCA» y trazo rosa a lo largo de toda la línea, de la bifurcación a Alacant Terminal."},
-    {"attribute": "mando", "from_node": "bif-albacete", "to_node": "alicante-terminal", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
+    {"attribute": "mando", "from_node": "bif-albacete", "to_node": "alicante-terminal", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."},
+    {
+      "attribute": "tracks",
+      "from_node": "bif-albacete",
+      "to_node": "alicante-terminal",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     

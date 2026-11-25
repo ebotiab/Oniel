@@ -11,6 +11,8 @@ export interface Route {
   simulacion: boolean
   /** Línea a la vista en el panel cuando no hay nada seleccionado; sin ella, la vista de la red. */
   linea?: string | null
+  /** La guía de inicio está abierta. */
+  guia?: boolean
   /** La página «Cobertura y fuentes» está abierta. */
   cobertura?: boolean
   /** Escenario abierto desde la URL, como cadena corta (`frontend/src/routing/scenario.ts`). */
@@ -37,7 +39,7 @@ export interface Comparador {
  * / (la vista de la red), /linea/<id>, /tramo/<id>, /nodo/<id>, /tramo/<id>/cierre, /escenario/<cadena>
  * (las dos últimas, con el día y la franja detrás si se han elegido: /tramo/<id>/cierre/2026-11-20/08:00-09:00),
  * /recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), /glosario,
- * /glosario/<entrada>, /cobertura, /sin-otro-camino y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
+ * /glosario/<entrada>, /guia, /cobertura, /sin-otro-camino y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
  * (/proyecto/<id>).
  *
  * `parseRoute` interpreta la ruta y `routePath` la construye: ninguna vista arma direcciones a mano.
@@ -53,6 +55,7 @@ export function parseRoute(pathname: string): Route {
   const capa = kind ? layerByRoute(kind) : undefined
   if (capa && id) return { selection: { type: 'anotacion', kind: capa.kind, id }, simulacion: false }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
+  if (kind === 'guia') return { selection: null, simulacion: false, guia: true }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
   if (kind === 'sin-otro-camino') return { selection: null, simulacion: false, sinOtroCamino: true }
   if (kind === 'glosario') return { selection: null, simulacion: false, glosario: { entrada: id ?? null } }
@@ -105,6 +108,7 @@ function code(value: string): string {
 }
 
 export function routePath(route: Route): string {
+  if (route.guia) return '/guia'
   if (route.cobertura) return '/cobertura'
   if (route.glosario) return route.glosario.entrada ? `/glosario/${encodeURIComponent(route.glosario.entrada)}` : '/glosario'
   if (route.sinOtroCamino) return '/sin-otro-camino'
@@ -130,8 +134,9 @@ export function annotationHref(a: { kind: string; id: string }): string | null {
   return routePath({ selection: { type: 'anotacion', kind: a.kind, id: a.id }, simulacion: false })
 }
 
+/** Kilómetros con un decimal y el punto de los millares, como los recuentos: 6772,1 → «6.772,1». */
 export function formatKm(km: number): string {
-  return km.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  return km.toLocaleString('es-ES', { useGrouping: 'always', minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
 /** Un recuento con el punto de los millares: 1170 → «1.170». */
@@ -168,9 +173,12 @@ export function networkCount(lines: LineSummary[]): string {
   return `${formatCount(n)} ${n === 1 ? 'línea' : 'líneas'} · ${formatCount(Math.round(km))} km`
 }
 
-/** Fecha de hoy como AAAA-MM-DD (en UTC, como el resto de fechas ISO que maneja la API). */
-export function todayIso(): string {
-  return new Date().toISOString().slice(0, 10)
+// El formato sueco conserva el orden ISO (AAAA-MM-DD) para comparar días del calendario.
+const madridDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' })
+
+/** Día de la red en la España peninsular, con el horario de verano o de invierno que corresponda. */
+export function todayIso(now: Date = new Date()): string {
+  return madridDate.format(now)
 }
 
 export function formatDate(iso: string): string {
@@ -200,37 +208,24 @@ export const KIND_LABEL: Record<string, string> = {
 }
 
 const SHORT_STOP_NAMES: Record<string, string> = {
-  'Madrid-Puerta de Atocha-Almudena Grandes': 'Madrid-Puerta de Atocha',
-  'Madrid-Atocha Cercanías': 'Madrid-Atocha',
-  'Córdoba-Julio Anguita': 'Córdoba',
-  'Málaga María Zambrano': 'Málaga',
-  // el fichero de Ouigo escribe los nombres sin tildes
-  'Malaga Maria Zambrano': 'Málaga',
-  'Cordoba-Central': 'Córdoba',
   'Villanueva de Córdoba-Los Pedroches': 'Villanueva de Córdoba',
-  'Madrid-Chamartín-Clara Campoamor': 'Madrid-Chamartín',
   'Cuenca-Fernando Zóbel': 'Cuenca',
   'Albacete-Los Llanos': 'Albacete',
   'San Fernando-Bahía Sur': 'San Fernando',
-  'Alicante/Alacant-Terminal': 'Alicante',
   'València-Estació del Nord': 'Valencia',
   'Campus Universitario de Rabanales': 'Rabanales',
   'Almuradiel-Viso del Marqués': 'Almuradiel',
 }
 
-/** Nombre corto de una parada para listas densas. */
+/**
+ * Nombre corto de una parada para listas densas. Las paradas que son un nodo llegan ya con el
+ * nombre del nodo; aquí solo se acortan los nombres de nodo más largos.
+ */
 export function shortStop(name: string | null | undefined): string {
   if (!name) return ''
   return SHORT_STOP_NAMES[name] ?? name
 }
 
-const PRODUCT_LABELS: Record<string, string> = {
-  'REG.EXP.': 'Regional Exprés',
-  PROXIMDAD: 'Proximidad',
-  REGIONAL: 'Regional',
-}
-
-/** Nombre del producto comercial tal y como lo entiende un visitante. */
 /** «Iryo», «Iryo y Ouigo», «Renfe, Iryo y Ouigo». */
 export function listaEs(items: string[]): string {
   return new Intl.ListFormat('es', { style: 'long', type: 'conjunction' }).format(items)
@@ -239,10 +234,6 @@ export function listaEs(items: string[]): string {
 /** Frase que avisa de que los trenes de esos operadores no salen de una fuente oficial. */
 export function notaNoOficial(nombres: string[]): string {
   return `Los trenes de ${listaEs(nombres)} salen de una compilación no oficial de sus horarios, que no publica${nombres.length > 1 ? 'n esos operadores' : ' el operador'}.`
-}
-
-export function productLabel(product: string): string {
-  return PRODUCT_LABELS[product] ?? product
 }
 
 /** «Línea de alta velocidad Madrid – Sevilla» → «Madrid – Sevilla». */

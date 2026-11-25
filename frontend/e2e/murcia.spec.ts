@@ -20,7 +20,7 @@ test.describe('La línea de alta velocidad Monforte del Cid – Murcia', () => {
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Murcia del Carmen' })).toBeVisible()
     await expect(ficha).toContainText('La estación de Murcia, donde acaba la línea')
-    await expect(ficha).toContainText('Alicante-Terminal')
+    await expect(ficha).toContainText('Alicante/Alacant-Terminal')
     await expect(ficha).toContainText('Madrid-Chamartín')
   })
 
@@ -56,17 +56,19 @@ test.describe('La línea de alta velocidad Monforte del Cid – Murcia', () => {
     // el primero, más corto, junta la línea convencional hasta Albacete con la alta velocidad
     // desde allí; el segundo es el de alta velocidad entero, por Cuenca
     const porCuenca = recorridos.nth(1)
-    await expect(porCuenca).toContainText('Por Bifurcación Torrejón de Velasco, Bifurcación Albacete y Bifurcación Murcia')
+    await expect(porCuenca.locator('.recorrido-titulo')).toHaveText('Por Cuenca')
     await expect(porCuenca).toContainText('521,7 km · 1 h 58 min sin paradas')
     await expect(porCuenca).toContainText('Recorre cuatro líneas')
-    await expect(porCuenca).not.toContainText('Alicante-Terminal')
+    await expect(porCuenca).not.toContainText('Alicante/Alacant-Terminal')
   })
 
-  test('desde Madrid-Chamartín el primer recorrido a Murcia es el de alta velocidad entero', async ({ page }) => {
+  test('desde Madrid-Chamartín hay un recorrido a Murcia de alta velocidad entero', async ({ page }) => {
     await page.goto('/recorridos/madrid-chamartin/murcia-del-carmen')
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos.first()).toBeVisible()
-    await expect(recorridos.first()).toContainText('529,5 km · 2 h 3 min sin paradas')
-    await expect(recorridos.first()).toContainText('Recorre tres líneas')
+    // es el segundo desde que está cargado el túnel de Atocha a Chamartín: el más corto en kilómetros
+    // (493,4 km) baja por él a Atocha y sigue por la línea convencional hasta Albacete
+    const altaVelocidad = recorridos.filter({ hasText: '529,5 km · 2 h 3 min sin paradas' })
+    await expect(altaVelocidad).toContainText('Recorre tres líneas')
   })
 })

@@ -10,6 +10,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from conftest import (
@@ -134,6 +135,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
             + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
         )
         # misma huella: se salta sin tocar la base
         second = await run(if_changed=True)
@@ -197,6 +199,7 @@ async def test_import_all_skips_when_nothing_changed(capfire: CaptureLogfire) ->
             + 84  # los regionales de Zaragoza a Logroño, Pamplona, Vitoria y Calatayud y los de Logroño a Alfaro
             + 4  # los Intercity de Miranda de Ebro a Bilbao
             + 32  # los regionales de Sevilla a Huelva y de Huelva a Zafra y Jabugo, y 7 de Córdoba a Sevilla
+            + 12  # los regionales de Madrid-Chamartín a Sigüenza, que entran con el túnel de Atocha a Chamartín
         )
     )
     assert runs[0]["lines"] == len(SPECS) and runs[0]["snapshot_exported"] is False
@@ -230,16 +233,19 @@ async def test_failed_import_leaves_a_failed_span(
         raise RuntimeError("fichero de horarios ilegible")
 
     monkeypatch.setattr("oniel.importing._import_all", boom)
-    no_connection: Any = None  # la importación simulada no usa la conexión
+    conn = MagicMock()
+    conn.execute = AsyncMock()
     with pytest.raises(RuntimeError):
         await run_import_all(
-            no_connection,
+            conn,
             specs=[],
             sources=tmp_path / "sources.json",
             feeds=[],
             data_dir=tmp_path,
             snapshot_dir=None,
         )
+    conn.transaction.return_value.__aexit__.assert_awaited_once()
+    assert conn.transaction.return_value.__aexit__.await_args.args[0] is RuntimeError
     spans = capfire.exporter.exported_spans_as_dict()
     assert [s["name"] for s in spans] == ["import all started", "import all"]
     failed = spans[1]
