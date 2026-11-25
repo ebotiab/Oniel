@@ -47,7 +47,7 @@ Si la PR es la del refresco automático de horarios (rama `datos/gtfs-<fecha>`),
 | `backend/src/oniel/settings.py` (`line_ids`) | Las líneas de los dos lados. La primera de la lista define los nodos compartidos: no se mueve. |
 | Recuentos de las pruebas (`backend/tests/`, `frontend/e2e/`) | No se elige un lado. Se regenera, se pasa la prueba y se escribe lo que da. Si el número no es el de ninguna de las dos ramas, es lo esperable cuando las dos añaden trenes, y se explica en la PR. |
 | `docs/datos.md`, `docs/simulacion.md` | Las filas y los apartados de los dos lados. Las cifras que suman toda la red (líneas, kilómetros, nodos, tramos, pesos de la instantánea) se vuelven a leer del resultado. |
-| `docs/hoja-de-ruta.md`, `docs/historial.md`, `CLAUDE.md` | Lo de los dos lados. Comprueba que la lista de líneas y su número siguen cuadrando. |
+| `docs/hoja-de-ruta.md`, `docs/historial.md`, `AGENTS.md` | Lo de los dos lados. Comprueba que la lista de líneas y su número siguen cuadrando. |
 | `frontend/src/app/app.css` | A mano, mirando el final de cada lado: varias sesiones añaden reglas al final y la llave de cierre puede quedar fuera del bloque en conflicto. Después, `npm run build`, que comprueba las hojas compiladas. |
 | `.github/scripts/que-cambia.sh`, flujos de CI | A mano, y se lee el resultado entero: una regla perdida no hace fallar nada, solo deja de lanzar pruebas. |
 

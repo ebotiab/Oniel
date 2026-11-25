@@ -46,6 +46,9 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Guía y procedimientos de Codex y Claude Code
+        run: ruby .github/scripts/comprobar-agentes.rb
+
       - name: Rutas que cambia la pull request
         id: rutas
         shell: bash
