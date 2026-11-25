@@ -10,6 +10,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from conftest import (
@@ -232,16 +233,19 @@ async def test_failed_import_leaves_a_failed_span(
         raise RuntimeError("fichero de horarios ilegible")
 
     monkeypatch.setattr("oniel.importing._import_all", boom)
-    no_connection: Any = None  # la importación simulada no usa la conexión
+    conn = MagicMock()
+    conn.execute = AsyncMock()
     with pytest.raises(RuntimeError):
         await run_import_all(
-            no_connection,
+            conn,
             specs=[],
             sources=tmp_path / "sources.json",
             feeds=[],
             data_dir=tmp_path,
             snapshot_dir=None,
         )
+    conn.transaction.return_value.__aexit__.assert_awaited_once()
+    assert conn.transaction.return_value.__aexit__.await_args.args[0] is RuntimeError
     spans = capfire.exporter.exported_spans_as_dict()
     assert [s["name"] for s in spans] == ["import all started", "import all"]
     failed = spans[1]

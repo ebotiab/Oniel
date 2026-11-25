@@ -97,17 +97,23 @@ async def run_import_all(
     logfire.info("import all started", if_changed=if_changed)
     with logfire.span("import all", if_changed=if_changed) as span:
         try:
-            result = await _import_all(
-                conn,
-                specs=specs,
-                sources=sources,
-                feeds=feeds,
-                data_dir=data_dir,
-                snapshot_dir=snapshot_dir,
-                annotations=annotations,
-                if_changed=if_changed,
-                src_dir=src_dir,
-            )
+            async with conn.transaction():
+                # Dos arranques pueden llegar a la vez, incluso a una base sin tablas.
+                # El segundo comprueba la huella después de que termine el primero.
+                await conn.execute(
+                    "SELECT pg_advisory_xact_lock(hashtextextended('oniel.import.all', 0))"
+                )
+                result = await _import_all(
+                    conn,
+                    specs=specs,
+                    sources=sources,
+                    feeds=feeds,
+                    data_dir=data_dir,
+                    snapshot_dir=snapshot_dir,
+                    annotations=annotations,
+                    if_changed=if_changed,
+                    src_dir=src_dir,
+                )
         except BaseException:
             span.set_attribute("outcome", "failed")
             raise
