@@ -41,7 +41,7 @@ gh workflow run gtfs.yml
 
 Cerrar la PR y relanzar el flujo se le propone al usuario; no se hace por iniciativa propia.
 
-Tras la fusión cambia `backend/data/`: Render reimporta, y la tarea termina cuando `oniel-data obs estado` enseña el commit desplegado y su importación completada, como dice `CLAUDE.md`.
+Tras la fusión cambia `backend/data/`: Render reimporta, y la tarea termina cuando `oniel-data obs estado` enseña el commit desplegado y su importación completada, como dice `AGENTS.md`.
 
 ## Caso 2: el fichero nuevo no pasa las comprobaciones
 

@@ -137,9 +137,17 @@ Según lo que vayas a hacer, empieza por aquí:
 4. **Se fusiona con squash, y fusionar publica.** Cada cambio en `main` despliega la API en Render y el visor en Vercel. Cada PR tiene además su vista previa en Vercel.
 5. **La PR cierra su incidencia** con `Closes #N` en la descripción, la retira de la hoja de ruta y lleva lo aprendido a `docs/`.
 
+### Publicar una rama desde Codex
+
+Para trabajar con la conexión de GitHub de Codex, instala o configura **ChatGPT Codex Connector** en la cuenta propietaria de Oniel. En **Only select repositories**, incluye `Oniel`. GitHub permite leer el código público aunque la instalación aún no tenga acceso de escritura. [Configurar la aplicación en GitHub](https://github.com/apps/chatgpt-codex-connector).
+
+Si crear una rama devuelve `403 Resource not accessible by integration`, comprueba que `ebotiab/Oniel` aparece entre los repositorios de esa instalación. Para publicar ramas se necesita escritura en `Contents`, para abrir PR en `Pull requests` y para modificar `.github/workflows/` también en `Workflows`. Se puede verificar la conexión publicando la rama de la tarea y abriendo su PR. [Permisos de las aplicaciones de GitHub](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app).
+
+Si usas Git desde una sesión local y aparece `Could not resolve host: github.com`, comprueba desde esa misma sesión la conexión con `git ls-remote origin HEAD`. Una vez haya red, `gh auth status` permite comprobar la cuenta de la CLI que abrirá la PR. [Red y permisos de Codex](https://developers.openai.com/codex/agent-approvals-security/).
+
 ### Convenciones
 
-Están completas en [CLAUDE.md](CLAUDE.md), que es la guía con la que trabajan las sesiones de código y sirve igual a una persona. Lo esencial:
+Están completas en [AGENTS.md](AGENTS.md), que es la guía con la que trabajan las sesiones de código y sirve igual a una persona. Lo esencial:
 
 - **Todo en español**: interfaz, documentación, comentarios, nombres de las pruebas, commits y PR. Los identificadores del código siguen en inglés.
 - **Se escribe para quien no sabe de ferrocarril.** Lenguaje llano, y los términos técnicos inevitables se explican en el glosario.
@@ -256,7 +264,7 @@ Ninguna es obligatoria para desarrollar. Los ejemplos están en `backend/.env.ex
 - [docs/despliegue.md](docs/despliegue.md): Vercel, Render, Logfire y la base de datos local.
 - [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): tareas pendientes, ordenadas, y principios de arquitectura.
 - [docs/historial.md](docs/historial.md): lo ya hecho, PR a PR.
-- [CLAUDE.md](CLAUDE.md): convenciones del proyecto.
+- [AGENTS.md](AGENTS.md): convenciones del proyecto.
 
 ## Licencias de los datos
 
