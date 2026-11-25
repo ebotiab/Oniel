@@ -362,6 +362,7 @@ export default function App() {
   else if (route.sinOtroCamino)
     panel = (
       <NoAlternativePanel
+        key={referenceDate}
         network={network}
         coverage={coverage}
         referenceDate={referenceDate}
