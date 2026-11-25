@@ -112,11 +112,11 @@ test.describe('Explorar la red', () => {
     const movil = await asa.isVisible()
     if (movil) await asa.click()
     // a la vista, lo que entiende cualquiera: cuánto mide y a qué velocidad se circula
-    await expect(page.getByTestId('ficha-linea')).toHaveText(/^470,5 km\s*hasta 300 km\/h$/)
+    await expect(page.getByTestId('ficha-linea')).toHaveText(/^470,3 km\s*hasta 300 km\/h$/)
     if (movil) return // la hoja compacta no lleva frase de entrada ni notas
     // una frase de entrada a la vista; el resto, plegado por párrafos
-    await expect(page.getByTestId('linea-entrada')).toContainText(/^Primera línea de alta velocidad de España/)
-    const resto = page.getByText(/Es de vía doble en todo su recorrido/)
+    await expect(page.getByTestId('linea-entrada')).toContainText(/^Une Madrid-Puerta de Atocha con Sevilla-Santa Justa/)
+    const resto = page.getByText(/Los horarios cargados incluyen AVE, Avant, Intercity y AVLO/)
     await expect(resto).toBeHidden()
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(resto).toBeVisible()

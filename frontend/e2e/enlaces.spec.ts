@@ -108,10 +108,10 @@ test.describe('El enlace de Monforte del Cid', () => {
     const altaVelocidad = recorridos.filter({ hasText: '529,5 km · 2 h 3 min sin paradas' })
     await expect(altaVelocidad).toContainText('Recorre tres líneas')
     // Solo pasa por el enlace el recorrido que llega antes a Alicante, por València y Xàtiva (#208): entra
-    // en él desde Alicante-Terminal, como los trenes de Alicante a Murcia, y no dobla ninguna esquina
+    // en él desde Alicante/Alacant-Terminal, como los trenes de Alicante a Murcia, y no dobla ninguna esquina
     for (const recorrido of await recorridos.all()) {
       const texto = (await recorrido.textContent()) ?? ''
-      if (texto.includes('Alicante-Terminal')) expect(texto).toContain('Xàtiva')
+      if (texto.includes('Alicante/Alacant-Terminal')) expect(texto).toContain('Xàtiva')
       else expect(texto).not.toContain('Monforte del Cid')
     }
   })
@@ -130,7 +130,7 @@ test.describe('Los enlaces de Soto de Cerrato y de Aljucén y el túnel de Atoch
   for (const [id, nombre, km] of [
     ['enlace-soto-de-cerrato', 'Enlace de Soto de Cerrato', '5,2 km'],
     ['enlace-aljucen-la-garrovilla', 'Enlace de Aljucén a La Garrovilla', '7,1 km'],
-    [TUNEL, 'Túnel de Atocha a Chamartín por Recoletos', '7,7 km'],
+    [TUNEL, 'Túnel de Atocha a Chamartín por Recoletos', '7,6 km'],
   ]) {
     test(`${nombre}: cuelga de su línea en la lista y tiene su ficha`, async ({ page }) => {
       await page.goto('/')
@@ -152,7 +152,7 @@ test.describe('Los enlaces de Soto de Cerrato y de Aljucén y el túnel de Atoch
     await campo.fill('túnel de atocha')
     const primero = page.getByRole('option').first()
     await expect(primero).toContainText('Túnel de Atocha a Chamartín por Recoletos')
-    await expect(primero).toContainText('Enlace convencional · 7,7 km')
+    await expect(primero).toContainText('Enlace convencional · 7,6 km')
     await campo.press('Enter')
     await expect(page).toHaveURL(new RegExp(`/linea/${TUNEL}$`))
   })

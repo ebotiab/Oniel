@@ -48,9 +48,8 @@ En ocho días se cargaron treinta y ocho líneas, cada una en una sesión distin
 
 **Incoherencias entre líneas y documentación.**
 
-- [#265](https://github.com/ebotiab/Oniel/issues/265) Datos: un solo criterio de velocidades, electrificación, fuentes y descripciones. Dos líneas cuya velocidad máxima es menor que la de uno de sus tramos, tres escrituras de la electrificación, la descripción de Madrid – Sevilla, cinco veces más corta que las demás.
 
-Cómo se reparten: #265 regenera la instantánea y va sola. #266 es casi toda del visor y #267, de solo documentación: pueden ir en paralelo con las demás.
+Las tareas que regeneran la instantánea van de una en una; las de visor y documentación pueden avanzar en paralelo.
 
 No tiene incidencia, y queda para cuando esto esté hecho, cargar como enlaces (`link_of`) las vías cortas que hoy van a trazos y por las que ya pasan trenes: la de Madrid-Príncipe Pío a Pinar de las Rozas (31 trenes el día de referencia), la de Grisén (12), la de El Chaparral a Arroyo de la Herrera (8), la de Vallecas a Los Gavilanes (8) y la de Gobantes a Bobadilla (6). Desde #264 están dibujadas por los dos extremos y salen en la ficha de los dos nodos; cargarlas es ampliar la red.
 

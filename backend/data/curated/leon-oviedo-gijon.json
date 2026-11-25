@@ -237,7 +237,7 @@
       "attribute": "electrification",
       "from_node": "bif-pajares",
       "to_node": "pola-de-lena",
-      "value": "25kv_ca",
+      "value": "25 kV 50 Hz",
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-15",
       "note": "Mapa 4: 25 kV desde el trecho de tercer carril que empieza junto a La Robla hasta Pola de Lena («Doble a 25 KV 50 HZ a 1.668 mm» de Campomanes AV a Pola de Lena); a 3 kV de León a La Robla y de Pola de Lena a Gijón. Las vías de OSM sitúan los cambios de tensión dentro de la variante: 1,9 km después de la bifurcación Pajares y 1,2 km después del cambiador de Campomanes, desde donde llevan voltage=3000 hasta Pola de Lena. Se declara lo que dibuja el mapa, que cambia en nodos."
@@ -295,6 +295,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-15",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en los cuatro rótulos de la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "leon",
+      "to_node": "gijon-sanz-crespo",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [

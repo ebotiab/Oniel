@@ -10,7 +10,11 @@ Oniel empezó por la línea de alta velocidad Madrid–Sevilla (Adif, línea 010
 
 ### Guía del atlas
 
-«Guía» aparece junto a «Glosario» en la cabecera y en el menú del móvil. Su dirección es `/guia`. La página utiliza la columna de lectura del glosario y un esquema de cuatro estaciones de la línea Manzanares – Ciudad Real. Cada nombre abre su ficha. Las preguntas siguientes abren un tramo y una comparación entre dos ciudades. Los ejemplos enlazan las vistas del atlas para que el lector pueda probar lo que acaba de leer. El cierre sigue siendo una consulta opcional en la ficha del tramo.
+«Guía» aparece junto a «Glosario» en la cabecera y en el menú del móvil. Su dirección es `/guia`. Utiliza la columna de lectura del glosario, Archivo y los colores del atlas. La primera pantalla tiene una invitación a abrir Manzanares – Ciudad Real y el esquema de sus cuatro estaciones, cuyos nombres abren las fichas. Explica que el mapa sitúa el trazado en el territorio y que el esquema endereza la misma línea para seguir su orden: arriba no significa norte.
+
+La ampliación del 25 de noviembre de 2026 organiza el resto por preguntas de un principiante, en desplegables nativos independientes: por dónde pasa la línea, adónde llega un tren desde una estación, cómo leer un tramo, qué comparar entre dos recorridos y de qué fecha son los horarios. Cada respuesta propone un detalle que observar y enlaza la vista real que lo muestra. Los ejemplos no fijan recuentos ni fechas que puedan quedar viejos. No hay pasos obligatorios, progreso ni un modo de visita distinto del atlas.
+
+Al volver desde un ejemplo, con Atrás o con «Guía», se conservan los apartados abiertos, el desplazamiento y el foco del enlace utilizado durante esa sesión. «Mapa» sigue devolviendo a la última vista del mapa. Bajo las preguntas, el alcance explica las conexiones pendientes de cargar, las fuentes y el uso del Glosario. El cierre tiene su propio desplegable al final, rotulado «Exploración opcional» y descrito como hipótesis. Los horarios publicados y los tiempos estimados se distinguen expresamente del seguimiento de trenes en directo. Capturas y recorrido comprobado en `docs/capturas/guia-primer-recorrido/`.
 
 ## Referencias
 
@@ -329,3 +333,10 @@ Principios
 - Los textos hablan al visitante que sabe poco de ferrocarril: "tramo", "estación", "cierre", no jerga.
 - Un tren y una estación se llaman igual en todas partes (#263, decidido el 23 de noviembre de 2026). El tipo de tren es el que rotula el fichero de horarios vigente, con una sola escritura («Avant», «Avant Exprés», «Intercity», «Regional», «AVE Euromed»), también en las descripciones: no se usa un nombre que el fichero ya no trae, como «Alvia» o «Media Distancia». Una estación que es un nodo lleva el nombre del nodo en las listas de trenes, aunque el fichero la escriba de otra manera; Madrid-Atocha Cercanías sale como «Madrid-Puerta de Atocha», el nodo que comparten. La regla está en `docs/datos.md`, «Rótulos de tren y nombres de estación».
 - Lo esencial primero y el detalle plegado: cada ficha sigue el «Patrón de ficha».
+
+
+## Coherencia y procedencia de las fichas (#265, 25 de noviembre de 2026)
+
+La fuente del número de vías y la de la velocidad máxima se citan al pie de «Más detalle», con el patrón existente de atributos: editor, enlace, fecha e identificador. Solo se agrupan atributos que comparten fuente y fecha: comprobar las vías hoy no cambia la fecha en que se comprobó la electrificación. Una corrección de Adif se atribuye a Adif y no a la geometría de OSM. Las electrificaciones publicadas usan el mismo texto en línea y tramo; la tolerancia del visor a las claves antiguas solo permite convivir con una API anterior durante el despliegue.
+
+El usuario aprobó antes de publicarlas la nueva descripción de Madrid–Sevilla (cuatro párrafos: recorrido, conexiones, trenes programados e interrupción fechada) y la normalización narrativa Valencia/Castellón/Alicante, conservando los nombres ferroviarios completos de las estaciones. El criterio y los datos revisados se detallan en `docs/datos.md`, «Añadir otra línea», y `docs/revision-datos-265.md`.

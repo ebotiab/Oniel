@@ -60,7 +60,16 @@
     {"attribute": "mando", "from_node": "bif-malaga", "to_node": "antequera-santa-ana", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."},
     {"attribute": "proteccion_tren", "from_node": "antequera-santa-ana", "to_node": "malaga-maria-zambrano", "value": "ertms_n1_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: símbolos de «ERTMS N1 y 2» (el color se comprobó con el de la leyenda) y de ASFA de alta velocidad, unidos por una línea a Málaga María Zambrano, al final del trazo de la línea que baja de Antequera-Santa Ana."},
     {"attribute": "bloqueo", "from_node": "antequera-santa-ana", "to_node": "malaga-maria-zambrano", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el trazo magenta de BCA sigue junto a la línea de Antequera-Santa Ana a Málaga María Zambrano."},
-    {"attribute": "mando", "from_node": "antequera-santa-ana", "to_node": "malaga-maria-zambrano", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."}
+    {"attribute": "mando", "from_node": "antequera-santa-ana", "to_node": "malaga-maria-zambrano", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando."},
+    {
+      "attribute": "tracks",
+      "from_node": "bif-malaga",
+      "to_node": "malaga-maria-zambrano",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [],
   "stop_mappings": {

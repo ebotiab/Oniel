@@ -71,7 +71,7 @@
     {"id": "siete-aguas-av", "name": "Siete Aguas", "kind": "paet", "rank": "secundario", "position": {"km": 345.503}, "reference_pk_km": 345.12,
      "description": "Puesto de adelantamiento y estacionamiento de trenes (PAET) en el término de Siete Aguas (Valencia). No tiene servicio de viajeros en esta línea."},
     {"id": "valencia-joaquin-sorolla", "name": "València-Joaquín Sorolla", "kind": "estacion", "adif_code": "03216", "position": {"lon": -0.3812078, "lat": 39.4600472}, "reference_pk_km": 397.55,
-     "description": "Final de la alta velocidad de Madrid en València: una estación término abierta en 2010 junto a la Estació del Nord, la de las líneas convencionales; un corredor peatonal las une desde junio de 2025. Algunos AVE de Madrid siguen desde aquí hasta Castelló por la línea de la costa."}
+     "description": "Final de la alta velocidad de Madrid en Valencia: una estación término abierta en 2010 junto a la Estació del Nord, la de las líneas convencionales; un corredor peatonal las une desde junio de 2025. Algunos AVE de Madrid siguen desde aquí hasta Castellón por la línea de la costa."}
   ],
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "madrid-chamartin", "to_node": "bif-torrejon-de-velasco", "value": "ertms_n1_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto a la línea que baja de Madrid hacia Torrejón de Velasco, el símbolo morado oscuro de «ERTMS N1» y el cuadrado amarillo de «ASFA - AV». Entre Chamartín y Atocha el mapa no dibuja un símbolo propio; Wikipedia dice nivel 1 de Madrid-Chamartín a Torrejón de Velasco."},
@@ -80,7 +80,16 @@
     {"attribute": "proteccion_tren", "from_node": "bif-torrejon-de-velasco", "to_node": "valencia-joaquin-sorolla", "value": "ertms_n1_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: junto a la línea, entre Aranjuez y Cuenca, entre Cuenca y la bifurcación de Albacete, antes de Requena-Utiel y a la entrada de Valencia, el símbolo morado oscuro de «ERTMS N1» (se comprobó el color con el de la leyenda) y el cuadrado amarillo de «ASFA - AV». Wikipedia dice que la línea tiene ERTMS de niveles 1 y 2; se declara lo que dibuja el mapa."},
     {"attribute": "bloqueo", "from_node": "bif-torrejon-de-velasco", "to_node": "siete-aguas-av", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: trazo magenta y rótulo «BCA» de Madrid a Cuenca, de Cuenca a la bifurcación de Albacete y de allí a Requena-Utiel y Buñol."},
     {"attribute": "bloqueo", "from_node": "siete-aguas-av", "to_node": "valencia-joaquin-sorolla", "value": "bca_bsl", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: el trazo magenta de BCA sigue pasado Buñol y, a la entrada de Valencia, cambia al trazo rojo rotulado «BSL» («BSL Alta Velocidad» en la leyenda) hasta València-Joaquín Sorolla. El mapa es un esquema y no dice en qué punto cambia."},
-    {"attribute": "mando", "from_node": "bif-torrejon-de-velasco", "to_node": "valencia-joaquin-sorolla", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA y al BSL no dice nada del mando."}
+    {"attribute": "mando", "from_node": "bif-torrejon-de-velasco", "to_node": "valencia-joaquin-sorolla", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA y al BSL no dice nada del mando."},
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-chamartin",
+      "to_node": "valencia-joaquin-sorolla",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "enlace-blancales-lav-sevilla", "node_id": "bif-blancales", "name": "Enlace de Blancales", "towards": "Ciudad Real, Córdoba y Sevilla, sin pasar por Madrid", "to_node_id": "bif-yeles", "towards_back": "Cuenca y Valencia, sin pasar por Madrid", "status": "no_cargada", "sketch": [[-3.7238, 40.1624], [-3.7332, 40.1694], [-3.7415, 40.1721], [-3.7539, 40.1679], [-3.765593, 40.145362]]}

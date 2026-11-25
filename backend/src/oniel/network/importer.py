@@ -116,7 +116,7 @@ async def import_network(
             await _upsert_stop_mappings(conn, net)
         stats: dict[str, Any] = {
             "line_id": spec.line.id,
-            "length_km": round(net.line.polyline.length_km, 3),
+            "length_km": round(net.length_km, 3),
             "reference_length_km": spec.line.reference_length_km,
             "nodes": len(net.nodes),
             "shared_nodes": sum(1 for n in net.nodes if n.spec.shared),
@@ -157,7 +157,7 @@ async def _upsert_line(conn: asyncpg.Connection, net: BuiltNetwork) -> None:
         line.electrification,
         line.max_speed_kmh,
         dt.date.fromisoformat(line.opened_on) if line.opened_on else None,
-        round(net.line.polyline.length_km, 3),
+        round(net.length_km, 3),
         line.reference_length_km,
         line.status,
         line.description,
@@ -336,7 +336,7 @@ def network_as_json(net: BuiltNetwork) -> dict[str, Any]:
     """Resumen serializable del modelo construido (para validar sin base de datos)."""
     return {
         "line": net.spec.line.id,
-        "length_km": round(net.line.polyline.length_km, 3),
+        "length_km": round(net.length_km, 3),
         "nodes": [
             {
                 "id": n.spec.id,

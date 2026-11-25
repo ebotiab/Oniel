@@ -173,6 +173,24 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-17",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "vitoria-gasteiz",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "burgos-rosa-manzano",
+      "to_node": "briviesca",
+      "value": 160,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Mapa 3, página 7: 160 km/h entre Burgos y Miranda. Los 200 de la variante son de diseño según wikipedia-linea-100; OSM los trae como maxspeed. Se conserva la predominante de OSM de 155."
     }
   ],
   "connections": [

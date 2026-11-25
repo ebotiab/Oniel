@@ -20,7 +20,7 @@ test.describe('La línea de alta velocidad Monforte del Cid – Murcia', () => {
     const ficha = page.getByTestId('detalle-nodo')
     await expect(ficha.getByRole('heading', { name: 'Murcia del Carmen' })).toBeVisible()
     await expect(ficha).toContainText('La estación de Murcia, donde acaba la línea')
-    await expect(ficha).toContainText('Alicante-Terminal')
+    await expect(ficha).toContainText('Alicante/Alacant-Terminal')
     await expect(ficha).toContainText('Madrid-Chamartín')
   })
 
@@ -59,7 +59,7 @@ test.describe('La línea de alta velocidad Monforte del Cid – Murcia', () => {
     await expect(porCuenca.locator('.recorrido-titulo')).toHaveText('Por Cuenca')
     await expect(porCuenca).toContainText('521,7 km · 1 h 58 min sin paradas')
     await expect(porCuenca).toContainText('Recorre cuatro líneas')
-    await expect(porCuenca).not.toContainText('Alicante-Terminal')
+    await expect(porCuenca).not.toContainText('Alicante/Alacant-Terminal')
   })
 
   test('desde Madrid-Chamartín hay un recorrido a Murcia de alta velocidad entero', async ({ page }) => {

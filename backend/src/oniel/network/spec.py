@@ -10,7 +10,12 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from oniel.domain.annotations import ANNOTATION_KINDS, Scope
-from oniel.domain.attributes import ATTRIBUTE_RULES, AttributeScalar, value_matches
+from oniel.domain.attributes import (
+    ATTRIBUTE_RULES,
+    ELECTRIFICATIONS,
+    AttributeScalar,
+    value_matches,
+)
 
 NodeKind = Literal["estacion", "paet", "pb", "bifurcacion", "cambiador", "referencia"]
 NodeRank = Literal["principal", "secundario"]
@@ -308,6 +313,13 @@ class LineSpec(BaseModel):
     #: Alicante). El visor la lista bajo aquella y el comparador la cuenta como parte suya, pero,
     #: a diferencia de un baipás, elige sus trenes con su propio filtro y sus asignaciones.
     link_of: str | None = None
+
+    @field_validator("electrification")
+    @classmethod
+    def _electrification(cls, value: str | None) -> str | None:
+        if value is not None and value not in ELECTRIFICATIONS:
+            raise ValueError(f"electrificación {value!r} fuera del criterio admitido")
+        return value
 
 
 class SlowRun(BaseModel):

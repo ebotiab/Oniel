@@ -41,7 +41,16 @@
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "ertms_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 no dibuja el enlace aparte: junto a la bifurcación de Murcia rotula lo de la línea 046, a la que el enlace da acceso. Símbolos «ERTMS N2» y «ASFA - AV», los mismos que lleva la línea de Alicante en ese punto. Las vías del enlace en OSM (ref=048) llevan railway:etcs=2."},
     {"attribute": "bloqueo", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "El mapa 4 no dibuja el enlace aparte: junto a la bifurcación de Murcia rotula lo de la línea 046, a la que el enlace da acceso. Trazo rosa y rótulo «BCA», como en las dos líneas que une."},
-    {"attribute": "mando", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
+    {"attribute": "mando", "from_node": "monforte-del-cid-av", "to_node": "bif-vinalopo", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."},
+    {
+      "attribute": "tracks",
+      "from_node": "monforte-del-cid-av",
+      "to_node": "bif-vinalopo",
+      "value": 1,
+      "source_id": "osm-relation-18342974",
+      "checked_on": "2026-11-25",
+      "note": "Trazado y etiquetas del extracto OSM registrado; criterio del enlace documentado en docs/datos.md."
+    }
   ],
   "connections": [],
   "stop_mappings": {

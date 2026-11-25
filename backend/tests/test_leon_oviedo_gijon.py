@@ -219,7 +219,9 @@ def test_kilometre_points_restart_at_the_variant_and_at_pola_de_lena(line: Built
 def test_double_track_and_speeds(line: BuiltNetwork) -> None:
     assert [s.id.removeprefix(f"{LINE}:") for s in line.segments] == ALL_SEGMENTS
     assert {s.tracks for s in line.segments} == {2}
-    assert not [s for s in line.spec.attribute_sections if s.attribute == "tracks"]
+    assert all(
+        s.attributes["tracks"].source_id == "adif-declaracion-red-2026-mapas" for s in line.segments
+    )
     # el primer tramo lleva la velocidad declarada: el desvío de la bifurcación trae 250 km/h
     assert [s.max_speed_kmh for s in line.segments] == [
         160,
@@ -253,7 +255,7 @@ def test_gauge_and_electrification_change_on_the_variant(line: BuiltNetwork) -> 
         for k, s in by_id.items()
         if "electrification" in s.attributes
     }
-    assert power == dict.fromkeys(VARIANT_SEGMENTS, "25kv_ca")
+    assert power == dict.fromkeys(VARIANT_SEGMENTS, "25 kV 50 Hz")
     for key in VARIANT_SEGMENTS[:2]:
         assert by_id[key].attributes["gauge"].source_id == MAP
 

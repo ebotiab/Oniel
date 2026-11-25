@@ -34,7 +34,7 @@ No pases de una fase sin su comprobación: los errores de trazado se pagan en la
 
 **1. Trazado y fuentes (pasos 1 a 4).** Cada fichero crudo va a `backend/data/raw/` con la fecha en el nombre y cada fuente a `sources.json` antes de usar el dato. Comprueba que la relación de OpenStreetMap es de una pieza trazándola de punta a punta, y mira dónde están de verdad sus extremos: el nombre de una relación no lo dice. Lo que no esté en una fuente no se estima: se deja sin poner y se dice.
 
-**2. Especificación (pasos 5, 6 y 10).** `backend/data/curated/<línea>.json`, los puntos kilométricos tal como los da Adif y el id en `line_ids`. Los tres atributos de señalización son obligatorios. Si la línea sustituye a una conexión a trazos de otra especificación, retírala de allí.
+**2. Especificación (pasos 5, 6 y 10).** `backend/data/curated/<línea>.json`, los puntos kilométricos tal como los da Adif y el id en `line_ids`. Los tres atributos de señalización son obligatorios. Aplica los criterios comunes de «Añadir otra línea»: máxima de línea igual al máximo documentado de sus tramos, sin confundirla con la predominante o comercial; electrificación con los mismos tres textos que la línea; secciones `tracks` con fuente y fecha en todo el recorrido, también donde se hereda el número general. Longitud medida entre nodos extremos; fecha de apertura y longitud de referencia ausentes si no hay fuente para ese ámbito. Nombres ferroviarios completos, topónimos narrativos uniformes y descripción de tres a cinco párrafos; enseña cualquier reescritura al usuario antes de publicarla. Si la línea sustituye a una conexión a trazos de otra especificación, retírala de allí.
 
 **3. Trenes (pasos 7 a 9).** Saca del GTFS los patrones de parada de los trenes de la línea antes de escribir asignaciones: dicen qué paradas de fuera hay que asignar. Después:
 
@@ -61,7 +61,7 @@ Lo que dice «Arrancar y comprobar» de `AGENTS.md`: las comprobaciones rápidas
 
 ## Está terminada cuando
 
-- `validate` no da problemas, con y sin `--spec`.
+- `validate` no da problemas, con y sin `--spec`; las regresiones de `test_coherencia_fichas.py` demuestran que rechaza máximas contradictorias y electrificación no canónica, y admite datos válidos o desconocidos sin inventarlos.
 - Todo dato nuevo tiene su fuente en `sources.json` y su fichero crudo con fecha.
 - La instantánea regenerada va en la PR, con `index.json` y `lines/<id>.json` al día.
 - Los recuentos que cambian están explicados en la descripción de la PR, uno por uno.

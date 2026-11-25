@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
 import { useApiStatus } from '../data/useApiStatus'
@@ -13,6 +13,7 @@ import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
+  notice?: ReactNode
   segment: SegmentOut
   network: NetworkOut
   /** Fuentes registradas, para citar al pie del detalle la del tramo. */
@@ -29,7 +30,7 @@ interface Props {
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ notice, segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [alternativas, setAlternativas] = useState<AlternativesOut | null>(null)
@@ -101,6 +102,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           {segment.to_name}
         </button>
       </h2>
+      {notice}
       <dl className="datos-tramo datos">
         <div>
           <dt>Longitud</dt>

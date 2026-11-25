@@ -172,7 +172,9 @@ def test_single_track_from_soto_de_cerrato_to_burgos(line: BuiltNetwork) -> None
     assert line.spec.line.tracks == 1
     single = sum(s.length_km for s in line.segments if s.tracks == 1)
     assert single == pytest.approx(81.3, abs=0.5)
-    (section,) = [a for a in line.spec.attribute_sections if a.attribute == "tracks"]
+    (section,) = [
+        a for a in line.spec.attribute_sections if a.attribute == "tracks" and a.value == 2
+    ]
     assert section.value == 2 and section.source_id == WIKIPEDIA
     # las vías de OSM traen la velocidad en todos los tramos: 300 km/h, y 210 al llegar a Burgos
     assert [s.max_speed_kmh for s in line.segments] == [300, 300, 300, 300]

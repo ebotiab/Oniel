@@ -27,7 +27,7 @@ export interface SegmentAttribute {
   sinDato?: string
   /** Identificador de la celda para las pruebas; por defecto, `tramo-atributo-<clave>`. */
   testId?: string
-  /** Si su fuente no se cita al pie de «Más detalle» (las vías, que la ficha no ha citado nunca). */
+  /** Si su fuente no se cita al pie de «Más detalle». */
   sinCita?: true
 }
 
@@ -92,7 +92,6 @@ export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
     lugar: 'esencial',
     sinDato: 'sin dato',
     testId: 'tramo-vias',
-    sinCita: true,
   },
   // Ancho de vía: solo lo traen los tramos que lo tienen distinto del de su línea (el ancho mixto del
   // paso por Loja, de la entrada a Granada y de València a Castelló, y el estándar del enlace de La
@@ -180,21 +179,21 @@ export function attributeRows(
 
 export interface FuenteAtributos {
   sourceId: string
-  /** El día más reciente en que se comprobó alguno de sus valores. */
+  /** El día en que se comprobaron estos valores. */
   checkedOn: string | null
   /** Las etiquetas de los atributos que da, en el orden de la ficha. */
   etiquetas: string[]
 }
 
-/** Las fuentes de unas filas de atributos: una por fuente, con lo que da cada una; sin las de los atributos que no se citan. */
+/** Agrupa solo los atributos con la misma fuente y fecha, sin trasladar la fecha de uno a los demás. */
 export function attributeSources(filas: FilaAtributo[]): FuenteAtributos[] {
   const porFuente = new Map<string, FuenteAtributos>()
   for (const { atributo, valor } of filas) {
     if (!valor?.source_id || atributo.sinCita) continue
-    const fuente = porFuente.get(valor.source_id) ?? { sourceId: valor.source_id, checkedOn: null, etiquetas: [] }
+    const clave = `${valor.source_id}:${valor.checked_on ?? ''}`
+    const fuente = porFuente.get(clave) ?? { sourceId: valor.source_id, checkedOn: valor.checked_on, etiquetas: [] }
     fuente.etiquetas.push(atributo.etiqueta)
-    if (valor.checked_on && (!fuente.checkedOn || valor.checked_on > fuente.checkedOn)) fuente.checkedOn = valor.checked_on
-    porFuente.set(valor.source_id, fuente)
+    porFuente.set(clave, fuente)
   }
   return [...porFuente.values()]
 }

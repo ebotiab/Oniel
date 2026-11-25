@@ -40,6 +40,30 @@
   ],
   "sources": [
     {
+      "id": "renfe-pat-madrid-puertollano-2026-11-14",
+      "name": "Plan de refuerzo del servicio Avant Madrid–Ciudad Real–Puertollano desde el 14 de noviembre",
+      "publisher": "Renfe",
+      "url": "https://www.renfe.com/content/dam/renfe-viajeros/home/pat_madrid_puertollano_14nov.pdf",
+      "license": "Consulta pública; © Renfe",
+      "license_url": null,
+      "retrieved_on": "2026-11-25",
+      "coverage": "Plan alternativo entre Madrid, Ciudad Real y Puertollano, con autobuses y una combinación de tren y autobús por sentido.",
+      "notes": "Enlazado por la portada de Renfe el 25 de noviembre de 2026. Las dos páginas son imágenes y se leyeron visualmente. Imprime vigencia desde el 14 de noviembre, sin año ni fecha de publicación. No identifica el tramo ferroviario de los servicios mixtos ni anuncia reapertura de la alta velocidad. La consulta y sus límites están en raw/interrupciones/consultas_2026-11-25.json.",
+      "file": "raw/interrupciones/consultas_2026-11-25.json"
+    },
+    {
+      "id": "adif-nota-obras-autopista-ferroviaria-2026-07",
+      "name": "Inicio de las obras de adaptación del tramo Madrid–Algeciras a la autopista ferroviaria",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/inicio-trabajos-madrid-algeciras-autopista-ferroviaria",
+      "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-25",
+      "coverage": "Previsión de suspensión del tráfico entre Venta de Cárdenas y Algeciras desde septiembre de 2026 hasta otoño de 2027 por las obras de adaptación.",
+      "notes": "Nota del 24 de julio de 2026. Fuente directa de la previsión que antes recogía la prensa; no es confirmación de reapertura ni una promesa de vuelta de los trenes al ramal Espelúy–Jaén. Resumen fechado en el registro de consultas.",
+      "file": "raw/interrupciones/consultas_2026-11-25.json"
+    },
+    {
       "id": "renfe-gtfs-av-ld-md",
       "name": "Horarios de alta velocidad, larga distancia y media distancia (GTFS)",
       "publisher": "Renfe Viajeros (data.renfe.com)",
@@ -692,13 +716,13 @@
     },
     {
       "id": "adif-declaracion-red-2026-mapas",
-      "name": "Declaración sobre la Red 2026 de Adif Alta Velocidad. Mapas (edición de 27 de febrero de 2026), mapa 4: sistemas de seguridad y bloqueos",
+      "name": "Declaración sobre la Red 2026 de Adif Alta Velocidad. Mapas (edición de 27 de febrero de 2026), mapas 3 y 4: velocidades, vías, electrificación, sistemas de seguridad y bloqueos",
       "publisher": "Adif Alta Velocidad; Adif",
       "url": "https://www.adifaltavelocidad.es/sobre-adif-av/declaracion-red",
       "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
       "retrieved_on": "2026-11-12",
-      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra.",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra. Revisión del 25 de noviembre: mapa 3, página 7 (enero de 2026), máximos de 300 km/h de Madrid a Barcelona y 160 de Burgos a Miranda; número de vías principales y electrificación de las líneas cargadas, junto al mapa 4. Las secciones curadas precisan los extremos y la fecha de comprobación.",
       "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
       "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },
@@ -720,10 +744,10 @@
       "url": "https://www.adif.es/viajeros/estado-de-la-red",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-20",
+      "retrieved_on": "2026-11-25",
       "coverage": "Interrupción de la circulación en la línea de alta velocidad Madrid–Andalucía desde el 28 de octubre de 2026 y tramos que siguen en servicio (Madrid–Toledo y Málaga–Sevilla).",
-      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea de Tarragona a Barcelona por la costa: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña; los avisos de obras de ese día solo traían de Cataluña obras de las líneas R3 y R7 de Rodalies, que no están cargadas (raw/interrupciones/consultas_2026-11-18_tarragona_barcelona.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó otra vez al cargar la línea de València a Alicante por Xàtiva: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-18_valencia_alicante.json). El 19 de noviembre de 2026, con la hora de página 8:00, se leyó al cargar la línea convencional de Madrid a Valladolid por Ávila y Medina del Campo: la circulación entre Robledo de Chavela y Zarzalejo se había restablecido por una vía tras el descarrilamiento de la locomotora de un tren de mercancías, y el panel de la estación de Ávila daba retrasos en ese trecho y un cambio de tren en El Escorial para los regionales a Chamartín; no anunciaba ninguna interrupción vigente en la línea (raw/interrupciones/consultas_2026-11-19_madrid_avila_valladolid.json). El 19 de noviembre de 2026, con la hora de página 17:09, se leyó al cargar la línea convencional de Palencia a Santander: no anunciaba ninguna interrupción en ella ni traía avisos de Cantabria; tampoco la página de avisos (raw/interrupciones/consultas_2026-11-19_palencia_santander.json). El 20 de noviembre de 2026, a las 9:54, se volvió a leer al cargar las líneas de Zaragoza a Logroño y de Castejón a Pamplona: no anunciaba ninguna incidencia en ellas (raw/interrupciones/consultas_2026-11-20_zaragoza_logrono_pamplona.json). El mismo día, hacia las 12:25 y con la misma hora de página, 9:54, se leyó al cargar la línea de Miranda de Ebro a Bilbao: no anunciaba ninguna incidencia en ella ni en el País Vasco (raw/interrupciones/consultas_2026-11-20_miranda_bilbao.json). El 20 de noviembre de 2026, con la hora de página 13:40, se leyó al cargar la línea de Sevilla a Huelva: no anunciaba ninguna interrupción en ella, y la pestaña de Andalucía solo traía la de la alta velocidad Madrid – Andalucía; tampoco la página de avisos (raw/interrupciones/consultas_2026-11-20_sevilla_huelva.json).",
-      "file": "raw/interrupciones/consultas_2026-11-13.json"
+      "notes": "Página de avisos en tiempo real: cambia sin dejar histórico. Lo que decía el 13 de noviembre de 2026 a las 10:47, igual que los días 10 y 12, está resumido en el registro de consultas de ese día; los anteriores siguen en raw/interrupciones/consultas_2026-11-10.json y consultas_2026-11-12.json. A las 13:38 de ese mismo día se volvió a leer al cargar la línea de alta velocidad de Albacete a Alicante: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-13_albacete_alicante.json). El 14 de noviembre de 2026, con la hora de página 13:32, se leyó al cargar la línea de alta velocidad de Olmedo a Ourense: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-14_olmedo_ourense.json). El 15 de noviembre de 2026, con la hora de página 10:29, se leyó al cargar la línea de León a Oviedo y Gijón: tampoco anunciaba ninguna interrupción en ella; traía además un aviso de la línea convencional de Madrid a Ávila, que no está cargada (raw/interrupciones/consultas_2026-11-15_leon_gijon.json). El 17 de noviembre de 2026, con la hora de página 17:51, se leyó al cargar la línea de Burgos a Miranda de Ebro y Vitoria: no anunciaba ninguna interrupción en ella; traía además una incidencia de señalización en la bifurcación Cerrato, que retrasaba los trenes entre Madrid y León, y un corte de cercanías en Asturias (raw/interrupciones/consultas_2026-11-17_burgos_vitoria.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 11:28, se leyó al cargar la línea de alta velocidad de Barcelona a Girona y Figueres: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_figueres.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar la línea de Sevilla a Cádiz: seguía el aviso de la línea Madrid–Andalucía y no anunciaba ninguna interrupción en la línea nueva (raw/interrupciones/consultas_2026-11-18_sevilla_cadiz.json). El 18 de noviembre de 2026, con la hora de página 10:51, se leyó al cargar los ramales de alta velocidad de Toledo y de Huesca: no anunciaba ninguna interrupción en ellos y repetía que los trenes de Madrid a Toledo siguen circulando (raw/interrupciones/consultas_2026-11-18_toledo_huesca.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea convencional de Barcelona a Girona y Portbou: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña (raw/interrupciones/consultas_2026-11-18_barcelona_portbou.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó al cargar la línea de Tarragona a Barcelona por la costa: no anunciaba ninguna interrupción en ella ni traía avisos de Cataluña; los avisos de obras de ese día solo traían de Cataluña obras de las líneas R3 y R7 de Rodalies, que no están cargadas (raw/interrupciones/consultas_2026-11-18_tarragona_barcelona.json). El 18 de noviembre de 2026, con la hora de página 15:57, se leyó otra vez al cargar la línea de València a Alicante por Xàtiva: no anunciaba ninguna interrupción en ella (raw/interrupciones/consultas_2026-11-18_valencia_alicante.json). El 19 de noviembre de 2026, con la hora de página 8:00, se leyó al cargar la línea convencional de Madrid a Valladolid por Ávila y Medina del Campo: la circulación entre Robledo de Chavela y Zarzalejo se había restablecido por una vía tras el descarrilamiento de la locomotora de un tren de mercancías, y el panel de la estación de Ávila daba retrasos en ese trecho y un cambio de tren en El Escorial para los regionales a Chamartín; no anunciaba ninguna interrupción vigente en la línea (raw/interrupciones/consultas_2026-11-19_madrid_avila_valladolid.json). El 19 de noviembre de 2026, con la hora de página 17:09, se leyó al cargar la línea convencional de Palencia a Santander: no anunciaba ninguna interrupción en ella ni traía avisos de Cantabria; tampoco la página de avisos (raw/interrupciones/consultas_2026-11-19_palencia_santander.json). El 20 de noviembre de 2026, a las 9:54, se volvió a leer al cargar las líneas de Zaragoza a Logroño y de Castejón a Pamplona: no anunciaba ninguna incidencia en ellas (raw/interrupciones/consultas_2026-11-20_zaragoza_logrono_pamplona.json). El mismo día, hacia las 12:25 y con la misma hora de página, 9:54, se leyó al cargar la línea de Miranda de Ebro a Bilbao: no anunciaba ninguna incidencia en ella ni en el País Vasco (raw/interrupciones/consultas_2026-11-20_miranda_bilbao.json). El 20 de noviembre de 2026, con la hora de página 13:40, se leyó al cargar la línea de Sevilla a Huelva: no anunciaba ninguna interrupción en ella, y la pestaña de Andalucía solo traía la de la alta velocidad Madrid – Andalucía; tampoco la página de avisos (raw/interrupciones/consultas_2026-11-20_sevilla_huelva.json). El 25 de noviembre de 2026, con hora de página 21:58, mantiene expresamente la suspensión Madrid–Andalucía y el servicio Madrid–Toledo y Málaga–Sevilla, sin fecha de reapertura; registro en raw/interrupciones/consultas_2026-11-25.json.",
+      "file": "raw/interrupciones/consultas_2026-11-25.json"
     },
     {
       "id": "adif-aviso-obras-autopista-ferroviaria",
@@ -732,10 +756,10 @@
       "url": "https://www.adif.es/w/obras-autopista-ferroviaria-algeciras-zaragoza",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-13",
+      "retrieved_on": "2026-11-25",
       "coverage": "Interrupción del servicio entre Córdoba y Santa Cruz de Mudela y en el tramo Algeciras–Bobadilla–Córdoba por las obras de la autopista ferroviaria, con transporte alternativo por carretera.",
-      "notes": "El aviso declara su última actualización el 30 de septiembre de 2026. No da fecha de inicio ni previsión de fin: esas salen de la nota de Renfe y de la prensa registradas aparte.",
-      "file": "raw/interrupciones/consultas_2026-11-13.json"
+      "notes": "El aviso sigue publicado el 25 de noviembre de 2026 y no da fecha de inicio ni de fin. La revisión del 13 de noviembre registró actualización del 30 de septiembre; en esta lectura no se comprobó esa fecha. La previsión de otoño de 2027 tiene ahora fuente oficial directa en adif-nota-obras-autopista-ferroviaria-2026-07.",
+      "file": "raw/interrupciones/consultas_2026-11-25.json"
     },
     {
       "id": "adif-salidas-y-llegadas",
@@ -744,10 +768,10 @@
       "url": "https://www.adif.es/viajeros/estaciones",
       "license": "Consulta pública; © Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adif.es/aviso-legal",
-      "retrieved_on": "2026-11-13",
+      "retrieved_on": "2026-11-25",
       "coverage": "Qué trenes circulan y cuáles hacen parte del recorrido por carretera el día de la consulta: sirve para fijar hasta qué estación llegan los trenes a cada lado de una interrupción.",
-      "notes": "Paneles en tiempo real, sin histórico; las páginas consultadas cada día y lo que mostraban están en los registros de consultas (raw/interrupciones/consultas_2026-11-10.json, consultas_2026-11-12.json y consultas_2026-11-13.json). El 13 de noviembre de 2026 se leyeron los de Ciudad Real, Puertollano, Santa Cruz de Mudela y Jaén; el de Córdoba no devolvió información de circulación.",
-      "file": "raw/interrupciones/consultas_2026-11-13.json"
+      "notes": "Paneles en tiempo real, sin histórico; las páginas consultadas cada día y lo que mostraban están en los registros de consultas (raw/interrupciones/consultas_2026-11-10.json, consultas_2026-11-12.json y consultas_2026-11-13.json). El 13 de noviembre de 2026 se leyeron los de Ciudad Real, Puertollano, Santa Cruz de Mudela y Jaén; el de Córdoba no devolvió información de circulación. El 25 de noviembre se leyeron llegadas de Ciudad Real y Puertollano con Avant rotulados BUS y de Jaén con carretera Córdoba-Jaén. La consulta nocturna de Córdoba y Santa Cruz solo devolvió la tanda de la mañana sin fecha propia; no se atribuye al día 25. Las salidas quedan sin comprobar con filas del día. El registro de consultas distingue estas observaciones de las de la revisión documental anterior de ese día en #259.",
+      "file": "raw/interrupciones/consultas_2026-11-25.json"
     },
     {
       "id": "merca2-marcas-renfe-2026-11",
@@ -768,10 +792,10 @@
       "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/07/modificacion-servicio-media-distancia-jaen-madrid-e-almeria-madrid",
       "license": "Consulta pública; © Renfe",
       "license_url": null,
-      "retrieved_on": "2026-11-10",
+      "retrieved_on": "2026-11-25",
       "coverage": "Inicio de las obras de la autopista ferroviaria el 6 de septiembre de 2026 y servicio por carretera entre Jaén y Almuradiel y entre Jaén y Córdoba.",
-      "notes": "Publicada el 25 de julio de 2026. Dice que entre Jaén y Córdoba el servicio ya se prestaba por carretera desde los daños de un temporal, sin dar la fecha.",
-      "file": "raw/interrupciones/consultas_2026-11-10.json"
+      "notes": "Publicada el 25 de julio de 2026. Dice que entre Jaén y Córdoba el servicio ya se prestaba por carretera desde los daños de un temporal, sin dar la fecha. Releída el 25 de noviembre de 2026: mantiene el plan por carretera entre Jaén y Almuradiel desde el 6 de septiembre y el previo entre Jaén y Córdoba, sin fecha de reanudación.",
+      "file": "raw/interrupciones/consultas_2026-11-25.json"
     },
     {
       "id": "el-estrecho-digital-corte-algeciras",

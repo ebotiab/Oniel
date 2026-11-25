@@ -171,7 +171,9 @@ def test_declared_speeds_fill_what_the_geometry_does_not_say(bcn: BuiltNetwork) 
         assert (segment.max_speed_kmh, segment.typical_speed_kmh) == (speed, speed)
         value = segment.attributes["max_speed_kmh"]
         assert value.source_id == "commons-velocidades-lav-zaragoza-lleida" and value.checked_on
-    assert {k for k, s in by_id.items() if "max_speed_kmh" in s.attributes} == set(declared)
+    assert {k for k, s in by_id.items() if "max_speed_kmh" in s.attributes} == set(declared) | {
+        "guadalajara-yebes:las-inviernas"
+    }
     # los demás conservan la velocidad de las vías de la geometría, y ninguno se queda sin ella
     assert by_id["zaragoza-delicias:bif-huesca"].max_speed_kmh == 70
     assert by_id["bif-moncasi:zaragoza-delicias"].typical_speed_kmh == 200

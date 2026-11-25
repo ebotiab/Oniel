@@ -109,6 +109,15 @@
       "source_id": "osm-relation-6759731",
       "checked_on": "2026-11-23",
       "note": "Las vías de la línea 520 entre Aljucén y la bifurcación La Isla llevan maxspeed=100 y 120 en OSM. Los últimos metros del trazado son vía de la línea nueva, con maxspeed=200: no es la velocidad del enlace."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "aljucen",
+      "to_node": "garrovilla-las-vegas",
+      "value": 1,
+      "source_id": "osm-relation-6759731",
+      "checked_on": "2026-11-25",
+      "note": "Trazado y etiquetas del extracto OSM registrado; criterio del enlace documentado en docs/datos.md."
     }
   ],
   "connections": [],

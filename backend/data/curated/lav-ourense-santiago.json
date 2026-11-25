@@ -126,7 +126,7 @@
       "attribute": "electrification",
       "from_node": "ourense",
       "to_node": "bif-coto-da-torre",
-      "value": "3kv_cc",
+      "value": "3 kV CC",
       "source_id": "osm-relation-11109438",
       "checked_on": "2026-11-18",
       "note": "En OSM, voltage=3000 en las vías de la estación de Ourense a la bifurcación Coto da Torre, la tensión de la red convencional de Ourense. La relación 4777980 etiqueta también a 3 kV los primeros 2,3 km de la vía nueva, pasada la bifurcación, y a 25 kV el resto: el cambio de tensión no cae en un nodo y se declara hasta la bifurcación. El mapa 4 de la Declaración sobre la Red, que es un esquema, dibuja toda la línea a 25 kV."
@@ -157,6 +157,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-coto-da-torre",
+      "to_node": "santiago",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
