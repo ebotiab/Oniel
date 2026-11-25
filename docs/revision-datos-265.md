@@ -44,6 +44,8 @@ Un guion en la tabla siguiente significa ausencia conservada: no hay una fuente 
 
 Se han revisado **430 tramos**; **332** heredaban vías sin fuente propia y ahora la incluyen. Permanecen **21** fechas de apertura y **24** longitudes de referencia ausentes.
 
+Las citas del visor agrupan solo los atributos con la misma fuente y fecha. Una comprobación nueva de las vías no presenta como recién comprobados otros atributos de esa fuente; la regresión de Pajares conserva por separado las fechas del 15 y el 25 de noviembre.
+
 | Especificación | Máxima km/h | Longitud cargada km | Apertura | Referencia km | Fuentes de vías |
 |---|---:|---:|---|---:|---|
 | `lav-madrid-sevilla` | 300 | 470.269 | 1992-04-21 | 471.8 | `adif-declaracion-red-2026-mapas` |

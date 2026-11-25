@@ -57,7 +57,7 @@ test.describe('Elegir línea sin pestañas', () => {
       await expect(filas.locator('.fila-linea-km')).toHaveText(z.lineas.map((l) => `${Math.round(l.length_km)} km`))
     }
     // el renglón de una línea: su tipo, su nombre corto, sus kilómetros y, si lo tiene, el tramo sin circulación
-    await expect(page.getByTestId('linea-lav-madrid-sevilla')).toHaveText(/^Alta velocidad: Madrid – Sevilla471 kmun tramo sin circulación$/)
+    await expect(page.getByTestId('linea-lav-madrid-sevilla')).toHaveText(/^Alta velocidad: Madrid – Sevilla470 kmun tramo sin circulación$/)
     await expect(page.getByTestId('linea-convencional-madrid-alcazar-cordoba')).toHaveText(/^Línea convencional: Madrid – Córdoba por Alcázar de San Juan441 kmun tramo sin circulación$/)
     await expect(page.getByTestId('linea-manzanares-ciudad-real')).toHaveText(/^Línea convencional: Manzanares – Ciudad Real64 km$/)
     // el tipo de vía ya no agrupa: lo dice la muestra de cada fila, con su clave sobre las zonas

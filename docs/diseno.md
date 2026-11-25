@@ -337,6 +337,6 @@ Principios
 
 ## Coherencia y procedencia de las fichas (#265, 25 de noviembre de 2026)
 
-La fuente del número de vías y la de la velocidad máxima se citan al pie de «Más detalle», con el patrón existente de atributos: editor, enlace, fecha e identificador. Una corrección de Adif se atribuye a Adif y no a la geometría de OSM. Las electrificaciones publicadas usan el mismo texto en línea y tramo; la tolerancia del visor a las claves antiguas solo permite convivir con una API anterior durante el despliegue.
+La fuente del número de vías y la de la velocidad máxima se citan al pie de «Más detalle», con el patrón existente de atributos: editor, enlace, fecha e identificador. Solo se agrupan atributos que comparten fuente y fecha: comprobar las vías hoy no cambia la fecha en que se comprobó la electrificación. Una corrección de Adif se atribuye a Adif y no a la geometría de OSM. Las electrificaciones publicadas usan el mismo texto en línea y tramo; la tolerancia del visor a las claves antiguas solo permite convivir con una API anterior durante el despliegue.
 
 El usuario aprobó antes de publicarlas la nueva descripción de Madrid–Sevilla (cuatro párrafos: recorrido, conexiones, trenes programados e interrupción fechada) y la normalización narrativa Valencia/Castellón/Alicante, conservando los nombres ferroviarios completos de las estaciones. El criterio y los datos revisados se detallan en `docs/datos.md`, «Añadir otra línea», y `docs/revision-datos-265.md`.

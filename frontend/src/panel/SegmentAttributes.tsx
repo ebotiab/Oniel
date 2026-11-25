@@ -35,7 +35,7 @@ function enumerar(etiquetas: string[]): string {
 
 /**
  * De dónde salen los atributos que la ficha enseña, a la vista o plegados, y cuándo se comprobaron: un
- * renglón por fuente, al pie de «Más detalle». No usa `PieFuente` porque la fecha es la de comprobación de
+ * renglón por fuente y fecha, al pie de «Más detalle». No usa `PieFuente` porque la fecha es la de comprobación de
  * cada valor, no la de descarga de la fuente. Una fuente que la ficha ya ha citado justo encima (la del
  * trazado, de la que sale también el ancho de vía) no repite su párrafo: se dice que es la misma.
  */
@@ -55,12 +55,12 @@ export function FuentesAtributos({ segment, line, sources, trazado = null }: Omi
         const fuente = sources.find((s) => s.id === f.sourceId)
         if (f.sourceId === trazado)
           return (
-            <p key={f.sourceId} className="suave">
+            <p key={`${f.sourceId}:${f.checkedOn ?? ''}`} className="suave">
               {enumerar(f.etiquetas)}: la misma fuente que el trazado{f.checkedOn ? `, comprobado el ${formatDateLong(f.checkedOn)}` : ''}.
             </p>
           )
         return (
-          <p key={f.sourceId} className="suave">
+          <p key={`${f.sourceId}:${f.checkedOn ?? ''}`} className="suave">
             {enumerar(f.etiquetas)}: {fuente?.url ? (
               <a href={fuente.url} target="_blank" rel="noreferrer">
                 {fuente.publisher}
