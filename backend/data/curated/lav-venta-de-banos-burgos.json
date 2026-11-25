@@ -145,6 +145,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-15",
       "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-soto-de-cerrato",
+      "to_node": "burgos-rosa-manzano",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [],

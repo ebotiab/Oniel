@@ -114,7 +114,7 @@
   ],
   "attribute_sections": [
     {"attribute": "tracks", "from_node": "bif-planetario", "to_node": "humanes", "value": 2, "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Única (salvo entre Madrid y Humanes que es doble)». El mapa 4 de la Declaración sobre la Red dibuja ese trecho como vía doble a 3 kV."},
-    {"attribute": "electrification", "from_node": "bif-planetario", "to_node": "humanes", "value": "3kv_cc", "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Electrificación: No (salvo entre Madrid y Humanes)», a 3000 V. El mapa 4 lo dibuja con el trazo de «Doble a 3 KV a 1.668 mm» hasta Humanes y sin electrificar desde allí; las vías de OSM dicen 3000 V hasta Humanes."},
+    {"attribute": "electrification", "from_node": "bif-planetario", "to_node": "humanes", "value": "3 kV CC", "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«Electrificación: No (salvo entre Madrid y Humanes)», a 3000 V. El mapa 4 lo dibuja con el trazo de «Doble a 3 KV a 1.668 mm» hasta Humanes y sin electrificar desde allí; las vías de OSM dicen 3000 V hasta Humanes."},
     {"attribute": "max_speed_kmh", "from_node": "oropesa-de-toledo", "to_node": "navalmoral-de-la-mata", "value": 155, "source_id": "wikipedia-linea-500", "checked_on": "2026-11-13", "note": "«La velocidad máxima permitida en prácticamente todo el recorrido es de 155 km/h». A la entrada de Navalmoral de la Mata los trenes van por 3,5 km de la plataforma de la línea de alta velocidad en construcción, que en OSM lleva maxspeed=300, la de proyecto; sin esta sección el tramo saldría con 300 km/h."},
     {"attribute": "proteccion_tren", "from_node": "bif-planetario", "to_node": "humanes", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto a Humanes hay símbolos del nudo de Madrid que no se pueden atribuir a esta línea."},
     {"attribute": "proteccion_tren", "from_node": "humanes", "to_node": "bif-san-esteban", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrados de «ASFA - Convencional» a lo largo de la línea, entre Humanes y Monfragüe y junto a Plasencia."},
@@ -123,7 +123,16 @@
     {"attribute": "bloqueo", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU», sin «ctc», y trazo verde entre las bifurcaciones El Chaparral y San Esteban."},
     {"attribute": "mando", "from_node": "bif-planetario", "to_node": "humanes", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el trazo marrón no lleva rótulo y el color no distingue «BAB ctc» de «BAB»."},
     {"attribute": "mando", "from_node": "humanes", "to_node": "bif-el-chaparral", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."},
-    {"attribute": "mando", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU» sin «ctc»; la leyenda distingue «BAU ctc» (naranja) de «BAU» (verde)."}
+    {"attribute": "mando", "from_node": "bif-el-chaparral", "to_node": "bif-san-esteban", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU» sin «ctc»; la leyenda distingue «BAU ctc» (naranja) de «BAU» (verde)."},
+    {
+      "attribute": "tracks",
+      "from_node": "humanes",
+      "to_node": "bif-san-esteban",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "enlace-el-chaparral-arroyo-de-la-herrera", "node_id": "bif-el-chaparral", "name": "Enlace El Chaparral – Arroyo de la Herrera", "towards": "Cáceres, Mérida y Badajoz sin entrar en Plasencia", "to_node_id": "arroyo-de-la-herrera", "towards_back": "Navalmoral de la Mata, Talavera de la Reina y Madrid sin entrar en Plasencia", "status": "no_cargada", "sketch": [[-6.1475609, 39.9554043], [-6.15, 39.962], [-6.165, 39.9635], [-6.178, 39.956], [-6.19109, 39.94645]]}

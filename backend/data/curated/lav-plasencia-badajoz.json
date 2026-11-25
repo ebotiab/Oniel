@@ -133,7 +133,34 @@
     {"attribute": "bloqueo", "from_node": "bif-penas-blancas", "to_node": "bif-granja-las-encinas", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo naranja de Peñas Blancas hacia Aljucén, con el rótulo «BAU ctc» al lado."},
     {"attribute": "bloqueo", "from_node": "bif-granja-las-encinas", "to_node": "montijo", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón en el ramal nuevo hasta Montijo."},
     {"attribute": "bloqueo", "from_node": "montijo", "to_node": "badajoz", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: trazo naranja de Montijo a la bifurcación San Nicolás y a Badajoz, sin rótulo propio; el naranja es el color de «BAU ctc» en vía única."},
-    {"attribute": "mando", "from_node": "plasencia", "to_node": "badajoz", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»; de Montijo a Badajoz, por el color."}
+    {"attribute": "mando", "from_node": "plasencia", "to_node": "badajoz", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»; de Montijo a Badajoz, por el color."},
+    {
+      "attribute": "tracks",
+      "from_node": "arroyo-de-la-herrera",
+      "to_node": "bif-el-palmeral",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-la-aldihuela",
+      "to_node": "bif-penas-blancas",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-granja-las-encinas",
+      "to_node": "montijo",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "caceres-valencia-de-alcantara", "node_id": "caceres", "name": "Línea convencional Cáceres – Valencia de Alcántara", "towards": "Arroyo de Malpartida, San Vicente de Alcántara y Valencia de Alcántara", "status": "no_cargada", "sketch": [[-6.3857249, 39.4611766], [-6.4, 39.468], [-6.5345, 39.468], [-6.8, 39.4], [-7.117, 39.3816], [-7.2307, 39.4269]]},

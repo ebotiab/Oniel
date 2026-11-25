@@ -120,6 +120,15 @@
       "source_id": "osm-ramal-soto-de-cerrato",
       "checked_on": "2026-11-23",
       "note": "Las tres vías del enlace llevan maxspeed=160 en OSM (ref=170). Los últimos 800 m del trazado son vía de la línea de León, con otra velocidad: no es la del enlace."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-soto-de-cerrato",
+      "to_node": "bif-cerrato",
+      "value": 1,
+      "source_id": "osm-ramal-soto-de-cerrato",
+      "checked_on": "2026-11-25",
+      "note": "Trazado y etiquetas del extracto OSM registrado; criterio del enlace documentado en docs/datos.md."
     }
   ],
   "connections": [],

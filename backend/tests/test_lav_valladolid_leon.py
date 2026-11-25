@@ -222,7 +222,9 @@ def test_single_and_double_track_alternate(line: BuiltNetwork) -> None:
     assert single == pytest.approx(85.174, abs=0.5)
     for section in line.spec.attribute_sections:
         if section.attribute == "tracks":
-            assert section.value == 1 and section.source_id == WIKIPEDIA
+            assert section.source_id == (
+                WIKIPEDIA if section.value == 1 else "adif-declaracion-red-2026-mapas"
+            )
     # las vías de OSM traen la velocidad en todos los tramos: ninguno queda sin ella
     assert [s.max_speed_kmh for s in line.segments] == [200, 300, 190, 150, 300, 300, 300, 300]
     assert sum(s.length_km for s in line.segments) == pytest.approx(

@@ -90,7 +90,25 @@
     {"attribute": "bloqueo", "from_node": "santa-cruz-de-mudela", "to_node": "vadollano", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAU ctc», en la vía única de Despeñaperros."},
     {"attribute": "bloqueo", "from_node": "vadollano", "to_node": "linares-baeza", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAB ctc»."},
     {"attribute": "bloqueo", "from_node": "linares-baeza", "to_node": "cordoba", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulos «BAU ctc» a los dos lados de Espelúy."},
-    {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "cordoba", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»."}
+    {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "cordoba", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: todos los rótulos de bloqueo de la línea llevan «ctc»."},
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-puerta-de-atocha",
+      "to_node": "santa-cruz-de-mudela",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "vadollano",
+      "to_node": "linares-baeza",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "conv-cordoba-sevilla", "node_id": "cordoba", "name": "Línea convencional Córdoba – Sevilla", "towards": "Posadas, Palma del Río, Lora del Río y Sevilla", "to_node_id": "bif-los-naranjos", "towards_back": "Los Rosales, Lora del Río y Córdoba", "status": "no_cargada", "sketch": [[-4.789453, 37.888291], [-5.106325, 37.803986], [-5.29276, 37.718081], [-5.5295514, 37.6613212], [-5.7261208, 37.5899718], [-5.959134, 37.441686]]}

@@ -148,7 +148,9 @@ def test_kilometre_points_continue_those_of_the_madrid_line(line: BuiltNetwork) 
 def test_double_track_and_the_speeds_of_the_osm_ways(line: BuiltNetwork) -> None:
     assert [s.id.removeprefix(f"{LINE}:") for s in line.segments] == ALL_SEGMENTS
     assert all(s.tracks == 2 for s in line.segments)
-    assert not [a for a in line.spec.attribute_sections if a.attribute == "tracks"]
+    assert all(
+        s.attributes["tracks"].source_id == "adif-declaracion-red-2026-mapas" for s in line.segments
+    )
     # ningún tramo se queda sin velocidad: la más baja, en la entrada a Girona
     assert [s.max_speed_kmh for s in line.segments] == [220, 255, 245, 245, 125, 290, 290]
     assert line.spec.line.max_speed_kmh == 290

@@ -122,6 +122,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-23",
       "note": "Mapa 4: los rótulos de bloqueo entre Madrid Atocha Cercanías y Madrid Chamartín son «BAB ctc»."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-puerta-de-atocha",
+      "to_node": "madrid-chamartin",
+      "value": 2,
+      "source_id": "osm-relation-18369025",
+      "checked_on": "2026-11-25",
+      "note": "Trazado y etiquetas del extracto OSM registrado; criterio del enlace documentado en docs/datos.md."
     }
   ],
   "connections": [],

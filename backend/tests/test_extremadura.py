@@ -494,8 +494,8 @@ def test_tracks_by_segment(nets: dict[str, BuiltNetwork]) -> None:
     ]
     for segment in madrid.segments:
         tracks = segment.attributes["tracks"]
-        # la sección cita su fuente; donde no hay sección vale el número de vías de la línea
-        assert tracks.source_id == (WIKIPEDIA_500 if segment.tracks == 2 else None)
+        # cada tramo cita su fuente, también los que mantienen el número general de vías
+        assert tracks.source_id == (WIKIPEDIA_500 if segment.tracks == 2 else MAP)
     assert lav.spec.line.tracks == 2
     assert {k for k, s in zip(_short(lav), lav.segments, strict=True) if s.tracks == 1} == (
         LAV_SINGLE
@@ -503,7 +503,7 @@ def test_tracks_by_segment(nets: dict[str, BuiltNetwork]) -> None:
     assert {s.tracks for s in lav.segments} == {1, 2}
     for segment in lav.segments:
         tracks = segment.attributes["tracks"]
-        assert tracks.source_id == (MAP if segment.tracks == 1 else None)
+        assert tracks.source_id == MAP
     double_km = sum(s.length_km for s in lav.segments if s.tracks == 2)
     assert double_km == pytest.approx(111.9, abs=0.2)
     assert all(s.tracks == 1 for line in (MERIDA, OLD) for s in nets[line].segments)
@@ -518,7 +518,7 @@ def test_only_the_way_out_of_madrid_is_electrified_on_the_conventional_line(
     assert madrid.spec.line.electrification == "Sin electrificar"
     for segment in madrid.segments[:3]:
         electrification = segment.attributes["electrification"]
-        assert electrification.value == "3kv_cc"
+        assert electrification.value == "3 kV CC"
         assert (electrification.source_id, electrification.checked_on) == (WIKIPEDIA_500, CHECKED)
     assert all("electrification" not in s.attributes for s in madrid.segments[3:])
     # la vía doble y la catenaria acaban en el mismo sitio
@@ -527,7 +527,7 @@ def test_only_the_way_out_of_madrid_is_electrified_on_the_conventional_line(
     ]
     sections = [t for t in madrid.spec.attribute_sections if t.attribute == "electrification"]
     assert [(t.from_node, t.to_node, t.value) for t in sections] == [
-        ("bif-planetario", "humanes", "3kv_cc")
+        ("bif-planetario", "humanes", "3 kV CC")
     ]
     # las otras tres líneas no lo declaran en ningún tramo
     for line in (LAV, MERIDA, OLD):
@@ -624,7 +624,11 @@ def test_sources_of_the_lines_are_registered(nets: dict[str, BuiltNetwork]) -> N
         assert verification.license == "CC BY-SA 4.0"
         assert verification.retrieved_on == "2026-11-13"
         for section in net.spec.attribute_sections:
-            assert section.source_id in sources and section.checked_on == CHECKED
+            assert (
+                section.source_id in sources
+                and section.checked_on is not None
+                and section.checked_on >= CHECKED
+            )
         assert {o.id for o in net.spec.operators} == {"adif", "renfe"}
         assert all(o.source_id in sources for o in net.spec.operators)
     assert "3,7" in str(sources[WIKIPEDIA_500].coverage)

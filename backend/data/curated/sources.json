@@ -692,13 +692,13 @@
     },
     {
       "id": "adif-declaracion-red-2026-mapas",
-      "name": "Declaración sobre la Red 2026 de Adif Alta Velocidad. Mapas (edición de 27 de febrero de 2026), mapa 4: sistemas de seguridad y bloqueos",
+      "name": "Declaración sobre la Red 2026 de Adif Alta Velocidad. Mapas (edición de 27 de febrero de 2026), mapas 3 y 4: velocidades, vías, electrificación, sistemas de seguridad y bloqueos",
       "publisher": "Adif Alta Velocidad; Adif",
       "url": "https://www.adifaltavelocidad.es/sobre-adif-av/declaracion-red",
       "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
       "retrieved_on": "2026-11-12",
-      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra.",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra. Revisión del 25 de noviembre: mapa 3, página 7 (enero de 2026), máximos de 300 km/h de Madrid a Barcelona y 160 de Burgos a Miranda; número de vías principales y electrificación de las líneas cargadas, junto al mapa 4. Las secciones curadas precisan los extremos y la fecha de comprobación.",
       "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
       "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },

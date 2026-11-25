@@ -41,7 +41,16 @@
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "lzb_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: junto a Toledo, la estrella de «LZB», el cuadrado amarillo de «ASFA - AV» y el triángulo de GSM-R, como en la línea Madrid – Sevilla."},
     {"attribute": "bloqueo", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Mapa 4: trazo rosa de BCA, con su rótulo, de La Sagra a Toledo."},
-    {"attribute": "mando", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Junto al BCA el mapa 4 no dice nada del mando, como en la línea Madrid – Sevilla."}
+    {"attribute": "mando", "from_node": "bif-la-sagra", "to_node": "toledo", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-18", "note": "Junto al BCA el mapa 4 no dice nada del mando, como en la línea Madrid – Sevilla."},
+    {
+      "attribute": "tracks",
+      "from_node": "bif-la-sagra",
+      "to_node": "toledo",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [],
   "stop_mappings": {

@@ -92,7 +92,6 @@ export const SEGMENT_ATTRIBUTES: SegmentAttribute[] = [
     lugar: 'esencial',
     sinDato: 'sin dato',
     testId: 'tramo-vias',
-    sinCita: true,
   },
   // Ancho de vía: solo lo traen los tramos que lo tienen distinto del de su línea (el ancho mixto del
   // paso por Loja, de la entrada a Granada y de València a Castelló, y el estándar del enlace de La

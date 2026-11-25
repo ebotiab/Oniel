@@ -138,7 +138,7 @@ def test_double_track_and_speeds_from_the_tracks(line: BuiltNetwork) -> None:
     assert line.spec.line.gauge_mm == 1668 and line.spec.line.electrification == "3 kV CC"
     # las vías de OSM traen la velocidad en todos los tramos; la más baja, el paso de Pancorbo y
     # la llegada a Miranda
-    assert [s.max_speed_kmh for s in line.segments] == [200, 160, 110, 110, 110, 150, 150]
+    assert [s.max_speed_kmh for s in line.segments] == [160, 160, 110, 110, 110, 150, 150]
 
 
 def test_signalling_as_the_map_draws_it(line: BuiltNetwork) -> None:

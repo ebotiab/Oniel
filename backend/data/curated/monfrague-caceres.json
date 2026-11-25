@@ -48,7 +48,16 @@
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrado de «ASFA - Convencional» bajo la línea, entre Mirabel y Cáceres."},
     {"attribute": "bloqueo", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "blau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU», sin «ctc», y trazo lila de Monfragüe a Cáceres por Mirabel."},
-    {"attribute": "mando", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU» sin «ctc»; la leyenda distingue «BLAU ctc» (azul claro) de «BLAU» (lila)."}
+    {"attribute": "mando", "from_node": "monfrague", "to_node": "bif-casa-de-la-torre", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BLAU» sin «ctc»; la leyenda distingue «BLAU ctc» (azul claro) de «BLAU» (lila)."},
+    {
+      "attribute": "tracks",
+      "from_node": "monfrague",
+      "to_node": "bif-casa-de-la-torre",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
   ],

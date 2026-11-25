@@ -298,6 +298,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "cadiz",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [

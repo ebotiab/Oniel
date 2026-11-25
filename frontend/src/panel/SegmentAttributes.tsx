@@ -40,7 +40,14 @@ function enumerar(etiquetas: string[]): string {
  * trazado, de la que sale también el ancho de vía) no repite su párrafo: se dice que es la misma.
  */
 export function FuentesAtributos({ segment, line, sources, trazado = null }: Omit<Props, 'lugar'> & { sources: Source[]; trazado?: string | null }) {
-  const fuentes = attributeSources([...attributeRows(segment, line, 'esencial'), ...attributeRows(segment, line, 'detalle')])
+  const fuenteVelocidad = sources.find((s) => s.id === segment.source_id)
+  const velocidad = segment.max_speed_kmh === null ? null : (segment.attributes?.max_speed_kmh ?? {
+    value: segment.max_speed_kmh, source_id: segment.source_id, checked_on: fuenteVelocidad?.retrieved_on ?? null,
+  })
+  const fuentes = attributeSources([
+    ...attributeRows(segment, line, 'esencial'), ...attributeRows(segment, line, 'detalle'),
+    { atributo: { clave: 'max_speed_kmh', etiqueta: 'Velocidad máxima', formato: String, lugar: 'esencial' }, valor: velocidad },
+  ])
   if (!fuentes.length) return null
   return (
     <div className="pie-fuente" data-testid="atributos-fuente">

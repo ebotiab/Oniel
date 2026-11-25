@@ -128,6 +128,7 @@ def test_the_geometry_comes_from_the_ways_tagged_048() -> None:
     assert {part.source_id, *(t.source_id for t in spec.attribute_sections)} <= sources
     values = {t.attribute: t.value for t in spec.attribute_sections}
     assert values == {
+        "tracks": 1,
         "proteccion_tren": "ertms_n2_asfa",
         "bloqueo": "bca",
         "mando": "sin_dato_publicado",

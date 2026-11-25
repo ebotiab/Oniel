@@ -315,7 +315,11 @@ def validate_attributes(
     sources = {s.id for s in load_sources(sources_path)}
     lines: list[dict[str, Any]] = []
     for line in _lines(spec_paths, data_dir):
-        spec = line.spec
+        try:
+            spec = line.spec
+        except (ValueError, OSError) as error:
+            problems.append(f"{line.path.name}: {error}")
+            continue
         for section in spec.attribute_sections:
             if section.source_id is not None and section.source_id not in sources:
                 problems.append(
@@ -328,6 +332,17 @@ def validate_attributes(
         except ValueError as error:
             problems.append(str(error))
             continue
+        speeds = [s.max_speed_kmh for s in net.segments if s.max_speed_kmh is not None]
+        maximum = max(speeds) if speeds else None
+        if spec.line.max_speed_kmh != maximum:
+            problems.append(
+                f"{spec.line.id}: velocidad máxima de línea {spec.line.max_speed_kmh!r};"
+                f" la máxima documentada de sus tramos es {maximum!r}"
+            )
+        for segment in net.segments:
+            tracks = segment.attributes["tracks"]
+            if tracks.source_id not in sources or tracks.checked_on is None:
+                problems.append(f"{segment.id}: número de vías sin fuente registrada y fecha")
         covered: Counter[str] = Counter(k for s in net.segments for k in s.attributes)
         lines.append(
             {

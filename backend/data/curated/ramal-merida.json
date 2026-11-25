@@ -58,7 +58,16 @@
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: cuadrado de «ASFA - Convencional» y triángulo de GSM-R junto a Mérida."},
     {"attribute": "bloqueo", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BAU ctc» y trazo naranja entre Aljucén y Mérida, y trazo naranja en el enlace que baja de Peñas Blancas."},
-    {"attribute": "mando", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."}
+    {"attribute": "mando", "from_node": "bif-granja-las-encinas", "to_node": "merida", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."},
+    {
+      "attribute": "tracks",
+      "from_node": "bif-granja-las-encinas",
+      "to_node": "merida",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "merida-zafra-sevilla", "node_id": "merida", "name": "Línea convencional Mérida – Zafra – Sevilla", "towards": "Almendralejo, Zafra y Sevilla", "official_name": "Línea Mérida – Los Rosales", "status": "no_cargada", "sketch": [[-6.3430521, 38.9215856], [-6.3644, 38.9173], [-6.383, 38.8869], [-6.3998, 38.6847], [-6.352, 38.5644], [-6.4051, 38.4136]]}

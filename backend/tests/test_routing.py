@@ -943,7 +943,7 @@ def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
         assert route.via == ["Guadalajara-Yebes", "Calatayud", "Camp de Tarragona"]
     # en sentido contrario, lo mismo
     there, by_tarragona, _, by_valencia, _, by_xativa = find_routes(graph, MADRID, BARCELONA)
-    assert by_xativa.length_km == 991.8 and "Alicante-Terminal" in by_xativa.via
+    assert by_xativa.length_km == 991.8 and "Alicante/Alacant-Terminal" in by_xativa.via
     back, *_ = find_routes(graph, BARCELONA, MADRID)
     # por la costa de Tarragona: de Camp de Tarragona se baja por la línea de València hasta
     # Cambrils, se invierte la marcha y se sube a Tarragona, porque en la bifurcación de La

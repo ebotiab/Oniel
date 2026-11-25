@@ -25,7 +25,7 @@ async function abrirBuscador(page: import('@playwright/test').Page) {
 }
 
 test.describe('Línea de València a Alicante por Xàtiva', () => {
-  test('va de la Estació del Nord a Alicante-Terminal, dos estaciones que ya definían otras líneas', () => {
+  test('va de la Estació del Nord a Alicante/Alacant-Terminal, dos estaciones que ya definían otras líneas', () => {
     const nodos = red.nodes.filter((n) => n.line_id === LINEA).sort((a, b) => a.km - b.km)
     expect(nodos).toHaveLength(21)
     expect(nodos[0].id).toBe(NORD)
@@ -70,13 +70,13 @@ test.describe('Línea de València a Alicante por Xàtiva', () => {
   test('la línea tiene su ficha, con Xàtiva y Villena en el esquema', async ({ page }) => {
     await page.goto(`/linea/${LINEA}`)
     await expect(page.getByRole('heading', { name: 'Línea convencional Valencia – Xàtiva – Alicante' })).toBeVisible()
-    await expect(page.locator('body')).toContainText('Une València con Alicante por el interior')
+    await expect(page.locator('body')).toContainText('Une Valencia con Alicante por el interior')
     const esquema = page.getByTestId('esquema')
     await expect(esquema).toContainText('València-Estació del Nord')
     await expect(esquema).toContainText('Xàtiva')
     await expect(esquema).toContainText('La Encina')
     await expect(esquema).toContainText('Villena')
-    await expect(esquema).toContainText('Alicante-Terminal')
+    await expect(esquema).toContainText('Alicante/Alacant-Terminal')
   })
 
   test('el buscador lleva a Xàtiva', async ({ page }) => {

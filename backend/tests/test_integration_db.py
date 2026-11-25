@@ -970,6 +970,15 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     )
 
 
+async def test_la_longitud_publicada_usa_los_extremos_del_recorrido(
+    client: httpx.AsyncClient,
+) -> None:
+    for line_id, expected in ((LAV, 470.269), (LAV_BURGOS, 86.272)):
+        detail = (await client.get(f"/api/lines/{line_id}")).json()
+        assert detail["line"]["length_km"] == expected
+        assert abs(expected - sum(s["length_km"] for s in detail["segments"])) < 0.01
+
+
 async def test_segments_carry_their_attributes_with_source_and_date(
     client: httpx.AsyncClient, dsn: str
 ) -> None:
@@ -1033,6 +1042,8 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # Lleida, y el de la convencional de Extremadura que entra en Navalmoral de la Mata por la
     # plataforma de la línea nueva
     assert speed == {
+        f"{BCN}:guadalajara-yebes:las-inviernas": 300,
+        "burgos-miranda-vitoria:burgos-rosa-manzano:briviesca": 160,
         f"{BCN}:bif-huesca:bif-canal-imperial": 220,
         f"{BCN}:bif-les-torres-de-sanui:lleida-pirineus": 140,
         f"{BCN}:lleida-pirineus:bif-artesa-de-lleida": 220,
@@ -1081,15 +1092,15 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # la convencional de Extremadura, con catenaria a 3 kV hasta Humanes
     assert wire == {
         f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona": "25 kV 50 Hz",
-        f"{MADRID_PLASENCIA}:bif-planetario:leganes": "3kv_cc",
-        f"{MADRID_PLASENCIA}:leganes:fuenlabrada": "3kv_cc",
-        f"{MADRID_PLASENCIA}:fuenlabrada:humanes": "3kv_cc",
+        f"{MADRID_PLASENCIA}:bif-planetario:leganes": "3 kV CC",
+        f"{MADRID_PLASENCIA}:leganes:fuenlabrada": "3 kV CC",
+        f"{MADRID_PLASENCIA}:fuenlabrada:humanes": "3 kV CC",
         # la variante de Pajares, a 25 kV en una línea a 3 kV
-        f"{LEON_GIJON}:bif-pajares:la-robla-av": "25kv_ca",
-        f"{LEON_GIJON}:la-robla-av:campomanes-av": "25kv_ca",
-        f"{LEON_GIJON}:campomanes-av:pola-de-lena": "25kv_ca",
+        f"{LEON_GIJON}:bif-pajares:la-robla-av": "25 kV 50 Hz",
+        f"{LEON_GIJON}:la-robla-av:campomanes-av": "25 kV 50 Hz",
+        f"{LEON_GIJON}:campomanes-av:pola-de-lena": "25 kV 50 Hz",
         # la salida de Ourense, a 3 kV en una línea a 25 kV
-        f"{LAV_SANTIAGO}:ourense:bif-coto-da-torre": "3kv_cc",
+        f"{LAV_SANTIAGO}:ourense:bif-coto-da-torre": "3 kV CC",
     }
     # el ancho, solo donde no es el de su línea: el mixto del paso por Loja, de la entrada a
     # Granada, de la de Murcia, de la llegada a Ourense y de la variante de Pajares, y en la línea de Valencia a Camp de Tarragona, el mixto de
@@ -1154,10 +1165,14 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         "bloqueo": {"value": "bau", **dr},
         "mando": {"value": "ctc", **dr},
     }
-    # la vía doble de la alta velocidad es el valor de la línea, sin fuente propia
+    # la vía doble de la alta velocidad también tiene su procedencia
     double = by_id[f"{LAV}:ciudad-real:puertollano"]
     assert double["attributes"] == {
-        "tracks": {"value": 2, "source_id": None, "checked_on": None},
+        "tracks": {
+            "value": 2,
+            "source_id": "adif-declaracion-red-2026-mapas",
+            "checked_on": "2026-11-25",
+        },
         "proteccion_tren": {"value": "lzb_asfa", **dr},
         "bloqueo": {"value": "bca", **dr},
         # la fuente no dice el mando de la alta velocidad: el hueco viaja como valor
@@ -1167,7 +1182,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # fuente; el tramo siguiente no lo lleva y vale la electrificación de la línea
     wired = by_id[f"{MADRID_PLASENCIA}:fuenlabrada:humanes"]["attributes"]
     assert wired["electrification"] == {
-        "value": "3kv_cc",
+        "value": "3 kV CC",
         "source_id": "wikipedia-linea-500",
         "checked_on": "2026-11-13",
     }
