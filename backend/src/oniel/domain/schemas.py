@@ -467,6 +467,7 @@ class ClosureResultItem(BaseModel):
     direction_label: str
     explanation: str
     from_previous_day: bool = False
+    from_next_day: bool = False
 
 
 class ClosureAlternative(BaseModel):

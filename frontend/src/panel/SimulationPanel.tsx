@@ -141,7 +141,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
       {result && (
         <div className="resultado" data-testid="sim-resultado" aria-live="polite">
           <p className="resumen">
-            <strong>{affected}</strong> {affected === 1 ? 'tren afectado' : 'trenes afectados'} de {result.items.length} que recorren el tramo el{' '}
+            <strong>{affected}</strong> {affected === 1 ? 'tren afectado' : 'trenes afectados'} de {result.items.length} considerados en el cierre del{' '}
             {result.window_label}
             {result.counts.indeterminado ? `, y ${result.counts.indeterminado} ${result.counts.indeterminado === 1 ? 'indeterminado' : 'indeterminados'}` : ''}.
           </p>
@@ -209,7 +209,7 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
                 {isOpen && (
                   <ol className="lista-servicios">
                     {items.map((i) => (
-                      <li key={`${i.service.id}-${i.from_previous_day ? 'ayer' : 'hoy'}`}>
+                      <li key={`${i.service.id}-${i.from_previous_day ? 'ayer' : i.from_next_day ? 'mañana' : 'hoy'}`}>
                         <span className="hora datos">
                           {i.enter ?? '—'}
                           {i.exit ? `–${i.exit}` : ''}
@@ -220,7 +220,8 @@ export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, in
                           </strong>{' '}
                           <span className="suave">
                             {shortStop(i.service.origin_name)} → {shortStop(i.service.destination_name)}
-                            {i.from_previous_day ? ' · salió el día anterior' : ''}
+                            {i.from_previous_day && ' · salió el día anterior'}
+                            {i.from_next_day && ' · sale el día siguiente'}
                           </span>
                           <details className="porque">
                             <summary>Por qué</summary>

@@ -31,7 +31,7 @@ Está en `backend/src/oniel/sim/closure.py`. Para cada tren que recorre el tramo
 - Si se solapan aun descontando los márgenes → **afectado** (publicado o estimado, según el origen del dato).
 - Si solo se tocan dentro del margen de incertidumbre, o el paso era indeterminado → **indeterminado**.
 
-Las ventanas que terminan antes de empezar (23:00 a 01:00) se interpretan como que acaban al día siguiente.
+Cuando la hora final es anterior a la inicial (23:00 a 01:00), el cierre termina al día siguiente. Dos horas iguales delimitan un cierre de 24 horas. Se consulta también el horario de ese segundo día y se añaden los trenes que salen entonces y cuyo paso alcanza el cierre, margen incluido. La lista los identifica con «sale el día siguiente». Un tren que entra justo al terminar el cierre queda fuera si su horario es exacto.
 
 ## Recorrido alternativo
 
