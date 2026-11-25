@@ -1,0 +1,19 @@
+version = 1
+name = "Oniel"
+
+[setup]
+script = ""
+
+[[actions]]
+name = "Abrir visor"
+icon = "run"
+command = """
+set -e
+npm --prefix frontend ci
+ONIEL_API_PROXY=http://127.0.0.1:8010 npm --prefix frontend run dev -- --host 127.0.0.1
+"""
+
+[[actions]]
+name = "Arrancar API"
+icon = "run"
+command = "cd backend && uv run --locked uvicorn oniel.api.main:app --reload --port 8010"

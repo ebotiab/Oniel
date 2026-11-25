@@ -49,10 +49,10 @@ Apunta la hora de cada página que leas: son avisos en tiempo real, sin históri
 3. `anotaciones.json`: `checked_on` cambia siempre, haya o no novedades. El resto, solo si la fuente lo sostiene.
 4. `uv run oniel-data validate` y `uv run oniel-data import all`, que regenera la instantánea.
 5. `docs/datos.md`: la tabla de «Interrupciones registradas», la frase que dice cuándo se comprobaron y un párrafo sobre esta revisión si cambió algo o quedó algo sin ver.
-6. Pruebas: las de «Arrancar y comprobar» de `CLAUDE.md` y, con `ONIEL_E2E_STATIC=1`, `e2e/anotaciones.spec.ts`, `e2e/interrupciones.spec.ts` y el fichero de la línea afectada si lo tiene. Las pruebas fijan como «hoy» el 10 de noviembre de 2026: poner `ended_on` o cambiar una previsión no las rompe; cambiar extremos o la fecha de inicio, sí, y se corrigen en la misma PR.
+6. Pruebas: las de «Arrancar y comprobar» de `AGENTS.md` y, con `ONIEL_E2E_STATIC=1`, `e2e/anotaciones.spec.ts`, `e2e/interrupciones.spec.ts` y el fichero de la línea afectada si lo tiene. Las pruebas fijan como «hoy» el 10 de noviembre de 2026: poner `ended_on` o cambiar una previsión no las rompe; cambiar extremos o la fecha de inicio, sí, y se corrigen en la misma PR.
 
 ## La PR
 
 La descripción dice, fuente por fuente y con su hora, qué decía cada una; qué cambia en cada entrada, o que no cambia nada; y, en un apartado propio, **qué quedó sin comprobar** y por qué. Si conviene repetir la revisión antes de una semana, también.
 
-Toca `backend/data/`, así que al fusionarse Render reimporta la base: la tarea termina cuando `oniel-data obs estado` enseña el commit desplegado y sin errores, como dice `CLAUDE.md`.
+Toca `backend/data/`, así que al fusionarse Render reimporta la base: la tarea termina cuando `oniel-data obs estado` enseña el commit desplegado y sin errores, como dice `AGENTS.md`.

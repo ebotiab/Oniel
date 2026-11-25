@@ -1,6 +1,8 @@
 # Oniel
 
-Web en español para entender cómo está conectada la red ferroviaria española. Está pensada para quien no sabe de ferrocarril: un mapa en el que se recorre cada línea, estación a estación, con sus trenes, sus obras y sus cortes, y cada dato con su fuente.
+Oniel es un atlas interactivo en español para aprender cómo es y cómo está conectada la red ferroviaria española. Nació como recurso de consulta para acompañar un futuro artículo de divulgación ferroviaria. También se puede explorar por cuenta propia, empezando por una estación conocida y siguiendo la línea en el mapa y en su esquema.
+
+El atlas documenta el estado conocido de la red con fuentes y fechas de comprobación. Los horarios ayudan a entender qué servicios utilizan cada tramo. El seguimiento de la posición de los trenes en tiempo real queda fuera de su alcance.
 
 Publicada en **https://oniel.vercel.app**.
 
@@ -9,7 +11,7 @@ Este documento es la puerta de entrada para quien quiera colaborar: qué es cada
 ## Qué hace
 
 - **Mapa de la red, línea a línea.** Cada línea tiene su trazado, su esquema vertical y una ficha por estación y por tramo: kilómetros, vías, velocidad, señalización, ancho.
-- **Trenes sobre la vía.** Cuántos trenes pasan al día por cada tramo y de qué operador, y a dónde se llega sin transbordo desde cada estación.
+- **Servicios previstos.** Qué trenes están programados en cada tramo para la fecha consultada, de qué operador son y a dónde se llega sin transbordo desde cada estación.
 - **Comparar recorridos.** Por dónde se va de una estación a otra y qué diferencia hay entre un camino y otro.
 - **Simular un cierre.** Qué trenes se quedan sin paso si se corta un tramo y por dónde podrían desviarse.
 - **Lo que está cortado o en obras hoy**, con su fuente y la fecha en que se comprobó, y los proyectos previstos.
@@ -137,9 +139,17 @@ Según lo que vayas a hacer, empieza por aquí:
 4. **Se fusiona con squash, y fusionar publica.** Cada cambio en `main` despliega la API en Render y el visor en Vercel. Cada PR tiene además su vista previa en Vercel.
 5. **La PR cierra su incidencia** con `Closes #N` en la descripción, la retira de la hoja de ruta y lleva lo aprendido a `docs/`.
 
+### Publicar una rama desde Codex
+
+Para trabajar con la conexión de GitHub de Codex, instala o configura **ChatGPT Codex Connector** en la cuenta propietaria de Oniel. En **Only select repositories**, incluye `Oniel`. GitHub permite leer el código público aunque la instalación aún no tenga acceso de escritura. [Configurar la aplicación en GitHub](https://github.com/apps/chatgpt-codex-connector).
+
+Si crear una rama devuelve `403 Resource not accessible by integration`, comprueba que `ebotiab/Oniel` aparece entre los repositorios de esa instalación. Para publicar ramas se necesita escritura en `Contents`, para abrir PR en `Pull requests` y para modificar `.github/workflows/` también en `Workflows`. Se puede verificar la conexión publicando la rama de la tarea y abriendo su PR. [Permisos de las aplicaciones de GitHub](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app).
+
+Si usas Git desde una sesión local y aparece `Could not resolve host: github.com`, comprueba desde esa misma sesión la conexión con `git ls-remote origin HEAD`. Una vez haya red, `gh auth status` permite comprobar la cuenta de la CLI que abrirá la PR. [Red y permisos de Codex](https://developers.openai.com/codex/agent-approvals-security/).
+
 ### Convenciones
 
-Están completas en [CLAUDE.md](CLAUDE.md), que es la guía con la que trabajan las sesiones de código y sirve igual a una persona. Lo esencial:
+Están completas en [AGENTS.md](AGENTS.md), que es la guía con la que trabajan las sesiones de código y sirve igual a una persona. Lo esencial:
 
 - **Todo en español**: interfaz, documentación, comentarios, nombres de las pruebas, commits y PR. Los identificadores del código siguen en inglés.
 - **Se escribe para quien no sabe de ferrocarril.** Lenguaje llano, y los términos técnicos inevitables se explican en el glosario.
@@ -256,7 +266,7 @@ Ninguna es obligatoria para desarrollar. Los ejemplos están en `backend/.env.ex
 - [docs/despliegue.md](docs/despliegue.md): Vercel, Render, Logfire y la base de datos local.
 - [docs/hoja-de-ruta.md](docs/hoja-de-ruta.md): tareas pendientes, ordenadas, y principios de arquitectura.
 - [docs/historial.md](docs/historial.md): lo ya hecho, PR a PR.
-- [CLAUDE.md](CLAUDE.md): convenciones del proyecto.
+- [AGENTS.md](AGENTS.md): convenciones del proyecto.
 
 ## Licencias de los datos
 

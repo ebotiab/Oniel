@@ -1,8 +1,12 @@
 # Diseño de Oniel
 
-## Brief resumido
+## Propósito del atlas
 
-Oniel es una web en español para descubrir cómo está conectada la red ferroviaria española. Su función principal es explorar la red en un mapa interactivo; la simulación de cierres es una herramienta secundaria. Empezó por la línea de alta velocidad Madrid–Sevilla (Adif, línea 010), que en 2026 ha sufrido dos accidentes graves (Adamuz, enero; Urda, octubre), y hoy cubre buena parte de la red de viajeros de la península: las líneas cargadas están en `docs/datos.md`, «Líneas cargadas». El tono debe ser sobrio, preciso y respetuoso.
+El mapa y el esquema de cada línea deben ayudar a alguien sin conocimientos de ferrocarril a entender por dónde pasa la vía, qué estaciones conecta y dónde se une a otra línea. Quien llegue desde un artículo debe poder abrir la vista citada, orientarse y consultar la fuente y la fecha del dato. La misma vista debe entenderse sin haber leído el artículo.
+
+El atlas documenta la red tal como se conoce en la fecha de cada fuente. Los horarios describen servicios programados. La simulación de un cierre es un recurso secundario para explorar un supuesto. El seguimiento de trenes en tiempo real queda fuera del propósito del atlas.
+
+Oniel empezó por la línea de alta velocidad Madrid–Sevilla (Adif, línea 010), que en 2026 ha sufrido dos accidentes graves (Adamuz, enero; Urda, octubre), y hoy cubre buena parte de la red de viajeros de la península: las líneas cargadas están en `docs/datos.md`, «Líneas cargadas». El tono debe ser sobrio, preciso y respetuoso.
 
 ## Referencias
 

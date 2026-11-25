@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
+import { useApiStatus } from '../data/useApiStatus'
 import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
 import { coste, fraseTramo, porLineas, trenes } from '../app/alternativas'
 import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, shortStop } from '../app/state'
@@ -32,6 +33,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [alternativas, setAlternativas] = useState<AlternativesOut | null>(null)
+  const apiAvailable = useApiStatus() === 'disponible'
   const line = network.lines.find((l) => l.id === segment.line_id)
 
   // App monta este componente con key={segment.id}, así que el estado se reinicia al cambiar de tramo.
@@ -54,7 +56,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
     return () => {
       alive = false
     }
-  }, [referenceDate])
+  }, [referenceDate, apiAvailable])
   const alternativa = alternativas?.segments.find((s) => s.segment_id === segment.id)
 
   const byProduct = new Map<string, number>()
