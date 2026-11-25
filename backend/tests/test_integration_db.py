@@ -1775,6 +1775,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 4
             + 1  # la relación de OSM del túnel de Atocha a Chamartín; los otros dos enlaces usan ficheros ya registrados
             + 1  # la noticia que explica el cambio de rótulos del fichero de Renfe (#263)
+            + 2  # plan de Renfe desde el 14/11 y previsión oficial de Adif para las obras (#259)
         )
     )
     assert "línea convencional" in cov["notice"]

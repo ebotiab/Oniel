@@ -1,0 +1,87 @@
+{
+  "descripcion": "Revisión de las tres interrupciones pendientes de #259 el 25 de noviembre de 2026, desde main posterior a #300 (#265). Consultas propias entre las 23:21 y las 23:24, hora peninsular. Se leyó antes la revisión documental del mismo día en https://github.com/ebotiab/Oniel/issues/259#issuecomment-7173159364; sus observaciones anteriores se distinguen de las consultas propias. Resúmenes en palabras propias, sin reproducir las páginas. Ninguna fuente consultada confirma una reanudación de las tres interrupciones.",
+  "consultado_el": "2026-11-25",
+  "consultas": [
+    {
+      "source_id": "adif-estado-de-la-red",
+      "titulo": "Estado de la red. Información del tráfico ferroviario",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-25 21:58",
+      "hora_de_consulta": "23:22",
+      "resumen": "Adif mantiene expresamente suspendida la circulación de alta velocidad Madrid-Andalucía desde el accidente del 28 de octubre. Señala servicio en Madrid-Toledo y Málaga-Sevilla, sin anunciar fecha de reanudación ni apertura parcial entre Ciudad Real y Puertollano. Leído en el navegador integrado; el lector web devolvió 403.",
+      "que_aporta": "Mantener vigente el corte La Sagra-Córdoba y sin fecha de fin. La conclusión se apoya en un aviso explícito, no en la ausencia de noticias."
+    },
+    {
+      "source_id": "renfe-pat-madrid-puertollano-2026-11-14",
+      "titulo": "Plan de refuerzo del servicio Avant Madrid-Ciudad Real-Puertollano, en ambos sentidos",
+      "editor": "Renfe",
+      "url": "https://www.renfe.com/content/dam/renfe-viajeros/home/pat_madrid_puertollano_14nov.pdf",
+      "fecha_de_la_pagina": "Vigencia impresa: a partir del 14 de noviembre; sin año ni fecha de publicación impresos",
+      "hora_de_consulta": "23:23",
+      "resumen": "PDF enlazado por la portada de Renfe durante la consulta. Dos páginas de imagen, sin texto extraíble: se descargaron y se leyeron visualmente ambas. La mayoría de servicios son autobuses. La salida de Madrid-Atocha Cercanías de las 13:11 figura como combinación tren y autobús; en sentido inverso, la de Puertollano de las 14:05 combina autobús y tren. El documento no identifica el tramo ferroviario de esas dos combinaciones ni da fecha de fin. No anuncia una reapertura de la alta velocidad. Se conserva este resumen propio, con huella SHA-256 del PDF consultado: 1e83b8bd3830e504e64940ef4c097d385f5d5421d12b270f61aa97d073a6c602.",
+      "que_aporta": "Resuelve la lectura pendiente del comentario anterior de #259. No se puede describir el plan actual como íntegramente por carretera ni deducir de su rótulo Avant que circulen trenes de alta velocidad. Queda sin identificar oficialmente el tramo en tren de las dos combinaciones; no se modifican los extremos del corte."
+    },
+    {
+      "source_id": "adif-salidas-y-llegadas",
+      "titulo": "Paneles de Ciudad Real, Puertollano, Jaén, Santa Cruz de Mudela y Córdoba",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estaciones",
+      "fecha_de_la_pagina": "2026-11-25, reloj del panel 23:22 o 23:23",
+      "hora_de_consulta": "23:22–23:24",
+      "paginas": [
+        "https://www.adif.es/w/37200-ciudad-real",
+        "https://www.adif.es/w/37700-puertollano",
+        "https://www.adif.es/w/03100-ja%C3%A9n",
+        "https://www.adif.es/w/50200-sta.cruz-de-mudela",
+        "https://www.adif.es/w/50500-c%C3%B3rdoba-j.-anguita"
+      ],
+      "resumen": "Se seleccionó la pestaña Llegadas y se reintentaron las tablas que inicialmente aparecían vacías. Ciudad Real muestra el Avant 35826 de Madrid a las 22:55 como BUS; Puertollano muestra 38834 a las 22:10 y 35826 a las 23:25, ambos de Madrid, como BUS. Los servicios posteriores a medianoche y la segunda tanda que vuelve a empezar por la mañana no se atribuyen al día 25. Jaén muestra MD 35017 a las 23:01 con observación de carretera Córdoba-Jaén, pese a la vía 4; el regional 18036 de las 00:04 lleva carretera Almuradiel-Jaén, pero no se atribuye al 25. Santa Cruz y Córdoba solo devuelven la tanda de la mañana sin fecha propia: repite carretera Almuradiel-Jaén en Santa Cruz y muestra servicios de Alcolea y carretera Jaén-Córdoba en Córdoba, pero no se usa como prueba del día 25. Las salidas no se pudieron verificar con filas del día. El comentario anterior de #259 documentó a las 20:25 la llegada 13236 de Alcolea a Córdoba, anunciada a las 22:31 con vía 7; esa observación es de la revisión anterior, no una nueva comprobación nocturna de circulación efectiva.",
+      "que_aporta": "Los Avant observados son autobuses; Jaén conserva carretera Córdoba-Jaén. Una vía asignada no demuestra circulación ferroviaria si la observación dice carretera. No hay evidencia para mover los extremos; el límite Alcolea conserva la comprobación previa. No interpretar como reanudación una tabla vacía, la falta de un aviso o la tanda sin fecha."
+    },
+    {
+      "source_id": "adif-aviso-obras-autopista-ferroviaria",
+      "titulo": "Obras autopista ferroviaria Algeciras-Zaragoza",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/obras-autopista-ferroviaria-algeciras-zaragoza",
+      "fecha_de_la_pagina": "Sin fecha visible en el contenido leído; la revisión del 13/11 registró actualización 30/09/2026",
+      "hora_de_consulta": "23:23",
+      "resumen": "Sigue publicado el aviso de servicio interrumpido entre Córdoba y Santa Cruz de Mudela y en Algeciras-Bobadilla-Córdoba por la adaptación de la autopista ferroviaria. Indica transporte alternativo por carretera para viajeros de media y larga distancia; no da fecha de fin.",
+      "que_aporta": "Confirma la vigencia del corte por obras. Los extremos del aviso genérico no sustituyen los límites de viajeros Almuradiel-Alcolea."
+    },
+    {
+      "source_id": "adif-nota-obras-autopista-ferroviaria-2026-07",
+      "titulo": "Adif inicia las obras de adaptación del tramo Madrid-Algeciras a los servicios de Autopista Ferroviaria",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/inicio-trabajos-madrid-algeciras-autopista-ferroviaria",
+      "fecha_de_la_pagina": "2026-07-24",
+      "hora_de_consulta": "23:21",
+      "resumen": "Adif prevé suspensión del tráfico entre Algeciras y Venta de Cárdenas desde principios de septiembre hasta otoño de 2027 por la adaptación de la infraestructura. El horizonte se presenta como previsión. La nota describe las obras de la línea principal, no promete una fecha de vuelta de los trenes al ramal Espelúy-Jaén.",
+      "que_aporta": "Fuente oficial directa para expected_end_text de las dos interrupciones convencionales, antes sustentada en prensa. No convertir el horizonte estacional en ended_on ni en un día de reapertura confirmado."
+    },
+    {
+      "source_id": "renfe-nota-md-jaen-madrid-2026-09",
+      "titulo": "Modificación del servicio de los Media Distancia Jaén-Madrid e Intercity Almería-Madrid desde el 6 de septiembre",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/07/modificacion-servicio-media-distancia-jaen-madrid-e-almeria-madrid",
+      "fecha_de_la_pagina": "2026-07-25",
+      "hora_de_consulta": "23:23",
+      "resumen": "Desde el 6 de septiembre, Renfe establece carretera Jaén-Almuradiel con paradas intermedias y mantiene el transporte por carretera Jaén-Córdoba previo a las obras. No da fecha de reanudación ni describe obras en el ramal de Jaén.",
+      "que_aporta": "Mantener la fecha de inicio y el extremo norte de viajeros de la convencional; conservar la interrupción del ramal de Jaén sin atribuirle obras propias."
+    },
+    {
+      "source_id": null,
+      "titulo": "Sala de prensa de Renfe: búsquedas de Puertollano y Jaén",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa",
+      "fecha_de_la_pagina": "Listado consultado el 25/11/2026",
+      "hora_de_consulta": "23:22–23:24",
+      "resumen": "El listado dinámico cargó en el navegador integrado. La búsqueda Puertollano devolvió como nota más reciente la prórroga del plan por carretera del 5 de noviembre, leída completa: solo prolongaba ese plan hasta el 12 de noviembre. La búsqueda Jaén devolvió cuatro notas, la más reciente pertinente la del 25 de julio. No se localizó una confirmación posterior de reanudación en esas búsquedas; no se revisó exhaustivamente toda la sala de prensa. La portada renfe.com/es/es enlazaba el PDF con vigencia desde el 14 de noviembre.",
+      "paginas": [
+        "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/renfe-prorroga-plan-alternativo-transporte-por-carretera-entre-madrid-ciudad-real-puertollano",
+        "https://www.renfe.com/es/es"
+      ],
+      "que_aporta": "Resuelve el acceso al listado pendiente en la revisión anterior. El fin previsto de un plan alternativo no acredita que vuelvan los trenes; para el plan actual se utiliza el PDF enlazado en la portada."
+    }
+  ]
+}
