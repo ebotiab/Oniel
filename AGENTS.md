@@ -8,6 +8,18 @@ Esta guía se carga en Codex desde `AGENTS.md` y en Claude Code mediante el enla
 
 Interfaz, documentación, comentarios del código, nombres y mensajes de las pruebas, mensajes de commit y descripciones de PR van en español. Los identificadores del código (`segments`, `stop_mappings`, `fetch_alternatives`) siguen en inglés, como están. Las palabras de la interfaz son las del visitante: «tramo», «estación», «cierre», no jerga; cuando un término técnico es inevitable (PAET, bifurcación), se explica.
 
+## Cómo llevar una tarea hasta el cierre
+
+Dentro del alcance acordado, la sesión toma las decisiones técnicas reversibles y elige cómo comprobar el resultado. Si una prueba falla, el CI se rompe o surge un conflicto, investiga la causa, corrige lo que corresponda y vuelve a comprobarlo. Para los cambios en el repositorio, sigue «PR pequeñas» y las reglas de despliegue hasta completar la entrega.
+
+Consulta al usuario cuando quede una decisión de producto o diseño que no haya tomado, haga falta ampliar el alcance, una acción irreversible requiera su autorización o falte un permiso imprescindible. Si encuentras un bloqueo, avanza en lo que puedas resolver por separado. Al pedir ayuda, explica en qué afecta al resultado, qué has intentado y qué decisión o acción concreta recomiendas. Reserva los avisos de progreso para los cambios relevantes y las decisiones que necesiten atención.
+
+**Resumen final.** Escribe en español y abre con lo que ha mejorado para quien usa Oniel o trabaja en el proyecto. Mantén el resumen breve y fácil de leer.
+
+- Explica qué ha cambiado en términos concretos y cómo lo has comprobado. Elige la evidencia que mejor lo muestre, por ejemplo una captura del visor, una medida comparable de antes y después o la prueba que reproduce el fallo.
+- Indica hasta dónde ha llegado la entrega. Enlaza la PR o la vista afectada cuando ayude al lector. Si falta algo por verificar, di qué queda, quién puede resolverlo y cuál es el siguiente paso.
+- Cierra con **«¿Necesitas hacer algo?»**. Responde «Nada» si está resuelto o indica la acción concreta que corresponde al usuario.
+
 ## Dónde está cada cosa
 
 - `README.md`: arrancar desde cero, comandos de datos, pruebas y comprobaciones.
