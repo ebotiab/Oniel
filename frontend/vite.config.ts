@@ -4,7 +4,8 @@ import { dirname, join } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 
-import { htmlConMeta, META_COBERTURA, META_GLOSARIO, META_SIN_OTRO_CAMINO, metaLinea, metaNodo, metaRecorridos, metaTramo, type Meta } from './src/app/meta.ts'
+import { escapar, htmlConMeta, META_COBERTURA, META_GLOSARIO, META_RED, META_SIN_OTRO_CAMINO, SITIO, metaLinea, metaNodo, metaRecorridos, metaTramo, type Meta } from './src/app/meta.ts'
+import { routePath } from './src/app/state.ts'
 
 // En desarrollo, /api se redirige al backend local (uv run uvicorn oniel.api.main:app --reload → :8000, o el puerto que uses).
 const apiTarget = process.env.ONIEL_API_PROXY ?? 'http://127.0.0.1:8000'
@@ -37,15 +38,12 @@ interface IndiceDeLaRed {
   segment_features: { features: { id: string; properties: { line_id: string; from_name: string; to_name: string; length_km: number } }[] }
 }
 
-/**
- * Una página estática por vista principal, con su título, su descripción y sus etiquetas de enlace
- * compartido ya escritas. El visor es una sola página que pinta cada vista con JavaScript, y los
- * rastreadores de las redes sociales y de la mensajería no lo ejecutan: sin esto, cualquier enlace a
- * Oniel enseñaría la tarjeta de la portada. Cada página es el mismo index.html con otras etiquetas, en
- * `<ruta>/index.html`; Vercel sirve un fichero que existe antes de aplicar la regla que lo manda todo
- * a index.html (`vercel.json`), y el visor arranca igual. Las vistas que no caben en una lista (una
- * comparación entre dos estaciones, una simulación con su franja) siguen con la tarjeta común.
- */
+/** React sustituye este contenido al arrancar. Sin JavaScript, las fichas se pueden recorrer con enlaces normales. */
+function lecturaInicial(meta: Meta, navegacion: string): string {
+  return `<main class="lectura-inicial"><h1>${escapar(meta.title)}</h1><p>${escapar(meta.description)}</p>${navegacion}</main>`
+}
+
+/** Las mismas rutas públicas alimentan las páginas estáticas y el sitemap en cada compilación. */
 function paginasEstaticas(): Plugin {
   let salida = 'dist'
   return {
@@ -59,19 +57,37 @@ function paginasEstaticas(): Plugin {
       const indice = JSON.parse(readFileSync(new URL('./public/data/index.json', import.meta.url), 'utf-8')) as IndiceDeLaRed
       const lineas = new Map(indice.lines.map((l) => [l.id, l]))
       const paginas = new Map<string, Meta>([
+        ['/', META_RED],
         ['/cobertura', META_COBERTURA],
         ['/glosario', META_GLOSARIO],
         ['/sin-otro-camino', META_SIN_OTRO_CAMINO],
         ['/recorridos', metaRecorridos()],
       ])
-      for (const l of indice.lines) paginas.set(`/linea/${l.id}`, metaLinea(l))
-      for (const n of indice.nodes) paginas.set(`/nodo/${n.id}`, metaNodo(n))
-      for (const { id, properties: t } of indice.segment_features.features) paginas.set(`/tramo/${id}`, metaTramo(t, lineas.get(t.line_id)))
+      const enlaces = indice.lines.map((linea) => {
+        const ruta = routePath({ selection: null, simulacion: false, linea: linea.id })
+        paginas.set(ruta, metaLinea(linea))
+        return `<li><a href="${escapar(ruta)}">${escapar(linea.name)}</a></li>`
+      })
+      for (const nodo of indice.nodes) {
+        const ruta = routePath({ selection: { type: 'nodo', id: nodo.id }, simulacion: false })
+        paginas.set(ruta, metaNodo(nodo))
+      }
+      for (const { id, properties: tramo } of indice.segment_features.features) {
+        const ruta = routePath({ selection: { type: 'tramo', id }, simulacion: false })
+        paginas.set(ruta, metaTramo(tramo, lineas.get(tramo.line_id)))
+      }
+      const lista = `<nav aria-label="Líneas, baipases y enlaces"><h2>Líneas, baipases y enlaces</h2><ul>${enlaces.join('\n')}</ul></nav>`
       for (const [ruta, meta] of paginas) {
         const fichero = join(salida, ruta, 'index.html')
+        const contenido = lecturaInicial(meta, ruta === '/' ? lista : '<a href="/">Volver al mapa de la red</a>')
+        const pagina = htmlConMeta(html, meta, ruta).replace('<div id="root"></div>', () => `<div id="root">${contenido}</div>`)
         mkdirSync(dirname(fichero), { recursive: true })
-        writeFileSync(fichero, htmlConMeta(html, meta, ruta))
+        writeFileSync(fichero, pagina)
       }
+
+      const urls = Array.from(paginas.keys(), (ruta) => `  <url><loc>${escapar(SITIO + ruta)}</loc></url>`)
+      writeFileSync(join(salida, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`)
+      writeFileSync(join(salida, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITIO}/sitemap.xml\n`)
     },
   }
 }
