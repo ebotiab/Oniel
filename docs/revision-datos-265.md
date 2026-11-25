@@ -1,6 +1,6 @@
 # Revisión de las fichas (#265)
 
-Revisión del 25 de noviembre de 2026, desde `main` (`407cb1a`, incorporado después `989fe14`). Son 44 especificaciones: 38 líneas, dos baipases y cuatro enlaces. Las cifras de la incidencia procedían de 41 especificaciones; se han vuelto a contar. Los originales de `data/raw/` no se modifican.
+Revisión del 25 de noviembre de 2026, desde `main` (`407cb1a`, incorporados después `989fe14` y `647a6ab`). La instantánea final se regenera tras incorporar ese último cambio del visor. Son 44 especificaciones: 38 líneas, dos baipases y cuatro enlaces. Las cifras de la incidencia procedían de 41 especificaciones; se han vuelto a contar. Los originales de `data/raw/` no se modifican.
 
 ## Reproducción y cadena de procedencia
 
