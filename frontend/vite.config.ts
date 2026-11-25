@@ -78,7 +78,7 @@ function paginasEstaticas(): Plugin {
       }
       const lista = `<nav aria-label="Líneas, baipases y enlaces"><h2>Líneas, baipases y enlaces</h2><ul>${enlaces.join('\n')}</ul></nav>`
       for (const [ruta, meta] of paginas) {
-        const fichero = join(salida, ruta, 'index.html')
+        const fichero = join(salida, ruta === '/' ? 'index.html' : `${ruta}.html`)
         const contenido = lecturaInicial(meta, ruta === '/' ? lista : '<a href="/">Volver al mapa de la red</a>')
         const pagina = htmlConMeta(html, meta, ruta).replace('<div id="root"></div>', () => `<div id="root">${contenido}</div>`)
         mkdirSync(dirname(fichero), { recursive: true })

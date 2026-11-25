@@ -25,7 +25,8 @@ test('robots anuncia un sitemap con todas las vistas estáticas, una sola vez', 
     ...indice.nodes.map((nodo) => `/nodo/${nodo.id}`),
     ...indice.segment_features.features.map((tramo) => `/tramo/${tramo.id}`),
   ]
-  expect(urls.sort()).toEqual(rutas.map((ruta) => SITIO + ruta).sort())
+  // Una estación compartida por varias líneas puede figurar varias veces en la instantánea.
+  expect(urls.sort()).toEqual([...new Set(rutas)].map((ruta) => SITIO + ruta).sort())
 })
 
 test.describe('Lectura sin JavaScript', () => {
