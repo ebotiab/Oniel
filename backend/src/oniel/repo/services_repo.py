@@ -30,6 +30,7 @@ from oniel.sim.passes import SegmentPass
 class DatedPass:
     service: ServiceOut
     segment_pass: SegmentPass
+    dataset_id: str
     day_offset: Literal[-1, 0, 1] = 0
 
     @property
@@ -93,14 +94,14 @@ async def passes_on_segment(
     cuya entrada más temprana cae antes de ``next_day_until_s`` segundos desde la medianoche.
     """
     today = await conn.fetch(PASS_SQL, segment_id, date)
-    out = [DatedPass(_service(r), _pass(r)) for r in today]
+    out = [DatedPass(_service(r), _pass(r), r["dataset_id"]) for r in today]
     if with_previous_day and date > dt.date.min:
         yesterday = await conn.fetch(
             PASS_SQL + " AND p.exit_s + COALESCE(p.exit_margin_s, 0) >= 86400",
             segment_id,
             date - dt.timedelta(days=1),
         )
-        out += [DatedPass(_service(r), _pass(r), -1) for r in yesterday]
+        out += [DatedPass(_service(r), _pass(r), r["dataset_id"], -1) for r in yesterday]
     if next_day_until_s > 0 and date < dt.date.max:
         tomorrow = await conn.fetch(
             PASS_SQL + " AND p.enter_s - COALESCE(p.enter_margin_s, 0) < $3",
@@ -108,7 +109,7 @@ async def passes_on_segment(
             date + dt.timedelta(days=1),
             next_day_until_s,
         )
-        out += [DatedPass(_service(r), _pass(r), 1) for r in tomorrow]
+        out += [DatedPass(_service(r), _pass(r), r["dataset_id"], 1) for r in tomorrow]
     out.sort(
         key=lambda d: (
             (d.segment_pass.enter_s if d.segment_pass.enter_s is not None else 1e9)
