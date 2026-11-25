@@ -169,9 +169,12 @@ export function networkCount(lines: LineSummary[]): string {
   return `${formatCount(n)} ${n === 1 ? 'línea' : 'líneas'} · ${formatCount(Math.round(km))} km`
 }
 
-/** Fecha de hoy como AAAA-MM-DD (en UTC, como el resto de fechas ISO que maneja la API). */
-export function todayIso(): string {
-  return new Date().toISOString().slice(0, 10)
+// El formato sueco conserva el orden ISO (AAAA-MM-DD) para comparar días del calendario.
+const madridDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' })
+
+/** Día de la red en la España peninsular, con el horario de verano o de invierno que corresponda. */
+export function todayIso(now: Date = new Date()): string {
+  return madridDate.format(now)
 }
 
 export function formatDate(iso: string): string {

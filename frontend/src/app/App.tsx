@@ -45,7 +45,8 @@ import {
 import { navegar } from './navegacion'
 import { compararRecorridos } from './recorridos'
 import type { SearchTarget } from './search'
-import { legacyHashPath, parseRoute, routePath, todayIso, type Comparador, type Route, type Selection } from './state'
+import { legacyHashPath, parseRoute, routePath, type Comparador, type Route, type Selection } from './state'
+import { useToday } from './useToday'
 import './app.css'
 
 // MapLibre pesa tres cuartas partes del JavaScript del visor: va en un fichero aparte para que el panel
@@ -285,7 +286,7 @@ export default function App() {
   // Anotaciones vigentes hoy: cada tipo se marca en el mapa y en el esquema y se explica en el panel
   // como diga su capa (annotationLayers.ts). Las interrupciones, además, cortan recorridos y avisan
   // en la simulación.
-  const today = useMemo(() => todayIso(), [])
+  const today = useToday()
   const annotations = useMemo(() => activeAnnotations(network, today), [network, today])
   const annotated = useMemo(() => bySegment(annotations), [annotations])
   const interrupted = useMemo(() => bySegment(annotations.filter(isInterruption)), [annotations])
@@ -582,6 +583,7 @@ export default function App() {
       {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} />}
       {showCoverage && !route.glosario && coverage && network && (
         <CoveragePage
+          today={today}
           coverage={coverage}
           network={network}
           annotations={annotations}
