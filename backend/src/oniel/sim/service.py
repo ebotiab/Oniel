@@ -12,7 +12,7 @@ from oniel.domain.schemas import ClosureRequest, ClosureResult, ClosureResultIte
 from oniel.repo.network_repo import fetch_graph, fetch_interruptions
 from oniel.repo.services_repo import DatedPass, fmt_time, passes_on_segment
 from oniel.routing import Scenario
-from oniel.sim.closure import ClosureWindow, alternatives, classify
+from oniel.sim.closure import DAY_S, ClosureWindow, alternatives, classify
 from oniel.sim.passes import SegmentPass
 
 METHOD = (
@@ -77,7 +77,11 @@ async def simulate_closure(
         end=req.end.isoformat(),
     ):
         dated: list[DatedPass] = await passes_on_segment(
-            conn, segment.id, req.date, with_previous_day=True
+            conn,
+            segment.id,
+            req.date,
+            with_previous_day=True,
+            next_day_until_s=max(0, window.end_s - DAY_S),
         )
         # El cierre es un escenario de una modificación sobre el grafo de todas las líneas.
         active = await fetch_interruptions(conn, day=req.date)
@@ -88,11 +92,10 @@ async def simulate_closure(
         items: list[ClosureResultItem] = []
         counts: Counter[str] = Counter()
         for d in dated:
-            verdict = classify(d.segment_pass, window, -86400 if d.from_previous_day else 0)
-            # Un tren es del día en que sale. El de ayer que sigue en el tramo pasada la medianoche
-            # solo entra en el resultado si el cierre lo alcanza: así, cuando no lo alcanza, la
-            # simulación cuenta los mismos trenes que la ficha del tramo.
-            if d.from_previous_day and verdict.status == "no_afectado":
+            verdict = classify(d.segment_pass, window, DAY_S * d.day_offset)
+            # La ficha cuenta los trenes que salen el día elegido. De los días contiguos solo
+            # se añaden los pasos que alcanza la franja, incluidos sus márgenes de incertidumbre.
+            if d.day_offset and verdict.status == "no_afectado":
                 continue
             counts[verdict.status] += 1
             enter, exit_ = shifted_times(d.segment_pass, d.from_previous_day)
@@ -106,6 +109,7 @@ async def simulate_closure(
                     direction_label=direction_label(segment, d.segment_pass.km_increasing),
                     explanation=verdict.explanation,
                     from_previous_day=d.from_previous_day,
+                    from_next_day=d.day_offset == 1,
                 )
             )
         order = {
@@ -114,7 +118,8 @@ async def simulate_closure(
             "indeterminado": 2,
             "no_afectado": 3,
         }
-        items.sort(key=lambda i: (order[i.status], i.enter or "", i.service.train_number))
+        # Los pasos ya vienen en orden cronológico, incluidas las horas de los días contiguos.
+        items.sort(key=lambda i: order[i.status])
         for key in order:
             counts.setdefault(key, 0)
         summary: dict[str, Any] = {

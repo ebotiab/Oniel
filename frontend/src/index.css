@@ -86,6 +86,16 @@ a {
   letter-spacing: -0.02em;
 }
 
+/* La lectura del primer HTML permite recorrer la red mientras arranca el visor o sin JavaScript. */
+.lectura-inicial {
+  max-width: 70ch;
+  padding: 1rem;
+}
+
+.lectura-inicial > * + * {
+  margin-block-start: 1rem;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

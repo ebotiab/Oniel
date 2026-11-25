@@ -114,7 +114,7 @@ export function metaProyecto(nombre: string): Meta {
   return { title: titulo(nombre), description: `${nombre}: qué es, en qué estado está y según qué fuente, sobre el mapa de la red ferroviaria española.` }
 }
 
-const escapar = (texto: string) => texto.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+export const escapar = (texto: string) => texto.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 /**
  * El index.html compilado con el título y la descripción de una vista, para escribirlo como página

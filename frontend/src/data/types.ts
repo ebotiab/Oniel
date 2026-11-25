@@ -417,6 +417,7 @@ export interface ClosureResultItem {
   direction_label: string
   explanation: string
   from_previous_day: boolean
+  from_next_day?: boolean
 }
 
 /** Trecho de un recorrido por una sola línea (o por un enlace esbozado, sin `line_id`). */

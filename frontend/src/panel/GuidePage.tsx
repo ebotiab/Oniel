@@ -31,8 +31,8 @@ export function GuidePage() {
         <h1 id="guia-titulo" className="pagina-titulo">Guía del atlas</h1>
         <p className="pagina-entrada">
           Oniel te ayuda a entender cómo está conectada la red ferroviaria española. El mapa sitúa cada línea
-          en el territorio y el esquema te permite seguirla estación a estación. Puedes empezar buscando una
-          estación que conozcas o recorrer esta línea de ejemplo.
+          en el territorio y el esquema te permite seguirla estación a estación. Las fichas reúnen lo que se conoce
+          de cada línea y de dónde sale esa información. Para empezar, busca una estación que conozcas o prueba el siguiente recorrido.
         </p>
 
         <section className="guia-ejemplo" aria-labelledby="guia-linea">
