@@ -2537,6 +2537,22 @@ async def snapshot(
         return out, await export_snapshot(conn, out)
 
 
+async def test_los_nodos_compartidos_tienen_la_misma_ficha_en_la_instantanea_y_en_la_api(
+    client: httpx.AsyncClient, snapshot: tuple[Path, dict[str, Any]]
+) -> None:
+    carpeta, _ = snapshot
+    indice = json.loads((carpeta / "index.json").read_text(encoding="utf-8"))
+    apariciones = Counter(n["id"] for n in indice["nodes"])
+    compartidos = [identificador for identificador, veces in apariciones.items() if veces > 1]
+    assert "ciudad-real" in compartidos
+    for identificador in compartidos:
+        ruta = carpeta / "nodes" / f"{identificador}.json"
+        ficha = json.loads(ruta.read_text(encoding="utf-8"))
+        respuesta = await client.get(f"/api/nodes/{identificador}")
+        respuesta.raise_for_status()
+        assert ficha["node"] == respuesta.json(), identificador
+
+
 async def test_snapshot_history_matches_the_api(
     client: httpx.AsyncClient, snapshot: tuple[Path, dict[str, Any]]
 ) -> None:
