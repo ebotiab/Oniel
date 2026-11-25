@@ -39,8 +39,7 @@ test.describe('Guía del atlas', () => {
   })
 
   test('el enlace directo se lee aunque no carguen los datos de la red', async ({ page }) => {
-    await page.route('**/data/**', route => route.abort())
-    await page.route('**/api/**', route => route.abort())
+    await page.route(url => url.pathname.startsWith('/data/') || url.pathname.startsWith('/api/'), route => route.abort())
     await page.goto('/guia')
     const guia = page.getByRole('main', { name: 'Guía del atlas' })
     await expect(guia.getByRole('heading', { name: 'Cómo interpretar los datos' })).toBeVisible()
