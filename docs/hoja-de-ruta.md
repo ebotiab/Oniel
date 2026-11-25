@@ -2,7 +2,7 @@
 
 Las tareas pendientes, ordenadas, y los principios con los que se construyen. Última revisión: 23 de noviembre de 2026.
 
-Oniel es para quien no sabe de ferrocarril y quiere consultar la red española de forma clara, intuitiva y atractiva, y debe poder crecer durante años sin complicarse. Las tareas de esta lista están pensadas con eso delante: cada una deja un mecanismo que la siguiente reutiliza.
+La red se amplía línea a línea para que el atlas sea cada vez más completo y preciso. Una incorporación debe ayudar al lector a entender qué conecta y distinguir lo comprobado de lo que queda por documentar. Las prioridades siguen el [propósito del atlas](diseno.md#propósito-del-atlas). Cada tarea deja un mecanismo que la siguiente puede reutilizar.
 
 ## Cómo se usa
 
