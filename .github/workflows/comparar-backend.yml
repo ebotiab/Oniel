@@ -1,0 +1,49 @@
+name: Comparación controlada del backend
+
+on:
+  push:
+    branches: [experimento/ci-backend-comparable]
+
+permissions:
+  contents: read
+
+jobs:
+  comparar:
+    name: Antes y después en el mismo ejecutor
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: oniel
+          POSTGRES_DB: oniel
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U oniel"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: "3.13"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Dos revisiones, todas las comprobaciones y comparación de evidencias
+        env:
+          POSTGRES_ID: ${{ job.services.postgres.id }}
+        run: python .github/scripts/comparar-backend.py
+      - name: Conservar tiempos, JUnit, cobertura y registros
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: comparacion-backend
+          path: evidencias-backend
+          retention-days: 30
+          if-no-files-found: error
