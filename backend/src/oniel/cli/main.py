@@ -289,7 +289,12 @@ def validate_cmd(
     summaries = {}
     for feed_path, prefix, aliases in feeds:
         line_reports, summary = validate_feed(
-            selected, context, feed_path, stop_id_prefix=prefix, stop_id_aliases=aliases
+            selected,
+            context,
+            feed_path,
+            stop_id_prefix=prefix,
+            stop_id_aliases=aliases,
+            require_rules=False,
         )
         reports.extend(line_reports)
         summaries[feed_path.resolve()] = summary

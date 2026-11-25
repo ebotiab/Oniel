@@ -509,12 +509,15 @@ def validate_all(
     (:func:`unused_route_overrides`): una regla escrita para los trenes de un operador no encaja
     con el fichero de otro.
     """
-    line = ValidationLine(spec_path, data_dir)
-    others = [
-        other.loaded for other in _lines(other_spec_paths, data_dir) if other.path != spec_path
-    ]
-    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
-    return _validate_line(line, others, feed_path, feed, require_rules=require_rules)
+    reports, _ = validate_feed(
+        [ValidationLine(spec_path, data_dir)],
+        _lines(other_spec_paths, data_dir),
+        feed_path,
+        stop_id_prefix=stop_id_prefix,
+        stop_id_aliases=stop_id_aliases,
+        require_rules=require_rules,
+    )
+    return reports[0]
 
 
 def validate_feed(
@@ -522,8 +525,9 @@ def validate_feed(
     context: Sequence[ValidationLine],
     feed_path: Path,
     *,
-    stop_id_prefix: str | None,
-    stop_id_aliases: Mapping[str, str],
+    stop_id_prefix: str | None = None,
+    stop_id_aliases: Mapping[str, str] | None = None,
+    require_rules: bool = True,
 ) -> tuple[list[dict[str, Any]], FeedSummary]:
     """Devuelve los informes y el resumen del horario sin retener sus viajes para el siguiente."""
     feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
@@ -533,7 +537,7 @@ def validate_feed(
             [other.loaded for other in context if other.path != line.path],
             feed_path,
             feed,
-            require_rules=False,
+            require_rules=require_rules,
         )
         for line in selected
     ]

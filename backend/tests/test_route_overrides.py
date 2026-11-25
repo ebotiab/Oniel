@@ -76,7 +76,7 @@ from oniel.gtfs.trips import (
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import NetworkSpec, RouteOverride, StopMapping, load_network_spec
 from oniel.sim.passes import LineSegment, SegmentPass, StopCall, resolve_passes
-from oniel.validate import loaded_line, validate_all
+from oniel.validate import ValidationLine, loaded_line, validate_all, validate_feed
 
 LAV, CONV, MZCR = (
     "lav-madrid-sevilla",
@@ -609,7 +609,9 @@ def test_via_legs_say_why_a_chain_cannot_be_followed(lines: Lines) -> None:
 
 
 def test_validate_reports_the_rules_and_no_problems() -> None:
-    reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
+    lines = [ValidationLine(path, DATA_DIR) for path in SPECS]
+    line_reports, _ = validate_feed(lines, lines, FEED)
+    reports = {line.path.name: report for line, report in zip(lines, line_reports, strict=True)}
     expected = {
         SPEC.name: RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES | TOLEDO_RULES,
         CONV_SPEC.name: RULES | JAEN_RULES | EXTREMADURA_RULES,
