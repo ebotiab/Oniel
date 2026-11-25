@@ -62,6 +62,11 @@ CASTEJON_PAMPLONA_SPEC = DATA_DIR / "curated" / "castejon-pamplona.json"
 #: La línea de Miranda de Ebro a Bilbao por Orduña y Llodio.
 MIRANDA_BILBAO_SPEC = DATA_DIR / "curated" / "miranda-bilbao.json"
 SEVILLA_HUELVA_SPEC = DATA_DIR / "curated" / "sevilla-huelva.json"
+#: Los tres enlaces cargados el 23 de noviembre de 2026: el ramal de Soto de Cerrato, la vía de
+#: Aljucén a La Garrovilla y el túnel de Atocha a Chamartín por Recoletos.
+LINK_CERRATO_SPEC = DATA_DIR / "curated" / "enlace-soto-de-cerrato.json"
+LINK_ALJUCEN_SPEC = DATA_DIR / "curated" / "enlace-aljucen-la-garrovilla.json"
+LINK_MADRID_SPEC = DATA_DIR / "curated" / "enlace-atocha-chamartin.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -105,6 +110,9 @@ SPECS = [
     CASTEJON_PAMPLONA_SPEC,
     MIRANDA_BILBAO_SPEC,
     SEVILLA_HUELVA_SPEC,
+    LINK_CERRATO_SPEC,
+    LINK_ALJUCEN_SPEC,
+    LINK_MADRID_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los
@@ -145,8 +153,16 @@ def ouigo_feed() -> GtfsFeed:
 
 
 def database_url_for_tests() -> str | None:
-    """Base de datos para las pruebas de integración: ONIEL_TEST_DATABASE_URL o ninguna."""
-    return os.environ.get("ONIEL_TEST_DATABASE_URL")
+    """URL de integración. En paralelo, cada proceso sustituye {worker} por su identificador."""
+    url = os.environ.get("ONIEL_TEST_DATABASE_URL")
+    worker = os.environ.get("PYTEST_XDIST_WORKER")
+    if url and worker:
+        if "{worker}" not in url:
+            raise pytest.UsageError(
+                "Incluye {worker} en ONIEL_TEST_DATABASE_URL para que cada proceso use su propia base."
+            )
+        return url.replace("{worker}", worker)
+    return url
 
 
 requires_db = pytest.mark.skipif(

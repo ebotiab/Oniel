@@ -237,7 +237,7 @@
       "attribute": "electrification",
       "from_node": "bif-pajares",
       "to_node": "pola-de-lena",
-      "value": "25kv_ca",
+      "value": "25 kV 50 Hz",
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-15",
       "note": "Mapa 4: 25 kV desde el trecho de tercer carril que empieza junto a La Robla hasta Pola de Lena («Doble a 25 KV 50 HZ a 1.668 mm» de Campomanes AV a Pola de Lena); a 3 kV de León a La Robla y de Pola de Lena a Gijón. Las vías de OSM sitúan los cambios de tensión dentro de la variante: 1,9 km después de la bifurcación Pajares y 1,2 km después del cambiador de Campomanes, desde donde llevan voltage=3000 hasta Pola de Lena. Se declara lo que dibuja el mapa, que cambia en nodos."
@@ -295,6 +295,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-15",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en los cuatro rótulos de la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "leon",
+      "to_node": "gijon-sanz-crespo",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
@@ -303,6 +312,8 @@
       "node_id": "bif-pajares",
       "name": "Línea antigua por el puerto de Pajares",
       "towards": "La Robla, Busdongo, Puente de los Fierros y Pola de Lena",
+      "to_node_id": "pola-de-lena",
+      "towards_back": "Puente de los Fierros, Busdongo, La Robla y León",
       "status": "no_cargada",
       "sketch": [
         [
@@ -370,16 +381,17 @@
           43.10762
         ],
         [
-          -5.83075,
-          43.1617
+          -5.831187,
+          43.158643
         ]
       ]
     },
     {
       "id": "conv-villabona-san-juan-de-nieva",
       "node_id": "villabona-de-asturias",
-      "name": "Línea Villabona de Asturias–San Juan de Nieva",
+      "name": "Línea convencional Villabona de Asturias – Avilés",
       "towards": "Avilés y San Juan de Nieva",
+      "official_name": "Línea Villabona de Asturias – San Juan de Nieva",
       "status": "no_cargada",
       "sketch": [
         [

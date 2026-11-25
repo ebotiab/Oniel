@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 
 import { expect, test } from '@playwright/test'
 
-import { attributeRows, attributesOf, SEGMENT_ATTRIBUTES, type SegmentAttribute } from '../src/app/segmentAttributes.ts'
+import { attributeRows, attributeSources, attributesOf, SEGMENT_ATTRIBUTES, type SegmentAttribute } from '../src/app/segmentAttributes.ts'
 import { composeNetwork } from '../src/data/network.ts'
 import type { NetworkIndexOut, SegmentOut } from '../src/data/types.ts'
 
@@ -15,12 +15,21 @@ const DOBLE = 'lav-madrid-sevilla:urda:ciudad-real'
 const UNICA = 'convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques'
 
 test.describe('Atributos de tramo: de las secciones de la línea a la ficha', () => {
-  test('cada tramo de la instantánea trae su número de vías como atributo, con fuente donde cambia', () => {
+  test('cada tramo de la instantánea trae su número de vías como atributo, con fuente también donde no cambia', () => {
     expect(red.segments.length).toBeGreaterThan(0)
     for (const s of red.segments) expect(s.attributes?.tracks?.value).toBe(s.tracks)
     expect(tramo(UNICA).attributes?.tracks).toEqual({ value: 1, source_id: 'wikipedia-lineas-300-400', checked_on: '2026-11-08' })
-    // la vía doble de la alta velocidad es el valor de la línea entera: no tiene fuente propia
-    expect(tramo(DOBLE).attributes?.tracks).toEqual({ value: 2, source_id: null, checked_on: null })
+    expect(tramo(DOBLE).attributes?.tracks).toEqual({ value: 2, source_id: 'adif-declaracion-red-2026-mapas', checked_on: '2026-11-25' })
+  })
+
+  test('una comprobación nueva no cambia la fecha de otros atributos de la misma fuente', () => {
+    const filas = [
+      ...attributeRows(tramo(DOBLE), linea(tramo(DOBLE)), 'esencial'),
+      ...attributeRows(tramo(DOBLE), linea(tramo(DOBLE)), 'detalle'),
+    ]
+    const fuentes = attributeSources(filas)
+    expect(fuentes).toContainEqual({ sourceId: 'adif-declaracion-red-2026-mapas', checkedOn: '2026-11-25', etiquetas: ['Vías'] })
+    expect(fuentes).toContainEqual({ sourceId: 'adif-declaracion-red-2026-mapas', checkedOn: '2026-11-12', etiquetas: ['Protección del tren', 'Bloqueo', 'Mando'] })
   })
 
   test('la ficha saca las vías de la lista de atributos', () => {

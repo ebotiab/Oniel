@@ -5,7 +5,7 @@
     {"id": "castilla-y-leon", "name": "Castilla y León", "sort_order": 3, "cities": ["Valladolid", "León", "Burgos", "Salamanca", "Segovia", "Zamora", "Palencia", "Ávila"]},
     {"id": "aragon-navarra-rioja", "name": "Aragón, Navarra y La Rioja", "sort_order": 4, "cities": ["Zaragoza", "Pamplona", "Logroño", "Huesca", "Teruel", "Calatayud"]},
     {"id": "cataluna", "name": "Cataluña", "sort_order": 5, "cities": ["Barcelona", "Tarragona", "Lleida", "Girona", "Figueres"]},
-    {"id": "levante", "name": "Comunidad Valenciana y Murcia", "sort_order": 6, "cities": ["Valencia", "Alicante", "Castellón", "Murcia", "Cartagena", "Elche"]},
+    {"id": "levante", "name": "Comunidad Valenciana y Murcia", "sort_order": 6, "cities": ["Valencia", "Alicante", "Castelló", "Murcia", "Cartagena", "Elche"]},
     {"id": "madrid-castilla-la-mancha", "name": "Madrid y Castilla-La Mancha", "sort_order": 7, "cities": ["Madrid", "Toledo", "Ciudad Real", "Albacete", "Cuenca", "Guadalajara"]},
     {"id": "extremadura", "name": "Extremadura", "sort_order": 8, "cities": ["Cáceres", "Mérida", "Badajoz", "Plasencia"]},
     {"id": "andalucia", "name": "Andalucía", "sort_order": 9, "cities": ["Sevilla", "Córdoba", "Málaga", "Granada", "Jaén", "Cádiz", "Almería", "Huelva", "Algeciras"]}

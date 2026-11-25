@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { sinOtroCamino } from './instantanea.ts'
+import { alternativas, cobertura, sinOtroCamino } from './instantanea.ts'
+import { irA } from './navegar.ts'
 
 // Trenes por tramo y si tienen otro camino en las líneas cargadas (día de referencia: 13 de
 // noviembre de 2026). El cálculo es del servidor y viaja en `alternatives.json`, así que estas
@@ -31,26 +32,31 @@ test.describe('Tramos sin otro camino', () => {
     expect(pedidas).toBe(0)
   })
 
-  test('si la instantánea es de otro día, el análisis se pide al servidor; y si este no lo tiene, vale la instantánea', async ({ page }) => {
-    test.skip(estatico, 'sin API el visor ya lee la instantánea')
-    // una instantánea de otro día: el visor publicado va por delante de la API desplegada
-    await page.route('**/data/alternatives.json', async (route) => {
-      const respuesta = await route.fetch()
-      const datos = (await respuesta.json()) as { date: string }
-      return route.fulfill({ response: respuesta, json: { ...datos, date: '2000-01-01' } })
-    })
-    // y una API anterior a este apartado, que no tiene la ruta
-    let pedidas = 0
+  test('una respuesta de otro día se descarta y la vista puede recuperarse al volver a abrirla', async ({ page }) => {
+    let recuperado = false
+    let consultasApi = 0
+    await page.route('**/api/coverage', (route) => route.fulfill({ json: cobertura }))
+    await page.route('**/data/alternatives.json', (route) =>
+      route.fulfill({ json: estatico && recuperado ? alternativas : { ...alternativas, date: '2000-01-01' } }),
+    )
     await page.route('**/api/alternatives*', (route) => {
-      pedidas++
-      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+      consultasApi++
+      const date = new URL(route.request().url()).searchParams.get('date')
+      return recuperado ? route.fulfill({ json: { ...alternativas, date } }) : route.fulfill({ status: 503 })
     })
     await page.goto('/')
-    await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
-    await page.goto('/sin-otro-camino')
+    if (!estatico) await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
+    await irA(page, 'sin-otro-camino')
+    await expect(page.getByText('No se ha podido cargar esta vista.')).toBeVisible()
+    await expect(page.getByTestId('tramos-sin-alternativa')).toHaveCount(0)
+    expect(consultasApi).toBe(estatico ? 0 : 1)
+
+    recuperado = true
+    await irA(page, 'glosario')
+    await irA(page, 'sin-otro-camino')
     await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(sinOtroCamino.lineas.length)
-    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
-    expect(pedidas).toBeGreaterThan(0)
+    await expect(page.getByText('No se ha podido cargar esta vista.')).toHaveCount(0)
+    expect(consultasApi).toBe(estatico ? 0 : 2)
   })
 
   test('el arranque no pide el análisis: llega al abrir un tramo', async ({ page }) => {
@@ -124,7 +130,7 @@ test.describe('Tramos sin otro camino', () => {
     await abrirPanel(page)
     // los 4 regionales de Ciudad Real a Alcázar de San Juan no tienen otro camino: el que hay mide más del doble
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, 4 de sus 14 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 183 km más y 2 min menos.',
+      'Si este tramo se cortara, 4 de sus 14 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 204 km y 54 min más.',
     )
     // los desviados de Madrid a Málaga que quedan el 20 de noviembre: su otro camino es más corto
     await page.getByTestId('mas-detalle').locator('summary').click()
@@ -187,12 +193,13 @@ test.describe('Tramos sin otro camino', () => {
     await expect(otros.first()).toContainText('162 trenes')
     await expect(otros.first()).toContainText('30 sin él')
     await expect(otros.first()).toContainText('+90 km · +1 h 8 min')
-    // de Córdoba a la bifurcación de Málaga pasan también los que no paran en Madrid; los Avant que solo recorren
-    // ese tramo no tienen otro camino: la fila lo dice
+    // de Córdoba a la bifurcación de Málaga pasan también los que no paran en Madrid. Los que siguen a Sevilla no
+    // tienen otro camino: la vuelta por Granada llega a la bifurcación por la línea de Málaga, y para tomar la de
+    // Sevilla habría que invertir la marcha en Córdoba, que es lo cortado. Los de Málaga sí lo tienen
     const cordoba = otros.filter({ hasText: 'Córdoba – Bifurcación Málaga-Alta Velocidad' })
     await expect(cordoba).toContainText('158 trenes')
-    await expect(cordoba).toContainText('22 sin él')
-    await expect(cordoba).toContainText('+340 km · +3 h 2 min')
+    await expect(cordoba).toContainText('97 sin él')
+    await expect(cordoba).toContainText('+147 km · +2 h 23 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(vista).not.toContainText('Moreda – Bifurcación Almería')

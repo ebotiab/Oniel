@@ -9,10 +9,11 @@ import asyncpg
 import logfire
 
 from oniel.domain.schemas import ClosureRequest, ClosureResult, ClosureResultItem, SegmentOut
-from oniel.repo.network_repo import fetch_graph, fetch_interruptions
+from oniel.repo.datasets_repo import fetch_datasets
+from oniel.repo.network_repo import fetch_graph, fetch_interruptions, fetch_operators, fetch_sources
 from oniel.repo.services_repo import DatedPass, fmt_time, passes_on_segment
 from oniel.routing import Scenario
-from oniel.sim.closure import ClosureWindow, alternatives, classify
+from oniel.sim.closure import DAY_S, ClosureWindow, alternatives, classify
 from oniel.sim.passes import SegmentPass
 
 METHOD = (
@@ -27,10 +28,8 @@ METHOD = (
 )
 
 CAVEATS = [
-    "Los horarios son los publicados por Renfe en su GTFS; no incluyen interrupciones, obras ni"
-    " cambios de última hora.",
-    "Se consideran solo los servicios de Renfe importados en esta versión; no aparecen otros"
-    " operadores ni mercancías.",
+    "El cálculo usa horarios planificados de viajeros. Quedan fuera los trenes de mercancías y"
+    " los cambios de última hora por obras o interrupciones.",
     "El cierre se supone de todas las vías del tramo y no se calcula ningún desvío ni"
     " reordenación de trenes.",
 ]
@@ -65,6 +64,21 @@ def shifted_times(p: SegmentPass, from_previous_day: bool) -> tuple[str | None, 
     )
 
 
+async def timetable_credits(conn: asyncpg.Connection, used: set[tuple[str, str]]) -> list[str]:
+    """Cita la fuente del conjunto de cada servicio que aparece en la simulación."""
+    if not used:
+        return ["No hay servicios en los horarios consultados para este tramo y esta fecha."]
+    dataset_sources = {d.id: d.source_id for d in await fetch_datasets(conn)}
+    source_names = {s.id: s.name for s in await fetch_sources(conn)}
+    operator_names = {o.id: o.name for o in await fetch_operators(conn)}
+    # Dos versiones del mismo horario pueden intervenir a uno y otro lado de la medianoche.
+    credits = {
+        (operator_names[operator_id], source_names[dataset_sources[dataset_id]])
+        for operator_id, dataset_id in used
+    }
+    return [f"El horario de {name} procede de «{source}»." for name, source in sorted(credits)]
+
+
 async def simulate_closure(
     conn: asyncpg.Connection, segment: SegmentOut, req: ClosureRequest
 ) -> ClosureResult:
@@ -76,7 +90,13 @@ async def simulate_closure(
         start=req.start.isoformat(),
         end=req.end.isoformat(),
     ):
-        dated: list[DatedPass] = await passes_on_segment(conn, segment.id, req.date)
+        dated: list[DatedPass] = await passes_on_segment(
+            conn,
+            segment.id,
+            req.date,
+            with_previous_day=True,
+            next_day_until_s=max(0, window.end_s - DAY_S),
+        )
         # El cierre es un escenario de una modificación sobre el grafo de todas las líneas.
         active = await fetch_interruptions(conn, day=req.date)
         detours, omitted = alternatives(
@@ -85,8 +105,14 @@ async def simulate_closure(
         interruptions = [i for i in active if segment.id in i.segment_ids]
         items: list[ClosureResultItem] = []
         counts: Counter[str] = Counter()
+        used_timetables: set[tuple[str, str]] = set()
         for d in dated:
-            verdict = classify(d.segment_pass, window, -86400 if d.from_previous_day else 0)
+            verdict = classify(d.segment_pass, window, DAY_S * d.day_offset)
+            # La ficha cuenta los trenes que salen el día elegido. De los días contiguos solo
+            # se añaden los pasos que alcanza la franja, incluidos sus márgenes de incertidumbre.
+            if d.day_offset and verdict.status == "no_afectado":
+                continue
+            used_timetables.add((d.service.operator_id, d.dataset_id))
             counts[verdict.status] += 1
             enter, exit_ = shifted_times(d.segment_pass, d.from_previous_day)
             items.append(
@@ -99,6 +125,7 @@ async def simulate_closure(
                     direction_label=direction_label(segment, d.segment_pass.km_increasing),
                     explanation=verdict.explanation,
                     from_previous_day=d.from_previous_day,
+                    from_next_day=d.day_offset == 1,
                 )
             )
         order = {
@@ -107,7 +134,8 @@ async def simulate_closure(
             "indeterminado": 2,
             "no_afectado": 3,
         }
-        items.sort(key=lambda i: (order[i.status], i.enter or "", i.service.train_number))
+        # Los pasos ya vienen en orden cronológico, incluidas las horas de los días contiguos.
+        items.sort(key=lambda i: order[i.status])
         for key in order:
             counts.setdefault(key, 0)
         summary: dict[str, Any] = {
@@ -130,6 +158,7 @@ async def simulate_closure(
             interruptions=interruptions,
             method=METHOD,
             caveats=[
+                *await timetable_credits(conn, used_timetables),
                 *CAVEATS,
                 *([INTERRUPTED_CAVEAT] if interruptions else []),
                 *([ALTERNATIVE_CAVEAT] if detours else []),

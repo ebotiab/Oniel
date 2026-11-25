@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 
 import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
+import { useApiStatus } from '../data/useApiStatus'
 import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
 import { coste, fraseTramo, porLineas, trenes } from '../app/alternativas'
-import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, productLabel, shortStop } from '../app/state'
+import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, shortStop } from '../app/state'
 import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
@@ -12,6 +13,7 @@ import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
+  notice?: ReactNode
   segment: SegmentOut
   network: NetworkOut
   /** Fuentes registradas, para citar al pie del detalle la del tramo. */
@@ -28,10 +30,11 @@ interface Props {
   onBack: () => void
 }
 
-export function SegmentDetail({ segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
+export function SegmentDetail({ notice, segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
   const [services, setServices] = useState<SegmentServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [alternativas, setAlternativas] = useState<AlternativesOut | null>(null)
+  const apiAvailable = useApiStatus() === 'disponible'
   const line = network.lines.find((l) => l.id === segment.line_id)
 
   // App monta este componente con key={segment.id}, así que el estado se reinicia al cambiar de tramo.
@@ -54,11 +57,11 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
     return () => {
       alive = false
     }
-  }, [referenceDate])
+  }, [referenceDate, apiAvailable])
   const alternativa = alternativas?.segments.find((s) => s.segment_id === segment.id)
 
   const byProduct = new Map<string, number>()
-  for (const p of services?.passes ?? []) byProduct.set(productLabel(p.service.product), (byProduct.get(productLabel(p.service.product)) ?? 0) + 1)
+  for (const p of services?.passes ?? []) byProduct.set(p.service.product, (byProduct.get(p.service.product) ?? 0) + 1)
 
   // Los trenes de cada operador, del que más tiene al que menos; dentro, por hora de paso.
   const operatorName = (id: string) => operators.find((o) => o.id === id)?.name ?? id
@@ -99,6 +102,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           {segment.to_name}
         </button>
       </h2>
+      {notice}
       <dl className="datos-tramo datos">
         <div>
           <dt>Longitud</dt>
@@ -136,7 +140,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />
-        <FuentesAtributos segment={segment} line={line} sources={sources} />
+        <FuentesAtributos segment={segment} line={line} sources={sources} trazado={segment.source_id} />
         {alternativa && alternativa.trains > 0 && (
           <section data-testid="tramo-alternativa-detalle">
             <p className="sobre">Si este tramo se cortara</p>
@@ -230,18 +234,19 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
           {/* un tramo puede no llevar ningún tren de los horarios: se dice, en vez de un recuento a cero */}
           {services.passes.length === 0 ? (
             <p className="suave" data-testid="tramo-sin-trenes">
-              Ningún tren de los horarios cargados recorre este tramo ese día.
+              Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de{' '}
+              <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.from_node_id)}>
+                {segment.from_name}
+              </button>{' '}
+              y en la de{' '}
+              <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.to_node_id)}>
+                {segment.to_name}
+              </button>
+              .
             </p>
           ) : (
             <p className="suave">
-              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. Paso con <Termino id="paso-publicado">horario publicado</Termino> en{' '}
-              {services.counts.publicado}, <Termino id="paso-estimado">estimado</Termino> en {services.counts.estimado}
-              {services.counts.indeterminado > 0 && (
-                <>
-                  , <Termino id="paso-indeterminado">indeterminado</Termino> en {services.counts.indeterminado}
-                </>
-              )}
-              .
+              {[...byProduct.entries()].map(([p, n]) => `${n} ${p}`).join(' · ')}. <HoraDePaso counts={services.counts} />
             </p>
           )}
           <div data-testid="lista-servicios">
@@ -258,7 +263,7 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
                       <span className="hora datos">{p.enter ?? '—'}</span>
                       <span className="tren">
                         <strong>
-                          {productLabel(p.service.product)} {p.service.train_number}
+                          {p.service.product} {p.service.train_number}
                         </strong>{' '}
                         <span className="suave">
                           {shortStop(p.service.origin_name)} → {shortStop(p.service.destination_name)}
@@ -274,5 +279,40 @@ export function SegmentDetail({ segment, network, sources, operators, referenceD
         </>
       )}
     </section>
+  )
+}
+
+/**
+ * De dónde sale la hora a la que cada tren recorre el tramo, dicho sin ceros y sin dar por sabido qué es un
+ * paso estimado: la del horario si para en los dos extremos, calculada si no (docs/diseno.md, «Selección de ficha»).
+ */
+function HoraDePaso({ counts }: { counts: Record<'publicado' | 'estimado' | 'indeterminado', number> }) {
+  const { publicado, estimado, indeterminado } = counts
+  const delHorario = <Termino id="paso-publicado">la del horario</Termino>
+  const calculada = <Termino id="paso-estimado">calculada</Termino>
+  const uno = publicado + estimado === 1
+  return (
+    <span data-testid="tramo-hora-de-paso">
+      {publicado > 0 && estimado === 0 && (
+        <>
+          {uno ? 'Para' : 'Todos paran'} en los dos extremos del tramo: la hora a la que {uno ? 'pasa' : 'pasan'} es {delHorario}.
+        </>
+      )}
+      {publicado === 0 && estimado > 0 && (
+        <>
+          {uno ? 'No para' : 'Ninguno para'} en los dos extremos del tramo: la hora a la que {uno ? 'pasa' : 'pasan'} está {calculada}.
+        </>
+      )}
+      {publicado > 0 && estimado > 0 && (
+        <>
+          {publicado} {publicado === 1 ? 'para' : 'paran'} en los dos extremos del tramo y su hora es {delHorario}; la de {estimado === 1 ? 'el otro' : `los otros ${estimado}`} está {calculada}.
+        </>
+      )}
+      {indeterminado > 0 && (
+        <>
+          {publicado + estimado > 0 ? ' ' : ''}De {indeterminado} no se puede saber la hora: su paso es <Termino id="paso-indeterminado">indeterminado</Termino>.
+        </>
+      )}
+    </span>
   )
 }

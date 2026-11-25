@@ -54,7 +54,10 @@ test.describe('Línea de València a Camp de Tarragona: une la alta velocidad de
     // alta velocidad o por la costa de Tarragona, y uno que deja la alta velocidad en Camp de Tarragona
     const aBarcelona = findRoutes(grafo, 'madrid-puerta-de-atocha', 'barcelona-sants')
     // y, desde la línea de València a Alicante por Xàtiva, dos más: por Albacete, Alicante y Xàtiva
-    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 632.0, 734.8, 755.1, 844.6, 864.8, 971.5, 991.8])
+    // por la costa de Tarragona hay que invertir la marcha en Cambrils (648,5 km; sin la regla de giro, 632,0), y los
+    // dos que iban por Albacete a València ya no salen: giraban en la bifurcación de Albacete
+    expect(aBarcelona.map((r) => r.length_km)).toEqual([620.1, 648.5, 734.8, 755.1, 971.5, 991.8])
+    expect(aBarcelona[1].reverse_node_ids).toEqual(['cambrils'])
   })
 
   test('la ficha del último tramo dice que es de ancho estándar; la de un tramo de ancho ibérico no dice nada', async ({ page }) => {

@@ -1,6 +1,7 @@
 ---
 name: anadir-linea
-description: Añadir una línea ferroviaria a Oniel o prolongar una ya cargada, siguiendo «Añadir otra línea» de docs/datos.md. Úsala cuando la tarea sea cargar una línea, un ramal, un baipás o un trecho nuevo de la red: trazado de OpenStreetMap, especificación curada, asignación de paradas, filtro de corredor, pruebas, instantánea y documentación.
+description: >-
+  Añadir una línea ferroviaria a Oniel o prolongar una ya cargada, siguiendo «Añadir otra línea» de docs/datos.md. Úsala cuando la tarea sea cargar una línea, un ramal, un baipás o un trecho nuevo de la red: trazado de OpenStreetMap, especificación curada, asignación de paradas, filtro de corredor, pruebas, instantánea y documentación.
 ---
 
 # Añadir una línea
@@ -33,7 +34,7 @@ No pases de una fase sin su comprobación: los errores de trazado se pagan en la
 
 **1. Trazado y fuentes (pasos 1 a 4).** Cada fichero crudo va a `backend/data/raw/` con la fecha en el nombre y cada fuente a `sources.json` antes de usar el dato. Comprueba que la relación de OpenStreetMap es de una pieza trazándola de punta a punta, y mira dónde están de verdad sus extremos: el nombre de una relación no lo dice. Lo que no esté en una fuente no se estima: se deja sin poner y se dice.
 
-**2. Especificación (pasos 5, 6 y 10).** `backend/data/curated/<línea>.json`, los puntos kilométricos tal como los da Adif y el id en `line_ids`. Los tres atributos de señalización son obligatorios. Si la línea sustituye a una conexión a trazos de otra especificación, retírala de allí.
+**2. Especificación (pasos 5, 6 y 10).** `backend/data/curated/<línea>.json`, los puntos kilométricos tal como los da Adif y el id en `line_ids`. Los tres atributos de señalización son obligatorios. Aplica los criterios comunes de «Añadir otra línea»: máxima de línea igual al máximo documentado de sus tramos, sin confundirla con la predominante o comercial; electrificación con los mismos tres textos que la línea; secciones `tracks` con fuente y fecha en todo el recorrido, también donde se hereda el número general. Longitud medida entre nodos extremos; fecha de apertura y longitud de referencia ausentes si no hay fuente para ese ámbito. Nombres ferroviarios completos, topónimos narrativos uniformes y descripción de tres a cinco párrafos; enseña cualquier reescritura al usuario antes de publicarla. Si la línea sustituye a una conexión a trazos de otra especificación, retírala de allí.
 
 **3. Trenes (pasos 7 a 9).** Saca del GTFS los patrones de parada de los trenes de la línea antes de escribir asignaciones: dicen qué paradas de fuera hay que asignar. Después:
 
@@ -50,21 +51,21 @@ hasta que no haya problemas ni ningún paso `indeterminado`, y luego `validate` 
 
 **5. Importación e instantánea (paso 13).** `uv run oniel-data import all` sobre la base de la sesión. Si has retirado una conexión a trazos o has movido nodos compartidos, impórtalo sobre una base vacía antes de dar la instantánea por buena. Anota los pesos nuevos en «Medidas».
 
-**6. Pruebas (pasos 14, 16 y 17).** La especificación entra en `SPECS` y la línea tiene su `test_<línea>.py`. El paso 14 enumera los ficheros del backend cuyos recuentos cambian. En el visor los totales de la red no están escritos en ninguna prueba: se leen de la instantánea (`frontend/e2e/instantanea.ts`), así que al añadir una línea no hay ningún fichero de `frontend/e2e/` que tocar por ellos. La prueba de la línea nueva sigue la misma regla (`CLAUDE.md`, «Pruebas»): escribe a mano solo lo de su línea, pide a `instantanea.ts` cualquier total o si un tramo tiene otro camino, y llega a la línea con `abrirLinea`. Solo cambia una prueba ajena cuando la línea nueva cambia de verdad lo que esa prueba afirma de la suya: una estación que pasa a ser común a dos líneas, un tramo compartido que gana trenes o un recorrido más corto entre dos estaciones. Si el día de referencia se mueve, cambian los recuentos de todas las líneas, no solo los de la nueva. Ningún recuento se ajusta a ojo: se lee del resultado y se explica en la PR por qué cambia.
+**6. Pruebas (pasos 14, 16 y 17).** La especificación entra en `SPECS` y la línea tiene su `test_<línea>.py`. El paso 14 enumera los ficheros del backend cuyos recuentos cambian. En el visor los totales de la red no están escritos en ninguna prueba: se leen de la instantánea (`frontend/e2e/instantanea.ts`), así que al añadir una línea no hay ningún fichero de `frontend/e2e/` que tocar por ellos. La prueba de la línea nueva sigue la misma regla (`AGENTS.md`, «Pruebas»): escribe a mano solo lo de su línea, pide a `instantanea.ts` cualquier total o si un tramo tiene otro camino, y llega a la línea con `abrirLinea`. Solo cambia una prueba ajena cuando la línea nueva cambia de verdad lo que esa prueba afirma de la suya: una estación que pasa a ser común a dos líneas, un tramo compartido que gana trenes o un recorrido más corto entre dos estaciones. Si el día de referencia se mueve, cambian los recuentos de todas las líneas, no solo los de la nueva. Ningún recuento se ajusta a ojo: se lee del resultado y se explica en la PR por qué cambia.
 
-**7. Documentación (paso 15).** Las tablas de `docs/datos.md`, el apartado «Cómo se construyó…», la tabla de «Tramos sin alternativa» de `docs/simulacion.md`, la lista de líneas de `CLAUDE.md` y la hoja de ruta.
+**7. Documentación (paso 15).** Las tablas de `docs/datos.md`, el apartado «Cómo se construyó…», la tabla de «Tramos sin alternativa» de `docs/simulacion.md`, la lista de líneas de `AGENTS.md` y la hoja de ruta.
 
 ## Qué pasar en local
 
-Lo que dice «Arrancar y comprobar» de `CLAUDE.md`: las comprobaciones rápidas de las dos mitades, `pytest` con la base de pruebas de la sesión, `oniel-data validate` y, con `ONIEL_E2E_STATIC=1`, solo el fichero de Playwright de la línea nueva, `e2e/red.spec.ts` y `e2e/alternativas.spec.ts` (los dos que recorren la red entera) y los de las líneas con las que comparte estación o tramo. La batería completa la pasa el CI.
+Lo que dice «Arrancar y comprobar» de `AGENTS.md`: las comprobaciones rápidas de las dos mitades, `pytest` con la base de pruebas de la sesión, `oniel-data validate` y, con `ONIEL_E2E_STATIC=1`, solo el fichero de Playwright de la línea nueva, `e2e/red.spec.ts` y `e2e/alternativas.spec.ts` (los dos que recorren la red entera) y los de las líneas con las que comparte estación o tramo. La batería completa la pasa el CI.
 
 ## Está terminada cuando
 
-- `validate` no da problemas, con y sin `--spec`.
+- `validate` no da problemas, con y sin `--spec`; las regresiones de `test_coherencia_fichas.py` demuestran que rechaza máximas contradictorias y electrificación no canónica, y admite datos válidos o desconocidos sin inventarlos.
 - Todo dato nuevo tiene su fuente en `sources.json` y su fichero crudo con fecha.
 - La instantánea regenerada va en la PR, con `index.json` y `lines/<id>.json` al día.
 - Los recuentos que cambian están explicados en la descripción de la PR, uno por uno.
 - Las tablas y los apartados del paso 15 están al día.
 - La descripción lleva `Closes #N` y la hoja de ruta ya no lista la tarea.
 
-Si la línea roza los accidentes de Adamuz o de Urda, o cualquier interrupción, el tono es el de `CLAUDE.md`: hechos con fecha y fuente, sin adjetivos.
+Si la línea roza los accidentes de Adamuz o de Urda, o cualquier interrupción, el tono es el de `AGENTS.md`: hechos con fecha y fuente, sin adjetivos.

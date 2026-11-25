@@ -5,7 +5,7 @@ import { routePath } from '../app/state'
 import type { ApiStatus } from '../data/api'
 
 /** Las secciones de Oniel: lo que la cabecera enlaza desde cualquier vista. */
-export type Seccion = 'mapa' | 'recorridos' | 'sin-otro-camino' | 'glosario' | 'cobertura'
+export type Seccion = 'mapa' | 'recorridos' | 'sin-otro-camino' | 'guia' | 'glosario' | 'cobertura'
 
 interface Entrada {
   id: Seccion
@@ -33,6 +33,7 @@ const SECCIONES: Entrada[] = [
     frase: 'Dónde un corte deja a los trenes sin paso',
     href: routePath({ selection: null, simulacion: false, sinOtroCamino: true }),
   },
+  { id: 'guia', nombre: 'Guía', frase: 'Cómo empezar a explorar la red', href: routePath({ selection: null, simulacion: false, guia: true }) },
   { id: 'glosario', nombre: 'Glosario', frase: 'Qué significa cada término', href: routePath({ selection: null, simulacion: false, glosario: { entrada: null } }) },
   { id: 'cobertura', nombre: 'Cobertura y fuentes', frase: 'Qué hay cargado y de dónde sale', href: routePath({ selection: null, simulacion: false, cobertura: true }) },
 ]

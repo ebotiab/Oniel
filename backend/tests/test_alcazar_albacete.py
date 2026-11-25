@@ -77,11 +77,12 @@ def test_alcazar_is_the_station_of_the_main_line(
     assert all(n.offset_m < 100 for n in albacete.nodes)
     # con la línea cargada, de Alcázar ya no sale una conexión a trazos hacia Levante...
     assert all(c.node_id != "alcazar-de-san-juan" for c in conv_spec.connections)
-    # ...y de Albacete sale una: la línea convencional hacia La Encina. La de alta velocidad
-    # está cargada desde que entró la línea de Albacete a Alicante
-    assert {c.id: c.node_id for c in albacete.spec.connections} == {
-        "conv-albacete-levante": "albacete-los-llanos",
-    }
+    # ...y de Albacete sale una, la línea convencional hacia La Encina, que declara la línea de
+    # Valencia a Alicante con sus dos extremos: la bifurcación de La Encina y Albacete
+    assert albacete.spec.connections == []
+    xativa = load_network_spec(DATA_DIR / "curated" / "valencia-xativa-alicante.json")
+    (to_albacete,) = [c for c in xativa.connections if c.to_node_id == "albacete-los-llanos"]
+    assert (to_albacete.id, to_albacete.node_id) == ("conv-la-encina-albacete", "bif-la-encina")
 
 
 def test_adif_kilometre_points_continue_those_of_madrid_alcazar(albacete: BuiltNetwork) -> None:
@@ -151,7 +152,11 @@ def test_the_filter_selects_the_trains_that_run_along_the_line(
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in albacete.segments]
     trips = select_trips_for_spec(feed, albacete_spec)
     assert len(trips) == 142
-    assert Counter(t.product for t in trips) == {"MD": 105, "REG.EXP.": 29, "ALVIA": 8}
+    assert Counter(t.product for t in trips) == {
+        "Media Distancia": 105,
+        "Regional Exprés": 29,
+        "Alvia": 8,
+    }
     by_segment = dict.fromkeys((s.id for s in albacete.segments), 0)
     kinds: Counter[str] = Counter()
     for trip in trips:

@@ -55,7 +55,7 @@ class Verdict:
 
 
 def classify(p: SegmentPass, window: ClosureWindow, day_offset_s: int = 0) -> Verdict:
-    """Clasifica el paso de un tren. ``day_offset_s`` desplaza trenes del día anterior (-86400)."""
+    """Clasifica el paso de un tren. ``day_offset_s`` sitúa los trenes de los días contiguos respecto al cierre."""
     if p.kind == "indeterminado" or p.enter_s is None or p.exit_s is None:
         return Verdict("indeterminado", p.basis)
     enter, exit_ = p.enter_s + day_offset_s, p.exit_s + day_offset_s

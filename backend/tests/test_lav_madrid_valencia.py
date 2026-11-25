@@ -235,7 +235,7 @@ def test_trains_of_valencia_and_of_alicante_share_the_line_as_far_as_the_albacet
         short = _short(passes)
         ends = sorted({short[0].split(":")[0], short[-1].split(":")[1]})
         shapes[(ends[0], ends[1])] = shapes.get((ends[0], ends[1]), 0) + 1
-    assert products == {"AVE": 319, "AVLO": 61, "AVANT": 85, "ALVIA": 24}
+    assert products == {"AVE": 319, "AVLO": 61, "Avant": 85, "Alvia": 24}
     assert rules == {
         "madrid-valencia-sin-parada": 62,
         "madrid-albacete-sin-parada": 31,

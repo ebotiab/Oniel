@@ -19,7 +19,7 @@
       }
     ],
     "status": "disponible",
-    "description": "Une Sevilla con Jerez de la Frontera y Cádiz por Dos Hermanas y Utrera. Por ella siguen hasta Cádiz los trenes de larga distancia que llegan de Madrid a Sevilla por la alta velocidad.\n\nEs el último trecho de la línea de Adif que va de Alcázar de San Juan a Cádiz, y en Sevilla-Santa Justa empieza a contar los kilómetros de nuevo. La construyó en el siglo XIX una compañía de Sevilla, Jerez y Cádiz: llegó de Jerez a Sevilla en 1860 y a Cádiz en 1861. Desde finales del siglo XX se ha ido duplicando y preparando para más velocidad; hoy es de vía doble de punta a punta, y entre Las Cabezas de San Juan y el aeropuerto de Jerez va por la variante de Lebrija, abierta en 2013.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Cádiz y los Media Distancia de Sevilla, Córdoba y Jaén a Cádiz. Los de Córdoba y Jaén llegan a Sevilla por la línea convencional de Córdoba, que no está cargada. Los Media Distancia de Sevilla a Osuna y Málaga van por ella hasta la bifurcación Utrera, donde toman la línea de Marchena.\n\nPor ella circulan también los trenes de Cercanías de Sevilla y de Cádiz, que no están cargados. Las estaciones que solo usan ellos no figuran en la línea.",
+    "description": "Une Sevilla con Jerez de la Frontera y Cádiz por Dos Hermanas y Utrera. Por ella siguen hasta Cádiz los trenes de larga distancia que llegan de Madrid a Sevilla por la alta velocidad.\n\nEs el último trecho de la línea de Adif que va de Alcázar de San Juan a Cádiz, y en Sevilla-Santa Justa empieza a contar los kilómetros de nuevo. La construyó en el siglo XIX una compañía de Sevilla, Jerez y Cádiz: llegó de Jerez a Sevilla en 1860 y a Cádiz en 1861. Desde finales del siglo XX se ha ido duplicando y preparando para más velocidad; hoy es de vía doble de punta a punta, y entre Las Cabezas de San Juan y el aeropuerto de Jerez va por la variante de Lebrija, abierta en 2013.\n\nEn los horarios de Renfe la recorren los Intercity de Madrid a Cádiz y los regionales de Sevilla, Córdoba y Jaén a Cádiz. Los de Córdoba y Jaén llegan a Sevilla por la línea convencional de Córdoba, que no está cargada. Los regionales de Sevilla a Osuna y Málaga van por ella hasta la bifurcación Utrera, donde toman la línea de Marchena.\n\nPor ella circulan también los trenes de Cercanías de Sevilla y de Cádiz, que no están cargados. Las estaciones que solo usan ellos no figuran en la línea.",
     "geometry_source": {
       "source_id": "osm-relation-11351144",
       "parts": [
@@ -298,14 +298,24 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo, «BAB ctc»."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "sevilla-santa-justa",
+      "to_node": "cadiz",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "conv-bif-utrera-marchena",
       "node_id": "bif-utrera",
-      "name": "Línea Utrera – Fuente de Piedra",
+      "name": "Línea convencional Utrera – Bobadilla – Málaga",
       "towards": "Arahal, Marchena, Osuna, Bobadilla y Málaga",
+      "official_name": "Línea Utrera – Fuente de Piedra",
       "status": "no_cargada",
       "sketch": [
         [

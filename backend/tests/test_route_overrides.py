@@ -38,6 +38,9 @@ from conftest import (
     LAV_VALLADOLID_SPEC,
     LBMG_SPEC,
     LEON_GIJON_SPEC,
+    LINK_ALJUCEN_SPEC,
+    LINK_CERRATO_SPEC,
+    LINK_MADRID_SPEC,
     LINK_MONFORTE_SPEC,
     MADRID_AVILA_VALLADOLID_SPEC,
     MADRID_PLASENCIA_SPEC,
@@ -73,7 +76,7 @@ from oniel.gtfs.trips import (
 from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import NetworkSpec, RouteOverride, StopMapping, load_network_spec
 from oniel.sim.passes import LineSegment, SegmentPass, StopCall, resolve_passes
-from oniel.validate import loaded_line, validate_all
+from oniel.validate import ValidationLine, loaded_line, validate_all, validate_feed
 
 LAV, CONV, MZCR = (
     "lav-madrid-sevilla",
@@ -318,7 +321,7 @@ def test_the_diverted_trains_enter_the_three_lines(
         & {t.trip_id for t in mzcr_trips}
     )
     assert len(diverted) == 22
-    assert {feed.trips[t].product for t in diverted} == {"Intercity", "ALVIA"}
+    assert {feed.trips[t].product for t in diverted} == {"Intercity", "Alvia"}
 
 
 def test_intercity_10270_runs_madrid_manzanares_on_the_conventional_line(
@@ -606,7 +609,9 @@ def test_via_legs_say_why_a_chain_cannot_be_followed(lines: Lines) -> None:
 
 
 def test_validate_reports_the_rules_and_no_problems() -> None:
-    reports = {p.name: validate_all(p, FEED, DATA_DIR, SPECS) for p in SPECS}
+    lines = [ValidationLine(path, DATA_DIR) for path in SPECS]
+    line_reports, _ = validate_feed(lines, lines, FEED)
+    reports = {line.path.name: report for line, report in zip(lines, line_reports, strict=True)}
     expected = {
         SPEC.name: RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES | TOLEDO_RULES,
         CONV_SPEC.name: RULES | JAEN_RULES | EXTREMADURA_RULES,
@@ -751,6 +756,11 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "regionales-de-zafra-por-los-rosales": 17,
             "regionales-de-zafra-y-jabugo": 13,
         },
+        # de los tres enlaces de #260 solo el túnel de Madrid lleva una regla: los regionales que
+        # llegan a Atocha desde Príncipe Pío
+        LINK_CERRATO_SPEC.name: {},
+        LINK_ALJUCEN_SPEC.name: {},
+        LINK_MADRID_SPEC.name: {"principe-pio-atocha": 12},
     }
     # la regla de los Ouigo de Barcelona a Andalucía y la de los Ouigo de Albacete a Elche no
     # encajan con ningún viaje de Renfe, y la del AVE de Madrid-Puerta de Atocha a Murcia sin
@@ -802,7 +812,15 @@ def test_validate_reports_a_via_that_cannot_be_followed(tmp_path: Path) -> None:
         broken,
         FEED,
         DATA_DIR,
-        [SPEC, MZCR_SPEC, JAEN_SPEC, LBMG_SPEC, ALBACETE_SPEC, MADRID_PLASENCIA_SPEC],
+        [
+            SPEC,
+            MZCR_SPEC,
+            JAEN_SPEC,
+            LBMG_SPEC,
+            ALBACETE_SPEC,
+            MADRID_PLASENCIA_SPEC,
+            LINK_MADRID_SPEC,
+        ],
     )
     assert report["problems"] == [
         f"la regla {rule['id']}: el «via» de la parada 50500 no se sostiene: cordoba no es un"

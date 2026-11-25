@@ -148,7 +148,9 @@ def test_kilometre_points_continue_those_of_the_madrid_line(line: BuiltNetwork) 
 def test_double_track_and_the_speeds_of_the_osm_ways(line: BuiltNetwork) -> None:
     assert [s.id.removeprefix(f"{LINE}:") for s in line.segments] == ALL_SEGMENTS
     assert all(s.tracks == 2 for s in line.segments)
-    assert not [a for a in line.spec.attribute_sections if a.attribute == "tracks"]
+    assert all(
+        s.attributes["tracks"].source_id == "adif-declaracion-red-2026-mapas" for s in line.segments
+    )
     # ningún tramo se queda sin velocidad: la más baja, en la entrada a Girona
     assert [s.max_speed_kmh for s in line.segments] == [220, 255, 245, 245, 125, 290, 290]
     assert line.spec.line.max_speed_kmh == 290
@@ -200,17 +202,22 @@ def test_the_filter_takes_the_trains_that_stop_at_figueres_vilafant(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 208
     assert Counter(t.product for t in trips) == {
-        "AVANT": 104,
-        "AVE INT": 54,
+        "Avant": 104,
+        "AVE internacional": 54,
         "AVE": 41,
-        "EUROMED": 9,
+        "Euromed": 9,
     }
     selected = {t.trip_id for t in trips}
     at_girona = [t for t in feed.trips.values() if GIRONA in _stops(t)]
     left_out = [t for t in at_girona if t.trip_id not in selected]
     # los que se quedan fuera son todos regionales, que paran en Barcelona-Passeig de Gràcia o
     # en alguna estación de la línea convencional
-    assert left_out and not {t.product for t in left_out} & {"AVE", "AVE INT", "AVANT", "EUROMED"}
+    assert left_out and not {t.product for t in left_out} & {
+        "AVE",
+        "AVE internacional",
+        "Avant",
+        "Euromed",
+    }
     assert all(FIGUERES not in _stops(t) for t in left_out)
     assert not spec.route_overrides
     assert select_trips_for_spec(ouigo_feed, spec) == []

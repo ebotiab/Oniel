@@ -185,22 +185,21 @@ const alternativesCache = new Map<string, Promise<AlternativesOut>>()
  * al abrir la ficha de un tramo o la vista «Tramos sin otro camino», y una vez por origen y día.
  */
 export function fetchAlternatives(date?: string): Promise<AlternativesOut> {
-  const api = currentMode() === 'api'
-  const key = api ? `api:${date ?? ''}` : 'estatico'
+  const mode = currentMode()
+  const key = `${mode}:${date ?? ''}`
   let pending = alternativesCache.get(key)
   if (!pending) {
-    const estatico = () => getJson<AlternativesOut>('/data/alternatives.json')
-    const servidor = () => getJson<AlternativesOut>(`${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}`)
-    // El servidor tarda en calcularlo, y la instantánea lleva ese mismo cálculo ya hecho para su día
-    // de referencia: si es el día pedido, vale tal cual. Solo se pide al servidor otro día, o el de
-    // una API que aún va por detrás del visor (Vercel publica unos minutos antes que Render); y si
-    // el servidor no tiene la ruta o falla, vuelve a valer la instantánea.
-    const instantaneaDelDia = async () => {
-      const datos = await estatico()
-      if (date && datos.date !== date) throw new Error('la instantánea es de otro día')
-      return datos
+    // La instantánea ya lleva calculado su día de referencia. Una fecha explícita exige el mismo
+    // día en cualquiera de los dos orígenes; los fallos se olvidan para poder volver a intentarlo.
+    const forRequestedDay = (data: AlternativesOut) => {
+      if (date && data.date !== date) throw new Error(`Falta el análisis de alternativas del ${date}.`)
+      return data
     }
-    pending = api ? instantaneaDelDia().catch(() => servidor().catch(estatico)) : estatico()
+    pending = getJson<AlternativesOut>('/data/alternatives.json').then(forRequestedDay)
+    if (mode === 'api') {
+      const url = `${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}`
+      pending = pending.catch(() => getJson<AlternativesOut>(url).then(forRequestedDay))
+    }
     alternativesCache.set(key, pending)
     pending.catch(() => alternativesCache.delete(key))
   }

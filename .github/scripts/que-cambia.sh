@@ -9,7 +9,8 @@
 #
 # Por qué cada regla:
 # - `docs/`, los `.md` de la raíz, `.vscode/` y `.claude/` no entran en ninguna comprobación, salvo
-#   `docs/datos.md`, que leen las pruebas del refresco del GTFS (backend/tests/test_refresh.py).
+#   `docs/datos.md`, que leen las pruebas del refresco del GTFS (backend/tests/test_refresh.py), y
+#   `docs/datos.md` y `AGENTS.md`, cuyos recuentos comprueba backend/tests/test_documentacion.py.
 # - Las pruebas del backend leen la instantánea (`frontend/public/data/`) y los casos de paridad de
 #   rutas (`frontend/e2e/fixtures/`); el resto de `frontend/` no las afecta.
 # - Playwright prueba en el CI la instantánea estática, sin API: del backend solo le llega lo que
@@ -25,8 +26,8 @@ while IFS= read -r ruta; do
   [ -z "$ruta" ] && continue
   ficheros=$((ficheros + 1))
   case "$ruta" in
-    docs/datos.md) backend=true ;;
-    docs/* | .vscode/* | .claude/*) ;;
+    docs/datos.md | AGENTS.md | CLAUDE.md) backend=true ;;
+    docs/* | .vscode/* | .claude/* | .agents/skills/* | .codex/environments/*) ;;
     frontend/public/data/* | frontend/e2e/fixtures/*) backend=true; frontend=true ;;
     frontend/*) frontend=true ;;
     backend/data/* | backend/src/oniel/export/*) backend=true; frontend=true ;;

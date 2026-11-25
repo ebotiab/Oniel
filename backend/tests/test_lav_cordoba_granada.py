@@ -170,7 +170,10 @@ def test_single_track_starts_at_archidona_and_loja_is_crossed_on_the_old_line(
     by_id = {s.id.split(":", 1)[1]: s for s in granada.segments}
     assert by_id["bif-archidona:bif-riofrio"].attributes["tracks"].source_id == "boe-b-2025-42383"
     assert by_id["bif-la-chana:granada"].attributes["tracks"].source_id == "osm-relation-16228313"
-    assert by_id["antequera-av:bif-archidona"].attributes["tracks"].source_id is None
+    assert (
+        by_id["antequera-av:bif-archidona"].attributes["tracks"].source_id
+        == "adif-declaracion-red-2026-mapas"
+    )
     # ancho mixto en el paso por Loja y en la entrada a Granada, y en ningún otro tramo
     mixed = {k for k, s in by_id.items() if "gauge" in s.attributes}
     assert mixed == {"bif-riofrio:loja", "loja:bif-tocon", "bif-la-chana:granada"}
@@ -212,7 +215,7 @@ def test_trains_to_malaga_and_to_granada_leave_the_main_line_at_the_junction(
             rules[route.override.id] = rules.get(route.override.id, 0) + 1
     assert rules == {"madrid-malaga-sin-paradas": 13, "malaga-granada-por-gobantes": 6}
     assert sum("50500" in _stops(t) for t in trips) == 181
-    assert {t.product for t in trips} == {"AVE", "AVLO", "ALVIA", "AVANT", "Intercity"}
+    assert {t.product for t in trips} == {"AVE", "AVLO", "Alvia", "Avant", "Intercity"}
     kinds: dict[str, int] = {}
     lengths: dict[int, int] = {}
     last_three = [s.id for s in malaga.segments[-3:]]
@@ -230,7 +233,9 @@ def test_trains_to_malaga_and_to_granada_leave_the_main_line_at_the_junction(
     assert kinds == {"estimado": 1250, "publicado": 68}
     # los Media Distancia que paran en Antequera-Santa Ana por las vías convencionales no entran
     chosen = {t.trip_id for t in trips}
-    regional = [t for t in feed.trips.values() if t.product == "MD" and "02003" in _stops(t)]
+    regional = [
+        t for t in feed.trips.values() if t.product == "Media Distancia" and "02003" in _stops(t)
+    ]
     assert regional and not chosen & {t.trip_id for t in regional}
 
 
@@ -262,11 +267,11 @@ def test_trains_to_granada_and_the_link_from_malaga(
     Avant de Málaga entran por la bifurcación Bobadilla y no pasan por Antequera-Santa Ana."""
     trips = select_trips_for_spec(feed, granada.spec)
     assert len(trips) == 63
-    assert {t.product for t in trips} == {"AVE", "ALVIA", "AVANT"}
+    assert {t.product for t in trips} == {"AVE", "Alvia", "Avant"}
     assert select_trips_for_spec(ouigo_feed, granada.spec) == []
     first = f"{GRANADA}:antequera-santa-ana:bif-bobadilla"
     from_malaga = [t for t in trips if "54413" in _stops(t)]
-    assert len(from_malaga) == 6 and all(t.product == "AVANT" for t in from_malaga)
+    assert len(from_malaga) == 6 and all(t.product == "Avant" for t in from_malaga)
     for trip in trips:
         segments = [p.segment_id for p in _passes(trip, feed, granada, lines)]
         if trip in from_malaga:
@@ -277,6 +282,8 @@ def test_trains_to_granada_and_the_link_from_malaga(
     # de la línea pero van por las vías convencionales, y los de Granada a Almería
     chosen = {t.trip_id for t in trips}
     by_ronda = [t for t in feed.trips.values() if {"02030", "55007"} <= set(_stops(t))]
-    to_almeria = [t for t in feed.trips.values() if _stops(t)[0] == "05000" and t.product == "MD"]
+    to_almeria = [
+        t for t in feed.trips.values() if _stops(t)[0] == "05000" and t.product == "Media Distancia"
+    ]
     assert by_ronda and to_almeria
     assert not chosen & {t.trip_id for t in (*by_ronda, *to_almeria)}

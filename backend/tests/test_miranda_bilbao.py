@@ -158,7 +158,7 @@ def test_the_filter_takes_the_trains_to_bilbao(
     en Miranda de Ebro y en Bilbao, y ninguno de Ouigo."""
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 28
-    assert Counter(t.product for t in trips) == {"ALVIA": 24, "Intercity": 4}
+    assert Counter(t.product for t in trips) == {"Alvia": 24, "Intercity": 4}
     assert all(MIRANDA in _stops(t) and BILBAO in _stops(t) for t in trips)
     assert select_trips_for_spec(ouigo_feed, spec) == []
 

@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, type ReactNode } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
 import type { AnnotationOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
-import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, productLabel, shortStop } from '../app/state'
+import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, shortStop } from '../app/state'
 import { capasDe } from '../app/annotationLayers'
 import { isInterruption } from '../app/annotations'
 import { AnnotationNotice } from './AnnotationNotice'
@@ -13,6 +13,7 @@ import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
+  notice?: ReactNode
   node: NodeOut
   network: NetworkOut
   /** Fuentes registradas, para citar al pie del detalle las de sus líneas. */
@@ -32,11 +33,14 @@ interface Props {
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
+export function NodeDetail({ notice, node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
-  const connections = network.connections.filter((c) => c.node_id === node.id)
+  // Una conexión a trazos sale en la ficha de sus dos extremos, y en cada uno dice adónde lleva desde él.
+  const connections = network.connections.flatMap((c) =>
+    c.node_id === node.id ? [{ id: c.id, name: c.name, towards: c.towards }] : c.to_node_id === node.id && c.towards_back ? [{ id: c.id, name: c.name, towards: c.towards_back }] : [],
+  )
   const station = node.kind === 'estacion'
   // Un nodo puede pertenecer a varias líneas (Madrid y Córdoba): su kilómetro en cada una.
   const memberships = network.nodes
@@ -80,6 +84,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
       <h2 id="detalle-titulo" className="titulo">
         {node.name}
       </h2>
+      {notice}
       {memberships.length > 1 && (
         <div data-testid="nodo-lineas">
           <p className="texto">Aquí se encuentran {memberships.length} líneas:</p>
@@ -234,7 +239,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
                   <span className="hora datos">{c.departure ?? c.arrival ?? '—'}</span>
                   <span className="tren">
                     <strong>
-                      {productLabel(c.product)} {c.train_number}
+                      {c.product} {c.train_number}
                     </strong>{' '}
                     <span className="suave">
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}

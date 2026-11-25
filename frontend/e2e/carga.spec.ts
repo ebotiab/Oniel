@@ -43,7 +43,8 @@ test.describe('Carga de la red por partes', () => {
     const linea = await (await request.get(`/data/lines/${CONV}.json`)).body()
     // Las anotaciones de red (interrupciones, proyectos) van enteras en el índice y no dependen de la
     // geometría: la red mantiene su tope y ellas tienen el suyo. Cuando no quepan, su detalle se pedirá aparte.
-    const { annotations, interruptions, ...red } = JSON.parse(indice.toString('utf-8')) as Record<string, unknown>
+    // Tampoco los lados de cada bifurcación (`turns`), que dicen qué giros permiten las vías: no son geometría.
+    const { annotations, interruptions, turns, ...red } = JSON.parse(indice.toString('utf-8')) as Record<string, unknown>
     const bytes = (parte: unknown) => Buffer.byteLength(JSON.stringify(parte))
     // El tope de la red crece con ella: 20 KB sin comprimir por línea cargada (hoy son 15 KB de media).
     expect(bytes(red)).toBeLessThan(20_000 * (red.lines as unknown[]).length)
@@ -52,6 +53,8 @@ test.describe('Carga de la red por partes', () => {
     // de 70 a 75 KB con la «Y» vasca, y de 75 a 85 KB con los dos proyectos de la línea de València a
     // Alicante por Xàtiva: hoy pesan 75,3 KB.
     expect(bytes({ annotations, interruptions })).toBeLessThan(85_000)
+    // Los lados son un número por cada extremo de tramo que no es una estación: 60 bytes por tramo sobran (hoy, 33).
+    expect(bytes(turns)).toBeLessThan(60 * (red.segment_features as { features: unknown[] }).features.length)
     // Con veintiuna entradas (dieciocho líneas, dos baipases y un enlace), la red del índice (305 KB) pesa ya el doble que el detalle
     // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
     // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más

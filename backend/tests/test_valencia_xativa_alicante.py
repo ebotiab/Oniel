@@ -220,12 +220,12 @@ def test_the_filter_takes_every_train_that_runs_on_the_line(
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 556
     assert Counter(t.product for t in trips) == {
-        "REGIONAL": 314,
-        "MD": 167,
-        "REG.EXP.": 34,
-        "EUROMED": 19,
+        "Regional": 314,
+        "Media Distancia": 167,
+        "Regional Exprés": 34,
+        "Euromed": 19,
         "Intercity": 14,
-        "ALVIA": 8,
+        "Alvia": 8,
     }
     codes = {n.adif_code for n in spec.nodes if n.adif_code}
     selected = {t.trip_id for t in trips}
@@ -249,7 +249,7 @@ def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNe
         tuple(FROM_CAUDETE): 78,
         tuple(FROM_VILLENA): 164,
     }
-    euromed = [t for t in trips if t.product == "EUROMED"]
+    euromed = [t for t in trips if t.product == "Euromed"]
     assert all(VALENCIA in _stops(t) and ALICANTE in _stops(t) for t in euromed)
     for trip in trips:
         stops, run = _stops(trip), _short(_passes(trip, feed, line))

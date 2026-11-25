@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import type { AnnotationOut, CoverageOut, NetworkOut, Source } from '../data/types'
 import type { ApiStatus } from '../data/api'
-import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, notaNoOficial, parentOf, routePath, todayIso } from '../app/state'
+import { annotationHref, bypassesOf, formatCount, formatDate, formatKm, lineLabel, lineKind, listaEs, mainLines, notaNoOficial, parentOf, routePath } from '../app/state'
 import { SITIO } from '../app/meta'
 import { ANNOTATION_LAYERS } from '../app/annotationLayers'
 import { formatDateLong, lugar } from '../app/annotations'
@@ -13,6 +13,7 @@ import { Muestra } from './Legend'
 import { Termino } from './Termino'
 
 interface Props {
+  today: string
   coverage: CoverageOut
   network: NetworkOut
   onPickLine: (id: string) => void
@@ -94,7 +95,7 @@ function Fuente({ source: s }: { source: Source }) {
  */
 const ordenHorarios = (timetable: string | null | undefined) => (timetable === 'no_publicado' ? 2 : timetable === 'no_oficial' ? 1 : 0)
 
-export function CoveragePage({ coverage, network, annotations, status, onPickLine }: Props) {
+export function CoveragePage({ today, coverage, network, annotations, status, onPickLine }: Props) {
   const operadores = coverage.operators
     .filter((o) => o.role === 'operador')
     // primero los que tienen horarios cargados de una fuente oficial, después los de una
@@ -373,7 +374,7 @@ export function CoveragePage({ coverage, network, annotations, status, onPickLin
                 Oniel, «{lineaDeEjemplo.name}»
                 {conHorarios.length > 0 && `, con los horarios de ${listaEs(conHorarios.map((o) => o.nombre))}`}
                 {coverage.reference_date && ` del ${formatDateLong(coverage.reference_date)}`}. {SITIO}
-                {routePath({ selection: null, simulacion: false, linea: lineaDeEjemplo.id })} (consultado el {formatDateLong(todayIso())}).
+                {routePath({ selection: null, simulacion: false, linea: lineaDeEjemplo.id })} (consultado el {formatDateLong(today)}).
               </p>
             </>
           )}

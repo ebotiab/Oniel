@@ -7,7 +7,7 @@
 // tienen que dar lo mismo, y `e2e/rutas.spec.ts` lo comprueba con un caso compartido. El método
 // está en `docs/simulacion.md`, «Grafo y escenarios».
 
-import type { LineSummary, NodeOut, Route, RouteLeg, SegmentOut } from '../data/types.ts'
+import type { LineSummary, NodeOut, Route, RouteLeg, SegmentOut, Turns } from '../data/types.ts'
 import { ScenarioError, emptyScenario, linkId, withClosures, type Scenario } from './scenario.ts'
 
 /**
@@ -65,6 +65,12 @@ export interface Graph {
    */
   linkOf: Map<string, string>
   /**
+   * Por cada nodo que no es estación, el lado por el que sale cada uno de sus tramos. Dos tramos del
+   * mismo lado no se pueden encadenar allí: para pasar de uno a otro hay que seguir hasta una
+   * estación e invertir la marcha (`excursion`).
+   */
+  turns: Turns
+  /**
    * De cada tramo que es lado del triángulo de un enlace, de qué enlace y qué lado: el enlace (0) y
    * el trecho de cada una de las dos líneas desde un extremo del enlace hasta el nodo en el que se
    * juntan. Las vías de un triángulo así no dejan doblar sus esquinas: de un lado a otro solo se
@@ -98,6 +104,7 @@ function makeGraph(
   lineKm: Graph['lineKm'],
   bypassOf: Graph['bypassOf'],
   linkOf: Graph['linkOf'],
+  turns: Turns,
 ): Graph {
   const adjacent = new Map<string, Edge[]>()
   for (const edge of edges) {
@@ -107,7 +114,7 @@ function makeGraph(
       else adjacent.set(end, [edge])
     }
   }
-  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, linkSides: linkSides(edges, lineKm, bypassOf, linkOf), adjacent }
+  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, turns, linkSides: linkSides(edges, lineKm, bypassOf, linkOf), adjacent }
 }
 
 /** Los lados del triángulo de cada enlace, con la misma regla que el servidor (`Graph.link_sides`). */
@@ -152,8 +159,11 @@ function linkSides(edges: Edge[], lineKm: Graph['lineKm'], bypassOf: Graph['bypa
   return sides
 }
 
-/** Grafo de la red disponible. `nodes` trae cada nodo una vez por línea, con su km en ella. */
-export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; segments: SegmentOut[] }): Graph {
+/**
+ * Grafo de la red disponible. `nodes` trae cada nodo una vez por línea, con su km en ella. Sin
+ * `turns` el grafo no sabe qué giros permiten las vías y los deja todos.
+ */
+export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; segments: SegmentOut[]; turns?: Turns }): Graph {
   const nodes = new Map<string, GraphNode>()
   const lineKm = new Map<string, Map<string, number>>()
   for (const n of network.nodes) {
@@ -175,7 +185,7 @@ export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; se
     }))
   const bypassOf = new Map(network.lines.flatMap((l) => (l.bypass_of ? [[l.id, l.bypass_of] as const] : [])))
   const linkOf = new Map(network.lines.flatMap((l) => (l.link_of ? [[l.id, l.link_of] as const] : [])))
-  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf)
+  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf, network.turns ?? {})
 }
 
 /** El grafo con las modificaciones del escenario: cierres, velocidades y enlaces. */
@@ -194,7 +204,7 @@ export function applyScenario(graph: Graph, scenario: Scenario): Graph {
     if (link.from_node_id === link.to_node_id) throw new ScenarioError('Un enlace tiene que unir dos nodos distintos')
     edges.push({ id: linkId(link), line_id: null, a: link.from_node_id, b: link.to_node_id, length_km: link.length_km, speed_kmh: link.speed_kmh, tracks: null })
   }
-  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf)
+  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf, graph.turns)
 }
 
 /**
@@ -222,10 +232,84 @@ function bypassSpans(graph: Graph): { parent: string; a: string; b: string }[] {
 }
 
 /**
- * Caminos simples desde `start` hasta un nodo meta, en profundidad. Un camino termina al llegar a
- * una meta; solo atraviesa los nodos que `mayPass` admite y no cambia de línea más de `maxChanges`
- * veces. Cada enlace esbozado cuenta como una línea, y un baipás o un enlace cargado, como parte de
- * la suya. Tampoco pasa de un lado a otro del triángulo de un enlace: sería invertir la marcha.
+ * Si para pasar de un tramo a otro en ese nodo hay que invertir la marcha. En una estación nunca:
+ * allí el tren puede salir por donde quiera. En los demás nodos, cuando los dos tramos salen del
+ * nodo por el mismo lado (`Graph.turns`). De un tramo o de un nodo sin lado conocido (una vía
+ * supuesta) no se sabe, y se deja pasar.
+ */
+function mustReverse(graph: Graph, node: string, previous: Edge, edge: Edge): boolean {
+  if (graph.nodes.get(node)?.kind === 'estacion') return false
+  const side = graph.turns[node]?.[previous.id]
+  return side !== undefined && side === graph.turns[node]?.[edge.id]
+}
+
+/**
+ * Si pasar de un tramo a otro es doblar una esquina del triángulo de un enlace. Ningún recorrido lo
+ * hace, tampoco invirtiendo la marcha en la estación que haya en la esquina.
+ */
+function corner(graph: Graph, previous: Edge, edge: Edge): boolean {
+  const [from, to] = [graph.linkSides.get(previous.id), graph.linkSides.get(edge.id)]
+  return from !== undefined && to !== undefined && from[0] === to[0] && from[1] !== to[1]
+}
+
+/** El orden del servidor: la longitud y, a igualdad, la lista de tramos. */
+function before(x: { length: number; ids: string[] }, y: { length: number; ids: string[] }): boolean {
+  if (x.length !== y.length) return x.length < y.length
+  for (let i = 0; i < Math.min(x.ids.length, y.ids.length); i++) {
+    if (x.ids[i] !== y.ids[i]) return x.ids[i]! < y.ids[i]!
+  }
+  return x.ids.length < y.ids.length
+}
+
+/**
+ * Ida y vuelta desde un nodo hasta la estación más cercana en la que invertir la marcha. Quien llega
+ * a `node` por `previous` y quiere seguir por un tramo del mismo lado no puede girar: sigue de
+ * frente, por un tramo del lado opuesto, hasta la primera estación, invierte la marcha allí y
+ * vuelve. Devuelve esos pasos (la ida y la vuelta), o `null` si por ese lado no hay ninguna estación
+ * a la que se llegue sin girar donde no se puede. Es el mismo cálculo que `_excursion` en el servidor.
+ */
+function excursion(graph: Graph, node: string, previous: Edge, edgeOk: (edge: Edge) => boolean, nodeOk: (node: string) => boolean): Step[] | null {
+  const sides = graph.turns[node]!
+  const side = sides[previous.id]
+  const queue: { length: number; ids: string[]; steps: Step[]; at: string }[] = [{ length: 0, ids: [], steps: [], at: node }]
+  const settled = new Set<string>()
+  while (queue.length > 0) {
+    let first = 0
+    for (let i = 1; i < queue.length; i++) if (before(queue[i]!, queue[first]!)) first = i
+    const [{ length, ids, steps, at }] = queue.splice(first, 1) as [(typeof queue)[number]]
+    const last = steps.at(-1)?.[0]
+    const state = `${at}|${last?.id ?? ''}`
+    if (settled.has(state)) continue
+    settled.add(state)
+    if (last && graph.nodes.get(at)?.kind === 'estacion') {
+      const back: Step[] = []
+      for (let i = steps.length - 1; i >= 0; i--) back.push([steps[i]![0], i > 0 ? steps[i - 1]![1] : node])
+      return [...steps, ...back]
+    }
+    for (const edge of graph.adjacent.get(at) ?? []) {
+      if (!edgeOk(edge)) continue
+      if (!last) {
+        // La salida: solo por un tramo del lado opuesto al de llegada.
+        if (sides[edge.id] === undefined || sides[edge.id] === side || corner(graph, previous, edge)) continue
+      } else if (edge.id === last.id || corner(graph, last, edge) || mustReverse(graph, at, last, edge)) continue
+      const next = edge.a === at ? edge.b : edge.a
+      // Solo por los nodos que admite quien la pide: el rodeo de un cierre no toca su línea tampoco para invertir la marcha.
+      if (!nodeOk(next)) continue
+      queue.push({ length: length + edge.length_km, ids: [...ids, edge.id], steps: [...steps, [edge, next]], at: next })
+    }
+  }
+  return null
+}
+
+/**
+ * Caminos desde `start` hasta un nodo meta, en profundidad. Un camino termina al llegar a una meta,
+ * no pasa dos veces por el mismo nodo, solo atraviesa los nodos que `mayPass` admite y no cambia de
+ * línea más de `maxChanges` veces. Cada enlace esbozado cuenta como una línea, y un baipás o un
+ * enlace cargado, como parte de la suya.
+ *
+ * Donde las vías no dejan girar (`mustReverse`), el camino sigue hasta la estación más cercana,
+ * invierte la marcha y vuelve (`excursion`): esos pasos van dentro del camino, y son los únicos
+ * nodos y tramos que recorre dos veces.
  */
 function walk(
   graph: Graph,
@@ -238,23 +322,38 @@ function walk(
   const found: Step[][] = []
   const path: Step[] = []
   const visited = new Set([start])
+  const excursions = new Map<string, Step[] | null>()
   const visit = (node: string, changes: number) => {
     for (const edge of graph.adjacent.get(node) ?? []) {
       const next = edge.a === node ? edge.b : edge.a
       if (visited.has(next) || !edgeOk(edge)) continue
       const previous = path.at(-1)?.[0]
-      const [from, to] = [previous && graph.linkSides.get(previous.id), graph.linkSides.get(edge.id)]
-      if (from && to && from[0] === to[0] && from[1] !== to[1]) continue
-      const total = changes + (previous !== undefined && lineKey(graph, previous) !== lineKey(graph, edge) ? 1 : 0)
+      if (previous !== undefined && corner(graph, previous, edge)) continue
+      let added: Step[] = [[edge, next]]
+      if (previous !== undefined && mustReverse(graph, node, previous, edge)) {
+        const key = `${node}|${previous.id}`
+        if (!excursions.has(key)) excursions.set(key, excursion(graph, node, previous, edgeOk, mayPass))
+        const out = excursions.get(key)
+        // Una ida y vuelta que pasa por el origen o por una meta no es otro recorrido: es el mismo
+        // viaje empezado antes o acabado después.
+        if (!out || out.some(([, n]) => n === start || isGoal(n))) continue
+        added = [...out, [edge, next]]
+      }
+      let total = changes
+      let last = previous
+      for (const [taken] of added) {
+        if (last !== undefined && lineKey(graph, last) !== lineKey(graph, taken)) total += 1
+        last = taken
+      }
       if (maxChanges !== null && total > maxChanges) continue
-      path.push([edge, next])
+      path.push(...added)
       if (isGoal(next)) found.push([...path])
       else if (mayPass(next)) {
         visited.add(next)
         visit(next, total)
         visited.delete(next)
       }
-      path.pop()
+      path.length -= added.length
     }
   }
   visit(start, 0)
@@ -291,8 +390,11 @@ function toRoute(graph: Graph, start: string, steps: Step[]): Route {
   const groups: { start: string; steps: Step[] }[] = []
   let at = start
   for (const step of steps) {
-    const last = groups.at(-1)
-    if (last && lineKey(graph, last.steps.at(-1)![0]) === lineKey(graph, step[0])) last.steps.push(step)
+    // Donde se invierte la marcha (el mismo tramo dos veces seguidas) empieza otro trecho, aunque
+    // siga por la misma línea: sus kilómetros se suman, no se restan.
+    const group = groups.at(-1)
+    const last = group?.steps.at(-1)![0]
+    if (group && last && last.id !== step[0].id && lineKey(graph, last) === lineKey(graph, step[0])) group.steps.push(step)
     else groups.push({ start: at, steps: [step] })
     at = step[1]
   }
@@ -349,9 +451,10 @@ function toRoute(graph: Graph, start: string, steps: Step[]): Route {
     single_track_km: round1(singleTrack(edges)),
     line_ids: [...new Set(legs.flatMap((leg) => (leg.line_id !== null ? [leg.line_id] : [])))],
     legs,
-    via: inner.filter((n) => n.kind === 'estacion' && n.rank === 'principal').map((n) => n.name),
+    via: [...new Set(inner.filter((n) => n.kind === 'estacion' && n.rank === 'principal').map((n) => n.name))],
     node_ids: [start, ...steps.map(([, n]) => n)],
     segment_ids: edges.map((e) => e.id),
+    reverse_node_ids: steps.flatMap(([edge, node], i) => (steps[i + 1]?.[0].id === edge.id ? [node] : [])),
   }
 }
 

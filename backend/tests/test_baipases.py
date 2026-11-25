@@ -268,7 +268,7 @@ def test_validate_counts_the_trains_of_each_bypass(tmp_path: Path) -> None:
     others = [BCN_SPEC, BYPASS_ZARAGOZA_SPEC, BYPASS_LLEIDA_SPEC]
     expected = {
         BYPASS_ZARAGOZA_SPEC: ({"AVE": 97}, {"TGV": 10}),
-        BYPASS_LLEIDA_SPEC: ({"AVE": 169, "AVE INT": 55}, {"TGV": 25}),
+        BYPASS_LLEIDA_SPEC: ({"AVE": 169, "AVE internacional": 55}, {"TGV": 25}),
     }
     for path, (renfe, ouigo) in expected.items():
         report = validate_all(path, FEED, DATA_DIR, others)

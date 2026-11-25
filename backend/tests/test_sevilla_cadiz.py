@@ -194,7 +194,7 @@ def test_the_filter_takes_every_train_that_runs_on_the_line(
     assert spec.corridor_filter.min_node_stops == 2
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 202
-    assert Counter(t.product for t in trips) == {"MD": 177, "ALVIA": 25}
+    assert Counter(t.product for t in trips) == {"Media Distancia": 177, "Alvia": 25}
     codes = {n.adif_code for n in spec.nodes}
     selected = {t.trip_id for t in trips}
     for trip in feed.trips.values():
@@ -255,4 +255,4 @@ def test_the_high_speed_line_now_takes_its_direct_trains(feed: GtfsFeed) -> None
         for t in trips
         if MADRID in _stops(t) and CORDOBA not in _stops(t) and {SEVILLA, JEREZ} & set(_stops(t))
     ]
-    assert Counter(t.product for t in direct) == {"AVE": 10, "ALVIA": 13}
+    assert Counter(t.product for t in direct) == {"AVE": 10, "Alvia": 13}

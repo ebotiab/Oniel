@@ -4,12 +4,12 @@ import { abrirMenu, irA } from './navegar.ts'
 
 // La navegación de la cabecera: la misma en el mapa y en las páginas de lectura, con la sección a la vista marcada.
 test.describe('Navegación de la cabecera', () => {
-  test('lleva a las cinco secciones y marca la que se está viendo', async ({ page }) => {
+  test('lleva a las secciones y marca la que se está viendo', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByTestId('vista-red')).toBeVisible()
     await abrirMenu(page)
     const nav = page.getByTestId('nav')
-    await expect(nav.getByRole('link')).toHaveText([/^Mapa/, /^Comparar recorridos/, /^Tramos sin otro camino/, /^Glosario/, /^Cobertura y fuentes/])
+    await expect(nav.getByRole('link')).toHaveText([/^Mapa/, /^Comparar recorridos/, /^Tramos sin otro camino/, /^Guía/, /^Glosario/, /^Cobertura y fuentes/])
     await expect(page.getByTestId('nav-mapa')).toHaveAttribute('aria-current', 'page')
 
     await irA(page, 'recorridos')
@@ -27,6 +27,11 @@ test.describe('Navegación de la cabecera', () => {
     await irA(page, 'recorridos')
 
     // de una página de lectura a otra sin pasar por el mapa: la cabecera es la misma
+    await irA(page, 'guia')
+    await expect(page).toHaveURL(/\/guia$/)
+    await expect(page.getByRole('heading', { name: 'Guía del atlas' })).toBeVisible()
+    await abrirMenu(page)
+    await expect(page.getByTestId('nav-guia')).toHaveAttribute('aria-current', 'page')
     await irA(page, 'glosario')
     await expect(page).toHaveURL(/\/glosario$/)
     await expect(page.getByTestId('pagina-glosario')).toBeVisible()
@@ -72,6 +77,7 @@ test.describe('Navegación de la cabecera', () => {
     await expect(page.getByTestId('nav-mapa')).toHaveAttribute('href', '/')
     await expect(page.getByTestId('nav-recorridos')).toHaveAttribute('href', '/recorridos')
     await expect(page.getByTestId('nav-sin-otro-camino')).toHaveAttribute('href', '/sin-otro-camino')
+    await expect(page.getByTestId('nav-guia')).toHaveAttribute('href', '/guia')
     await expect(page.getByTestId('nav-glosario')).toHaveAttribute('href', '/glosario')
     await expect(page.getByTestId('nav-cobertura')).toHaveAttribute('href', '/cobertura')
   })

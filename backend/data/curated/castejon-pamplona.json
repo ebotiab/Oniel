@@ -13,7 +13,7 @@
     "tracks": 1,
     "pk_origin_km": 93.7,
     "status": "disponible",
-    "description": "Sale de Castejón de Ebro, en la línea de Zaragoza a Logroño, y sube hacia el norte por Tafalla hasta Pamplona.\n\nEs el único camino del tren a Pamplona desde Zaragoza, Madrid y Barcelona. Tiene una sola vía en todo el recorrido. Para Adif es parte de la línea 710, de Castejón a Altsasu, que se abrió entre 1860 y 1865 para unir Zaragoza con Pamplona.\n\nEn los horarios de Renfe la recorren los Alvia e Intercity de Madrid a Pamplona, que llegan por la alta velocidad hasta el cambiador de Plasencia de Jalón; los de Barcelona a Pamplona, San Sebastián y Galicia, que cambian de ancho en Zaragoza, y los regionales de Zaragoza a Pamplona y Vitoria.\n\nMás allá de Pamplona la línea sigue hasta Altsasu, donde se une a la de Madrid a Irún; ese trecho no está cargado.",
+    "description": "Sale de Castejón de Ebro, en la línea de Zaragoza a Logroño, y sube hacia el norte por Tafalla hasta Pamplona.\n\nEs el único camino del tren a Pamplona desde Zaragoza, Madrid y Barcelona. Tiene una sola vía en todo el recorrido. Para Adif es parte de la línea 710, de Castejón a Altsasu, que se abrió entre 1860 y 1865 para unir Zaragoza con Pamplona.\n\nEn los horarios de Renfe la recorren los Intercity de Madrid a Pamplona, que llegan por la alta velocidad hasta el cambiador de Plasencia de Jalón; los de Barcelona a Pamplona, San Sebastián y Galicia, que cambian de ancho en Zaragoza, y los regionales de Zaragoza a Pamplona y Vitoria.\n\nMás allá de Pamplona la línea sigue hasta Altsasu, donde se une a la de Madrid a Irún; ese trecho no está cargado.",
     "geometry_source": {
       "source_id": "osm-relation-9392199",
       "parts": [
@@ -161,14 +161,24 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-20",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "castejon-de-ebro",
+      "to_node": "pamplona",
+      "value": 1,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "conv-pamplona-altsasu",
       "node_id": "pamplona",
-      "name": "Línea Castejón – Altsasu",
+      "name": "Línea convencional Pamplona – Altsasu",
       "towards": "Altsasu, y de allí a Vitoria o a San Sebastián e Irún",
+      "official_name": "Línea Castejón – Altsasu",
       "status": "no_cargada",
       "sketch": [
         [

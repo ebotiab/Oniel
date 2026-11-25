@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { FICHA_RED, lineasDeLista, zonas } from './instantanea.ts'
+import { FICHA_RED, zonas } from './instantanea.ts'
 import { abrirLinea, abrirZonas, irA } from './navegar.ts'
 
 test.describe('Explorar la red', () => {
@@ -27,7 +27,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Alta velocidad')
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
     await expect(page.getByTestId('lista-servicios').locator('li').first()).toBeVisible()
-    await expect(page.getByTestId('lista-servicios')).toContainText(/AVE|AVLO|ALVIA|Intercity/)
+    await expect(page.getByTestId('lista-servicios')).toContainText(/AVE|AVLO|Intercity/)
     await expect(page).toHaveURL(/\/tramo\/lav-madrid-sevilla:ciudad-real:puertollano/)
   })
 
@@ -61,7 +61,8 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(0)
     await expect(page.getByRole('tab')).toHaveCount(0)
     await abrirZonas(page)
-    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(lineasDeLista.length)
+    // una línea sale en cada zona en la que para: los renglones son los de todas las zonas sumados
+    await expect(page.getByTestId('lista-lineas').locator('.fila-linea')).toHaveCount(zonas.reduce((n, z) => n + z.lineas.length, 0))
     await page.getByTestId('linea-manzanares-ciudad-real').click()
     await expect(page).toHaveURL(/\/linea\/manzanares-ciudad-real$/)
     await expect(page.getByRole('heading', { name: 'Línea convencional Manzanares – Ciudad Real' })).toBeVisible()
@@ -81,7 +82,7 @@ test.describe('Explorar la red', () => {
     await expect(lista).toContainText(/Regional \d{5}/)
     // el Intercity 10080 se explica con kilómetros por las líneas, no en línea recta
     const intercity = lista.locator('li', { hasText: 'Intercity 10080' }).first()
-    await expect(intercity).toContainText('Madrid-Atocha → Sevilla-Santa Justa')
+    await expect(intercity).toContainText('Madrid-Puerta de Atocha → Sevilla-Santa Justa')
     const porque = intercity.locator('.senal')
     await expect(porque).toHaveText('estimado')
     await expect(porque).toHaveAttribute('title', /entra en esta línea por Manzanares.*64 km por la línea y, desde Manzanares, 196 km por esa línea/)
@@ -95,7 +96,7 @@ test.describe('Explorar la red', () => {
     await expect(page.getByTestId('nodo-lineas')).toContainText(/Madrid – Sevilla\s*alta velocidad\s*Manzanares – Ciudad Real\s*convencional/)
     await expect(page.getByRole('button', { name: 'Almagro – Ciudad Real' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Ciudad Real – Puertollano' })).toBeVisible()
-    await expect(page.getByText(/Línea convencional Ciudad Real–Badajoz hacia Puertollano/)).toBeVisible()
+    await expect(page.getByText(/Línea convencional Ciudad Real – Mérida hacia Puertollano/)).toBeVisible()
     await page.goto('/nodo/manzanares')
     await expect(page.getByRole('heading', { name: 'Manzanares' })).toBeVisible()
     await expect(page.getByTestId('nodo-lineas')).toContainText('2 líneas')
@@ -111,11 +112,11 @@ test.describe('Explorar la red', () => {
     const movil = await asa.isVisible()
     if (movil) await asa.click()
     // a la vista, lo que entiende cualquiera: cuánto mide y a qué velocidad se circula
-    await expect(page.getByTestId('ficha-linea')).toHaveText(/^470,5 km\s*hasta 300 km\/h$/)
+    await expect(page.getByTestId('ficha-linea')).toHaveText(/^470,3 km\s*hasta 300 km\/h$/)
     if (movil) return // la hoja compacta no lleva frase de entrada ni notas
     // una frase de entrada a la vista; el resto, plegado por párrafos
-    await expect(page.getByTestId('linea-entrada')).toContainText(/^Primera línea de alta velocidad de España/)
-    const resto = page.getByText(/Es de vía doble en todo su recorrido/)
+    await expect(page.getByTestId('linea-entrada')).toContainText(/^Une Madrid-Puerta de Atocha con Sevilla-Santa Justa/)
+    const resto = page.getByText(/Los horarios cargados incluyen AVE, Avant, Intercity y AVLO/)
     await expect(resto).toBeHidden()
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(resto).toBeVisible()

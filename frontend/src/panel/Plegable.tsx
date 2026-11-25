@@ -57,25 +57,57 @@ export function Plegable({ rotulo = 'Más detalle', memoria = 'detalle', testId 
   )
 }
 
-/** Pie de una ficha: de dónde sale el dato y cuándo se consultó. */
+/**
+ * Pie de una ficha: de dónde sale el dato y cuándo se consultó. Las fuentes de un mismo editor van en un solo
+ * párrafo: una estación de varias líneas cita OpenStreetMap una vez, con el trazado de cada línea detrás.
+ */
 export function PieFuente({ sources, de }: { sources: (Source | undefined)[]; de: string }) {
   // una estación de dos líneas con el mismo trazado de origen (Barcelona-Sants) lo cita una sola vez
   const fuentes = sources.filter((s, i): s is Source => Boolean(s) && sources.findIndex((o) => o?.id === s?.id) === i)
   if (!fuentes.length) return null
+  const porEditor = new Map<string, Source[]>()
+  for (const s of fuentes) porEditor.set(s.publisher, [...(porEditor.get(s.publisher) ?? []), s])
   return (
     <div className="pie-fuente" data-testid="pie-fuente">
-      {fuentes.map((s) => (
-        <p key={s.id} className="suave">
-          Fuente {de}: {s.url ? (
-            <a href={s.url} target="_blank" rel="noreferrer">
-              {s.publisher}
-            </a>
-          ) : (
-            s.publisher
-          )}
-          {s.retrieved_on ? `, consultada el ${formatDateLong(s.retrieved_on)}` : ''}. {s.name}. <span className="datos">Identificador de la fuente: {s.id}</span>
-        </p>
-      ))}
+      {[...porEditor.entries()].map(([editor, grupo]) => {
+        const s = grupo[0]!
+        if (grupo.length === 1)
+          return (
+            <p key={s.id} className="suave">
+              Fuente {de}: {s.url ? (
+                <a href={s.url} target="_blank" rel="noreferrer">
+                  {s.publisher}
+                </a>
+              ) : (
+                s.publisher
+              )}
+              {s.retrieved_on ? `, consultada el ${formatDateLong(s.retrieved_on)}` : ''}. {s.name}. <span className="datos">Identificador de la fuente: {s.id}</span>
+            </p>
+          )
+        // Varias del mismo editor: el editor una vez y, detrás, cada una con su enlace; la fecha se dice una
+        // vez si es la misma y, si no, con cada una.
+        const mismaFecha = grupo.every((g) => g.retrieved_on === s.retrieved_on)
+        return (
+          <p key={editor} className="suave">
+            Fuentes {de}: {editor}
+            {mismaFecha && s.retrieved_on ? `, consultadas el ${formatDateLong(s.retrieved_on)}` : ''}.{' '}
+            {grupo.map((g, i) => (
+              <span key={g.id}>
+                {i > 0 && '; '}
+                {g.url ? (
+                  <a href={g.url} target="_blank" rel="noreferrer">
+                    {g.name}
+                  </a>
+                ) : (
+                  g.name
+                )}
+                {!mismaFecha && g.retrieved_on ? ` (consultada el ${formatDateLong(g.retrieved_on)})` : ''}
+              </span>
+            ))}
+            . <span className="datos">Identificadores de las fuentes: {grupo.map((g) => g.id).join(', ')}</span>
+          </p>
+        )
+      })}
     </div>
   )
 }

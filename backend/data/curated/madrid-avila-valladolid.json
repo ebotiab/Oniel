@@ -18,7 +18,7 @@
       }
     ],
     "status": "disponible",
-    "description": "El camino de siempre de Madrid a Castilla y León: sale de Madrid-Chamartín, cruza la sierra de Guadarrama por Villalba, El Escorial y Las Navas del Marqués y sigue por Ávila y Medina del Campo hasta Valladolid.\n\nEs el primer tramo de la línea 100 de Adif, la de Madrid a Hendaya, abierta en 1864 por la Compañía de los Caminos de Hierro del Norte. Antes de la alta velocidad por Segovia era la puerta de todo el norte; hoy la usan sobre todo los trenes regionales y de media distancia, y algunos que siguen a León, Burgos y el País Vasco.\n\nLa mayoría de esos trenes no salen de Chamartín, sino de Madrid-Príncipe Pío, y llegan a la línea por Pozuelo y Las Rozas: se unen a ella en Pinar de las Rozas. Ese ramal, que para Adif es otra línea, no está cargado. En Villalba sale la línea de Cercedilla y Segovia; en Ávila y en Medina del Campo, las de Salamanca, y en Medina, también la de Zamora.\n\nEn los horarios de Renfe la recorren los regionales y Media Distancia de Madrid a Ávila, Salamanca, Valladolid, León, Burgos, Vitoria e Irún, los regionales de Madrid a Segovia hasta Villalba y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria. Los trenes de Cercanías de Madrid también usan parte de sus vías, pero no están en los horarios cargados.",
+    "description": "El camino de siempre de Madrid a Castilla y León: sale de Madrid-Chamartín, cruza la sierra de Guadarrama por Villalba, El Escorial y Las Navas del Marqués y sigue por Ávila y Medina del Campo hasta Valladolid.\n\nEs el primer tramo de la línea 100 de Adif, la de Madrid a Hendaya, abierta en 1864 por la Compañía de los Caminos de Hierro del Norte. Antes de la alta velocidad por Segovia era la puerta de todo el norte; hoy la usan sobre todo los trenes regionales, y algunos que siguen a León, Burgos y el País Vasco.\n\nLa mayoría de esos trenes no salen de Chamartín, sino de Madrid-Príncipe Pío, y llegan a la línea por Pozuelo y Las Rozas: se unen a ella en Pinar de las Rozas. Ese ramal, que para Adif es otra línea, no está cargado. En Villalba sale la línea de Cercedilla y Segovia; en Ávila y en Medina del Campo, las de Salamanca, y en Medina, también la de Zamora.\n\nEn los horarios de Renfe la recorren los regionales de Madrid a Ávila, Salamanca, Valladolid, León, Burgos, Vitoria e Irún, los regionales de Madrid a Segovia hasta Villalba y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria. Los trenes de Cercanías de Madrid también usan parte de sus vías, pero no están en los horarios cargados.",
     "geometry_source": {
       "source_id": "osm-relation-13489217",
       "parts": [
@@ -123,7 +123,7 @@
         "lat": 40.523069
       },
       "reference_pk_km": 20.4,
-      "description": "Estación de Las Rozas donde se une a la línea, viniendo de Madrid-Príncipe Pío por Pozuelo y Las Rozas, el ramal por el que llegan casi todos sus trenes regionales y de media distancia. Ese ramal no está cargado."
+      "description": "Estación de Las Rozas donde se une a la línea, viniendo de Madrid-Príncipe Pío por Pozuelo y Las Rozas, el ramal por el que llegan casi todos sus trenes regionales. Ese ramal no está cargado."
     },
     {
       "id": "las-matas",
@@ -428,14 +428,24 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-19",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "conv-pinar-principe-pio",
       "node_id": "pinar-de-las-rozas",
-      "name": "Línea Atocha – Pinar de las Rozas",
+      "name": "Línea convencional Pinar de las Rozas – Madrid-Príncipe Pío",
       "towards": "Las Rozas, Pozuelo y Madrid-Príncipe Pío",
+      "official_name": "Línea Atocha – Pinar de las Rozas",
       "status": "no_cargada",
       "sketch": [
         [
@@ -459,7 +469,7 @@
     {
       "id": "conv-villalba-segovia",
       "node_id": "villalba-de-guadarrama",
-      "name": "Línea Villalba – Segovia",
+      "name": "Línea convencional Villalba – Segovia",
       "towards": "Cercedilla y Segovia",
       "status": "no_cargada",
       "sketch": [
@@ -488,7 +498,7 @@
     {
       "id": "conv-avila-salamanca",
       "node_id": "avila",
-      "name": "Línea Ávila – Salamanca",
+      "name": "Línea convencional Ávila – Salamanca",
       "towards": "Peñaranda de Bracamonte y Salamanca",
       "status": "no_cargada",
       "sketch": [
@@ -513,7 +523,7 @@
     {
       "id": "conv-medina-salamanca",
       "node_id": "medina-del-campo",
-      "name": "Línea Medina del Campo – Salamanca",
+      "name": "Línea convencional Medina del Campo – Salamanca",
       "towards": "Cantalapiedra y Salamanca",
       "status": "no_cargada",
       "sketch": [
@@ -530,8 +540,11 @@
     {
       "id": "conv-valladolid-venta-de-banos",
       "node_id": "valladolid-campo-grande",
-      "name": "Línea Madrid – Hendaya",
-      "towards": "Venta de Baños, Burgos y el País Vasco",
+      "name": "Línea convencional Valladolid – Venta de Baños – Burgos",
+      "towards": "Venta de Baños y Burgos",
+      "to_node_id": "burgos-rosa-manzano",
+      "towards_back": "Venta de Baños y Valladolid",
+      "official_name": "Línea Madrid – Hendaya",
       "status": "no_cargada",
       "sketch": [
         [
@@ -549,6 +562,22 @@
         [
           -4.495844,
           41.91736
+        ],
+        [
+          -4.432114,
+          41.976561
+        ],
+        [
+          -4.19858,
+          42.079974
+        ],
+        [
+          -3.999396,
+          42.215717
+        ],
+        [
+          -3.666334,
+          42.371196
         ]
       ]
     }
@@ -641,17 +670,29 @@
     "18000": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "enlace-atocha-chamartin",
+        "node": "madrid-chamartin"
+      }
     },
     "18001": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "enlace-atocha-chamartin",
+        "node": "madrid-chamartin"
+      }
     },
     "18002": {
       "exits": [
         "madrid-chamartin"
-      ]
+      ],
+      "via": {
+        "line": "enlace-atocha-chamartin",
+        "node": "madrid-chamartin"
+      }
     },
     "10000": {
       "exits": [

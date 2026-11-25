@@ -263,13 +263,22 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: el rótulo del bloqueo es «BAB ctc» en los tres trechos de la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "a-coruna",
+      "to_node": "vigo-urzaiz",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [
     {
       "id": "conv-a-coruna-betanzos",
       "node_id": "a-coruna",
-      "name": "Línea de A Coruña a Betanzos",
+      "name": "Línea convencional A Coruña – Betanzos",
       "towards": "Betanzos, Ferrol y Lugo",
       "status": "no_cargada",
       "sketch": [
@@ -292,6 +301,8 @@
       "node_id": "bif-angueira",
       "name": "Vía antigua por Padrón y Catoira",
       "towards": "Padrón, Pontecesures y Catoira",
+      "to_node_id": "vilagarcia-de-arousa",
+      "towards_back": "Catoira, Pontecesures y Padrón",
       "status": "no_cargada",
       "sketch": [
         [
@@ -311,8 +322,8 @@
           42.672265
         ],
         [
-          -8.762284,
-          42.6019723
+          -8.761994,
+          42.602051
         ]
       ]
     },
