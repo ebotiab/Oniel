@@ -567,13 +567,15 @@ def _walk(
                     continue
                 added = [*excursion, (edge, nxt)]
             total = changes
-            before = previous
-            for taken, _ in added:
-                if before is not None and graph.line_key(before) != graph.line_key(taken):
-                    total += 1
-                before = taken
-            if max_changes is not None and total > max_changes:
-                continue
+            # Sin límite, contar cambios no descarta ningún camino y se repite por cada paso.
+            if max_changes is not None:
+                before = previous
+                for taken, _ in added:
+                    if before is not None and graph.line_key(before) != graph.line_key(taken):
+                        total += 1
+                    before = taken
+                if total > max_changes:
+                    continue
             path.extend(added)
             if is_goal(nxt):
                 yield list(path)
