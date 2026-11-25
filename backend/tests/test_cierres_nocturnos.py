@@ -29,11 +29,12 @@ def row(number: str, hour: int, minute: int, *, margin: int = 0) -> dict[str, An
     enter = (hour * 60 + minute) * 60
     return {
         "id": number,
+        "dataset_id": "horario-renfe",
         "operator_id": "renfe",
         "train_number": number,
         "product": "AVE",
-        "origin_name": "Madrid",
-        "destination_name": "Sevilla",
+        "origin_name": "Sevilla",
+        "destination_name": "Madrid",
         "resolution": "completa",
         "valid_from": DAY,
         "valid_to": DAY + dt.timedelta(days=1),
@@ -43,7 +44,7 @@ def row(number: str, hour: int, minute: int, *, margin: int = 0) -> dict[str, An
         "exit_s": enter + 12 * 60,
         "enter_margin_s": margin,
         "exit_margin_s": margin,
-        "km_increasing": True,
+        "km_increasing": False,
         "basis": "Horario de prueba.",
     }
 
@@ -52,6 +53,7 @@ def row(number: str, hour: int, minute: int, *, margin: int = 0) -> dict[str, An
 def connection(monkeypatch: pytest.MonkeyPatch) -> AsyncMock:
     monkeypatch.setattr(service, "fetch_interruptions", AsyncMock(return_value=[]))
     monkeypatch.setattr(service, "fetch_graph", AsyncMock())
+    monkeypatch.setattr(service, "timetable_credits", AsyncMock(return_value=[]))
     monkeypatch.setattr(service, "alternatives", lambda *_: ([], 0))
     return AsyncMock()
 
