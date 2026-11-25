@@ -11,7 +11,7 @@ import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { AnnotationDetail } from '../panel/AnnotationDetail'
 import { CoveragePage } from '../panel/CoveragePage'
-import { GuidePage } from '../panel/GuidePage'
+import { GuidePage, type GuidePosition } from '../panel/GuidePage'
 import { GlossaryPage } from '../panel/GlossaryPage'
 import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
@@ -98,6 +98,7 @@ export default function App() {
   const [lineasResaltadas, setLineasResaltadas] = useState<string[] | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseRoute(window.location.pathname).cobertura))
+  const guidePosition = useRef<GuidePosition>({ scrollTop: 0, linkIndex: null, open: [] })
   const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario ?? parseRoute(window.location.pathname).guia ?? parseRoute(window.location.pathname).sinOtroCamino))
   const [elegidoKey, setElegidoKey] = useState<string | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(() => parseRoute(window.location.pathname).linea ?? null)
@@ -591,7 +592,7 @@ export default function App() {
           onPin={pinTrazo}
         />
       )}
-      {route.guia && <GuidePage />}
+      {route.guia && <GuidePage position={guidePosition} />}
       {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} />}
       {showCoverage && !route.glosario && coverage && network && (
         <CoveragePage
