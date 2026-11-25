@@ -92,6 +92,11 @@ class BuiltNetwork:
     nodes: list[BuiltNode]
     segments: list[BuiltSegment]
 
+    @property
+    def length_km(self) -> float:
+        """Recorrido cargado entre los nodos extremos, como el comparador."""
+        return sum(s.length_km for s in self.segments)
+
     def node(self, node_id: str) -> BuiltNode:
         for n in self.nodes:
             if n.spec.id == node_id:
@@ -386,7 +391,11 @@ def cut_segments(
         declared = attributes[seq - 1].get(MAX_SPEED)
         if declared is not None:
             # Una velocidad declarada con su fuente manda sobre la de las vías de la geometría.
-            max_speed = typical = int(declared.value)
+            max_speed = int(declared.value)
+            # La máxima documentada no es la predominante de las vías ni la comercial de
+            # un servicio. Conservamos la predominante de OSM, limitada por la corrección;
+            # si falta, la máxima sigue siendo la aproximación que usa el comparador.
+            typical = min(typical, max_speed) if typical is not None else max_speed
         segments.append(
             BuiltSegment(
                 id=f"{spec.line.id}:{a.spec.id}:{b.spec.id}",

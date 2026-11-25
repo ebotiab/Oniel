@@ -244,7 +244,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         # el de León a la bifurcación Pajares, los seis de Sevilla a Utrera, del mapa 3, y el de
         # Tardienta a Huesca
         declared_speed = {
-            "lav-madrid-barcelona": 3,
+            "lav-madrid-barcelona": 4,
+            "burgos-miranda-vitoria": 1,
             "madrid-plasencia": 1,
             "leon-oviedo-gijon": 1,
             "sevilla-cadiz": 6,
@@ -259,13 +260,16 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         assert covered == dict.fromkeys(
             ["bloqueo", "mando", "proteccion_tren", "tracks"], line["segments"]
         )
-    assert granada["sections"] == 4 + 3
+    assert granada["sections"] == 4 + 3 + 1
     # dos de vía única, seis de bloqueo, una de protección del tren y una de mando
-    assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 10
+    assert by_line["convencional-madrid-alcazar-cordoba"]["sections"] == 12
 
     # sin el valor de la línea, las dos secciones de vía única no cubren la convencional
     raw = _raw()
     del raw["line"]["tracks"]
+    raw["attribute_sections"] = [
+        s for s in raw["attribute_sections"] if not (s["attribute"] == "tracks" and s["value"] == 2)
+    ]
     raw["attribute_sections"][0]["source_id"] = "fuente-que-no-existe"
     broken = tmp_path / "convencional.json"
     broken.write_text(json.dumps(raw), encoding="utf-8")

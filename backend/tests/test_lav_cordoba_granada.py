@@ -170,7 +170,10 @@ def test_single_track_starts_at_archidona_and_loja_is_crossed_on_the_old_line(
     by_id = {s.id.split(":", 1)[1]: s for s in granada.segments}
     assert by_id["bif-archidona:bif-riofrio"].attributes["tracks"].source_id == "boe-b-2025-42383"
     assert by_id["bif-la-chana:granada"].attributes["tracks"].source_id == "osm-relation-16228313"
-    assert by_id["antequera-av:bif-archidona"].attributes["tracks"].source_id is None
+    assert (
+        by_id["antequera-av:bif-archidona"].attributes["tracks"].source_id
+        == "adif-declaracion-red-2026-mapas"
+    )
     # ancho mixto en el paso por Loja y en la entrada a Granada, y en ningún otro tramo
     mixed = {k for k, s in by_id.items() if "gauge" in s.attributes}
     assert mixed == {"bif-riofrio:loja", "loja:bif-tocon", "bif-la-chana:granada"}

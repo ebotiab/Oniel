@@ -14,7 +14,7 @@
     "opened_on": "1992-04-21",
     "reference_length_km": 471.8,
     "status": "disponible",
-    "description": "Primera línea de alta velocidad de España, abierta en abril de 1992 entre Madrid-Puerta de Atocha y Sevilla-Santa Justa.\n\nEs de vía doble en todo su recorrido y da acceso, por sus bifurcaciones, a Toledo, Levante, Málaga y Granada.",
+    "description": "Une Madrid-Puerta de Atocha con Sevilla-Santa Justa pasando por Ciudad Real, Puertollano y Córdoba. Fue la primera línea de alta velocidad de España: se abrió en abril de 1992 y tiene dos vías de ancho estándar, electrificadas a 25 kV.\n\nDe ella salen el ramal de Toledo en La Sagra, las líneas de Levante en Torrejón de Velasco y la de Málaga en Córdoba, por la que también se llega a Granada. Un enlace en el entorno de Madrid permite que los trenes de Barcelona continúen hacia Andalucía sin entrar en Atocha.\n\nLos horarios cargados incluyen AVE, Avant, Intercity y AVLO de Renfe, además de Ouigo e Iryo. Algunos recorren solo una parte de la línea y siguen por sus bifurcaciones. Son servicios programados: su presencia en el horario no confirma que circulen durante una interrupción.\n\nLa última comprobación registrada, del 13 de noviembre de 2026, señala la circulación suspendida entre La Sagra y Córdoba desde el 28 de octubre, según Adif. Madrid–Toledo y Málaga–Sevilla siguen en servicio según ese aviso. El detalle y las fuentes de la interrupción se consultan en su ficha.",
     "geometry_source": {
       "source_id": "osm-relation-1254828",
       "file": "raw/osm/relation_1254828_ave_madrid_sevilla_2026-11-08.json",
@@ -74,7 +74,16 @@
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "lzb_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos de LZB y de ASFA de alta velocidad a lo largo de toda la línea. El mapa los sitúa por línea, no tramo a tramo."},
     {"attribute": "bloqueo", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo BCA de Madrid a Sevilla."},
-    {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."}
+    {"attribute": "mando", "from_node": "madrid-puerta-de-atocha", "to_node": "sevilla-santa-justa", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "El mapa 4 solo dice «ctc» junto a los bloqueos automáticos; junto al BCA no dice nada del mando, y la Declaración no relaciona puestos de mando con tramos."},
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-puerta-de-atocha",
+      "to_node": "sevilla-santa-justa",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "majarabique-los-naranjos", "node_id": "majarabique", "name": "Enlace de Majarabique", "towards": "la bifurcación Los Naranjos y Huelva", "to_node_id": "bif-los-naranjos", "towards_back": "el cambiador de Majarabique y la alta velocidad a Madrid", "status": "no_cargada", "sketch": [[-5.9604, 37.453815], [-5.9590381, 37.4417188]]}

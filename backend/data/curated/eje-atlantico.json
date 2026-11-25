@@ -263,6 +263,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-18",
       "note": "Mapa 4: el rótulo del bloqueo es «BAB ctc» en los tres trechos de la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "a-coruna",
+      "to_node": "vigo-urzaiz",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [

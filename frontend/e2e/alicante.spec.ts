@@ -14,12 +14,12 @@ test.describe('La línea de alta velocidad Albacete – Alicante', () => {
     const campo = await abrirBuscador(page)
     await campo.fill('alicante')
     const primero = page.getByRole('option').first()
-    await expect(primero).toContainText('Alicante-Terminal')
+    await expect(primero).toContainText('Alicante/Alacant-Terminal')
     await expect(primero).toContainText('Estación')
     await campo.press('Enter')
     await expect(page).toHaveURL(/\/nodo\/alicante-terminal$/)
     const ficha = page.getByTestId('detalle-nodo')
-    await expect(ficha.getByRole('heading', { name: 'Alicante-Terminal' })).toBeVisible()
+    await expect(ficha.getByRole('heading', { name: 'Alicante/Alacant-Terminal' })).toBeVisible()
     await expect(ficha).toContainText('Es una estación término')
     await expect(ficha).toContainText('Albacete-Los Llanos')
     await expect(ficha).toContainText('Madrid-Chamartín')
@@ -34,7 +34,7 @@ test.describe('La línea de alta velocidad Albacete – Alicante', () => {
     await expect(esquema).toContainText('Albacete-Los Llanos')
     await expect(esquema).toContainText('Villena Alta Velocidad')
     await expect(esquema).toContainText('Bif. Murcia')
-    await expect(esquema).toContainText('Alicante-Terminal')
+    await expect(esquema).toContainText('Alicante/Alacant-Terminal')
   })
 
   test('al sur de Albacete la ficha dice que la protección del tren no está publicada', async ({ page }) => {

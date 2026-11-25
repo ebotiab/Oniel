@@ -189,7 +189,7 @@ def test_ourense_santiago_tracks_voltage_and_speed(santiago_line: BuiltNetwork) 
     segments = santiago_line.segments
     assert [s.id.removeprefix(f"{SANTIAGO_LINE}:") for s in segments] == SANTIAGO_SEGMENTS
     assert [s.tracks for s in segments] == [1, 2, 2]
-    assert segments[0].attributes["electrification"].value == "3kv_cc"
+    assert segments[0].attributes["electrification"].value == "3 kV CC"
     assert all("electrification" not in s.attributes for s in segments[1:])
     assert santiago_line.spec.line.gauge_mm == 1668
     assert santiago_line.spec.line.electrification == "25 kV 50 Hz"

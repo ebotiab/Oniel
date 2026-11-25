@@ -428,6 +428,15 @@
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-19",
       "note": "Mapa 4: «ctc» tras el rótulo del bloqueo en toda la línea."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-chamartin",
+      "to_node": "valladolid-campo-grande",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
   "connections": [

@@ -59,7 +59,16 @@
     {"attribute": "gauge", "from_node": "bif-el-regueron", "to_node": "murcia-del-carmen", "value": "mixto", "source_id": "osm-relation-18342974", "checked_on": "2026-11-13", "note": "En OSM, gauge=1435;1668 y ref=354 (la línea de Chinchilla a Cartagena) desde el punto en que la vía de la línea 046 se une a la de Cartagena hasta 2,3 km antes de la estación (4,8 km); la entrada a la estación vuelve a ser de 1435. El mapa 4 de la Declaración sobre la Red dibuja de El Reguerón a Murcia del Carmen una vía única con tercer carril, y la tabla de Wikipedia dice que la línea convencional de Cartagena entra en El Reguerón con ancho mixto."},
     {"attribute": "proteccion_tren", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "ertms_n2_asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: símbolos «ERTMS N2» y «ASFA - AV» junto a la línea entre la bifurcación de Murcia y Elche/Elx AV y, con una línea de llamada, entre Orihuela y Beniel. Entre El Reguerón y Murcia del Carmen, el de «ERTMS N2» con el de «ASFA - Convencional». Wikipedia dice que el tramo de Monforte del Cid a Murcia solo tiene ETCS de nivel 2 y las vías de OSM llevan railway:etcs=2."},
     {"attribute": "bloqueo", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "bca", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: rótulo «BCA» y trazo rosa a lo largo de toda la línea. Entre El Reguerón y Murcia del Carmen rotula «BCA ancho 1.435» y «BSL ancho 1.668»: el BSL es el de los trenes de ancho ibérico, que no son los de esta línea."},
-    {"attribute": "mando", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."}
+    {"attribute": "mando", "from_node": "bif-murcia", "to_node": "murcia-del-carmen", "value": "sin_dato_publicado", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-13", "note": "Mapa 4: junto al BCA no dice nada del mando, como en las demás líneas de alta velocidad."},
+    {
+      "attribute": "tracks",
+      "from_node": "bif-murcia",
+      "to_node": "orihuela-miguel-hernandez",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "conv-murcia-cartagena", "node_id": "bif-el-regueron", "name": "Línea convencional Murcia – Cartagena", "towards": "Balsicas-Mar Menor, Torre-Pacheco y Cartagena", "status": "no_cargada", "sketch": [[-1.058278, 37.9911527], [-1.02, 37.92], [-0.950891, 37.81884], [-0.967078, 37.746905], [-0.975122, 37.604967]]},

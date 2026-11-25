@@ -66,7 +66,16 @@
     {"attribute": "tracks", "from_node": "bif-archidona", "to_node": "bif-la-chana", "value": 1, "source_id": "boe-b-2025-42383", "checked_on": "2026-11-12", "note": "Adif licita la electrificación de la duplicación de la vía entre la bifurcación Archidona y la bifurcación La Chana: hoy hay una sola. La relación 2869549 de OSM coincide: sus dos vías paralelas se juntan en una en el desvío que Oniel toma como bifurcación Archidona."},
     {"attribute": "tracks", "from_node": "bif-la-chana", "to_node": "granada", "value": 1, "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM la línea 036 entra en Granada por una sola vía de ancho mixto, al lado de la vía de la línea 416 de Moreda."},
     {"attribute": "gauge", "from_node": "bif-riofrio", "to_node": "bif-tocon", "value": "mixto", "source_id": "osm-relation-2869549", "checked_on": "2026-11-12", "note": "Paso por Loja por la vía de la línea antigua con tercer carril: en OSM, gauge=1435;1668 entre los desvíos de las dos bifurcaciones (26,3 km), con velocidades de 50 a 95 km/h en la bajada a Loja. El visor todavía no enseña este atributo."},
-    {"attribute": "gauge", "from_node": "bif-la-chana", "to_node": "granada", "value": "mixto", "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM, gauge=1435;1668 desde la bifurcación La Chana hasta la estación de Granada."}
+    {"attribute": "gauge", "from_node": "bif-la-chana", "to_node": "granada", "value": "mixto", "source_id": "osm-relation-16228313", "checked_on": "2026-11-12", "note": "En OSM, gauge=1435;1668 desde la bifurcación La Chana hasta la estación de Granada."},
+    {
+      "attribute": "tracks",
+      "from_node": "antequera-santa-ana",
+      "to_node": "bif-archidona",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-25",
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+    }
   ],
   "connections": [
     {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga – Granada", "towards": "Málaga por la bifurcación Gobantes, sin pasar por Antequera-Santa Ana", "to_node_id": "bif-gobantes", "towards_back": "Granada por la bifurcación Bobadilla, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7153, 37.0244], [-4.7235031, 37.0106686]]}
