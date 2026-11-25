@@ -101,6 +101,15 @@ test.describe('Simular un cierre', () => {
     await expect(page.getByTestId('sim-alternativa-omitidas')).toHaveText(/^Existen otros \d+ recorridos más largos, que no se enseñan: dan un rodeo de más del doble/)
   })
 
+  test('el cierre nocturno incluye el AVE 02061 que sale al día siguiente', async ({ page }) => {
+    await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre/2026-11-19/23:00-08:00')
+    const resultado = page.getByTestId('sim-resultado')
+    const tren = resultado.locator('li', { hasText: 'AVE 02061' }).filter({ hasText: 'sale el día siguiente' })
+    await expect(tren).toHaveCount(1)
+    await expect(tren).toContainText('07:31–07:43')
+    await expect(resultado).toContainText('08:00 del día siguiente')
+  })
+
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {
     await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre')
     await page.getByTestId('sim-fecha').fill('2026-11-20')
