@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { sinOtroCamino } from './instantanea.ts'
+import { alternativas, cobertura, sinOtroCamino } from './instantanea.ts'
+import { irA } from './navegar.ts'
 
 // Trenes por tramo y si tienen otro camino en las líneas cargadas (día de referencia: 13 de
 // noviembre de 2026). El cálculo es del servidor y viaja en `alternatives.json`, así que estas
@@ -31,26 +32,31 @@ test.describe('Tramos sin otro camino', () => {
     expect(pedidas).toBe(0)
   })
 
-  test('si la instantánea es de otro día, el análisis se pide al servidor; y si este no lo tiene, vale la instantánea', async ({ page }) => {
-    test.skip(estatico, 'sin API el visor ya lee la instantánea')
-    // una instantánea de otro día: el visor publicado va por delante de la API desplegada
-    await page.route('**/data/alternatives.json', async (route) => {
-      const respuesta = await route.fetch()
-      const datos = (await respuesta.json()) as { date: string }
-      return route.fulfill({ response: respuesta, json: { ...datos, date: '2000-01-01' } })
-    })
-    // y una API anterior a este apartado, que no tiene la ruta
-    let pedidas = 0
+  test('una respuesta de otro día se descarta y la vista puede recuperarse al volver a abrirla', async ({ page }) => {
+    let recuperado = false
+    let consultasApi = 0
+    await page.route('**/api/coverage', (route) => route.fulfill({ json: cobertura }))
+    await page.route('**/data/alternatives.json', (route) =>
+      route.fulfill({ json: estatico && recuperado ? alternativas : { ...alternativas, date: '2000-01-01' } }),
+    )
     await page.route('**/api/alternatives*', (route) => {
-      pedidas++
-      return route.fulfill({ status: 404, contentType: 'application/json', body: '{"detail":"Not Found"}' })
+      consultasApi++
+      const date = new URL(route.request().url()).searchParams.get('date')
+      return recuperado ? route.fulfill({ json: { ...alternativas, date } }) : route.fulfill({ status: 503 })
     })
     await page.goto('/')
-    await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
-    await page.goto('/sin-otro-camino')
+    if (!estatico) await expect(page.locator('.cabecera')).toHaveAttribute('data-estado', 'disponible')
+    await irA(page, 'sin-otro-camino')
+    await expect(page.getByText('No se ha podido cargar esta vista.')).toBeVisible()
+    await expect(page.getByTestId('tramos-sin-alternativa')).toHaveCount(0)
+    expect(consultasApi).toBe(estatico ? 0 : 1)
+
+    recuperado = true
+    await irA(page, 'glosario')
+    await irA(page, 'sin-otro-camino')
     await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(sinOtroCamino.lineas.length)
-    await expect(page.getByTestId('vista-sin-otro-camino')).not.toContainText('No se ha podido cargar esta vista')
-    expect(pedidas).toBeGreaterThan(0)
+    await expect(page.getByText('No se ha podido cargar esta vista.')).toHaveCount(0)
+    expect(consultasApi).toBe(estatico ? 0 : 2)
   })
 
   test('el arranque no pide el análisis: llega al abrir un tramo', async ({ page }) => {
