@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, type ReactNode } from 'react'
 
 import { ApiError, fetchNodeServices } from '../data/api'
 import type { AnnotationOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
@@ -13,6 +13,7 @@ import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
 interface Props {
+  notice?: ReactNode
   node: NodeOut
   network: NetworkOut
   /** Fuentes registradas, para citar al pie del detalle las de sus líneas. */
@@ -32,7 +33,7 @@ interface Props {
   onBack: () => void
 }
 
-export function NodeDetail({ node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
+export function NodeDetail({ notice, node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
   const [calls, setCalls] = useState<NodeServicesOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
@@ -83,6 +84,7 @@ export function NodeDetail({ node, network, sources, operators, referenceDate, a
       <h2 id="detalle-titulo" className="titulo">
         {node.name}
       </h2>
+      {notice}
       {memberships.length > 1 && (
         <div data-testid="nodo-lineas">
           <p className="texto">Aquí se encuentran {memberships.length} líneas:</p>
