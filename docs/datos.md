@@ -2250,6 +2250,8 @@ Las pruebas usan dos ficheros: el fijo del 8 de noviembre y una copia sin un tre
 | `historico/<conjunto>/segment-counts.json` | Pasos por tramo de cada conjunto de datos. | No lo lee el visor: lo usa el resumen del refresco de horarios. |
 | `alternatives.json` | Trenes por tramo el día de referencia y si las líneas cargadas les ofrecen otro camino con el tramo cortado (`docs/simulacion.md`, «Tramos sin alternativa»). 93 KB, 3,2 KB con gzip (12 de noviembre de 2026). | Al abrir la ficha de un tramo o la vista «Tramos sin otro camino»; nunca al arrancar. |
 
+En un nodo compartido, la ficha `nodes/<id>.json` toma la primera línea en el orden de la red, con su kilómetro y su posición en esa línea. Ese es también el criterio de `GET /api/nodes/{id}` y de su ficha de servicios. El detalle de cada línea conserva el kilómetro propio del nodo.
+
 La red entera en un solo fichero (`network.json`, con `segment-counts.json`) dejó de exportarse el 11 de noviembre de 2026: el visor ya no la descargaba y las pruebas del grafo de rutas leen el índice.
 
 La API ofrece lo equivalente: `GET /api/lines` (el índice), `GET /api/lines/{id}` (el detalle, con `?date=` para los recuentos de otro día) y `GET /api/alternatives`. `GET /api/network` sigue devolviendo la red entera.

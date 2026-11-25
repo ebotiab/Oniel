@@ -17,7 +17,7 @@ from typing import Any
 import asyncpg
 import logfire
 
-from oniel.domain.schemas import SegmentPassOut, SegmentServicesOut, ServiceHistoryOut
+from oniel.domain.schemas import NodeOut, SegmentPassOut, SegmentServicesOut, ServiceHistoryOut
 from oniel.repo import datasets_repo, network_repo, services_repo
 from oniel.sim.service import direction_label, shifted_times
 
@@ -89,7 +89,11 @@ async def _export_snapshot(
             history_dir / "segments" / f"{safe_name(segment.id)}.json",
             history.model_dump(mode="json"),
         )
-    for node_id in dict.fromkeys(node.id for node in network.nodes):
+    # La API de nodos toma la primera pertenencia en el orden de las líneas de la red.
+    nodes_by_id: dict[str, NodeOut] = {}
+    for node in network.nodes:
+        nodes_by_id.setdefault(node.id, node)
+    for node_id in nodes_by_id:
         history = ServiceHistoryOut(
             id=node_id, points=await services_repo.node_history(conn, node_id, refs)
         )
@@ -138,7 +142,7 @@ async def _export_snapshot(
         _write(
             out_dir / "segments" / f"{safe_name(segment.id)}.json", payload.model_dump(mode="json")
         )
-    for node in network.nodes:
+    for node in nodes_by_id.values():
         calls = await services_repo.calls_at_node(conn, node.id, day)
         destinations = await services_repo.destinations_from_node(conn, node.id, day)
         _write(
