@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
-    "@pydantic/logfire-browser": "0.35.1",
+    "@pydantic/logfire-browser": "0.39.0",
     "@vercel/analytics": "2.0.1",
-    "maplibre-gl": "^6.18.0",
+    "maplibre-gl": "^6.19.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
