@@ -12,7 +12,7 @@ import io
 import re
 import zipfile
 from collections import defaultdict
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
@@ -59,6 +59,8 @@ class GtfsFeed:
     trips_in_file: int = 0
     #: Números de tren que el fichero trae en más de un viaje algún día.
     merged_train_numbers: int = 0
+    #: Rótulos de routes.txt, incluidas las rutas que no tienen viajes.
+    route_products: frozenset[str] = frozenset()
 
     def stop_ids_of(self, trip: GtfsTrip) -> set[str]:
         return {s.stop_id for s in trip.stop_times}
@@ -138,14 +140,18 @@ def product_name(label: str) -> str:
     return PRODUCT_NAMES.get(label, label)
 
 
+def _route_products(routes: Iterable[dict[str, str]]) -> set[str]:
+    return {
+        product_name(label)
+        for route in routes
+        if (label := route.get("route_short_name") or route.get("route_long_name"))
+    }
+
+
 def feed_products(path: Path) -> set[str]:
     """Los tipos de tren que rotula un fichero, con su escritura única (solo lee ``routes.txt``)."""
     with zipfile.ZipFile(path) as zf:
-        return {
-            product_name(label)
-            for r in _rows(zf, "routes.txt")
-            if (label := r.get("route_short_name") or r.get("route_long_name"))
-        }
+        return _route_products(_rows(zf, "routes.txt"))
 
 
 def stop_name(name: str) -> str:
@@ -213,7 +219,8 @@ def read_feed(
             )
             for r in _rows(zf, "stops.txt")
         }
-        routes = {r["route_id"]: r for r in _rows(zf, "routes.txt")}
+        route_rows = _rows(zf, "routes.txt")
+        routes = {r["route_id"]: r for r in route_rows}
         trips: dict[str, GtfsTrip] = {}
         for r in _rows(zf, "trips.txt"):
             route = routes.get(r["route_id"], {})
@@ -255,6 +262,7 @@ def read_feed(
         feed_start=min(all_dates),
         feed_end=max(all_dates),
         trips_in_file=len(trips),
+        route_products=frozenset(_route_products(route_rows)),
     )
     feed.merged_train_numbers = merge_same_day_trips(feed)
     return feed

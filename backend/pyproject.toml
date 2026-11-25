@@ -41,7 +41,8 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 # El plugin de pytest de Logfire se activa solo con CI=true y LOGFIRE_TOKEN: aquí, nunca.
-addopts = "--no-logfire"
+# Las veinte pruebas más lentas quedan visibles tanto en local como en el registro del CI.
+addopts = "--no-logfire --durations=20"
 filterwarnings = ["error::DeprecationWarning:oniel.*"]
 
 # Cobertura (pytest-cov): solo se mide con `pytest --cov`, como hace el CI. Es un informe para ver

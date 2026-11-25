@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import re
 from collections import Counter
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
 from typing import Any
 
 from oniel.geo import haversine_km
-from oniel.gtfs.reader import read_feed
+from oniel.gtfs.reader import GtfsFeed, read_feed
 from oniel.gtfs.trips import (
     LoadedLine,
     bypasses_of,
@@ -25,6 +28,7 @@ from oniel.network.build import BuiltNetwork, build_network
 from oniel.network.spec import (
     ConnectionSpec,
     FeedSpec,
+    NetworkSpec,
     OperatorSpec,
     load_annotations,
     load_feeds,
@@ -40,6 +44,39 @@ def loaded_line(net: BuiltNetwork) -> LoadedLine:
     nodes = {n.spec.id: LineNode(n.spec.id, n.km, n.lon, n.lat, n.spec.name) for n in net.nodes}
     segments = [LineSegment(s.id, s.km_from, s.km_to) for s in net.segments]
     return LoadedLine(net.spec, nodes, segments)
+
+
+@dataclass(frozen=True)
+class ValidationLine:
+    """Una línea de esta validación; cada etapa prepara solo los datos que necesita."""
+
+    path: Path
+    data_dir: Path
+
+    @cached_property
+    def spec(self) -> NetworkSpec:
+        return load_network_spec(self.path)
+
+    @cached_property
+    def network(self) -> BuiltNetwork:
+        return build_network(self.spec, self.data_dir)
+
+    @cached_property
+    def loaded(self) -> LoadedLine:
+        return loaded_line(self.network)
+
+
+@dataclass(frozen=True)
+class FeedSummary:
+    """Lo que necesitan los informes globales después de liberar los viajes de un horario."""
+
+    start: dt.date
+    end: dt.date
+    products: frozenset[str]
+
+
+def _lines(paths: Sequence[Path | ValidationLine], data_dir: Path) -> list[ValidationLine]:
+    return [p if isinstance(p, ValidationLine) else ValidationLine(p, data_dir) for p in paths]
 
 
 def expected_pk_km(net: BuiltNetwork, km: float) -> float:
@@ -60,7 +97,7 @@ def expected_pk_km(net: BuiltNetwork, km: float) -> float:
 
 
 def validate_annotations(
-    path: Path, sources_path: Path, spec_paths: Sequence[Path], data_dir: Path
+    path: Path, sources_path: Path, spec_paths: Sequence[Path | ValidationLine], data_dir: Path
 ) -> dict[str, Any]:
     """Comprueba el fichero de anotaciones contra las líneas cargadas y el registro de fuentes.
 
@@ -73,8 +110,8 @@ def validate_annotations(
     except (ValueError, OSError) as error:
         return {"annotations": path.name, "entries": [], "problems": [str(error)]}
     line_nodes: dict[str, list[str]] = {}
-    for spec_path in spec_paths:
-        net = build_network(load_network_spec(spec_path), data_dir)
+    for line in _lines(spec_paths, data_dir):
+        net = line.network
         line_nodes[net.spec.line.id] = [n.spec.id for n in sorted(net.nodes, key=lambda n: n.km)]
     sources = {s.id: s.url for s in load_sources(sources_path)}
     return {
@@ -100,13 +137,13 @@ def validate_annotations(
     }
 
 
-def validate_zones(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+def validate_zones(spec_paths: Sequence[Path | ValidationLine], data_dir: Path) -> dict[str, Any]:
     """Comprueba que cada línea declara una zona del registro (data/curated/zonas.json)."""
     from oniel.network.importer import ZONES_FILE
     from oniel.network.spec import load_zones
 
     zones = {z.id: z.name for z in load_zones(data_dir / ZONES_FILE)}
-    lines = {(spec := load_network_spec(path)).line.id: spec.line.zone for path in spec_paths}
+    lines = {line.spec.line.id: line.spec.line.zone for line in _lines(spec_paths, data_dir)}
     return {
         "zones": {line_id: zones.get(zone, zone) for line_id, zone in lines.items()},
         "problems": [
@@ -134,7 +171,11 @@ def cited_products(text: str, known: Sequence[str]) -> list[str]:
 
 
 def validate_products(
-    spec_paths: Sequence[Path], feeds: Sequence[FeedSpec], data_dir: Path
+    spec_paths: Sequence[Path | ValidationLine],
+    feeds: Sequence[FeedSpec],
+    data_dir: Path,
+    *,
+    summaries: Mapping[Path, FeedSummary] | None = None,
 ) -> dict[str, Any]:
     """Comprueba que las descripciones nombran los trenes como el fichero de horarios vigente.
 
@@ -152,14 +193,20 @@ def validate_products(
     current: set[str] = set()
     known: set[str] = set(PRODUCT_NAMES.values())
     for feed in feeds:
-        labels = {feed.product} if feed.product else feed_products(data_dir / feed.file)
+        path = (data_dir / feed.file).resolve()
+        if feed.product:
+            labels = {feed.product}
+        elif summaries is not None and path in summaries:
+            labels = set(summaries[path].products)
+        else:
+            labels = feed_products(path)
         known |= labels
         if latest[feed.source_id] is feed:
             current |= labels
     allowed = current | {label.split()[-1] for label in current}
     problems: list[str] = []
-    for path in spec_paths:
-        spec = load_network_spec(path)
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
         texts = [("la línea", spec.line.description)] + [
             (f"el nodo {n.id}", n.description) for n in spec.nodes
         ]
@@ -174,7 +221,11 @@ def validate_products(
 
 
 def validate_operators(
-    spec_paths: Sequence[Path], sources_path: Path, data_dir: Path
+    spec_paths: Sequence[Path | ValidationLine],
+    sources_path: Path,
+    data_dir: Path,
+    *,
+    summaries: Mapping[Path, FeedSummary] | None = None,
 ) -> dict[str, Any]:
     """Comprueba los operadores de trenes de las líneas contra los ficheros de horarios declarados.
 
@@ -185,8 +236,8 @@ def validate_operators(
     """
     problems: list[str] = []
     operators: dict[str, OperatorSpec] = {}
-    for path in spec_paths:
-        for op in load_network_spec(path).operators:
+    for line in _lines(spec_paths, data_dir):
+        for op in line.spec.operators:
             if op.role != "operador":
                 continue
             known = operators.setdefault(op.id, op)
@@ -215,8 +266,13 @@ def validate_operators(
     current = {f.source_id: f for f in feeds}
     windows = []
     for feed in current.values():
-        read = read_feed(data_dir / feed.file)
-        windows.append((feed, read.feed_start, read.feed_end))
+        path = (data_dir / feed.file).resolve()
+        if summaries is not None and path in summaries:
+            summary = summaries[path]
+            windows.append((feed, summary.start, summary.end))
+        else:
+            read = read_feed(path)
+            windows.append((feed, read.feed_start, read.feed_end))
     common: list[str] | None = None
     if windows:
         start, end = max(w[1] for w in windows), min(w[2] for w in windows)
@@ -246,7 +302,7 @@ def validate_operators(
 
 
 def validate_attributes(
-    spec_paths: Sequence[Path], sources_path: Path, data_dir: Path
+    spec_paths: Sequence[Path | ValidationLine], sources_path: Path, data_dir: Path
 ) -> dict[str, Any]:
     """Comprueba los atributos de tramo de las líneas: reparto, cobertura y fuentes.
 
@@ -258,8 +314,8 @@ def validate_attributes(
     problems: list[str] = []
     sources = {s.id for s in load_sources(sources_path)}
     lines: list[dict[str, Any]] = []
-    for path in spec_paths:
-        spec = load_network_spec(path)
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
         for section in spec.attribute_sections:
             if section.source_id is not None and section.source_id not in sources:
                 problems.append(
@@ -268,7 +324,7 @@ def validate_attributes(
                     f" ({section.source_id})"
                 )
         try:
-            net = build_network(spec, data_dir)
+            net = line.network
         except ValueError as error:
             problems.append(str(error))
             continue
@@ -284,7 +340,7 @@ def validate_attributes(
     return {"attributes": lines, "problems": problems}
 
 
-def validate_turns(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+def validate_turns(spec_paths: Sequence[Path | ValidationLine], data_dir: Path) -> dict[str, Any]:
     """Comprueba que en cada nodo que no es estación se sabe de qué lado sale cada tramo.
 
     De ahí sale la regla de giro del comparador y de los tramos sin otro camino
@@ -292,8 +348,6 @@ def validate_turns(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]
     juntos ni enfrentados no se puede clasificar: es un problema, porque allí los recorridos
     girarían sin regla. Las líneas que no se pueden construir ya las señala ``validate_attributes``.
     """
-    from dataclasses import dataclass
-
     from oniel.routing.turns import turn_sides
 
     @dataclass(frozen=True)
@@ -305,10 +359,10 @@ def validate_turns(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]
 
     segments: list[tuple[Leaving, dict[str, Any]]] = []
     stations: set[str] = set()
-    for path in spec_paths:
-        spec = load_network_spec(path)
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
         try:
-            net = build_network(spec, data_dir)
+            net = line.network
         except ValueError:
             continue
         stations.update(n.spec.id for n in net.nodes if n.spec.kind == "estacion")
@@ -348,7 +402,9 @@ def connection_name_problem(name: str) -> str | None:
     return None
 
 
-def validate_connections(spec_paths: Sequence[Path], data_dir: Path) -> dict[str, Any]:
+def validate_connections(
+    spec_paths: Sequence[Path | ValidationLine], data_dir: Path
+) -> dict[str, Any]:
     """Comprueba las costuras entre líneas: las conexiones a trazos y los nodos compartidos.
 
     Una conexión cuyo croquis acaba en un nodo cargado tiene que declararlo (``to_node_id``):
@@ -361,10 +417,10 @@ def validate_connections(spec_paths: Sequence[Path], data_dir: Path) -> dict[str
     lines_of: dict[str, set[str]] = {}
     descriptions: dict[str, list[str]] = {}
     connections: list[tuple[str, ConnectionSpec]] = []
-    for path in spec_paths:
-        spec = load_network_spec(path)
+    for line in _lines(spec_paths, data_dir):
+        spec = line.spec
         try:
-            net = build_network(spec, data_dir)
+            net = line.network
         except ValueError:
             continue
         for n in net.nodes:
@@ -453,13 +509,47 @@ def validate_all(
     (:func:`unused_route_overrides`): una regla escrita para los trenes de un operador no encaja
     con el fichero de otro.
     """
-    spec = load_network_spec(spec_path)
-    net = build_network(spec, data_dir)
+    line = ValidationLine(spec_path, data_dir)
     others = [
-        loaded_line(build_network(load_network_spec(p), data_dir))
-        for p in other_spec_paths
-        if p != spec_path
+        other.loaded for other in _lines(other_spec_paths, data_dir) if other.path != spec_path
     ]
+    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
+    return _validate_line(line, others, feed_path, feed, require_rules=require_rules)
+
+
+def validate_feed(
+    selected: Sequence[ValidationLine],
+    context: Sequence[ValidationLine],
+    feed_path: Path,
+    *,
+    stop_id_prefix: str | None,
+    stop_id_aliases: Mapping[str, str],
+) -> tuple[list[dict[str, Any]], FeedSummary]:
+    """Devuelve los informes y el resumen del horario sin retener sus viajes para el siguiente."""
+    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
+    reports = [
+        _validate_line(
+            line,
+            [other.loaded for other in context if other.path != line.path],
+            feed_path,
+            feed,
+            require_rules=False,
+        )
+        for line in selected
+    ]
+    return reports, FeedSummary(feed.feed_start, feed.feed_end, feed.route_products)
+
+
+def _validate_line(
+    line: ValidationLine,
+    others: Sequence[LoadedLine],
+    feed_path: Path,
+    feed: GtfsFeed,
+    *,
+    require_rules: bool,
+) -> dict[str, Any]:
+    spec = line.spec
+    net = line.network
     problems: list[str] = []
     length = net.line.polyline.length_km
     if (
@@ -496,8 +586,7 @@ def validate_all(
                 f"el nodo {n.spec.id} queda en el km {expected_pk:.1f} y la referencia es {ref}"
             )
 
-    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
-    own = loaded_line(net)
+    own = line.loaded
     # Los trenes de un baipás salen al resolver la línea de la que es baipás: se resuelve aquella
     # y se cuentan los viajes que pasan por los tramos de esta.
     resolved = own

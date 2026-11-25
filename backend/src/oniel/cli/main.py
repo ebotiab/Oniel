@@ -252,11 +252,12 @@ def validate_cmd(
 ) -> None:
     """Comprueba la red, la resolución de los horarios y las anotaciones sin tocar la base de datos."""
     from oniel.validate import (
+        ValidationLine,
         unused_route_overrides,
-        validate_all,
         validate_annotations,
         validate_attributes,
         validate_connections,
+        validate_feed,
         validate_operators,
         validate_products,
         validate_turns,
@@ -265,7 +266,11 @@ def validate_cmd(
 
     # Las demás líneas configuradas se cargan como contexto aunque solo se valide una: una
     # parada puede ser salida hacia otra línea y medir la distancia por ella.
-    context = list(dict.fromkeys([*SPECS_DEFAULT, *_specs(spec)]))
+    paths = _specs(spec)
+    all_paths = dict.fromkeys(path.resolve() for path in [*SPECS_DEFAULT, *paths])
+    by_path = {path: ValidationLine(path, settings.data_dir) for path in all_paths}
+    context = list(by_path.values())
+    selected = [by_path[path.resolve()] for path in paths]
     feeds: list[tuple[Path, str | None, dict[str, str]]] = (
         [(feed, None, {})]
         if feed
@@ -280,19 +285,14 @@ def validate_cmd(
     if attributes["problems"]:
         _echo_json([attributes])
         raise typer.Exit(code=1)
-    reports = [
-        validate_all(
-            path,
-            feed_path,
-            settings.data_dir,
-            [p for p in context if p != path],
-            stop_id_prefix=prefix,
-            stop_id_aliases=aliases,
-            require_rules=False,
+    reports = []
+    summaries = {}
+    for feed_path, prefix, aliases in feeds:
+        line_reports, summary = validate_feed(
+            selected, context, feed_path, stop_id_prefix=prefix, stop_id_aliases=aliases
         )
-        for feed_path, prefix, aliases in feeds
-        for path in _specs(spec)
-    ]
+        reports.extend(line_reports)
+        summaries[feed_path.resolve()] = summary
     # Cada regla de recorrido tiene que encajar con algún viaje de alguno de los ficheros.
     reports.append(
         {"route_overrides": "todos los ficheros", "problems": unused_route_overrides(reports)}
@@ -300,13 +300,15 @@ def validate_cmd(
     # Las anotaciones se contrastan con todas las líneas configuradas, se valide una o todas.
     reports.append(validate_annotations(annotations, sources, context, settings.data_dir))
     # Los operadores y sus ficheros de horarios también se contrastan con todas las líneas.
-    reports.append(validate_operators(context, sources, settings.data_dir))
+    reports.append(validate_operators(context, sources, settings.data_dir, summaries=summaries))
     # La zona en la que el visor lista cada línea tiene que estar en el registro.
     reports.append(validate_zones(context, settings.data_dir))
     # En cada bifurcación tiene que saberse de qué lado sale cada tramo: de ahí sale la regla de giro.
     reports.append(validate_turns(context, settings.data_dir))
     # Las descripciones nombran los trenes con los rótulos de los ficheros vigentes.
-    reports.append(validate_products(context, _declared_feeds(sources), settings.data_dir))
+    reports.append(
+        validate_products(context, _declared_feeds(sources), settings.data_dir, summaries=summaries)
+    )
     # Las conexiones a trazos se declaran en sus dos extremos y los nodos compartidos no hablan
     # desde una sola línea.
     reports.append(validate_connections(context, settings.data_dir))
