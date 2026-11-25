@@ -40,7 +40,7 @@ Consulta al usuario cuando quede una decisión de producto o diseño que no haya
 
 Los comandos están en el README y no se repiten aquí: «Arrancar desde cero» (Docker para PostgreSQL, uv y Node 20), «Pruebas» y «Comprobaciones». Para fusionar una PR tiene que estar todo esto en verde, y quien lo pasa entero es el CI:
 
-- Backend: `ruff format --check`, `ruff check`, `mypy` (estricto), `pyright` (modo `standard`, el mismo que Pylance), `pytest` con `ONIEL_TEST_DATABASE_URL` apuntando a una base `oniel_test`, y `oniel-data validate`. En `main` (no en las PR, porque la alarga 7-8 minutos) el CI mide además la cobertura de `oniel` con ramas y deja la tabla por módulo en el resumen del trabajo; es un informe sin umbral, y en local se ve con `uv run pytest --cov`.
+- Backend: `ruff format --check`, `ruff check`, `mypy` (estricto), `pyright` (modo `standard`, el mismo que Pylance), `pytest` con PostgreSQL y `oniel-data validate`. El CI reparte los ficheros de pytest entre tres procesos. Cada uno usa su propia base mediante `{worker}` en `ONIEL_TEST_DATABASE_URL`. Solo en `main`, el CI reúne la cobertura de `oniel` con ramas y publica la tabla por módulo en el resumen del trabajo. El informe no tiene umbral. En local se ve con `uv run pytest --cov`.
 - Frontend: `npm run typecheck`, `npm run lint` (oxlint: falla también con un aviso, y pasa las reglas que usan los tipos y las de accesibilidad; `frontend/.oxlintrc.json`), `npm run build` (que al final comprueba las hojas de estilo compiladas) y Playwright con `ONIEL_E2E_STATIC=1` (la instantánea estática, sin servidor), que en el CI va repartida en cuatro fragmentos a la vez.
 
 En local, antes de abrir la PR, la sesión pasa lo rápido y lo que ha tocado, no todo otra vez:

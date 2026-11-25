@@ -153,8 +153,16 @@ def ouigo_feed() -> GtfsFeed:
 
 
 def database_url_for_tests() -> str | None:
-    """Base de datos para las pruebas de integración: ONIEL_TEST_DATABASE_URL o ninguna."""
-    return os.environ.get("ONIEL_TEST_DATABASE_URL")
+    """URL de integración. En paralelo, cada proceso sustituye {worker} por su identificador."""
+    url = os.environ.get("ONIEL_TEST_DATABASE_URL")
+    worker = os.environ.get("PYTEST_XDIST_WORKER")
+    if url and worker:
+        if "{worker}" not in url:
+            raise pytest.UsageError(
+                "Incluye {worker} en ONIEL_TEST_DATABASE_URL para que cada proceso use su propia base."
+            )
+        return url.replace("{worker}", worker)
+    return url
 
 
 requires_db = pytest.mark.skipif(

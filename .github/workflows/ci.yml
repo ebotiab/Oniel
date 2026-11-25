@@ -69,11 +69,9 @@ jobs:
     needs: cambios
     if: needs.cambios.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    # pytest ronda los 9-11 minutos y `validate` pasa de 3 con tres ficheros de Renfe: con 15 el
-    # trabajo se cancelaba a medias de `validate` según el día que tuviera el ejecutor. En `main`
-    # pytest mide además la cobertura, que con ramas lo alarga de 9-11 a unos 17 minutos (el
-    # trabajo entero, 22): por eso el límite es 45 y no 25.
     timeout-minutes: 45
+    env:
+      PROCESOS_PYTEST: "3"
     defaults:
       run:
         working-directory: backend
@@ -118,14 +116,17 @@ jobs:
       - name: Tipos (pyright, modo standard)
         run: uv run pyright
 
-      - name: Crear la base de pruebas oniel_test
-        run: docker exec ${{ job.services.postgres.id }} createdb -U oniel oniel_test
+      # Las pruebas de integración reconstruyen el esquema. Cada proceso necesita su propia base.
+      - name: Crear una base PostgreSQL por proceso de pytest
+        env:
+          POSTGRES_ID: ${{ job.services.postgres.id }}
+        run: |
+          for ((i=0; i<PROCESOS_PYTEST; i++)); do
+            docker exec "$POSTGRES_ID" createdb -U oniel "oniel_test_gw$i"
+          done
 
-      # En `main`, con cobertura de `oniel`, ramas incluidas
-      # ([tool.coverage] en backend/pyproject.toml). Es solo un informe para ver qué módulos no
-      # tienen pruebas: ningún umbral hace fallar el trabajo. En las ramas (las PR y el CI que lanza a
-      # mano el refresco del GTFS) no se mide, porque alarga pytest 7-8 minutos y no cambia lo que se
-      # fusiona.
+      # Cada fichero se ejecuta entero en un proceso para compartir sus fixtures de módulo.
+      # En main, pytest-cov reúne la cobertura de todos los procesos, incluidas las ramas.
       - name: Pruebas (pytest, incluidas las de integración con PostgreSQL; en main, con cobertura)
         run: |
           if [ "$COBERTURA" = "true" ]; then
@@ -134,7 +135,8 @@ jobs:
             uv run pytest
           fi
         env:
-          ONIEL_TEST_DATABASE_URL: postgresql://oniel@localhost:5432/oniel_test
+          ONIEL_TEST_DATABASE_URL: postgresql://oniel@localhost:5432/oniel_test_{worker}
+          PYTEST_ADDOPTS: -n ${{ env.PROCESOS_PYTEST }} --dist=loadfile --max-worker-restart=0
           COBERTURA: ${{ github.ref == 'refs/heads/main' }}
 
       # La tabla por módulo va al resumen del trabajo, también si alguna prueba ha fallado.
