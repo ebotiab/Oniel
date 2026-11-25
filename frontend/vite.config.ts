@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 
-import { htmlConMeta, META_COBERTURA, META_GLOSARIO, META_SIN_OTRO_CAMINO, metaLinea, metaNodo, metaRecorridos, metaTramo, type Meta } from './src/app/meta.ts'
+import { htmlConMeta, META_COBERTURA, META_GLOSARIO, META_GUIA, META_SIN_OTRO_CAMINO, metaLinea, metaNodo, metaRecorridos, metaTramo, type Meta } from './src/app/meta.ts'
 
 // En desarrollo, /api se redirige al backend local (uv run uvicorn oniel.api.main:app --reload → :8000, o el puerto que uses).
 const apiTarget = process.env.ONIEL_API_PROXY ?? 'http://127.0.0.1:8000'
@@ -61,6 +61,7 @@ function paginasEstaticas(): Plugin {
       const paginas = new Map<string, Meta>([
         ['/cobertura', META_COBERTURA],
         ['/glosario', META_GLOSARIO],
+        ['/guia', META_GUIA],
         ['/sin-otro-camino', META_SIN_OTRO_CAMINO],
         ['/recorridos', metaRecorridos()],
       ])
