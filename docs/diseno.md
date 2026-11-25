@@ -10,7 +10,11 @@ Oniel empezó por la línea de alta velocidad Madrid–Sevilla (Adif, línea 010
 
 ### Guía del atlas
 
-«Guía» aparece junto a «Glosario» en la cabecera y en el menú del móvil. Su dirección es `/guia`. La página utiliza la columna de lectura del glosario y un esquema de cuatro estaciones de la línea Manzanares – Ciudad Real. Cada nombre abre su ficha. Las preguntas siguientes abren un tramo y una comparación entre dos ciudades. Los ejemplos enlazan las vistas del atlas para que el lector pueda probar lo que acaba de leer. El cierre sigue siendo una consulta opcional en la ficha del tramo.
+«Guía» aparece junto a «Glosario» en la cabecera y en el menú del móvil. Su dirección es `/guia`. Utiliza la columna de lectura del glosario, Archivo y los colores del atlas. La primera pantalla tiene una invitación a abrir Manzanares – Ciudad Real y el esquema de sus cuatro estaciones, cuyos nombres abren las fichas. Explica que el mapa sitúa el trazado en el territorio y que el esquema endereza la misma línea para seguir su orden: arriba no significa norte.
+
+La ampliación del 25 de noviembre de 2026 organiza el resto por preguntas de un principiante, en desplegables nativos independientes: por dónde pasa la línea, adónde llega un tren desde una estación, cómo leer un tramo, qué comparar entre dos recorridos y de qué fecha son los horarios. Cada respuesta propone un detalle que observar y enlaza la vista real que lo muestra. Los ejemplos no fijan recuentos ni fechas que puedan quedar viejos. No hay pasos obligatorios, progreso ni un modo de visita distinto del atlas.
+
+Al volver desde un ejemplo, con Atrás o con «Guía», se conservan los apartados abiertos, el desplazamiento y el foco del enlace utilizado durante esa sesión. «Mapa» sigue devolviendo a la última vista del mapa. Bajo las preguntas, el alcance explica las conexiones pendientes de cargar, las fuentes y el uso del Glosario. El cierre tiene su propio desplegable al final, rotulado «Exploración opcional» y descrito como hipótesis. Los horarios publicados y los tiempos estimados se distinguen expresamente del seguimiento de trenes en directo. Capturas y recorrido comprobado en `docs/capturas/guia-primer-recorrido/`.
 
 ## Referencias
 
