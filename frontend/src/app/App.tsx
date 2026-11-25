@@ -11,6 +11,7 @@ import { buildGraph } from '../routing/graph'
 import { ComparePanel } from '../panel/ComparePanel'
 import { AnnotationDetail } from '../panel/AnnotationDetail'
 import { CoveragePage } from '../panel/CoveragePage'
+import { GuidePage } from '../panel/GuidePage'
 import { GlossaryPage } from '../panel/GlossaryPage'
 import { GlosarioContext } from '../panel/glosarioContexto'
 import { Legend, LeyendaTrazos } from '../panel/Legend'
@@ -30,6 +31,7 @@ import { aplicarMeta } from './aplicarMeta'
 import {
   META_COBERTURA,
   META_GLOSARIO,
+  META_GUIA,
   META_RED,
   META_SIN_OTRO_CAMINO,
   metaEntradaGlosario,
@@ -96,7 +98,7 @@ export default function App() {
   const [lineasResaltadas, setLineasResaltadas] = useState<string[] | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
   const [showCoverage, setShowCoverage] = useState(() => Boolean(parseRoute(window.location.pathname).cobertura))
-  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario ?? parseRoute(window.location.pathname).sinOtroCamino))
+  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario ?? parseRoute(window.location.pathname).guia ?? parseRoute(window.location.pathname).sinOtroCamino))
   const [elegidoKey, setElegidoKey] = useState<string | null>(null)
   const [activeLineId, setActiveLineId] = useState<string | null>(() => parseRoute(window.location.pathname).linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
@@ -157,9 +159,9 @@ export default function App() {
       const r = parseRoute(window.location.pathname)
       setRoute(r)
       setShowCoverage(Boolean(r.cobertura))
-      if (r.recorridos || r.glosario || r.sinOtroCamino) setSheetOpen(true)
+      if (r.recorridos || r.glosario || r.guia || r.sinOtroCamino) setSheetOpen(true)
       // Sin selección manda la URL: / es la vista de la red. Con selección, la línea sale de lo seleccionado.
-      if (!r.selection && !r.cobertura && !r.glosario) setActiveLineId(r.linea ?? null)
+      if (!r.selection && !r.cobertura && !r.glosario && !r.guia) setActiveLineId(r.linea ?? null)
     }
     // Un enlace antiguo, con almohadilla, pegado en la barra con el visor ya abierto: no recarga la página.
     const onHash = () => {
@@ -213,7 +215,7 @@ export default function App() {
   const vuelta = useRef<{ route: Route; cobertura: boolean } | null>(null)
   const openGlossary = useCallback(
     (entrada: string | null) => {
-      if (!route.glosario) vuelta.current = { route, cobertura: showCoverage }
+      if (!route.glosario && !route.guia) vuelta.current = { route, cobertura: showCoverage }
       setRoute({ selection: null, simulacion: false, glosario: { entrada } })
       setShowCoverage(false)
       setSheetOpen(true)
@@ -450,9 +452,16 @@ export default function App() {
 
   // La navegación de la cabecera. «Mapa» devuelve desde una página a lo que se estaba viendo; desde el propio
   // mapa lleva a la vista de la red. Entre páginas se conserva a qué vista del mapa hay que volver.
-  const seccion: Seccion = route.glosario ? 'glosario' : showCoverage ? 'cobertura' : route.sinOtroCamino ? 'sin-otro-camino' : comparador ? 'recorridos' : 'mapa'
+  const seccion: Seccion = route.guia ? 'guia' : route.glosario ? 'glosario' : showCoverage ? 'cobertura' : route.sinOtroCamino ? 'sin-otro-camino' : comparador ? 'recorridos' : 'mapa'
   const ir = (destino: Seccion) => {
-    const debajo: Route = route.glosario ? (vuelta.current?.route ?? { selection: null, simulacion: false }) : route
+    const debajo: Route = route.glosario || route.guia ? (vuelta.current?.route ?? { selection: null, simulacion: false }) : route
+    if (destino === 'guia') {
+      if (!route.guia) {
+        vuelta.current = { route: debajo, cobertura: false }
+        navegar(routePath({ selection: null, simulacion: false, guia: true }))
+      }
+      return
+    }
     if (destino === 'glosario') {
       if (route.glosario) return
       vuelta.current = { route: debajo, cobertura: false }
@@ -474,7 +483,7 @@ export default function App() {
         setRoute(debajo)
         setShowCoverage(false)
       } else compare({ from: null, to: null })
-    } else if (seccion === 'glosario' || seccion === 'cobertura') {
+    } else if (seccion === 'guia' || seccion === 'glosario' || seccion === 'cobertura') {
       setRoute(debajo)
       setShowCoverage(false)
     } else showLine(null)
@@ -488,6 +497,7 @@ export default function App() {
 
   // El título de la pestaña y la descripción dicen qué vista es: lo lee quien guarda el enlace o lo comparte.
   const meta = useMemo<Meta | null>(() => {
+    if (route.guia) return META_GUIA
     if (route.glosario) {
       const nombre = route.glosario.entrada ? tituloDe(route.glosario.entrada) : null
       return nombre ? metaEntradaGlosario(nombre) : META_GLOSARIO
@@ -514,15 +524,15 @@ export default function App() {
 
   const lines = network?.lines ?? []
   // Quien llega por un enlace al glosario no descarga el mapa hasta que vuelve a él; después se queda montado.
-  const enPagina = Boolean(route.glosario) || showCoverage
+  const enPagina = Boolean(route.guia || route.glosario) || showCoverage
   const [mapaMontado, setMapaMontado] = useState(!enPagina)
   if (!enPagina && !mapaMontado) setMapaMontado(true)
 
   return (
     <GlosarioContext value={openGlossary}>
     <div className={`app ${mobile ? 'movil' : 'escritorio'} ${sheetOpen ? 'hoja-abierta' : ''} ${enPagina ? 'en-pagina' : ''}`}>
-      <a className="visually-hidden" href="#panel">
-        Ir al panel de la línea
+      <a className={route.guia ? 'salto-guia' : 'visually-hidden'} href={route.guia ? '#guia-contenido' : '#panel'}>
+        {route.guia ? 'Ir a la guía' : 'Ir al panel de la línea'}
       </a>
       <Suspense fallback={<div className="mapa" aria-hidden="true" />}>
         {mapaMontado && <MapView
@@ -581,6 +591,7 @@ export default function App() {
           onPin={pinTrazo}
         />
       )}
+      {route.guia && <GuidePage />}
       {route.glosario && <GlossaryPage entrada={route.glosario.entrada} sources={coverage?.sources ?? []} />}
       {showCoverage && !route.glosario && coverage && network && (
         <CoveragePage

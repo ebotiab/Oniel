@@ -20,7 +20,7 @@ test('robots anuncia un sitemap con todas las vistas estáticas, una sola vez', 
   expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
   const urls = Array.from(xml.matchAll(/<loc>([^<]+)<\/loc>/g), (m) => m[1])
   const rutas = [
-    '/', '/cobertura', '/glosario', '/recorridos', '/sin-otro-camino',
+    '/', '/cobertura', '/glosario', '/guia', '/recorridos', '/sin-otro-camino',
     ...indice.lines.map((linea) => `/linea/${linea.id}`),
     ...indice.nodes.map((nodo) => `/nodo/${nodo.id}`),
     ...indice.segment_features.features.map((tramo) => `/tramo/${tramo.id}`),

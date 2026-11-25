@@ -11,6 +11,8 @@ export interface Route {
   simulacion: boolean
   /** Línea a la vista en el panel cuando no hay nada seleccionado; sin ella, la vista de la red. */
   linea?: string | null
+  /** La guía de inicio está abierta. */
+  guia?: boolean
   /** La página «Cobertura y fuentes» está abierta. */
   cobertura?: boolean
   /** Escenario abierto desde la URL, como cadena corta (`frontend/src/routing/scenario.ts`). */
@@ -37,7 +39,7 @@ export interface Comparador {
  * / (la vista de la red), /linea/<id>, /tramo/<id>, /nodo/<id>, /tramo/<id>/cierre, /escenario/<cadena>
  * (las dos últimas, con el día y la franja detrás si se han elegido: /tramo/<id>/cierre/2026-11-20/08:00-09:00),
  * /recorridos/<desde>/<hasta> (y, detrás, el escenario; «-» es una estación sin elegir), /glosario,
- * /glosario/<entrada>, /cobertura, /sin-otro-camino y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
+ * /glosario/<entrada>, /guia, /cobertura, /sin-otro-camino y, por cada tipo de anotación con ficha propia, la ruta que declara su capa
  * (/proyecto/<id>).
  *
  * `parseRoute` interpreta la ruta y `routePath` la construye: ninguna vista arma direcciones a mano.
@@ -53,6 +55,7 @@ export function parseRoute(pathname: string): Route {
   const capa = kind ? layerByRoute(kind) : undefined
   if (capa && id) return { selection: { type: 'anotacion', kind: capa.kind, id }, simulacion: false }
   if (kind === 'linea' && id) return { selection: null, simulacion: false, linea: id }
+  if (kind === 'guia') return { selection: null, simulacion: false, guia: true }
   if (kind === 'cobertura') return { selection: null, simulacion: false, cobertura: true }
   if (kind === 'sin-otro-camino') return { selection: null, simulacion: false, sinOtroCamino: true }
   if (kind === 'glosario') return { selection: null, simulacion: false, glosario: { entrada: id ?? null } }
@@ -105,6 +108,7 @@ function code(value: string): string {
 }
 
 export function routePath(route: Route): string {
+  if (route.guia) return '/guia'
   if (route.cobertura) return '/cobertura'
   if (route.glosario) return route.glosario.entrada ? `/glosario/${encodeURIComponent(route.glosario.entrada)}` : '/glosario'
   if (route.sinOtroCamino) return '/sin-otro-camino'

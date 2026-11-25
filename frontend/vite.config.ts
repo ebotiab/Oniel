@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 
-import { escapar, htmlConMeta, META_COBERTURA, META_GLOSARIO, META_RED, META_SIN_OTRO_CAMINO, SITIO, metaLinea, metaNodo, metaRecorridos, metaTramo, type Meta } from './src/app/meta.ts'
+import { escapar, htmlConMeta, META_COBERTURA, META_GLOSARIO, META_GUIA, META_RED, META_SIN_OTRO_CAMINO, SITIO, metaLinea, metaNodo, metaRecorridos, metaTramo, type Meta } from './src/app/meta.ts'
 import { routePath } from './src/app/state.ts'
 
 // En desarrollo, /api se redirige al backend local (uv run uvicorn oniel.api.main:app --reload → :8000, o el puerto que uses).
@@ -60,6 +60,7 @@ function paginasEstaticas(): Plugin {
         ['/', META_RED],
         ['/cobertura', META_COBERTURA],
         ['/glosario', META_GLOSARIO],
+        ['/guia', META_GUIA],
         ['/sin-otro-camino', META_SIN_OTRO_CAMINO],
         ['/recorridos', metaRecorridos()],
       ])

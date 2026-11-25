@@ -41,6 +41,11 @@ export const META_SIN_OTRO_CAMINO: Meta = {
   description: 'Los tramos de la red ferroviaria española cuyos trenes no tendrían otro camino por vía si se cortaran, línea a línea y con los trenes de un día.',
 }
 
+export const META_GUIA: Meta = {
+  title: titulo('Guía del atlas'),
+  description: 'Cómo utilizar Oniel para entender la red ferroviaria española. Explora una línea de ejemplo, sus estaciones y sus tramos, y compara dos recorridos en el mapa.',
+}
+
 export const META_GLOSARIO: Meta = {
   title: titulo('Glosario'),
   description: 'Las palabras del ferrocarril explicadas para quien no las conoce: ancho de vía, bloqueo, vía única, bifurcación y las demás que usa Oniel.',

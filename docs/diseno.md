@@ -8,6 +8,10 @@ El atlas documenta la red tal como se conoce en la fecha de cada fuente. Los hor
 
 Oniel empezó por la línea de alta velocidad Madrid–Sevilla (Adif, línea 010), que en 2026 ha sufrido dos accidentes graves (Adamuz, enero; Urda, octubre), y hoy cubre buena parte de la red de viajeros de la península: las líneas cargadas están en `docs/datos.md`, «Líneas cargadas». El tono debe ser sobrio, preciso y respetuoso.
 
+### Guía del atlas
+
+«Guía» aparece junto a «Glosario» en la cabecera y en el menú del móvil. Su dirección es `/guia`. La página utiliza la columna de lectura del glosario y un esquema de cuatro estaciones de la línea Manzanares – Ciudad Real. Cada nombre abre su ficha. Las preguntas siguientes abren un tramo y una comparación entre dos ciudades. Los ejemplos enlazan las vistas del atlas para que el lector pueda probar lo que acaba de leer. El cierre sigue siendo una consulta opcional en la ficha del tramo.
+
 ## Referencias
 
 - Cartografía oficial (hojas del IGN, mapa de la red de Adif): papel mate, tinta negra, el ferrocarril como línea negra con trazos.
