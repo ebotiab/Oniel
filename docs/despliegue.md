@@ -113,7 +113,9 @@ También puede lanzarse desde cualquier máquina con `uv` y acceso a la base. La
 cd backend && ONIEL_DATABASE_URL='<External Database URL>' uv run oniel-data import all
 ```
 
-La importación es repetible: crea el esquema si falta, sustituye los servicios de la fuente dentro de una transacción y registra la ejecución en `import_runs`. También regenera la instantánea estática de `frontend/public/data`, que conviene subir junto con los cambios.
+La red, los horarios, el registro de ejecuciones y la huella se confirman juntos en PostgreSQL. Si la importación se interrumpe, la base conserva los datos y la huella anteriores. Al reintentar se vuelve a cargar el cambio pendiente. Si arrancan dos importaciones a la vez, la segunda espera a la primera antes de comparar la huella.
+
+En local la orden también regenera la instantánea de `frontend/public/data`. Si falla al escribir los ficheros, corrige la causa y repite `oniel-data import all` antes de subirlos.
 
 **Cuánto tarda y por qué importa.** Render da por fallido («Timed Out») un despliegue que no responde en unos 15 minutos, y la API no responde hasta que la importación termina. El 15 de noviembre de 2026, con 25 líneas y tres ficheros de horarios, tardó 474 s en producción (commit `0f4f589`): unos 35 s las 25 redes, 129 s y 136 s los dos ficheros de Renfe, 4 s el de Ouigo y 166 s la exportación de la instantánea. Desde el 17 de noviembre de 2026 hace menos trabajo, con el mismo resultado en la base:
 
