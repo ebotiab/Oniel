@@ -1,4 +1,5 @@
 .guia h2 {
+  margin: 0;
   font-size: var(--t-22);
   line-height: 1.18;
 }
@@ -15,7 +16,8 @@
 }
 
 .guia-ejemplo p,
-.guia-preguntas p,
+.guia-preguntas > p,
+.guia-respuesta p,
 .guia-lectura p {
   margin: 9px 0 0;
   line-height: 1.55;
@@ -34,8 +36,7 @@
   margin-left: 3px;
 }
 
-.guia-estaciones,
-.guia-preguntas ul {
+.guia-estaciones {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -83,27 +84,86 @@
   text-decoration-color: currentColor;
 }
 
-.guia-preguntas ul {
-  margin-top: 14px;
-  border-top: 1px solid var(--tinta);
+/* Las preguntas son consultas independientes: solo se abre lo que interesa. */
+.guia-preguntas {
+  margin-top: 36px;
 }
 
-.guia-preguntas li {
-  padding: 15px 0;
+.guia-preguntas > p {
+  margin-bottom: 18px;
+}
+
+.guia-preguntas details {
+  border-top: 1px solid var(--regla);
+}
+
+.guia-preguntas details:last-child {
   border-bottom: 1px solid var(--regla);
 }
 
-.guia-preguntas a {
+.guia summary {
+  padding: 17px 0;
+  cursor: pointer;
+}
+
+.guia summary::marker {
+  color: var(--tinta-2);
+  font-size: var(--t-14);
+}
+
+.guia summary h3 {
+  display: inline;
   font-size: var(--t-17);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.guia-respuesta {
+  padding: 0 0 22px 20px;
+  max-width: 62ch;
+}
+
+.guia-respuesta p:first-child {
+  margin-top: 0;
+}
+
+.guia-respuesta > a {
+  display: inline-block;
+  padding: 12px 0 2px;
   font-weight: 600;
 }
 
-.guia-preguntas p {
-  margin-top: 5px;
+.guia-vuelta {
+  margin: -16px 0 0;
+  color: var(--tinta-2);
+  line-height: 1.55;
+}
+
+.guia-opcional {
+  margin-top: 32px;
+  border-top: 1px solid var(--regla);
+  border-bottom: 1px solid var(--regla);
+}
+
+.guia-opcional-rotulo {
+  font-size: var(--t-14);
+  color: var(--tinta-2);
+}
+
+.guia-opcional h2 {
+  margin: 6px 0 0 20px;
 }
 
 .guia-lectura {
-  margin-top: 32px;
+  margin-top: 36px;
+}
+
+.guia p {
+  font-size: var(--t-17);
+}
+
+.movil .guia p {
+  font-size: 16px;
 }
 
 @media (max-width: 540px) {
