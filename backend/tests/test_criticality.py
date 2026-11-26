@@ -343,6 +343,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "enlace-soto-de-cerrato",
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
+        "vitoria-irun",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -399,6 +400,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
+        + 20  # Vitoria–Irún
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
@@ -486,7 +488,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         # tramos de la línea de Valencia de Chamartín a Torrejón de Velasco dejan de estarlo: sus
         # trenes tienen el túnel de Atocha a Chamartín y la línea convencional
         + 2
-        - 2,
+        - 2
+        + 20,  # Vitoria–Irún no cierra ningún anillo
         121
         + 29
         + 4
@@ -520,7 +523,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         # entrada a Zaragoza-Delicias y el de la salida de Lleida-Pirineus, porque desde el baipás
         # no se entra en la estación sin invertir la marcha, y el de Arroyo de la Herrera a la
         # bifurcación El Palmeral
-        + 4,
+        + 4
+        + 20,  # Vitoria–Irún
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -572,6 +576,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # la de Sevilla a Huelva, entera: a Huelva solo llega ella
     huelva = {k: n for k, n in none.items() if k.startswith("sevilla-huelva:")}
     assert len(huelva) == 11
+    irun = {k: n for k, n in none.items() if k.startswith("vitoria-irun:")}
+    assert len(irun) == 20 and all(n > 0 for n in irun.values())
     extremadura_lines = (
         f"{MADRID_PLASENCIA}:",
         f"{LAV_BADAJOZ}:",
@@ -605,6 +611,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         "sevilla-huelva:",
         "enlace-soto-de-cerrato:",
         "enlace-aljucen-la-garrovilla:",
+        "vitoria-irun:",
         *extremadura_lines,
     )
     # los enlaces de Soto de Cerrato y de Aljucén a La Garrovilla, sin otro camino para sus trenes:

@@ -1,0 +1,734 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-06-01T08:52:28Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 26837751,
+  "lat": 42.9109612,
+  "lon": -2.0717275,
+  "tags": {
+    "name": "Etxarri-Aranatz",
+    "name:es": "Echarri-Aranaz",
+    "name:eu": "Etxarri Aranatz",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "80003",
+    "ref:EU:PLC": "ES80003",
+    "train": "yes",
+    "uic_ref": "7180003",
+    "wikidata": "Q4464191",
+    "wikipedia": "es:Estación de Echarri-Aranaz"
+  }
+},
+{
+  "type": "node",
+  "id": 29568804,
+  "lat": 42.8413030,
+  "lon": -2.6726970,
+  "tags": {
+    "name": "Vitoria-Gasteiz",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11208",
+    "ref:EU:PLC": "ES11208",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111208",
+    "website": "https://www.adif.es/w/11208-vitoria-gasteiz",
+    "wheelchair": "yes",
+    "wikidata": "Q3381144",
+    "wikipedia": "es:Estación de Vitoria"
+  }
+},
+{
+  "type": "node",
+  "id": 495990620,
+  "lat": 43.0526137,
+  "lon": -2.1792201,
+  "tags": {
+    "name": "Ordizia",
+    "name:es": "Ordicia",
+    "name:eu": "Ordizia",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 498214406,
+  "lat": 43.1394667,
+  "lon": -2.0741566,
+  "tags": {
+    "name": "Tolosa-Centro",
+    "name:es": "Tolosa-Centro",
+    "name:eu": "Tolosa-Erdia",
+    "operator": "Renfe",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 513291332,
+  "lat": 43.0858040,
+  "lon": -2.1409622,
+  "tags": {
+    "name": "Legorreta",
+    "operator": "Renfe",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8840921"
+  }
+},
+{
+  "type": "node",
+  "id": 608988814,
+  "lat": 43.0510088,
+  "lon": -2.3304800,
+  "tags": {
+    "name": "Legazpi",
+    "name:es": "Legazpia",
+    "name:eu": "Legazpi",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8840918"
+  }
+},
+{
+  "type": "node",
+  "id": 642969646,
+  "lat": 43.0939589,
+  "lon": -2.1254951,
+  "tags": {
+    "name": "Ikaztegieta",
+    "name:es": "Icazteguieta",
+    "name:eu": "Ikaztegieta",
+    "operator": "Renfe",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1330680970,
+  "lat": 43.0187986,
+  "lon": -2.3344667,
+  "tags": {
+    "name": "Brinkola",
+    "name:es": "Bríncola",
+    "name:eu": "Brinkola",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "wikidata": "Q8779423"
+  }
+},
+{
+  "type": "node",
+  "id": 2044176476,
+  "lat": 42.8490443,
+  "lon": -2.5146291,
+  "tags": {
+    "name": "Alegría-Dulantzi",
+    "opening_hours": "07:35-22:40",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11210",
+    "ref:EU:PLC": "ES11210",
+    "train": "yes",
+    "uic_ref": "7111210",
+    "wikidata": "Q3381113",
+    "wikipedia": "es:Estación de Alegría de Álava"
+  }
+},
+{
+  "type": "node",
+  "id": 2118941959,
+  "lat": 42.9203922,
+  "lon": -1.9748294,
+  "tags": {
+    "name": "Uharte-Arakil",
+    "name:eu": "Uharte Arakil",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "80005",
+    "ref:EU:PLC": "ES80005",
+    "train": "yes",
+    "uic_ref": "7180005",
+    "wikidata": "Q4464145",
+    "wikipedia": "es:Estación de Huarte-Araquil"
+  }
+},
+{
+  "type": "node",
+  "id": 2381701827,
+  "lat": 42.8463131,
+  "lon": -2.3888912,
+  "tags": {
+    "addr:city": "Agurain / Salvatierra",
+    "addr:postcode": "01200",
+    "addr:street": "Trebiño kalea",
+    "name": "Agurain-Salvatierra de Álava",
+    "name:es": "Salvatierra de Álava",
+    "name:eu": "Agurain",
+    "nohousenumber": "yes",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11212",
+    "ref:EU:PLC": "ES11212",
+    "train": "yes",
+    "uic_ref": "7111212",
+    "wikidata": "Q3381133",
+    "wikipedia": "es:Estación de Salvatierra de Álava"
+  }
+},
+{
+  "type": "node",
+  "id": 2381777955,
+  "lat": 43.1627387,
+  "lon": -2.0705964,
+  "tags": {
+    "name": "Anoeta",
+    "name:es": "Anoeta",
+    "operator": "Renfe",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 2463961443,
+  "lat": 43.0683734,
+  "lon": -2.1625334,
+  "tags": {
+    "name": "Itsasondo",
+    "name:es": "Isasondo",
+    "name:eu": "Itsasondo",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q5483211"
+  }
+},
+{
+  "type": "node",
+  "id": 2464005848,
+  "lat": 43.0460967,
+  "lon": -2.2023400,
+  "tags": {
+    "name": "Beasain",
+    "name:es": "Beasáin",
+    "name:eu": "Beasain",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q8779367"
+  }
+},
+{
+  "type": "node",
+  "id": 4396236530,
+  "lat": 42.8692330,
+  "lon": -2.3067403,
+  "tags": {
+    "name": "Araia",
+    "name:es": "Araya",
+    "name:eu": "Araia",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11213",
+    "ref:EU:PLC": "ES11213",
+    "train": "yes",
+    "uic_ref": "7111213",
+    "wikidata": "Q3381106",
+    "wikipedia": "es:Estación de Araya"
+  }
+},
+{
+  "type": "node",
+  "id": 4586116154,
+  "lat": 42.8954056,
+  "lon": -2.1813079,
+  "tags": {
+    "name": "Altsasu",
+    "name:es": "Alsasua",
+    "name:eu": "Altsasu",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11300",
+    "ref:EU:PLC": "ES11300",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111300",
+    "wikidata": "Q4464138",
+    "wikipedia": "es:Estación de Alsasua"
+  }
+},
+{
+  "type": "node",
+  "id": 4586116155,
+  "lat": 42.8933349,
+  "lon": -2.1674506,
+  "tags": {
+    "name": "Altsasu–Herria",
+    "name:es": "Alsasua-Pueblo",
+    "name:eu": "Altsasu–Herria",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "80001",
+    "ref:EU:PLC": "ES80001",
+    "train": "yes",
+    "uic_ref": "7180001",
+    "wikidata": "Q4464109"
+  }
+},
+{
+  "type": "node",
+  "id": 6080884392,
+  "lat": 43.3177368,
+  "lon": -1.9769301,
+  "tags": {
+    "alt_name": "Estación de Atotxa",
+    "name": "Donostia / San Sebastián",
+    "name:ar": "سان سيباستيان",
+    "name:es": "Donostia",
+    "name:eu": "San Sebastián",
+    "old_name": "Estación de Norte",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q3394097"
+  }
+},
+{
+  "type": "node",
+  "id": 6083584004,
+  "lat": 43.3196174,
+  "lon": -1.9367139,
+  "tags": {
+    "name": "Herrera",
+    "operator": "Renfe",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6856192695,
+  "lat": 43.3046206,
+  "lon": -1.9636202,
+  "tags": {
+    "name": "Loiola",
+    "operator": "Renfe",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q11681657",
+    "wikipedia": "es:Estación de Loyola"
+  }
+},
+{
+  "type": "node",
+  "id": 6856192696,
+  "lat": 43.3219434,
+  "lon": -1.9733012,
+  "tags": {
+    "name": "Gros",
+    "network": "Donostiako Aldiriak / Cercanías San Sebastián",
+    "network:es": "Cercanías San Sebastián",
+    "network:eu": "Donostiako Aldiriak",
+    "network:wikidata": "Q2946410",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "halt",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6856192698,
+  "lat": 43.3203287,
+  "lon": -1.9589151,
+  "tags": {
+    "name": "Ategorrieta",
+    "operator": "Renfe",
+    "public_transport": "station",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6856208612,
+  "lat": 43.2155256,
+  "lon": -2.0203096,
+  "tags": {
+    "name": "Andoain-Centro",
+    "name:es": "Andoain-Centro",
+    "name:eu": "Andoain-Erdia",
+    "operator": "Renfe",
+    "public_transport": "station",
+    "railway": "station",
+    "toilets:wheelchair": "no",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q11681630"
+  }
+},
+{
+  "type": "node",
+  "id": 6856208614,
+  "lat": 43.2478593,
+  "lon": -1.9881264,
+  "tags": {
+    "name": "Urnieta",
+    "operator": "Renfe",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8842124"
+  }
+},
+{
+  "type": "node",
+  "id": 6856208615,
+  "lat": 43.2664561,
+  "lon": -1.9727493,
+  "tags": {
+    "name": "Hernani-Centro",
+    "name:es": "Hernani-Centro",
+    "name:eu": "Hernani-Erdia",
+    "operator": "Renfe",
+    "railway": "halt",
+    "train": "yes",
+    "wikidata": "Q11681649",
+    "wikipedia": "es:Estación de Hernani-Centro"
+  }
+},
+{
+  "type": "node",
+  "id": 6856208616,
+  "lat": 43.2990788,
+  "lon": -1.9562799,
+  "tags": {
+    "name": "Martutene",
+    "operator": "Renfe",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wikidata": "Q8841039"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255906,
+  "lat": 43.0870148,
+  "lon": -2.3198828,
+  "tags": {
+    "name": "Zumarraga",
+    "name:es": "Zumárraga",
+    "name:eu": "Zumarraga",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8842460"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255907,
+  "lat": 43.0404654,
+  "lon": -2.2569850,
+  "tags": {
+    "name": "Ormaiztegi",
+    "name:es": "Ormaiztegui",
+    "name:eu": "Ormaiztegi",
+    "operator": "Adif",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255913,
+  "lat": 43.3297468,
+  "lon": -1.8184009,
+  "tags": {
+    "name": "Ventas de Irún",
+    "name:es": "Ventas de Irún",
+    "name:eu": "Irungo Bentak",
+    "operator": "Renfe",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8842188"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255914,
+  "lat": 43.3159579,
+  "lon": -1.8993138,
+  "tags": {
+    "name": "Lezo-Rentería",
+    "operator": "Renfe",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q11681655"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255915,
+  "lat": 43.3189807,
+  "lon": -1.9170734,
+  "tags": {
+    "name": "Pasaia",
+    "operator": "Renfe",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255916,
+  "lat": 43.3201501,
+  "lon": -1.9527669,
+  "tags": {
+    "name": "Intxaurrondo",
+    "operator": "Renfe",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255917,
+  "lat": 43.1356356,
+  "lon": -2.0791385,
+  "tags": {
+    "name": "Tolosa",
+    "operator": "Renfe",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8842051"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255918,
+  "lat": 43.2723975,
+  "lon": -1.9637926,
+  "tags": {
+    "name": "Hernani",
+    "network": "Donostiako Aldiriak / Cercanías San Sebastián",
+    "network:es": "Cercanías San Sebastián",
+    "network:eu": "Donostiako Aldiriak",
+    "network:wikidata": "Q2946410",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wikidata": "Q8779881"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255919,
+  "lat": 43.2221450,
+  "lon": -2.0156244,
+  "tags": {
+    "name": "Andoain",
+    "network": "Donostiako Aldiriak / Cercanías San Sebastián",
+    "network:es": "Cercanías San Sebastián",
+    "network:eu": "Donostiako Aldiriak",
+    "network:wikidata": "Q2946410",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes",
+    "wheelchair": "limited",
+    "wheelchair:description": "estación tren está accesible cuenta con dos ascensores uno cada sentido de las vía. para subir el tren ya es otro tema",
+    "wikidata": "Q8779282"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255920,
+  "lat": 43.1889983,
+  "lon": -2.0554706,
+  "tags": {
+    "name": "Villabona-Zizurkil",
+    "name:es": "Villabona-Cizúrquil",
+    "name:eu": "Villabona-Zizurkil",
+    "network": "Donostiako Aldiriak / Cercanías San Sebastián",
+    "network:es": "Cercanías San Sebastián",
+    "network:eu": "Donostiako Aldiriak",
+    "network:wikidata": "Q2946410",
+    "operator": "Renfe",
+    "operator:wikidata": "Q2476154",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11503",
+    "ref:EU:PLC": "ES11503",
+    "train": "yes",
+    "uic_ref": "7111503"
+  }
+},
+{
+  "type": "node",
+  "id": 6856255945,
+  "lat": 43.1018803,
+  "lon": -2.0972226,
+  "tags": {
+    "name": "Alegia",
+    "name:es": "Alegría de Oria",
+    "name:eu": "Alegia",
+    "operator": "Adif",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9882171870,
+  "lat": 43.3392054,
+  "lon": -1.8005750,
+  "tags": {
+    "internet_access:fee": "no",
+    "name": "Irun",
+    "name:ar": "محطة إرون",
+    "name:es": "Irún",
+    "name:eu": "Irun",
+    "name:fr": "Gare d'Irun",
+    "operator": "Adif",
+    "operator:wikidata": "Q358752",
+    "owner": "Adif",
+    "owner:wikidata": "Q358752",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "11600",
+    "ref:EU:PLC": "ES11600",
+    "station": "train",
+    "train": "yes",
+    "uic_ref": "7111600",
+    "wikidata": "Q3095803"
+  }
+},
+{
+  "type": "way",
+  "id": 421314734,
+  "center": {
+    "lat": 42.9394256,
+    "lon": -2.2635840
+  },
+  "nodes": [
+    4210932871,
+    4210932873,
+    4210932876,
+    4210932868,
+    4210932867,
+    4210932866,
+    4210932871
+  ],
+  "tags": {
+    "addr:postcode": "20215",
+    "building": "yes",
+    "name": "Zegama-Otzaurte",
+    "operator": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1093501551,
+  "center": {
+    "lat": 43.0587948,
+    "lon": -2.2786643
+  },
+  "nodes": [
+    10015121929,
+    10015121930,
+    10015121931,
+    10015121932,
+    10015121933,
+    10015121934,
+    10015121935,
+    10015121936,
+    10015121929
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Gabiria",
+    "operator": "ADIF",
+    "public_transport": "station",
+    "railway": "station",
+    "train": "yes"
+  }
+}
+
+  ]
+}

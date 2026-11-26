@@ -613,6 +613,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
     line_reports, _ = validate_feed(lines, lines, FEED)
     reports = {line.path.name: report for line, report in zip(lines, line_reports, strict=True)}
     expected = {
+        "vitoria-irun.json": {"barcelona-san-sebastian-por-altsasu": 9},
         SPEC.name: RULES | AWAY_RULES | MALAGA_RULES | CADIZ_RULES | TOLEDO_RULES,
         CONV_SPEC.name: RULES | JAEN_RULES | EXTREMADURA_RULES,
         MZCR_SPEC.name: RULES,
