@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -10,12 +11,13 @@ from conftest import DATA_DIR
 
 from oniel.network.build import (
     BuiltNetwork,
+    build_line_geometry,
     build_network,
     chain_osm_relation,
     concat_parts,
     trace_osm_relation,
 )
-from oniel.network.spec import NetworkSpec, load_network_spec
+from oniel.network.spec import GeometrySource, NetworkSpec, load_network_spec
 
 CONV_SPEC = DATA_DIR / "curated" / "convencional-madrid-alcazar-cordoba.json"
 
@@ -73,16 +75,34 @@ def _two_track_relation() -> dict[str, Any]:
     return {"elements": [*nodes, *ways, relation]}
 
 
-def test_vias_sin_referencia_se_trazan_por_id_en_ambos_sentidos() -> None:
-    raw = _two_track_relation()
+def test_vias_sin_referencia_se_trazan_por_id_en_ambos_sentidos(tmp_path: Path) -> None:
+    spec = load_network_spec(CONV_SPEC)
+    (tmp_path / "vias.json").write_text(json.dumps(_two_track_relation()))
     start, end = (0.0, 0.0), (0.03, 0.0)
     for a, b in ((start, end), (end, start)):
-        line = trace_osm_relation(raw, None, a, b, way_ids=[100, 101, 102])
+        spec.line.geometry_source = GeometrySource.model_validate(
+            {
+                "source_id": "osm",
+                "parts": [
+                    {
+                        "source_id": "osm",
+                        "file": "vias.json",
+                        "way_ids": [100, 101, 102],
+                        "from": a,
+                        "to": b,
+                    }
+                ],
+            }
+        )
+        line = build_line_geometry(spec, tmp_path)
         assert line.polyline.coords[0] == a and line.polyline.coords[-1] == b
         assert len(line.polyline.coords) == 4
 
 
-@pytest.mark.parametrize(("ids", "mensaje"), [([100, 999], "999"), ([100, 102], "no hay camino")])
+@pytest.mark.parametrize(
+    ("ids", "mensaje"),
+    [([100, 999], "999"), ([100, 102], "no hay camino"), ([100, 101, 102, 201], "no hay camino")],
+)
 def test_vias_explicitas_ausentes_o_separadas(ids: list[int], mensaje: str) -> None:
     with pytest.raises(ValueError, match=mensaje):
         trace_osm_relation(_two_track_relation(), None, (0, 0), (0.03, 0), way_ids=ids)

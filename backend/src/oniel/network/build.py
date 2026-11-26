@@ -226,6 +226,8 @@ def trace_osm_relation(
     best: tuple[int, int, dict[int, tuple[int, int]]] | None = None
     for s in nearest(start):
         dist, prev = _dijkstra(adjacency, s)
+        if way_ids is not None and len(dist) != len(adjacency):
+            raise ValueError(f"no hay camino continuo entre todas {what}")
         reachable = [e for e in nearest(end) if e in dist and e != s]
         if reachable:
             best = (s, reachable[0], prev)
