@@ -4,7 +4,7 @@
 
 import type { AnnotationOut, Feature, LineDetailOut, NetworkIndexOut, NetworkOut, NodeOut } from './types.ts'
 
-export type LineDetails = Readonly<Record<string, LineDetailOut>>
+export type LineDetails = Readonly<Record<string, LineDetailOut | null>>
 
 /**
  * Las anotaciones del índice. Una API anterior a ellas solo trae `interruptions`: se leen como
@@ -24,7 +24,7 @@ function annotationsOf(index: NetworkIndexOut): AnnotationOut[] {
 }
 
 export function composeNetwork(index: NetworkIndexOut, details: LineDetails): NetworkOut {
-  const loaded = Object.values(details)
+  const loaded = Object.values(details).filter((d) => d !== null)
   // Un nodo común a varias líneas tiene los mismos textos en todas: basta con que una esté cargada.
   const full = new Map<string, NodeOut>()
   const geometry = new Map<string, GeoJSON.Geometry>()

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
 import { fetchNodeServices, fetchSegmentServices } from '../data/api'
+import { useApiStatus } from '../data/useApiStatus'
 import type { NetworkOut, Source } from '../data/types'
 import { formatDateLong, mainSourceLabel } from '../app/annotations'
 import { diferenciaConSupuesto, enumerar, formatDuracion, fraseTrenesFuera, lineaRecta, trenesDelRecorrido, trenesDirectos, trenesFueraDeLosRecorridos, velocidadesHabituales, type Comparacion, type Recorrido, type TrenDirecto } from '../app/recorridos'
@@ -35,13 +36,14 @@ interface Trenes {
 const FUENTE_HORARIOS = 'renfe-gtfs-av-ld-md'
 
 /** Los dos horarios comerciales que identifican el acceso de Pozuelo en los ficheros de Renfe. */
-async function trenesPorPozuelo(dia?: string): Promise<Set<string>> {
+async function trenesPorPozuelo(dia?: string) {
   const [terminal, sierra] = await Promise.all([
     fetchNodeServices('madrid-principe-pio', dia),
     fetchNodeServices('villalba-de-guadarrama', dia),
   ])
+  if (terminal.date !== sierra.date) throw new Error('Los horarios son de días distintos.')
   const villalba = new Set(sierra.calls.map((parada) => parada.service_id))
-  return new Set(terminal.calls.map((parada) => parada.service_id).filter((id) => villalba.has(id)))
+  return { date: terminal.date, ids: new Set(terminal.calls.map((parada) => parada.service_id).filter((id) => villalba.has(id))) }
 }
 
 /** Una estación por elegir. `etiqueta` la nombra para los lectores de pantalla cuando el rótulo a la vista no basta («y»). */
@@ -228,15 +230,18 @@ function Tarjeta({ r, activo, masLargo, onElegir, supuesto, children }: { r: Rec
 
 /** Comparador de recorridos: dos estaciones y los caminos que las unen, del más corto al más largo. */
 export function ComparePanel({ network, comparador, comparacion, elegido, sources, referenceDate, onChange, onElegir, onBack }: Props) {
+  const apiAvailable = useApiStatus() === 'disponible'
   const { from, to } = comparador
   const nombre = (id: string | null) => (id ? (network.nodes.find((n) => n.id === id)?.name ?? null) : null)
   const [cargados, setCargados] = useState<{ clave: string; trenes: Trenes } | null>(null)
+  const [fallida, setFallida] = useState<string | null>(null)
   const recorridos = comparacion?.recorridos ?? []
   const claves = [...new Set(recorridos.flatMap((r) => r.tramosClave))].filter((id) => network.segments.some((s) => s.id === id))
   const clavesTexto = claves.join('|')
-  const consulta = `${from}>${to}@${referenceDate}:${clavesTexto}`
+  const trayecto = `${from}>${to}:${clavesTexto}`
+  const consulta = `${trayecto}@${referenceDate}`
   // Los trenes de otra consulta no valen para esta: hasta que lleguen los suyos, no se enseña ninguno.
-  const trenes = cargados?.clave === consulta ? cargados.trenes : null
+  const trenes = cargados?.clave === trayecto && (!referenceDate || cargados.trenes.date === referenceDate) ? cargados.trenes : null
 
   // Trenes directos: los que paran en las dos estaciones, en ese orden, y por dónde pasa cada uno.
   useEffect(() => {
@@ -249,21 +254,23 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
     const porTramo = ids.map(async (id) => {
       if (acceso && porPozuelo(id)) return acceso
       const tramo = await fetchSegmentServices(id, dia)
-      return new Set(tramo.passes.map((p) => p.service.id))
+      return { date: tramo.date, ids: new Set(tramo.passes.map((p) => p.service.id)) }
     })
     Promise.all([fetchNodeServices(from, dia), fetchNodeServices(to, dia), Promise.all(porTramo)])
       .then(([origen, destino, servicios]) => {
         if (!alive) return
-        const pasos = new Map(ids.map((id, i) => [id, servicios[i]!]))
-        setCargados({ clave: consulta, trenes: { date: origen.date, directos: trenesDirectos(origen.calls, destino.calls), pasos } })
+        if ([destino, ...servicios].some((dato) => dato.date !== origen.date)) throw new Error('Los horarios son de días distintos.')
+        const pasos = new Map(ids.map((id, i) => [id, servicios[i]!.ids]))
+        setFallida(null)
+        setCargados({ clave: trayecto, trenes: { date: origen.date, directos: trenesDirectos(origen.calls, destino.calls), pasos } })
       })
       .catch(() => {
-        // Sin los horarios, el comparador sigue sirviendo: kilómetros, tiempo estimado y vía única no dependen de ellos.
+        if (alive) setFallida(consulta)
       })
     return () => {
       alive = false
     }
-  }, [from, to, clavesTexto, referenceDate, consulta])
+  }, [from, to, clavesTexto, referenceDate, trayecto, consulta, apiAvailable])
 
   const dia = trenes ? formatDayShort(trenes.date) : ''
   const supuestos = comparacion?.supuestos ?? []
@@ -358,6 +365,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             {recorridos.length === 1 ? 'Un solo recorrido con las líneas cargadas.' : `${recorridos.length === 2 ? 'Dos' : recorridos.length === 3 ? 'Tres' : 'Cuatro'} recorridos, del más corto al más largo.`}
             {trenes && ` ${trenes.directos.length === 0 ? 'No hay trenes directos' : trenes.directos.length === 1 ? 'Hay 1 tren directo' : `Hay ${trenes.directos.length} trenes directos`} en este sentido en el horario del ${dia}.`}
           </p>
+          {fallida === consulta && !trenes && <p className="aviso">Horarios no disponibles para esta consulta.</p>}
           {fuera && (
             <p className="suave" data-testid="recorridos-trenes-fuera">
               {fuera}

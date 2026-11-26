@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import type { AnnotationOut, CoverageOut, NetworkOut } from '../data/types'
+import type { AnnotationOut, CoverageOut, LineDetailOut, NetworkOut } from '../data/types'
 import { capasDe } from '../app/annotationLayers'
 import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, listaEs } from '../app/state'
@@ -13,9 +13,7 @@ interface Props {
   notice?: ReactNode
   network: NetworkOut
   coverage: CoverageOut | null
-  counts: Record<string, number> | null
-  /** El mayor recuento de toda la red, para que las barras de todas las líneas vayan a la misma escala. */
-  countsMax: number | null
+  detail: LineDetailOut | null | undefined
   lineId: string
   /** Vuelve a la vista de la red. */
   onShowNetwork: () => void
@@ -31,7 +29,7 @@ interface Props {
   leyenda?: ReactNode
 }
 
-export function LineOverview({ notice, network, coverage, counts, countsMax, lineId, onShowNetwork, selection, hoverId, closedSegmentId, annotations, onSelect, onHover, compact, leyenda = null }: Props) {
+export function LineOverview({ notice, network, coverage, detail, lineId, onShowNetwork, selection, hoverId, closedSegmentId, annotations, onSelect, onHover, compact, leyenda = null }: Props) {
   const line = network.lines.find((l) => l.id === lineId) ?? network.lines[0]
   if (!line) return null
   // La descripción curada va en párrafos separados por una línea en blanco: el primero se lee de
@@ -48,7 +46,10 @@ export function LineOverview({ notice, network, coverage, counts, countsMax, lin
   // En el móvil la cabecera no lleva la frase de entrada: la descripción entera va en el detalle.
   const parrafos = compact ? [entrada, ...resto].filter((p): p is string => Boolean(p)) : resto
   const cuts = annotations.filter((a) => a.line_id === line.id && a.segment_ids.length > 0)
-  const dia = coverage?.reference_date ?? null
+  const dia = detail?.date
+  const compatible = Boolean(dia && (!coverage?.reference_date || dia === coverage.reference_date))
+  const counts = compatible ? detail?.counts ?? null : null
+  const countsMax = detail?.network_max_count
   // De quién son los trenes que cuentan las barras, y de quién faltan porque no publica sus horarios.
   const operadores = (coverage?.operators ?? []).filter((o) => line.operator_ids?.includes(o.id))
   const conHorarios = operadores.filter((o) => o.timetable !== 'no_publicado').map((o) => o.name)
@@ -75,6 +76,8 @@ export function LineOverview({ notice, network, coverage, counts, countsMax, lin
           </p>
         )}
         {notice}
+        {detail === null && <p className="aviso">Detalle de la línea no disponible.</p>}
+        {detail && !compatible && <p className="aviso">Horarios no disponibles para esta consulta.</p>}
         <Plegable>
           {parrafos.map((p) => (
             <p key={p} className="texto">

@@ -41,7 +41,7 @@ backend/data/raw/      +     backend/data/curated/*.json    →    oniel-data im
 
 - **Backend** (`backend/`, Python 3.13): la API con FastAPI, la orden `oniel-data` que importa y valida los datos, y las reglas de la simulación y de los recorridos. Base de datos PostgreSQL.
 - **Visor** (`frontend/`, React + TypeScript + Vite + MapLibre): el mapa y las fichas.
-- **La instantánea.** El importador deja en `frontend/public/data/` una copia estática de todo lo que el visor necesita. El visor arranca siempre con ella y pasa a la API cuando responde. Por eso el visor funciona sin backend, y por eso la instantánea se regenera y se sube con cada cambio de datos.
+- **La instantánea.** El importador deja en `frontend/public/data/` una copia estática de todo lo que el visor necesita. El visor arranca siempre con ella y pasa a la API cuando responde. Si una consulta posterior falla o tarda más de cinco segundos, las fichas y el comparador recurren a la copia. Solo muestran horarios compatibles con el día consultado. La instantánea se regenera y se sube con cada cambio de datos.
 
 Dos ideas que explican casi todas las decisiones: **todo dato lleva su fuente** (sin fuente registrada, no entra), y **añadir una línea es trabajo de datos**, no de código: el visor dibuja lo que trae la instantánea.
 
@@ -206,7 +206,7 @@ cd frontend && ONIEL_E2E_STATIC=1 npx playwright test e2e/fichas.spec.ts
 Cosas que conviene saber:
 
 - La batería completa son más de 200 pruebas en dos tamaños de pantalla, escritorio y móvil. La pasa el CI en cada PR, repartida en cuatro trabajos a la vez.
-- Los casos con `@api` de `albacete`, `alternativas`, `arranque`, `arranque-cobertura`, `interrupciones`, `principe-pio`, `rutas`, `simulacion` y `vitoria-irun` corren además en el trabajo «Integración · visor y API local»: 16 casos en escritorio y móvil (32 ejecuciones), sin `ONIEL_E2E_STATIC`. Comprueban simulaciones normales y nocturnas, advertencias de interrupciones, paridad real con `/api/routes`, servicios de San Sebastián e Irún, alternativas y arranque con API dormida o ausente. Las regresiones de arranque simulan esperas y fallos de salud o cobertura; los contratos y las simulaciones usan la API real. Incluye el paso a la API aunque `coverage.json` tarde o falle. Los demás casos siguen en los cuatro fragmentos estáticos.
+- Los casos con `@api` corren en el trabajo «Integración · visor y API local» en escritorio y móvil, sin `ONIEL_E2E_STATIC`. Comprueban simulaciones normales y nocturnas, advertencias de interrupciones, paridad real con `/api/routes`, servicios de San Sebastián e Irún, alternativas y arranque con API dormida o ausente. Las regresiones de arranque simulan esperas y fallos de salud o cobertura; los contratos y las simulaciones usan la API real. También se comprueban el paso a la API aunque `coverage.json` tarde o falle y el respaldo de las consultas si la API cae después. Los demás casos siguen en los cuatro fragmentos estáticos.
 - Playwright arranca Vite por su cuenta en el puerto 5199 (`ONIEL_E2E_PORT` lo cambia) y usa dos procesos en local (`ONIEL_E2E_WORKERS` lo cambia).
 - `npm run build` termina comprobando las hojas de estilo compiladas: falla si a alguna le falta una llave. Vercel ejecuta la misma orden, así que una hoja rota no se publica.
 
