@@ -6,7 +6,6 @@ import { abrirLinea } from './navegar.ts'
 // acercar el mapa. Vale igual con la instantánea estática (/data/…) que con la API (/api/lines…).
 
 const LAV = 'lav-madrid-sevilla'
-const CONV = 'convencional-madrid-alcazar-cordoba'
 const MZCR = 'manzanares-ciudad-real'
 
 /** Anota qué partes de la red pide la página: el índice, cada línea y la red entera (que ya no debe pedirse). */
@@ -38,9 +37,8 @@ test.describe('Carga de la red por partes', () => {
     expect(pedidas.indice).toBeGreaterThan(0)
     expect(pedidas.lineas).toEqual([])
     expect(pedidas.redEntera).toBe(0)
-    // El índice lleva toda la red con la geometría simplificada: pesa mucho menos que una sola línea grande.
+    // El índice lleva toda la red con geometría simplificada y un presupuesto por línea.
     const indice = await (await request.get('/data/index.json')).body()
-    const linea = await (await request.get(`/data/lines/${CONV}.json`)).body()
     // Las anotaciones de red (interrupciones, proyectos) van enteras en el índice y no dependen de la
     // geometría: la red mantiene su tope y ellas tienen el suyo. Cuando no quepan, su detalle se pedirá aparte.
     // Tampoco los lados de cada bifurcación (`turns`), que dicen qué giros permiten las vías: no son geometría.
@@ -55,16 +53,8 @@ test.describe('Carga de la red por partes', () => {
     expect(bytes({ annotations, interruptions })).toBeLessThan(85_000)
     // Los lados son un número por cada extremo de tramo que no es una estación: 60 bytes por tramo sobran (hoy, 33).
     expect(bytes(turns)).toBeLessThan(60 * (red.segment_features as { features: unknown[] }).features.length)
-    // Con veintiuna entradas (dieciocho líneas, dos baipases y un enlace), la red del índice (305 KB) pesa ya el doble que el detalle
-    // de la línea más grande (148 KB): lo que la acota es el tope por línea de arriba. Desde que están a la vez
-    // la línea de València a Camp de Tarragona y las de Extremadura pesa también más que las dos líneas más
-    // grandes juntas (285 KB). Desde la línea de Sevilla a Cádiz (424 KB, con veintinueve entradas) pesa también más
-    // que las tres más grandes (414 KB): se compara con las cuatro, la convencional de Córdoba, la alta velocidad
-    // de Barcelona, la de València a Camp de Tarragona y la alta velocidad de Sevilla. Desde la convencional de Madrid
-    // a Valladolid por Ávila (554 KB, con treinta y seis entradas) pesa más que esas cuatro (521 KB): se compara
-    // también con ella, que es la segunda más grande (138 KB), y las cinco suman 659 KB.
-    const otras = await Promise.all(['madrid-avila-valladolid', 'lav-madrid-barcelona', 'valencia-castello-tarragona', 'lav-madrid-sevilla'].map(async (id) => (await request.get(`/data/lines/${id}.json`)).body()))
-    expect(bytes(red)).toBeLessThan(linea.byteLength + otras.reduce((suma, otra) => suma + otra.byteLength, 0))
+    // Compararlo con cinco detalles concretos dejaba de servir al ampliar la red. El presupuesto
+    // por línea de arriba se calcula con la instantánea y sigue detectando un índice excesivo.
   })
 
   test('el detalle de una línea se pide al abrirla, y una sola vez', async ({ page }) => {

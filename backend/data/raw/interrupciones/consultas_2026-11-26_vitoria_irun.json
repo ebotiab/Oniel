@@ -1,0 +1,51 @@
+{
+  "descripcion": "Revisión de obras y servicio de Vitoria–Irún para #220. Páginas consultadas mediante el lector web; resúmenes propios.",
+  "consultado_el": "2026-11-26T10:45:56.757145+00:00",
+  "consultas": [
+    {
+      "source_id": "adif-astigarraga-2026-10",
+      "titulo": "Adif licita las vías y electrificación de la nueva estación de Astigarraga",
+      "editor": "Adif",
+      "url": "https://www.adif.es/w/astigarraga",
+      "fecha_de_la_pagina": "2026-10-21",
+      "resumen": "La licitación comprende vías de andenes de ancho ibérico y adaptación de catenaria. La conexión con la Y vasca se reserva para una fase posterior. El tercer carril hasta Irún se describe como instalación en curso.",
+      "que_aporta": "No constituye acta de puesta en servicio del ancho estándar."
+    },
+    {
+      "source_id": "renfe-gipuzkoa-2026-11",
+      "titulo": "Recuperación de servicios en Gipuzkoa",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/renfe-amplia-servicios-cercanias-gipuzkoa",
+      "fecha_de_la_pagina": "2026-11-23",
+      "resumen": "Renfe fecha el fin del plan que combinaba tren y autobús en el 31 de octubre y anuncia más frecuencias de Cercanías desde el 26 de noviembre.",
+      "que_aporta": "Documenta la recuperación del servicio de Cercanías; no se importan esos servicios ni se deduce la autorización de otro ancho."
+    },
+    {
+      "source_id": "renfe-gipuzkoa-2026-09",
+      "titulo": "Transporte alternativo durante las obras en Gipuzkoa",
+      "editor": "Renfe",
+      "url": "https://grupo.renfe.com/es/es/sala-de-prensa/avisos/2026/septiembre/renfe-garantiza-movilidad-obras-gipuzkoa",
+      "fecha_de_la_pagina": "2026-09-23",
+      "resumen": "El aviso de septiembre anunciaba autobuses Irun–Andoain para media distancia, Irun–Tolosa para larga distancia de Madrid y San Sebastián–Tolosa para Barcelona.",
+      "que_aporta": "Antecedente de las obras; no se presenta como interrupción vigente por la sola permanencia de la página antigua."
+    },
+    {
+      "source_id": "adif-estado-vitoria-irun-2026-11",
+      "titulo": "Estado de la red consultado para Vitoria–Irún",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "fecha_de_la_pagina": "2026-11-26",
+      "resumen": "La página, fechada 26 de noviembre a las 10:16, no enumera una interrupción del corredor Vitoria–Irún. Incluye también un aviso de mantenimiento de la sección.",
+      "que_aporta": "Ausencia de aviso en el listado, no certificación de todos los trenes. No se verificaron paneles individuales de estaciones."
+    },
+    {
+      "source_id": "adif-avisos-vitoria-irun-2026-11",
+      "titulo": "Avisos de obras consultados para Vitoria–Irún",
+      "editor": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "fecha_de_la_pagina": "2026-11-26",
+      "resumen": "No aparece el corte de Gipuzkoa. Sí figura el de Miranda–Logroño en fines de semana, fuera del recorrido cargado aquí. El antiguo enlace /w/obras-gipuzkoa responde 404.",
+      "que_aporta": "No se añade una interrupción vigente a esta línea por avisos históricos."
+    }
+  ]
+}

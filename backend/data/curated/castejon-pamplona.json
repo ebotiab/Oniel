@@ -190,10 +190,12 @@
           42.920606
         ],
         [
-          -2.181237,
-          42.894847
+          -2.1813079,
+          42.8954056
         ]
-      ]
+      ],
+      "to_node_id": "altsasu",
+      "towards_back": "Pamplona y Castejón de Ebro"
     }
   ],
   "stop_mappings": {

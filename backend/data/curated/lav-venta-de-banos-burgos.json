@@ -411,21 +411,61 @@
     "11400": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11500": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11511": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11600": {
       "exits": [
         "burgos-rosa-manzano"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "13106": {

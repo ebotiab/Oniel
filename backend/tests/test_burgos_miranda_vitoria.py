@@ -100,7 +100,6 @@ def test_nodes_stations_and_dashed_branches(line: BuiltNetwork) -> None:
     assert line.node("vitoria-gasteiz").spec.adif_code == VITORIA
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "conv-miranda-logrono": "miranda-de-ebro",
-        "conv-vitoria-altsasu": "vitoria-gasteiz",
     }
     for c in line.spec.connections:
         node = line.node(c.node_id).spec.position
@@ -215,7 +214,10 @@ def test_stops_on_each_side_leave_by_the_right_node(spec: NetworkSpec) -> None:
         assert code and sm[code].node == node
     for stop_id in ("13106", "13200", "81002", "81100"):
         assert sm[stop_id].exits == ["miranda-de-ebro"]
-    for stop_id in ("11300", "11511", "11600", "80100", "04040", "71801"):
+    for stop_id in ("11300", "11511", "11600"):
+        assert sm[stop_id].exits == ["vitoria-gasteiz"]
+        assert [(v.line, v.node) for v in sm[stop_id].via] == [("vitoria-irun", "vitoria-gasteiz")]
+    for stop_id in ("80100", "04040", "71801"):
         assert sm[stop_id].exits == ["vitoria-gasteiz"] and not sm[stop_id].via
     # hacia Valladolid y Madrid, por la alta velocidad de Burgos y la línea de León
     assert [(v.line, v.node) for v in sm["17000"].via] == [

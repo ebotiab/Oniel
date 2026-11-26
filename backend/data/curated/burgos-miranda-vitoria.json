@@ -13,7 +13,7 @@
     "tracks": 2,
     "pk_origin_km": 374.9,
     "status": "disponible",
-    "description": "Une Burgos con Vitoria por Miranda de Ebro. Es el camino de los trenes de Madrid al País Vasco mientras no esté la alta velocidad entre Burgos y Vitoria.\n\nEs un trecho de la línea de Madrid a Hendaya, abierta en 1862. Por ella van los Intercity de Madrid a Vitoria, San Sebastián e Irún, a Bilbao y a Logroño, que llegan a Burgos por la alta velocidad y cambian allí de ancho de vía; los que unen Barcelona, Zaragoza y Pamplona con Burgos, León, Galicia y Salamanca, y los regionales de Madrid-Príncipe Pío a Vitoria, San Sebastián e Irún por Ávila y Valladolid. En Briviesca y Pancorbo solo paran algunos de estos últimos.\n\nSale de Burgos hacia el noreste, cruza el desfiladero de Pancorbo y llega a Miranda de Ebro, donde se cruza con la línea de Casetas (Zaragoza) a Bilbao por Logroño: por el norte sale la línea de Bilbao, y por el sureste la rama de Haro, Logroño y Zaragoza. De Miranda a Vitoria la acompaña el río Zadorra, y entre las dos ciudades circulan además los trenes regionales que siguen a Altsasu y Pamplona.\n\nEn Vitoria la línea sigue hacia Altsasu, San Sebastián e Irún, y en Altsasu sale la de Pamplona: esos trechos, como la rama de Miranda a Logroño, no están cargados y se dibujan a trazos.",
+    "description": "Une Burgos con Vitoria por Miranda de Ebro. Es el camino de los trenes de Madrid al País Vasco mientras no esté la alta velocidad entre Burgos y Vitoria.\n\nEs un trecho de la línea de Madrid a Hendaya, abierta en 1862. Por ella van los Intercity de Madrid a Vitoria, San Sebastián e Irún, a Bilbao y a Logroño, que llegan a Burgos por la alta velocidad y cambian allí de ancho de vía; los que unen Barcelona, Zaragoza y Pamplona con Burgos, León, Galicia y Salamanca, y los regionales de Madrid-Príncipe Pío a Vitoria, San Sebastián e Irún por Ávila y Valladolid. En Briviesca y Pancorbo solo paran algunos de estos últimos.\n\nSale de Burgos hacia el noreste, cruza el desfiladero de Pancorbo y llega a Miranda de Ebro, donde se cruza con la línea de Casetas (Zaragoza) a Bilbao por Logroño: por el norte sale la línea de Bilbao, y por el sureste la rama de Haro, Logroño y Zaragoza. De Miranda a Vitoria la acompaña el río Zadorra, y entre las dos ciudades circulan además los trenes regionales que siguen a Altsasu y Pamplona.\n\nDesde Vitoria está cargada la continuación por Altsasu, San Sebastián e Irún. Las salidas hacia Pamplona desde Altsasu y hacia Logroño desde Miranda de Ebro siguen a trazos.",
     "geometry_source": {
       "source_id": "osm-relation-18347132",
       "parts": [
@@ -143,7 +143,7 @@
         "lat": 42.841303
       },
       "reference_pk_km": 492.292,
-      "description": "La estación de Vitoria, donde acaba esta línea. Los trenes siguen hacia Altsasu, desde donde unos van a San Sebastián e Irún y otros a Pamplona y Zaragoza, por vías que no están cargadas."
+      "description": "La estación de Vitoria une el camino de Burgos y Miranda de Ebro con el de Altsasu, San Sebastián e Irún. Los trenes hacia Pamplona y Zaragoza dejan este último en el nudo de Altsasu; la continuación desde allí a Pamplona no está cargada."
     }
   ],
   "attribute_sections": [
@@ -215,36 +215,6 @@
         [
           -2.4408195,
           42.4575743
-        ]
-      ]
-    },
-    {
-      "id": "conv-vitoria-altsasu",
-      "node_id": "vitoria-gasteiz",
-      "name": "Línea convencional Vitoria – Altsasu",
-      "towards": "Altsasu, San Sebastián e Irún, y Pamplona",
-      "official_name": "Línea Madrid – Hendaya",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -2.672697,
-          42.841303
-        ],
-        [
-          -2.514668,
-          42.848723
-        ],
-        [
-          -2.38921,
-          42.84643
-        ],
-        [
-          -2.306807,
-          42.869599
-        ],
-        [
-          -2.181237,
-          42.894847
         ]
       ]
     }
@@ -806,96 +776,210 @@
     "11210": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11212": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11213": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11300": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11305": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11306": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11400": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11402": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11404": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11405": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11500": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11501": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11503": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11504": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11507": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11511": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11515": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11516": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11600": {
       "exits": [
         "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "70800": {

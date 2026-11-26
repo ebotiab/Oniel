@@ -310,8 +310,13 @@ def test_stops_on_each_side_leave_by_the_right_node(spec: NetworkSpec) -> None:
             ("burgos-miranda-vitoria", "burgos-rosa-manzano"),
             ("miranda-bilbao", "miranda-de-ebro"),
         ]
-    for stop_id in ("11511", "11600", "81100"):
-        assert sm[stop_id].exits == ["burgos-rosa-manzano"] and not sm[stop_id].via
+    for stop_id in ("11511", "11600"):
+        assert sm[stop_id].exits == ["burgos-rosa-manzano"]
+        assert [(v.line, v.node) for v in sm[stop_id].via] == [
+            ("burgos-miranda-vitoria", "burgos-rosa-manzano"),
+            ("vitoria-irun", "vitoria-gasteiz"),
+        ]
+    assert sm["81100"].exits == ["burgos-rosa-manzano"] and not sm["81100"].via
     # hacia Valladolid y Madrid, por la bifurcación Venta de Baños y la línea de León
     assert [(v.line, v.node) for v in sm[VALLADOLID].via] == [
         ("lav-valladolid-leon", "bif-venta-de-banos")

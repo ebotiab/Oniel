@@ -237,6 +237,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "leon-oviedo-gijon": 3,
             # la salida de Ourense, a 3 kV
             "lav-ourense-santiago": 1,
+            # Vitoria–Irún declara la procedencia de la tensión en todo su recorrido.
+            "vitoria-irun": 20,
         }
         assert covered.pop("electrification", None) == wired.get(line["line"])
         # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona,
@@ -303,6 +305,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     dt.date(2026, 11, 20),
                     # los tres enlaces de #260
                     dt.date(2026, 11, 23),
+                    dt.date(2026, 11, 26),
                 )
 
 

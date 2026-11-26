@@ -67,6 +67,7 @@ SEVILLA_HUELVA_SPEC = DATA_DIR / "curated" / "sevilla-huelva.json"
 LINK_CERRATO_SPEC = DATA_DIR / "curated" / "enlace-soto-de-cerrato.json"
 LINK_ALJUCEN_SPEC = DATA_DIR / "curated" / "enlace-aljucen-la-garrovilla.json"
 LINK_MADRID_SPEC = DATA_DIR / "curated" / "enlace-atocha-chamartin.json"
+VITORIA_IRUN_SPEC = DATA_DIR / "curated" / "vitoria-irun.json"
 #: Las líneas cargadas, en el orden de importación.
 SPECS = [
     SPEC,
@@ -113,6 +114,7 @@ SPECS = [
     LINK_CERRATO_SPEC,
     LINK_ALJUCEN_SPEC,
     LINK_MADRID_SPEC,
+    VITORIA_IRUN_SPEC,
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

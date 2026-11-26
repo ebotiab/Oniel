@@ -686,21 +686,77 @@
     "11400": {
       "exits": [
         "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11500": {
       "exits": [
         "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11511": {
       "exits": [
         "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11600": {
       "exits": [
         "bif-venta-de-banos"
+      ],
+      "via": [
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "13106": {

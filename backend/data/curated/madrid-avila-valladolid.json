@@ -987,81 +987,369 @@
     "11210": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11212": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11213": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11300": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11306": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11400": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11404": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11405": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11500": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11503": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11504": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11507": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11511": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11515": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11516": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "11600": {
       "exits": [
         "valladolid-campo-grande"
+      ],
+      "via": [
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "vitoria-irun",
+          "node": "vitoria-gasteiz"
+        }
       ]
     },
     "15004": {

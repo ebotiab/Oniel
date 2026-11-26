@@ -1,0 +1,1378 @@
+{
+  "line": {
+    "id": "vitoria-irun",
+    "name": "Línea convencional Vitoria – Altsasu – San Sebastián – Irún",
+    "short_name": "100",
+    "sort_order": 48,
+    "zone": "cantabrico",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 160,
+    "tracks": 2,
+    "pk_origin_km": 492.292,
+    "status": "disponible",
+    "geometry_source": {
+      "source_id": "osm-vitoria-irun-2026",
+      "parts": [
+        {
+          "source_id": "osm-vitoria-irun-2026",
+          "file": "raw/osm/relation_18347132_vitoria_irun_2026-11-26.json",
+          "relation_id": 18347132,
+          "from": [
+            -2.6727538,
+            42.8413281
+          ],
+          "to": [
+            -1.800575,
+            43.3392054
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "wikipedia-vitoria-irun-2026",
+    "description": "Une Vitoria con San Sebastián e Irún por Altsasu, Zumarraga y Tolosa. Continúa el camino ferroviario de Madrid al País Vasco hasta la frontera francesa.\n\nCruza la Llanada Alavesa y, desde Altsasu, atraviesa los montes de Gipuzkoa hasta alcanzar el valle del Oria. En Vitoria enlaza con la línea cargada de Burgos y Miranda de Ebro. Las salidas hacia Pamplona y la continuación de Irún a Hendaya se dibujan a trazos porque todavía no están cargadas.\n\nLos horarios de Renfe incluyen Intercity y regionales: los de Madrid llegan por Vitoria; los de Barcelona, por Pamplona y Altsasu. También hay trenes entre Miranda de Ebro, Vitoria y Altsasu. Los servicios de Cercanías que comparten las vías entre Brinkola e Irún no se incluyen.\n\nLa «Y» vasca y su conexión en Astigarraga siguen documentadas como proyecto en obras. La revisión del 26 de noviembre de 2026 no acredita la apertura de un recorrido continuo en ancho estándar hasta Irún. Los horarios son servicios programados, no información de circulación en tiempo real."
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "vitoria-gasteiz",
+      "name": "Vitoria-Gasteiz",
+      "kind": "estacion",
+      "adif_code": "11208",
+      "position": {
+        "lon": -2.672697,
+        "lat": 42.841303
+      },
+      "reference_pk_km": 492.292,
+      "shared": true
+    },
+    {
+      "id": "alegria-dulantzi",
+      "name": "Alegría-Dulantzi",
+      "kind": "estacion",
+      "adif_code": "11210",
+      "position": {
+        "lon": -2.5146291,
+        "lat": 42.8490443
+      },
+      "reference_pk_km": 505.6,
+      "rank": "secundario"
+    },
+    {
+      "id": "agurain-salvatierra-de-alava",
+      "name": "Agurain-Salvatierra de Álava",
+      "kind": "estacion",
+      "adif_code": "11212",
+      "position": {
+        "lon": -2.3888912,
+        "lat": 42.8463131
+      },
+      "reference_pk_km": 516.4,
+      "rank": "secundario"
+    },
+    {
+      "id": "araia",
+      "name": "Araia",
+      "kind": "estacion",
+      "adif_code": "11213",
+      "position": {
+        "lon": -2.3067403,
+        "lat": 42.869233
+      },
+      "reference_pk_km": 523.7,
+      "rank": "secundario"
+    },
+    {
+      "id": "bif-altsasu",
+      "name": "Bifurcación de Altsasu",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -2.1865604,
+        "lat": 42.8832719
+      },
+      "reference_pk_km": 534.0,
+      "description": "Aquí sale hacia Pamplona la vía que evita la estación de Altsasu. El enlace y la continuación a Pamplona todavía no están cargados."
+    },
+    {
+      "id": "altsasu",
+      "name": "Altsasu",
+      "kind": "estacion",
+      "adif_code": "11300",
+      "position": {
+        "lon": -2.1813079,
+        "lat": 42.8954056
+      },
+      "reference_pk_km": 535.47
+    },
+    {
+      "id": "brinkola",
+      "name": "Brinkola",
+      "kind": "estacion",
+      "adif_code": "11305",
+      "position": {
+        "lon": -2.3344667,
+        "lat": 43.0187986
+      },
+      "reference_pk_km": 557.2,
+      "rank": "secundario"
+    },
+    {
+      "id": "legazpi",
+      "name": "Legazpi",
+      "kind": "estacion",
+      "adif_code": "11306",
+      "position": {
+        "lon": -2.33048,
+        "lat": 43.0510088
+      },
+      "reference_pk_km": 561.3,
+      "rank": "secundario"
+    },
+    {
+      "id": "zumarraga",
+      "name": "Zumarraga",
+      "kind": "estacion",
+      "adif_code": "11400",
+      "position": {
+        "lon": -2.3198828,
+        "lat": 43.0870148
+      },
+      "reference_pk_km": 565.6
+    },
+    {
+      "id": "ormaiztegui",
+      "name": "Ormáiztegui",
+      "kind": "estacion",
+      "adif_code": "11402",
+      "position": {
+        "lon": -2.256985,
+        "lat": 43.0404654
+      },
+      "reference_pk_km": 574.2,
+      "rank": "secundario"
+    },
+    {
+      "id": "beasain",
+      "name": "Beasain",
+      "kind": "estacion",
+      "adif_code": "11404",
+      "position": {
+        "lon": -2.20234,
+        "lat": 43.0460967
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "ordizia",
+      "name": "Ordizia",
+      "kind": "estacion",
+      "adif_code": "11405",
+      "position": {
+        "lon": -2.1792201,
+        "lat": 43.0526137
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "tolosa",
+      "name": "Tolosa",
+      "kind": "estacion",
+      "adif_code": "11500",
+      "position": {
+        "lon": -2.0791385,
+        "lat": 43.1356356
+      }
+    },
+    {
+      "id": "tolosa-centro",
+      "name": "Tolosa-Centro",
+      "kind": "estacion",
+      "adif_code": "11501",
+      "position": {
+        "lon": -2.0741566,
+        "lat": 43.1394667
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "billabona-zizurkil",
+      "name": "Billabona-Zizurkil",
+      "kind": "estacion",
+      "adif_code": "11503",
+      "position": {
+        "lon": -2.0554706,
+        "lat": 43.1889983
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "andoain-centro",
+      "name": "Andoain-Centro",
+      "kind": "estacion",
+      "adif_code": "11504",
+      "position": {
+        "lon": -2.0203096,
+        "lat": 43.2155256
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "hernani-erdia",
+      "name": "Hernani-Erdia",
+      "kind": "estacion",
+      "adif_code": "11507",
+      "position": {
+        "lon": -1.9727493,
+        "lat": 43.2664561
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "san-sebastian-donostia",
+      "name": "San Sebastián-Donostia",
+      "kind": "estacion",
+      "adif_code": "11511",
+      "position": {
+        "lon": -1.9769301,
+        "lat": 43.3177368
+      },
+      "description": "Estación de San Sebastián-Donostia, en la línea convencional entre Vitoria e Irún. En los horarios cargados figuran trenes hacia Madrid y Barcelona, además de regionales. Los servicios de Cercanías no están incluidos."
+    },
+    {
+      "id": "pasaia",
+      "name": "Pasaia",
+      "kind": "estacion",
+      "adif_code": "11515",
+      "position": {
+        "lon": -1.9170734,
+        "lat": 43.3189807
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "lezo-renteria",
+      "name": "Lezo-Rentería",
+      "kind": "estacion",
+      "adif_code": "11516",
+      "position": {
+        "lon": -1.8993138,
+        "lat": 43.3159579
+      },
+      "rank": "secundario"
+    },
+    {
+      "id": "irun",
+      "name": "Irun",
+      "kind": "estacion",
+      "adif_code": "11600",
+      "position": {
+        "lon": -1.800575,
+        "lat": 43.3392054
+      },
+      "description": "Estación fronteriza donde termina el recorrido cargado desde Vitoria y San Sebastián. La continuación a Hendaya no está cargada. La estación dispone de instalaciones de distintos anchos; su existencia no acredita una conexión continua en ancho estándar con Astigarraga."
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "vitoria-gasteiz",
+      "to_node": "irun",
+      "value": 2,
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4: doble vía en el corredor. No se cuentan las vías de apartado de Irun."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "vitoria-gasteiz",
+      "to_node": "irun",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4: círculos verdes de Tren tierra y ASFA convencional en Vitoria, Altsasu, Hernani, San Sebastián e Irún."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "vitoria-gasteiz",
+      "to_node": "irun",
+      "value": "bab",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4: trazo marrón de BAB ctc de Vitoria a Irún."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "vitoria-gasteiz",
+      "to_node": "irun",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4: rótulo BAB ctc."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "vitoria-gasteiz",
+      "to_node": "irun",
+      "value": "3 kV CC",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4: doble vía a 3 kV y 1.668 mm. El color cambia en Hernani por la titularidad Adif/Adif AV, no por la tensión."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conv-bif-altsasu-pamplona",
+      "node_id": "bif-altsasu",
+      "to_node_id": "pamplona",
+      "name": "Línea convencional Altsasu – Pamplona por la bifurcación sur",
+      "towards": "Pamplona sin pasar por la estación de Altsasu",
+      "towards_back": "Vitoria por la bifurcación de Altsasu",
+      "official_name": "Enlace sur con la línea Castejón – Altsasu",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -2.1865604,
+          42.8832719
+        ],
+        [
+          -2.1674506,
+          42.8933349
+        ],
+        [
+          -1.974814,
+          42.920606
+        ],
+        [
+          -1.6614867,
+          42.8250496
+        ]
+      ]
+    },
+    {
+      "id": "conv-irun-hendaya",
+      "node_id": "irun",
+      "name": "Línea convencional Irún – Hendaya",
+      "towards": "Hendaya y Francia",
+      "official_name": "Línea Madrid – Hendaya",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -1.800575,
+          43.3392054
+        ],
+        [
+          -1.7819475,
+          43.3530823
+        ]
+      ]
+    }
+  ],
+  "stop_mappings": {
+    "11208": {
+      "node": "vitoria-gasteiz"
+    },
+    "11210": {
+      "node": "alegria-dulantzi"
+    },
+    "11212": {
+      "node": "agurain-salvatierra-de-alava"
+    },
+    "11213": {
+      "node": "araia"
+    },
+    "11300": {
+      "node": "altsasu"
+    },
+    "11305": {
+      "node": "brinkola"
+    },
+    "11306": {
+      "node": "legazpi"
+    },
+    "11400": {
+      "node": "zumarraga"
+    },
+    "11402": {
+      "node": "ormaiztegui"
+    },
+    "11404": {
+      "node": "beasain"
+    },
+    "11405": {
+      "node": "ordizia"
+    },
+    "11500": {
+      "node": "tolosa"
+    },
+    "11501": {
+      "node": "tolosa-centro"
+    },
+    "11503": {
+      "node": "billabona-zizurkil"
+    },
+    "11504": {
+      "node": "andoain-centro"
+    },
+    "11507": {
+      "node": "hernani-erdia"
+    },
+    "11511": {
+      "node": "san-sebastian-donostia"
+    },
+    "11515": {
+      "node": "pasaia"
+    },
+    "11516": {
+      "node": "lezo-renteria"
+    },
+    "11600": {
+      "node": "irun"
+    },
+    "04040": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "04104": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "08004": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "08223": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "10000": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "10200": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10203": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10204": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10205": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10206": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10207": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10208": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10209": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10300": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10302": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10400": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10409": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10500": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10501": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10502": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10503": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10504": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10600": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        }
+      ]
+    },
+    "11000": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11004": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11006": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11009": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "11109": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "11111": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "11200": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "11203": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "11204": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "11205": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        }
+      ]
+    },
+    "14100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "15100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "17000": {
+      "exits": [
+        "vitoria-gasteiz"
+      ],
+      "via": [
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "vitoria-gasteiz"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "burgos-rosa-manzano"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "lav-madrid-valladolid",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "20100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "20111": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "20200": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "20211": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "20213": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "20216": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "20300": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "22100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "23004": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "23008": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "30100": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "31400": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "32002": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "32003": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "32004": {
+      "exits": [
+        "vitoria-gasteiz"
+      ]
+    },
+    "70800": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "70801": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "70806": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "70807": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "71100": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "71801": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "78400": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80001": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80003": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80005": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80100": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80108": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80109": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80114": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "80115": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81200": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81203": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81205": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81206": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81207": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81208": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81209": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    },
+    "81210": {
+      "exits": [
+        "bif-altsasu"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "description": "Dos paradas en la línea o un paso directo de Vitoria a Pamplona. Solo se lee el GTFS AV/LD/MD de Renfe; no se importa Cercanías.",
+    "min_node_stops": 2,
+    "consecutive_stop_ids": [
+      [
+        "11208",
+        "80100"
+      ]
+    ]
+  },
+  "route_overrides": [
+    {
+      "description": "Los trenes Barcelona–San Sebastián entran por la estación de Altsasu. Los Vitoria–Pamplona usan la bifurcación sur y no llegan a la estación.",
+      "consecutive_stop_ids": [
+        "11300",
+        "80100"
+      ],
+      "stop_mappings": {
+        "04040": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "04104": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "70800": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "70801": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "70806": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "70807": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "71100": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "71801": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "78400": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80001": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80003": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80005": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80100": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80108": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80109": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80114": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "80115": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81200": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81202": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81203": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81205": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81206": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81207": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81208": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81209": {
+          "exits": [
+            "altsasu"
+          ]
+        },
+        "81210": {
+          "exits": [
+            "altsasu"
+          ]
+        }
+      },
+      "id": "barcelona-san-sebastian-por-altsasu"
+    }
+  ]
+}

@@ -72,6 +72,7 @@ class Settings(BaseSettings):
         "enlace-soto-de-cerrato",
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
+        "vitoria-irun",
     ]
 
 

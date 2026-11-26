@@ -144,6 +144,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 3  # la de Miranda de Ebro a Bilbao
             + 11  # la de Sevilla a Huelva
             + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
+            + 20  # la continuación de Vitoria a Irún
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -1186,3 +1187,23 @@ def test_the_shortest_route_uses_a_sketched_link_and_knows_when_there_is_none(gr
     assert (
         shortest_route(graph, MADRID, "sevilla-santa-justa", Scenario(closures=[isolated])) is None
     )
+
+
+@pytest.mark.parametrize(
+    "destination,km,minutes", [("san-sebastian-donostia", 549.0, 186), ("irun", 565.9, 193)]
+)
+def test_madrid_san_sebastian_e_irun_en_ambos_sentidos(
+    graph: Graph, destination: str, km: float, minutes: int
+) -> None:
+    """La continuación sale de Vitoria; las conexiones a trazos de Pamplona no cierran un anillo."""
+    outward = find_routes(graph, "madrid-chamartin", destination)
+    backward = find_routes(graph, destination, "madrid-chamartin")
+    assert outward and backward
+    assert outward[0].length_km == pytest.approx(km, abs=0.1)
+    assert backward[0].length_km == outward[0].length_km
+    assert outward[0].time_min == backward[0].time_min == minutes
+    assert backward[0].node_ids == list(reversed(outward[0].node_ids))
+    assert outward[0].line_ids[-1] == "vitoria-irun"
+    for route in outward + backward:
+        assert "pamplona" not in route.node_ids
+        assert len(route.node_ids) == len(set(route.node_ids))
