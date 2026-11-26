@@ -173,6 +173,7 @@ def trace_osm_relation(
     end: Coord,
     *,
     way_ref: str | None = None,
+    way_ids: list[int] | None = None,
 ) -> ChainedLine:
     """Camino más corto por las vías de una relación OSM entre dos puntos.
 
@@ -183,6 +184,20 @@ def trace_osm_relation(
     if relation_id is not None:
         members, nodes = _relation_ways(raw, relation_id)
         what = f"la relación {relation_id}"
+    elif way_ids is not None:
+        elements = raw["elements"]
+        requested = set(way_ids)
+        members = [w for w in elements if w["type"] == "way" and w["id"] in requested]
+        nodes = {n["id"]: (n["lon"], n["lat"]) for n in elements if n["type"] == "node"}
+        missing = requested.difference(w["id"] for w in members)
+        if missing:
+            raise ValueError(f"faltan vías OSM en el fichero: {sorted(missing)}")
+        for way in members:
+            if way.get("tags", {}).get("railway") != "rail" or not all(
+                n in nodes for n in way["nodes"]
+            ):
+                raise ValueError(f"la vía OSM {way['id']} no es ferroviaria o le faltan nodos")
+        what = f"las vías OSM {way_ids}"
     else:
         assert way_ref is not None
         members, nodes = _ref_ways(raw, way_ref)
@@ -202,7 +217,9 @@ def trace_osm_relation(
         raise ValueError(f"{what} no tiene vías ferroviarias")
 
     def nearest(p: Coord) -> list[int]:
-        return sorted(adjacency, key=lambda n: haversine_km(nodes[n], p))[:TRACE_CANDIDATES]
+        # Con vías explícitas no se busca otra vía cercana para disimular un corte.
+        count = 1 if way_ids is not None else TRACE_CANDIDATES
+        return sorted(adjacency, key=lambda n: haversine_km(nodes[n], p))[:count]
 
     # Para cada extremo se toma el nodo más cercano que esté conectado con el otro: así, si las
     # dos vías de una línea doble solo se tocan en los extremos, el trazado no salta de una a otra.
@@ -433,7 +450,12 @@ def build_line_geometry(spec: NetworkSpec, data_dir: Path) -> ChainedLine:
         for part in source.parts:
             raw = json.loads((data_dir / part.file).read_text(encoding="utf-8"))
             traced = trace_osm_relation(
-                raw, part.relation_id, part.from_point, part.to_point, way_ref=part.way_ref
+                raw,
+                part.relation_id,
+                part.from_point,
+                part.to_point,
+                way_ref=part.way_ref,
+                way_ids=part.way_ids,
             )
             if part.trim:
                 traced = _trimmed(traced, part.from_point, part.to_point)

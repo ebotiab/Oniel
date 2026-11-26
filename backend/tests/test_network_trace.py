@@ -73,6 +73,21 @@ def _two_track_relation() -> dict[str, Any]:
     return {"elements": [*nodes, *ways, relation]}
 
 
+def test_vias_sin_referencia_se_trazan_por_id_en_ambos_sentidos() -> None:
+    raw = _two_track_relation()
+    start, end = (0.0, 0.0), (0.03, 0.0)
+    for a, b in ((start, end), (end, start)):
+        line = trace_osm_relation(raw, None, a, b, way_ids=[100, 101, 102])
+        assert line.polyline.coords[0] == a and line.polyline.coords[-1] == b
+        assert len(line.polyline.coords) == 4
+
+
+@pytest.mark.parametrize(("ids", "mensaje"), [([100, 999], "999"), ([100, 102], "no hay camino")])
+def test_vias_explicitas_ausentes_o_separadas(ids: list[int], mensaje: str) -> None:
+    with pytest.raises(ValueError, match=mensaje):
+        trace_osm_relation(_two_track_relation(), None, (0, 0), (0.03, 0), way_ids=ids)
+
+
 def test_trace_follows_one_track_and_ignores_the_branch() -> None:
     raw = _two_track_relation()
     line = trace_osm_relation(raw, 7, start=(0.0, 0.00005), end=(0.03, -0.00002))

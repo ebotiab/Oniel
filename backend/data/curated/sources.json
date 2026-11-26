@@ -2752,6 +2752,90 @@
       "coverage": "El panel publicaba servicios hacia Pinar y Príncipe Pío y un aviso de retrasos de Cercanías en el entorno de Ramón y Cajal.",
       "notes": "El panel no anunciaba la interrupción del acceso.",
       "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
+    },
+    {
+      "id": "osm-way-75916844-plasencia-de-jalon",
+      "name": "Vía 75916844 del acceso de Plasencia de Jalón",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/way/75916844/full.json",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Salida de la LAV por la aguja del eje que usa Oniel.",
+      "notes": "Vía 75916844, versión 6. Sin ref ni relación en la consulta del 26 de noviembre. Los nodos proceden de la descarga full.",
+      "file": "raw/osm/way_75916844_plasencia_de_jalon_2026-11-26.json"
+    },
+    {
+      "id": "osm-way-138477723-plasencia-de-jalon",
+      "name": "Vía 138477723 del acceso de Plasencia de Jalón",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/way/138477723/full.json",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Convergencia de los dos accesos de ancho estándar y llegada al cambiador.",
+      "notes": "Vía 138477723, versión 4. Sin ref ni relación en la consulta del 26 de noviembre. Los nodos proceden de la descarga full.",
+      "file": "raw/osm/way_138477723_plasencia_de_jalon_2026-11-26.json"
+    },
+    {
+      "id": "osm-way-204467779-plasencia-de-jalon",
+      "name": "Vía 204467779 del acceso de Plasencia de Jalón",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/way/204467779/full.json",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Vía de ancho ibérico que parte del cambiador.",
+      "notes": "Vía 204467779, versión 3. Sin ref ni relación en la consulta del 26 de noviembre. Los nodos proceden de la descarga full.",
+      "file": "raw/osm/way_204467779_plasencia_de_jalon_2026-11-26.json"
+    },
+    {
+      "id": "osm-way-1221613439-plasencia-de-jalon",
+      "name": "Vía 1221613439 del acceso de Plasencia de Jalón",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/way/1221613439/full.json",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Continuación del ramal ibérico hasta la aguja de la convencional.",
+      "notes": "Vía 1221613439, versión 1. Sin ref ni relación en la consulta del 26 de noviembre. Los nodos proceden de la descarga full.",
+      "file": "raw/osm/way_1221613439_plasencia_de_jalon_2026-11-26.json"
+    },
+    {
+      "id": "osm-relation-4830814",
+      "name": "Recorrido convencional Zaragoza – Madrid",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/relation/4830814/full.json",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Relación de servicio empleada para identificar la vía convencional entre el empalme de Plasencia de Jalón y las vías de andén de Grisén.",
+      "notes": "Original de la API de OpenStreetMap con los identificadores y versiones de los objetos. Geometría contrastada para la investigación de Grisén (#310).",
+      "file": "raw/osm/relation_4830814_2026-11-26.json"
+    },
+    {
+      "id": "osm-relation-9696024",
+      "name": "Línea 702 entre Grisén y Cabañas de Ebro",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/relation/9696024/full.json",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Relación de infraestructura del acceso a la línea del Ebro y sus agujas. La correspondencia con la fase de las obras de Grisén queda pendiente.",
+      "notes": "Original de la API de OpenStreetMap con los identificadores y versiones de los objetos. Geometría contrastada para la investigación de Grisén (#310).",
+      "file": "raw/osm/relation_9696024_2026-11-26.json"
+    },
+    {
+      "id": "osm-instalaciones-grisen",
+      "name": "Estación de Grisén y puntos de parada ferroviarios",
+      "publisher": "OpenStreetMap y sus colaboradores",
+      "url": "https://api.openstreetmap.org/api/0.6/nodes.json?nodes=6186096066,26377463,8614882059",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Posición de la estación 70706 y de los dos puntos de parada junto a los andenes convencionales.",
+      "notes": "Original de la API de OpenStreetMap con los identificadores y versiones de los objetos. Geometría contrastada para la investigación de Grisén (#310).",
+      "file": "raw/osm/instalaciones_grisen_2026-11-26.json"
     }
   ]
 }

@@ -164,9 +164,8 @@ class OperatorSpec(BaseModel):
 class GeometryPart(BaseModel):
     """Trozo de línea tomado de un fichero de OSM: el camino más corto entre dos puntos.
 
-    Las vías son las de una relación (``relation_id``) o, si el fichero no trae ninguna, las que
-    llevan una misma etiqueta ``ref`` (``way_ref``; el enlace de Monforte del Cid son las vías con
-    ``ref=048``).
+    Las vías se eligen por relación (``relation_id``), por referencia (``way_ref``) o por sus
+    identificadores (``way_ids``) si carecen de relación y de referencia.
     """
 
     model_config = ConfigDict(populate_by_name=True)
@@ -175,6 +174,7 @@ class GeometryPart(BaseModel):
     file: str
     relation_id: int | None = None
     way_ref: str | None = None
+    way_ids: list[int] | None = Field(default=None, min_length=1)
     #: La parte empieza y acaba justo a la altura de ``from`` y de ``to``, y no en el vértice de
     #: OSM más cercano a cada uno: para un trazado corto, en el que esos metros se notan.
     trim: bool = False
@@ -183,8 +183,8 @@ class GeometryPart(BaseModel):
 
     @model_validator(mode="after")
     def _one_of(self) -> GeometryPart:
-        if (self.relation_id is None) == (self.way_ref is None):
-            raise ValueError("una parte de la geometría lleva relation_id o way_ref")
+        if sum(value is not None for value in (self.relation_id, self.way_ref, self.way_ids)) != 1:
+            raise ValueError("una parte de la geometría lleva relation_id, way_ref o way_ids")
         return self
 
 
