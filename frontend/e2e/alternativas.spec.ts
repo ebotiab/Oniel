@@ -15,7 +15,7 @@ async function abrirPanel(page: Page) {
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
 test.describe('Tramos sin otro camino', () => {
-  test('con la API en marcha, la vista lee la instantánea y no espera al cálculo del servidor', async ({ page }) => {
+  test('con la API en marcha, la vista lee la instantánea y no espera al cálculo del servidor', { tag: '@api' }, async ({ page }) => {
     test.skip(estatico, 'sin API el visor ya lee la instantánea')
     let pedidas = 0
     await page.route('**/api/alternatives*', (route) => {

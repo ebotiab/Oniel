@@ -6,7 +6,7 @@ import { abrirMenu } from './navegar.ts'
 // El visor no debe esperar a /healthz: pinta la instantánea estática y cambia a la API cuando responde.
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
-test.describe('Arranque con el servidor dormido', () => {
+test.describe('Arranque con el servidor dormido', { tag: '@api' }, () => {
   test.skip(estatico, 'en modo estático no se sondea el servidor')
 
   test('la red se pinta desde la instantánea mientras el servidor despierta', async ({ page }) => {
