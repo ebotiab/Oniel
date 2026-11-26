@@ -82,6 +82,11 @@ async function getJson<T>(path: string, init?: RequestInit): Promise<T> {
   return (await res.json()) as T
 }
 
+// El plazo cubre también la lectura del cuerpo si el servidor solo envía las cabeceras.
+function readJson<T>(path: string): Promise<T> {
+  return getJson<T>(path, { signal: AbortSignal.timeout(5_000) })
+}
+
 async function ping(timeoutMs: number): Promise<boolean> {
   try {
     const res = await fetch(`${API_BASE}/healthz`, { cache: 'no-store', signal: AbortSignal.timeout(timeoutMs) })
@@ -129,53 +134,70 @@ export async function fetchIndex(source: DataMode = currentMode()): Promise<Netw
 
 const lineCache = new Map<string, Promise<LineDetailOut>>()
 
-/** El detalle de una línea. Cada línea se pide una sola vez por origen; un fallo no se guarda. */
-export function fetchLine(lineId: string, source: DataMode = currentMode()): Promise<LineDetailOut> {
-  const key = `${source}:${lineId}`
-  let pending = lineCache.get(key)
+function lineAt(path: string, date?: string): Promise<LineDetailOut> {
+  let pending = lineCache.get(path)
   if (!pending) {
-    pending = getJson<LineDetailOut>(
-      source === 'api' ? `${API_BASE}/api/lines/${encodeURIComponent(lineId)}` : `/data/lines/${safeName(lineId)}.json`,
-    )
-    lineCache.set(key, pending)
-    pending.catch(() => lineCache.delete(key))
+    pending = readJson<LineDetailOut>(path).then((detail) => date ? forDay(detail, date) : detail)
+    lineCache.set(path, pending)
+    pending.catch(() => lineCache.delete(path))
   }
   return pending
+}
+
+function forDay<T extends { date: string | null }>(data: T, date?: string): T {
+  if (!data.date || (date && data.date !== date)) throw new Error('Horario sin la fecha solicitada.')
+  return data
+}
+
+/** El trazado estático sirve incluso si sus recuentos son de otro día. La ficha comprueba su fecha. */
+export function fetchLine(lineId: string, source: DataMode = currentMode(), date?: string): Promise<LineDetailOut> {
+  const snapshot = () => lineAt(`/data/lines/${safeName(lineId)}.json`)
+  if (source === 'estatico') return snapshot()
+  const path = `${API_BASE}/api/lines/${encodeURIComponent(lineId)}${dayQuery(date)}`
+  return lineAt(path, date).catch(snapshot)
 }
 
 export async function fetchCoverage(source: DataMode = currentMode()): Promise<CoverageOut> {
   return source === 'api' ? getJson(`${API_BASE}/api/coverage`) : getJson('/data/coverage.json')
 }
 
-export async function fetchSegmentServices(segmentId: string, date?: string): Promise<SegmentServicesOut> {
-  if (currentMode() === 'api') {
-    const q = date ? `?date=${date}` : ''
-    return getJson(`${API_BASE}/api/segments/${encodeURIComponent(segmentId)}/services${q}`)
-  }
-  return getJson(`/data/segments/${safeName(segmentId)}.json`)
+function dayQuery(date?: string): string {
+  return date ? `?date=${encodeURIComponent(date)}` : ''
 }
 
-export async function fetchNodeServices(nodeId: string, date?: string): Promise<NodeServicesOut> {
-  if (currentMode() === 'api') {
-    const q = date ? `?date=${date}` : ''
-    return getJson(`${API_BASE}/api/nodes/${encodeURIComponent(nodeId)}/services${q}`)
-  }
-  return getJson(`/data/nodes/${encodeURIComponent(nodeId)}.json`)
+const inFlight = new Map<string, Promise<unknown>>()
+
+/** Comparte la consulta hasta que termine, incluido el respaldo. Al volver se prueba la API. */
+function readWithSnapshot<T>(path: string, snapshot: string, read: (url: string) => Promise<T>): Promise<T> {
+  const mode = currentMode()
+  const key = mode + path
+  const pending = inFlight.get(key)
+  if (pending) return pending as Promise<T>
+  const query = mode === 'api' ? read(API_BASE + path).catch(() => read(snapshot)) : read(snapshot)
+  const result = query.finally(() => inFlight.delete(key))
+  inFlight.set(key, result)
+  return result
 }
 
-/**
- * Los trenes de una estación o de un tramo según cada fichero de horarios importado. Si la API no
- * lo sirve (una versión anterior, o un fallo), se lee de la instantánea: es el mismo contenido.
- */
-export async function fetchHistory(kind: 'nodes' | 'segments', id: string): Promise<ServiceHistoryOut> {
-  if (currentMode() === 'api') {
-    try {
-      return await getJson(`${API_BASE}/api/${kind}/${encodeURIComponent(id)}/history`)
-    } catch {
-      /* se intenta con la instantánea */
-    }
-  }
-  return getJson(`/data/historico/${kind}/${safeName(id)}.json`)
+function snapshotName(kind: 'nodes' | 'segments', id: string) {
+  return kind === 'nodes' ? encodeURIComponent(id) : safeName(id)
+}
+
+function services<T extends NodeServicesOut | SegmentServicesOut>(kind: 'nodes' | 'segments', id: string, date?: string): Promise<T> {
+  const path = `/api/${kind}/${encodeURIComponent(id)}/services${dayQuery(date)}`
+  return readWithSnapshot(path, `/data/${kind}/${snapshotName(kind, id)}.json`, async (url) => forDay(await readJson<T>(url), date))
+}
+
+export function fetchSegmentServices(segmentId: string, date?: string): Promise<SegmentServicesOut> {
+  return services('segments', segmentId, date)
+}
+
+export function fetchNodeServices(nodeId: string, date?: string): Promise<NodeServicesOut> {
+  return services('nodes', nodeId, date)
+}
+
+export function fetchHistory(kind: 'nodes' | 'segments', id: string): Promise<ServiceHistoryOut> {
+  return readWithSnapshot(`/api/${kind}/${encodeURIComponent(id)}/history`, `/data/historico/${kind}/${snapshotName(kind, id)}.json`, readJson<ServiceHistoryOut>)
 }
 
 const alternativesCache = new Map<string, Promise<AlternativesOut>>()
@@ -195,10 +217,10 @@ export function fetchAlternatives(date?: string): Promise<AlternativesOut> {
       if (date && data.date !== date) throw new Error(`Falta el análisis de alternativas del ${date}.`)
       return data
     }
-    pending = getJson<AlternativesOut>('/data/alternatives.json').then(forRequestedDay)
+    pending = readJson<AlternativesOut>('/data/alternatives.json').then(forRequestedDay)
     if (mode === 'api') {
       const url = `${API_BASE}/api/alternatives${date ? `?date=${date}` : ''}`
-      pending = pending.catch(() => getJson<AlternativesOut>(url).then(forRequestedDay))
+      pending = pending.catch(() => readJson<AlternativesOut>(url).then(forRequestedDay))
     }
     alternativesCache.set(key, pending)
     pending.catch(() => alternativesCache.delete(key))

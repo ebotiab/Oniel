@@ -1,7 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { apiStatus, fetchCoverage, fetchIndex, fetchLine, onApiStatus, wakeApi, type ApiStatus, type DataMode } from '../data/api'
-import { composeNetwork } from '../data/network'
+import { composeNetwork, type LineDetails } from '../data/network'
 import { useApiStatus } from '../data/useApiStatus'
 import type { ClosureResult, CoverageOut, LineDetailOut, NetworkIndexOut } from '../data/types'
 import type { Trazo } from '../map/layers'
@@ -83,9 +83,9 @@ function supuestasEnMapa(code: string | undefined, network: { nodes: { id: strin
 export default function App() {
   // La red llega por partes: el índice al arrancar y el detalle de cada línea cuando hace falta.
   const [loaded, setLoaded] = useState<{ index: NetworkIndexOut; source: DataMode } | null>(null)
-  const [details, setDetails] = useState<Record<string, LineDetailOut>>({})
+  const [details, setDetails] = useState<LineDetails>({})
   const [near, setNear] = useState<readonly string[]>([])
-  const requested = useRef(new Set<string>())
+  const latestLine = useRef(new Map<string, { key: string; pending: Promise<LineDetailOut> }>())
   const [coverage, setCoverage] = useState<CoverageOut | null>(null)
   const [coverageError, setCoverageError] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -274,24 +274,30 @@ export default function App() {
     })
   }, [])
 
-  // La línea a la vista y las que el mapa tiene cerca se cargan enteras: textos de sus nodos, geometría
-  // completa y recuentos. Cada una se descarga una vez por origen: de la instantánea y, cuando responde,
-  // de la API.
-  useEffect(() => {
-    if (!loaded) return
-    const { index, source } = loaded
-    for (const id of lineId ? [lineId, ...near] : near) {
-      const key = `${source}:${id}`
-      if (requested.current.has(key) || !index.lines.some((l) => l.id === id)) continue
-      requested.current.add(key)
-      fetchLine(id, source)
-        .then((detail) => setDetails((cur) => ({ ...cur, [id]: detail })))
-        .catch(() => {
-          // Sin el detalle, la línea se queda con lo que trae el índice; se reintenta si se vuelve a pedir.
-          requested.current.delete(key)
-        })
+  const referenceDate = coverage?.reference_date ?? null
+  const loadLine = useCallback((id: string, nearby = false) => {
+    if (!loaded?.index.lines.some((l) => l.id === id)) return
+    const key = `${loaded.source}@${referenceDate}`
+    if (nearby && latestLine.current.get(id)?.key === key) return
+    const pending = fetchLine(id, loaded.source, referenceDate ?? undefined)
+    latestLine.current.set(id, { key, pending })
+    const apply = (detail: LineDetailOut | null) => {
+      if (latestLine.current.get(id)?.pending !== pending) return
+      setDetails((cur) => {
+        const previous = cur[id]
+        if (previous === detail || (previous && !detail)) return cur
+        if (referenceDate && previous?.date === referenceDate && detail?.date !== referenceDate) return cur
+        return { ...cur, [id]: detail }
+      })
     }
-  }, [loaded, near, lineId])
+    void pending.then(apply, () => apply(null))
+  }, [loaded, referenceDate])
+
+  // Volver a una línea permite recuperar la API. Las vecinas solo se anticipan una vez por consulta.
+  useEffect(() => { if (lineId) loadLine(lineId) }, [lineId, loadLine])
+  useEffect(() => {
+    for (const id of near) loadLine(id, true)
+  }, [near, loadLine])
   const lineDetail = lineId ? details[lineId] : undefined
   const closedSegmentId = result && route.simulacion ? result.segment.id : null
   // Una anotación con ficha propia (un proyecto). Se busca entre todas: su ficha vale aunque ya no esté vigente.
@@ -307,7 +313,6 @@ export default function App() {
   const annotated = useMemo(() => bySegment(annotations), [annotations])
   const interrupted = useMemo(() => bySegment(annotations.filter(isInterruption)), [annotations])
   const pasadas = useMemo(() => bySegment(pastInterruptions(network, today)), [network, today])
-  const referenceDate = coverage?.reference_date ?? null
 
   // Comparador de recorridos. Una estación de la URL que no existe cuenta como sin elegir.
   const graph = useMemo(() => (network ? buildGraph(network) : null), [network])
@@ -416,7 +421,7 @@ export default function App() {
   else if (segment)
     panel = (
       <SegmentDetail
-        key={`${segment.id}@${referenceDate}`}
+        key={segment.id}
         notice={coverageNotice}
         segment={segment}
         network={network}
@@ -433,7 +438,7 @@ export default function App() {
   else if (node)
     panel = (
       <NodeDetail
-        key={`${node.id}@${referenceDate}`}
+        key={node.id}
         node={node}
         notice={coverageNotice}
         network={network}
@@ -458,8 +463,7 @@ export default function App() {
         notice={coverageNotice}
         network={network}
         coverage={coverage}
-        counts={lineDetail?.counts ?? null}
-        countsMax={lineDetail?.network_max_count ?? null}
+        detail={lineDetail}
         lineId={lineId}
         onShowNetwork={() => showLine(null)}
         selection={selection}
