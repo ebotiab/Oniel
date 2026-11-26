@@ -184,6 +184,14 @@ Fuentes del acceso Madrid-Príncipe Pío – Pinar de las Rozas, consultadas el 
 | `boe-cerramientos-las-rozas`, `boe-renovacion-principe-pio-pinar` | BOE, reutilización con cita | Identidad de las tres líneas del nudo e información pública de la renovación. |
 | `adif-enclavamiento-pozuelo`, `adif-estado-principe-pio-2026-11`, `adif-avisos-principe-pio-2026-11`, `adif-barrial-2026-11` | Adif, consulta pública | Instalación en servicio en Pozuelo y revisión de los avisos. |
 
+Para Ávila–Salamanca se contrastaron el 26 de noviembre de 2026 las siguientes fuentes. Las distancias y los controles del horario están en el [plan de la línea](planes/linea-avila-salamanca.md).
+
+| Fuente | Editor y licencia | Aportación |
+|---|---|---|
+| `osm-relation-1210118`, `osm-relation-6016263`, `osm-relation-6016262` | OpenStreetMap, ODbL 1.0 | Recorrido regional de contraste, trazado por Peñaranda y acceso urbano de Salamanca. |
+| `boe-catalogo-rfig-122` | BOE, disposición normativa pública | Longitud administrativa de 111,1 km y características del tronco. |
+| `adif-esquema-salamanca` | Adif, consulta pública | Puntos kilométricos de las nueve paradas intermedias, de Salamanca y de La Alamedilla, en sus respectivas líneas. |
+
 ### Operadores y sus horarios
 
 Los operadores de trenes de cada línea se declaran en `operators` de su especificación, cada uno con su fuente. Al importar se guardan en `operators` y `line_operators`, y la API los devuelve en `operators` de la cobertura y en `operator_ids` de cada línea.

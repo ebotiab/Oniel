@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from 'react'
 
 import { fetchNodeServices } from '../data/api'
 import { useServices } from '../data/useServices'
-import type { AnnotationOut, NetworkOut, NodeOut, Operator, Source } from '../data/types'
+import type { AnnotationOut, NetworkOut, NodeCall, NodeOut, Operator, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, shortStop } from '../app/state'
 import { capasDe } from '../app/annotationLayers'
 import { isInterruption } from '../app/annotations'
@@ -32,6 +32,14 @@ interface Props {
   /** Abre el comparador de recorridos con este nodo como salida. */
   onCompare: () => void
   onBack: () => void
+}
+
+function permisoEnParada({ arrival, departure, boards, alights }: NodeCall) {
+  if (!arrival || !departure) return ''
+  if (boards === false && alights === false) return ' · Sin subida ni bajada'
+  if (boards === false) return ` · Solo bajada · sale a las ${departure}`
+  if (alights === false) return ` · Solo subida · llega a las ${arrival}`
+  return ''
 }
 
 export function NodeDetail({ notice, node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
@@ -225,7 +233,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
             <ol className="lista-servicios">
               {calls.calls.map((c) => (
                 <li key={c.service_id}>
-                  <span className="hora datos">{c.departure ?? c.arrival ?? '—'}</span>
+                  <span className="hora datos">{(c.boards === false ? c.arrival ?? c.departure : c.departure ?? c.arrival) ?? '—'}</span>
                   <span className="tren">
                     <strong>
                       {c.product} {c.train_number}
@@ -233,6 +241,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
                     <span className="suave">
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}
                       {severalOperators ? ` · ${operatorName(c.operator_id)}` : ''}
+                      {permisoEnParada(c)}
                     </span>
                   </span>
                 </li>

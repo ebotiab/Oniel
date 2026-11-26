@@ -201,15 +201,21 @@ async def service_paths(conn: asyncpg.Connection, date: dt.date) -> list[Service
 
 
 async def fetch_service(
-    conn: asyncpg.Connection, service_id: str
+    conn: asyncpg.Connection, service_id: str, date: dt.date | None = None
 ) -> tuple[ServiceOut, list[StopOut]] | None:
-    # El mismo viaje puede estar en varios conjuntos de datos: se sirve el del más reciente.
+    # Sin fecha se conserva el detalle más reciente, incluso de un servicio retirado.
     r = await conn.fetchrow(
-        """
+        f"""
         SELECT s.* FROM services s JOIN datasets ds ON ds.id = s.dataset_id
-        WHERE s.id = $1 ORDER BY ds.retrieved_on DESC, ds.valid_to DESC, ds.id DESC LIMIT 1
+        WHERE s.id = $1 AND ($2::date IS NULL OR (
+            s.dataset_id IN {active_ids_sql("$2")} AND EXISTS (
+                SELECT 1 FROM service_dates d
+                WHERE d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = $2
+            )))
+        ORDER BY ds.retrieved_on DESC, ds.valid_to DESC, ds.id DESC LIMIT 1
         """,
         service_id,
+        date,
     )
     if r is None:
         return None
@@ -229,6 +235,8 @@ async def fetch_service(
             arrival=fmt_time(s["arrival_s"]),
             departure=fmt_time(s["departure_s"]),
             node_id=s["node_id"],
+            pickup_type=s["pickup_type"],
+            drop_off_type=s["drop_off_type"],
         )
         for s in stops
     ]

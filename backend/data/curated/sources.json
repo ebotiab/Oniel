@@ -2752,6 +2752,66 @@
       "coverage": "El panel publicaba servicios hacia Pinar y Príncipe Pío y un aviso de retrasos de Cercanías en el entorno de Ramón y Cajal.",
       "notes": "El panel no anunciaba la interrupción del acceso.",
       "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
+    },
+    {
+      "id": "osm-relation-1210118",
+      "name": "Recorrido regional entre Ávila y Salamanca",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/1210118",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Contraste continuo entre las estaciones de Ávila y La Alamedilla.",
+      "notes": "Relación de servicio, versión 118. Original completo de la API 0.6. La relación permite reconstruir la geometría y no acredita el producto comercial ni la puesta en tensión.",
+      "file": "raw/osm/relation_1210118_salamanca_2026-11-26.json"
+    },
+    {
+      "id": "osm-relation-6016263",
+      "name": "Trazado por Peñaranda de Bracamonte",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/6016263",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Trazado y etiquetas de las vías entre Ávila y la entrada este de Salamanca.",
+      "notes": "Relación de servicio, versión 34. Original completo de la API 0.6. La relación permite reconstruir la geometría y no acredita el producto comercial ni la puesta en tensión.",
+      "file": "raw/osm/relation_6016263_salamanca_2026-11-26.json"
+    },
+    {
+      "id": "osm-relation-6016262",
+      "name": "Acceso a Salamanca y La Alamedilla",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/6016262",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Vía de llegada a Salamanca y recorrido urbano hasta el apeadero de La Alamedilla.",
+      "notes": "Relación de servicio, versión 49. Original completo de la API 0.6. La relación permite reconstruir la geometría y no acredita el producto comercial ni la puesta en tensión.",
+      "file": "raw/osm/relation_6016262_salamanca_2026-11-26.json"
+    },
+    {
+      "id": "boe-catalogo-rfig-122",
+      "name": "Catálogo de líneas y tramos de la Red Ferroviaria de Interés General",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-4382",
+      "license": "Disposición normativa pública",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "La fila 01-122 recoge 111,1 km de catálogo, ancho de 1.668 mm, vía única y tronco sin electrificar.",
+      "notes": "La longitud se refiere al ámbito administrativo. El catálogo no desglosa las vías de cada estación.",
+      "file": "raw/boe/catalogo_rfig_2026-11-26.html"
+    },
+    {
+      "id": "adif-esquema-salamanca",
+      "name": "Esquema del área de mantenimiento de Salamanca",
+      "publisher": "Adif",
+      "url": "https://attachments.tender-service.com/07/1653/165392442_860937cbc64391e786890c9dbcec430b/DOC20240624111343PliegoDePrescripcionesTecnicas.PDF",
+      "license": "Consulta pública, © Adif",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-26",
+      "coverage": "PK de las nueve paradas comerciales intermedias de la 122 y de Salamanca y La Alamedilla en la 120.",
+      "notes": "Lámina 18, página 52 del PDF firmado. La consulta conserva los datos transcritos y la huella del documento. El PDF se puede verificar en la sede de Adif con su CSV.",
+      "file": "raw/adif/esquema_salamanca_consulta_2026-11-26.json"
     }
   ]
 }
