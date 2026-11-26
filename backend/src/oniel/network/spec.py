@@ -314,6 +314,8 @@ class LineSpec(BaseModel):
     #: Alicante). El visor la lista bajo aquella y el comparador la cuenta como parte suya, pero,
     #: a diferencia de un baipás, elige sus trenes con su propio filtro y sus asignaciones.
     link_of: str | None = None
+    #: Para un acceso terminal, nodo contiguo de la principal hacia el que se puede continuar.
+    link_towards: str | None = None
 
     @field_validator("electrification")
     @classmethod
@@ -456,6 +458,8 @@ class NetworkSpec(BaseModel):
                     f" {self.line.bypass_of} que no paran entre sus dos extremos, y no lleva"
                     " stop_mappings ni route_overrides"
                 )
+        if self.line.link_towards and not self.line.link_of:
+            raise ValueError("solo un enlace puede declarar un sentido de incorporación")
         if self.line.link_of == self.line.id:
             raise ValueError(f"la línea {self.line.id} se declara enlace de sí misma")
         rule_ids = [r.id for r in self.route_overrides]

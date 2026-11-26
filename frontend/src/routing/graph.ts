@@ -64,6 +64,7 @@ export interface Graph {
    * de otra línea, y con las dos forma un triángulo.
    */
   linkOf: Map<string, string>
+  linkTowards: Map<string, string>
   /**
    * Por cada nodo que no es estación, el lado por el que sale cada uno de sus tramos. Dos tramos del
    * mismo lado no se pueden encadenar allí: para pasar de uno a otro hay que seguir hasta una
@@ -105,6 +106,7 @@ function makeGraph(
   bypassOf: Graph['bypassOf'],
   linkOf: Graph['linkOf'],
   turns: Turns,
+  linkTowards: Graph['linkTowards'],
 ): Graph {
   const adjacent = new Map<string, Edge[]>()
   for (const edge of edges) {
@@ -114,11 +116,11 @@ function makeGraph(
       else adjacent.set(end, [edge])
     }
   }
-  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, turns, linkSides: linkSides(edges, lineKm, bypassOf, linkOf), adjacent }
+  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, linkTowards, turns, linkSides: linkSides(edges, lineKm, bypassOf, linkOf, linkTowards), adjacent }
 }
 
 /** Los lados del triángulo de cada enlace, con la misma regla que el servidor (`Graph.link_sides`). */
-function linkSides(edges: Edge[], lineKm: Graph['lineKm'], bypassOf: Graph['bypassOf'], linkOf: Graph['linkOf']): Graph['linkSides'] {
+function linkSides(edges: Edge[], lineKm: Graph['lineKm'], bypassOf: Graph['bypassOf'], linkOf: Graph['linkOf'], linkTowards: Graph['linkTowards']): Graph['linkSides'] {
   const sides = new Map<string, readonly [string, number]>()
   for (const [lineId, parent] of linkOf) {
     const own = lineKm.get(lineId)
@@ -130,6 +132,15 @@ function linkSides(edges: Edge[], lineKm: Graph['lineKm'], bypassOf: Graph['bypa
     const away = ends.filter((n) => !onParent.has(n))
     if (joins.length !== 1 || away.length !== 1) continue
     const [join, far] = [joins[0]!, away[0]!]
+    const towards = linkTowards.get(lineId)
+    if (towards) {
+      for (const edge of edges) {
+        if (edge.a !== join && edge.b !== join) continue
+        if (edge.line_id === lineId) sides.set(edge.id, [lineId, 0])
+        if (edge.line_id === parent && edge.a !== towards && edge.b !== towards) sides.set(edge.id, [lineId, 1])
+      }
+      continue
+    }
     let best: { around: number; other: string; apex: string } | null = null
     for (const other of [...lineKm.keys()].sort()) {
       const km = lineKm.get(other)!
@@ -185,7 +196,8 @@ export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; se
     }))
   const bypassOf = new Map(network.lines.flatMap((l) => (l.bypass_of ? [[l.id, l.bypass_of] as const] : [])))
   const linkOf = new Map(network.lines.flatMap((l) => (l.link_of ? [[l.id, l.link_of] as const] : [])))
-  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf, network.turns ?? {})
+  const linkTowards = new Map(network.lines.flatMap((l) => l.link_towards ? [[l.id, l.link_towards] as const] : []))
+  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf, network.turns ?? {}, linkTowards)
 }
 
 /** El grafo con las modificaciones del escenario: cierres, velocidades y enlaces. */
@@ -204,7 +216,7 @@ export function applyScenario(graph: Graph, scenario: Scenario): Graph {
     if (link.from_node_id === link.to_node_id) throw new ScenarioError('Un enlace tiene que unir dos nodos distintos')
     edges.push({ id: linkId(link), line_id: null, a: link.from_node_id, b: link.to_node_id, length_km: link.length_km, speed_kmh: link.speed_kmh, tracks: null })
   }
-  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf, graph.turns)
+  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf, graph.turns, graph.linkTowards)
 }
 
 /**

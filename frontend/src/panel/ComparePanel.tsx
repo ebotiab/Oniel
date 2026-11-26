@@ -34,6 +34,16 @@ interface Trenes {
 /** La fuente de los horarios en `sources.json`. */
 const FUENTE_HORARIOS = 'renfe-gtfs-av-ld-md'
 
+/** Los dos horarios comerciales que identifican el acceso de Pozuelo en los ficheros de Renfe. */
+async function trenesPorPozuelo(dia?: string): Promise<Set<string>> {
+  const [terminal, sierra] = await Promise.all([
+    fetchNodeServices('madrid-principe-pio', dia),
+    fetchNodeServices('villalba-de-guadarrama', dia),
+  ])
+  const villalba = new Set(sierra.calls.map((parada) => parada.service_id))
+  return new Set(terminal.calls.map((parada) => parada.service_id).filter((id) => villalba.has(id)))
+}
+
 /** Una estación por elegir. `etiqueta` la nombra para los lectores de pantalla cuando el rótulo a la vista no basta («y»). */
 function Extremo({ rotulo, etiqueta = rotulo, nombre, network, testId, onPick, onClear }: { rotulo: string; etiqueta?: string; nombre: string | null; network: NetworkOut; testId: string; onPick: (id: string) => void; onClear: () => void }) {
   return (
@@ -234,10 +244,17 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
     let alive = true
     const dia = referenceDate ?? undefined
     const ids = clavesTexto.split('|')
-    Promise.all([fetchNodeServices(from, dia), fetchNodeServices(to, dia), Promise.all(ids.map((id) => fetchSegmentServices(id, dia)))])
-      .then(([origen, destino, tramos]) => {
+    const porPozuelo = (id: string) => id.startsWith('enlace-principe-pio-pinar:')
+    const acceso = ids.some(porPozuelo) ? trenesPorPozuelo(dia) : null
+    const porTramo = ids.map(async (id) => {
+      if (acceso && porPozuelo(id)) return acceso
+      const tramo = await fetchSegmentServices(id, dia)
+      return new Set(tramo.passes.map((p) => p.service.id))
+    })
+    Promise.all([fetchNodeServices(from, dia), fetchNodeServices(to, dia), Promise.all(porTramo)])
+      .then(([origen, destino, servicios]) => {
         if (!alive) return
-        const pasos = new Map(tramos.map((t, i) => [ids[i]!, new Set(t.passes.map((p) => p.service.id))]))
+        const pasos = new Map(ids.map((id, i) => [id, servicios[i]!]))
         setCargados({ clave: consulta, trenes: { date: origen.date, directos: trenesDirectos(origen.calls, destino.calls), pasos } })
       })
       .catch(() => {

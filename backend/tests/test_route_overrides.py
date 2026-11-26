@@ -730,6 +730,10 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # ni la de València a Alicante: las paradas del lado de La Encina llevan dos salidas
         VALENCIA_ALICANTE_SPEC.name: {"almansa-caudete": 49, "almansa-villena": 29},
         "enlace-la-encina-caudete.json": {},
+        "enlace-principe-pio-pinar.json": {
+            "principe-pio-aravaca": 12,
+            "principe-pio-villalba": 141,
+        },
         # los trenes de Salamanca que llegan por Medina del Campo, no por Ávila, y los regionales de
         # Ávila que siguen de Príncipe Pío a Atocha y Chamartín por el túnel de Cercanías
         MADRID_AVILA_VALLADOLID_SPEC.name: {

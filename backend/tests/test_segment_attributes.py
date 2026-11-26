@@ -225,6 +225,7 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "lav-zaragoza-huesca": 1,
             # el tercer carril de Girona a Vilamalla
             "barcelona-girona-portbou": 7,
+            "enlace-principe-pio-pinar": 8,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
         # la electrificación solo se declara donde no es la de la línea: ese último tramo de la
@@ -239,6 +240,7 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "lav-ourense-santiago": 1,
             # Vitoria–Irún declara la procedencia de la tensión en todo su recorrido.
             "vitoria-irun": 20,
+            "enlace-principe-pio-pinar": 8,
         }
         assert covered.pop("electrification", None) == wired.get(line["line"])
         # la velocidad declarada es opcional: tres tramos de la alta velocidad de Barcelona,
@@ -259,6 +261,7 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "enlace-aljucen-la-garrovilla": 1,
             "alcazar-albacete": 1,
             "enlace-la-encina-caudete": 1,
+            "enlace-principe-pio-pinar": 8,
         }
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(
@@ -297,7 +300,13 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                 # líneas de Valladolid a León y de Olmedo a Ourense, dos, y la de León a Gijón, tres;
                 # la de Burgos a Vitoria, cinco, y las dos de Galicia y la de Sevilla a Cádiz, seis;
                 # la de Madrid a Valladolid por Ávila, siete
-                assert value.source_id == DR
+                source = (
+                    "osm-relation-13489217"
+                    if net.spec.line.id == "enlace-principe-pio-pinar"
+                    and attribute == "proteccion_tren"
+                    else DR
+                )
+                assert value.source_id == source
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),
                     dt.date(2026, 11, 13),

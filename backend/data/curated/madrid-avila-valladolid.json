@@ -18,7 +18,7 @@
       }
     ],
     "status": "disponible",
-    "description": "El camino de siempre de Madrid a Castilla y León: sale de Madrid-Chamartín, cruza la sierra de Guadarrama por Villalba, El Escorial y Las Navas del Marqués y sigue por Ávila y Medina del Campo hasta Valladolid.\n\nEs el primer tramo de la línea 100 de Adif, la de Madrid a Hendaya, abierta en 1864 por la Compañía de los Caminos de Hierro del Norte. Antes de la alta velocidad por Segovia era la puerta de todo el norte; hoy la usan sobre todo los trenes regionales, y algunos que siguen a León, Burgos y el País Vasco.\n\nLa mayoría de esos trenes no salen de Chamartín, sino de Madrid-Príncipe Pío, y llegan a la línea por Pozuelo y Las Rozas: se unen a ella en Pinar de las Rozas. Ese ramal, que para Adif es otra línea, no está cargado. En Villalba sale la línea de Cercedilla y Segovia; en Ávila y en Medina del Campo, las de Salamanca, y en Medina, también la de Zamora.\n\nEn los horarios de Renfe la recorren los regionales de Madrid a Ávila, Salamanca, Valladolid, León, Burgos, Vitoria e Irún, los regionales de Madrid a Segovia hasta Villalba y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria. Los trenes de Cercanías de Madrid también usan parte de sus vías, pero no están en los horarios cargados.",
+    "description": "El camino de siempre de Madrid a Castilla y León: sale de Madrid-Chamartín, cruza la sierra de Guadarrama por Villalba, El Escorial y Las Navas del Marqués y sigue por Ávila y Medina del Campo hasta Valladolid.\n\nEs el primer tramo de la línea 100 de Adif, la de Madrid a Hendaya, abierta en 1864 por la Compañía de los Caminos de Hierro del Norte. Antes de la alta velocidad por Segovia era la puerta de todo el norte; hoy la usan sobre todo los trenes regionales, y algunos que siguen a León, Burgos y el País Vasco.\n\nLa mayoría de esos trenes no salen de Chamartín, sino de Madrid-Príncipe Pío, y llegan a la línea por Pozuelo y Las Rozas: se unen a ella en Pinar de las Rozas. Ese acceso se puede recorrer en el esquema de su enlace. En Villalba sale la línea de Cercedilla y Segovia; en Ávila y en Medina del Campo, las de Salamanca, y en Medina, también la de Zamora.\n\nEn los horarios de Renfe la recorren los regionales de Madrid a Ávila, Salamanca, Valladolid, León, Burgos, Vitoria e Irún, los regionales de Madrid a Segovia hasta Villalba y los de Valladolid a Medina del Campo, Salamanca y Puebla de Sanabria. Los trenes de Cercanías de Madrid también usan parte de sus vías, pero no están en los horarios cargados.",
     "geometry_source": {
       "source_id": "osm-relation-13489217",
       "parts": [
@@ -123,7 +123,7 @@
         "lat": 40.523069
       },
       "reference_pk_km": 20.4,
-      "description": "Estación de Las Rozas donde se une a la línea, viniendo de Madrid-Príncipe Pío por Pozuelo y Las Rozas, el ramal por el que llegan casi todos sus trenes regionales. Ese ramal no está cargado."
+      "description": "Aquí confluyen los accesos que llegan de Madrid por Pitis y por Pozuelo. Los regionales de Príncipe Pío se incorporan a la línea de Ávila y Valladolid en dirección a Las Matas y Villalba."
     },
     {
       "id": "las-matas",
@@ -441,32 +441,6 @@
   ],
   "connections": [
     {
-      "id": "conv-pinar-principe-pio",
-      "node_id": "pinar-de-las-rozas",
-      "name": "Línea convencional Pinar de las Rozas – Madrid-Príncipe Pío",
-      "towards": "Las Rozas, Pozuelo y Madrid-Príncipe Pío",
-      "official_name": "Línea Atocha – Pinar de las Rozas",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -3.882318,
-          40.523069
-        ],
-        [
-          -3.867936,
-          40.494294
-        ],
-        [
-          -3.8000491,
-          40.4474232
-        ],
-        [
-          -3.7192492,
-          40.4220483
-        ]
-      ]
-    },
-    {
       "id": "conv-villalba-segovia",
       "node_id": "villalba-de-guadarrama",
       "name": "Línea convencional Villalba – Segovia",
@@ -697,22 +671,38 @@
     "10000": {
       "exits": [
         "pinar-de-las-rozas"
-      ]
+      ],
+      "via": {
+        "line": "enlace-principe-pio-pinar",
+        "node": "pinar-de-las-rozas"
+      }
     },
     "10001": {
       "exits": [
         "pinar-de-las-rozas"
-      ]
+      ],
+      "via": {
+        "line": "enlace-principe-pio-pinar",
+        "node": "pinar-de-las-rozas"
+      }
     },
     "10002": {
       "exits": [
         "pinar-de-las-rozas"
-      ]
+      ],
+      "via": {
+        "line": "enlace-principe-pio-pinar",
+        "node": "pinar-de-las-rozas"
+      }
     },
     "10005": {
       "exits": [
         "pinar-de-las-rozas"
-      ]
+      ],
+      "via": {
+        "line": "enlace-principe-pio-pinar",
+        "node": "pinar-de-las-rozas"
+      }
     },
     "12001": {
       "exits": [

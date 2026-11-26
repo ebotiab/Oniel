@@ -147,6 +147,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 20  # la continuación de Vitoria a Irún
             + 4
             + 1  # de Albacete a La Encina y su enlace hacia Caudete
+            + 8  # de Príncipe Pío a Pinar
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -493,6 +494,7 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
         "enlace-aljucen-la-garrovilla": "lav-plasencia-badajoz",
         "enlace-atocha-chamartin": LAV,
         "enlace-la-encina-caudete": "valencia-xativa-alicante",
+        "enlace-principe-pio-pinar": "madrid-avila-valladolid",
     }
     side_alicante = f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av"
     side_murcia = f"{LAV_MURCIA}:bif-murcia:bif-vinalopo"
@@ -505,6 +507,8 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     tunnel = "enlace-atocha-chamartin"
     assert {s: n for s, (link, n) in all_sides.items() if link != "enlace-monforte-del-cid"} == {
         "enlace-la-encina-caudete:la-encina:caudete": 0,
+        "enlace-principe-pio-pinar:aguja-bif-chamartin:pinar-de-las-rozas": 0,
+        "madrid-avila-valladolid:pitis:pinar-de-las-rozas": 1,
         "alcazar-albacete:la-encina:bif-la-encina": 1,
         "valencia-xativa-alicante:bif-la-encina:caudete": 2,
         "enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato": 0,
@@ -1255,3 +1259,18 @@ def test_extended_line_closures_compare_routes_between_passenger_stations(graph:
         conventional = next(r for r in there[:3] if "almansa" in r.node_ids)
         assert side in conventional.segment_ids
         assert conventional.segment_ids[::-1] in [r.segment_ids for r in back[:3]]
+
+
+def test_el_acceso_de_principe_pio_solo_continua_hacia_las_matas_en_pinar(graph: Graph) -> None:
+    terminal = "madrid-principe-pio"
+    pinar = "pinar-de-las-rozas"
+    for destino, km, minutos in [("avila", 120.6, 62), ("valladolid-campo-grande", 249.5, 112)]:
+        for desde, hasta in [(terminal, destino), (destino, terminal)]:
+            ruta = find_routes(graph, desde, hasta)[0]
+            assert (ruta.length_km, ruta.time_min) == (km, minutos)
+            nodos = ruta.node_ids if desde == terminal else list(reversed(ruta.node_ids))
+            assert nodos[nodos.index(pinar) + 1] == "las-matas"
+    for desde, hasta in [(terminal, "pitis"), ("pitis", terminal)]:
+        for ruta in find_routes(graph, desde, hasta):
+            pos = ruta.node_ids.index(pinar)
+            assert "las-matas" in (ruta.node_ids[pos - 1], ruta.node_ids[pos + 1])

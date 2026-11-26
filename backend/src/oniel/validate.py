@@ -656,7 +656,23 @@ def _validate_line(
             )
         else:
             far_node = link_far_node(own, others)
-            if not any(far_node in o.nodes for o in others if o is not parent):
+            if towards := spec.line.link_towards:
+                join = next(e for e in ends if e in parent.nodes)
+                parent_order = [n.id for n in parent.spec.nodes]
+                if (
+                    towards not in parent_order
+                    or abs(parent_order.index(join) - parent_order.index(towards)) != 1
+                ):
+                    problems.append(
+                        f"{towards} no es un nodo contiguo a {join} en {parent.line_id}"
+                    )
+                if not any(
+                    n.id == far_node and n.kind == "estacion" and not n.shared for n in spec.nodes
+                ):
+                    problems.append(
+                        f"el extremo {far_node} del acceso debe ser una estación propia"
+                    )
+            elif not any(far_node in o.nodes for o in others if o is not parent):
                 problems.append(
                     f"es un enlace de {parent.line_id}, pero {far_node} no es un nodo de ninguna"
                     " otra línea cargada"
