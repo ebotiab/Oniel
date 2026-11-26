@@ -522,9 +522,11 @@ class FeedSpec(BaseModel):
     #: cambian al leerlo, de modo que valen las asignaciones de todas las líneas.
     stop_id_aliases: dict[str, str] = Field(default_factory=dict)
     #: ``false`` si el fichero usa los códigos de estación de Adif pero con sus propios nombres y
-    #: coordenadas (una compilación ajena al operador): sus trenes se cargan, y el nombre y la
+    #: coordenadas (Iryo o SNCF): sus trenes se cargan, y el nombre y la
     #: posición de las paradas asignadas los siguen poniendo los ficheros oficiales.
     names_stops: bool = True
+    #: Campo que contiene el número comercial; SNCF lo publica en trip_headsign.
+    train_number_field: Literal["trip_short_name", "trip_headsign"] = "trip_short_name"
 
 
 #: Tipos de geometría GeoJSON que admite una anotación con geometría propia.

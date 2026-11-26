@@ -182,6 +182,7 @@ async def _import_all(
             stop_id_prefix=feed.stop_id_prefix,
             stop_id_aliases=feed.stop_id_aliases,
             names_stops=feed.names_stops,
+            train_number_field=feed.train_number_field,
         )
         for feed in feeds
     ]

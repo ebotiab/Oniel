@@ -36,6 +36,21 @@
         "37700": "37300"
       },
       "names_stops": false
+    },
+    {
+      "file": "raw/sncf/gtfs_sncf_paris_espagne_2026-11-26.zip",
+      "source_id": "sncf-horarios-abiertos",
+      "operator_id": "sncf",
+      "retrieved_on": "2026-11-26",
+      "product": "TGV",
+      "stop_id_prefix": "StopPoint:OCETGV INOUI-",
+      "stop_id_aliases": {
+        "71718010": "71801",
+        "71793000": "79300",
+        "71043075": "04307"
+      },
+      "names_stops": false,
+      "train_number_field": "trip_headsign"
     }
   ],
   "sources": [
@@ -1860,15 +1875,15 @@
     },
     {
       "id": "sncf-horarios-abiertos",
-      "name": "Horarios abiertos de SNCF (conjunto «Réseau SNCF TGV, Intercités et TER»): que los TGV de París a Barcelona recorren la línea de Barcelona a Figueres",
-      "publisher": "SNCF; Point d'Accès National aux données de transport (transport.data.gouv.fr)",
+      "name": "Horarios de SNCF: TGV de París a Barcelona (extracto del GTFS «Réseau SNCF TGV, Intercités et TER»)",
+      "publisher": "SNCF Voyageurs; Point d’Accès National aux données de transport (transport.data.gouv.fr)",
       "url": "https://transport.data.gouv.fr/datasets/horaires-sncf",
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
-      "retrieved_on": "2026-11-18",
-      "coverage": "Que SNCF Voyageurs opera trenes TGV entre Paris Gare de Lyon y Barcelona-Sants con parada en Perpiñán, Figueres-Vilafant y Girona, dos por sentido y día en el fichero válido del 18 de noviembre de 2026 al 30 de abril de 2027, y que publica sus horarios en GTFS con licencia abierta.",
-      "notes": "Oniel no carga estos horarios: de la fuente solo se toma que esos trenes existen y cuántos son, para decir en la descripción de la línea que faltan. El fichero es de toda la red de SNCF (84 MB de horarios sin comprimir) y sus paradas llevan un código propio, distinto del de Renfe; cargarlo queda para una tarea aparte. Lo consultado está resumido en el registro de consultas de ese día; el fichero no se guarda en raw/ porque la importación no lo usa.",
-      "file": "raw/operadores/consultas_2026-11-18.json"
+      "retrieved_on": "2026-11-26",
+      "coverage": "TGV de SNCF Voyageurs entre París y Barcelona, con parada en Girona y Figueres-Vilafant. Oniel cuenta su paso por la línea Barcelona–Girona–Figueres hasta el límite con la sección internacional; no carga la red francesa. Validez del fichero del 25 de noviembre de 2026 al 30 de abril de 2027.",
+      "notes": "Extracto de la ruta «Paris - Espagne TGV» del GTFS oficial descargado el 26 de noviembre de 2026, publicado el 25 a las 20:57 UTC. Se conservan viajes completos, calendarios, paradas y estaciones padre, agencia y metadatos; las filas no se alteran. Procedencia, URL del archivo histórico, tamaño, SHA-256 del original y del extracto y recuentos en raw/sncf/gtfs_sncf_paris_espagne_2026-11-26.json. Extracción reproducible con oniel.gtfs.sncf_extract; extracto disponible bajo ODbL 1.0 en https://github.com/ebotiab/Oniel/tree/main/backend/data/raw/sncf. Horarios planificados, con restricciones de subida y bajada del original; no es información en tiempo real. Renovación manual descrita en docs/datos.md, con el recordatorio de caducidad existente.",
+      "file": "raw/sncf/gtfs_sncf_paris_espagne_2026-11-26.zip"
     },
     {
       "id": "osm-relation-15616205",

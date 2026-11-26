@@ -1,0 +1,40 @@
+{
+  "source_id": "sncf-horarios-abiertos",
+  "catalogue_url": "https://transport.data.gouv.fr/datasets/horaires-sncf",
+  "license": "ODbL 1.0",
+  "license_url": "https://opendatacommons.org/licenses/odbl/1.0/",
+  "original": {
+    "url": "https://eu.ftp.opendatasoft.com/sncf/plandata/Export_OpenData_SNCF_GTFS_NewTripId.zip",
+    "downloaded_at": "2026-11-26T08:57:56.393315+00:00",
+    "sha256": "e05ea39f6e49db54d2a63e16659cbfa98141c2e8936d56b90741dc3eb86911b9",
+    "size_bytes": 5544385,
+    "last_modified": "Wed, 25 Nov 2026 20:57:08 GMT",
+    "etag": "\"6b074ba4-5499c1\"",
+    "archive_url": "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/83582/83582.20261126.002511.551839.zip",
+    "uncompressed_bytes": 98783268
+  },
+  "criterion": {
+    "route_long_name": "Paris - Espagne TGV",
+    "route_ids": [
+      "FR:Line::6667353C-75C7-4A33-8ADE-EBA7FFC003C6:"
+    ],
+    "complete_trips": true,
+    "parent_stations": true
+  },
+  "script": "src/oniel/gtfs/sncf_extract.py",
+  "extract": {
+    "file": "gtfs_sncf_paris_espagne_2026-11-26.zip",
+    "sha256": "8289a8a77d47e8a3712a4abf571fd929b465d2f4fc7064fd4d0ace85f2e41519",
+    "size_bytes": 8347,
+    "rows": {
+      "agency.txt": 1,
+      "calendar_dates.txt": 614,
+      "feed_info.txt": 1,
+      "routes.txt": 1,
+      "stop_times.txt": 656,
+      "stops.txt": 28,
+      "transfers.txt": 0,
+      "trips.txt": 63
+    }
+  }
+}

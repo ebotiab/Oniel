@@ -195,6 +195,7 @@ def import_gtfs_cmd(
                     stop_id_prefix=f.stop_id_prefix,
                     stop_id_aliases=f.stop_id_aliases,
                     names_stops=f.names_stops,
+                    train_number_field=f.train_number_field,
                 )
                 for f in _declared_feeds()
             ]
@@ -271,11 +272,11 @@ def validate_cmd(
     by_path = {path: ValidationLine(path, settings.data_dir) for path in all_paths}
     context = list(by_path.values())
     selected = [by_path[path.resolve()] for path in paths]
-    feeds: list[tuple[Path, str | None, dict[str, str]]] = (
-        [(feed, None, {})]
+    feeds: list[tuple[Path, str | None, dict[str, str], str]] = (
+        [(feed, None, {}, "trip_short_name")]
         if feed
         else [
-            (settings.data_dir / f.file, f.stop_id_prefix, f.stop_id_aliases)
+            (settings.data_dir / f.file, f.stop_id_prefix, f.stop_id_aliases, f.train_number_field)
             for f in _declared_feeds(sources)
         ]
     )
@@ -287,13 +288,14 @@ def validate_cmd(
         raise typer.Exit(code=1)
     reports = []
     summaries = {}
-    for feed_path, prefix, aliases in feeds:
+    for feed_path, prefix, aliases, number_field in feeds:
         line_reports, summary = validate_feed(
             selected,
             context,
             feed_path,
             stop_id_prefix=prefix,
             stop_id_aliases=aliases,
+            train_number_field=number_field,
             require_rules=False,
         )
         reports.extend(line_reports)

@@ -271,7 +271,12 @@ def validate_operators(
             summary = summaries[path]
             windows.append((feed, summary.start, summary.end))
         else:
-            read = read_feed(path)
+            read = read_feed(
+                path,
+                stop_id_prefix=feed.stop_id_prefix,
+                stop_id_aliases=feed.stop_id_aliases,
+                train_number_field=feed.train_number_field,
+            )
             windows.append((feed, read.feed_start, read.feed_end))
     common: list[str] | None = None
     if windows:
@@ -515,6 +520,7 @@ def validate_all(
     *,
     stop_id_prefix: str | None = None,
     stop_id_aliases: Mapping[str, str] | None = None,
+    train_number_field: str = "trip_short_name",
     require_rules: bool = True,
 ) -> dict[str, Any]:
     """Comprueba una línea; las demás (``other_spec_paths``) solo se usan para medir por ellas.
@@ -530,6 +536,7 @@ def validate_all(
         feed_path,
         stop_id_prefix=stop_id_prefix,
         stop_id_aliases=stop_id_aliases,
+        train_number_field=train_number_field,
         require_rules=require_rules,
     )
     return reports[0]
@@ -542,10 +549,16 @@ def validate_feed(
     *,
     stop_id_prefix: str | None = None,
     stop_id_aliases: Mapping[str, str] | None = None,
+    train_number_field: str = "trip_short_name",
     require_rules: bool = True,
 ) -> tuple[list[dict[str, Any]], FeedSummary]:
     """Devuelve los informes y el resumen del horario sin retener sus viajes para el siguiente."""
-    feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
+    feed = read_feed(
+        feed_path,
+        stop_id_prefix=stop_id_prefix,
+        stop_id_aliases=stop_id_aliases,
+        train_number_field=train_number_field,
+    )
     reports = [
         _validate_line(
             line,

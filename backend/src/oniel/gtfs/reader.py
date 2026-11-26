@@ -194,6 +194,7 @@ def read_feed(
     *,
     stop_id_prefix: str | None = None,
     stop_id_aliases: Mapping[str, str] | None = None,
+    train_number_field: str = "trip_short_name",
 ) -> GtfsFeed:
     """Lee un GTFS y deja un viaje por número de tren y día (``oniel.gtfs.variants``).
 
@@ -229,7 +230,7 @@ def read_feed(
                 trip_id=r["trip_id"],
                 route_id=r["route_id"],
                 service_id=r["service_id"],
-                train_number=train_number(r.get("trip_short_name") or r["trip_id"], product),
+                train_number=train_number(r.get(train_number_field) or r["trip_id"], product),
                 product=product_name(product),
             )
         for r in _rows(zf, "stop_times.txt"):
@@ -248,7 +249,7 @@ def read_feed(
             )
         for trip in trips.values():
             trip.stop_times.sort(key=lambda s: s.seq)
-        calendar = _rows(zf, "calendar.txt")
+        calendar = _rows(zf, "calendar.txt") if "calendar.txt" in zf.namelist() else []
         calendar_dates = (
             _rows(zf, "calendar_dates.txt") if "calendar_dates.txt" in zf.namelist() else []
         )

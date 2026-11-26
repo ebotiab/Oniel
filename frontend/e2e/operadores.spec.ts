@@ -60,6 +60,11 @@ test.describe('Trenes por operador', () => {
     const ouigo = operadores.getByTestId('operador-ouigo')
     await expect(ouigo).toContainText(/Horarios cargados, válidos del .* de junio de 2026 al .* de diciembre de 2026\./)
     await expect(ouigo).toContainText('Punto de Acceso Nacional')
+    const sncf = operadores.getByTestId('operador-sncf')
+    await expect(sncf).toContainText('SNCF Voyageurs')
+    await expect(sncf).toContainText('Horarios cargados, válidos del 25 de noviembre de 2026 al 30 de abril de 2027.')
+    await expect(sncf.getByRole('link', { name: 'ODbL 1.0' })).toBeVisible()
+    await expect(sncf.getByRole('link', { name: /Horarios de SNCF/ })).toHaveAttribute('href', 'https://transport.data.gouv.fr/datasets/horaires-sncf')
     // los de Iryo salen de una compilación no oficial: lo dice el estado, y la ficha, quién la compila y con qué licencia
     const iryo = operadores.getByTestId('operador-iryo')
     await expect(iryo).toContainText('Horarios cargados de una compilación no oficial, que no publica el operador, válidos del 5 de noviembre de 2026 al 11 de diciembre de 2027.')
