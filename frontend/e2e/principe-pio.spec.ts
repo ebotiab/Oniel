@@ -44,6 +44,21 @@ for (const destino of destinos) {
   })
 }
 
+test('la ficha distingue los atributos documentados de los que faltan', async ({ page }) => {
+  await page.goto(`/tramo/${acceso}:madrid-principe-pio:aravaca`)
+  await expect(page.getByTestId('tramo-atributo-gauge')).toHaveText('Ibérico (1.668 mm)')
+  const ampliar = page.getByRole('button', { name: 'Ampliar el panel' })
+  if (await ampliar.isVisible()) await ampliar.click()
+  await page.getByTestId('mas-detalle').locator('summary').click()
+  await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ASFA')
+  await expect(page.getByTestId('tramo-atributo-bloqueo')).toHaveText('Sin dato publicado')
+  await expect(page.getByTestId('tramo-atributo-mando')).toHaveText('Sin dato publicado')
+  const fuente = page.getByTestId('atributos-fuente')
+  await expect(fuente).toContainText('la misma fuente que el trazado')
+  await expect(page.getByTestId('mas-detalle').getByText('osm-relation-13489217')).toHaveCount(1)
+  await expect(fuente).toContainText('adif-declaracion-red-2026-mapas')
+})
+
 test('el cierre entre Las Rozas y Pinar lleva a los horarios de ambas estaciones y al comparador', async ({ page }) => {
   await page.goto(`/tramo/${acceso}:las-rozas:bif-chamartin/cierre`)
   const cierre = page.getByTestId('cierre-estaciones')

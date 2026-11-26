@@ -1,13 +1,11 @@
-import { readFileSync } from 'node:fs'
-
 import { expect, test, type Page } from '@playwright/test'
 
 import { attributeRows, attributeSources } from '../src/app/segmentAttributes.ts'
 import { composeNetwork } from '../src/data/network.ts'
-import type { NetworkIndexOut } from '../src/data/types.ts'
+import { cobertura, indice } from './instantanea.ts'
 
-const leer = <T>(ruta: string) => JSON.parse(readFileSync(new URL(ruta, import.meta.url), 'utf-8')) as T
-const red = composeNetwork(leer<NetworkIndexOut>('../public/data/index.json'), {})
+const red = composeNetwork(indice, {})
+const fuentesRegistradas = new Set(cobertura.sources.map((fuente) => fuente.id))
 
 const FUENTE = 'adif-declaracion-red-2026-mapas'
 const ALTA_VELOCIDAD = 'lav-madrid-sevilla:urda:ciudad-real'
@@ -30,25 +28,21 @@ test.describe('Señalización: protección del tren, bloqueo y mando de cada tra
     expect(red.segments).toHaveLength(red.lines.reduce((suma, l) => suma + l.segment_count, 0))
     for (const s of red.segments) {
       for (const clave of ['proteccion_tren', 'bloqueo', 'mando']) {
-        expect(s.attributes?.[clave], `${clave} de ${s.id}`).toMatchObject({ source_id: FUENTE })
-        // la fecha es la del día en que se leyó en el mapa: cada línea, el día en que se cargó, desde el 12 de noviembre de 2026
+        expect(fuentesRegistradas.has(s.attributes?.[clave]?.source_id ?? ''), `${clave} de ${s.id}`).toBe(true)
+        // la fecha indica cuándo se comprobó la fuente: cada línea, el día en que se cargó, desde el 12 de noviembre de 2026
         expect(s.attributes?.[clave]?.checked_on, `${clave} de ${s.id}`).toMatch(/^\d{4}-\d{2}-\d{2}$/)
         expect((s.attributes?.[clave]?.checked_on ?? '') >= '2026-11-12', `${clave} de ${s.id}`).toBe(true)
       }
       const filas = attributeRows(s, red.lines.find((l) => l.id === s.line_id), 'detalle')
       // cada valor tiene su texto en la ficha: ninguno sale con la clave cruda
       for (const f of filas) expect(f.atributo.formato(f.valor!.value)).not.toMatch(/_|^[a-z]/)
-      const comprobado = s.attributes?.bloqueo?.checked_on
-      // la electrificación va también bajo «Más detalle»: la de la línea no se cita aparte, y los
-      // tramos que traen la suya (de Madrid a Humanes, camino de Extremadura) citan además su fuente
-      const propia = s.attributes?.electrification
-      // si la electrificación sale de la misma fuente y del mismo día que la señalización (la variante
-      // de Pajares, leída en el mismo mapa), se citan juntas
-      const junta = propia?.source_id === FUENTE && propia.checked_on === comprobado
-      expect(attributeSources(filas)).toEqual([
-        ...(propia && !junta ? [{ sourceId: propia.source_id, checkedOn: propia.checked_on, etiquetas: ['Electrificación'] }] : []),
-        { sourceId: FUENTE, checkedOn: comprobado, etiquetas: [...(junta ? ['Electrificación'] : []), 'Protección del tren', 'Bloqueo', 'Mando'] },
-      ])
+      const conFuente = filas.filter((f) => f.valor?.source_id && !f.atributo.sinCita)
+      const citas = attributeSources(filas)
+      expect(citas.flatMap((c) => c.etiquetas).sort()).toEqual(conFuente.map((f) => f.atributo.etiqueta).sort())
+      for (const cita of citas) {
+        const mismas = conFuente.filter((f) => f.valor?.source_id === cita.sourceId && f.valor.checked_on === cita.checkedOn)
+        expect(cita.etiquetas).toEqual(mismas.map((f) => f.atributo.etiqueta))
+      }
     }
   })
 
