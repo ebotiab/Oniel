@@ -17,9 +17,9 @@ from typing import Any
 import asyncpg
 import logfire
 
-from oniel.domain.schemas import NodeOut, SegmentPassOut, SegmentServicesOut, ServiceHistoryOut
+from oniel.domain.schemas import NodeOut, SegmentServicesOut, ServiceHistoryOut
 from oniel.repo import datasets_repo, network_repo, services_repo
-from oniel.sim.service import direction_label, shifted_times
+from oniel.sim.service import public_passes
 
 
 def safe_name(identifier: str) -> str:
@@ -111,25 +111,9 @@ async def _export_snapshot(
             },
         )
     for segment in network.segments:
-        dated = await services_repo.passes_on_segment(conn, segment.id, day)
-        passes = []
-        kinds = {"publicado": 0, "estimado": 0, "indeterminado": 0}
-        for d in dated:
-            enter, exit_ = shifted_times(d.segment_pass, d.from_previous_day)
-            kinds[d.segment_pass.kind] += 1
-            passes.append(
-                SegmentPassOut(
-                    service=d.service,
-                    kind=d.segment_pass.kind,
-                    enter=enter,
-                    exit=exit_,
-                    enter_margin_min=round(d.segment_pass.enter_margin_s / 60, 1),
-                    exit_margin_min=round(d.segment_pass.exit_margin_s / 60, 1),
-                    km_increasing=d.segment_pass.km_increasing,
-                    direction_label=direction_label(segment, d.segment_pass.km_increasing),
-                    basis=d.segment_pass.basis,
-                )
-            )
+        passes, kinds = public_passes(
+            segment, await services_repo.passes_on_segment(conn, segment.id, day)
+        )
         payload = SegmentServicesOut(
             segment=segment,
             date=day,

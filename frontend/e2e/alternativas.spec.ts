@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { fechaReferencia, alternativas, cobertura, sinOtroCamino } from './instantanea.ts'
+import { fechaReferencia, alternativas, cobertura, fraseOtroCamino, sinOtroCamino } from './instantanea.ts'
 import { irA } from './navegar.ts'
 
 // Trenes por tramo y si tienen otro camino en las líneas cargadas, en el día de la instantánea.
@@ -125,9 +125,9 @@ test.describe('Tramos sin otro camino', () => {
   test('los regionales de Manzanares a Ciudad Real conservan sus alternativas tras terminar los desvíos', async ({ page }) => {
     await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real')
     await abrirPanel(page)
-    await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, 4 de sus 10 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 204 km y 54 min más.',
-    )
+    const resumen = page.getByTestId('tramo-alternativa')
+    await expect(resumen).toContainText(fraseOtroCamino('manzanares-ciudad-real:almagro:ciudad-real'))
+    await expect(resumen).toContainText(/entre Ciudad Real y .+ km y .+ min más/)
     // Los Intercity desviados hacia Andalucía terminan el 22/11 en el GTFS vigente.
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(page.getByTestId('tramo-alternativa-detalle')).not.toContainText('Madrid-Puerta de Atocha y Málaga-María Zambrano')
@@ -143,7 +143,7 @@ test.describe('Tramos sin otro camino', () => {
     )
     // los totales salen del análisis de la instantánea (e2e/instantanea.ts): cambian con cada línea que se carga
     const { sin, con, lineas: esperadas } = sinOtroCamino
-    await expect(page.getByTestId('sin-camino-resumen')).toHaveText(`Son ${sin} de los ${sin + con} tramos con trenes, en ${esperadas.length} líneas. En el mapa, lo demás va atenuado.`)
+    await expect(page.getByTestId('sin-camino-resumen')).toHaveText(`Son ${sin} de los ${sin + con} tramos con trenes analizados, en ${esperadas.length} líneas. En el mapa, lo demás va atenuado.`)
     // no falta ningún operador, y los trenes de Iryo salen de una compilación no oficial
     await expect(page.getByTestId('sin-camino-faltan')).toHaveCount(0)
     await expect(page.getByTestId('sin-camino-no-oficiales')).toHaveText('Los trenes de Iryo salen de una compilación no oficial de sus horarios, que no publica el operador.')

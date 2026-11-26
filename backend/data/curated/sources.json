@@ -151,7 +151,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-08",
-      "coverage": "De la relación completa (Madrid-Chamartín–València) Oniel usa los 146,7 km entre Madrid-Atocha y Alcázar de San Juan, para la línea convencional Madrid – Alcázar de San Juan – Córdoba, y los 130,8 km entre Alcázar de San Juan y Albacete-Los Llanos, para la línea de Alcázar de San Juan a Albacete, recorriendo el grafo de vías por el camino más corto entre las estaciones; velocidad máxima por tramo.",
+      "coverage": "De la relación completa (Madrid-Chamartín–València) Oniel usa los 146,7 km entre Madrid-Atocha y Alcázar de San Juan, para la línea convencional Madrid – Alcázar de San Juan – Córdoba, y los 130,8 km entre Alcázar de San Juan y Albacete-Los Llanos, para la línea de Alcázar de San Juan a Albacete, recorriendo el grafo de vías por el camino más corto entre las estaciones; velocidad máxima por tramo. La prolongación sigue la misma relación desde Albacete hasta la bifurcación de La Encina por Almansa.",
       "notes": "Descargado por la API Overpass el 8 de noviembre de 2026. La relación incluye las dos vías de la línea sin orden fijo, por eso la geometría se obtiene trazando el camino más corto en lugar de encadenar los miembros. Los puntos kilométricos se contrastaron con los de Adif recogidos en Wikipedia.",
       "file": "raw/osm/relation_18368327_linea_300_madrid_valencia_2026-11-08.json"
     },
@@ -742,7 +742,7 @@
       "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
       "retrieved_on": "2026-11-12",
-      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra. Revisión del 25 de noviembre: mapa 3, página 7 (enero de 2026), máximos de 300 km/h de Madrid a Barcelona y 160 de Burgos a Miranda; número de vías principales y electrificación de las líneas cargadas, junto al mapa 4. Las secciones curadas precisan los extremos y la fecha de comprobación. Revisión 26 de noviembre: Vitoria–Irún, mapas 3 y 4, doble vía, 3 kV CC, ancho ibérico, ASFA, BAB y CTC; máximos de 160 entre Vitoria y Altsasu y 135 al norte, compatibles con los tramos medidos de OSM.",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra. Revisión del 25 de noviembre: mapa 3, página 7 (enero de 2026), máximos de 300 km/h de Madrid a Barcelona y 160 de Burgos a Miranda; número de vías principales y electrificación de las líneas cargadas, junto al mapa 4. Las secciones curadas precisan los extremos y la fecha de comprobación. Revisión 26 de noviembre: Vitoria–Irún, mapas 3 y 4, doble vía, 3 kV CC, ancho ibérico, ASFA, BAB y CTC; máximos de 160 entre Vitoria y Altsasu y 135 al norte, compatibles con los tramos medidos de OSM. En la ampliación desde Albacete, los mapas 3 y 4 distinguen la línea 300 de doble vía y el enlace de vía única hacia Caudete.",
       "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
       "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },
@@ -2524,6 +2524,126 @@
       "coverage": "Coordenadas de Hendaye (SNCF), distintas de la estación Hendaia de Euskotren.",
       "notes": "Extracto de la API OSM. Se usa solo para el extremo del croquis Irún–Hendaya: no incorpora vía ni servicios franceses.",
       "file": "raw/osm/hendaya_2026-11-26.json"
+    },
+    {
+      "id": "osm-enlace-la-encina-caudete",
+      "name": "Vías de La Encina a Caudete",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=-0.967,38.710,-0.930,38.772",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Vías principales con referencia 330. El trazado se corta en las dos estaciones.",
+      "notes": "Extracto de la API 0.6 con las vías seleccionadas y sus nodos. Se conservan los identificadores de OSM.",
+      "file": "raw/osm/vias_la_encina_caudete_2026-11-26.json"
+    },
+    {
+      "id": "osm-aguja-chinchilla",
+      "name": "Salida convencional de Chinchilla hacia Murcia",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=-1.737,38.883,-1.676,38.922",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Nodo 2398381289. Las vías de Madrid–Cartagena y de la línea 300 comparten esta aguja al oeste de la instalación de Chinchilla.",
+      "notes": "Extracto de la API 0.6 con las vías seleccionadas y sus nodos. Se conservan los identificadores de OSM.",
+      "file": "raw/osm/aguja_chinchilla_2026-11-26.json"
+    },
+    {
+      "id": "transportes-cuadro-linea-300-salobrejo",
+      "name": "Cuadro de velocidades máximas de la línea 300, anejo 7 del estudio de la laguna del Salobrejo",
+      "publisher": "Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://cdn.transportes.gob.es/portal-web-transportes/ferroviario/estudios_planificacion/Madrid-Chamartin-Clara-Campoamor-Valencia-Nord/doc-1-memoria-y-anejos/07_trazado-y-superestructura.pdf",
+      "license": "Consulta pública",
+      "license_url": "https://cdn.transportes.gob.es/portal-web-transportes/ferroviario/estudios_planificacion/Madrid-Chamartin-Clara-Campoamor-Valencia-Nord/doc-1-memoria-y-anejos/07_trazado-y-superestructura.pdf",
+      "retrieved_on": "2026-11-26",
+      "coverage": "PK 298,4 de la aguja de Chinchilla y 358,2 de Almansa.",
+      "notes": "Página 4 impresa (6 del PDF). El cuadro distingue la línea 300 en servicio de la 042 y de las variantes estudiadas.",
+      "file": "raw/adif/anejo_7_salobrejo_2026-11-26.pdf"
+    },
+    {
+      "id": "fcmaf-linea-300",
+      "name": "Ficha de la línea 300 en Castilla-La Mancha",
+      "publisher": "Federación Castellano Manchega de Amigos del Ferrocarril",
+      "url": "https://www.fcmaf.es/Ferrocarriles/300.htm",
+      "license": "Consulta pública",
+      "license_url": "https://www.fcmaf.es/Ferrocarriles/300.htm",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Almansa (358,2) a La Encina (376,4): 140 km/h.",
+      "notes": "Consulta del cuadro por kilómetros y tipo de tren. Se conservan los hechos verificados y el enlace al original.",
+      "file": "raw/proyectos/consultas_2026-11-26_la_encina.json"
+    },
+    {
+      "id": "fcmaf-linea-330",
+      "name": "Ficha de la línea 330 en Castilla-La Mancha",
+      "publisher": "Federación Castellano Manchega de Amigos del Ferrocarril",
+      "url": "https://www.fcmaf.es/Ferrocarriles/330.htm",
+      "license": "Consulta pública",
+      "license_url": "https://www.fcmaf.es/Ferrocarriles/330.htm",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Vía única ibérica. BAU con CTC. Entre La Encina (376,4) y Caudete (383,138) el cuadro de la línea alcanza 130 km/h. El límite cambia varias veces en el recorrido.",
+      "notes": "Consulta del cuadro por kilómetros y tipo de tren. Se conservan los hechos verificados y el enlace al original.",
+      "file": "raw/proyectos/consultas_2026-11-26_la_encina.json"
+    },
+    {
+      "id": "boe-b-2025-15773",
+      "name": "Formalización del contrato de vía y electrificación de La Encina a Alicante",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2025-15773",
+      "license": "Reutilización autorizada citando la fuente (aviso legal del BOE)",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Adjudicación el 25 de febrero de 2025 de las obras de vía y electrificación del tramo La Encina–Bifurcación Alicante.",
+      "notes": "Publicado el 30 de abril de 2025. El anuncio acredita el contrato.",
+      "file": "raw/proyectos/boe/BOE-B-2025-15773_2026-11-26.xml"
+    },
+    {
+      "id": "adif-materiales-la-encina-alicante-2026-03",
+      "name": "Suministro de materiales para el tercer carril de La Encina a Alicante",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/adjudicacion-traviesas-balasto-ancho-estandar-encina-alicante",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/w/adjudicacion-traviesas-balasto-ancho-estandar-encina-alicante",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Adif adjudicó el suministro y el transporte de materiales para el tercer carril el 5 de marzo de 2026.",
+      "notes": "La adjudicación no fecha una apertura ni una interrupción.",
+      "file": "raw/proyectos/consultas_2026-11-26_la_encina.json"
+    },
+    {
+      "id": "adif-estado-encina-2026-11",
+      "name": "Estado de la red",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "retrieved_on": "2026-11-26",
+      "coverage": "La página consultada incluye un aviso de mantenimiento. No permite determinar por sí sola todas las incidencias de la línea.",
+      "notes": "Lectura del 26 de noviembre para esta ampliación.",
+      "file": "raw/interrupciones/consultas_2026-11-26_la_encina.json"
+    },
+    {
+      "id": "adif-avisos-encina-2026-11",
+      "name": "Avisos de obras",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/viajeros/avisos",
+      "retrieved_on": "2026-11-26",
+      "coverage": "El aviso de Murcia-Almería sitúa el recorrido por carretera en los trayectos al sur de Archena y Murcia. No afecta a la parte cargada hasta Chinchilla.",
+      "notes": "Lectura del 26 de noviembre para esta ampliación.",
+      "file": "raw/interrupciones/consultas_2026-11-26_la_encina.json"
+    },
+    {
+      "id": "adif-almansa-2026-11",
+      "name": "Panel de Almansa",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/60800-almansa",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/w/60800-almansa",
+      "retrieved_on": "2026-11-26",
+      "coverage": "El panel del día enumera regionales hacia Albacete, Ciudad Real y Valencia. La observación de algunos trenes limita la parada en Caudete a viernes, sábados y domingos. No acredita la circulación efectiva de todos los trenes.",
+      "notes": "Lectura del 26 de noviembre para esta ampliación.",
+      "file": "raw/interrupciones/consultas_2026-11-26_la_encina.json"
     }
   ]
 }

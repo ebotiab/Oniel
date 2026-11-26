@@ -8,6 +8,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field, computed_field
 
 from oniel.domain.annotations import INTERRUPTION
+from oniel.domain.station_closures import StationClosure
 from oniel.routing.graph import Route, RouteLeg
 from oniel.routing.scenario import Scenario
 
@@ -97,6 +98,9 @@ class AttributeValue(BaseModel):
 
 
 class SegmentOut(BaseModel):
+    station_closure: StationClosure | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     id: str
     line_id: str
     seq: int

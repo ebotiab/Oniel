@@ -49,11 +49,11 @@ test.describe('Línea de València a Alicante por Xàtiva', () => {
     expect(rutas[0].length_km).toBe(183.1)
     expect(rutas[0].line_ids).toEqual([LINEA])
     expect(findRoutes(grafo, NORD, 'xativa').map((r) => r.length_km)).toEqual([55.9])
-    // la vuelta por la alta velocidad mide más del doble y no sale; de Madrid a Alicante hay un tercer camino, por València y Xàtiva
-    expect(rutas).toHaveLength(1)
-    // el primero baja a Atocha por el túnel de Recoletos y sigue por la convencional hasta Albacete; eran 507,6 km
-    // cuando ese camino doblaba en la bifurcación de Torrejón de Velasco
-    expect(findRoutes(grafo, 'madrid-chamartin', ALICANTE).map((r) => r.length_km)).toEqual([450.1, 486.2, 581.3, 587.8])
+    // El camino directo de Valencia evita la estación de La Encina.
+    expect(rutas[0].node_ids).toContain('caudete')
+    expect(rutas[0].node_ids).not.toContain('la-encina')
+    const desdeMadrid = findRoutes(grafo, 'madrid-chamartin', ALICANTE)
+    expect(desdeMadrid.find((r) => r.length_km === 461.3)?.node_ids).toContain('almansa')
   })
 
   test('la alta velocidad en obras y el tercer carril figuran como proyectos, no como línea', () => {

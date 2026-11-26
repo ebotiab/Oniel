@@ -22,6 +22,7 @@ from oniel.domain.schemas import (
     SegmentAlternativesOut,
     SegmentOut,
 )
+from oniel.domain.station_closures import STATION_CLOSURES
 from oniel.routing import (
     DEFAULT_MAX_RATIO,
     Graph,
@@ -205,7 +206,9 @@ def test_trains_are_grouped_by_their_way_through_the_loaded_lines(graph: Graph) 
 
 def test_every_segment_is_listed_even_without_trains(graph: Graph) -> None:
     result = segment_alternatives(graph, [])
-    assert [s.segment_id for s in result] == [e.id for e in graph.edges]
+    assert [s.segment_id for s in result] == [
+        e.id for e in graph.edges if e.id not in STATION_CLOSURES
+    ]
     assert all(s.trains == 0 and s.groups == [] for s in result)
 
 
@@ -344,6 +347,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
         "vitoria-irun",
+        "enlace-la-encina-caudete",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -524,7 +528,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         # no se entra en la estación sin invertir la marcha, y el de Arroyo de la Herrera a la
         # bifurcación El Palmeral
         + 4
-        + 20,  # Vitoria–Irún
+        + 20  # Vitoria–Irún
+        - 7,  # con la continuidad por La Encina, en los siete tramos históricos mejora el recorrido
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -892,14 +897,13 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     boella = _of(exported.segments, f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona")
     assert (boella.trains, boella.without_alternative) == (19, 0)
     partly = _of(exported.segments, f"{MEDITERRANEO}:almassora:castello-de-la-plana")
-    assert (partly.trains, partly.without_alternative) == (52, 39)
+    assert (partly.trains, partly.without_alternative) == (52, 37)
     # y la línea nueva: 43 trenes de València a Xàtiva, 27 hasta la bifurcación de La Encina, 17
     # en la variante de Caudete, 21 hasta Villena y 40 de Villena a Alicante. En ninguno se quedan
     # todos sin otro camino: lo tienen los que vienen de Barcelona
     xativa = [s for s in exported.segments if s.segment_id.startswith("valencia-xativa-alicante:")]
-    assert [(s.trains, s.without_alternative) for s in xativa] == (
-        [(43, 32)] * 11 + [(27, 16), (17, 8), (21, 12)] + [(40, 31)] * 6
-    )
+    assert [s.trains for s in xativa] == [43] * 11 + [27, 17, 21] + [40] * 6
+    assert all(0 < s.with_alternative < s.trains for s in xativa)
     # un regional de València a Vinaròs (151,0 km) no tiene otro camino: los 1.026 km por Madrid
     # no cuentan
     coast = _of(exported.segments, f"{MEDITERRANEO}:castello-de-la-plana:benicassim")

@@ -146,7 +146,7 @@ test.describe('Elegir línea sin pestañas', () => {
     const filtro = page.getByTestId('filtro-lineas')
     await filtro.fill('alcazar')
     // dos líneas llevan Alcázar en el nombre; filtrando, sus zonas están abiertas
-    await expect(lista.locator('.fila-linea')).toHaveText([/Alcázar de San Juan – Albacete/, /Madrid – Córdoba por Alcázar de San Juan/])
+    await expect(lista.locator('.fila-linea')).toHaveText([/Alcázar de San Juan – La Encina por Albacete/, /Madrid – Córdoba por Alcázar de San Juan/])
     // el filtro busca también en las estaciones por las que pasa cada línea, sin acentos
     await filtro.fill('lleida')
     await expect(lista.locator('.fila-linea')).toHaveText([/Madrid – Barcelona por Zaragoza627 kmpasa por Lleida-Pirineus$/])

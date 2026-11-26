@@ -325,6 +325,11 @@ def validate_attributes(
         except (ValueError, OSError) as error:
             problems.append(f"{line.path.name}: {error}")
             continue
+        for node in spec.nodes:
+            if node.source_id is not None and node.source_id not in sources:
+                problems.append(
+                    f"{spec.line.id}: {node.id} cita una fuente no registrada ({node.source_id})"
+                )
         for section in spec.attribute_sections:
             if section.source_id is not None and section.source_id not in sources:
                 problems.append(

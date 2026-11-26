@@ -1,0 +1,94 @@
+{
+  "line": {
+    "id": "enlace-la-encina-caudete",
+    "name": "Enlace La Encina – Caudete",
+    "short_name": "330",
+    "sort_order": 50,
+    "zone": "levante",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "max_speed_kmh": 130,
+    "tracks": 1,
+    "status": "disponible",
+    "link_of": "valencia-xativa-alicante",
+    "description": "Los trenes que vienen de Albacete hacia Alicante pasan por la estación de La Encina y toman esta vía hasta Caudete. Desde allí siguen por Villena.\n\nLa variante que une directamente Valencia con Alicante llega a Caudete por otro camino y evita la estación de La Encina.",
+    "geometry_source": {
+      "source_id": "osm-enlace-la-encina-caudete",
+      "parts": [
+        {
+          "source_id": "osm-enlace-la-encina-caudete",
+          "file": "raw/osm/vias_la_encina_caudete_2026-11-26.json",
+          "way_ref": "330",
+          "from": [
+            -0.954244,
+            38.765344
+          ],
+          "to": [
+            -0.959727,
+            38.716163
+          ]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "la-encina", "name": "La Encina", "kind": "estacion", "adif_code": "60900", "position": {"lon": -0.954244, "lat": 38.765344}, "shared": true},
+    {"id": "caudete", "name": "Caudete", "kind": "estacion", "adif_code": "60901", "position": {"lon": -0.959727, "lat": 38.716163}, "shared": true}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "la-encina", "to_node": "caudete", "value": 1, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapas 3 y 4. Número de vías principales en el recorrido."},
+    {"attribute": "proteccion_tren", "from_node": "la-encina", "to_node": "caudete", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapa 4. Símbolos de ASFA convencional."},
+    {"attribute": "bloqueo", "from_node": "la-encina", "to_node": "caudete", "value": "bau", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapa 4. Rótulo del bloqueo junto al trazado convencional."},
+    {"attribute": "mando", "from_node": "la-encina", "to_node": "caudete", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapa 4. El rótulo del bloqueo incluye «ctc»."},
+    {"attribute": "max_speed_kmh", "from_node": "la-encina", "to_node": "caudete", "value": 130, "source_id": "fcmaf-linea-330", "checked_on": "2026-11-26", "note": "La máxima del cuadro por PK alcanza 130. La velocidad predominante de las vías con dato en OSM es 90 km/h."}
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "60900": {"node": "la-encina"},
+    "60901": {"node": "caudete"},
+    "37200": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
+    "50100": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}]},
+    "50102": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}]},
+    "50207": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}]},
+    "50300": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}]},
+    "50500": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}]},
+    "60400": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60402": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60406": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60500": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60503": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60505": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60507": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60600": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "60800": {"exits": ["la-encina"], "via": {"line": "alcazar-albacete", "node": "la-encina"}},
+    "94002": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
+    "94004": {"exits": ["la-encina"], "via": [{"line": "alcazar-albacete", "node": "la-encina"}, {"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
+    "60902": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}},
+    "60904": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}},
+    "60905": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}},
+    "60907": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}},
+    "60913": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}},
+    "60914": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}},
+    "60911": {"exits": ["caudete"], "via": {"line": "valencia-xativa-alicante", "node": "caudete"}}
+  },
+  "corridor_filter": {
+    "description": "Los pares de Almansa con Caudete o Villena identifican los trenes de ambos sentidos aunque pasen por La Encina o Caudete sin parar.",
+    "min_node_stops": 2,
+    "consecutive_stop_ids": [
+      [
+        "60800",
+        "60901"
+      ],
+      [
+        "60800",
+        "60902"
+      ]
+    ]
+  }
+}

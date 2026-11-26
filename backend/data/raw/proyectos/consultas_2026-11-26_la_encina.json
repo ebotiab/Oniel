@@ -1,0 +1,26 @@
+{
+  "consultado_el": "2026-11-26",
+  "hora_local": "Entre las 12:58 y las 13:06 (Europe/Madrid)",
+  "consultas": [
+    {
+      "source_id": "fcmaf-linea-300",
+      "url": "https://www.fcmaf.es/Ferrocarriles/300.htm",
+      "resultado": "Almansa (358,2) a La Encina (376,4): 140 km/h."
+    },
+    {
+      "source_id": "fcmaf-linea-330",
+      "url": "https://www.fcmaf.es/Ferrocarriles/330.htm",
+      "resultado": "Vía única ibérica. BAU con CTC. Entre La Encina (376,4) y Caudete (383,138) el cuadro de la línea alcanza 130 km/h. El límite cambia varias veces en el recorrido."
+    },
+    {
+      "source_id": "boe-b-2025-15773",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2025-15773",
+      "resultado": "Adjudicación el 25 de febrero de 2025 de las obras de vía y electrificación del tramo La Encina–Bifurcación Alicante."
+    },
+    {
+      "source_id": "adif-materiales-la-encina-alicante-2026-03",
+      "url": "https://www.adif.es/w/adjudicacion-traviesas-balasto-ancho-estandar-encina-alicante",
+      "resultado": "Adif adjudicó el suministro y el transporte de materiales para el tercer carril el 5 de marzo de 2026."
+    }
+  ]
+}

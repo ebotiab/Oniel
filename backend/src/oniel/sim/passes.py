@@ -39,6 +39,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Literal
 
+from oniel.domain.station_closures import STATION_CLOSURES
 from oniel.geo import haversine_km
 
 PassKind = Literal["publicado", "estimado", "indeterminado"]
@@ -419,9 +420,26 @@ def _leg_passes(
     passes = []
     for segment_id, done_lo, done_hi, same_direction, note in stretches:
         first, last = (done_lo, done_hi) if km_increasing else (done_hi, done_lo)
-        enter, exit_ = time_at(first), time_at(last)
         enter_pub = a.on_line and abs(first - done_a) <= KM_TOLERANCE
         exit_pub = b.on_line and abs(last - done_b) <= KM_TOLERANCE
+        if segment_id in STATION_CLOSURES:
+            # Se conserva la pertenencia al recorrido y, cuando existen, las horas comerciales.
+            # Los puntos intermedios de este trayecto carecen de hora de paso en el horario.
+            published = enter_pub and exit_pub
+            passes.append(
+                SegmentPass(
+                    segment_id,
+                    "publicado" if published else "estimado",
+                    t0 if published else None,
+                    t1 if published else None,
+                    0.0,
+                    0.0,
+                    km_increasing if same_direction else not km_increasing,
+                    f"Recorrido entre las paradas publicadas de {a.call.stop_name} y {b.call.stop_name}.",
+                )
+            )
+            continue
+        enter, exit_ = time_at(first), time_at(last)
         if enter_pub and exit_pub:
             kind: PassKind = "publicado"
             basis = (

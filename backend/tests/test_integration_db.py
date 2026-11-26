@@ -33,6 +33,7 @@ from conftest import (
 from test_criticality import assert_alternatives_of_13_november_2026
 
 from oniel.domain.schemas import AlternativesOut
+from oniel.domain.station_closures import STATION_CLOSURES
 
 LAV, CONV, MZCR, JAEN, LBMG, ALBACETE = (
     "lav-madrid-sevilla",
@@ -278,6 +279,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     trips += 12
     # Seis viajes Intercity de Vitoria a San Sebastián; los otros 139 ya contaban en otras líneas.
     trips += 6
+    trips += 10  # los viajes de Albacete a Hellín que salen por Chinchilla
     # Con la de León a Gijón entran 33: los 25 regionales de León y de Valladolid a Gijón, que
     # suben el puerto de Pajares por la vía antigua, y 8 Media Distancia de León a Gijón. Los
     # otros 108 de sus 141 viajes ya estaban en la de Valladolid a León
@@ -450,9 +452,9 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     assert gtfs1["lines"][JAEN]["passes"] == {"publicado": 20, "estimado": 226}
     assert gtfs1["lines"][MZCR]["passes"] == {"publicado": 124 * 3, "estimado": 22 * 3}
     assert gtfs1["lines"][LBMG]["trips"] == 26 + 12
-    assert gtfs1["lines"][ALBACETE]["trips"] == 127 + 15
+    assert gtfs1["lines"][ALBACETE]["trips"] == 127 + 15 + 38
     assert gtfs1["lines"][ALBACETE]["route_overrides"] == {}
-    assert gtfs1["lines"][ALBACETE]["passes"] == {"publicado": 516, "estimado": 478}
+    assert gtfs1["lines"][ALBACETE]["passes"] == {"publicado": 555, "estimado": 911}
     assert gtfs1["lines"][LBMG]["route_overrides"] == {"linares-baeza-almeria-por-moreda": 4}
     assert gtfs1["lines"][LBMG]["passes"] == {"publicado": 18, "estimado": 62}
     assert "indeterminado" not in gtfs1["passes"] and gtfs1["unmapped_stops"] == {}
@@ -523,7 +525,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # y las de Zaragoza a Logroño y de Castejón a Pamplona, y la de Miranda de Ebro a Bilbao
     # y la de Sevilla a Huelva, y los tres enlaces de #260
     assert c["lines"] == (
-        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 1
+        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 2
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -571,6 +573,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 11  # la de Sevilla a Huelva
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
+        + 5  # ampliación a La Encina y enlace a Caudete
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -606,6 +609,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # los tres enlaces de #260: Soto de Cerrato, Aljucén a La Garrovilla y el túnel de Madrid
     renfe_passes += 6 + 128 + (555 + 423)
     renfe_passes += 1427 + 342  # Vitoria–Irún
+    renfe_passes += 472 + 78  # ampliación y enlace
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -738,7 +742,7 @@ async def test_lines_carry_their_zone(client: httpx.AsyncClient) -> None:
     assert zones["lav-madrid-sevilla"]["name"] == "Andalucía"
     assert "Sevilla" in zones["lav-madrid-sevilla"]["cities"]
     assert zones["lav-madrid-barcelona"]["id"] == "cataluna"
-    assert zones["alcazar-albacete"]["id"] == "madrid-castilla-la-mancha"
+    assert zones["alcazar-albacete"]["id"] == "levante"
     # el orden de las zonas va de norte a sur
     assert zones["lav-madrid-barcelona"]["sort_order"] < zones["lav-madrid-sevilla"]["sort_order"]
     assert all(zone is not None for zone in zones.values())
@@ -796,6 +800,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 11  # la de Sevilla a Huelva
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
+        + 5  # ampliación a La Encina y enlace a Caudete
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -858,6 +863,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         # los enlaces de Soto de Cerrato y de Aljucén a La Garrovilla, de vía única
         "enlace-soto-de-cerrato",
         "enlace-aljucen-la-garrovilla",
+        "enlace-la-encina-caudete",
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -938,6 +944,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
         "vitoria-irun",
+        "enlace-la-encina-caudete",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -1043,6 +1050,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 11  # la de Sevilla a Huelva
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
+        + 5  # ampliación a La Encina y enlace a Caudete
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1093,6 +1101,8 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         # los dos enlaces que acaban con unos metros de vía de la línea vecina, más rápida
         "enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato": 160,
         "enlace-aljucen-la-garrovilla:aljucen:garrovilla-las-vegas": 120,
+        "alcazar-albacete:almansa:la-encina": 140,
+        "enlace-la-encina-caudete:la-encina:caudete": 130,
     }
     # la electrificación, solo donde no es la de su línea: el último tramo de la línea de
     # Valencia a Camp de Tarragona, que va a 25 kV en una línea de 3 kV, y la salida de Madrid de
@@ -1484,7 +1494,7 @@ async def test_closure_of_an_interrupted_segment_says_so(client: httpx.AsyncClie
     # doble: no se listan, se cuentan)
     by_manzanares, alt = res["alternatives"]
     # con las cuatro vueltas por Barcelona y la costa y las que pasan por Xàtiva
-    assert res["omitted_alternatives"] == 14
+    assert res["omitted_alternatives"] == 20
     assert alt["line_ids"] == ["convencional-madrid-alcazar-cordoba"]
     assert by_manzanares["line_ids"] == [MZCR, CONV]
     assert [i["id"] for i in by_manzanares["interruptions"]] == [WORKS_CUT]
@@ -1508,7 +1518,7 @@ async def test_closure_before_the_interruptions_has_no_notes(client: httpx.Async
     res = r.json()
     assert res["interruptions"] == []
     assert not any("interrupción real" in c for c in res["caveats"])
-    assert (len(res["alternatives"]), res["omitted_alternatives"]) == (2, 14)
+    assert (len(res["alternatives"]), res["omitted_alternatives"]) == (2, 20)
     for alt in res["alternatives"]:
         assert alt["interruptions"] == [] and "no está disponible" not in alt["note"]
 
@@ -1624,6 +1634,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 8  # la de Sevilla a Huelva: de Benacazón a Huelva
             + 2  # el túnel de Atocha a Chamartín: Recoletos y Nuevos Ministerios
             + 19  # Vitoria–Irún reutiliza Vitoria
+            + 2  # Almansa y La Encina
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1687,6 +1698,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         + 12
         + 3
         + 2  # los Intercity de Vitoria a San Sebastián de ese día
+        + 4  # ampliación hacia Hellín
     )
     assert {s["id"] for s in cov["sources"]} >= {
         "renfe-gtfs-av-ld-md",
@@ -1789,6 +1801,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 1  # la noticia que explica el cambio de rótulos del fichero de Renfe (#263)
             + 2  # plan de Renfe desde el 14/11 y previsión oficial de Adif para las obras (#259)
             + 13  # geometría, verificación y obras de Vitoria–Irún (#220)
+            + 10  # ampliación a La Encina
         )
     )
     assert "línea convencional" in cov["notice"]
@@ -1869,6 +1882,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
         "vitoria-irun",
+        "enlace-la-encina-caudete",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1945,6 +1959,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-aljucen-la-garrovilla": ["renfe"],
         "enlace-atocha-chamartin": ["renfe"],
         "vitoria-irun": ["renfe"],
+        "enlace-la-encina-caudete": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
@@ -2144,7 +2159,8 @@ async def test_direct_destinations_from_ciudad_real(client: httpx.AsyncClient) -
     # la Frontera, El Puerto de Santa María, San Fernando-Bahía Sur y Cádiz
     # y 4 más con la de València a Alicante por Xàtiva, por los regionales de Ciudad Real a
     # Alicante: Caudete, Villena, Elda-Petrer y Universidad de Alicante
-    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5 + 1 + 4 + 4
+    assert len(dest) == 57 and len(by_node) == 19 + 4 + 4 + 1 + 2 + 1 + 5 + 1 + 4 + 4 + 1
+    assert "almansa" in by_node
     assert by_node["alicante-terminal"]["trains"] == 2
     assert {"merida", "garrovilla-las-vegas", "montijo", "montijo-el-molino"} <= set(by_node)
     assert by_node["valencia-joaquin-sorolla"]["trains"] == 1
@@ -2265,7 +2281,7 @@ async def test_closure_between_manzanares_and_ciudad_real_affects_the_diverted_t
     # Madrid, y también las que suben a Barcelona y bajan por Valencia, por Camp de Tarragona o por
     # la costa de Tarragona
     # y las que pasan por Xàtiva
-    assert res["omitted_alternatives"] == 11
+    assert res["omitted_alternatives"] == 16
     assert (by_madrid["from_node_id"], by_madrid["to_node_id"]) == ("manzanares", "ciudad-real")
     assert (by_madrid["length_km"], by_madrid["closed_line_length_km"]) == (366.9, 64.4)
     assert [leg["to_name"] for leg in by_madrid["legs"]] == [
@@ -2304,7 +2320,7 @@ async def test_closure_hand_case(client: httpx.AsyncClient) -> None:
     # los dos que salen de la bifurcación de Torrejón de Velasco por Cuenca y Albacete y vuelven
     # por Alcázar de San Juan (709,4 y 967,0 km)
     # con las cuatro vueltas por Barcelona y la costa y las que pasan por Xàtiva
-    assert res["omitted_alternatives"] == 14
+    assert res["omitted_alternatives"] == 20
     assert [a["line_id"] for a in alt] == [CONV]
     assert alt[0]["from_node_id"] == "madrid-puerta-de-atocha" and alt[0]["to_node_id"] == "cordoba"
     assert alt[0]["length_km"] > alt[0]["closed_line_length_km"]
@@ -2374,7 +2390,7 @@ async def test_closure_between_urda_and_ciudad_real_finds_the_detour_through_man
     # la vuelta por Granada hasta la bifurcación de Málaga (698,3 km) no se lista, ni las tres
     # que salen de la bifurcación de Torrejón de Velasco por Cuenca y Albacete
     # con las seis por Barcelona y la costa y las que pasan por Xàtiva
-    assert r.json()["omitted_alternatives"] == 19
+    assert r.json()["omitted_alternatives"] == 28
     assert detour["line_ids"] == [CONV, MZCR]
     assert (detour["from_node_id"], detour["to_node_id"]) == (
         "madrid-puerta-de-atocha",
@@ -2402,7 +2418,7 @@ async def test_closure_with_a_scenario_adds_its_other_changes(client: httpx.Asyn
     assert r.status_code == 200
     assert [a["line_ids"] for a in r.json()["alternatives"]] == [[CONV]]
     # con las cuatro vueltas por Barcelona y la costa y las que pasan por Xàtiva
-    assert r.json()["omitted_alternatives"] == 13
+    assert r.json()["omitted_alternatives"] == 19
     r = await client.post("/api/simulations/closure", json={**body, "scenario": "c~no:existe"})
     assert r.status_code == 422 and "Escenario no válido" in r.json()["detail"]
 
@@ -2432,6 +2448,7 @@ async def test_routes_between_madrid_and_ciudad_real(client: httpx.AsyncClient) 
         260.5,
         558.0,
         613.5,
+        841.1,
         910.9,
         # por Cuenca, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares: ocho líneas, que
         # con el tope de cinco pasos de una línea a otra que hubo hasta noviembre de 2026 no salía
@@ -2641,11 +2658,19 @@ async def test_every_segment_lists_each_train_once_and_all_its_counts_agree(
         scheme |= read(f"lines/{safe_name(line_id)}.json")["counts"]
     alternatives = {s["segment_id"]: s for s in read("alternatives.json")["segments"]}
     files = sorted((tmp_path / "segments").iterdir())
-    assert len(files) == result["segments"] == len(scheme) == len(alternatives)
+    assert len(files) == result["segments"] == len(scheme)
+    assert set(scheme) - set(alternatives) == set(STATION_CLOSURES)
     midnight = 0
     for file in files:
         body = json.loads(file.read_text("utf-8"))
         segment_id = body["segment"]["id"]
+        if segment_id in STATION_CLOSURES:
+            assert body["passes"] == []
+            assert sum(body["counts"].values()) == scheme[segment_id]
+            assert body["segment"]["station_closure"] == STATION_CLOSURES[segment_id].model_dump(
+                mode="json"
+            )
+            continue
         ids = [p["service"]["id"] for p in body["passes"]]
         assert len(ids) == len(set(ids)), segment_id
         assert sum(body["counts"].values()) == len(ids), segment_id
@@ -2810,6 +2835,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
         "vitoria-irun",
+        "enlace-la-encina-caudete",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -2862,7 +2888,9 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
     )
-    assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == counts["counts"]
+    assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == {
+        k: n for k, n in counts["counts"].items() if k not in STATION_CLOSURES
+    }
     # hacia Sevilla no hay otra línea cargada: ningún tren tiene otro camino
     south = by_id[f"{LAV}:bif-malaga:majarabique"]
     assert (south["trains"], south["without_alternative"]) == (89, 89)
@@ -2974,6 +3002,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
         "vitoria-irun",
+        "enlace-la-encina-caudete",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

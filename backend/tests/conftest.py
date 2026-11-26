@@ -115,6 +115,7 @@ SPECS = [
     LINK_ALJUCEN_SPEC,
     LINK_MADRID_SPEC,
     VITORIA_IRUN_SPEC,
+    DATA_DIR / "curated" / "enlace-la-encina-caudete.json",
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

@@ -44,6 +44,7 @@ class NodeSpec(BaseModel):
     #: El nodo lo define otra línea (por ejemplo una estación común): esta línea solo lo
     #: incorpora a su kilometraje y no sobrescribe su nombre, posición ni descripción.
     shared: bool = False
+    source_id: str | None = None
     position: Position
     reference_pk_km: float | None = None
     description: str | None = None

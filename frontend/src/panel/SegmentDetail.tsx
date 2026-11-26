@@ -9,6 +9,7 @@ import { AnnotationNotice } from './AnnotationNotice'
 import { KindBadge } from './KindBadge'
 import { PieFuente, Plegable } from './Plegable'
 import { FilasAtributos, FuentesAtributos } from './SegmentAttributes'
+import { StationClosureLinks } from './StationClosureLinks'
 import { ServiceHistory } from './ServiceHistory'
 import { Termino } from './Termino'
 
@@ -39,6 +40,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
 
   // App monta este componente con key={segment.id}, así que el estado se reinicia al cambiar de tramo.
   useEffect(() => {
+    if (segment.station_closure) return
     let alive = true
     fetchSegmentServices(segment.id, referenceDate ?? undefined)
       .then((s) => alive && setServices(s))
@@ -46,10 +48,11 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
     return () => {
       alive = false
     }
-  }, [segment.id, referenceDate])
+  }, [segment.id, segment.station_closure, referenceDate])
 
   // Si el tramo se cortara: va aparte de la lista de trenes y, si no llega, la ficha sigue entera.
   useEffect(() => {
+    if (segment.station_closure) return
     let alive = true
     fetchAlternatives(referenceDate ?? undefined)
       .then((a) => alive && setAlternativas(a))
@@ -57,7 +60,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
     return () => {
       alive = false
     }
-  }, [referenceDate, apiAvailable])
+  }, [referenceDate, apiAvailable, segment.station_closure])
   const alternativa = alternativas?.segments.find((s) => s.segment_id === segment.id)
 
   const byProduct = new Map<string, number>()
@@ -184,6 +187,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
         <AnnotationNotice key={a.id} annotation={a} />
       ))}
 
+      {segment.station_closure ? <StationClosureLinks journey={segment.station_closure} /> : (<>
       <div className="acciones">
         <button type="button" className="boton primario" onClick={onSimulate} data-testid="boton-simular">
           Simular un cierre en este tramo
@@ -278,6 +282,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
           </div>
         </>
       )}
+      </>)}
     </section>
   )
 }
