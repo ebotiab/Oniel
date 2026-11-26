@@ -176,10 +176,8 @@ def test_sources_and_operators_are_registered(spec: NetworkSpec) -> None:
     assert spec.line.verification_source_id == WIKIPEDIA and WIKIPEDIA in sources
     for section in spec.attribute_sections:
         assert section.source_id in sources
-    # solo Renfe: Ouigo e Iryo acaban en Barcelona, y por eso es una línea aparte de la de
-    # Madrid. Los TGV de SNCF la recorren, pero sus horarios no están cargados: no se declara
-    # como operador, y la fuente y la descripción lo dicen
-    assert {o.id for o in spec.operators if o.role == "operador"} == {"renfe"}
+    # Ouigo e Iryo acaban en Barcelona; SNCF recorre esta línea con su GTFS oficial.
+    assert {o.id for o in spec.operators if o.role == "operador"} == {"renfe", "sncf"}
     assert all(o.source_id in sources for o in spec.operators)
     madrid = load_network_spec(BCN_SPEC)
     assert {o.id for o in madrid.operators if o.role == "operador"} == {"renfe", "ouigo", "iryo"}

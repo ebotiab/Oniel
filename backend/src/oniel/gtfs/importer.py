@@ -147,6 +147,7 @@ async def import_gtfs(
     product: str | None = None,
     stop_id_prefix: str | None = None,
     stop_id_aliases: Mapping[str, str] | None = None,
+    train_number_field: str = "trip_short_name",
     names_stops: bool = True,
 ) -> dict[str, Any]:
     """Importa un fichero GTFS como conjunto de datos, sin tocar los demás conjuntos.
@@ -170,7 +171,12 @@ async def import_gtfs(
     paths = [spec_paths] if isinstance(spec_paths, Path) else list(spec_paths)
     specs = [load_network_spec(p) for p in paths]
     with logfire.span("import gtfs {feed}", feed=feed_path.name):
-        feed = read_feed(feed_path, stop_id_prefix=stop_id_prefix, stop_id_aliases=stop_id_aliases)
+        feed = read_feed(
+            feed_path,
+            stop_id_prefix=stop_id_prefix,
+            stop_id_aliases=stop_id_aliases,
+            train_number_field=train_number_field,
+        )
         if product:
             for trip in feed.trips.values():
                 trip.product = product

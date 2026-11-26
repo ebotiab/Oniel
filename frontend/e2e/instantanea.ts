@@ -21,6 +21,8 @@ const leer = <T>(ruta: string) => JSON.parse(readFileSync(new URL(ruta, import.m
 export const indice = leer<NetworkIndexOut>('../public/data/index.json')
 /** «Cobertura y fuentes»: las cifras de la red, los operadores y las fuentes. */
 export const cobertura = leer<CoverageOut>('../public/data/coverage.json')
+/** La fecha cambia al renovar horarios; las pruebas de ficha comprueban el día publicado. */
+export const fechaReferencia = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${cobertura.reference_date}T12:00:00Z`))
 /** El análisis de los tramos sin otro camino. */
 export const alternativas = leer<AlternativesOut>('../public/data/alternatives.json')
 

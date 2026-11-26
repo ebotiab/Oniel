@@ -1879,6 +1879,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "ouigo": ("cargado", OUIGO_SOURCE_ID),
         # los trenes de Iryo se cargan de una compilación no oficial, con su propia fuente
         "iryo": ("no_oficial", "iryo-gtfs-no-oficial"),
+        "sncf": ("cargado", "sncf-horarios-abiertos"),
     }
     assert {line["id"]: line["operator_ids"] for line in cov["lines"]} == {
         LAV: ["iryo", "ouigo", "renfe"],
@@ -1912,8 +1913,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         LAV_SANTIAGO: ["renfe"],
         EJE_ATLANTICO: ["renfe"],
         SEVILLA_CADIZ: ["renfe"],
-        # Ouigo e Iryo acaban en Barcelona; los TGV de SNCF no están cargados ni declarados
-        LAV_FIGUERES: ["renfe"],
+        # Ouigo e Iryo acaban en Barcelona; SNCF recorre la de Figueres
+        LAV_FIGUERES: ["renfe", "sncf"],
         "lav-la-sagra-toledo": ["renfe"],
         "lav-zaragoza-huesca": ["renfe"],
         "barcelona-girona-portbou": ["renfe"],
@@ -1930,7 +1931,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-atocha-chamartin": ["renfe"],
     }
     assert (
-        "con los servicios de Iryo, Ouigo España y Renfe Viajeros que las recorren" in cov["notice"]
+        "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
+        in cov["notice"]
     )
     assert (
         "Los horarios de Iryo salen de una compilación no oficial, que no publica el operador"

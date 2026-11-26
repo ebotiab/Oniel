@@ -143,12 +143,8 @@ test.describe('Interrupciones del servicio', () => {
 
   test('el resultado de la simulación señala el tramo y la alternativa interrumpidos ese día', { tag: '@api' }, async ({ page }) => {
     test.skip(estatico, 'la simulación necesita la API')
-    await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre')
-    // un día que cubren los horarios cargados (el de las demás pruebas de la simulación), con las dos interrupciones vigentes
-    await page.getByTestId('sim-fecha').fill('2026-11-20')
-    await page.getByTestId('sim-inicio').fill('08:00')
-    await page.getByTestId('sim-fin').fill('09:00')
-    await page.getByTestId('sim-calcular').click()
+    // Enlace histórico: conserva las dos interrupciones del caso, aunque cambie la vigencia común actual.
+    await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre/2026-11-20/08:00-09:00')
     await expect(page.getByTestId('sim-resultado')).toBeVisible()
     await expect(page.getByTestId('sim-resultado-interrumpido')).toHaveText(/^Ese día el tramo ya está interrumpido\. Horario publicado; sin circulación real desde el 28 de octubre de 2026 \(Adif\)\.$/)
     // la alternativa por Despeñaperros cruza el corte por obras, y el rodeo de Ciudad Real a Córdoba por Manzanares también

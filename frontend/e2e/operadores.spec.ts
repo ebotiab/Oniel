@@ -19,14 +19,14 @@ test.describe('Trenes por operador', () => {
     if (await asa.isVisible()) await asa.click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     // lo primero, el reparto: los trenes del día de referencia, del operador que más tiene al que menos (6 de Renfe son los de Madrid a Sevilla y a Cádiz que no paran en Córdoba)
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 96 · Iryo 28 · Ouigo España 12')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 92 · Iryo 28 · Ouigo España 12')
     // Iryo no publica sus horarios: sus trenes salen de una compilación no oficial y el panel lo dice
     await expect(page.getByTestId('tramo-operadores-no-oficiales')).toHaveText('Los trenes de Iryo salen de una compilación no oficial de sus horarios, que no publica el operador.')
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveCount(0)
     // la lista va agrupada por operador, cada grupo con su nombre y su cifra
     const lista = page.getByTestId('lista-servicios')
-    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 96', 'Iryo · 28', 'Ouigo España · 12'])
-    await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(96)
+    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 92', 'Iryo · 28', 'Ouigo España · 12'])
+    await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(92)
     await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(12)
     await expect(page.getByTestId('trenes-ouigo').locator('li').first()).toContainText('Ouigo 6476')
     await expect(page.getByTestId('trenes-ouigo')).toContainText('Madrid-Puerta de Atocha → Málaga-María Zambrano')
@@ -37,7 +37,7 @@ test.describe('Trenes por operador', () => {
     await expect(page.getByTestId('trenes-iryo')).not.toContainText('Madrid Atocha')
     // la barra del esquema lleva el total de todos los operadores
     await page.getByRole('button', { name: '← Toda la línea' }).click()
-    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('136')
+    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('132')
   })
 
   test('la nota del esquema dice de quién son los trenes de las barras', async ({ page }, testInfo) => {
@@ -60,6 +60,11 @@ test.describe('Trenes por operador', () => {
     const ouigo = operadores.getByTestId('operador-ouigo')
     await expect(ouigo).toContainText(/Horarios cargados, válidos del .* de junio de 2026 al .* de diciembre de 2026\./)
     await expect(ouigo).toContainText('Punto de Acceso Nacional')
+    const sncf = operadores.getByTestId('operador-sncf')
+    await expect(sncf).toContainText('SNCF Voyageurs')
+    await expect(sncf).toContainText('Horarios cargados, válidos del 25 de noviembre de 2026 al 30 de abril de 2027.')
+    await expect(sncf.getByRole('link', { name: 'ODbL 1.0' })).toBeVisible()
+    await expect(sncf.getByRole('link', { name: /Horarios de SNCF/ })).toHaveAttribute('href', 'https://transport.data.gouv.fr/datasets/horaires-sncf')
     // los de Iryo salen de una compilación no oficial: lo dice el estado, y la ficha, quién la compila y con qué licencia
     const iryo = operadores.getByTestId('operador-iryo')
     await expect(iryo).toContainText('Horarios cargados de una compilación no oficial, que no publica el operador, válidos del 5 de noviembre de 2026 al 11 de diciembre de 2027.')

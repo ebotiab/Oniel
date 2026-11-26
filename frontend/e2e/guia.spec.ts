@@ -47,7 +47,8 @@ test.describe('Guía del atlas', () => {
     await page.getByRole('button', { name: 'Toda la línea' }).click()
     await page.getByTestId('esquema-tramo-2').click()
     await expect(page.getByTestId('detalle-tramo')).toContainText('Vía única')
-    await expect(page.getByTestId('detalle-tramo')).toContainText('calculada')
+    // En esta referencia quedan regionales con parada en ambos extremos.
+    await expect(page.getByTestId('detalle-tramo')).toContainText('la del horario')
     await irA(page, 'guia')
     await expect(page.getByRole('main', { name: 'Guía del atlas' })).toBeVisible()
     await irA(page, 'mapa')
