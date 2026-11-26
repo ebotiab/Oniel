@@ -86,7 +86,19 @@ a {
   letter-spacing: -0.02em;
 }
 
-/* La lectura del primer HTML permite recorrer la red mientras arranca el visor o sin JavaScript. */
+/* Sin el aviso de arranque (JavaScript desactivado o módulo fallido), se lee el HTML de la ruta. */
+.inicio-estatico {
+  height: 100%;
+}
+
+:is(.arrancando, .inicio-estatico.montando) .carga-inicial {
+  display: block;
+}
+
+:is(.arrancando, .inicio-estatico.montando) .lectura-inicial {
+  display: none;
+}
+
 .lectura-inicial {
   max-width: 70ch;
   padding: 1rem;
