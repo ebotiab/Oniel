@@ -1,7 +1,6 @@
-import { useLayoutEffect, useRef, type ReactNode, type RefObject } from 'react'
+import { useLayoutEffect, useRef, type RefObject } from 'react'
 
-import { abreAparte, navegar } from '../app/navegacion'
-import { routePath, type Route } from '../app/state'
+import { AtlasLink } from '../app/AtlasLink'
 import './guide.css'
 
 const STATIONS = [
@@ -18,19 +17,6 @@ export interface GuidePosition {
   scrollTop: number
   linkIndex: number | null
   open: string[]
-}
-
-function AtlasLink({ to, children, className }: { to: Partial<Route>; children: ReactNode; className?: string }) {
-  const href = routePath({ selection: null, simulacion: false, ...to })
-  return (
-    <a href={href} className={className} onClick={(event) => {
-      if (abreAparte(event)) return
-      event.preventDefault()
-      navegar(href)
-    }}>
-      {children}
-    </a>
-  )
 }
 
 export function GuidePage({ position }: { position: RefObject<GuidePosition> }) {

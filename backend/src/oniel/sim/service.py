@@ -8,7 +8,13 @@ from typing import Any
 import asyncpg
 import logfire
 
-from oniel.domain.schemas import ClosureRequest, ClosureResult, ClosureResultItem, SegmentOut
+from oniel.domain.schemas import (
+    ClosureRequest,
+    ClosureResult,
+    ClosureResultItem,
+    SegmentOut,
+    SegmentPassOut,
+)
 from oniel.repo.datasets_repo import fetch_datasets
 from oniel.repo.network_repo import fetch_graph, fetch_interruptions, fetch_operators, fetch_sources
 from oniel.repo.services_repo import DatedPass, fmt_time, passes_on_segment
@@ -77,6 +83,33 @@ async def timetable_credits(conn: asyncpg.Connection, used: set[tuple[str, str]]
         for operator_id, dataset_id in used
     }
     return [f"El horario de {name} procede de «{source}»." for name, source in sorted(credits)]
+
+
+def public_passes(
+    segment: SegmentOut, dated: list[DatedPass]
+) -> tuple[list[SegmentPassOut], dict[str, int]]:
+    """La ficha y la API cuentan los recorridos del día y comparten el mismo detalle horario."""
+    passes = []
+    counts: dict[str, int] = {"publicado": 0, "estimado": 0, "indeterminado": 0}
+    for d in dated:
+        counts[d.segment_pass.kind] += 1
+        if segment.station_closure:
+            continue
+        enter, exit_ = shifted_times(d.segment_pass, d.from_previous_day)
+        passes.append(
+            SegmentPassOut(
+                service=d.service,
+                kind=d.segment_pass.kind,
+                enter=enter,
+                exit=exit_,
+                enter_margin_min=round(d.segment_pass.enter_margin_s / 60, 1),
+                exit_margin_min=round(d.segment_pass.exit_margin_s / 60, 1),
+                km_increasing=d.segment_pass.km_increasing,
+                direction_label=direction_label(segment, d.segment_pass.km_increasing),
+                basis=d.segment_pass.basis,
+            )
+        )
+    return passes, counts
 
 
 async def simulate_closure(

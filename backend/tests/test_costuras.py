@@ -64,7 +64,7 @@ def test_lines_drawn_from_both_ends_are_one_connection_now() -> None:
     for gone in ("conv-albacete-levante", "conv-los-naranjos-cordoba", "merida-ciudad-real"):
         assert gone not in connections
     ends = {
-        "conv-la-encina-albacete": ("bif-la-encina", "albacete-los-llanos"),
+        "conv-chinchilla-murcia-cartagena": ("bif-chinchilla", "murcia-del-carmen"),
         "conv-cordoba-sevilla": ("cordoba", "bif-los-naranjos"),
         "conv-ciudad-real-badajoz": ("ciudad-real", "merida"),
         # la convencional de Valladolid a Burgos: por ella llegan a Burgos los regionales

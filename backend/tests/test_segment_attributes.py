@@ -257,6 +257,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             # los dos enlaces que acaban con unos metros de vía de la línea vecina
             "enlace-soto-de-cerrato": 1,
             "enlace-aljucen-la-garrovilla": 1,
+            "alcazar-albacete": 1,
+            "enlace-la-encina-caudete": 1,
         }
         assert covered.pop("max_speed_kmh", None) == declared_speed.get(line["line"])
         assert covered == dict.fromkeys(
@@ -273,9 +275,11 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         s for s in raw["attribute_sections"] if not (s["attribute"] == "tracks" and s["value"] == 2)
     ]
     raw["attribute_sections"][0]["source_id"] = "fuente-que-no-existe"
+    raw["nodes"][0]["source_id"] = "fuente-de-estacion-desconocida"
     broken = tmp_path / "convencional.json"
     broken.write_text(json.dumps(raw), encoding="utf-8")
     problems = validate_attributes([broken], SOURCES, DATA_DIR)["problems"]
+    assert any("fuente no registrada (fuente-de-estacion-desconocida)" in p for p in problems)
     assert any("fuente no registrada (fuente-que-no-existe)" in p for p in problems)
     assert any("«tracks» no cubre el tramo" in p for p in problems)
 

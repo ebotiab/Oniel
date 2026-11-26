@@ -201,7 +201,7 @@ async def _replace_nodes_and_segments(conn: asyncpg.Connection, net: BuiltNetwor
                     n.spec.adif_code,
                     n.spec.description,
                     n.spec.details,
-                    source_id,
+                    n.spec.source_id or source_id,
                 )
                 for n in net.nodes
                 if bool(n.spec.shared) is shared

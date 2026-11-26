@@ -1,7 +1,7 @@
 """La línea convencional València – Xàtiva – Alicante: la 300 de Adif de València a La Encina, la
 variante de Caudete (332) y la 330 de La Encina a Alicante. Une València-Estació del Nord, que
 define la línea de Castelló, con Alicante-Terminal, que define la alta velocidad de Albacete. La
-línea de Almansa y Albacete sale a trazos de la bifurcación de La Encina y de Caudete."""
+línea de Almansa y Albacete conecta por la bifurcación de La Encina o por el enlace de Caudete."""
 
 from __future__ import annotations
 
@@ -129,8 +129,6 @@ def test_nodes_stations_junction_and_dashed_lines(line: BuiltNetwork) -> None:
     assert line.node("xativa").km == pytest.approx(55.9, abs=0.1)
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "conv-xativa-alcoi": "xativa",
-        "conv-la-encina-albacete": "bif-la-encina",
-        "conv-caudete-la-encina": "caudete",
         "conv-alicante-murcia": "alicante-terminal",
     }
     for c in line.spec.connections:
@@ -216,7 +214,10 @@ def test_the_filter_takes_every_train_that_runs_on_the_line(
     """Entran los viajes que paran en dos estaciones de la línea y los regionales que van de
     Almansa a Villena sin parar en Caudete: 556 de Renfe y ninguno de Ouigo."""
     assert spec.corridor_filter.min_node_stops == 2
-    assert spec.corridor_filter.consecutive_stop_ids == [[ALMANSA, VILLENA]]
+    assert [r.consecutive_stop_ids for r in spec.route_overrides] == [
+        [ALMANSA, CAUDETE],
+        [ALMANSA, VILLENA],
+    ]
     trips = select_trips_for_spec(feed, spec)
     assert len(trips) == 556
     assert Counter(t.product for t in trips) == {
@@ -278,9 +279,10 @@ def test_stops_on_each_side_leave_by_the_right_node(spec: NetworkSpec) -> None:
     # la línea de Alcoi sale de Xàtiva; la convencional de Murcia, de Alicante
     assert sm[ALCOI].exits == ["xativa"] and not sm[ALCOI].via
     assert sm[MURCIA].exits == ["alicante-terminal"] and not sm[MURCIA].via
-    # La Encina, Almansa y Albacete quedan a un lado, con dos salidas: la bifurcación para los
-    # trenes de València y Caudete para los de Alicante
     for stop_id in (LA_ENCINA, ALMANSA, ALBACETE, "37200"):
-        assert sm[stop_id].exits == ["bif-la-encina", "caudete"] and sm[stop_id].aside
-        assert not sm[stop_id].via
-    assert spec.route_overrides == []
+        assert sm[stop_id].exits == ["bif-la-encina"]
+        assert sm[stop_id].via[0].line == "alcazar-albacete"
+    for rule in spec.route_overrides:
+        mapping = rule.stop_mappings[ALMANSA]
+        assert mapping.exits == ["caudete"]
+        assert [v.line for v in mapping.via] == ["enlace-la-encina-caudete", "alcazar-albacete"]

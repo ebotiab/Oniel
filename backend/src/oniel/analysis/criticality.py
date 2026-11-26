@@ -25,6 +25,7 @@ from oniel.domain.schemas import (
     SegmentAlternativesOut,
     SegmentTrainGroupOut,
 )
+from oniel.domain.station_closures import STATION_CLOSURES
 from oniel.routing import (
     DEFAULT_MAX_RATIO,
     Edge,
@@ -166,7 +167,7 @@ def segment_alternatives(
     """
     out: list[SegmentAlternativesOut] = []
     for edge in graph.edges:
-        if edge.line_id is None:
+        if edge.line_id is None or edge.id in STATION_CLOSURES:
             continue
         # Trenes del tramo por recorrido: (origen, tramos en orden) → operadores, uno por tren.
         groups: dict[tuple[str, tuple[str, ...]], list[str]] = {}

@@ -1,0 +1,21 @@
+{
+  "consultado_el": "2026-11-26",
+  "hora_local": "Entre las 12:58 y las 13:06 (Europe/Madrid)",
+  "consultas": [
+    {
+      "source_id": "adif-estado-encina-2026-11",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "resultado": "La página consultada incluye un aviso de mantenimiento. No permite determinar por sí sola todas las incidencias de la línea."
+    },
+    {
+      "source_id": "adif-avisos-encina-2026-11",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "resultado": "El aviso de Murcia-Almería sitúa el recorrido por carretera en los trayectos al sur de Archena y Murcia. No afecta a la parte cargada hasta Chinchilla."
+    },
+    {
+      "source_id": "adif-almansa-2026-11",
+      "url": "https://www.adif.es/w/60800-almansa",
+      "resultado": "El panel del día enumera regionales hacia Albacete, Ciudad Real y Valencia. La observación de algunos trenes limita la parada en Caudete a viernes, sábados y domingos. No acredita la circulación efectiva de todos los trenes."
+    }
+  ]
+}

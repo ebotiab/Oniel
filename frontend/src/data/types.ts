@@ -102,7 +102,16 @@ export interface AttributeValue {
   checked_on: string | null
 }
 
+export interface StationClosure {
+  from_id: string
+  to_id: string
+  from_name: string
+  to_name: string
+  segment_ids: string[]
+}
+
 export interface SegmentOut {
+  station_closure?: StationClosure
   id: string
   line_id: string
   seq: number

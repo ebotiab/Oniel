@@ -540,18 +540,30 @@
       "to_node": "alicante-terminal",
       "title": "Tercer carril entre La Encina y Alicante",
       "reason": "Un tercer carril en la vía única entre el nudo de La Encina y Alicante, para que puedan usarla también trenes de ancho estándar, sobre todo de mercancías, con vías de apartado para trenes de 750 metros en Caudete, Sax y Monforte del Cid.",
-      "note": "Adif licitó las obras de vía y electrificación en agosto de 2024. Oniel no ha buscado si se han adjudicado ni si han empezado, y las fuentes leídas no dan fecha. La nota habla de 75 km desde las conexiones con el nudo de La Encina hasta la entrada de la estación de Alicante: aquí se señala desde la bifurcación de La Encina. La electrificación seguirá a 3 kV.",
+      "note": "Adif ha adjudicado las obras de vía y electrificación y el suministro de materiales. Las fuentes consultadas no confirman la puesta en servicio del ancho mixto. El proyecto comprende unos 75 km desde las conexiones con el nudo de La Encina hasta la entrada de Alicante. La parte señalada en el mapa empieza en la bifurcación de La Encina.",
       "milestones": [
         {
           "date": "2024-08-07",
           "text": "Adif licita las obras de vía y electrificación para el ancho mixto entre La Encina y Alicante.",
           "source_id": "adif-nota-ancho-estandar-la-encina-alicante-2024-08"
+        },
+        {
+          "date": "2025-02-25",
+          "text": "Adif adjudica el contrato de vía y electrificación entre La Encina y la bifurcación Alicante.",
+          "source_id": "boe-b-2025-15773"
+        },
+        {
+          "date": "2026-03-05",
+          "text": "Adif anuncia la adjudicación de los materiales de vía.",
+          "source_id": "adif-materiales-la-encina-alicante-2026-03"
         }
       ],
       "source_ids": [
-        "adif-nota-ancho-estandar-la-encina-alicante-2024-08"
+        "adif-nota-ancho-estandar-la-encina-alicante-2024-08",
+        "boe-b-2025-15773",
+        "adif-materiales-la-encina-alicante-2026-03"
       ],
-      "checked_on": "2026-11-18"
+      "checked_on": "2026-11-26"
     },
     {
       "id": "proyecto-lav-palencia-aguilar",

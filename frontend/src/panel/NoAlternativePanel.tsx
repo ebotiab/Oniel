@@ -89,7 +89,7 @@ export function NoAlternativePanel({ network, coverage, referenceDate, onSelectS
           </p>
           {sin.length > 0 && (
             <p className="texto sin-camino-resumen" data-testid="sin-camino-resumen">
-              Son {sin.length} de los {sin.length + con.length} tramos con trenes, en {lineas.length === 1 ? 'una línea' : `${lineas.length} líneas`}. En el mapa, lo demás va atenuado.
+              Son {sin.length} de los {sin.length + con.length} tramos con trenes analizados, en {lineas.length === 1 ? 'una línea' : `${lineas.length} líneas`}. En el mapa, lo demás va atenuado.
             </p>
           )}
           {lineas.length > 0 && (

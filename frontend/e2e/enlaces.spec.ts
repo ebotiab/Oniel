@@ -99,7 +99,7 @@ test.describe('El enlace de Monforte del Cid', () => {
     await expect(page.getByTestId('recorridos-resumen')).toContainText('trenes directos en este sentido')
   })
 
-  test('de Madrid a Murcia sigue habiendo los mismos recorridos: ninguno dobla una esquina del triángulo', async ({ page }) => {
+  test('los recorridos de Madrid a Murcia respetan el triángulo de Monforte', async ({ page }) => {
     await page.goto('/recorridos/madrid-chamartin/murcia-del-carmen')
     const recorridos = page.getByTestId('recorrido')
     // el de alta velocidad entero es el segundo desde que está cargado el túnel de Atocha a Chamartín: el
@@ -111,7 +111,7 @@ test.describe('El enlace de Monforte del Cid', () => {
     // en él desde Alicante/Alacant-Terminal, como los trenes de Alicante a Murcia, y no dobla ninguna esquina
     for (const recorrido of await recorridos.all()) {
       const texto = (await recorrido.textContent()) ?? ''
-      if (texto.includes('Alicante/Alacant-Terminal')) expect(texto).toContain('Xàtiva')
+      if (texto.includes('Alicante/Alacant-Terminal')) expect(texto).toMatch(/Xàtiva|Almansa/)
       else expect(texto).not.toContain('Monforte del Cid')
     }
   })

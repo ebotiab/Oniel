@@ -142,7 +142,7 @@ def test_it_shares_the_junction_and_albacete_station(line: BuiltNetwork) -> None
     assert not theirs.shared and ours.position == theirs.position
     assert ours.adif_code == theirs.adif_code == "60600"
     # con la línea cargada ya no sale a trazos ni de Albacete ni de la bifurcación
-    assert conventional.connections == []
+    assert all(c.node_id != "albacete-los-llanos" for c in conventional.connections)
     trunk_spec = load_network_spec(LAV_VALENCIA_SPEC)
     assert all(c.node_id != "bif-albacete" for c in trunk_spec.connections)
     # ya no queda nada a trazos: la convencional de La Encina a Alicante está cargada (#208). El

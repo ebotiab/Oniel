@@ -63,9 +63,9 @@ test.describe('La línea de alta velocidad Albacete – Alicante', () => {
     const recorridos = page.getByTestId('recorrido')
     await expect(recorridos.first()).toBeVisible()
     // el primero, más corto, junta la línea convencional hasta Albacete con la alta velocidad
-    // desde allí; el segundo es el de alta velocidad entero, por Cuenca
-    const porCuenca = recorridos.nth(1)
-    await expect(porCuenca.locator('.recorrido-titulo')).toHaveText('Por Cuenca y Albacete')
+    // desde allí; la alta velocidad por Cuenca también aparece entre los visibles
+    const porCuenca = recorridos.filter({ hasText: 'Villena Alta Velocidad' }).filter({ hasText: 'Por Cuenca' })
+    await expect(porCuenca.locator('.recorrido-titulo')).toContainText('Por Cuenca')
     await expect(porCuenca).toContainText('478,4 km · 1 h 42 min sin paradas')
     await expect(porCuenca).toContainText('Pasa por Cuenca, Albacete y Villena Alta Velocidad.')
     await expect(porCuenca).toContainText('Recorre tres líneas')

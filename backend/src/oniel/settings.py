@@ -73,6 +73,7 @@ class Settings(BaseSettings):
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
         "vitoria-irun",
+        "enlace-la-encina-caudete",
     ]
 
 

@@ -145,6 +145,8 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 11  # la de Sevilla a Huelva
             + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
             + 20  # la continuación de Vitoria a Irún
+            + 4
+            + 1  # de Albacete a La Encina y su enlace hacia Caudete
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -229,16 +231,16 @@ def test_by_default_routes_are_not_capped_by_lines_but_by_length(graph: Graph) -
         # (el mismo al revés, por Alcázar a Albacete y vuelta por Cuenca, ya no sale: en Torrejón
         # de Velasco las vías no dejan girar hacia Ciudad Real, y la estación en la que invertir
         # la marcha es la de salida)
+        841.1,  # por València, Xàtiva, Almansa, Albacete y Alcázar
         885.6,  # por Linares-Baeza, Moreda, Granada, Antequera y Córdoba
         910.9,  # por Cuenca, Albacete y Alcázar, y de allí por Linares-Baeza y Córdoba
         # los siguientes encadenan siete líneas o más: con el tope de cinco pasos de una línea a
         # otra que hubo hasta noviembre de 2026 no salían
         982.8,  # por Cuenca, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares
         1183.0,  # por Cuenca, Albacete, Alcázar, Linares-Baeza, Granada, Antequera y Córdoba
+        1194.1,
+        1237.5,
         1335.7,  # por València, Xàtiva, Alicante, Albacete, Alcázar, Linares-Baeza y Córdoba
-        1358.3,  # por Barcelona y València, invirtiendo la marcha en Cuenca para bajar a Albacete
-        1379.2,  # por Barcelona, València, Xàtiva, Alicante, Albacete, Alcázar y Manzanares
-        1537.5,  # el de 1.358,3 km, por Barcelona-Sants y la costa de Tarragona
     ]
     # sin tope de líneas no queda ninguna pareja de estaciones unidas sin recorrido: de
     # Madrid-Puerta de Atocha a Bilbao se encadenan seis líneas desde que el túnel de Atocha a
@@ -272,15 +274,20 @@ def test_madrid_to_albacete_goes_two_ways_and_alicante_is_reached(graph: Graph) 
     to_alicante = find_routes(graph, MADRID, "alicante-terminal")
     assert [(r.length_km, r.time_min) for r in to_alicante] == [
         (442.5, 143),
+        (453.8, 179),  # convencional por Almansa
         (478.4, 102),
+        (489.7, 138),
         (573.5, 161),  # por València y Xàtiva, desde que esa línea está cargada
         (580.0, 167),
+        (591.3, 203),
     ]
     # el más corto junta la línea convencional hasta Albacete con la alta velocidad desde allí: el
-    # comparador une líneas sin mirar el ancho de vía. El de alta velocidad entero es el segundo
+    # comparador une líneas sin mirar el ancho de vía. El segundo pasa por Almansa y el tercero por Cuenca.
     assert to_alicante[0].line_ids == [CONV, ALBACETE, LAV_ALICANTE]
-    assert to_alicante[1].line_ids == [LAV, LAV_VALENCIA, LAV_ALICANTE]
-    assert to_alicante[1].via == [
+    assert "almansa" in to_alicante[1].node_ids
+    assert "caudete" in to_alicante[1].node_ids
+    assert to_alicante[2].line_ids == [LAV, LAV_VALENCIA, LAV_ALICANTE]
+    assert to_alicante[2].via == [
         "Cuenca-Fernando Zóbel",
         "Albacete-Los Llanos",
         "Villena Alta Velocidad",
@@ -294,8 +301,11 @@ def test_murcia_is_reached_from_madrid_and_from_alicante(graph: Graph) -> None:
     assert [(r.length_km, r.time_min) for r in to_murcia] == [
         (485.8, 159),
         (521.7, 118),
+        (542.2, 204),
+        (578.1, 163),
         (623.3, 183),
         (661.9, 187),  # por València, Xàtiva y Alicante
+        (679.7, 229),
     ]
     # como a Alicante, el más corto junta la línea convencional hasta Albacete con la alta
     # velocidad desde allí; el de alta velocidad entero es el segundo
@@ -458,14 +468,14 @@ def test_ourense_and_zamora_are_reached_from_madrid(graph: Graph) -> None:
         ("madrid-chamartin", "bif-medina"),
         ("bif-medina", "ourense"),
     ]
-    # los trenes de Ourense a Alicante van por Chamartín, sin pasar por Atocha: es el segundo
+    # los trenes de Ourense a Alicante van por Chamartín, sin pasar por Atocha: es el tercer
     # recorrido (947,5 km). El más corto en kilómetros (911,4 km) cruza Madrid por el túnel de
     # Atocha a Chamartín y sigue por la convencional hasta Albacete; el grafo no mira el ancho
     to_alicante = find_routes(graph, "ourense", "alicante-terminal")
-    assert [r.length_km for r in to_alicante[:2]] == [911.4, 947.5]
+    assert [r.length_km for r in to_alicante[:3]] == [911.4, 922.7, 947.5]
     assert "enlace-atocha-chamartin" in to_alicante[0].line_ids
-    assert "madrid-chamartin" in to_alicante[1].node_ids
-    assert "madrid-puerta-de-atocha" not in to_alicante[1].node_ids
+    assert "madrid-chamartin" in to_alicante[2].node_ids
+    assert "madrid-puerta-de-atocha" not in to_alicante[2].node_ids
     assert graph.edges_at("bif-medina") and {
         e.line_id for e in graph.edges_at("bif-medina")
     } == set(lines)
@@ -482,6 +492,7 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
         "enlace-soto-de-cerrato": "lav-venta-de-banos-burgos",
         "enlace-aljucen-la-garrovilla": "lav-plasencia-badajoz",
         "enlace-atocha-chamartin": LAV,
+        "enlace-la-encina-caudete": "valencia-xativa-alicante",
     }
     side_alicante = f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av"
     side_murcia = f"{LAV_MURCIA}:bif-murcia:bif-vinalopo"
@@ -493,6 +504,9 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     }
     tunnel = "enlace-atocha-chamartin"
     assert {s: n for s, (link, n) in all_sides.items() if link != "enlace-monforte-del-cid"} == {
+        "enlace-la-encina-caudete:la-encina:caudete": 0,
+        "alcazar-albacete:la-encina:bif-la-encina": 1,
+        "valencia-xativa-alicante:bif-la-encina:caudete": 2,
         "enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato": 0,
         "lav-valladolid-leon:bif-venta-de-banos:bif-cerrato": 1,
         "lav-venta-de-banos-burgos:bif-venta-de-banos:bif-soto-de-cerrato": 2,
@@ -536,10 +550,12 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     # la línea de València a Alicante por Xàtiva cierra un anillo sí hay un rodeo, que da la vuelta
     # entera por València (de 333 a 570 km) y usa, como mucho, uno de los otros dos lados
     for side in sides:
-        (ring,) = closure_detours(graph, side).detours
-        assert "valencia-xativa-alicante" in ring.route.line_ids
-        assert len((sides - {side}).intersection(ring.route.segment_ids)) <= 1
-        assert ring.route.length_km > 300
+        rings = closure_detours(graph, side).detours
+        assert rings
+        for ring in rings:
+            assert "valencia-xativa-alicante" in ring.route.line_ids
+            assert len((sides - {side}).intersection(ring.route.segment_ids)) <= 1
+            assert ring.route.length_km > ring.closed_line_length_km
 
 
 def _turns_made(graph: Graph, route: Route) -> list[tuple[str, str, str]]:
@@ -751,10 +767,10 @@ def test_detours_of_a_closure_between_madrid_and_ciudad_real(graph: Graph) -> No
     # tres que suben a Barcelona y bajan por la costa y por Cuenca (de 1.252 a 1.690 km); desde
     # que está la línea de Tarragona a Barcelona por la costa, otras tres que bajan de Barcelona
     # por ella en vez de por Camp de Tarragona (de 1.431 a 1.869 km). Y desde que la línea de
-    # València a Alicante por Xàtiva cierra otro anillo, las que pasan por ella: son veintiuno en
+    # València a Alicante por Xàtiva cierra otro anillo, las que pasan por ella: con la ampliación por Almansa son treinta en
     # total, y sin descartar ninguno se listan los doce más cortos
-    assert found.omitted == 19
-    assert closure_detours(graph, URDA_CIUDAD_REAL, max_ratio=None).omitted == 9
+    assert found.omitted == 28
+    assert closure_detours(graph, URDA_CIUDAD_REAL, max_ratio=None).omitted == 18
     everything = closure_detours(graph, URDA_CIUDAD_REAL, max_ratio=None).detours
     assert [d.route.length_km for d in everything] == [
         260.5,
@@ -762,17 +778,17 @@ def test_detours_of_a_closure_between_madrid_and_ciudad_real(graph: Graph) -> No
         529.2,
         698.3,
         709.4,
+        812.4,
         954.1,
         967.0,
+        992.5,
         1134.2,
-        1358.3,  # invierte la marcha en Cuenca: en la bifurcación de Albacete no se puede girar
-        1379.2,
-        1391.8,
-        1537.5,
+        1237.5,
+        1250.2,
     ]
     assert (
         LAV_ALICANTE in everything[2].route.line_ids
-        and LAV_ALICANTE in everything[6].route.line_ids
+        and LAV_ALICANTE in everything[7].route.line_ids
     )
     by_granada = everything[3]
     assert by_granada.route.line_ids == BY_GRANADA
@@ -794,7 +810,11 @@ def test_detours_leave_the_closed_line_and_only_come_back_past_the_closure(graph
         assert total == len(everything.detours) + everything.omitted
         assert everything.omitted == max(0, total - MAX_ROUTES)
         assert found.detours[:1] == everything.detours[:1]
-        assert all(d in everything.detours for d in found.detours)
+        assert all(
+            d in everything.detours
+            or (everything.omitted and d.route.length_km >= everything.detours[-1].route.length_km)
+            for d in found.detours
+        )
         for detour in everything.detours:
             route = detour.route
             assert edge.line_id not in route.line_ids
@@ -829,25 +849,25 @@ def test_closure_between_almagro_and_ciudad_real_goes_round_through_madrid(graph
     # recorre 399,1 km para lo que aquel hace en 127: más del doble, se omite; y lo mismo la
     # vuelta por Alcázar de San Juan, Albacete y Cuenca (664,3 km, invirtiendo la marcha en Madrid) y las dos que suben a Barcelona
     # y bajan por la costa y por Valencia, y otras dos que van de Barcelona a La Feredat por la
-    # costa de Tarragona, y las que pasan por Xàtiva: son trece, y sin descartar ninguno se
+    # costa de Tarragona, y las que pasan por Xàtiva o Almansa: son dieciocho, y sin descartar ninguno se
     # listan doce
-    assert found.omitted == 11
+    assert found.omitted == 16
     everything = closure_detours(graph, f"{MZCR}:almagro:ciudad-real", max_ratio=None).detours
     assert [d.route.length_km for d in everything] == [
         366.9,
         417.4,
-        664.3,  # por Albacete y Cuenca, invirtiendo la marcha en Madrid-Puerta de Atocha
+        664.3,
         689.5,
+        947.5,
         1089.1,
+        1343.9,
         1464.7,
         1485.5,
+        1523.1,
         1542.6,
         1643.9,
-        1664.7,
-        1721.8,
-        1815.2,
     ]
-    by_granada, by_barcelona = everything[3], everything[6]
+    by_granada, by_barcelona = everything[3], everything[8]
     assert by_granada.route.length_km == 689.5 and "Granada" in by_granada.route.via
     assert by_barcelona.route.length_km == 1485.5
     assert {"Calatayud", "Castelló de la Plana"} <= set(by_barcelona.route.via)
@@ -860,7 +880,7 @@ def test_other_closures_of_the_scenario_also_cut_the_detours(graph: Graph) -> No
     assert conventional.route.line_ids == [CONV]
     # la vuelta por Granada, las dos que salen de Torrejón de Velasco por Cuenca y Albacete y
     # las cuatro que dan la vuelta por Barcelona y la costa, por Camp de Tarragona o por Tarragona
-    assert found.omitted == 13
+    assert found.omitted == 19
 
 
 def test_alternatives_of_a_closure_keep_the_single_line_wording(graph: Graph) -> None:
@@ -870,7 +890,7 @@ def test_alternatives_of_a_closure_keep_the_single_line_wording(graph: Graph) ->
     # no se listan las dos vueltas por Granada hasta la bifurcación de Málaga ni las dos que
     # salen de Torrejón de Velasco por Cuenca y Albacete, ni las dos que dan la vuelta por
     # Barcelona y la costa, por Camp de Tarragona o por Tarragona
-    assert omitted == 14
+    assert omitted == 20
     assert (one_line.line_id, one_line.line_ids) == (CONV, [CONV])
     assert (one_line.from_node_id, one_line.to_node_id) == (MADRID, CORDOBA)
     assert (one_line.length_km, one_line.closed_line_length_km) == (440.7, 343.6)
@@ -943,8 +963,8 @@ def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
         )
         assert route.via == ["Guadalajara-Yebes", "Calatayud", "Camp de Tarragona"]
     # en sentido contrario, lo mismo
-    there, by_tarragona, _, by_valencia, _, by_xativa = find_routes(graph, MADRID, BARCELONA)
-    assert by_xativa.length_km == 991.8 and "Alicante/Alacant-Terminal" in by_xativa.via
+    there, by_tarragona, _, by_valencia, by_almansa, *_ = find_routes(graph, MADRID, BARCELONA)
+    assert by_almansa.length_km == 829.9 and "almansa" in by_almansa.node_ids
     back, *_ = find_routes(graph, BARCELONA, MADRID)
     # por la costa de Tarragona: de Camp de Tarragona se baja por la línea de València hasta
     # Cambrils, se invierte la marcha y se sube a Tarragona, porque en la bifurcación de La
@@ -966,8 +986,12 @@ def test_a_bypass_counts_as_part_of_its_line(graph: Graph) -> None:
         648.5,
         734.8,
         755.1,
-        971.5,
-        991.8,
+        829.9,
+        850.1,
+        865.8,
+        886.0,
+        967.5,
+        987.7,
     ]
     # a una estación que el baipás rodea se llega por su ramal, y desde ella se sigue por el otro
     (to_zaragoza,) = find_routes(graph, MADRID, ZARAGOZA)
@@ -1000,11 +1024,11 @@ def test_a_closed_station_stretch_is_saved_by_its_bypass_and_the_other_way_round
         # vuelta de Madrid a Camp de Tarragona por València, por Cuenca o por Albacete, y desde
         # que está la de Tarragona a Barcelona, la de Madrid a Barcelona-Sants por València y la
         # costa, por Cuenca o por Albacete, y las dos que pasan por Alicante y Xàtiva; otros
-        # veintiocho, más largos, se omiten (los que giraban en la bifurcación de Albacete ya no
+        # cuarenta, más largos, se omiten (los que giraban en la bifurcación de Albacete ya no
         # se enseñan: ahora invierten la marcha en una estación y quedan entre los largos)
-        detour, ring, by_coast, by_xativa, _ = found.detours
-        assert found.omitted == 28
-        assert by_xativa.route.length_km == 892.1
+        detour, ring, by_coast, *_ = found.detours
+        assert found.omitted == 40
+        assert any("almansa" in d.route.node_ids for d in found.detours)
         assert (by_coast.route.to_node_id, by_coast.route.length_km) == (BARCELONA, 734.8)
         assert (ring.route.from_node_id, ring.route.to_node_id) == (MADRID, "camp-de-tarragona")
         assert ring.route.length_km == 655.3
@@ -1207,3 +1231,27 @@ def test_madrid_san_sebastian_e_irun_en_ambos_sentidos(
     for route in outward + backward:
         assert "pamplona" not in route.node_ids
         assert len(route.node_ids) == len(set(route.node_ids))
+
+
+def test_extended_line_closures_compare_routes_between_passenger_stations(graph: Graph) -> None:
+    """Los dos tramos de Albacete a Almansa comparten un cierre y los enlaces conservan su giro."""
+    from oniel.domain.station_closures import STATION_CLOSURES
+
+    link = "enlace-la-encina-caudete:la-encina:caudete"
+    junction = "alcazar-albacete:la-encina:bif-la-encina"
+    to_caudete = "valencia-xativa-alicante:bif-la-encina:caudete"
+    for journey in STATION_CLOSURES.values():
+        assert graph.nodes[journey.from_id].kind == graph.nodes[journey.to_id].kind == "estacion"
+        regular = find_routes(graph, journey.from_id, journey.to_id)
+        assert set(regular[0].segment_ids) == set(journey.segment_ids)
+        closed = Scenario(closures=list(journey.segment_ids))
+        for route in find_routes(graph, journey.from_id, journey.to_id, closed):
+            assert not set(route.segment_ids).intersection(journey.segment_ids)
+            assert len({link, junction, to_caudete}.intersection(route.segment_ids)) <= 1
+            assert "hellin" not in route.node_ids
+    for end, side in [("alicante-terminal", link), ("valencia-estacio-del-nord", junction)]:
+        there = find_routes(graph, MADRID, end)
+        back = find_routes(graph, end, MADRID)
+        conventional = next(r for r in there[:3] if "almansa" in r.node_ids)
+        assert side in conventional.segment_ids
+        assert conventional.segment_ids[::-1] in [r.segment_ids for r in back[:3]]

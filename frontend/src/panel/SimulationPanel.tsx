@@ -7,6 +7,7 @@ import { formatDateLong, mainSourceLabel } from '../app/annotations'
 import type { Franja } from '../app/meta'
 import { formatKm, shortStop, todayIso } from '../app/state'
 import { StatusBadge } from './KindBadge'
+import { StationClosureLinks } from './StationClosureLinks'
 import { STATUS } from './labels'
 import { Termino } from './Termino'
 
@@ -36,7 +37,18 @@ const legName = (leg: RouteLeg) => (leg.line_id ? lowerFirst(leg.line_name) : 'u
 
 const ORDER: ClosureStatus[] = ['afectado_publicado', 'afectado_estimado', 'indeterminado', 'no_afectado']
 
-export function SimulationPanel({ segment, referenceDate, feedStart, feedEnd, interruptions, scenario, franja, onFranja, result, onResult, onBack }: Props) {
+export function SimulationPanel(props: Props) {
+  const journey = props.segment.station_closure
+  if (journey) return (
+    <section className="detalle">
+      <button type="button" className="enlace volver" onClick={props.onBack}>← Volver al tramo</button>
+      <StationClosureLinks journey={journey} scenario={props.scenario} />
+    </section>
+  )
+  return <TimedSimulation {...props} />
+}
+
+function TimedSimulation({ segment, referenceDate, feedStart, feedEnd, interruptions, scenario, franja, onFranja, result, onResult, onBack }: Props) {
   const [date, setDateState] = useState(() => result?.request.date ?? franja?.date ?? referenceDate ?? todayIso())
   const [start, setStartState] = useState(result?.request.start.slice(0, 5) ?? franja?.start ?? '08:00')
   const [end, setEndState] = useState(result?.request.end.slice(0, 5) ?? franja?.end ?? '09:00')

@@ -34,6 +34,7 @@ from oniel.domain.schemas import (
     SourceRef,
     ZoneOut,
 )
+from oniel.domain.station_closures import STATION_CLOSURES
 from oniel.geo import simplify
 from oniel.repo import cache, datasets_repo, services_repo
 from oniel.repo.datasets_repo import CURRENT_IDS_SQL
@@ -226,6 +227,7 @@ async def _load_nodes(conn: asyncpg.Connection, line_id: str | None) -> list[Nod
 
 def _segment(r: asyncpg.Record) -> SegmentOut:
     return SegmentOut(
+        station_closure=STATION_CLOSURES.get(r["id"]),
         id=r["id"],
         line_id=r["line_id"],
         seq=r["seq"],

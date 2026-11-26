@@ -1,21 +1,19 @@
 {
   "line": {
     "id": "alcazar-albacete",
-    "name": "Línea convencional Alcázar de San Juan – Albacete",
+    "name": "Línea convencional Alcázar de San Juan – Albacete – La Encina",
     "short_name": "300",
     "sort_order": 6,
-    "zone": "madrid-castilla-la-mancha",
+    "zone": "levante",
     "mode": "ferrocarril",
     "infrastructure_manager": "adif",
     "gauge_mm": 1668,
     "electrification": "3 kV CC",
     "max_speed_kmh": 200,
     "tracks": 2,
-    "opened_on": "1855-03-18",
-    "reference_length_km": 130.6,
     "pk_origin_km": 148.1,
     "status": "disponible",
-    "description": "La rama de Levante: en Alcázar de San Juan se separa de la línea que baja a Andalucía y cruza la llanura de La Mancha hasta Albacete, por Socuéllamos, Villarrobledo y La Roda.\n\nPara Adif no es una línea aparte, sino el trecho central de su línea 300, de Madrid a Valencia: la misma por la que se llega de Madrid a Alcázar de San Juan. Oniel la enseña con nombre propio porque en Alcázar el camino se abre en dos, y así cada rama se consulta por separado: la de Andalucía, que sigue en la línea Madrid – Alcázar de San Juan – Córdoba, y esta. Se abrió el 18 de marzo de 1855, como parte del ferrocarril de Madrid a Alicante.\n\nPasado Albacete, la línea continúa hacia Almansa y La Encina, donde se reparte entre Valencia y Alicante; esa continuación todavía no está cargada.\n\nEn los horarios de Renfe la recorren trenes regionales que van de Madrid, Alcázar de San Juan o Ciudad Real a Albacete, Alicante y Valencia, y el Intercity de Barcelona a Córdoba. Los trenes de alta velocidad de Madrid a Albacete y Alicante no pasan por aquí: van por Cuenca, por otra línea que llega a la misma estación de Albacete.",
+    "description": "Desde Alcázar de San Juan, la línea convencional cruza La Mancha por Villarrobledo y Albacete. Continúa por Chinchilla y Almansa hasta La Encina, donde se abren los caminos hacia Valencia y Alicante.\n\nForma parte de la línea 300 de Adif, de Madrid a Valencia. El tramo de Alcázar a Albacete abrió en 1855. En Chinchilla sale la vía hacia Hellín, Murcia y Cartagena.\n\nLos servicios de Renfe hacia Valencia pasan por la estación de La Encina y siguen hacia Xàtiva. Los que van de Albacete hacia Alicante toman en La Encina el enlace a Caudete y siguen por Villena. La bifurcación de La Encina está en otro punto, al este de la estación.\n\nEn Albacete-Los Llanos también paran trenes de alta velocidad. Llegan desde Madrid por Cuenca y continúan hacia Alicante por vías distintas.",
     "geometry_source": {
       "source_id": "osm-relation-18368327",
       "parts": [
@@ -30,6 +28,19 @@
           "to": [
             -1.84845,
             38.999384
+          ]
+        },
+        {
+          "source_id": "osm-relation-18368327",
+          "file": "raw/osm/relation_18368327_linea_300_madrid_valencia_2026-11-08.json",
+          "relation_id": 18368327,
+          "from": [
+            -1.84845,
+            38.999384
+          ],
+          "to": [
+            -0.9264679,
+            38.7591849
           ]
         }
       ]
@@ -48,7 +59,11 @@
     {"id": "minaya", "name": "Minaya", "kind": "estacion", "adif_code": "60503", "rank": "secundario", "position": {"lon": -2.348403, "lat": 39.240738}, "reference_pk_km": 226.1},
     {"id": "la-roda-de-albacete", "name": "La Roda de Albacete", "kind": "estacion", "adif_code": "60505", "position": {"lon": -2.162547, "lat": 39.199594}, "reference_pk_km": 242.9},
     {"id": "la-gineta", "name": "La Gineta", "kind": "estacion", "adif_code": "60507", "rank": "secundario", "position": {"lon": -2.000155, "lat": 39.111665}, "reference_pk_km": 260.2},
-    {"id": "albacete-los-llanos", "name": "Albacete-Los Llanos", "kind": "estacion", "adif_code": "60600", "position": {"lon": -1.84845, "lat": 38.999384}, "reference_pk_km": 278.7, "description": "La estación de Albacete. Tiene vías de dos anchos: a las de ancho ibérico llegan los trenes de la línea convencional de Alcázar de San Juan y a las de ancho estándar, los de alta velocidad de Madrid por Cuenca y los de Alicante. La línea convencional sigue desde aquí hacia Almansa, Valencia y Alicante."}
+    {"id": "albacete-los-llanos", "name": "Albacete-Los Llanos", "kind": "estacion", "adif_code": "60600", "position": {"lon": -1.84845, "lat": 38.999384}, "reference_pk_km": 278.7, "description": "La estación de Albacete. Tiene vías de dos anchos: a las de ancho ibérico llegan los trenes de la línea convencional de Alcázar de San Juan y a las de ancho estándar, los de alta velocidad de Madrid por Cuenca y los de Alicante. La línea convencional sigue desde aquí hacia Almansa, Valencia y Alicante."},
+    {"id": "bif-chinchilla", "name": "Bifurcación de Chinchilla de Montearagón", "kind": "bifurcacion", "position": {"lon": -1.7005189, "lat": 38.9000079}, "source_id": "osm-aguja-chinchilla", "description": "Aquí se separa la vía convencional que baja por Hellín hacia Murcia y Cartagena."},
+    {"id": "almansa", "name": "Almansa", "kind": "estacion", "adif_code": "60800", "position": {"lon": -1.105446, "lat": 38.867822}, "reference_pk_km": 358.2, "source_id": "transportes-cuadro-linea-300-salobrejo"},
+    {"id": "la-encina", "name": "La Encina", "kind": "estacion", "adif_code": "60900", "source_id": "fcmaf-linea-300", "reference_pk_km": 376.4, "position": {"lon": -0.954244, "lat": 38.765344}, "description": "En esta estación se separan los trenes que vienen de Almansa. Unos siguen por Xàtiva hacia Valencia y otros toman el enlace a Caudete hacia Alicante."},
+    {"id": "bif-la-encina", "name": "Bifurcación de La Encina", "kind": "bifurcacion", "position": {"lon": -0.9264679, "lat": 38.7591849}, "shared": true}
   ],
   "attribute_sections": [
     {"attribute": "proteccion_tren", "from_node": "alcazar-de-san-juan", "to_node": "albacete-los-llanos", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: símbolos «Tren tierra y ASFA conv.» junto a la línea, entre Alcázar y Albacete. Las vías de OSM dicen railway:asfa=yes."},
@@ -57,17 +72,16 @@
     {"attribute": "bloqueo", "from_node": "la-roda-de-albacete", "to_node": "albacete-los-llanos", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: rótulo «BAB ctc» y trazo marrón de La Roda de Albacete a Albacete-Los Llanos."},
     {"attribute": "mando", "from_node": "alcazar-de-san-juan", "to_node": "la-roda-de-albacete", "value": "sin_ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: los rótulos «BAB» y «BAD» de Alcázar a La Roda no llevan «ctc», y la leyenda distingue «BAB ctc» de «BAB» y «BAD ctc» de «BAD»: el mapa dice que no hay control de tráfico centralizado. No dice desde dónde se gobierna el tramo."},
     {"attribute": "mando", "from_node": "la-roda-de-albacete", "to_node": "albacete-los-llanos", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-12", "note": "Mapa 4: el rótulo del bloqueo lleva «ctc»."},
-    {
-      "attribute": "tracks",
-      "from_node": "alcazar-de-san-juan",
-      "to_node": "albacete-los-llanos",
-      "value": 2,
-      "source_id": "adif-declaracion-red-2026-mapas",
-      "checked_on": "2026-11-25",
-      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
-    }
+    {"attribute": "tracks", "from_node": "alcazar-de-san-juan", "to_node": "albacete-los-llanos", "value": 2, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-25", "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."},
+    {"attribute": "tracks", "from_node": "albacete-los-llanos", "to_node": "bif-la-encina", "value": 2, "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapas 3 y 4. Número de vías principales en el recorrido."},
+    {"attribute": "proteccion_tren", "from_node": "albacete-los-llanos", "to_node": "bif-la-encina", "value": "asfa", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapa 4. Símbolos de ASFA convencional."},
+    {"attribute": "bloqueo", "from_node": "albacete-los-llanos", "to_node": "bif-la-encina", "value": "bab", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapa 4. Rótulo del bloqueo junto al trazado convencional."},
+    {"attribute": "mando", "from_node": "albacete-los-llanos", "to_node": "bif-la-encina", "value": "ctc", "source_id": "adif-declaracion-red-2026-mapas", "checked_on": "2026-11-26", "note": "Mapa 4. El rótulo del bloqueo incluye «ctc»."},
+    {"attribute": "max_speed_kmh", "from_node": "almansa", "to_node": "la-encina", "value": 140, "source_id": "fcmaf-linea-300", "checked_on": "2026-11-26", "note": "Cuadro de velocidades, del PK 358,2 al 376,4. El mapa 3 de Adif rotula 160 para el ámbito más amplio."}
   ],
-  "connections": [],
+  "connections": [
+    {"id": "conv-chinchilla-murcia-cartagena", "node_id": "bif-chinchilla", "name": "Línea convencional Chinchilla – Murcia – Cartagena", "towards": "Hellín, Cieza y Murcia, con continuación a Cartagena", "to_node_id": "murcia-del-carmen", "towards_back": "Cieza, Hellín y Chinchilla de Montearagón", "status": "no_cargada", "sketch": [[-1.7005189, 38.9000079], [-1.688437, 38.508776], [-1.421702, 38.246609], [-1.236037, 38.13132], [-1.130582, 37.974629]]}
+  ],
   "stop_mappings": {
     "60400": {"node": "alcazar-de-san-juan"},
     "60402": {"node": "campo-de-criptana"},
@@ -102,27 +116,34 @@
     "94004": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
     "37200": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "manzanares-ciudad-real", "node": "manzanares"}]},
     "17000": {"exits": ["alcazar-de-san-juan"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "alcazar-de-san-juan"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
-    "60800": {"exits": ["albacete-los-llanos"]},
-    "60900": {"exits": ["albacete-los-llanos"]},
-    "60901": {"exits": ["albacete-los-llanos"]},
-    "60902": {"exits": ["albacete-los-llanos"]},
-    "60905": {"exits": ["albacete-los-llanos"]},
-    "60911": {"exits": ["albacete-los-llanos"]},
-    "60913": {"exits": ["albacete-los-llanos"]},
-    "60914": {"exits": ["albacete-los-llanos"]},
-    "64100": {"exits": ["albacete-los-llanos"]},
-    "64200": {"exits": ["albacete-los-llanos"]},
-    "65000": {"exits": ["albacete-los-llanos"]},
-    "65300": {"exits": ["albacete-los-llanos"]},
-    "65311": {"exits": ["albacete-los-llanos"]},
-    "65312": {"exits": ["albacete-los-llanos"]},
-    "65402": {"exits": ["albacete-los-llanos"]},
-    "65422": {"exits": ["albacete-los-llanos"]},
-    "04104": {"exits": ["albacete-los-llanos"]},
-    "71801": {"exits": ["albacete-los-llanos"]}
+    "60800": {"node": "almansa"},
+    "60900": {"node": "la-encina"},
+    "60901": {"exits": ["la-encina"], "via": {"line": "enlace-la-encina-caudete", "node": "la-encina"}},
+    "60902": {"exits": ["la-encina"], "via": [{"line": "enlace-la-encina-caudete", "node": "la-encina"}, {"line": "valencia-xativa-alicante", "node": "caudete"}]},
+    "60905": {"exits": ["la-encina"], "via": [{"line": "enlace-la-encina-caudete", "node": "la-encina"}, {"line": "valencia-xativa-alicante", "node": "caudete"}]},
+    "60911": {"exits": ["la-encina"], "via": [{"line": "enlace-la-encina-caudete", "node": "la-encina"}, {"line": "valencia-xativa-alicante", "node": "caudete"}]},
+    "60913": {"exits": ["la-encina"], "via": [{"line": "enlace-la-encina-caudete", "node": "la-encina"}, {"line": "valencia-xativa-alicante", "node": "caudete"}]},
+    "60914": {"exits": ["la-encina"], "via": [{"line": "enlace-la-encina-caudete", "node": "la-encina"}, {"line": "valencia-xativa-alicante", "node": "caudete"}]},
+    "64100": {"exits": ["bif-la-encina"], "via": {"line": "valencia-xativa-alicante", "node": "bif-la-encina"}},
+    "64200": {"exits": ["bif-la-encina"], "via": {"line": "valencia-xativa-alicante", "node": "bif-la-encina"}},
+    "65000": {"exits": ["bif-la-encina"], "via": {"line": "valencia-xativa-alicante", "node": "bif-la-encina"}},
+    "65300": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}]},
+    "65311": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}]},
+    "65312": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}]},
+    "65402": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}]},
+    "65422": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}]},
+    "04104": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}]},
+    "71801": {"exits": ["bif-la-encina"], "via": [{"line": "valencia-xativa-alicante", "node": "bif-la-encina"}, {"line": "valencia-castello-tarragona", "node": "valencia-estacio-del-nord"}, {"line": "lav-madrid-barcelona", "node": "camp-de-tarragona"}]},
+    "61005": {"exits": ["bif-chinchilla"]},
+    "61012": {"exits": ["bif-chinchilla"]},
+    "61015": {"exits": ["bif-chinchilla"]},
+    "61200": {"exits": ["bif-chinchilla"]},
+    "61303": {"exits": ["bif-chinchilla"]},
+    "61304": {"exits": ["bif-chinchilla"]},
+    "61307": {"exits": ["bif-chinchilla"]}
   },
   "corridor_filter": {
-    "description": "Se importan los viajes del GTFS que paran en al menos dos estaciones de la línea y en alguna de las intermedias (de Campo de Criptana a La Gineta), a las que solo se llega por ella. Así entran los Media Distancia y Regional Exprés de Madrid, Alcázar de San Juan y Ciudad Real a Albacete, Alicante y Valencia y el Alvia de Barcelona a Córdoba, y quedan fuera los trenes que solo tocan la línea en Albacete: los de alta velocidad, que llegan por Cuenca, y los regionales e Intercity de Albacete a Valencia, Murcia y Cartagena.",
+    "description": "Entran los viajes con paradas en la línea y en alguna estación exclusiva del corredor. Los pares Albacete–Hellín y Albacete–Xàtiva identifican también los que dejan la línea en Chinchilla y los que pasan por Almansa sin parar.",
     "required_stop_ids": [],
     "any_of_stop_ids": [
       "60402",
@@ -130,8 +151,20 @@
       "60500",
       "60503",
       "60505",
-      "60507"
+      "60507",
+      "60800",
+      "60900"
     ],
-    "min_node_stops": 2
+    "min_node_stops": 2,
+    "consecutive_stop_ids": [
+      [
+        "60600",
+        "61005"
+      ],
+      [
+        "60600",
+        "64100"
+      ]
+    ]
   }
 }
