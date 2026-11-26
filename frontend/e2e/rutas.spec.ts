@@ -59,7 +59,7 @@ test.describe('Grafo de rutas en el cliente', () => {
     expect(() => findRoutes(buildGraph(red), MADRID, 'cordoba', closureScenario('no:existe'))).toThrow(ScenarioError)
   })
 
-  test('la API da lo mismo que el cliente', async ({ request }) => {
+  test('la API da lo mismo que el cliente', { tag: '@api' }, async ({ request }) => {
     test.skip(estatico, 'compara con la API')
     const caso = paridad.routes[3]!
     const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, ...(caso.max_changes === null ? {} : { max_changes: caso.max_changes }), max_ratio: 100 } })

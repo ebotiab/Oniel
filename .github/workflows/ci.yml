@@ -1,7 +1,7 @@
 # Comprobaciones de Oniel en cada pull request y en cada push a main.
 #
 # Son los mismos comandos que documenta el README en «Pruebas» y «Comprobaciones»: si cambian allí,
-# cambian aquí. El conjunto debe quedar por debajo de tres minutos.
+# cambian aquí. La integración añade un runner con PostgreSQL; coste y límites en el README.
 #
 # La protección de `main` exige dos comprobaciones, `Backend` y `Frontend`. Son los dos trabajos
 # finales de este fichero, que no prueban nada: miran el resultado de los trabajos que sí prueban
@@ -39,6 +39,7 @@ jobs:
     outputs:
       backend: ${{ steps.rutas.outputs.backend }}
       frontend: ${{ steps.rutas.outputs.frontend }}
+      integracion: ${{ steps.rutas.outputs.integracion }}
     steps:
       # Dos commits: en una pull request, HEAD es la fusión de la rama con su base, y la diferencia
       # con su primer padre es exactamente lo que la PR cambia.
@@ -49,6 +50,9 @@ jobs:
       - name: Guía y procedimientos de Codex y Claude Code
         run: ruby .github/scripts/comprobar-agentes.rb
 
+      - name: Comprobar selección de trabajos y bloqueo de la autofusión
+        run: ruby .github/scripts/comprobar-ci.rb
+
       - name: Rutas que cambia la pull request
         id: rutas
         shell: bash
@@ -57,7 +61,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$EVENTO" != "pull_request" ] || ! git rev-parse --verify --quiet HEAD^2 >/dev/null; then
-            printf 'backend=true\nfrontend=true\n' | tee -a "$GITHUB_OUTPUT"
+            printf 'backend=true\nfrontend=true\nintegracion=true\n' | tee -a "$GITHUB_OUTPUT"
             exit 0
           fi
           git diff --name-only --no-renames HEAD^1 HEAD > "$RUNNER_TEMP/rutas.txt"
@@ -245,13 +249,85 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  # Solo los casos @api existentes: el resto sigue en los cuatro fragmentos estáticos.
+  integracion-api:
+    name: Integración · visor y API local
+    needs: cambios
+    if: needs.cambios.outputs.integracion == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: oniel
+          POSTGRES_DB: oniel_integracion
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U oniel -d oniel_integracion"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.4.0
+        with:
+          python-version: "3.13"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Dependencias con los lockfiles versionados
+        run: |
+          uv sync --locked --project backend
+          npm ci --prefix frontend
+
+      - name: Versión de Playwright instalada
+        id: playwright
+        run: echo "version=$(node -p "require('./frontend/node_modules/@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      - name: Instalar Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: cd frontend && npx playwright install chromium
+
+      - name: Importar sin exportar, arrancar la API local y probar la integración
+        timeout-minutes: 10
+        run: .github/scripts/integracion-api.sh
+        env:
+          ONIEL_DATABASE_URL: postgresql://oniel@127.0.0.1:5432/oniel_integracion
+
+      - name: Conservar importación, API, informe, trazas y capturas
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: integracion-api
+          path: |
+            ${{ runner.temp }}/oniel-integracion
+            frontend/test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
   # Las dos comprobaciones obligatorias de `main`. Corren siempre (`always()`), también cuando lo
   # anterior falla o se salta: sin eso GitHub las daría por saltadas, y una comprobación saltada
   # cuenta como pasada. Cada trabajo del que dependen tiene que haber terminado bien, o haberse
   # saltado porque `Qué cambia` dijo que la PR no toca esa mitad; cualquier otra cosa es un fallo.
   backend:
     name: Backend
-    needs: [cambios, backend-pruebas]
+    needs: [cambios, backend-pruebas, integracion-api]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -260,6 +336,8 @@ jobs:
         shell: bash
         env:
           CAMBIOS: ${{ needs.cambios.result }}
+          INTEGRACION_APLICA: ${{ needs.cambios.outputs.integracion }}
+          INTEGRACION_RESULTADO: ${{ needs.integracion-api.result }}
           APLICA: ${{ needs.cambios.outputs.backend }}
           RESULTADOS: ${{ needs.backend-pruebas.result }}
         run: &resultado |
@@ -273,11 +351,15 @@ jobs:
           for resultado in $RESULTADOS; do
             [ "$resultado" = "$esperado" ] || { echo "::error::Se esperaba $esperado y hay un trabajo con $resultado."; exit 1; }
           done
+          case "$INTEGRACION_APLICA:$INTEGRACION_RESULTADO" in
+            true:success | false:skipped) ;;
+            *) echo "::error::Integración visor–API: aplica=$INTEGRACION_APLICA, resultado=$INTEGRACION_RESULTADO"; exit 1 ;;
+          esac
           [ "$esperado" = "success" ] && echo "Todo pasado." || echo "La PR no toca esta mitad: nada que comprobar."
 
   frontend:
     name: Frontend
-    needs: [cambios, frontend-compilar, frontend-e2e]
+    needs: [cambios, frontend-compilar, frontend-e2e, integracion-api]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -286,6 +368,8 @@ jobs:
         shell: bash
         env:
           CAMBIOS: ${{ needs.cambios.result }}
+          INTEGRACION_APLICA: ${{ needs.cambios.outputs.integracion }}
+          INTEGRACION_RESULTADO: ${{ needs.integracion-api.result }}
           APLICA: ${{ needs.cambios.outputs.frontend }}
           RESULTADOS: ${{ needs.frontend-compilar.result }} ${{ needs.frontend-e2e.result }}
         run: *resultado

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
-test.describe('Simular un cierre', () => {
+test.describe('Simular un cierre', { tag: '@api' }, () => {
   test.skip(estatico, 'la simulación necesita la API')
 
   test('el caso calculado a mano: AVE 02070, Villanueva–Adamuz, 20/11/2026 de 8:00 a 9:00', async ({ page }) => {
