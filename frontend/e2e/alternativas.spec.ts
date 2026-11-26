@@ -1,11 +1,11 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { alternativas, cobertura, sinOtroCamino } from './instantanea.ts'
+import { fechaReferencia, alternativas, cobertura, sinOtroCamino } from './instantanea.ts'
 import { irA } from './navegar.ts'
 
-// Trenes por tramo y si tienen otro camino en las líneas cargadas (día de referencia: 13 de
-// noviembre de 2026). El cálculo es del servidor y viaja en `alternatives.json`, así que estas
-// pruebas valen igual con la API y en modo estático.
+// Trenes por tramo y si tienen otro camino en las líneas cargadas, en el día de la instantánea.
+// El cálculo es del servidor y viaja en `alternatives.json`, así que estas pruebas valen igual
+// con la API y en modo estático.
 
 async function abrirPanel(page: Page) {
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })
@@ -28,7 +28,7 @@ test.describe('Tramos sin otro camino', () => {
     await page.goto('/sin-otro-camino')
     await expect(page.getByTestId('lista-sin-alternativa').locator('> li')).toHaveCount(sinOtroCamino.lineas.length)
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
-    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 97 trenes no tendrían otro camino')
+    await expect(page.getByTestId('tramo-alternativa')).toContainText('sus 95 trenes no tendrían otro camino')
     expect(pedidas).toBe(0)
   })
 
@@ -79,7 +79,7 @@ test.describe('Tramos sin otro camino', () => {
     await abrirPanel(page)
     // lo esencial, a la vista: cuántos trenes, si tienen otro camino y dónde se ha buscado
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 136 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (49, entre Madrid-Puerta de Atocha y Sevilla-Santa Justa), 97 km y 1 h 46 min más.',
+      'Si este tramo se cortara, sus 132 trenes tendrían otro camino en las líneas que Oniel tiene cargadas. Para los más numerosos (49, entre Madrid-Puerta de Atocha y Sevilla-Santa Justa), 97 km y 1 h 46 min más.',
     )
     const detalle = page.getByTestId('tramo-alternativa-detalle')
     await expect(detalle).toBeHidden()
@@ -89,10 +89,9 @@ test.describe('Tramos sin otro camino', () => {
     // los de Málaga, los de Algeciras, los de Granada y los de Almería son grupos distintos: unos
     // llegan a Málaga, otros dejan la red cargada en Antequera-Santa Ana y los demás llegan a
     // Granada o siguen hacia Moreda; los de Cádiz siguen por la línea de Sevilla a Cádiz
-    // con los trenes de Iryo son 15: los suyos de Málaga a Barcelona forman un grupo más. Desde la
-    // línea de Sevilla a Huelva son 16: los 2 Intercity de Madrid a Huelva que paran en Santa Justa
-    // siguen por ella y dejan el grupo de Madrid a Sevilla
-    await expect(grupos).toHaveCount(16)
+    // Con los trenes de Iryo y los de Huelva son 14 grupos, una vez terminados los dos
+    // grupos de Intercity desviados por Manzanares.
+    await expect(grupos).toHaveCount(14)
     await expect(grupos.first()).toHaveText(
       '49 trenes entre Madrid-Puerta de Atocha y Sevilla-Santa Justa: otro camino por la línea convencional Madrid – Alcázar de San Juan – Córdoba y la línea de alta velocidad Madrid – Sevilla, 97 km y 1 h 46 min más (567,3 km en vez de 470,3).',
     )
@@ -100,10 +99,8 @@ test.describe('Tramos sin otro camino', () => {
     await expect(grupos.nth(2)).toContainText('8 trenes entre Madrid-Puerta de Atocha y Cádiz')
     await expect(grupos.nth(3)).toContainText('6 trenes entre Madrid-Puerta de Atocha y Granada')
     await expect(grupos.nth(3)).toContainText('82 km')
-    // los desviados por Manzanares ya dan un rodeo: para ellos el otro camino añade poco. El 20 de
-    // noviembre quedan 2 a Málaga y 2 a Sevilla
-    await expect(grupos.nth(13)).toContainText('2 trenes entre Madrid-Puerta de Atocha y Málaga-María Zambrano')
-    await expect(grupos.nth(13)).toContainText('7 km y 38 min más')
+    // Los dos grupos de Intercity desviados por Manzanares ya no circulan en esta fecha.
+    await expect(detalle).not.toContainText('7 km y 38 min más')
     // el detalle dice qué significa y qué no mira el cálculo
     await expect(detalle).toContainText('no hay otro camino en las líneas que Oniel tiene cargadas, no que no exista en la red real')
     await expect(detalle).toContainText('no mira si el tren cabe por él')
@@ -114,29 +111,26 @@ test.describe('Tramos sin otro camino', () => {
     await page.goto('/tramo/lav-madrid-sevilla:bif-malaga:majarabique')
     await abrirPanel(page)
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, sus 97 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
+      'Si este tramo se cortara, sus 95 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas. No quiere decir que no exista en la red real.',
     )
     // Iryo también pasa por aquí y sus trenes salen de una compilación no oficial: la ficha lo dice junto al recuento
     await expect(page.getByTestId('tramo-operadores-no-oficiales')).toContainText('Iryo')
     await page.getByTestId('mas-detalle').locator('summary').click()
     const grupos = page.getByTestId('tramo-alternativa-detalle').locator('li')
     // desde la línea de Sevilla a Huelva, los 2 Intercity de Madrid a Huelva que paran en Santa Justa son un grupo aparte
-    await expect(grupos).toHaveCount(10)
+    await expect(grupos).toHaveCount(9)
     for (const grupo of await grupos.all()) await expect(grupo).toContainText('sin otro camino en las líneas cargadas.')
   })
 
-  test('para un tren desviado, el otro camino puede ser más corto', async ({ page }) => {
+  test('los regionales de Manzanares a Ciudad Real conservan sus alternativas tras terminar los desvíos', async ({ page }) => {
     await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real')
     await abrirPanel(page)
-    // los 4 regionales de Ciudad Real a Alcázar de San Juan no tienen otro camino: el que hay mide más del doble
     await expect(page.getByTestId('tramo-alternativa')).toHaveText(
-      'Si este tramo se cortara, 4 de sus 14 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 204 km y 54 min más.',
+      'Si este tramo se cortara, 4 de sus 10 trenes no tendrían otro camino en las líneas que Oniel tiene cargadas; los demás, sí. Para los más numerosos (4, entre Ciudad Real y Albacete-Los Llanos), 204 km y 54 min más.',
     )
-    // los desviados de Madrid a Málaga que quedan el 20 de noviembre: su otro camino es más corto
+    // Los Intercity desviados hacia Andalucía terminan el 22/11 en el GTFS vigente.
     await page.getByTestId('mas-detalle').locator('summary').click()
-    const desviados = page.getByTestId('tramo-alternativa-detalle').locator('li').nth(3)
-    await expect(desviados).toContainText('2 trenes entre Madrid-Puerta de Atocha y Málaga-María Zambrano')
-    await expect(desviados).toContainText('90 km y 1 h 7 min menos')
+    await expect(page.getByTestId('tramo-alternativa-detalle')).not.toContainText('Madrid-Puerta de Atocha y Málaga-María Zambrano')
   })
 
   test('«Tramos sin otro camino» tiene su vista: un renglón por línea y los demás tramos, plegados', async ({ page }) => {
@@ -175,7 +169,7 @@ test.describe('Tramos sin otro camino', () => {
     await expect(sevilla).toContainText('2 de sus 13 tramos')
     // una línea con otro camino en todos sus tramos no figura (hoy, la de Alcázar de San Juan a Albacete o la
     // alta velocidad de Antequera a Granada): la lista tiene solo los renglones de arriba
-    await expect(vista).toContainText('Trenes del viernes, 20 de noviembre de 2026')
+    await expect(vista).toContainText(`Trenes del ${fechaReferencia}`)
     await expect(vista).not.toContainText(/criticidad/i)
     // el mapa atenúa el resto de la red; mientras no se mira nada, no hay nada en azul
     await expect(page.getByTestId('mapa')).not.toHaveAttribute('data-recorrido-elegido')
@@ -197,8 +191,8 @@ test.describe('Tramos sin otro camino', () => {
     // tienen otro camino: la vuelta por Granada llega a la bifurcación por la línea de Málaga, y para tomar la de
     // Sevilla habría que invertir la marcha en Córdoba, que es lo cortado. Los de Málaga sí lo tienen
     const cordoba = otros.filter({ hasText: 'Córdoba – Bifurcación Málaga-Alta Velocidad' })
-    await expect(cordoba).toContainText('158 trenes')
-    await expect(cordoba).toContainText('97 sin él')
+    await expect(cordoba).toContainText('154 trenes')
+    await expect(cordoba).toContainText('95 sin él')
     await expect(cordoba).toContainText('+147 km · +2 h 23 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
@@ -220,9 +214,9 @@ test.describe('Tramos sin otro camino', () => {
     const tramos = linea.locator('ol > li')
     await expect(tramos).toHaveCount(2)
     await expect(tramos.nth(0)).toContainText('Bifurcación Málaga-Alta Velocidad – Cambiador de Majarabique')
-    await expect(tramos.nth(0)).toContainText('97 trenes')
+    await expect(tramos.nth(0)).toContainText('95 trenes')
     await expect(tramos.nth(1)).toContainText('Cambiador de Majarabique – Sevilla-Santa Justa')
-    await expect(tramos.nth(1)).toContainText('95 trenes')
+    await expect(tramos.nth(1)).toContainText('93 trenes')
     // al elegir un tramo se pinta en azul en el mapa y se despliega en el sitio
     const tramo = page.getByTestId('tramo-lav-madrid-sevilla:bif-malaga:majarabique')
     await tramo.click()

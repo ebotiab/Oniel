@@ -9,7 +9,7 @@ from collections import Counter
 from pathlib import Path
 
 import pytest
-from conftest import DATA_DIR, SOURCES, SPECS, database_url_for_tests, requires_db
+from conftest import DATA_DIR, FEED, SOURCES, SPECS, database_url_for_tests, requires_db
 
 from oniel.gtfs.reader import GtfsFeed, read_feed
 from oniel.gtfs.sncf_extract import extract, rows
@@ -48,7 +48,7 @@ def test_calendarios_numeros_y_restricciones_del_original(
     days = Counter(
         (t.train_number, d) for t in sncf.trips.values() for d in sncf.service_dates[t.service_id]
     )
-    assert len(days) == 614 and set(days.values()) == {1}
+    assert len(days) == 626 and set(days.values()) == {1}
     current = [t for t in sncf.trips.values() if DAY in sncf.service_dates[t.service_id]]
     assert {t.train_number for t in current} == NUMBERS
     for trip in current:
@@ -81,6 +81,29 @@ def test_solo_entran_en_la_alta_velocidad_hasta_el_limite(sncf: GtfsFeed) -> Non
                     ]
                     assert not mapping.via
     assert selected == {"lav-barcelona-figueres": 63}
+
+
+def test_las_estaciones_francesas_compartidas_reutilizan_su_codigo(
+    declared: FeedSpec, feed: GtfsFeed
+) -> None:
+    """Nombre y posición del original confirman los cinco destinos compartidos con Renfe."""
+    from oniel.geo import haversine_km
+
+    original = read_feed(SNAPSHOT, stop_id_prefix=declared.stop_id_prefix)
+    aliases = {
+        "87784009": "87374",
+        "87781104": "87088",
+        "87773002": "87173",
+        "87775007": "87302",
+        "87763029": "87810",
+    }
+    assert all(declared.stop_id_aliases[a] == b for a, b in aliases.items())
+    for sncf_id, renfe_id in aliases.items():
+        a, b = original.stops[sncf_id], feed.stops[renfe_id]
+        assert haversine_km((a.lon, a.lat), (b.lon, b.lat)) < 0.15
+    # Las dos estaciones de Montpellier y las dos de Nimes siguen siendo distintas.
+    assert "87688887" not in declared.stop_id_aliases
+    assert "87703975" not in declared.stop_id_aliases
 
 
 def test_extracto_conserva_referencias_y_es_reproducible(tmp_path: Path) -> None:
@@ -151,7 +174,7 @@ async def test_importacion_repetida_fichas_y_destinos(declared: FeedSpec) -> Non
             assert result["trips_imported"] == 63
         assert await conn.fetchval("SELECT count(*) FROM datasets") == 1
         assert await conn.fetchval("SELECT count(*) FROM services") == 63
-        assert await conn.fetchval("SELECT count(*) FROM service_dates") == 614
+        assert await conn.fetchval("SELECT count(*) FROM service_dates") == 626
         for node in ("barcelona-sants", "girona", "figueres-vilafant"):
             calls = await calls_at_node(conn, node, DAY)
             assert len(calls) == 4
@@ -178,3 +201,20 @@ async def test_importacion_repetida_fichas_y_destinos(declared: FeedSpec) -> Non
             )
             == 0
         )
+
+        # Los destinos externos compartidos también se agrupan: un solo Perpignan con ambos operadores.
+        await import_gtfs(
+            conn,
+            FEED,
+            SPECS,
+            source_id="renfe-gtfs-av-ld-md",
+            operator_id="renfe",
+            data_dir=DATA_DIR,
+        )
+        for node in ("barcelona-sants", "girona", "figueres-vilafant"):
+            destinations = await destinations_from_node(conn, node, DAY)
+            perpignan = [d for d in destinations if d.name == "Perpignan"]
+            assert len(perpignan) == 1
+            assert perpignan[0].stop_id == "87374"
+            assert {o.operator_id for o in perpignan[0].operators} == {"sncf", "renfe"}
+            assert perpignan[0].trains == sum(o.trains for o in perpignan[0].operators)

@@ -19,14 +19,14 @@ test.describe('Trenes por operador', () => {
     if (await asa.isVisible()) await asa.click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     // lo primero, el reparto: los trenes del día de referencia, del operador que más tiene al que menos (6 de Renfe son los de Madrid a Sevilla y a Cádiz que no paran en Córdoba)
-    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 96 · Iryo 28 · Ouigo España 12')
+    await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 92 · Iryo 28 · Ouigo España 12')
     // Iryo no publica sus horarios: sus trenes salen de una compilación no oficial y el panel lo dice
     await expect(page.getByTestId('tramo-operadores-no-oficiales')).toHaveText('Los trenes de Iryo salen de una compilación no oficial de sus horarios, que no publica el operador.')
     await expect(page.getByTestId('tramo-operadores-sin-horarios')).toHaveCount(0)
     // la lista va agrupada por operador, cada grupo con su nombre y su cifra
     const lista = page.getByTestId('lista-servicios')
-    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 96', 'Iryo · 28', 'Ouigo España · 12'])
-    await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(96)
+    await expect(lista.getByRole('heading')).toHaveText(['Renfe Viajeros · 92', 'Iryo · 28', 'Ouigo España · 12'])
+    await expect(page.getByTestId('trenes-renfe').locator('li')).toHaveCount(92)
     await expect(page.getByTestId('trenes-ouigo').locator('li')).toHaveCount(12)
     await expect(page.getByTestId('trenes-ouigo').locator('li').first()).toContainText('Ouigo 6476')
     await expect(page.getByTestId('trenes-ouigo')).toContainText('Madrid-Puerta de Atocha → Málaga-María Zambrano')
@@ -37,7 +37,7 @@ test.describe('Trenes por operador', () => {
     await expect(page.getByTestId('trenes-iryo')).not.toContainText('Madrid Atocha')
     // la barra del esquema lleva el total de todos los operadores
     await page.getByRole('button', { name: '← Toda la línea' }).click()
-    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('136')
+    if (testInfo.project.name !== 'movil') await expect(page.getByTestId('esquema-tramo-7')).toContainText('132')
   })
 
   test('la nota del esquema dice de quién son los trenes de las barras', async ({ page }, testInfo) => {

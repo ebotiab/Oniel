@@ -21,7 +21,7 @@ El original, `Export_OpenData_SNCF_GTFS_NewTripId.zip`, se descargó el **26/11/
 | feed_info.txt | 1 |
 | transfers.txt | 0 |
 
-El extracto pesa **8.347 bytes**, el **0,15 %** del ZIP nacional. SHA-256: `8289a8a77d47e8a3712a4abf571fd929b465d2f4fc7064fd4d0ace85f2e41519`. El original solo usa `calendar_dates.txt`: no se fabrica un calendario semanal. Su validez efectiva es **25/11/2026–30/04/2027**; los 63 viajes son variantes de calendario de seis números comerciales, con **614 trenes-día** y ninguno duplicado por número y fecha. El 26 y el 27 de noviembre circulan **9706, 9708, 9713 y 9715**, dos por sentido.
+El extracto pesa **8.347 bytes**, el **0,15 %** del ZIP nacional. SHA-256: `8289a8a77d47e8a3712a4abf571fd929b465d2f4fc7064fd4d0ace85f2e41519`. El original solo usa `calendar_dates.txt`: no se fabrica un calendario semanal. Su validez efectiva es **25/11/2026–30/04/2027**; los 63 viajes son variantes de calendario de seis números comerciales, con **626 trenes-día** y ninguno duplicado por número y fecha. Las 614 filas de calendario se comparten entre algunos viajes: no son un recuento de trenes-día. El 26 y el 27 de noviembre circulan **9706, 9708, 9713 y 9715**, dos por sentido.
 
 ## Lectura, paradas y límite
 
@@ -32,12 +32,25 @@ Se reutilizan las opciones de `feeds`: `product: "TGV"`, `stop_id_prefix: "StopP
 | 71718010 | 71801 | Barcelona-Sants |
 | 71793000 | 79300 | Girona |
 | 71043075 | 04307 | Figueres-Vilafant |
+| 87784009 | 87374 | Perpignan |
+| 87781104 | 87088 | Narbonne |
+| 87773002 | 87173 | Montpellier Saint-Roch |
+| 87775007 | 87302 | Nimes / Nîmes Centre |
+| 87763029 | 87810 | Valence TGV |
 
 `train_number_field: "trip_headsign"` declara dónde publica SNCF el número comercial. Los otros feeds conservan `trip_short_name`: no se interpreta un destino cualquiera como número de tren. Los nombres de las estaciones españolas siguen siendo los que ya usa Oniel.
 
-Los once códigos franceses permanecen diferenciados y se asignan como salidas por `limite-seccion-internacional`, sin `via` ni nuevos nodos. Sus nombres siguen disponibles como destinos externos. Todos los TGV seleccionados recorren los siete tramos de la línea, y ninguno se asigna a la convencional de Portbou ni a otra línea. No se solapan con los AVE internacionales de Renfe.
+Los cinco destinos franceses compartidos usan los códigos ya cargados de Renfe: nombres y coordenadas los identifican a menos de 150 m. Así Perpignan y Narbonne salen una sola vez, sumando los trenes de ambos operadores. Montpellier Sud de France y Nîmes Pont du Gard son estaciones distintas de Saint-Roch y Nîmes Centre y conservan códigos propios. Las once paradas francesas se asignan como salidas por `limite-seccion-internacional`, sin `via` ni nuevos nodos. Sus nombres siguen disponibles como destinos externos. Todos los TGV seleccionados recorren los siete tramos de la línea, y ninguno se asigna a la convencional de Portbou ni a otra línea. No se solapan con los AVE internacionales de Renfe.
 
 Se conservan `pickup_type` y `drop_off_type`: en las tres estaciones españolas el TGV hacia Francia permite subir pero no bajar; el de regreso permite bajar pero no subir. Cuenta como tren que pasa y para, pero no se ofrece como conexión comercial Barcelona–Girona–Figueres. La estimación del último tramo usa el mismo límite y criterio que los internacionales de Renfe.
+
+## Instantánea y coste medidos
+
+Con `main` integrado (`e85d663`, incluida #303), la importación final con exportación del 26/11 tardó **310,048 s**, con un máximo de **202.360 KiB de memoria residente** en Codex Cloud, con PostgreSQL local y otras pruebas concurrentes. La llamada real a `import_gtfs` del extracto SNCF tardó **1,336 s** para 63 viajes; las tres de Renfe, 28,669, 39,896 y 28,613 s; Ouigo, 0,603 s; Iryo, 5,552 s. Son medidas de este entorno, no una predicción del plan de Render. En producción solo entra el extracto de 8.347 bytes, sin descarga ni filtrado nacional.
+
+La referencia pasa del 20/11 al **11/12/2026**, el laborable con más servicios en la nueva intersección de vigencias (25/11–12/12, descartando el primer día parcial). La red pasa de 1.446 a **1.452 servicios**, sin cambiar sus 311 estaciones ni sus líneas. En Barcelona–Figueres hay **47 trenes** hasta Figueres (43 Renfe + 4 SNCF) y **8** hasta el límite (4 + 4). Los cuatro TGV aparecen una sola vez en las tres estaciones. Los cambios de otras líneas proceden del nuevo día de referencia: terminan los cuatro Intercity desviados por Manzanares el 22/11 y cambian algunos servicios de Levante; no se han modificado esos feeds.
+
+Las pruebas fijan el extracto a su fichero de descarga, comprueban 626 pares únicos de número y día, ambas direcciones, sus restricciones, todas las referencias conservadas, la extracción determinista, los siete tramos y la repetición de la importación. Las pruebas del visor comprueban SNCF/TGV, cuatro trenes sin duplicados, París como destino externo y licencia ODbL en cobertura, tanto en escritorio como en móvil.
 
 ## Renovación manual reproducible
 

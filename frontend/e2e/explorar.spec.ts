@@ -50,7 +50,7 @@ test.describe('Explorar la red', () => {
     await expect(page).toHaveURL(/\/tramo\/convencional-madrid-alcazar-cordoba:santa-cruz-de-mudela:almuradiel-viso-del-marques/)
   })
 
-  test('la lista lleva a la línea Manzanares – Ciudad Real, de vía única, con los trenes desviados', async ({ page }) => {
+  test('la lista lleva a la línea Manzanares – Ciudad Real, de vía única, con sus regionales', async ({ page }) => {
     await page.goto('/')
     const asa = page.getByRole('button', { name: 'Ampliar el panel' })
     const movil = await asa.isVisible()
@@ -71,7 +71,7 @@ test.describe('Explorar la red', () => {
     await page.getByTestId('mas-detalle').locator('summary').click()
     await expect(page.getByTestId('linea-detalle')).toHaveText(/Adif.*522.*ibérico \(1\.668 mm\).*3 kV CC/)
     for (const nodo of ['manzanares', 'daimiel', 'almagro', 'ciudad-real']) await expect(page.getByTestId(`esquema-nodo-${nodo}`)).toBeVisible()
-    // Daimiel – Almagro: vía única, con los regionales y los Intercity que la cruzan sin parar
+    // Daimiel – Almagro: vía única, con los regionales del día de referencia
     // se toca sobre la vía: el centro del grupo cae entre la barra de trenes y su cifra, que con
     // una barra corta (38 trenes frente a los 140 del tramo con más) deja un hueco sin dibujo
     await page.getByTestId('esquema-tramo-2').click({ position: { x: 14, y: 12 } })
@@ -80,13 +80,11 @@ test.describe('Explorar la red', () => {
     await expect(page).toHaveURL(/\/tramo\/manzanares-ciudad-real:daimiel:almagro/)
     const lista = page.getByTestId('lista-servicios')
     await expect(lista).toContainText(/Regional \d{5}/)
-    // el Intercity 10080 se explica con kilómetros por las líneas, no en línea recta
-    const intercity = lista.locator('li', { hasText: 'Intercity 10080' }).first()
-    await expect(intercity).toContainText('Madrid-Puerta de Atocha → Sevilla-Santa Justa')
-    const porque = intercity.locator('.senal')
-    await expect(porque).toHaveText('estimado')
-    await expect(porque).toHaveAttribute('title', /entra en esta línea por Manzanares.*64 km por la línea y, desde Manzanares, 196 km por esa línea/)
-    await expect(porque).not.toHaveAttribute('title', /línea recta/)
+    // Los Intercity desviados terminaban el 22/11: en la referencia nueva quedan diez
+    // regionales con parada en ambos extremos, por lo que sus horas son publicadas.
+    await expect(lista.locator('li')).toHaveCount(10)
+    await expect(lista).not.toContainText('Intercity 10080')
+    await expect(lista.locator('.senal')).toHaveText(Array(10).fill('publicado'))
   })
 
   test('Manzanares y Ciudad Real unen la línea nueva con las otras dos', async ({ page }) => {

@@ -12,7 +12,10 @@ test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', (
     await page.goto('/linea/lav-barcelona-figueres')
     await expect(page.getByRole('heading', { name: 'Línea de alta velocidad Barcelona – Girona – Figueres' })).toBeVisible()
     await expect(page.locator('body')).toContainText('Une Barcelona-Sants con Girona y Figueres-Vilafant')
-    await expect(page.getByTestId('ficha-linea')).toContainText('los TGV de SNCF Voyageurs entre París y Barcelona')
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    if (await asa.isVisible()) await asa.click()
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    await expect(page.getByText('los TGV de SNCF Voyageurs entre París y Barcelona', { exact: false })).toBeVisible()
     const esquema = page.getByTestId('esquema')
     for (const estacion of ['Barcelona-Sants', 'Girona', 'Figueres-Vilafant', 'Límite con la sección internacional']) {
       await expect(esquema).toContainText(estacion)
@@ -112,6 +115,10 @@ test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', (
       await expect(paris).toContainText('TGV')
       await expect(paris).toContainText('SNCF Voyageurs')
       await expect(paris.getByRole('button')).toHaveCount(0)
+      const perpignan = ficha.getByTestId('lista-destinos').locator('li').filter({ hasText: /^Perpignan/ })
+      await expect(perpignan).toHaveCount(1)
+      await expect(perpignan).toContainText('4 trenes')
+      await expect(perpignan).toContainText('Renfe Viajeros 2, SNCF Voyageurs 2')
     })
   }
 

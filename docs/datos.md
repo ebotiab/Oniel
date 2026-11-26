@@ -180,7 +180,7 @@ Los operadores de trenes de cada línea se declaran en `operators` de su especif
 
 ## Líneas cargadas
 
-La última columna cuenta los viajes de los ficheros de horarios vigentes el 23 de noviembre de 2026 (Renfe del 17 de noviembre, Ouigo del 12 e Iryo del 18), con los tipos de tren que rotula cada uno: es lo que da `oniel-data validate` por línea y fichero, y cambia con cada refresco de los horarios. Donde no se dice el operador, todos son de Renfe. Los apartados «Cómo se construyó…» dan en cambio los recuentos del fichero de las pruebas, el del 8 de noviembre, que rotulaba además Alvia, Media Distancia, Regional Exprés y Proximidad (véase «El fichero del 17 de noviembre de 2026»).
+La última columna cuenta los viajes de los ficheros de horarios vigentes el 26 de noviembre de 2026 (Renfe del 17 de noviembre, Ouigo del 12, Iryo del 18 y SNCF del 26), con los tipos de tren que rotula cada uno: es lo que da `oniel-data validate` por línea y fichero, y cambia con cada refresco de los horarios. Donde no se dice el operador, todos son de Renfe. Los apartados «Cómo se construyó…» dan en cambio los recuentos del fichero de las pruebas, el del 8 de noviembre, que rotulaba además Alvia, Media Distancia, Regional Exprés y Proximidad (véase «El fichero del 17 de noviembre de 2026»).
 
 | Línea | Id | Longitud medida | Nodos | Tramos | Viajes del GTFS |
 |---|---|---|---|---|---|
@@ -276,38 +276,38 @@ En «compartidos» se cuentan los nodos que define otra línea. Son 44 especific
 - Los viajes de Iryo son los de la compilación no oficial descargada el 18 de noviembre de 2026 (véase «Operadores y sus horarios»): 135 en total, todos en alguna de las cinco líneas que lo declaran. De los 64 de la línea de Sevilla, 29 siguen a Málaga y 17 vienen de Barcelona o van a ella con parada en Madrid-Puerta de Atocha, de modo que cuentan también en la línea de Barcelona; de los 64 de esta, 22 no paran en Zaragoza-Delicias y van por su baipás, y ninguno para en Lleida. Los 24 de la línea de Valencia salen de Madrid-Chamartín, y 6 de ellos siguen a Alicante.
 - De los 364 viajes de Renfe de la línea de Sevilla, 47 la recorren sin parar en Madrid: esos 31, los 8 AVE de Barcelona a Sevilla, que están también en la línea de Barcelona, y 8 que no pasan por ninguna otra línea cargada (4 Avant de Sevilla a Córdoba y 4 AVE de Valencia a Sevilla).
 
-El día de referencia es el viernes 20 de noviembre de 2026, desde que está cargado el fichero de Renfe del 17 de noviembre, que empieza el día 16; hasta entonces fue el viernes 13 (véase «El fichero del 17 de noviembre de 2026», en «Refresco de los horarios»). La regla toma el laborable con más servicios de los ficheros vigentes de todos los operadores (véase «Conjuntos de datos»); cargar el de Iryo no lo ha movido, y la diferencia entre el jueves 12 y el viernes 13 es de muy pocos trenes: con nueve líneas, sin la de Valencia, ganaba el jueves por uno, y con la de Valencia vuelve a ganar el viernes; ni la de Albacete a Alicante, ni la de Monforte del Cid a Murcia, ni la de Madrid a Valladolid, ni las cuatro de Extremadura, ni la de Valladolid a León, ni la de Olmedo a Ourense, ni la de Venta de Baños a Burgos, ni la de León a Gijón, ni la de Burgos a Vitoria, ni las dos de Galicia, ni la de Sevilla a Cádiz, ni la de Palencia a Santander lo movieron. La convencional de Madrid a Valladolid por Ávila lo habría llevado al lunes 16, el primer día del fichero, que trae el servicio a medias; desde #253 ese día no cuenta y sigue siendo el viernes 20. Cada línea nueva puede moverlo, y cada fichero de horarios nuevo también, y con él los recuentos por día de todas. El 20 de noviembre cada tramo de la LAV Madrid – Sevilla lleva los trenes de los dos operadores:
+El día de referencia actual es el **viernes 11 de diciembre de 2026**, con **1.452 trenes distintos**. Desde #230 la intersección de los ficheros vigentes empieza el 25 de noviembre, por el extracto SNCF, y acaba el 12 de diciembre, por Ouigo. El primer día parcial no cuenta y se elige el laborable con más servicios de ese intervalo. Antes era el viernes 20 de noviembre, y antes del fichero de Renfe del 17, el viernes 13. Las cifras históricas de los apartados «Cómo se construyó…» conservan su fecha; las tablas siguientes corresponden al día actual, incluidos los trenes de Iryo. El cambio de fecha retira los cuatro Intercity desviados por Manzanares que terminaban el 22/11; no es una pérdida de cobertura causada por SNCF. Los recuentos y costes de esta incorporación están en [Horarios de SNCF](horarios-sncf.md).
 
-| Tramos de la LAV Madrid – Sevilla | Renfe | Ouigo | Total |
-|---|---|---|---|
-| Madrid-Puerta de Atocha – bifurcación Los Gavilanes | 82 | 12 | 94 |
-| Bifurcación Los Gavilanes – Torrejón de Velasco – bifurcación Yeles (2 tramos) | 90 | 12 | 102 |
-| Bifurcación Yeles – Urda – Ciudad Real (3 tramos) | 92 | 12 | 104 |
-| Ciudad Real – Córdoba (4 tramos) | 96 | 12 | 108 |
-| Córdoba – bifurcación de Málaga | 118 | 12 | 130 |
-| Bifurcación de Málaga – Majarabique | 75 | 6 | 81 |
-| Majarabique – Sevilla-Santa Justa | 73 | 6 | 79 |
+| Tramos de la LAV Madrid – Sevilla | Renfe | Ouigo | Iryo | Total |
+|---|---|---|---|---|
+| Madrid-Puerta de Atocha – Bifurcación Los Gavilanes | 112 | 12 | 28 | 152 |
+| Bifurcación Los Gavilanes – Bifurcación Yeles (2 tramos) | 120 | 12 | 28 | 160 |
+| Bifurcación Yeles – Bifurcación La Sagra | 122 | 12 | 28 | 162 |
+| Bifurcación La Sagra – Córdoba (6 tramos) | 92 | 12 | 28 | 132 |
+| Córdoba – Bifurcación Málaga-Alta Velocidad | 114 | 12 | 28 | 154 |
+| Bifurcación Málaga-Alta Velocidad – Cambiador de Majarabique | 73 | 6 | 16 | 95 |
+| Cambiador de Majarabique – Sevilla-Santa Justa | 71 | 6 | 16 | 93 |
 
-En Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid y en Yeles, los 2 de Valencia; desde Córdoba cuentan además los Avant de Sevilla. Desde la línea de Sevilla a Cádiz (#206) cuentan también, de punta a punta, los 6 trenes de ese día de Madrid a Sevilla o a Cádiz que no paran en Córdoba. Entre Ciudad Real y Córdoba hay 4 trenes más que entre Madrid y Ciudad Real: los Intercity Madrid-Atocha Cercanías – Andalucía que el fichero mantiene hasta el 22 de noviembre, que llegan a Ciudad Real por la línea de Manzanares.
+En Los Gavilanes se incorporan los 8 AVE de Barcelona que no paran en Madrid y en Yeles, los 2 de Valencia; desde Córdoba cuentan además los Avant de Sevilla. Desde la línea de Sevilla a Cádiz (#206) cuentan también, de punta a punta, los 6 trenes de ese día de Madrid a Sevilla o a Cádiz que no paran en Córdoba. Los cuatro Intercity Madrid-Atocha Cercanías – Andalucía que llegaban por Manzanares terminaron el 22 de noviembre según el fichero y ya no cuentan el 11 de diciembre.
 
-En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 63 trenes de Renfe y 6 de Ouigo, 69 en total; el de Antequera-Santa Ana a la bifurcación Gobantes, 43 y 6, porque allí se han ido los de Granada y Algeciras, y los tres últimos, hasta Málaga, 49 y 6, con los 6 Avant de Málaga a Granada. En la de Granada todos son de Renfe: 18 entre Antequera-Santa Ana y la bifurcación Bobadilla y 24 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
+En la línea de Córdoba a Málaga, los cuatro tramos hasta Antequera-Santa Ana llevan 61 trenes de Renfe, 6 de Ouigo y 12 de Iryo, 79 en total; el de Antequera-Santa Ana a la bifurcación Gobantes, 41, 6 y 12, y los tres últimos hasta Málaga, 47, 6 y 12. En la de Granada todos son de Renfe: 18 entre Antequera-Santa Ana y la bifurcación Bobadilla y 24 desde allí hasta Granada, con los 6 Avant que vienen de Málaga.
 
-En la de Barcelona los trenes cambian donde entran o salen, y los que no paran en Zaragoza o en Lleida van por su baipás (23 por el de Zaragoza, 19 de Renfe y 4 de Ouigo; 43 por el de Lleida, 32 y 11):
+En la de Barcelona los trenes cambian donde entran o salen, y los que no paran en Zaragoza o en Lleida van por su baipás (35 por el de Zaragoza, 19 de Renfe, 4 de Ouigo y 12 de Iryo; 73 por el de Lleida, 32, 11 y 30):
 
-| Tramos de la LAV Madrid – Barcelona | Renfe | Ouigo | Total |
-|---|---|---|---|
-| Madrid-Puerta de Atocha – bifurcación de Vallecas | 64 | 11 | 75 |
-| Bifurcación de Vallecas – Calatayud (4 tramos) | 72 | 11 | 83 |
-| Calatayud – cambiador de Plasencia de Jalón | 80 | 11 | 91 |
-| Cambiador de Plasencia de Jalón – bifurcación Moncasi | 68 | 11 | 79 |
-| Bifurcación Moncasi – Zaragoza-Delicias | 49 | 7 | 56 |
-| Zaragoza-Delicias – bifurcación Huesca | 48 | 7 | 55 |
-| Bifurcación Huesca – bifurcación Canal Imperial | 44 | 7 | 51 |
-| Bifurcación Canal Imperial – bifurcación Les Torres de Sanui (3 tramos) | 63 | 11 | 74 |
-| Bifurcación Les Torres de Sanui – Lleida-Pirineus | 31 | 0 | 31 |
-| Lleida-Pirineus – bifurcación Artesa de Lleida | 47 | 0 | 47 |
-| Bifurcación Artesa de Lleida – Camp de Tarragona (2 tramos) | 79 | 11 | 90 |
-| Camp de Tarragona – Barcelona-Sants (3 tramos) | 98 | 11 | 109 |
+| Tramos de la LAV Madrid – Barcelona | Renfe | Ouigo | Iryo | Total |
+|---|---|---|---|---|
+| Madrid-Puerta de Atocha – Bifurcación de Vallecas | 64 | 11 | 30 | 105 |
+| Bifurcación de Vallecas – Calatayud (4 tramos) | 72 | 11 | 30 | 113 |
+| Calatayud – Cambiador de Plasencia de Jalón | 80 | 11 | 30 | 121 |
+| Cambiador de Plasencia de Jalón – Bifurcación Moncasi | 68 | 11 | 30 | 109 |
+| Bifurcación Moncasi – Zaragoza-Delicias | 49 | 7 | 18 | 74 |
+| Zaragoza-Delicias – Bifurcación Huesca | 48 | 7 | 18 | 73 |
+| Bifurcación Huesca – Bifurcación Canal Imperial | 44 | 7 | 18 | 69 |
+| Bifurcación Canal Imperial – Bifurcación Les Torres de Sanui (3 tramos) | 63 | 11 | 30 | 104 |
+| Bifurcación Les Torres de Sanui – Lleida-Pirineus | 31 | 0 | 0 | 31 |
+| Lleida-Pirineus – Bifurcación Artesa de Lleida | 47 | 0 | 0 | 47 |
+| Bifurcación Artesa de Lleida – Camp de Tarragona (2 tramos) | 79 | 11 | 30 | 120 |
+| Camp de Tarragona – Barcelona-Sants (3 tramos) | 98 | 11 | 30 | 139 |
 
 Por Vallecas entran los AVE de Barcelona a Andalucía que no pasan por Atocha; en Plasencia de Jalón salen los Alvia de Madrid a Pamplona y Logroño; en la bifurcación Huesca, los de Huesca; desde Lleida se suman los Avant de Lleida a Barcelona, y de Camp de Tarragona a Barcelona, los Euromed y los demás trenes del Corredor Mediterráneo. Cada tren cuenta una vez: el GTFS de Renfe trae muchos de los de esta línea partidos en dos viajes (un AVE Madrid – Calatayud y otro Madrid – Barcelona con el mismo número y el mismo horario), y Oniel los junta (véase «Trenes repetidos en el horario de Renfe»).
 
@@ -678,7 +678,9 @@ Verificación:
 
 **Paradas de fuera.** Las de Francia (Perpiñán, Narbona, Montpellier, Nimes, Aviñón, Aix-en-Provence, Marsella, Valence y Lyon) son salidas por el límite, sin camino cargado. Las de la línea de Madrid, salidas por Barcelona-Sants con `via` hacia ella; Castelló y València, con un segundo trecho por la línea de la costa desde Camp de Tarragona. Y al revés: Girona y Figueres-Vilafant llevan ahora `via` hacia esta línea en la de Madrid y en la de València a Camp de Tarragona. Las paradas francesas siguen en la línea de Madrid como salidas por Barcelona-Sants sin camino, porque no son nodos de ninguna línea.
 
-**Operadores.** Renfe y SNCF Voyageurs, este último con un extracto de su GTFS oficial bajo ODbL 1.0. Los TGV cuentan en los siete tramos, sin duplicarse con Renfe; Ouigo e Iryo terminan en Barcelona. Los once códigos franceses del extracto SNCF son salidas por el límite con la sección internacional. La traducción de los tres códigos españoles reutiliza `stop_id_aliases`; véase [Horarios de SNCF](horarios-sncf.md).
+**Operadores.** Renfe y SNCF Voyageurs, este último con un extracto de su GTFS oficial bajo ODbL 1.0. Los TGV cuentan en los siete tramos, sin duplicarse con Renfe; Ouigo e Iryo terminan en Barcelona. Los once códigos franceses del extracto SNCF son salidas por el límite con la sección internacional. La traducción de los tres códigos españoles y los cinco franceses compartidos con Renfe reutiliza `stop_id_aliases`; véase [Horarios de SNCF](horarios-sncf.md).
+
+**Comprobación actual con SNCF (26 de noviembre de 2026).** La instantánea usa el 11 de diciembre: 47 trenes en cada uno de los seis tramos hasta Figueres-Vilafant (43 Renfe y 4 SNCF) y 8 en el último (4 y 4). Las tres fichas incluyen cuatro TGV con operador y fuente; París aparece como destino externo de dos salidas. Los párrafos siguientes describen la entrega original de la línea, con sus cifras del 20/11.
 
 **Lo que cambia en las demás líneas.** Los recuentos por tramo de la línea de Madrid a Barcelona y de la de la costa no cambian: son los mismos trenes. Cambian los destinos directos de sus estaciones, que ganan Girona y Figueres-Vilafant, y los recorridos de «Tramos sin otro camino»: los trenes que siguen a Figueres forman grupos propios, con un recorrido 129 km más largo. En la cobertura, los servicios pasan de 945 a 978, porque los Avant de Barcelona a Figueres y los AVE de Barcelona a Lyon no estaban en ninguna línea, y las estaciones, de 174 a 176. El día de referencia sigue siendo el viernes 20 de noviembre de 2026: ese día pasan 41 trenes por cada tramo de Barcelona-Sants a Figueres-Vilafant y 3 por el último.
 
@@ -2122,7 +2124,7 @@ Los ficheros se declaran en la lista `feeds` de `backend/data/curated/sources.js
 | `ouigo-gtfs-nap-2026-11-12` | `ouigo-gtfs-nap` | Ouigo | 2026-11-12 | del 26 de junio al 12 de diciembre de 2026 |
 | `sncf-horarios-abiertos-2026-11-26` | `sncf-horarios-abiertos` | SNCF Voyageurs | 2026-11-26 | del 25 de noviembre de 2026 al 30 de abril de 2027 |
 
-SNCF usa `train_number_field: "trip_headsign"`, porque publica allí el número comercial, `product: "TGV"`, `stop_id_prefix`, tres `stop_id_aliases` y `names_stops: false`. El lector admite un calendario solo de excepciones (`calendar_dates.txt`) sin inventar un `calendar.txt`.
+SNCF usa `train_number_field: "trip_headsign"`, porque publica allí el número comercial, `product: "TGV"`, `stop_id_prefix`, ocho `stop_id_aliases` y `names_stops: false`. El lector admite un calendario solo de excepciones (`calendar_dates.txt`) sin inventar un `calendar.txt`.
 
 Una entrada de `feeds` admite además `product` (el nombre con el que se rotulan todos los trenes del fichero) y `stop_id_prefix` (un prefijo que se quita de sus códigos de parada); las usa el fichero de Ouigo. El de Iryo, que es una compilación no oficial, usa también `stop_id_aliases` (códigos de parada que trae distintos del de Adif, con el de Adif que les corresponde) y `names_stops: false` (no pone nombre ni coordenadas a las paradas asignadas).
 

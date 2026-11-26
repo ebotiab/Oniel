@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { fechaReferencia } from './instantanea.ts'
 
 /** En el móvil la ficha vive en la hoja inferior: hay que ampliarla para verla entera. */
 async function abrirHoja(page: Page) {
@@ -11,11 +12,11 @@ test.describe('Destinos directos de una estación', () => {
     await page.goto('/nodo/ciudad-real')
     await abrirHoja(page)
     const destinos = page.getByTestId('destinos-directos')
-    await expect(destinos.getByRole('heading')).toHaveText('Destinos directos · 57 el viernes, 20 de noviembre de 2026')
+    await expect(destinos.getByRole(`heading`)).toHaveText(`Destinos directos · 57 el ${fechaReferencia}`)
     // a la vista, los seis más frecuentes: nombre, tipos de servicio, entre qué horas salen y cuántos trenes
     const filas = page.getByTestId('lista-destinos').getByRole('listitem')
     await expect(filas).toHaveCount(6)
-    await expect(filas.nth(0)).toHaveText('CórdobaAVE, AVLO, Intercity e Iryo · de 07:55 a 22:01 · Renfe Viajeros 17, Iryo 118 trenes')
+    await expect(filas.nth(0)).toHaveText('CórdobaAVE, AVLO, Intercity e Iryo · de 07:55 a 22:01 · Renfe Viajeros 15, Iryo 116 trenes')
     // hacia Madrid pasan más trenes, pero una parte solo deja viajeros en Ciudad Real: se puede ir en 14 (12 de Renfe y 2 de Iryo)
     await expect(filas.nth(2)).toContainText('Madrid-Puerta de Atocha')
     await expect(filas.nth(2)).toContainText('14 trenes')
@@ -28,7 +29,7 @@ test.describe('Destinos directos de una estación', () => {
     await expect(filas).toHaveCount(57)
     // Málaga es ya una estación de la red: lleva a su ficha. Ya no está entre los seis primeros
     const malaga = filas.filter({ hasText: 'Málaga' })
-    await expect(malaga).toContainText('5 trenes')
+    await expect(malaga).toContainText('4 trenes')
     // en una estación con trenes de dos operadores, cada destino dice de quién son los suyos, aunque sean de uno solo
     await expect(malaga).toContainText('· Renfe Viajeros')
     await expect(malaga.getByRole('button')).toHaveCount(1)
@@ -40,7 +41,7 @@ test.describe('Destinos directos de una estación', () => {
     await page.getByTestId('destino-puertollano').click()
     await expect(page).toHaveURL(/\/nodo\/puertollano$/)
     await expect(page.getByTestId('detalle-nodo').getByRole('heading', { level: 2 })).toHaveText('Puertollano')
-    await expect(page.getByTestId('destinos-directos').getByRole('heading')).toContainText('Destinos directos · 44 el')
+    await expect(page.getByTestId('destinos-directos').getByRole('heading')).toContainText('Destinos directos · 38 el')
   })
 
   test('Madrid: con varios operadores, cada destino dice de quién son sus trenes', async ({ page }) => {
@@ -48,8 +49,8 @@ test.describe('Destinos directos de una estación', () => {
     await abrirHoja(page)
     const filas = page.getByTestId('lista-destinos').getByRole('listitem')
     await expect(filas.nth(0)).toContainText('Córdoba')
-    await expect(filas.nth(0)).toContainText('de 06:50 a 21:20 · Renfe Viajeros 39, Iryo 14, Ouigo España 6')
-    await expect(filas.nth(0)).toContainText('59 trenes')
+    await expect(filas.nth(0)).toContainText('de 06:50 a 21:20 · Renfe Viajeros 37, Iryo 14, Ouigo España 6')
+    await expect(filas.nth(0)).toContainText('57 trenes')
     await expect(filas.nth(1)).toContainText('Barcelona-Sants')
     await expect(filas.nth(1)).toContainText('Renfe Viajeros 24, Iryo 15, Ouigo España 6')
     // un destino con trenes de un solo operador también lo nombra
@@ -65,7 +66,7 @@ test.describe('Destinos directos de una estación', () => {
     await abrirHoja(page)
     await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 14 trenes directos en este sentido')
     await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
-    await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 59 trenes directos en este sentido')
+    await expect(page.getByTestId('recorridos-resumen')).toContainText('Hay 57 trenes directos en este sentido')
   })
 
   test('un nodo que no es estación no tiene destinos; el detalle de una estación dice cómo se cuentan', async ({ page }) => {
