@@ -1,18 +1,17 @@
 import { expect, test } from '@playwright/test'
 
+import { cobertura } from './instantanea.ts'
+
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 
 test.describe('Simular un cierre', { tag: '@api' }, () => {
   test.skip(estatico, 'la simulación necesita la API')
 
   test('el caso calculado a mano: AVE 02070, Villanueva–Adamuz, 20/11/2026 de 8:00 a 9:00', async ({ page }) => {
-    await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz')
-    await page.getByTestId('boton-simular').click()
+    // Los casos calculados a mano conservan su fecha mediante el enlace reproducible.
+    // El formulario de consultas nuevas usa la vigencia común de los feeds actuales.
+    await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre/2026-11-20/08:00-09:00')
     await expect(page.getByTestId('panel-simulacion')).toBeVisible()
-    await page.getByTestId('sim-fecha').fill('2026-11-20')
-    await page.getByTestId('sim-inicio').fill('08:00')
-    await page.getByTestId('sim-fin').fill('09:00')
-    await page.getByTestId('sim-calcular').click()
     const resultado = page.getByTestId('sim-resultado')
     await expect(resultado).toBeVisible()
     await expect(resultado).toContainText(/trenes afectados/)
@@ -41,11 +40,7 @@ test.describe('Simular un cierre', { tag: '@api' }, () => {
   })
 
   test('un cierre en Despeñaperros señala la alta velocidad como alternativa', async ({ page }) => {
-    await page.goto('/tramo/convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches/cierre')
-    await page.getByTestId('sim-fecha').fill('2026-11-20')
-    await page.getByTestId('sim-inicio').fill('07:00')
-    await page.getByTestId('sim-fin').fill('10:00')
-    await page.getByTestId('sim-calcular').click()
+    await page.goto('/tramo/convencional-madrid-alcazar-cordoba:venta-de-cardenas:vilches/cierre/2026-11-20/07:00-10:00')
     const resultado = page.getByTestId('sim-resultado')
     await expect(resultado).toBeVisible()
     await expect(resultado).toContainText(/Regional \d{5}/)
@@ -53,11 +48,7 @@ test.describe('Simular un cierre', { tag: '@api' }, () => {
   })
 
   test('un cierre entre Almagro y Ciudad Real afecta a los Intercity desviados por Manzanares', async ({ page }) => {
-    await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real/cierre')
-    await page.getByTestId('sim-fecha').fill('2026-11-20')
-    await page.getByTestId('sim-inicio').fill('13:00')
-    await page.getByTestId('sim-fin').fill('14:00')
-    await page.getByTestId('sim-calcular').click()
+    await page.goto('/tramo/manzanares-ciudad-real:almagro:ciudad-real/cierre/2026-11-20/13:00-14:00')
     const resultado = page.getByTestId('sim-resultado')
     await expect(resultado).toBeVisible()
     await expect(resultado).toContainText(/trenes afectados/)
@@ -83,11 +74,7 @@ test.describe('Simular un cierre', { tag: '@api' }, () => {
   })
 
   test('un cierre entre Urda y Ciudad Real señala el desvío por Manzanares, que usa dos líneas', async ({ page }) => {
-    await page.goto('/tramo/lav-madrid-sevilla:urda:ciudad-real/cierre')
-    await page.getByTestId('sim-fecha').fill('2026-11-20')
-    await page.getByTestId('sim-inicio').fill('08:00')
-    await page.getByTestId('sim-fin').fill('09:00')
-    await page.getByTestId('sim-calcular').click()
+    await page.goto('/tramo/lav-madrid-sevilla:urda:ciudad-real/cierre/2026-11-20/08:00-09:00')
     const alternativa = page.getByTestId('sim-alternativa')
     await expect(alternativa).toBeVisible()
     const desvio = alternativa.locator('p.texto').first()
@@ -113,8 +100,10 @@ test.describe('Simular un cierre', { tag: '@api' }, () => {
   })
 
   test('una ventana sin trenes devuelve cero afectados', async ({ page }) => {
-    await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano/cierre')
-    await page.getByTestId('sim-fecha').fill('2026-11-20')
+    await page.goto('/tramo/lav-madrid-sevilla:ciudad-real:puertollano')
+    await page.getByTestId('boton-simular').click()
+    await expect(page.getByTestId('panel-simulacion')).toBeVisible()
+    await page.getByTestId('sim-fecha').fill(cobertura.reference_date!)
     await page.getByTestId('sim-inicio').fill('02:00')
     await page.getByTestId('sim-fin').fill('04:00')
     await page.getByTestId('sim-calcular').click()
