@@ -1840,6 +1840,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 13  # geometría, verificación y obras de Vitoria–Irún (#220)
             + 10  # ampliación a La Encina
             + 9  # nuevas fuentes del acceso de Príncipe Pío
+            + 7  # cuatro vías, dos relaciones y los puntos de estación del contraste de Grisén
         )
     )
     assert "línea convencional" in cov["notice"]
