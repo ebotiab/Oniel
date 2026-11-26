@@ -206,9 +206,9 @@ test.describe('Glosario: cada término a un toque y el glosario como página pro
     await ficha.getByRole('button', { name: 'Vía única' }).first().click()
     await expect(page.getByTestId('termino-nota')).toContainText('uno espera al otro')
     // abrir otra nota cierra la anterior: solo hay una a la vez
-    await page.getByTestId('lista-servicios').getByRole('button', { name: 'estimado' }).first().click()
+    await page.getByTestId('lista-servicios').getByRole('button', { name: 'publicado' }).first().click()
     const abiertas = page.locator('[data-testid="termino-nota"]:popover-open')
     await expect(abiertas).toHaveCount(1)
-    await expect(abiertas).toContainText('Paso estimado')
+    await expect(abiertas).toContainText('Paso publicado')
   })
 })

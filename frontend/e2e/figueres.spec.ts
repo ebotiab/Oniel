@@ -8,10 +8,14 @@ async function abrirBuscador(page: import('@playwright/test').Page) {
 }
 
 test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', () => {
-  test('la línea tiene su ficha, con sus tres estaciones en el esquema, y dice qué trenes faltan', async ({ page }) => {
+  test('la línea tiene su ficha, con sus tres estaciones en el esquema, y describe los TGV cargados', async ({ page }) => {
     await page.goto('/linea/lav-barcelona-figueres')
     await expect(page.getByRole('heading', { name: 'Línea de alta velocidad Barcelona – Girona – Figueres' })).toBeVisible()
     await expect(page.locator('body')).toContainText('Une Barcelona-Sants con Girona y Figueres-Vilafant')
+    const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+    if (await asa.isVisible()) await asa.click()
+    await page.getByTestId('mas-detalle').locator('summary').click()
+    await expect(page.getByText('los TGV de SNCF Voyageurs entre París y Barcelona', { exact: false })).toBeVisible()
     const esquema = page.getByTestId('esquema')
     for (const estacion of ['Barcelona-Sants', 'Girona', 'Figueres-Vilafant', 'Límite con la sección internacional']) {
       await expect(esquema).toContainText(estacion)
@@ -76,6 +80,47 @@ test.describe('La línea de alta velocidad Barcelona – Girona – Figueres', (
     await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
     await expect(page.getByTestId('tramo-atributo-proteccion_tren')).toHaveText('ERTMS de nivel 1 y ASFA')
   })
+
+  test('los TGV de SNCF cuentan una sola vez en Girona–Figueres y hasta el límite', async ({ page }) => {
+    for (const tramo of ['girona:figueres-vilafant', 'figueres-vilafant:limite-seccion-internacional']) {
+      await page.goto(`/tramo/lav-barcelona-figueres:${tramo}`)
+      const ficha = page.getByTestId('detalle-tramo')
+      await expect(ficha).toBeVisible()
+      const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+      if (await asa.isVisible()) await asa.click()
+      await expect(page.getByTestId('tramo-operadores')).toContainText('SNCF Voyageurs 4')
+      const trenes = ficha.getByTestId('trenes-sncf')
+      await expect(trenes.getByRole('heading')).toHaveText('SNCF Voyageurs · 4')
+      await expect(trenes.locator('li')).toHaveCount(4)
+      for (const numero of ['9706', '9708', '9713', '9715']) {
+        await expect(trenes.locator('li').filter({ hasText: `TGV ${numero}` })).toHaveCount(1)
+      }
+      await expect(trenes).toContainText('Barcelona-Sants')
+      await expect(trenes).not.toContainText('Barcelone')
+    }
+  })
+
+  for (const nodo of ['barcelona-sants', 'girona', 'figueres-vilafant']) {
+    test(`la ficha de ${nodo} incluye París con fuente SNCF y sin línea francesa inventada`, async ({ page }) => {
+      await page.goto(`/nodo/${nodo}`)
+      const ficha = page.getByTestId('detalle-nodo')
+      await expect(ficha).toBeVisible()
+      const asa = page.getByRole('button', { name: 'Ampliar el panel' })
+      if (await asa.isVisible()) await asa.click()
+      const todos = ficha.getByTestId('destinos-ver-todos')
+      if (await todos.isVisible()) await todos.click()
+      const paris = ficha.getByTestId('lista-destinos').locator('li').filter({ hasText: 'Paris Gare de Lyon' })
+      await expect(paris).toHaveCount(1)
+      await expect(paris).toContainText('2 trenes')
+      await expect(paris).toContainText('TGV')
+      await expect(paris).toContainText('SNCF Voyageurs')
+      await expect(paris.getByRole('button')).toHaveCount(0)
+      const perpignan = ficha.getByTestId('lista-destinos').locator('li').filter({ hasText: /^Perpignan/ })
+      await expect(perpignan).toHaveCount(1)
+      await expect(perpignan).toContainText('4 trenes')
+      await expect(perpignan).toContainText('Renfe Viajeros 2, SNCF Voyageurs 2')
+    })
+  }
 
   test('el comparador encuentra Madrid – Girona y Barcelona – Figueres', async ({ page }) => {
     await page.goto('/recorridos/madrid-puerta-de-atocha/girona')

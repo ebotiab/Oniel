@@ -15,7 +15,7 @@
     "reference_length_km": 131.7,
     "pk_origin_km": 621.0,
     "status": "disponible",
-    "description": "Une Barcelona-Sants con Girona y Figueres-Vilafant y llega hasta el túnel por el que la alta velocidad cruza a Francia. Es el camino de los trenes de Barcelona a Girona y Figueres y de los que siguen a Perpiñán, Marsella, Lyon y París.\n\nEs la continuación de la línea de Madrid a Barcelona: para Adif las dos son una sola, la 050, y los kilómetros se siguen contando desde Madrid. Oniel la enseña aparte porque no la recorren los mismos trenes: los de Ouigo y los de Iryo acaban en Barcelona.\n\nSale de Sants por un túnel que cruza Barcelona bajo el Eixample y pasa por La Sagrera, donde está prevista una estación. Entre Mollet del Vallès y Girona la usan también trenes de mercancías, que entran por un ramal que viene del puerto de Barcelona. En Girona los trenes de alta velocidad paran bajo tierra, en la misma estación que los de la línea convencional.\n\nSe abrió el 9 de enero de 2013. Los últimos kilómetros, junto a Figueres-Vilafant, estaban en servicio desde diciembre de 2010 para los trenes que llegaban de Francia.\n\nLa línea de Adif acaba cuatro kilómetros al norte de Figueres-Vilafant. Lo que sigue hasta Perpiñán, con el túnel de El Pertús bajo los Pirineos, es la sección internacional, que gestiona otra empresa y no está cargada.\n\nAquí están los trenes de Renfe: los Avant de Barcelona a Figueres, los AVE de Madrid que siguen hasta Figueres y los AVE a Marsella y a Lyon. Faltan los TGV de París a Barcelona, de la compañía francesa SNCF, dos al día por sentido: sus horarios todavía no están cargados.",
+    "description": "Une Barcelona-Sants con Girona y Figueres-Vilafant y llega hasta el túnel por el que la alta velocidad cruza a Francia. Es el camino de los trenes de Barcelona a Girona y Figueres y de los que siguen a Perpiñán, Marsella, Lyon y París.\n\nEs la continuación de la línea de Madrid a Barcelona: para Adif las dos son una sola, la 050, y los kilómetros se siguen contando desde Madrid. Oniel la enseña aparte porque no la recorren los mismos trenes: los de Ouigo y los de Iryo acaban en Barcelona.\n\nSale de Sants por un túnel que cruza Barcelona bajo el Eixample y pasa por La Sagrera, donde está prevista una estación. Entre Mollet del Vallès y Girona la usan también trenes de mercancías, que entran por un ramal que viene del puerto de Barcelona. En Girona los trenes de alta velocidad paran bajo tierra, en la misma estación que los de la línea convencional.\n\nSe abrió el 9 de enero de 2013. Los últimos kilómetros, junto a Figueres-Vilafant, estaban en servicio desde diciembre de 2010 para los trenes que llegaban de Francia.\n\nLa línea de Adif acaba cuatro kilómetros al norte de Figueres-Vilafant. Lo que sigue hasta Perpiñán, con el túnel de El Pertús bajo los Pirineos, es la sección internacional, que gestiona otra empresa y no está cargada.\n\nAquí están los trenes de Renfe —los Avant de Barcelona a Figueres, los AVE de Madrid que siguen hasta Figueres y los AVE a Marsella y a Lyon— y los TGV de SNCF Voyageurs entre París y Barcelona. Sus horarios se cuentan hasta el límite con la sección internacional.",
     "geometry_source": {
       "source_id": "osm-relation-11082425",
       "parts": [
@@ -48,6 +48,12 @@
       "name": "Renfe Viajeros",
       "role": "operador",
       "source_id": "renfe-gtfs-av-ld-md"
+    },
+    {
+      "id": "sncf",
+      "name": "SNCF Voyageurs",
+      "role": "operador",
+      "source_id": "sncf-horarios-abiertos"
     }
   ],
   "nodes": [
@@ -300,7 +306,25 @@
         }
       ]
     },
-    "60911": {"exits": ["barcelona-sants"], "via": [{"line": "lav-madrid-barcelona", "node": "barcelona-sants"}, {"line": "valencia-castello-tarragona", "node": "camp-de-tarragona"}, {"line": "valencia-xativa-alicante", "node": "valencia-estacio-del-nord"}]},
+    "60911": {
+      "exits": [
+        "barcelona-sants"
+      ],
+      "via": [
+        {
+          "line": "lav-madrid-barcelona",
+          "node": "barcelona-sants"
+        },
+        {
+          "line": "valencia-castello-tarragona",
+          "node": "camp-de-tarragona"
+        },
+        {
+          "line": "valencia-xativa-alicante",
+          "node": "valencia-estacio-del-nord"
+        }
+      ]
+    },
     "87374": {
       "exits": [
         "limite-seccion-internacional"
@@ -342,6 +366,36 @@
       ]
     },
     "87303": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87686006": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87688887": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87703975": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87773200": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87781005": {
+      "exits": [
+        "limite-seccion-internacional"
+      ]
+    },
+    "87781278": {
       "exits": [
         "limite-seccion-internacional"
       ]

@@ -238,6 +238,7 @@ def refresh_source(
     reading: dict[str, Any] = {
         "stop_id_prefix": current.stop_id_prefix,
         "stop_id_aliases": current.stop_id_aliases,
+        "train_number_field": current.train_number_field,
     }
     feed = read_feed(downloaded, **reading)
     result.reason = "contenido"
@@ -369,7 +370,12 @@ def expiring_feeds(
     for source_id, feed in current.items():
         if source_id in exclude:
             continue
-        end = read_feed(data_dir / feed.file, stop_id_prefix=feed.stop_id_prefix).feed_end
+        end = read_feed(
+            data_dir / feed.file,
+            stop_id_prefix=feed.stop_id_prefix,
+            stop_id_aliases=feed.stop_id_aliases,
+            train_number_field=feed.train_number_field,
+        ).feed_end
         if (end - today).days <= days:
             out.append(
                 {

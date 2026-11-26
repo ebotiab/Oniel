@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { cabeceraDeZona, FICHA_RED, zona } from './instantanea.ts'
+import { fechaReferencia, cabeceraDeZona, FICHA_RED, zona } from './instantanea.ts'
 import { abrirLinea, abrirZona } from './navegar.ts'
 
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
@@ -68,7 +68,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     await expect(ficha).toContainText('20,7 km')
     await expect(page.getByTestId('tramo-tipo')).toHaveText('Alta velocidad')
     // 35 trenes el día de referencia: los que van de Madrid a Barcelona sin parar en Zaragoza (19 de Renfe, 12 de Iryo y 4 de Ouigo)
-    await expect(ficha).toContainText('35 el viernes, 20 de noviembre de 2026')
+    await expect(ficha).toContainText(`35 el ${fechaReferencia}`)
     await expect(page.getByTestId('tramo-operadores')).toHaveText('Renfe Viajeros 19 · Iryo 12 · Ouigo España 4')
     const trenes = page.getByTestId('lista-servicios').locator('li')
     await expect(trenes).toHaveCount(35)
@@ -87,7 +87,7 @@ test.describe('Los baipases de Zaragoza y de Lleida', () => {
     const ficha = page.getByTestId('detalle-tramo')
     // eran 78 cuando el tren que no para figuraba por la estación; lo que llega a la bifurcación sale
     // por aquí (74, con los 18 de Iryo que paran en Zaragoza) o por el baipás (35)
-    await expect(ficha).toContainText('74 el viernes, 20 de noviembre de 2026')
+    await expect(ficha).toContainText(`74 el ${fechaReferencia}`)
     await expect(page.getByTestId('lista-servicios').locator('li')).toHaveCount(74)
     // los que siguen hacia Barcelona tienen el baipás; los 8 que acaban en Zaragoza o salen de ella no: desde el
     // baipás no se entra en la estación sin invertir la marcha, y la estación más cercana para hacerlo queda lejos
