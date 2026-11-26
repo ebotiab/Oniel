@@ -343,6 +343,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "enlace-soto-de-cerrato",
         "enlace-aljucen-la-garrovilla",
         "enlace-atocha-chamartin",
+        "vitoria-irun",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -399,6 +400,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         + 3  # la de Miranda de Ebro a Bilbao
         + 11  # la de Sevilla a Huelva
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
+        + 20  # Vitoria–Irún
     )
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
