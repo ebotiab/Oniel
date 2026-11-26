@@ -110,4 +110,6 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 
 - Ampliación convencional Alcázar de San Juan – Albacete – La Encina (26 de noviembre de 2026, #269). Almansa y La Encina entran en el mapa. El enlace a Caudete completa el camino hacia Alicante y el comparador muestra también la ruta por Xàtiva hacia Valencia. Se conservan las direcciones existentes y el día de referencia.
 
+- Preparación documental del acceso de Majarabique a Huelva (26 de noviembre de 2026, [#311](https://github.com/ebotiab/Oniel/issues/311)). El [plan](planes/enlace-majarabique-los-naranjos.md) distingue la vía hacia Los Naranjos de la que enlaza hacia Huelva por San Jerónimo y separa los horarios según su parada en Sevilla. La incorporación queda pendiente.
+
 - 26 de noviembre de 2026, #308. Madrid-Príncipe Pío se incorpora a la línea convencional de Ávila y Valladolid mediante el enlace por Pozuelo y Las Rozas. El comparador conserva los regionales por su identidad al pasar por Pinar. Trazado, fuentes y recuentos en «El acceso de Madrid-Príncipe Pío a Pinar de las Rozas» de `docs/datos.md`.
