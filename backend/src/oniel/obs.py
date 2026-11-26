@@ -13,13 +13,14 @@ import csv
 import datetime as dt
 import io
 import json
+import math
 import os
 import re
 import time
 from collections.abc import Callable, Mapping
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import httpx
 
@@ -71,7 +72,8 @@ class LogfireRateLimited(LogfireError):
 
 def _retry_after(value: str | None) -> float | None:
     try:
-        return max(float(value), 0.0) if value else None
+        seconds = float(value) if value else None
+        return max(seconds, 0.0) if seconds is not None and math.isfinite(seconds) else None
     except ValueError:
         return None
 
@@ -127,6 +129,8 @@ class LogfireReader:
         since: dt.datetime,
         limit: int | None = None,
         environment: str | None = None,
+        until: dt.datetime | None = None,
+        timeout_s: float | None = None,
     ) -> list[Row]:
         """Ejecuta una consulta y devuelve las filas como diccionarios.
 
@@ -138,8 +142,14 @@ class LogfireReader:
             body["limit"] = limit
         if environment is not None:
             body["deployment_environment"] = [environment]
+        if until is not None:
+            body["max_timestamp"] = _utc(until)
         try:
-            response = self._client.post("/v2/query", json=body)
+            response = self._client.post(
+                "/v2/query",
+                json=body,
+                timeout=timeout_s if timeout_s is not None else httpx.USE_CLIENT_DEFAULT,
+            )
         except httpx.HTTPError as exc:
             raise LogfireError(
                 f"No se pudo conectar con Logfire ({type(exc).__name__}: {exc}). "
@@ -161,13 +171,19 @@ class LogfireReader:
             raise LogfireError(
                 f"Logfire respondió {response.status_code}: {response.text.strip()[:400]}"
             )
-        return rows_from_payload(response.json())
+        try:
+            return rows_from_payload(response.json())
+        except ValueError as exc:
+            raise LogfireError("Logfire devolvió una respuesta JSON inutilizable.") from exc
 
 
 def rows_from_payload(payload: Any) -> list[Row]:
     """La API responde `{"schema": …, "data": [fila, …]}`; aquí interesan las filas."""
-    data = payload.get("data", []) if isinstance(payload, dict) else []
-    return [dict(row) for row in data]
+    if not isinstance(payload, dict) or not isinstance(payload.get("data"), list):
+        raise LogfireError("Logfire devolvió una respuesta sin una lista de filas «data».")
+    if any(not isinstance(row, dict) for row in payload["data"]):
+        raise LogfireError("Logfire devolvió filas inutilizables.")
+    return [dict(row) for row in payload["data"]]
 
 
 def rows_to_csv(rows: list[Row]) -> str:
@@ -474,6 +490,260 @@ def wait_for_commit(
         if done or clock() + interval_s > deadline:
             return status
         sleep(interval_s)
+
+
+@dataclass
+class Verification:
+    """Resultado de la comprobación estricta; nunca confunde falta de datos con éxito."""
+
+    commit: str
+    environment: str
+    outcome: Literal["success", "failure", "unverifiable"] = "unverifiable"
+    reason: str = "no_evidence"
+    message: str = "No hay evidencia suficiente del commit solicitado."
+    checked_at: dt.datetime | None = None
+    window_start: dt.datetime | None = None
+    api: VersionSeen | None = None
+    last_import: ImportRun | None = None
+    server_errors: int | None = None
+    error_trace_id: str | None = None
+
+    @property
+    def exit_code(self) -> int:
+        return {"success": 0, "failure": 1, "unverifiable": 2}[self.outcome]
+
+    def to_json(self) -> str:
+        return json.dumps(
+            asdict(self) | {"exit_code": self.exit_code}, ensure_ascii=False, indent=2, default=str
+        )
+
+    def to_text(self) -> str:
+        label = {
+            "success": "ÉXITO",
+            "failure": "FALLO OBSERVADO",
+            "unverifiable": "VERIFICACIÓN IMPOSIBLE",
+        }
+        return (
+            f"{label[self.outcome]} · {self.commit} · {self.environment}\n{self.message}\n"
+            f"Ventana: {_when(self.window_start)} — {_when(self.checked_at)}.\n"
+            f"Errores de servidor de esa versión: {self.server_errors if self.server_errors is not None else 'sin comprobar'}.\n"
+            + (f"Traza de error: {self.error_trace_id}\n" if self.error_trace_id else "")
+        )
+
+
+class VerificationTimeout(LogfireError):
+    """Se agotó el plazo durante una consulta; su respuesta no certifica el despliegue."""
+
+
+def _verification_status(
+    reader: LogfireReader,
+    result: Verification,
+    *,
+    deadline: float,
+    clock: Callable[[], float],
+) -> Verification:
+    """Tres consultas acotadas al mismo periodo. Los errores se cuentan sin truncar filas."""
+    now = dt.datetime.now(dt.UTC)
+    assert result.window_start is not None
+    window_start = result.window_start
+    result = Verification(
+        result.commit, result.environment, checked_at=now, window_start=window_start
+    )
+
+    def query(sql: str) -> list[Row]:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            raise VerificationTimeout("Se agotó el plazo de verificación durante las consultas.")
+        rows = reader.query(
+            sql,
+            since=window_start,
+            until=now,
+            environment=result.environment,
+            timeout_s=min(60.0, remaining),
+        )
+        if clock() >= deadline:
+            raise VerificationTimeout("Se agotó el plazo de verificación durante las consultas.")
+        return rows
+
+    def timestamp(value: Any) -> dt.datetime:
+        parsed = _parse(value)
+        if parsed is None or not window_start <= parsed <= now:
+            raise ValueError("Fecha ausente o fuera de la ventana consultada")
+        return parsed
+
+    seen = query("""
+        SELECT service_name, service_version, min(start_timestamp) AS first_seen,
+               max(start_timestamp) AS last_seen, count(*) AS records
+        FROM records
+        WHERE service_name IN ('oniel-api', 'oniel-data')
+        GROUP BY service_name, service_version
+        ORDER BY last_seen DESC
+    """)
+    versions = []
+    for row in seen:
+        first, last = timestamp(row["first_seen"]), timestamp(row["last_seen"])
+        if (
+            row["service_name"] not in SERVICES
+            or not isinstance(row["service_version"], str)
+            or type(row["records"]) is not int
+            or row["records"] <= 0
+            or first > last
+        ):
+            raise ValueError("Evidencia de versión inutilizable")
+        versions.append(
+            VersionSeen(row["service_name"], row["service_version"], first, last, row["records"])
+        )
+    versions.sort(key=lambda v: v.last_seen or now, reverse=True)
+    api = next((v for v in versions if v.service == "oniel-api"), None)
+    result = replace(result, api=api)
+    matches = {v.version for v in versions if is_commit(v.version, result.commit)}
+    if not matches:
+        return result
+    if len(matches) != 1:
+        return replace(
+            result,
+            reason="ambiguous_commit",
+            message="El hash abreviado identifica varias versiones; usa el SHA completo.",
+        )
+    version = matches.pop()
+    if len(version) != 40 or not _COMMIT.fullmatch(version):
+        raise ValueError("La versión observada no es un SHA completo válido")
+
+    # El filtro por SHA se aplica ANTES de contar: una versión anterior puede seguir respondiendo.
+    errors = query(f"""
+        SELECT count(*) AS n, max(trace_id) AS trace_id
+        FROM records
+        WHERE service_name IN ('oniel-api', 'oniel-data') AND service_version = '{version}'
+          AND (level >= {ERROR_LEVEL} OR http_response_status_code >= 500)
+    """)
+    if len(errors) != 1 or type(errors[0].get("n")) is not int or errors[0]["n"] < 0:
+        raise ValueError("Recuento de errores ausente o inutilizable")
+    result = replace(result, server_errors=errors[0]["n"], error_trace_id=errors[0].get("trace_id"))
+    if result.server_errors:
+        return replace(
+            result,
+            outcome="failure",
+            reason="server_errors",
+            message="Se observaron errores de servidor atribuibles al commit solicitado.",
+        )
+
+    rows = query(f"""
+        SELECT kind, start_timestamp, duration, service_version, level, is_exception,
+               exception_type, exception_message, attributes
+        FROM records
+        WHERE service_name = 'oniel-data' AND service_version = '{version}'
+          AND span_name IN ('import all', 'import all started')
+        ORDER BY start_timestamp DESC
+        LIMIT {IMPORT_ROWS}
+    """)
+    for row in rows:
+        timestamp(row["start_timestamp"])
+        if (
+            row["service_version"] != version
+            or row["kind"] not in ("log", "span")
+            or type(row["level"]) is not int
+            or type(row["is_exception"]) is not bool
+        ):
+            raise ValueError("Evidencia de importación inutilizable")
+        attributes = row["attributes"]
+        attributes = json.loads(attributes) if isinstance(attributes, str) else attributes
+        if not isinstance(attributes, dict):
+            raise ValueError("Atributos de importación inutilizables")
+        if row["kind"] == "span" and attributes.get("outcome") not in (
+            "completed",
+            "skipped",
+            "failed",
+        ):
+            raise ValueError("Falta un resultado explícito de la importación")
+    runs = import_runs(rows)
+    run = runs[0] if runs else None
+    result = replace(result, last_import=run)
+    if run is not None and run.outcome == "failed":
+        return replace(
+            result,
+            outcome="failure",
+            reason="import_failed",
+            message="La importación del commit solicitado falló.",
+        )
+    if api is None or api.version != version:
+        return replace(
+            result,
+            reason="commit_not_current",
+            message="El commit solicitado todavía no es la versión observada más reciente de la API.",
+        )
+    if run is None or run.outcome not in ("completed", "skipped"):
+        return replace(
+            result,
+            reason="import_pending",
+            message="No hay importación completada u omitida del commit solicitado.",
+        )
+    return replace(
+        result,
+        outcome="success",
+        reason="verified",
+        message="Commit observado en la API, importación completada u omitida y ningún error de servidor de esa versión en la ventana consultada.",
+    )
+
+
+def verify_deployment(
+    reader: LogfireReader,
+    commit: str,
+    *,
+    environment: str = "production",
+    window_days: int = 7,
+    timeout_s: float = 0.0,
+    interval_s: float = 30.0,
+    sleep: Callable[[float], None] = time.sleep,
+    clock: Callable[[], float] = time.monotonic,
+) -> Verification:
+    """Verifica o espera evidencia. Sin espera hace una lectura, con plazo total de 60 s.
+
+    El inicio de la ventana queda fijo al esperar: un error no desaparece por el sondeo.
+    Las consultas y Retry-After comparten el mismo plazo; nunca se reutiliza un éxito antiguo.
+    """
+    commit = commit.strip().lower()
+    now = dt.datetime.now(dt.UTC)
+    result = Verification(commit, environment, checked_at=now)
+    if (
+        not _COMMIT.fullmatch(commit)
+        or not _ENVIRONMENT.fullmatch(environment)
+        or window_days <= 0
+        or timeout_s < 0
+        or interval_s <= 0
+    ):
+        return replace(
+            result,
+            reason="invalid_arguments",
+            message="Se requiere un SHA de 7 a 40 caracteres hexadecimales, entorno válido, días positivos y espera no negativa.",
+        )
+    result.window_start = now - dt.timedelta(days=window_days)
+    deadline = clock() + (timeout_s or 60.0)
+    while True:
+        pause = interval_s
+        try:
+            result = _verification_status(reader, result, deadline=deadline, clock=clock)
+        except LogfireRateLimited as exc:
+            result = replace(result, reason="rate_limited", message=str(exc))
+            pause = (exc.retry_after_s if exc.retry_after_s is not None else interval_s) + 1.0
+        except VerificationTimeout as exc:
+            return replace(result, reason="timeout", message=str(exc))
+        except LogfireError as exc:
+            return replace(result, reason="query_failed", message=str(exc))
+        except (ValueError, TypeError, KeyError, OverflowError) as exc:
+            return replace(
+                result,
+                reason="unusable_response",
+                message=f"Respuesta de Logfire inutilizable: {exc}.",
+            )
+        if result.outcome != "unverifiable" or timeout_s == 0:
+            return result
+        if clock() + pause >= deadline:
+            return replace(
+                result,
+                reason="timeout",
+                message=f"Espera agotada sin verificar el despliegue. Último resultado: {result.message}",
+            )
+        sleep(pause)
 
 
 def _when(moment: dt.datetime | None) -> str:

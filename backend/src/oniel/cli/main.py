@@ -472,6 +472,12 @@ def _obs_since(desde: str | None) -> dt.datetime | None:
 
 @obs_app.command("estado")
 def obs_estado_cmd(
+    verificar: Annotated[
+        bool,
+        typer.Option(
+            "--verificar", help="Verificación estricta con --commit: éxito 0, fallo 1, imposible 2"
+        ),
+    ] = False,
     commit: Annotated[
         str | None,
         typer.Option(help="Commit que se espera desplegado; si no lo está, termina con código 1"),
@@ -492,6 +498,31 @@ def obs_estado_cmd(
 ) -> None:
     """Qué commit corre en producción y desde cuándo, la última importación, los errores y las rutas lentas."""
     from oniel import obs
+
+    if verificar:
+        result = obs.Verification(commit or "", entorno)
+        if not commit or desde is not None:
+            result.reason = "invalid_arguments"
+            result.message = (
+                "--verificar requiere --commit y no admite --desde; usa --dias para la ventana."
+            )
+        elif (token := obs.read_token()) is None:
+            result.reason = "missing_token"
+            result.message = obs.NO_TOKEN_MESSAGE
+        else:
+            reader = obs.LogfireReader(token)
+            try:
+                result = obs.verify_deployment(
+                    reader,
+                    commit,
+                    environment=entorno,
+                    window_days=dias,
+                    timeout_s=esperar * 60,
+                )
+            finally:
+                reader.close()
+        typer.echo(result.to_json() if como_json else result.to_text(), nl=como_json)
+        raise typer.Exit(result.exit_code)
 
     token = obs.read_token()
     if token is None:
