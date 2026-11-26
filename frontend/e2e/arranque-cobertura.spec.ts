@@ -3,20 +3,10 @@ import type { Map as MapLibreMap } from 'maplibre-gl'
 
 import { cobertura, indice } from './instantanea.ts'
 import { irA } from './navegar.ts'
+import { retener } from './retener.ts'
 
 const estatico = Boolean(process.env.ONIEL_E2E_STATIC)
 type ConMapa = { __onielMap?: MapLibreMap }
-
-/** Retiene solo este recurso; al soltarlo, el servidor entrega el fichero real. */
-async function retener(page: Page, url: string) {
-  let soltar!: () => void
-  const retenida = new Promise<void>((resolve) => { soltar = resolve })
-  await page.route(url, async (route) => {
-    await retenida
-    await route.continue().catch(() => {}) // puede haberse cancelado al cerrar la página
-  })
-  return soltar
-}
 
 async function ampliarPanel(page: Page) {
   const asa = page.getByRole('button', { name: 'Ampliar el panel' })

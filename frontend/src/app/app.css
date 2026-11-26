@@ -991,9 +991,11 @@
 }
 
 /* Móvil: hoja inferior */
-.movil .cabecera {
-  height: 52px;
-  padding: 0 14px;
+@media (max-width: 760px) {
+  .app .cabecera {
+    height: 52px;
+    padding: 0 14px;
+  }
 }
 
 .movil .solo-escritorio {
@@ -1078,24 +1080,31 @@
   top: 60px;
 }
 
-.movil .panel {
-  left: 0;
-  right: 0;
-  top: auto;
-  bottom: 0;
-  width: auto;
-  height: 150px;
-  border-radius: 14px 14px 0 0;
-  border-bottom: 0;
-  transition: height 220ms ease;
+@media (max-width: 760px) {
+  .app .panel {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    width: auto;
+    height: 150px;
+    border-radius: 14px 14px 0 0;
+    border-bottom: 0;
+    transition: height 220ms ease;
+  }
+
+  .app .panel-contenido {
+    padding: 4px 16px 24px;
+  }
+
+  /* En el visor montado, el asa ocupa este espacio sobre el contenido. */
+  .carga-inicial .panel-contenido {
+    padding-top: 26px;
+  }
 }
 
 .movil.hoja-abierta .panel {
   height: 66vh;
-}
-
-.movil .panel-contenido {
-  padding: 4px 16px 24px;
 }
 
 .asa {

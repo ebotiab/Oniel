@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test'
 
 import { META_RED, SITIO } from '../src/app/meta.ts'
 import { indice } from './instantanea.ts'
+import { retener } from './retener.ts'
 
 // El segundo servidor de Playwright sirve la compilación, igual que en producción.
 const puerto = Number(process.env.ONIEL_E2E_PORT_TELEMETRIA ?? Number(process.env.ONIEL_E2E_PORT ?? 5199) + 1)
@@ -50,8 +51,62 @@ test.describe('Lectura sin JavaScript', () => {
   })
 })
 
-test('al arrancar el mapa, el visor sustituye la lectura inicial', async ({ page }) => {
-  await page.goto('/')
-  await expect(page.getByTestId('vista-red')).toBeVisible()
-  await expect(page.locator('.lectura-inicial')).toHaveCount(0)
-})
+const modulo = /\/assets\/index-[^/]+\.js$/
+
+for (const [ruta, ficha] of [['/', 'vista-red'], ['/nodo/puertollano', 'detalle-nodo']] as const) {
+  test(`el primer pintado de ${ruta} comparte cabecera y panel con el visor estático`, async ({ page }) => {
+    const ejecutar = await retener(page, modulo)
+    const cargarIndice = await retener(page, '**/data/index.json')
+    const cargarMapa = await retener(page, /\/assets\/MapView-[^/]+\.js$/)
+    try {
+      await page.goto(ruta, { waitUntil: 'commit' })
+      const carga = page.getByRole('status').filter({ hasText: 'Cargando la red…' })
+      await expect(carga).toBeInViewport()
+      const lectura = page.locator('.lectura-inicial')
+      await expect(lectura).toBeHidden()
+      await lectura.evaluate((main) => {
+        const doc = main.ownerDocument
+        doc.addEventListener('DOMContentLoaded', () => {
+          doc.documentElement.dataset.lecturaVisible = String(main.getClientRects().length > 0)
+        })
+      })
+      await expect(page.getByRole('heading')).toHaveCount(0)
+      await expect(page.getByRole('link')).toHaveCount(1)
+      const marca = page.getByRole('link', { name: 'Oniel, ir al inicio' })
+      await expect(marca).toBeInViewport()
+      await marca.evaluate(async (a) => { await a.ownerDocument.fonts.ready })
+      const panel = page.locator('.panel:visible')
+      const antes = [await marca.boundingBox(), await panel.boundingBox(), await carga.boundingBox()]
+
+      ejecutar()
+      await expect(page.locator('html')).toHaveAttribute('data-lectura-visible', 'false')
+      await expect(page.locator('.cabecera[data-estado]')).toBeVisible()
+      const mensaje = page.getByText('Cargando la red…', { exact: true })
+      await expect(mensaje).toBeInViewport()
+      expect([await marca.boundingBox(), await panel.boundingBox(), await mensaje.boundingBox()]).toEqual(antes)
+      await expect(page.locator('.inicio-estatico')).toHaveCount(0)
+
+      cargarIndice()
+      await expect(page.getByTestId(ficha)).toBeVisible()
+    } finally {
+      ejecutar()
+      cargarIndice()
+      cargarMapa()
+    }
+  })
+}
+
+for (const fallo of ['descarga', 'ejecución']) {
+  test(`si falla la ${fallo} del módulo se puede leer y recorrer el HTML`, async ({ page }) => {
+    await page.route(modulo, (route) => fallo === 'descarga'
+      ? route.abort('failed')
+      : route.fulfill({ contentType: 'text/javascript', body: 'throw new Error("Fallo del módulo de prueba")' }))
+    await page.goto('/')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(META_RED.title)
+    await expect(page.getByRole('status')).toHaveCount(0)
+    const linea = indice.lines[0]!
+    await page.getByRole('link', { name: linea.name, exact: true }).click()
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(linea.name)
+    await expect(page.getByRole('link', { name: 'Volver al mapa de la red' })).toBeVisible()
+  })
+}

@@ -24,6 +24,13 @@
     <meta name="twitter:image" content="https://oniel.vercel.app/tarjeta.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Oniel · Cómo está conectada la red ferroviaria</title>
+    <script>
+      // DOMContentLoaded llega cuando el módulo ha terminado o ha fallado.
+      document.documentElement.classList.add('arrancando')
+      document.addEventListener('DOMContentLoaded', () => {
+        document.documentElement.classList.remove('arrancando')
+      })
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -21,8 +21,12 @@ iniciarVisitas()
 const limpia = legacyHashPath(window.location.hash)
 if (limpia !== null) window.history.replaceState(null, '', limpia + window.location.search)
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')!
+createRoot(root).render(
   <StrictMode>
     <App />
   </StrictMode>,
 )
+// React puede hacer su primer pintado después de DOMContentLoaded. Conserva el estado de carga
+// hasta que ese pintado sustituya los hijos de #root. Si el módulo falla, queda la lectura.
+root.querySelector('.inicio-estatico')?.classList.add('montando')

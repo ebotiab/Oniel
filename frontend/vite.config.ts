@@ -40,7 +40,21 @@ interface IndiceDeLaRed {
 
 /** React sustituye este contenido al arrancar. Sin JavaScript, las fichas se pueden recorrer con enlaces normales. */
 function lecturaInicial(meta: Meta, navegacion: string): string {
-  return `<main class="lectura-inicial"><h1>${escapar(meta.title)}</h1><p>${escapar(meta.description)}</p>${navegacion}</main>`
+  return `<div class="inicio-estatico">
+    <div class="app carga-inicial" hidden>
+      <header class="cabecera">
+        <a class="marca" href="/" aria-label="Oniel, ir al inicio">
+          <svg class="marca-o" viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="10" cy="10" r="8.2" fill="var(--papel)" stroke="currentColor" stroke-width="3.4"/>
+          </svg><span aria-hidden="true">niel</span>
+        </a>
+      </header>
+      <div class="panel"><div class="panel-contenido">
+        <p class="suave cargando" role="status">Cargando la red…</p>
+      </div></div>
+    </div>
+    <main class="lectura-inicial"><h1>${escapar(meta.title)}</h1><p>${escapar(meta.description)}</p>${navegacion}</main>
+  </div>`
 }
 
 /** Las mismas rutas públicas alimentan las páginas estáticas y el sitemap en cada compilación. */
