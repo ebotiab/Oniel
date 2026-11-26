@@ -92,6 +92,9 @@ def test_terminales_y_calendarios_comerciales(
     assert Counter(t.stop_times[0].stop_id for t in por_avila) == {PRINCIPE_PIO: 7, SALAMANCA: 7}
     hasta_apeadero = [t for t in hoy if t.stop_times[-1].stop_id == ALAMEDILLA]
     assert Counter(PENARANDA in feed.stop_ids_of(t) for t in hasta_apeadero) == {True: 7, False: 5}
+    for viaje in hasta_apeadero:
+        parada = viaje.stop_times[-2]
+        assert (parada.stop_id, parada.pickup_type, parada.drop_off_type) == (SALAMANCA, 1, 0)
     assert all("10500" in feed.stop_ids_of(t) for t in hasta_apeadero if t.trip_id not in ids)
     por_medina = {t.train_number: t for t in hoy if t.train_number in {"18308", "00631", "04899"}}
     assert set(por_medina) == {"18308", "00631", "04899"}

@@ -94,6 +94,18 @@ Para el **11 al 13 de diciembre de 2026**, el pliego de Renfe del expediente 202
 
 El horario del día de control ya se importa con el mismo identificador de viaje en Príncipe Pío y en la 100. La prueba `test_avila_salamanca.py` comprueba sobre cada original de Renfe las terminales, los productos y la unicidad por número y día. En una base vacía con la red previa a la 122, el importador conserva 5.272, 5.124 y 5.057 viajes de Renfe en las ediciones del 8, 12 y 17 de noviembre, respectivamente. Estas son las cifras de partida para reconciliar la ampliación. Se cotejaron por viaje las 676, 658 y 658 paradas comerciales, sus horas y permisos, y los 1.016, 966 y 902 servicios-día de los regionales por Ávila en esas ediciones.
 
+El GTFS del 17 permite contrastar el tiempo comercial del 26/11. Se toma la salida de una parada que admite subida y la llegada posterior del mismo viaje a una parada que admite bajada.
+
+| Origen | Destino | Viajes directos | Tiempo comercial mínimo |
+|---|---|---:|---:|
+| Madrid-Príncipe Pío | Salamanca | 7 | 2 h 34 min |
+| Madrid-Príncipe Pío | Salamanca-La Alamedilla | 7 | 2 h 39 min |
+| Salamanca | Madrid-Príncipe Pío | 7 | 2 h 38 min |
+| Salamanca-La Alamedilla | Madrid-Príncipe Pío | 0 | — |
+| Salamanca | Salamanca-La Alamedilla | 0 | — |
+
+Los doce viajes que recorren el tramo urbano tienen subida prohibida y bajada permitida en Salamanca principal. Un viajero que ya está en el tren puede continuar al apeadero. Quien empieza en la principal carece de destino directo en el apeadero ese día. [GTFS de Renfe][gtfs]
+
 1. **Inventario y geometría.** Archivar las consultas originales, registrar fuentes, licencias, fecha y ámbito. Repetir la cadena por IDs en ambos sentidos con cero saltos. Cotejar los empalmes, la posición de las nueve paradas interiores y el sentido de las agujas. Conservar las fichas de Ávila y Pinar, el acceso de Chamartín, dos fichas salmantinas y una sola arista física por trecho. Documentar PK, longitud medida y secciones de atributos por separado. Si un atributo obligatorio carece de respaldo, resolverlo antes de importar.
 2. **Mapa, esquema y comparador.** El buscador y la lista de Castilla y León llevan a la línea principal, sus estaciones, tramos y fuentes en escritorio y móvil. Desde Príncipe Pío hasta Salamanca deben resultar aproximadamente **231,4 km**, y hasta La Alamedilla **232,3 km**, en ambos sentidos. Son controles geométricos redondeados (120,6 km hasta Ávila según #315 más la cadena medida), sujetos al recorte definitivo. La diferencia urbana es unos 0,83 km. Comparar kilómetros y tiempos en modo estático y con la API. El tiempo sin paradas se calcula tramo a tramo con velocidades justificadas o queda ausente cuando falten. No crear una alternativa ferroviaria mediante el croquis de Medina.
 3. **Censo y continuidad.** Reproducir por edición los 73/71/71 viajes por Ávila, sin aumentar el total de viajes únicos por volver a representar los mismos regionales. Con el horario del 17, el 26/11 deben contarse **14** por el interior de la 122 y **12** en Salamanca–La Alamedilla (7 por Ávila + 5 por Medina). El 18904, el 04899 de Chamartín y el 00631 de Zaragoza terminan o empiezan en la principal y no recorren ese último tramo. El 18308 alcanza el apeadero sin pasar por Peñaranda. Contrastar los pasos de cabecera con la vía representada, conservar las horas publicadas en Ávila y Salamanca, y estimar únicamente los pasos sin hora. Una sola identidad de viaje en las tres líneas, un paso por tramo y día. Verificar las salidas sin parada en Pinar y los servicios ya presentes en la 100 y en las LAV.

@@ -52,7 +52,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
   // Un nodo puede pertenecer a varias líneas (Madrid y Córdoba): su kilómetro en cada una.
   const memberships = network.nodes
     .filter((n) => n.id === node.id)
-    .map((n) => ({ km: n.km, line: network.lines.find((l) => l.id === n.line_id) }))
+    .map((n) => ({ km: n.km, referencePk: n.reference_pk_km, line: network.lines.find((l) => l.id === n.line_id) }))
   const lineOf = (lineId: string) => network.lines.find((l) => l.id === lineId)
   // Anotaciones de los tramos que confluyen aquí, cada una una sola vez.
   const cuts = [...new Map(adjacent.flatMap((s) => annotated.get(s.id) ?? []).map((a) => [a.id, a])).values()]
@@ -111,15 +111,23 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
 
       <Plegable>
         <dl className="datos-tramo datos">
-          {memberships.map((m) => (
-            <div key={m.line?.id ?? '?'}>
-              <dt>
-                <Termino id="punto-kilometrico">Punto kilométrico</Termino>
-                {memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''}
-              </dt>
-              <dd data-testid="nodo-pk">km {formatKm(m.km)}</dd>
-            </div>
-          ))}
+          {memberships.map((m) => {
+            const linea = memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''
+            return (
+              <Fragment key={m.line?.id ?? '?'}>
+                <div>
+                  <dt>Distancia desde el inicio del trazado{linea}</dt>
+                  <dd data-testid="nodo-pk">km {formatKm(m.km)}</dd>
+                </div>
+                {m.referencePk != null && (
+                  <div>
+                    <dt><Termino id="punto-kilometrico">PK de referencia</Termino>{linea}</dt>
+                    <dd>{m.referencePk.toLocaleString('es-ES', { maximumFractionDigits: 3 })} km</dd>
+                  </div>
+                )}
+              </Fragment>
+            )
+          })}
           {node.adif_code && (
             <div>
               <dt>Código de Adif</dt>
@@ -127,10 +135,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
             </div>
           )}
         </dl>
-        <p className="suave">
-          El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea.
-          {node.adif_code ? ' El código es el número con el que Adif identifica esta dependencia.' : ''}
-        </p>
+        {node.adif_code && <p className="suave">El código es el número con el que Adif identifica esta dependencia.</p>}
         <PieFuente de="del trazado" sources={memberships.map((m) => sources.find((s) => s.id === m.line?.source_id))} />
         {station && (
           <>

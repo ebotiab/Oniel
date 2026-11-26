@@ -186,7 +186,7 @@ const TERMINOS = {
   'punto-kilometrico': {
     nombre: 'Punto kilométrico',
     breve:
-      'La distancia medida a lo largo de la vía desde el origen de la línea, en kilómetros. Sirve para situar cualquier punto de la línea: una estación, una señal o una obra.',
+      'El punto kilométrico (PK) sitúa una estación u otro lugar en la numeración de la vía. Esta numeración puede comenzar en otra estación o cambiar de origen en un empalme. Oniel también mide la distancia desde el inicio del trazado que muestra en el mapa.',
   },
   'sin-circulacion': {
     nombre: 'Sin circulación',

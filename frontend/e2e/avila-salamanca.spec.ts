@@ -13,6 +13,13 @@ test('el detalle del regional conserva el producto de su edición, las terminale
     const respuesta = await request.get('/api/nodes/madrid-principe-pio/services', { params })
     expect(respuesta.ok()).toBeTruthy()
     const estacion = await respuesta.json() as NodeServicesOut
+    if (date === '2026-11-26') {
+      const terminales = estacion.destinations?.filter((d) => ['30100', '30110'].includes(d.stop_id))
+      expect(terminales).toHaveLength(2)
+      expect(terminales).toEqual(expect.arrayContaining(['30100', '30110'].map((stop_id) =>
+        expect.objectContaining({ stop_id, trains: 7, products: ['Regional'] }),
+      )))
+    }
     for (const numero of ['18901', '18904']) {
       const paradas = estacion.calls.filter((c) => c.train_number === numero)
       expect(paradas).toHaveLength(1)

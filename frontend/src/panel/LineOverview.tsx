@@ -153,7 +153,7 @@ export function LineOverview({ notice, network, coverage, detail, lineId, onShow
       {!compact && (
         <p className="nota-esquema" data-testid="nota-esquema">
           {conBarras && dia ? `Las barras cuentan los trenes de cada tramo el ${formatDate(dia)}, según los horarios de ${conHorarios.length ? listaEs(conHorarios) : 'los operadores cargados'}${sinHorarios.length ? `; no incluyen los de ${listaEs(sinHorarios)}` : ''}${noOficiales.length ? `; los de ${listaEs(noOficiales)}, de una compilación no oficial` : ''}. ` : ''}
-          Toca una estación o un tramo para ver sus trenes. La cifra a la derecha de cada nombre es su <Termino id="punto-kilometrico">punto kilométrico</Termino>.
+          Toca una estación o un tramo para ver sus trenes. A la derecha de cada nombre aparecen los kilómetros medidos desde el inicio del trazado en el mapa.
         </p>
       )}
     </section>
