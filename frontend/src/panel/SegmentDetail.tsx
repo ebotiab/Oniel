@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
-import { ApiError, fetchAlternatives, fetchSegmentServices } from '../data/api'
+import { fetchAlternatives, fetchSegmentServices } from '../data/api'
+import { useServices } from '../data/useServices'
 import { useApiStatus } from '../data/useApiStatus'
-import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, SegmentServicesOut, Source } from '../data/types'
+import type { AlternativesOut, AnnotationOut, NetworkOut, Operator, SegmentOut, SegmentPassOut, Source } from '../data/types'
 import { coste, fraseTramo, porLineas, trenes } from '../app/alternativas'
 import { formatDate, formatKm, lineKind, listaEs, notaNoOficial, shortStop } from '../app/state'
 import { AnnotationNotice } from './AnnotationNotice'
@@ -32,36 +33,26 @@ interface Props {
 }
 
 export function SegmentDetail({ notice, segment, network, sources, operators, referenceDate, annotations, past = [], onSimulate, onSelectNode, onBack }: Props) {
-  const [services, setServices] = useState<SegmentServicesOut | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const { data: services, unavailable } = useServices(fetchSegmentServices, segment.id, referenceDate)
   const [alternativas, setAlternativas] = useState<AlternativesOut | null>(null)
   const apiAvailable = useApiStatus() === 'disponible'
   const line = network.lines.find((l) => l.id === segment.line_id)
 
-  // App monta este componente con key={segment.id}, así que el estado se reinicia al cambiar de tramo.
-  useEffect(() => {
-    if (segment.station_closure) return
-    let alive = true
-    fetchSegmentServices(segment.id, referenceDate ?? undefined)
-      .then((s) => alive && setServices(s))
-      .catch((e: unknown) => alive && setError(e instanceof ApiError ? e.message : 'No se pudieron cargar los servicios.'))
-    return () => {
-      alive = false
-    }
-  }, [segment.id, segment.station_closure, referenceDate])
-
+  const analysisDay = referenceDate ?? services?.date
   // Si el tramo se cortara: va aparte de la lista de trenes y, si no llega, la ficha sigue entera.
   useEffect(() => {
     if (segment.station_closure) return
     let alive = true
-    fetchAlternatives(referenceDate ?? undefined)
+    fetchAlternatives(analysisDay)
       .then((a) => alive && setAlternativas(a))
       .catch(() => undefined)
     return () => {
       alive = false
     }
-  }, [referenceDate, apiAvailable, segment.station_closure])
-  const alternativa = alternativas?.segments.find((s) => s.segment_id === segment.id)
+  }, [analysisDay, apiAvailable, segment.station_closure])
+  const alternativa = !analysisDay || alternativas?.date === analysisDay
+    ? alternativas?.segments.find((s) => s.segment_id === segment.id)
+    : undefined
 
   const byProduct = new Map<string, number>()
   for (const p of services?.passes ?? []) byProduct.set(p.service.product, (byProduct.get(p.service.product) ?? 0) + 1)
@@ -203,8 +194,8 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
           </span>
         )}
       </h3>
-      {error && <p className="aviso">{error}</p>}
-      {!services && !error && <p className="suave">Cargando servicios…</p>}
+      {unavailable && <p className="aviso">Horarios no disponibles para esta consulta.</p>}
+      {!services && !unavailable && <p className="suave">Cargando servicios…</p>}
       {/* el tramo está interrumpido el día de la lista: los trenes son los del horario, no los que circulan */}
       {services?.interruptions?.map((i) => (
         <p key={i.id} className="nota-horario" data-testid="nota-horario">

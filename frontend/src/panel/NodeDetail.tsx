@@ -1,7 +1,8 @@
-import { Fragment, useEffect, useState, type ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 
-import { ApiError, fetchNodeServices } from '../data/api'
-import type { AnnotationOut, NetworkOut, NodeOut, NodeServicesOut, Operator, Source } from '../data/types'
+import { fetchNodeServices } from '../data/api'
+import { useServices } from '../data/useServices'
+import type { AnnotationOut, NetworkOut, NodeOut, Operator, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, shortStop } from '../app/state'
 import { capasDe } from '../app/annotationLayers'
 import { isInterruption } from '../app/annotations'
@@ -34,8 +35,6 @@ interface Props {
 }
 
 export function NodeDetail({ notice, node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
-  const [calls, setCalls] = useState<NodeServicesOut | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
   // Una conexión a trazos sale en la ficha de sus dos extremos, y en cada uno dice adónde lleva desde él.
   const connections = network.connections.flatMap((c) =>
@@ -50,17 +49,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
   // Anotaciones de los tramos que confluyen aquí, cada una una sola vez.
   const cuts = [...new Map(adjacent.flatMap((s) => annotated.get(s.id) ?? []).map((a) => [a.id, a])).values()]
 
-  // App monta este componente con key={node.id}, así que el estado se reinicia al cambiar de nodo.
-  useEffect(() => {
-    if (!station) return
-    let alive = true
-    fetchNodeServices(node.id, referenceDate ?? undefined)
-      .then((c) => alive && setCalls(c))
-      .catch((e: unknown) => alive && setError(e instanceof ApiError ? e.message : 'No se pudieron cargar los trenes.'))
-    return () => {
-      alive = false
-    }
-  }, [node.id, referenceDate, station])
+  const { data: calls, unavailable } = useServices(fetchNodeServices, node.id, referenceDate, station)
 
   // El operador de cada tren solo se nombra si aquí paran los de más de uno.
   const severalOperators = new Set(calls?.calls.map((c) => c.operator_id)).size > 1
@@ -230,8 +219,8 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
               </span>
             )}
           </h3>
-          {error && <p className="aviso">{error}</p>}
-          {!calls && !error && <p className="suave">Cargando…</p>}
+          {unavailable && <p className="aviso">Horarios no disponibles para esta consulta.</p>}
+          {!calls && !unavailable && <p className="suave">Cargando…</p>}
           {calls && (
             <ol className="lista-servicios">
               {calls.calls.map((c) => (
