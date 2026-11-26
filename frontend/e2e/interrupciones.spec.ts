@@ -141,7 +141,7 @@ test.describe('Interrupciones del servicio', () => {
     await expect(page.getByTestId('sim-interrumpido')).toHaveCount(0)
   })
 
-  test('el resultado de la simulación señala el tramo y la alternativa interrumpidos ese día', async ({ page }) => {
+  test('el resultado de la simulación señala el tramo y la alternativa interrumpidos ese día', { tag: '@api' }, async ({ page }) => {
     test.skip(estatico, 'la simulación necesita la API')
     await page.goto('/tramo/lav-madrid-sevilla:villanueva-de-cordoba:adamuz/cierre')
     // un día que cubren los horarios cargados (el de las demás pruebas de la simulación), con las dos interrupciones vigentes

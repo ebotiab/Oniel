@@ -206,9 +206,19 @@ cd frontend && ONIEL_E2E_STATIC=1 npx playwright test e2e/fichas.spec.ts
 Cosas que conviene saber:
 
 - La batería completa son más de 200 pruebas en dos tamaños de pantalla, escritorio y móvil. La pasa el CI en cada PR, repartida en cuatro trabajos a la vez.
-- Cinco ficheros necesitan la API local y el CI no los pasa: `alternativas`, `arranque`, `interrupciones`, `rutas` y `simulacion`. Si tocas la simulación o la API, pásalos a mano con la API arrancada y sin `ONIEL_E2E_STATIC`.
+- Los casos con `@api` de `alternativas`, `arranque`, `arranque-cobertura`, `interrupciones`, `rutas` y `simulacion` corren además en el trabajo «Integración · visor y API local»: 13 casos en escritorio y móvil (26 ejecuciones), sin `ONIEL_E2E_STATIC`. Comprueban simulaciones normales y nocturnas, advertencias de interrupciones, paridad real con `/api/routes`, alternativas y arranque con API dormida o ausente. Las regresiones de arranque simulan esperas y fallos de salud o cobertura; los contratos y las simulaciones usan la API real. Incluye el paso a la API aunque `coverage.json` tarde o falle. Los demás casos siguen en los cuatro fragmentos estáticos.
 - Playwright arranca Vite por su cuenta en el puerto 5199 (`ONIEL_E2E_PORT` lo cambia) y usa dos procesos en local (`ONIEL_E2E_WORKERS` lo cambia).
 - `npm run build` termina comprobando las hojas de estilo compiladas: falla si a alguna le falta una llave. Vercel ejecuta la misma orden, así que una hoja rota no se publica.
+
+Para repetir solo la integración en local, con dependencias y Chromium instalados, crea una base efímera exclusiva (sin contraseña, accesible solo desde el equipo):
+
+```bash
+docker run -d --rm --name oniel-integracion -e POSTGRES_USER=oniel -e POSTGRES_DB=oniel_integracion -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:55432:5432 postgres:17
+ONIEL_DATABASE_URL=postgresql://oniel@127.0.0.1:55432/oniel_integracion .github/scripts/integracion-api.sh
+docker stop oniel-integracion
+```
+
+El script importa con `--no-snapshot`, arranca la API en `127.0.0.1:8010`, espera su salud y ejecuta solo `@api` con dos procesos. `ONIEL_INTEGRACION_API_PORT` y `ONIEL_E2E_PORT` permiten cambiar puertos ocupados. Usa un directorio vacío de credenciales de Logfire y tokens vacíos; no conecta con Render ni con la base de producción. Comprueba por SHA-256 que ningún archivo versionado cambie, también si falla. La API termina al salir. Los registros quedan en `${RUNNER_TEMP:-/tmp}/oniel-integracion`; las trazas y capturas, en `frontend/test-results`.
 
 ## Comandos de datos
 
@@ -255,6 +265,7 @@ Ninguna es obligatoria para desarrollar. Los ejemplos están en `backend/.env.ex
 ## CI y despliegue
 
 - **CI** ([.github/workflows/ci.yml](.github/workflows/ci.yml)): en cada PR y en cada cambio de `main` pasa formato, lint, tipos y pruebas del backend con PostgreSQL 17, `oniel-data validate`, y tipos, lint, compilación y Playwright del visor. En una PR mira qué rutas cambian y se salta la mitad a la que el cambio no puede afectar: una de solo documentación no lanza pruebas.
+- **Integración visor–API**: añade un runner de Ubuntu con PostgreSQL 17, Python, Node y Chromium, en paralelo al resto. Se activa ante cambios en `backend/`, `frontend/` o CI; la documentación corriente no la lanza. La importación tiene 4 minutos de límite, la espera de salud menos de 90 segundos, Playwright 5 minutos y el trabajo completo 12 minutos. El coste añadido previsto es de 2–4 minutos de runner por ejecución pertinente (hasta 12 si se agota el plazo), incluida la importación; no añade cuatro fragmentos más. En `main` corre siempre. Los dos checks obligatorios esperan su resultado y rechazan fallo, cancelación, preparación fallida u omisión injustificada, incluso si su propia mitad no aplica. `ruby .github/scripts/comprobar-ci.rb` verifica las rutas y ejecuta esas condiciones con resultados controlados; corre dentro de «Qué cambia». Los logs de importación y API, el informe JSON y las trazas/capturas de fallos se conservan 7 días, también si falla la preparación.
 - **Despliegue**: Render sirve la API y PostgreSQL, y reimporta los datos cuando cambian; Vercel sirve el visor. Los dos se actualizan solos al entrar un cambio en `main`. Detalle en [docs/despliegue.md](docs/despliegue.md).
 - **Horarios**: un flujo semanal comprueba si Renfe ha publicado horarios nuevos y, si es así, abre una PR con ellos.
 

@@ -119,7 +119,7 @@ test.describe('Arranque sin esperar a la cobertura', () => {
   })
 })
 
-test.describe('La API despierta con la cobertura pendiente', () => {
+test.describe('La API despierta con la cobertura pendiente', { tag: '@api' }, () => {
   test.skip(estatico, 'en modo estático no se sondea la API')
 
   for (const falla of [false, true]) {
