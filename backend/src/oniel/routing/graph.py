@@ -88,6 +88,7 @@ class Graph:
     #: (``oniel.routing.turns``). Dos tramos del mismo lado no se pueden encadenar allí: para pasar
     #: de uno a otro hay que seguir hasta una estación e invertir la marcha (``_excursion``).
     turns: Turns = field(default_factory=dict)
+    link_towards: dict[str, str] = field(default_factory=dict)
     _adjacent: dict[str, list[Edge]] = field(default_factory=dict, compare=False, repr=False)
     #: Lo que se calcula la primera vez que se pide y no cambia: los lados de los triángulos de los
     #: enlaces, los tramos por id, las distancias a un nodo y el grafo del último escenario.
@@ -169,6 +170,15 @@ class Graph:
             if len(joins) != 1 or len(away) != 1:
                 continue
             join, far = joins[0], away[0]
+            if towards := self.link_towards.get(line_id):
+                # En Pinar los brazos de Pozuelo y Pitis llegan por el mismo lado.
+                # Solo se puede continuar por el tramo de la principal que mira a Las Matas.
+                for edge in self.edges_at(join):
+                    if edge.line_id == line_id:
+                        sides[edge.id] = (line_id, 0)
+                    elif edge.line_id == parent and edge.other(join) != towards:
+                        sides[edge.id] = (line_id, 1)
+                continue
             best: tuple[float, str, str] | None = None
             for other, km in sorted(self.line_km.items()):
                 if other in (line_id, parent) or far not in km:
@@ -258,6 +268,7 @@ class Graph:
             self.bypass_of,
             self.link_of,
             self.turns,
+            self.link_towards,
         )
 
 
@@ -272,6 +283,8 @@ class LineLike(Protocol):
     def bypass_of(self) -> str | None: ...
     @property
     def link_of(self) -> str | None: ...
+    @property
+    def link_towards(self) -> str | None: ...
 
 
 class NodeLike(Protocol):
@@ -352,6 +365,7 @@ def build_graph(
         {line.id: line.bypass_of for line in lines if line.bypass_of is not None},
         {line.id: line.link_of for line in lines if line.link_of is not None},
         turns or {},
+        {line.id: line.link_towards for line in lines if line.link_towards is not None},
     )
 
 

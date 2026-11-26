@@ -177,6 +177,7 @@ async def _load_lines(conn: asyncpg.Connection) -> list[LineSummary]:
                 source_id=r["source_id"],
                 bypass_of=r["bypass_of"],
                 link_of=r["link_of"],
+                link_towards=r["link_towards"],
                 node_count=r["node_count"],
                 segment_count=r["segment_count"],
             )

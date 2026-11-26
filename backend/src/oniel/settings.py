@@ -74,6 +74,7 @@ class Settings(BaseSettings):
         "enlace-atocha-chamartin",
         "vitoria-irun",
         "enlace-la-encina-caudete",
+        "enlace-principe-pio-pinar",
     ]
 
 

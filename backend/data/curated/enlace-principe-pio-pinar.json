@@ -1,0 +1,375 @@
+{
+  "line": {
+    "id": "enlace-principe-pio-pinar",
+    "name": "Enlace Madrid-Príncipe Pío – Pinar de las Rozas",
+    "short_name": "910",
+    "sort_order": 51,
+    "zone": "castilla-y-leon",
+    "link_of": "madrid-avila-valladolid",
+    "link_towards": "las-matas",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "3 kV CC",
+    "tracks": 2,
+    "max_speed_kmh": 140,
+    "status": "disponible",
+    "description": "Desde Madrid-Príncipe Pío, este acceso lleva los regionales a la línea de Ávila y Valladolid. El tren sale hacia el oeste, pasa por Aravaca y Pozuelo y llega a Pinar de las Rozas por Majadahonda y Las Rozas.\n\nDespués de Las Rozas se separa otra vía hacia Pitis y Chamartín. Los trenes que van al norte siguen hacia Pinar y Villalba. En dirección contraria, algunos regionales de Ávila continúan desde Príncipe Pío hacia Atocha Cercanías por el Pasillo Verde, que figura a trazos.\n\nEl horario distingue los trenes que paran en Aravaca, Pozuelo, Las Rozas y Pinar de los que van de Príncipe Pío a Villalba sin paradas intermedias. El destino de un tren puede quedar fuera de las vías cargadas, como Salamanca. El Barrial y Majadahonda figuran en el esquema por su infraestructura. Los servicios de Cercanías quedan fuera de los horarios del atlas.",
+    "geometry_source": {
+      "source_id": "osm-relation-13489217",
+      "parts": [
+        {
+          "source_id": "osm-relation-13489217",
+          "file": "raw/osm/relation_13489217_linea_100_madrid_valladolid_burgos_2026-11-19.json",
+          "relation_id": 13489217,
+          "from": [
+            -3.7192856,
+            40.4215282
+          ],
+          "to": [
+            -3.8821608,
+            40.5231149
+          ],
+          "trim": true
+        }
+      ]
+    },
+    "verification_source_id": "adif-ume-910-pinar"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "madrid-principe-pio",
+      "name": "Madrid-Príncipe Pío",
+      "kind": "estacion",
+      "position": {
+        "lon": -3.719032,
+        "lat": 40.4215987
+      },
+      "adif_code": "10000",
+      "description": "Estación de Madrid de la que parten los regionales hacia la sierra de Guadarrama y Castilla y León. Algunos servicios de Ávila continúan desde aquí por el Pasillo Verde hasta Atocha Cercanías y por Recoletos hasta Chamartín.",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "aravaca",
+      "name": "Aravaca",
+      "kind": "estacion",
+      "position": {
+        "lon": -3.7854948,
+        "lat": 40.4485813
+      },
+      "adif_code": "10001",
+      "rank": "secundario",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "pozuelo",
+      "name": "Pozuelo",
+      "kind": "estacion",
+      "position": {
+        "lon": -3.8000611,
+        "lat": 40.447408
+      },
+      "adif_code": "10002",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "el-barrial-centro-comercial-pozuelo",
+      "name": "El Barrial-Centro Comercial Pozuelo",
+      "kind": "estacion",
+      "position": {
+        "lon": -3.8078481,
+        "lat": 40.4653284
+      },
+      "adif_code": "10010",
+      "rank": "secundario",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "majadahonda",
+      "name": "Majadahonda",
+      "kind": "estacion",
+      "position": {
+        "lon": -3.84597,
+        "lat": 40.4743387
+      },
+      "adif_code": "10007",
+      "rank": "secundario",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "las-rozas",
+      "name": "Las Rozas",
+      "kind": "estacion",
+      "position": {
+        "lon": -3.867936,
+        "lat": 40.4942937
+      },
+      "adif_code": "10005",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "bif-chamartin",
+      "name": "Bifurcación Chamartín",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -3.8719071,
+        "lat": 40.5009542
+      },
+      "rank": "secundario",
+      "description": "Después de Las Rozas se separa el ramal hacia la línea de Pitis y Chamartín. Los regionales que van a Villalba siguen de frente hacia Pinar de las Rozas.",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "aguja-bif-chamartin",
+      "name": "Aguja de la bifurcación Chamartín",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -3.8741182,
+        "lat": 40.5077179
+      },
+      "rank": "secundario",
+      "description": "Segunda aguja del nudo de Las Rozas. Las dos vías del ramal hacia Chamartín se separan de la línea de Pinar en puntos distintos.",
+      "source_id": "osm-instalaciones-principe-pio"
+    },
+    {
+      "id": "pinar-de-las-rozas",
+      "name": "Pinar de las Rozas",
+      "kind": "estacion",
+      "adif_code": "10100",
+      "position": {
+        "lon": -3.882318,
+        "lat": 40.523069
+      },
+      "shared": true
+    }
+  ],
+  "connections": [
+    {
+      "id": "pasillo-verde-principe-pio-atocha",
+      "name": "Pasillo Verde de Madrid",
+      "node_id": "madrid-principe-pio",
+      "to_node_id": "madrid-puerta-de-atocha",
+      "towards": "Pirámides, Delicias y Madrid-Atocha Cercanías",
+      "towards_back": "Delicias, Pirámides y Madrid-Príncipe Pío",
+      "official_name": "Línea Madrid Atocha Cercanías – Pinar de las Rozas",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -3.719032,
+          40.4215987
+        ],
+        [
+          -3.716835,
+          40.414938
+        ],
+        [
+          -3.717837,
+          40.405511
+        ],
+        [
+          -3.67815,
+          40.395794
+        ],
+        [
+          -3.677307,
+          40.399704
+        ],
+        [
+          -3.690886,
+          40.406442
+        ]
+      ]
+    },
+    {
+      "id": "ramal-bif-chamartin-bif-principe-pio",
+      "name": "Ramal hacia la línea de Chamartín",
+      "node_id": "bif-chamartin",
+      "towards": "Bifurcación Príncipe Pío, hacia Pitis y Madrid-Chamartín",
+      "official_name": "Línea Bifurcación Chamartín – Bifurcación Príncipe Pío",
+      "status": "no_cargada",
+      "sketch": [
+        [
+          -3.8719071,
+          40.5009542
+        ],
+        [
+          -3.8728771,
+          40.5057302
+        ],
+        [
+          -3.8726181,
+          40.5075182
+        ],
+        [
+          -3.8705656,
+          40.5097274
+        ],
+        [
+          -3.8673966,
+          40.5106327
+        ]
+      ]
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pinar-de-las-rozas",
+      "value": 2,
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Dos vías principales paralelas en el extracto de infraestructura, independientes de los apartaderos de la terminal."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pinar-de-las-rozas",
+      "value": "iberico",
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Etiqueta gauge=1668 en las vías de la línea 910."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pinar-de-las-rozas",
+      "value": "3 kV CC",
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Catenaria con voltage=3000 y frequency=0."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pinar-de-las-rozas",
+      "value": "asfa",
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Las vías de la línea 910 llevan railway:asfa=yes. El mapa 4 no permite atribuir al acceso los símbolos de alta velocidad del nudo de Madrid."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pinar-de-las-rozas",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no identifica el bloqueo del brazo de Príncipe Pío con un rótulo propio."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pinar-de-las-rozas",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no precisa el mando de este acceso. El enclavamiento de Pozuelo no acredita por sí solo el mando del recorrido completo."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "madrid-principe-pio",
+      "to_node": "pozuelo",
+      "value": 120,
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Máxima de las etiquetas maxspeed de la vía recorrida en cada tramo. La velocidad habitual se calcula por longitud."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "pozuelo",
+      "to_node": "bif-chamartin",
+      "value": 140,
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Máxima de las etiquetas maxspeed de la vía recorrida en cada tramo. La velocidad habitual se calcula por longitud."
+    },
+    {
+      "attribute": "max_speed_kmh",
+      "from_node": "bif-chamartin",
+      "to_node": "pinar-de-las-rozas",
+      "value": 125,
+      "source_id": "osm-relation-13489217",
+      "checked_on": "2026-11-26",
+      "note": "Máxima de las etiquetas maxspeed de la vía recorrida en cada tramo. La velocidad habitual se calcula por longitud."
+    }
+  ],
+  "stop_mappings": {
+    "10000": {
+      "node": "madrid-principe-pio"
+    },
+    "10001": {
+      "node": "aravaca"
+    },
+    "10002": {
+      "node": "pozuelo"
+    },
+    "10010": {
+      "node": "el-barrial-centro-comercial-pozuelo"
+    },
+    "10007": {
+      "node": "majadahonda"
+    },
+    "10005": {
+      "node": "las-rozas"
+    },
+    "10100": {
+      "node": "pinar-de-las-rozas"
+    },
+    "10200": {
+      "exits": [
+        "pinar-de-las-rozas"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "pinar-de-las-rozas"
+      }
+    }
+  },
+  "corridor_filter": {
+    "description": "Viajes de los horarios de media y larga distancia con parada en Madrid-Príncipe Pío y Villalba. Las reglas delimitan el intervalo que recorre el enlace en ambos sentidos.",
+    "required_stop_ids": [
+      "10000",
+      "10200"
+    ]
+  },
+  "route_overrides": [
+    {
+      "id": "principe-pio-villalba",
+      "description": "Sin parada hasta Villalba. El tiempo hasta allí se reparte por el acceso y por la línea convencional desde Pinar.",
+      "consecutive_stop_ids": [
+        "10000",
+        "10200"
+      ],
+      "from_stop_id": "10000",
+      "to_stop_id": "10200"
+    },
+    {
+      "id": "principe-pio-aravaca",
+      "description": "Con paradas intermedias. Solo se toma el recorrido desde Príncipe Pío hasta Pinar, también cuando el tren viene de Atocha.",
+      "consecutive_stop_ids": [
+        "10000",
+        "10001",
+        "10002",
+        "10005",
+        "10100"
+      ],
+      "from_stop_id": "10000",
+      "to_stop_id": "10100"
+    }
+  ]
+}

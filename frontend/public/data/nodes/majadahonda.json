@@ -1,0 +1,1 @@
+{"node": {"id": "majadahonda", "name": "Majadahonda", "kind": "estacion", "rank": "secundario", "lon": -3.845981, "lat": 40.474324, "adif_code": "10007", "description": null, "details": {}, "line_id": "enlace-principe-pio-pinar", "km": 14.063, "reference_pk_km": null, "seq": 5}, "date": "2026-12-11", "calls": [], "destinations": []}

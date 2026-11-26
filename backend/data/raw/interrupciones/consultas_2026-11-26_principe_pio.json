@@ -1,0 +1,37 @@
+{
+  "consultado_el": "2026-11-26",
+  "hora_local": "17:48 (Europe/Madrid)",
+  "consultas": [
+    {
+      "source_id": "adif-ume-910-pinar",
+      "url": "https://cdn.transportes.gob.es/portal-web-transportes/ferroviario/organizacion_sector_ferroviario/tramitaciones_relativas_ruido_ferrocarril/planes-accion-ruido-fase-iv/ume_01_01_colmenar_viejo-bifurcacion_chamartin-pinar_de_las_rozas._documento_resumen.pdf",
+      "resultado": "La tabla de tramos distingue Príncipe Pío, Pozuelo, Las Rozas, bifurcación Chamartín, su segunda aguja y Pinar. La línea 910 continúa hacia Atocha por Pirámides.",
+      "notas": "Memoria de octubre de 2025, consultada el 26 de noviembre de 2026.",
+      "documento_sha256": "8e4ef77fb3b02816a572e91270817093510a26e0350ab0a3216c83b007b42707"
+    },
+    {
+      "source_id": "adif-enclavamiento-pozuelo",
+      "url": "https://www.adif.es/w/adif-instala-enclavamiento-ultima-generacion-estacion-pozuelo-mejorar-servicio-c10",
+      "resultado": "Adif confirmó la instalación del enclavamiento electrónico de Pozuelo. El corte necesario para los trabajos transcurrió entre febrero y marzo de 2025.",
+      "notas": "Nota del 5 de marzo de 2025. El enclavamiento no identifica todo el sistema de bloqueo de la línea."
+    },
+    {
+      "source_id": "adif-estado-principe-pio-2026-11",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "resultado": "Adif comunicaba el restablecimiento por una vía entre Robledo de Chavela y Zarzalejo, al oeste del acceso. La página advertía de labores de mantenimiento.",
+      "notas": "Consulta del 26 de noviembre. El aviso no sitúa un corte entre Príncipe Pío y Pinar."
+    },
+    {
+      "source_id": "adif-avisos-principe-pio-2026-11",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "resultado": "En los avisos consultados no figuraba un corte de este acceso. El plan por obras de Cercedilla a Cotos afecta a otra línea.",
+      "notas": "Un horario programado no acredita la circulación efectiva."
+    },
+    {
+      "source_id": "adif-barrial-2026-11",
+      "url": "https://www.adif.es/w/10010-el-barrial-cc.poz.",
+      "resultado": "El panel publicaba servicios hacia Pinar y Príncipe Pío y un aviso de retrasos de Cercanías en el entorno de Ramón y Cajal.",
+      "notas": "El panel no anunciaba la interrupción del acceso."
+    }
+  ]
+}

@@ -14,6 +14,8 @@ La simulación responde a una pregunta sencilla: **si este tramo se cerrase tal 
 
 En los nuevos tramos al este de Albacete el visor abre el comparador con un cierre entre estaciones. Si hay una bifurcación intermedia, el escenario incluye los tramos del trayecto completo. Se consultan los caminos que quedan en las líneas cargadas y su duración estimada sin paradas. Las fichas enlazan a los horarios publicados en cada estación. El análisis por franja horaria y el listado de impacto por tramo se aplican a la red con esa cobertura.
 
+El acceso de Príncipe Pío aplica también los cierres entre estaciones de viajeros. De Las Rozas a Pinar el escenario cierra los tres tramos a ambos lados de las agujas. El comparador reconoce los trenes del acceso por las paradas comerciales de Príncipe Pío y Villalba en el horario del día, tanto con API como en la instantánea. Los trenes conservan sus paradas comerciales y no se publican horas estimadas de paso por las agujas.
+
 ## Cómo se calcula el paso de un tren por un tramo
 
 Está implementado en `backend/src/oniel/sim/passes.py` y se precalcula en la importación, línea a línea.
@@ -180,6 +182,8 @@ Está automatizado en `frontend/e2e/recorridos.spec.ts` (el criterio, los cortes
 
 ## Tramos sin alternativa
 
+Los ocho tramos de Príncipe Pío a Pinar (31 trenes programados el 11 de diciembre) se consultan mediante cierre entre estaciones. Quedan fuera del análisis de impacto por franja, igual que la ampliación de La Encina. En Pinar el recorrido procedente de Pozuelo solo continúa hacia Las Matas.
+
 Para cada tramo, Oniel dice cuántos trenes lo recorren un día y si, con el tramo cortado, esos trenes tendrían otro camino. Lo calcula el servidor (`backend/src/oniel/analysis/criticality.py`) con dos cosas que ya existían: los pasos de cada tren por cada tramo y el grafo de rutas. No añade ningún dato externo.
 
 **«Sin alternativa» significa siempre «en las líneas que Oniel tiene cargadas».** Hacia Sevilla Oniel tiene una sola línea, así que sus dos tramos desde la bifurcación de Málaga salen sin alternativa aunque en la red real haya otras vías. El resultado lleva ese aviso como texto (`scope_note`), la lista de líneas en las que se ha buscado (`line_ids`) y los operadores cuyos trenes no están contados (`missing_operator_ids`; hoy ninguno, desde que los de Iryo se cargan de una compilación no oficial), y el visor lo dice junto a cada cifra.
@@ -210,7 +214,8 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Baipás de Lleida | 42 | Por Lleida-Pirineus: 1,9 km y 2 min más para los 22 que tampoco paran en Zaragoza |
 | Madrid-Chamartín – Bifurcación Torrejón de Velasco (alta velocidad de Valencia, dos tramos) | 74 | Desde el 23 de noviembre de 2026, por el túnel de Atocha a Chamartín y la línea convencional: el grafo no mira el ancho de vía. Hasta entonces, ninguno |
 | Madrid-Chamartín – Valladolid-Campo Grande (alta velocidad de Valladolid, la línea entera, cinco tramos) | 81 a 122 | Desde la línea convencional por Ávila (#211), para casi todos: por Ávila y Medina del Campo, 71,6 km y 76 min más para los de Madrid a Valladolid y para los que siguen a León, Asturias, Burgos y el País Vasco; 162,5 km más para los de Galicia, que vuelven por la bifurcación Medina. No lo tienen los 11 de Segovia-Guiomar ni los 8 de Medina del Campo AV: para ellos la vuelta mide más del doble. En el último tramo, de la bifurcación Medina a Valladolid, lo tienen los 81 (trenes del 20 de noviembre de 2026) |
-| Madrid-Chamartín – Valladolid-Campo Grande (convencional por Ávila y Medina del Campo, la línea entera, veintisiete tramos) | 12 a 70 | Solo para los 15 que van de Valladolid a Pinar de las Rozas, por la alta velocidad. No lo tienen los regionales de recorrido corto (de Madrid a Villalba y a Ávila, de Valladolid a Medina del Campo y a Ávila): la vuelta por la alta velocidad mide más del doble (trenes del 20 de noviembre de 2026) |
+| Madrid-Chamartín – Valladolid-Campo Grande (convencional por Ávila y Medina del Campo) | 12 a 70 | El rodeo por la alta velocidad que antes terminaba en Pinar no permite completar el viaje comercial desde Príncipe Pío. Los recorridos desde Chamartín se conservan. |
+| Acceso Madrid-Príncipe Pío – Pinar de las Rozas | Horarios en las estaciones de viajeros | Los cierres se consultan entre estaciones en el comparador. |
 | Valladolid-Campo Grande – León (alta velocidad de Valladolid a León, la línea entera, ocho tramos) | 26 a 53 | Ninguno. Es la única línea cargada al norte de Valladolid |
 | Bifurcación Medina – Ourense (alta velocidad de Olmedo a Ourense, la línea entera, trece tramos) | 22 a 30 | Ninguno. A Zamora y a Ourense solo llega esta línea |
 | Bifurcación Venta de Baños – Burgos-Rosa Manzano (alta velocidad de Venta de Baños a Burgos, la línea entera, cuatro tramos) | 20 a 22 | Ninguno. A Burgos solo llega esta línea; el enlace de Soto de Cerrato une su segundo tramo con la línea de León, y doblar en la bifurcación sería invertir la marcha |

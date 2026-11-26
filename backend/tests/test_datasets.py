@@ -345,6 +345,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 6 + 128 + (555 + 423)
     passes += 1427 + 342  # Vitoria–Irún
     passes += 472 + 78  # ampliación a La Encina y enlace a Caudete
+    passes += 153 * 8  # el acceso de Príncipe Pío, con los mismos trenes de la principal
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes
 

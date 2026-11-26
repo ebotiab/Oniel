@@ -348,6 +348,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "enlace-atocha-chamartin",
         "vitoria-irun",
         "enlace-la-encina-caudete",
+        "enlace-principe-pio-pinar",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -493,7 +494,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         # trenes tienen el túnel de Atocha a Chamartín y la línea convencional
         + 2
         - 2
-        + 20,  # Vitoria–Irún no cierra ningún anillo
+        + 20  # Vitoria–Irún no cierra ningún anillo
+        + 23,  # el viaje de los regionales ya comienza en Príncipe Pío en vez de Pinar
         121
         + 29
         + 4
@@ -609,6 +611,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{MEDITERRANEO}:",
         f"{LAV_VALLADOLID}:",
         f"{LINK}:",
+        "madrid-avila-valladolid:",
         "palencia-santander:",
         "zaragoza-castejon-logrono:",
         "castejon-pamplona:",
@@ -639,18 +642,14 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LBMG}:linares-baeza:jodar-ubeda": 2,
         f"{LBMG}:jodar-ubeda:cabra-del-santo-cristo": 2,
         f"{LBMG}:cabra-del-santo-cristo:moreda": 2,
-        # de Chamartín a Pinar de las Rozas solo pasan los regionales de Madrid a Villalba y a
-        # Ávila: la vuelta por la alta velocidad de Valladolid mide más del doble
-        **{
-            f"madrid-avila-valladolid:{a}:{b}": 12
-            for a, b in [
-                ("madrid-chamartin", "madrid-ramon-y-cajal"),
-                ("madrid-ramon-y-cajal", "mirasierra-paco-de-lucia"),
-                ("mirasierra-paco-de-lucia", "pitis"),
-                ("pitis", "pinar-de-las-rozas"),
-            ]
-        },
     }
+    # El rodeo que antes terminaba en Pinar no lleva al origen real en Príncipe Pío.
+    convencional = [
+        s for s in exported.segments if s.segment_id.startswith("madrid-avila-valladolid:")
+    ]
+    assert len(convencional) == 27
+    assert all(s.trains == s.without_alternative for s in convencional)
+    assert all(s.trains == 12 for s in convencional[:4])
     # desde que Albacete está unida a Madrid por dos caminos, el convencional por Alcázar de San
     # Juan y el de alta velocidad por Cuenca, cada uno es el otro camino del otro: los 13 trenes
     # de Alcázar de San Juan a Albacete, los 86 de la línea de Valencia hasta la bifurcación de

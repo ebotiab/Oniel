@@ -72,6 +72,7 @@ export interface LineSummary {
   bypass_of?: string | null
   /** Si la línea es un enlace entre dos líneas, el id de la línea de la que cuelga en la lista. */
   link_of?: string | null
+  link_towards?: string | null
   node_count: number
   segment_count: number
 }

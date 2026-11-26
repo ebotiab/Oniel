@@ -525,7 +525,30 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     # y las de Zaragoza a Logroño y de Castejón a Pamplona, y la de Miranda de Ebro a Bilbao
     # y la de Sevilla a Huelva, y los tres enlaces de #260
     assert c["lines"] == (
-        14 + 2 + 1 + 4 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 2
+        14
+        + 2
+        + 1
+        + 4
+        + 1
+        + 1
+        + 1
+        + 1
+        + 1
+        + 2
+        + 1
+        + 1
+        + 2
+        + 1
+        + 1
+        + 1
+        + 1
+        + 1
+        + 2
+        + 1
+        + 1
+        + 3
+        + 2
+        + 1  # el acceso de Príncipe Pío
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -574,6 +597,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
         + 5  # ampliación a La Encina y enlace a Caudete
+        + 8  # el acceso de Príncipe Pío
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -610,6 +634,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 6 + 128 + (555 + 423)
     renfe_passes += 1427 + 342  # Vitoria–Irún
     renfe_passes += 472 + 78  # ampliación y enlace
+    renfe_passes += 153 * 8  # los mismos 153 regionales en los ocho tramos del nuevo acceso
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
     )
@@ -801,6 +826,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
         + 5  # ampliación a La Encina y enlace a Caudete
+        + 8  # el acceso de Príncipe Pío
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -945,6 +971,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "enlace-atocha-chamartin",
         "vitoria-irun",
         "enlace-la-encina-caudete",
+        "enlace-principe-pio-pinar",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -1051,12 +1078,15 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
         + 20  # Vitoria–Irún
         + 5  # ampliación a La Encina y enlace a Caudete
+        + 8  # el acceso de Príncipe Pío
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
     # Lleida, y el de la convencional de Extremadura que entra en Navalmoral de la Mata por la
     # plataforma de la línea nueva
-    assert speed == {
+    access_speed = {k: v for k, v in speed.items() if k.startswith("enlace-principe-pio-pinar:")}
+    assert sorted(access_speed.values()) == [120] * 2 + [125] * 2 + [140] * 4
+    assert {k: v for k, v in speed.items() if k not in access_speed} == {
         f"{BCN}:guadalajara-yebes:las-inviernas": 300,
         "burgos-miranda-vitoria:burgos-rosa-manzano:briviesca": 160,
         f"{BCN}:bif-huesca:bif-canal-imperial": 220,
@@ -1108,8 +1138,12 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # Valencia a Camp de Tarragona, que va a 25 kV en una línea de 3 kV, y la salida de Madrid de
     # la convencional de Extremadura, con catenaria a 3 kV hasta Humanes
     # Vitoria–Irún documenta también la tensión común a sus veinte tramos.
-    own_wire = {k: v for k, v in wire.items() if k.startswith("vitoria-irun:")}
-    assert len(own_wire) == 20 and set(own_wire.values()) == {"3 kV CC"}
+    own_wire = {
+        k: v
+        for k, v in wire.items()
+        if k.startswith(("vitoria-irun:", "enlace-principe-pio-pinar:"))
+    }
+    assert len(own_wire) == 20 + 8 and set(own_wire.values()) == {"3 kV CC"}
     assert {k: v for k, v in wire.items() if k not in own_wire} == {
         f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona": "25 kV 50 Hz",
         f"{MADRID_PLASENCIA}:bif-planetario:leganes": "3 kV CC",
@@ -1127,7 +1161,9 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     # València-Joaquín Sorolla a Castelló (18 tramos) y el estándar del cambiador de La Boella a
     # Camp de Tarragona
     values = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "gauge"}
-    assert {s for s in gauge if not s.startswith(MEDITERRANEO)} == {
+    access = {k: v for k, v in values.items() if k.startswith("enlace-principe-pio-pinar:")}
+    assert len(access) == 8 and set(access.values()) == {"iberico"}
+    assert {s for s in gauge if not s.startswith(MEDITERRANEO) and s not in access} == {
         f"{LAV_GRANADA}:bif-riofrio:loja",
         f"{LAV_GRANADA}:loja:bif-tocon",
         f"{LAV_GRANADA}:bif-la-chana:granada",
@@ -1635,6 +1671,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 2  # el túnel de Atocha a Chamartín: Recoletos y Nuevos Ministerios
             + 19  # Vitoria–Irún reutiliza Vitoria
             + 2  # Almansa y La Encina
+            + 6  # de Príncipe Pío a Las Rozas, Pinar ya estaba en la red
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1802,6 +1839,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 2  # plan de Renfe desde el 14/11 y previsión oficial de Adif para las obras (#259)
             + 13  # geometría, verificación y obras de Vitoria–Irún (#220)
             + 10  # ampliación a La Encina
+            + 9  # nuevas fuentes del acceso de Príncipe Pío
         )
     )
     assert "línea convencional" in cov["notice"]
@@ -1883,6 +1921,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-atocha-chamartin",
         "vitoria-irun",
         "enlace-la-encina-caudete",
+        "enlace-principe-pio-pinar",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -1960,6 +1999,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-atocha-chamartin": ["renfe"],
         "vitoria-irun": ["renfe"],
         "enlace-la-encina-caudete": ["renfe"],
+        "enlace-principe-pio-pinar": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
@@ -2836,6 +2876,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "enlace-atocha-chamartin",
         "vitoria-irun",
         "enlace-la-encina-caudete",
+        "enlace-principe-pio-pinar",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -3003,6 +3044,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "enlace-atocha-chamartin",
         "vitoria-irun",
         "enlace-la-encina-caudete",
+        "enlace-principe-pio-pinar",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

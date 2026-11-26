@@ -1,5 +1,7 @@
 """Trayectos en los que el visor simula el cierre entre estaciones de viajeros."""
 
+from itertools import pairwise
+
 from pydantic import BaseModel
 
 
@@ -14,7 +16,40 @@ class StationClosure(BaseModel):
 _LINE = "alcazar-albacete"
 _COAST = "valencia-xativa-alicante"
 _LINK = "enlace-la-encina-caudete"
+_ACCESS = "enlace-principe-pio-pinar"
+_ACCESS_STATIONS = (
+    ("madrid-principe-pio", "Madrid-Príncipe Pío"),
+    ("aravaca", "Aravaca"),
+    ("pozuelo", "Pozuelo"),
+    ("el-barrial-centro-comercial-pozuelo", "El Barrial-Centro Comercial Pozuelo"),
+    ("majadahonda", "Majadahonda"),
+    ("las-rozas", "Las Rozas"),
+    ("pinar-de-las-rozas", "Pinar de las Rozas"),
+)
+
+
+def _access_closures() -> tuple[StationClosure, ...]:
+    journeys = []
+    for (start, start_name), (end, end_name) in pairwise(_ACCESS_STATIONS):
+        nodes = (
+            (start, "bif-chamartin", "aguja-bif-chamartin", end)
+            if start == "las-rozas"
+            else (start, end)
+        )
+        journeys.append(
+            StationClosure(
+                from_id=start,
+                from_name=start_name,
+                to_id=end,
+                to_name=end_name,
+                segment_ids=tuple(f"{_ACCESS}:{a}:{b}" for a, b in pairwise(nodes)),
+            )
+        )
+    return tuple(journeys)
+
+
 _JOURNEYS = (
+    *_access_closures(),
     StationClosure(
         from_id="albacete-los-llanos",
         to_id="almansa",

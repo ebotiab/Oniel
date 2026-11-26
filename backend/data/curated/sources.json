@@ -2167,8 +2167,8 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-19",
-      "coverage": "De la relación se usa el trecho de la unión con el ramal de Príncipe Pío, junto a Pinar de las Rozas, a Valladolid-Campo Grande, por Villalba, El Escorial, Ávila y Medina del Campo; velocidad máxima por tramo.",
-      "notes": "Descargado por la API de OpenStreetMap (api.openstreetmap.org, relation/13489217/full.json) el 19 de noviembre de 2026. La relación («Línea ferroviaria Madrid - Vallodolid - Burgos», ref=100, 568 vías) empieza en Atocha y llega a Madrid por Príncipe Pío, Pozuelo y Las Rozas, no por Chamartín: de ese trecho no se usa nada. Es de una pieza. Sus vías llevan gauge=1668 y voltage=3000; passenger_lines solo en parte, con 2 en casi todo el trecho de Medina del Campo a Valladolid.",
+      "coverage": "De la relación se usa el trecho de la unión con el ramal de Príncipe Pío, junto a Pinar de las Rozas, a Valladolid-Campo Grande, por Villalba, El Escorial, Ávila y Medina del Campo; velocidad máxima por tramo. Incluye también el acceso por la línea 910 de Madrid-Príncipe Pío a Pinar, usado por el enlace.",
+      "notes": "Descargado por la API de OpenStreetMap (api.openstreetmap.org, relation/13489217/full.json) el 19 de noviembre de 2026. La relación («Línea ferroviaria Madrid - Vallodolid - Burgos», ref=100, 568 vías) empieza en Atocha y llega a Madrid por Príncipe Pío, Pozuelo y Las Rozas, no por Chamartín: ese trecho se usa en el enlace independiente, hasta Pinar. Es de una pieza. Sus vías llevan gauge=1668 y voltage=3000; passenger_lines solo en parte, con 2 en casi todo el trecho de Medina del Campo a Valladolid.",
       "file": "raw/osm/relation_13489217_linea_100_madrid_valladolid_burgos_2026-11-19.json"
     },
     {
@@ -2644,6 +2644,114 @@
       "coverage": "El panel del día enumera regionales hacia Albacete, Ciudad Real y Valencia. La observación de algunos trenes limita la parada en Caudete a viernes, sábados y domingos. No acredita la circulación efectiva de todos los trenes.",
       "notes": "Lectura del 26 de noviembre para esta ampliación.",
       "file": "raw/interrupciones/consultas_2026-11-26_la_encina.json"
+    },
+    {
+      "id": "osm-instalaciones-principe-pio",
+      "name": "Estaciones y agujas del acceso de Príncipe Pío",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://api.openstreetmap.org/api/0.6/nodes.json?nodes=9820978455,5318466126,5318415084,9669569787,5318466125,5318415085,252935979,256231521,256230819,1089767538",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Posición de seis estaciones de la línea 910 y de las agujas en las que las dos vías del ramal 914 se separan y se incorporan a la línea 100.",
+      "notes": "Los sitios de Adif enlazados en los nodos identifican los códigos de las estaciones. Pinar conserva el nodo que ya tenía en el atlas.",
+      "file": "raw/osm/instalaciones_principe_pio_pinar_2026-11-26.json"
+    },
+    {
+      "id": "osm-ramal-las-rozas-914",
+      "name": "Ramal de la bifurcación Chamartín hacia Pitis",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/23359711",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Una de las vías del ramal 914, entre las líneas 910 y 100.",
+      "notes": "Se usa solo para el croquis de la continuación sin cargar.",
+      "file": "raw/osm/ramal_las_rozas_914_2026-11-26.json"
+    },
+    {
+      "id": "adif-ume-910-pinar",
+      "name": "Mapa estratégico de ruido, unidad 01_01. Tramos de la línea 910",
+      "publisher": "Adif Alta Velocidad / Ministerio de Transportes y Movilidad Sostenible",
+      "url": "https://cdn.transportes.gob.es/portal-web-transportes/ferroviario/organizacion_sector_ferroviario/tramitaciones_relativas_ruido_ferrocarril/planes-accion-ruido-fase-iv/ume_01_01_colmenar_viejo-bifurcacion_chamartin-pinar_de_las_rozas._documento_resumen.pdf",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-26",
+      "coverage": "La tabla de tramos distingue Príncipe Pío, Pozuelo, Las Rozas, bifurcación Chamartín, su segunda aguja y Pinar. La línea 910 continúa hacia Atocha por Pirámides.",
+      "notes": "Memoria de octubre de 2025, consultada el 26 de noviembre de 2026.",
+      "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
+    },
+    {
+      "id": "boe-cerramientos-las-rozas",
+      "name": "Cerramientos del nudo de Las Rozas",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2023-7552",
+      "license": "Reutilización autorizada citando la fuente",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Distingue las líneas 100, 910 y 914 y las dos vías de la bifurcación.",
+      "notes": "El anuncio del 15 de marzo de 2023 documenta el contrato de cerramientos.",
+      "file": "raw/adif/cerramientos_las_rozas_2026-11-26.xml"
+    },
+    {
+      "id": "boe-renovacion-principe-pio-pinar",
+      "name": "Renovación de vía y línea aérea de contacto de Príncipe Pío a Pinar",
+      "publisher": "Boletín Oficial del Estado",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2025-38392",
+      "license": "Reutilización autorizada citando la fuente",
+      "license_url": "https://www.boe.es/informacion/aviso_legal/index.php",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Información pública del proyecto entre Príncipe Pío y Pinar.",
+      "notes": "El anuncio del 23 de octubre de 2025 no acredita una puesta en servicio ni un corte de vía.",
+      "file": "raw/adif/renovacion_principe_pio_pinar_2026-11-26.xml"
+    },
+    {
+      "id": "adif-enclavamiento-pozuelo",
+      "name": "Puesta en servicio del enclavamiento de Pozuelo",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/adif-instala-enclavamiento-ultima-generacion-estacion-pozuelo-mejorar-servicio-c10",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Adif confirmó la instalación del enclavamiento electrónico de Pozuelo. El corte necesario para los trabajos transcurrió entre febrero y marzo de 2025.",
+      "notes": "Nota del 5 de marzo de 2025. El enclavamiento no identifica todo el sistema de bloqueo de la línea.",
+      "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
+    },
+    {
+      "id": "adif-estado-principe-pio-2026-11",
+      "name": "Estado de la red en el acceso a Pinar",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/viajeros/estado-de-la-red",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-26",
+      "coverage": "Adif comunicaba el restablecimiento por una vía entre Robledo de Chavela y Zarzalejo, al oeste del acceso. La página advertía de labores de mantenimiento.",
+      "notes": "Consulta del 26 de noviembre. El aviso no sitúa un corte entre Príncipe Pío y Pinar.",
+      "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
+    },
+    {
+      "id": "adif-avisos-principe-pio-2026-11",
+      "name": "Avisos de obras en la red",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/viajeros/avisos",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-26",
+      "coverage": "En los avisos consultados no figuraba un corte de este acceso. El plan por obras de Cercedilla a Cotos afecta a otra línea.",
+      "notes": "Un horario programado no acredita la circulación efectiva.",
+      "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
+    },
+    {
+      "id": "adif-barrial-2026-11",
+      "name": "Panel de la estación de El Barrial",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/w/10010-el-barrial-cc.poz.",
+      "license": "Consulta pública",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-26",
+      "coverage": "El panel publicaba servicios hacia Pinar y Príncipe Pío y un aviso de retrasos de Cercanías en el entorno de Ramón y Cajal.",
+      "notes": "El panel no anunciaba la interrupción del acceso.",
+      "file": "raw/interrupciones/consultas_2026-11-26_principe_pio.json"
     }
   ]
 }
