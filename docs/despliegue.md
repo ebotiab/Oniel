@@ -356,18 +356,35 @@ Desde `backend/`, solo lectura:
 
 ```bash
 uv run oniel-data obs estado                              # qué corre en producción y cómo va
-uv run oniel-data obs estado --commit <hash> --esperar 15 # espera hasta 15 min a que entre ese commit
+uv run oniel-data obs estado --verificar --commit <hash> --esperar 15 # verifica la entrega (hasta 15 min)
+uv run oniel-data obs estado --verificar --commit <hash> --json       # resultado para automatizaciones
 uv run oniel-data obs consulta "select span_name, count(*) n from records group by 1 order by 2 desc" --horas 6
 uv run oniel-data obs consulta "select count(*) n from records" --entorno local   # o --entorno todos
 ```
 
 `obs estado` dice la versión desplegada y desde cuándo, la última importación y su resultado, los errores (nivel 17 o más) y las excepciones controladas desde que entró esa versión, las respuestas 4xx y 5xx por ruta y las rutas más lentas. Como `/healthz` no se traza, la «última traza» de la API es la última petición de un visitante o el último arranque, no la última comprobación de Render. «Última importación» es la de la versión desplegada (con `--commit`, la de ese commit), no la que empezó más tarde: durante un despliegue el contenedor de la versión anterior puede arrancar después que el nuevo y saltarse su importación, y esa omitida no dice nada de la versión nueva (#120). Si la más reciente es de otra versión, la orden la enseña aparte, debajo. Con `--commit` termina con código 1 si ese commit no es el de la API o su importación no ha terminado completada u omitida, y `--esperar` repite la consulta cada 30 segundos hasta que el commit sea el de la API y su importación haya terminado, o hasta que esa importación falle: sustituye a sondear producción con `curl`. El aviso `import all started` y el tramo `import all` van en trazas distintas; una importación en curso es un aviso sin tramo de la misma versión que empiece justo después. `--desde` cambia el inicio del periodo, `--json` da la salida para un programa. `obs consulta` ejecuta SQL sobre la tabla `records` (trazas) o `metrics` y lo imprime en CSV. Las dos órdenes miran `production` salvo que `--entorno` diga `local`; `obs consulta` admite además `--entorno todos`, que no filtra. Usan la API de consultas de Logfire (`POST /v2/query`), que limita las consultas con token de lectura. El token es del proyecto y lo comparten las sesiones que consultan a la vez, así que tras un despliegue es fácil llegar al límite: si Logfire responde 429, la orden lo dice y termina con código 2, salvo con `--esperar`, que espera lo que pide la cabecera `Retry-After` y vuelve a probar dentro del mismo plazo. Las columnas útiles de `records` son `service_name`, `service_version`, `deployment_environment` (`production`, `local`), `span_name`, `message`, `http_route`, `http_response_status_code`, `duration` (segundos), `level`, `is_exception`, `exception_type`, `exception_message`, `attributes`, `trace_id` y `start_timestamp`.
 
+**Verificar una entrega.** Tras fusionar un cambio del backend, usa `obs estado --verificar --commit <SHA de la fusión> --esperar 15`. Es un modo aditivo: sin `--verificar`, el informe y el significado informativo de `--commit` se conservan; que ese informe termine con 0 no certifica ausencia de errores.
+
+El modo estricto requiere un SHA hexadecimal de 7 a 40 caracteres (mejor completo). Solo da éxito si la versión observada más reciente de `oniel-api` coincide, hay una importación de ese mismo SHA terminada con `outcome` explícito `completed` o `skipped`, y no hay errores de servidor de esa versión. Un prefijo que corresponda a varios SHA es evidencia ambigua. Una importación en curso, ausente o sin resultado explícito no certifica nada; si falló, se informa del fallo aunque la API aún no haya arrancado.
+
+El alcance es **la evidencia disponible en Logfire** de `oniel-api` y `oniel-data`, en el entorno indicado (`production` por defecto), durante los últimos `--dias` (7 por defecto). Cada lectura fija un límite superior común; al esperar se conserva el inicio de la ventana. El recuento de errores se filtra por SHA exacto antes de agregarse, sin límite de filas: ni los errores de versiones anteriores ni los de otro entorno o servicio se atribuyen al nuevo commit. Cuenta los registros de nivel 17 o superior y las respuestas HTTP 5xx aunque su nivel sea menor; una excepción controlada de nivel inferior o un 4xx por sí solos no cuentan. Incluye también los errores de la importación anteriores al arranque de la API. `--desde` no se admite en este modo, para evitar recortar esos errores; `--dias` determina el periodo completo. Si el arranque o la importación quedan fuera del periodo, amplía `--dias`.
+
+| Código | `outcome` en JSON | Significado |
+|---|---|---|
+| 0 | `success` | Commit e importación acreditados y cero errores de servidor observados en la ventana. |
+| 1 | `failure` | Fallo observado: error de servidor atribuible al SHA o importación fallida. |
+| 2 | `unverifiable` | Verificación imposible: falta token o evidencia, consulta rechazada o sin conexión, respuesta inutilizable, argumentos inválidos o espera agotada. |
+
+`--json` emite un objeto también en los resultados 1 y 2, con `outcome`, `exit_code`, `reason` (identificador del motivo), `message`, `commit`, `environment`, `window_start`, `checked_at` y la evidencia disponible (`api`, `last_import`, `server_errors`, `error_trace_id`). Un recuento `null` significa que no se pudo comprobar; no equivale a cero. Los errores de sintaxis de opciones que detecta el analizador de la CLI conservan su ayuda habitual y código 2.
+
+Sin `--esperar` se hace una lectura con un plazo total de 60 segundos. Con `--esperar N`, las consultas y las pausas comparten el plazo de N minutos: se reintenta cada 30 segundos mientras falte evidencia y, ante 429, se respeta `Retry-After` más un segundo de margen si cabe en el plazo. Al agotarse devuelve 2; no reutiliza un éxito de otra lectura. Un fallo observado termina la espera con 1. El éxito describe lo observado hasta `checked_at`: no garantiza que no aparezcan errores después, ni que Logfire ya haya recibido todas las trazas, y no sustituye las pruebas funcionales del visor.
+
 Una sesión de Claude tiene que ejecutarlo fuera del sandbox del shell, que corta la conexión TLS con Logfire. Cada traza del informe lleva su `trace_id`; se abre en https://logfire-us.pydantic.dev/ebotiab/oniel buscando `trace_id = '…'`.
 
 ### El token de lectura
 
-`oniel-data obs` usa un token de **solo lectura** del proyecto, distinto del de escritura de Render. No está en el repositorio ni debe estarlo: se lee de la variable `LOGFIRE_READ_TOKEN` o, si no existe, del fichero `~/.config/oniel/logfire-read-token` (permisos 600) de la máquina de quien desarrolla. Sin token, las órdenes lo dicen y terminan sin fallar; el CI no lo tiene ni lo necesita, porque las pruebas simulan las respuestas.
+`oniel-data obs` usa un token de **solo lectura** del proyecto, distinto del de escritura de Render. No está en el repositorio ni debe estarlo: se lee de la variable `LOGFIRE_READ_TOKEN` o, si no existe, del fichero `~/.config/oniel/logfire-read-token` (permisos 600) de la máquina de quien desarrolla. Sin token, las órdenes informativas lo dicen y terminan sin fallar; `obs estado --verificar` devuelve 2 (`unverifiable`), también en JSON; el CI no lo tiene ni lo necesita, porque las pruebas simulan las respuestas.
 
 Para renovarlo o darlo de alta en otra máquina: Logfire → proyecto `oniel` → Settings → Read tokens → crear uno, y guardarlo:
 

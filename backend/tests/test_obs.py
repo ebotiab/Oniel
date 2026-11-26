@@ -510,3 +510,374 @@ def test_cli_estado_and_consulta(monkeypatch: pytest.MonkeyPatch) -> None:
 
     rows = CliRunner().invoke(app, ["obs", "consulta", "select 'api started'"])
     assert rows.exit_code == 0 and rows.output == "started\n2026-11-12T16:04:00Z\n"
+
+
+# El modo estricto ejecuta su SQL sobre SQLite en memoria: se comprueban los filtros reales
+# de versión, servicio, fechas y nivel, además de la salida del comando, sin acceder a la red.
+def _verification_reader(
+    extra: list[dict[str, Any]] | None = None,
+    *,
+    imports: list[dict[str, Any]] | None = None,
+    api: bool = True,
+    seen: list[httpx.Request] | None = None,
+) -> obs.LogfireReader:
+    import sqlite3
+
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    conn.execute("""CREATE TABLE source_records (
+        service_name TEXT, service_version TEXT, deployment_environment TEXT,
+        kind TEXT, span_name TEXT, start_timestamp TEXT, duration REAL,
+        level INTEGER, is_exception BOOLEAN, exception_type TEXT, exception_message TEXT,
+        attributes TEXT, trace_id TEXT, http_response_status_code INTEGER
+    )""")
+    now = dt.datetime.now(dt.UTC)
+    base: dict[str, Any] = {
+        "service_name": "oniel-api",
+        "service_version": COMMIT,
+        "deployment_environment": "production",
+        "kind": "span",
+        "span_name": "GET /api/lines",
+        "start_timestamp": obs._utc(now - dt.timedelta(minutes=1)),
+        "duration": 0.5,
+        "level": 9,
+        "is_exception": False,
+        "attributes": "{}",
+        "trace_id": "traza-de-prueba",
+        "http_response_status_code": 200,
+    }
+    default_import = _import_row() | {
+        "service_name": "oniel-data",
+        "span_name": "import all",
+        "start_timestamp": obs._utc(now - dt.timedelta(minutes=3)),
+    }
+    records = (
+        ([base] if api else []) + ([default_import] if imports is None else imports) + (extra or [])
+    )
+    for record in records:
+        row = base | record
+        conn.execute(
+            f"INSERT INTO source_records ({','.join(row)}) VALUES ({','.join('?' for _ in row)})",
+            list(row.values()),
+        )
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if seen is not None:
+            seen.append(request)
+        body = _body(request)
+        cursor = conn.execute(
+            """WITH records AS (SELECT * FROM source_records WHERE start_timestamp >= ?
+                AND start_timestamp <= ? AND deployment_environment = ?) """
+            + body["sql"],
+            (body["min_timestamp"], body["max_timestamp"], body["deployment_environment"][0]),
+        )
+        rows = [dict(row) for row in cursor.fetchall()]
+        for row in rows:
+            if "is_exception" in row:
+                row["is_exception"] = bool(row["is_exception"])
+        return httpx.Response(200, json=_payload(rows))
+
+    return obs.LogfireReader("token-de-prueba", transport=httpx.MockTransport(handler))
+
+
+def _verificar_cli(monkeypatch: pytest.MonkeyPatch, reader: obs.LogfireReader, *args: str) -> Any:
+    monkeypatch.setattr(obs, "read_token", lambda: "token-de-prueba")
+    monkeypatch.setattr(obs, "LogfireReader", lambda token: reader)
+    return CliRunner().invoke(
+        app, ["obs", "estado", "--verificar", "--commit", COMMIT, "--json", *args]
+    )
+
+
+@pytest.mark.parametrize("outcome", ["completed", "skipped"])
+def test_verificacion_exige_api_importacion_y_ausencia_de_errores(
+    monkeypatch: pytest.MonkeyPatch,
+    outcome: str,
+) -> None:
+    row = _import_row(outcome) | {
+        "service_name": "oniel-data",
+        "span_name": "import all",
+        "start_timestamp": obs._utc(dt.datetime.now(dt.UTC) - dt.timedelta(minutes=3)),
+    }
+    seen: list[httpx.Request] = []
+    result = _verificar_cli(monkeypatch, _verification_reader(imports=[row], seen=seen))
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["outcome"] == "success" and data["exit_code"] == 0
+    assert data["last_import"]["outcome"] == outcome and data["server_errors"] == 0
+    assert data["api"]["version"] == COMMIT
+    assert len({_body(r)["max_timestamp"] for r in seen}) == 1
+    assert len({_body(r)["min_timestamp"] for r in seen}) == 1
+
+
+@pytest.mark.parametrize(
+    ("extra", "code"),
+    [
+        ({"level": 17}, 1),
+        ({"http_response_status_code": 500}, 1),
+        ({"http_response_status_code": 503}, 1),
+        ({"http_response_status_code": 422, "level": 13, "is_exception": True}, 0),
+        ({"http_response_status_code": 404, "level": 9}, 0),
+        ({"service_version": OLD, "level": 17, "http_response_status_code": 500}, 0),
+        ({"service_name": "otro-servicio", "level": 17}, 0),
+        ({"deployment_environment": "local", "level": 17}, 0),
+        ({"level": 17, "start_timestamp": "2000-01-01T00:00:00.000000Z"}, 0),
+    ],
+)
+def test_verificacion_atribuye_errores_por_version_servicio_entorno_y_ventana(
+    monkeypatch: pytest.MonkeyPatch,
+    extra: dict[str, Any],
+    code: int,
+) -> None:
+    record = {
+        "start_timestamp": obs._utc(dt.datetime.now(dt.UTC) - dt.timedelta(minutes=2))
+    } | extra
+    result = _verificar_cli(monkeypatch, _verification_reader([record]))
+    assert result.exit_code == code, result.output
+    data = json.loads(result.output)
+    assert data["outcome"] == ("failure" if code else "success")
+    if code:
+        assert data["reason"] == "server_errors" and data["server_errors"] == 1
+        assert data["error_trace_id"] == "traza-de-prueba"
+
+
+def test_verificacion_cuenta_errores_aunque_haya_muchos_4xx(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    rows = [{"http_response_status_code": 400 + n} for n in range(40)]
+    rows.append({"http_response_status_code": 503})
+    result = _verificar_cli(monkeypatch, _verification_reader(rows))
+    assert result.exit_code == 1
+    assert json.loads(result.output)["server_errors"] == 1
+
+
+@pytest.mark.parametrize(
+    ("api", "imports", "code", "reason"),
+    [
+        (False, [], 2, "no_evidence"),
+        (False, None, 2, "commit_not_current"),
+        (True, [], 2, "import_pending"),
+        (True, [{"kind": "log", "attributes": "{}"}], 2, "import_pending"),
+        (True, [{"attributes": '{"outcome":"failed"}'}], 1, "import_failed"),
+        (False, [{"attributes": '{"outcome":"failed"}'}], 1, "import_failed"),
+        (True, [{"attributes": "{}"}], 2, "unusable_response"),
+        (True, [{"attributes": "roto"}], 2, "unusable_response"),
+        (True, [{"start_timestamp": "fecha rota"}], 2, "import_pending"),
+    ],
+)
+def test_verificacion_no_certifica_evidencia_ausente_o_importacion_invalida(
+    monkeypatch: pytest.MonkeyPatch,
+    api: bool,
+    imports: list[dict[str, Any]] | None,
+    code: int,
+    reason: str,
+) -> None:
+    if imports is not None:
+        imports = [
+            _import_row()
+            | {
+                "service_name": "oniel-data",
+                "span_name": "import all",
+                "start_timestamp": obs._utc(dt.datetime.now(dt.UTC) - dt.timedelta(minutes=3)),
+            }
+            | row
+            for row in imports
+        ]
+    result = _verificar_cli(monkeypatch, _verification_reader(api=api, imports=imports))
+    assert result.exit_code == code, result.output
+    assert json.loads(result.output)["reason"] == reason
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        httpx.Response(401),
+        httpx.Response(403),
+        httpx.Response(500),
+        httpx.Response(200, text="no es JSON"),
+        httpx.Response(200, json={}),
+        httpx.Response(200, json={"data": None}),
+        httpx.Response(200, json={"data": [1]}),
+        httpx.Response(200, json={"data": [{}]}),
+    ],
+)
+def test_verificacion_entrega_json_si_la_consulta_falla(
+    monkeypatch: pytest.MonkeyPatch,
+    response: httpx.Response,
+) -> None:
+    reader = obs.LogfireReader("x", transport=httpx.MockTransport(lambda request: response))
+    result = _verificar_cli(monkeypatch, reader)
+    assert result.exit_code == 2
+    assert json.loads(result.output)["outcome"] == "unverifiable"
+
+
+def test_verificacion_sin_token_falla_y_el_informe_conserva_su_comportamiento(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(obs, "read_token", lambda: None)
+    args = ["obs", "estado", "--commit", COMMIT]
+    assert CliRunner().invoke(app, args).exit_code == 0
+    for output in ([], ["--json"]):
+        result = CliRunner().invoke(app, [*args, "--verificar", *output])
+        assert result.exit_code == 2
+        if output:
+            assert json.loads(result.output)["reason"] == "missing_token"
+        else:
+            assert "VERIFICACIÓN IMPOSIBLE" in result.output
+
+
+def test_verificacion_respeta_retry_after_y_el_plazo(monkeypatch: pytest.MonkeyPatch) -> None:
+    reader = _verification_reader()
+    original = reader.query
+    elapsed = [0.0]
+    pauses: list[float] = []
+    attempts = [0]
+
+    def query(sql: str, **kwargs: Any) -> list[obs.Row]:
+        attempts[0] += 1
+        if attempts[0] <= 2:
+            raise obs.LogfireRateLimited("429", retry_after_s=67)
+        return original(sql, **kwargs)
+
+    def sleep(seconds: float) -> None:
+        pauses.append(seconds)
+        elapsed[0] += seconds
+
+    monkeypatch.setattr(reader, "query", query)
+    result = obs.verify_deployment(
+        reader, COMMIT, timeout_s=900, clock=lambda: elapsed[0], sleep=sleep
+    )
+    assert result.exit_code == 0 and pauses == [68, 68]
+    attempts[0] = 0
+    pauses.clear()
+    result = obs.verify_deployment(
+        reader, COMMIT, timeout_s=60, clock=lambda: elapsed[0], sleep=sleep
+    )
+    assert result.exit_code == 2 and result.reason == "timeout" and not pauses
+
+
+def test_verificacion_no_acepta_una_respuesta_que_llega_fuera_de_plazo(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = _verification_reader()
+    original = reader.query
+    elapsed = [0.0]
+
+    def query(sql: str, **kwargs: Any) -> list[obs.Row]:
+        result = original(sql, **kwargs)
+        elapsed[0] += 21
+        return result
+
+    monkeypatch.setattr(reader, "query", query)
+    result = obs.verify_deployment(reader, COMMIT, timeout_s=60, clock=lambda: elapsed[0])
+    assert result.exit_code == 2 and result.reason == "timeout"
+
+
+def test_verificacion_agota_espera_sin_evidencia_y_no_duerme_tras_un_fallo() -> None:
+    elapsed = [0.0]
+    pauses: list[float] = []
+
+    def sleep(seconds: float) -> None:
+        pauses.append(seconds)
+        elapsed[0] += seconds
+
+    result = obs.verify_deployment(
+        _verification_reader(api=False, imports=[]),
+        COMMIT,
+        timeout_s=65,
+        clock=lambda: elapsed[0],
+        sleep=sleep,
+    )
+    assert result.exit_code == 2 and result.reason == "timeout" and pauses == [30, 30]
+    pauses.clear()
+    result = obs.verify_deployment(
+        _verification_reader([{"level": 17}]),
+        COMMIT,
+        timeout_s=900,
+        clock=lambda: elapsed[0],
+        sleep=sleep,
+    )
+    assert result.exit_code == 1 and not pauses
+
+
+@pytest.mark.parametrize("rows", [[], [{}], [{"n": None}], [{"n": -1}], [{"n": "0"}]])
+def test_verificacion_no_interpreta_un_recuento_invalido_como_cero(
+    monkeypatch: pytest.MonkeyPatch,
+    rows: list[dict[str, Any]],
+) -> None:
+    reader = _verification_reader()
+    original = reader.query
+
+    def query(sql: str, **kwargs: Any) -> list[obs.Row]:
+        return rows if "max(trace_id)" in sql else original(sql, **kwargs)
+
+    monkeypatch.setattr(reader, "query", query)
+    result = _verificar_cli(monkeypatch, reader)
+    assert result.exit_code == 2 and json.loads(result.output)["reason"] == "unusable_response"
+
+
+def test_verificacion_ignora_importacion_omitida_de_otra_version() -> None:
+    old_import = _import_row("skipped") | {
+        "service_name": "oniel-data",
+        "span_name": "import all",
+        "service_version": OLD,
+        "start_timestamp": obs._utc(dt.datetime.now(dt.UTC) - dt.timedelta(seconds=30)),
+    }
+    result = obs.verify_deployment(_verification_reader([old_import]), COMMIT[:7])
+    assert result.exit_code == 0 and result.last_import is not None
+    assert result.last_import.version == COMMIT and result.last_import.outcome == "completed"
+
+
+def test_verificacion_no_confunde_un_prefijo_ambiguo_ni_una_version_con_sufijo() -> None:
+    for version, reason in [
+        (COMMIT[:-1] + "d", "ambiguous_commit"),
+        (COMMIT + "-otro", "ambiguous_commit"),
+    ]:
+        result = obs.verify_deployment(
+            _verification_reader([{"service_version": version}]), COMMIT[:7]
+        )
+        assert result.exit_code == 2 and result.reason == reason
+    reader = _verification_reader(
+        imports=[], api=False, extra=[{"service_version": COMMIT + "-otro"}]
+    )
+    assert obs.verify_deployment(reader, COMMIT).reason == "unusable_response"
+
+
+@pytest.mark.parametrize(
+    "args",
+    [
+        ["--desde", "2026-11-01"],
+        ["--commit", "xyz"],
+        ["--dias", "0"],
+        ["--esperar", "-1"],
+        ["--entorno", "x' or '1'='1"],
+    ],
+)
+def test_verificacion_rechaza_argumentos_invalidos_con_json(
+    monkeypatch: pytest.MonkeyPatch,
+    args: list[str],
+) -> None:
+    result = _verificar_cli(monkeypatch, _verification_reader(), *args)
+    assert result.exit_code == 2 and json.loads(result.output)["reason"] == "invalid_arguments"
+
+
+def test_verificacion_puede_esperar_hasta_que_aparezca_la_evidencia(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = _verification_reader()
+    original = reader.query
+    elapsed = [0.0]
+    bounds: list[dt.datetime] = []
+
+    def query(sql: str, **kwargs: Any) -> list[obs.Row]:
+        bounds.append(kwargs["since"])
+        return [] if elapsed[0] == 0 else original(sql, **kwargs)
+
+    monkeypatch.setattr(reader, "query", query)
+    result = obs.verify_deployment(
+        reader,
+        COMMIT,
+        timeout_s=120,
+        clock=lambda: elapsed[0],
+        sleep=lambda seconds: elapsed.__setitem__(0, elapsed[0] + seconds),
+    )
+    assert result.exit_code == 0 and elapsed == [30] and len(set(bounds)) == 1
