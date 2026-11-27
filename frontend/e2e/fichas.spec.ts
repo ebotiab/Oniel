@@ -11,7 +11,18 @@ async function abrirHoja(page: Page) {
 }
 
 test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
-  test('en un tramo el detalle está plegado, se abre y muestra los puntos kilométricos y la fuente', async ({ page }) => {
+  test('en una parada intermedia se ve qué hora y qué permiso corresponden al viajero', async ({ page }) => {
+    await page.goto('/nodo/aeropuerto-de-jerez')
+    const lista = page.getByTestId('detalle-nodo').locator('.lista-servicios li')
+    const bajada = lista.filter({ hasText: 'Regional 35079' })
+    await expect(bajada.locator('.hora')).toHaveText('12:05')
+    await expect(bajada).toContainText('Solo bajada · sale a las 12:06')
+    const subida = lista.filter({ hasText: 'Regional 35001' })
+    await expect(subida.locator('.hora')).toHaveText('06:24')
+    await expect(subida).toContainText('Solo subida · llega a las 06:23')
+  })
+
+  test('en un tramo el detalle está plegado, se abre y muestra los kilómetros medidos y la fuente', async ({ page }) => {
     await page.goto(`/tramo/${TRAMO}`)
     const ficha = page.getByTestId('detalle-tramo')
     await expect(ficha).toBeVisible()
@@ -62,6 +73,22 @@ test.describe('Fichas: lo esencial primero y el detalle plegado', () => {
     await page.getByRole('button', { name: /Urda – Ciudad Real/ }).click()
     await expect(page.getByTestId('detalle-tramo')).toBeVisible()
     await expect(page.getByTestId('mas-detalle')).not.toHaveAttribute('open')
+  })
+
+  test('en una estación compartida cada línea conserva su PK y su distancia medida', async ({ page }) => {
+    await page.goto('/nodo/ciudad-real')
+    const detalle = page.getByTestId('mas-detalle')
+    await detalle.locator('summary').click()
+    for (const [linea, medido, referencia] of [
+      ['Manzanares – Ciudad Real', 'km 64,4', '261,783 km'],
+      ['Madrid – Sevilla', 'km 170,8', '170,7 km'],
+    ]) {
+      await expect(detalle.getByText(`Distancia desde el inicio del trazado en ${linea}`, { exact: true }).locator('+ dd')).toHaveText(medido)
+      await expect(detalle.locator('dt').filter({ hasText: `PK de referencia en ${linea}` }).locator('+ dd')).toHaveText(referencia)
+    }
+    await page.goto('/nodo/madrid-principe-pio')
+    await expect(detalle.getByText('Distancia desde el inicio del trazado')).toBeVisible()
+    await expect(detalle.getByRole('button', { name: 'PK de referencia' })).toHaveCount(0)
   })
 
   test('la línea a la vista y la página de cobertura tienen su ruta en la URL', async ({ page }) => {

@@ -390,10 +390,12 @@
           41.2913315
         ],
         [
-          -5.64899,
-          40.972235
+          -5.6437217,
+          40.973664
         ]
-      ]
+      ],
+      "to_node_id": "bif-acceso-salamanca",
+      "towards_back": "Medina del Campo AV"
     },
     {
       "id": "conv-zamora-medina-del-campo",

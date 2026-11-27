@@ -349,64 +349,20 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "vitoria-irun",
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
+        "avila-salamanca",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
     counts: dict[str, int] = {}
+    segmentos: set[str] = set()
     by_operator: dict[str, dict[str, int]] = {}
     for line in lines:
         detail = _read(f"lines/{line.id}.json")
         assert detail["date"] == str(exported.date)
+        segmentos.update(s["id"] for s in detail["segments"])
         counts |= detail["counts"]
         by_operator |= detail["counts_by_operator"]
-    # los dos de después de la línea de Valencia son los baipases; los nueve siguientes, la
-    # línea de Albacete a Alicante; los ocho de después, la de Monforte del Cid a Murcia; los 35,
-    # la de Valencia a Camp de Tarragona; los 5, la de Madrid a
-    # Valladolid; el 1, el enlace de Monforte del Cid; los 13, 14, 2 y 4 del final, las
-    # cuatro de Extremadura; los 8, la de Valladolid a León; los 13, la de Olmedo a Ourense, y los
-    # 4 siguientes, la de Venta de Baños a Burgos; los 11, la de León a Gijón; los 7, la de Burgos a
-    # Vitoria; los 3 y los 15 de después, las dos de Galicia, y los 16 del final, la de Sevilla a Cádiz, y el 1 y
-    # los 2 de después, los ramales de Toledo y de Huesca
-    assert (
-        len(exported.segments)
-        == (
-            54
-            + 8
-            + 8
-            + 20
-            + 2
-            + 14
-            + 2
-            + 9
-            + 8
-            + 35
-            + 5
-            + 1
-            + 13
-            + 14
-            + 2
-            + 4
-            + 8
-            + 13
-            + 4
-            + 11
-            + 7
-        )
-        + (3 + 15)
-        + 16
-        + 7  # la de Barcelona a Figueres
-        + (1 + 2)
-        + 26  # la de Barcelona a Portbou
-        + 8  # la de Tarragona a Barcelona por la costa
-        + 20  # la de València a Alicante por Xàtiva
-        + 27  # la de Madrid a Valladolid por Ávila
-        + 21  # la de Palencia a Santander
-        + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
-        + 3  # la de Miranda de Ebro a Bilbao
-        + 11  # la de Sevilla a Huelva
-        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
-        + 20  # Vitoria–Irún
-    )
+    assert {s.segment_id for s in exported.segments} == segmentos - set(STATION_CLOSURES)
     for s in exported.segments:
         assert s.trains == counts.get(s.segment_id, 0) == sum(g.trains for g in s.groups)
         assert s.by_operator == by_operator.get(s.segment_id, {})
@@ -495,7 +451,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 2
         - 2
         + 20  # Vitoria–Irún no cierra ningún anillo
-        + 23,  # el viaje de los regionales ya comienza en Príncipe Pío en vez de Pinar
+        + 23  # el viaje de los regionales ya comienza en Príncipe Pío en vez de Pinar
+        - 1,  # Ávila–Arévalo se consulta entre estaciones
         121
         + 29
         + 4
@@ -531,7 +488,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         # bifurcación El Palmeral
         + 4
         + 20  # Vitoria–Irún
-        - 7,  # con la continuidad por La Encina, en los siete tramos históricos mejora el recorrido
+        - 7  # con la continuidad por La Encina, en los siete tramos históricos mejora el recorrido
+        - 1,  # Ávila–Arévalo se consulta entre estaciones
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -647,7 +605,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     convencional = [
         s for s in exported.segments if s.segment_id.startswith("madrid-avila-valladolid:")
     ]
-    assert len(convencional) == 27
+    assert len(convencional) == 26  # las dos partes de Ávila–Arévalo se consultan entre estaciones
     assert all(s.trains == s.without_alternative for s in convencional)
     assert all(s.trains == 12 for s in convencional[:4])
     # desde que Albacete está unida a Madrid por dos caminos, el convencional por Alcázar de San

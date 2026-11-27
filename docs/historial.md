@@ -113,3 +113,5 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - Preparación documental del acceso de Majarabique a Huelva (26 de noviembre de 2026, [#311](https://github.com/ebotiab/Oniel/issues/311)). El [plan](planes/enlace-majarabique-los-naranjos.md) distingue la vía hacia Los Naranjos de la que enlaza hacia Huelva por San Jerónimo y separa los horarios según su parada en Sevilla. La incorporación queda pendiente.
 
 - 26 de noviembre de 2026, #308. Madrid-Príncipe Pío se incorpora a la línea convencional de Ávila y Valladolid mediante el enlace por Pozuelo y Las Rozas. El comparador conserva los regionales por su identidad al pasar por Pinar. Trazado, fuentes y recuentos en «El acceso de Madrid-Príncipe Pío a Pinar de las Rozas» de `docs/datos.md`.
+
+- 27 de noviembre de 2026, #316. Los regionales de Madrid-Príncipe Pío se pueden seguir por Ávila y Peñaranda hasta su terminal salmantina. El mapa distingue la estación principal y La Alamedilla, con sus horarios, permisos y cierres entre estaciones.

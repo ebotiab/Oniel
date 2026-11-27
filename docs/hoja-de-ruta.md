@@ -52,7 +52,7 @@ La revisión del 22 de noviembre de 2026, sobre `main` (`0f4c9d7`) y producción
 
 **Mantenimiento pendiente de los horarios.** [#282](https://github.com/ebotiab/Oniel/issues/282): el fichero de Ouigo cargado termina el 12 de diciembre de 2026. La comprobación del 26 de noviembre, documentada en la incidencia, no encontró un relevo en el catálogo público; queda por comprobar la descarga autenticada del PAN. No se ha incorporado un fichero nuevo y la incidencia sigue abierta. Se sigue «Refresco de los horarios» de `docs/datos.md` cuando esté disponible.
 
-La incorporación del enlace de Grisén ([#310](https://github.com/ebotiab/Oniel/issues/310), [plan](planes/enlace-grisen.md)) puede tomar el siguiente turno de datos tras la incorporación de Madrid-Príncipe Pío – Pinar de las Rozas ([#308](https://github.com/ebotiab/Oniel/issues/308)). Siguen pendientes de incidencia los enlaces de El Chaparral – Arroyo de la Herrera, Vallecas – Los Gavilanes y Gobantes – Bobadilla. Desde #264 estos enlaces se dibujan a trazos y aparecen en las fichas de sus dos extremos.
+La línea Ávila – Salamanca por Peñaranda ([#316](https://github.com/ebotiab/Oniel/issues/316)) completa el recorrido desde Príncipe Pío. El corredor de Medina del Campo a Salamanca ([#320](https://github.com/ebotiab/Oniel/issues/320)) queda para su propio turno de datos. El enlace de Grisén ([#310](https://github.com/ebotiab/Oniel/issues/310)) sigue a la espera de la fuente de Adif. Siguen pendientes de incidencia los enlaces de El Chaparral – Arroyo de la Herrera, Vallecas – Los Gavilanes y Gobantes – Bobadilla. Desde #264 estos enlaces se dibujan a trazos y aparecen en las fichas de sus dos extremos.
 
 ## Ampliar la red
 

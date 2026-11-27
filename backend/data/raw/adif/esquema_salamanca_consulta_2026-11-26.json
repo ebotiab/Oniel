@@ -1,0 +1,26 @@
+{
+  "editor": "Adif",
+  "consultado_el": "2026-11-26",
+  "url": "https://attachments.tender-service.com/07/1653/165392442_860937cbc64391e786890c9dbcec430b/DOC20240624111343PliegoDePrescripcionesTecnicas.PDF",
+  "documento": "Pliego de prescripciones técnicas. Ámbitos de mantenimiento, jefatura de Salamanca.",
+  "pagina_pdf": 52,
+  "lamina": 18,
+  "csv": "QT7BPZ2VG71118WRX01G229970",
+  "documento_sha256": "f48a7a06e16c61648556f7cdb0790767aaff4af76532b62925a2a3655fdd2201",
+  "pk_linea_122": {
+    "34002": 15.707,
+    "34005": 36.103,
+    "34007": 47.656,
+    "34008": 55.67,
+    "34010": 70.792,
+    "34011": 80.481,
+    "34012": 92.159,
+    "34013": 97.648,
+    "34014": 102.789
+  },
+  "pk_linea_120": {
+    "30100": 76.825,
+    "30110": 0.9
+  },
+  "nota": "Salamanca y La Alamedilla usan orígenes kilométricos distintos. El esquema no da un PK de la 122 para Salamanca."
+}

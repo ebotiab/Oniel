@@ -10,11 +10,13 @@ La simulación responde a una pregunta sencilla: **si este tramo se cerrase tal 
 - Las reglas de recorrido (`route_overrides`) para los trenes que cambian de línea a mitad de camino: dicen entre qué paradas el viaje va por cada línea y por qué nodo sale hacia las otras.
 - Las interrupciones del servicio registradas a mano (`backend/data/curated/anotaciones.json`, descritas en `docs/datos.md`): no cambian el cálculo, pero el resultado dice cuándo el tramo o su alternativa ya están interrumpidos en la fecha simulada.
 
-## Cierres entre estaciones en la ampliación de La Encina
+## Cierres entre estaciones
 
 En los nuevos tramos al este de Albacete el visor abre el comparador con un cierre entre estaciones. Si hay una bifurcación intermedia, el escenario incluye los tramos del trayecto completo. Se consultan los caminos que quedan en las líneas cargadas y su duración estimada sin paradas. Las fichas enlazan a los horarios publicados en cada estación. El análisis por franja horaria y el listado de impacto por tramo se aplican a la red con esa cobertura.
 
 El acceso de Príncipe Pío aplica también los cierres entre estaciones de viajeros. De Las Rozas a Pinar el escenario cierra los tres tramos a ambos lados de las agujas. El comparador reconoce los trenes del acceso por las paradas comerciales de Príncipe Pío y Villalba en el horario del día, tanto con API como en la instantánea. Los trenes conservan sus paradas comerciales y no se publican horas estimadas de paso por las agujas.
+
+En Ávila – Salamanca se aplica el mismo criterio a las estaciones de la 122, al acceso compartido en Ávila y a Salamanca – La Alamedilla. Las fichas cuentan los viajes del día y enlazan los horarios de viajeros. Un trayecto con instalaciones intermedias se cierra entero en el comparador. Las pruebas de coincidencia por minutos utilizan recorridos ficticios.
 
 ## Cómo se calcula el paso de un tren por un tramo
 
@@ -215,6 +217,7 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Madrid-Chamartín – Bifurcación Torrejón de Velasco (alta velocidad de Valencia, dos tramos) | 74 | Desde el 23 de noviembre de 2026, por el túnel de Atocha a Chamartín y la línea convencional: el grafo no mira el ancho de vía. Hasta entonces, ninguno |
 | Madrid-Chamartín – Valladolid-Campo Grande (alta velocidad de Valladolid, la línea entera, cinco tramos) | 81 a 122 | Desde la línea convencional por Ávila (#211), para casi todos: por Ávila y Medina del Campo, 71,6 km y 76 min más para los de Madrid a Valladolid y para los que siguen a León, Asturias, Burgos y el País Vasco; 162,5 km más para los de Galicia, que vuelven por la bifurcación Medina. No lo tienen los 11 de Segovia-Guiomar ni los 8 de Medina del Campo AV: para ellos la vuelta mide más del doble. En el último tramo, de la bifurcación Medina a Valladolid, lo tienen los 81 (trenes del 20 de noviembre de 2026) |
 | Madrid-Chamartín – Valladolid-Campo Grande (convencional por Ávila y Medina del Campo) | 12 a 70 | El rodeo por la alta velocidad que antes terminaba en Pinar no permite completar el viaje comercial desde Príncipe Pío. Los recorridos desde Chamartín se conservan. |
+| Ávila – Salamanca y Salamanca – La Alamedilla | Horarios de las estaciones | Consulta entre estaciones en el comparador. |
 | Acceso Madrid-Príncipe Pío – Pinar de las Rozas | Horarios en las estaciones de viajeros | Los cierres se consultan entre estaciones en el comparador. |
 | Valladolid-Campo Grande – León (alta velocidad de Valladolid a León, la línea entera, ocho tramos) | 26 a 53 | Ninguno. Es la única línea cargada al norte de Valladolid |
 | Bifurcación Medina – Ourense (alta velocidad de Olmedo a Ourense, la línea entera, trece tramos) | 22 a 30 | Ninguno. A Zamora y a Ourense solo llega esta línea |

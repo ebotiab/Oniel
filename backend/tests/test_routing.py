@@ -148,6 +148,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 4
             + 1  # de Albacete a La Encina y su enlace hacia Caudete
             + 8  # de Príncipe Pío a Pinar
+            + 16  # quince tramos propios y la división del acceso en Ávila
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -440,7 +441,7 @@ def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:
     to_oviedo = find_routes(graph, "madrid-chamartin", "oviedo")
     assert [(r.length_km, r.time_min, r.line_ids) for r in to_oviedo] == [
         (445.5, 118, lines),
-        (517.1, 194, ["madrid-avila-valladolid", *lines[1:]]),
+        (517.1, 195, ["madrid-avila-valladolid", *lines[1:]]),
     ]
     to_gijon = find_routes(graph, "madrid-chamartin", "gijon-sanz-crespo")
     assert [(r.length_km, r.time_min, r.line_ids) for r in to_gijon] == [

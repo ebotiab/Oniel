@@ -48,8 +48,63 @@ def _access_closures() -> tuple[StationClosure, ...]:
     return tuple(journeys)
 
 
+def _salamanca_closures() -> tuple[StationClosure, ...]:
+    """Cada franja del esquema lleva al trayecto entre dos estaciones con horario."""
+    line = "avila-salamanca"
+    main = "madrid-avila-valladolid"
+    junction = "bif-avila-salamanca"
+    shared = f"{main}:avila:{junction}"
+    stations = (
+        ("avila", "Ávila"),
+        ("cardenosa-de-avila", "Cardeñosa de Ávila"),
+        ("san-pedro-del-arroyo", "San Pedro del Arroyo"),
+        ("crespos", "Crespos"),
+        ("narros-del-castillo", "Narros del Castillo"),
+        ("penaranda-de-bracamonte", "Peñaranda de Bracamonte"),
+        ("villar-de-gallimazo", "Villar de Gallimazo"),
+        ("babilafuente", "Babilafuente"),
+        ("san-morales", "San Morales"),
+        ("aldealengua", "Aldealengua"),
+        ("salamanca", "Salamanca"),
+        ("salamanca-la-alamedilla", "Salamanca-La Alamedilla"),
+    )
+    journeys = [
+        StationClosure(
+            from_id="avila",
+            from_name="Ávila",
+            to_id="arevalo",
+            to_name="Arévalo",
+            segment_ids=(shared, f"{main}:{junction}:arevalo"),
+        ),
+    ]
+    for (start, start_name), (end, end_name) in pairwise(stations):
+        nodes: tuple[str, ...] = (start, end)
+        if start == "avila":
+            nodes = (junction, "salida-avila-penaranda", end)
+        elif end == "salamanca":
+            nodes = (
+                start,
+                "entrada-salamanca-por-avila",
+                "desvio-acceso-salamanca",
+                "bif-acceso-salamanca",
+                end,
+            )
+        segments = tuple(f"{line}:{a}:{b}" for a, b in pairwise(nodes))
+        journeys.append(
+            StationClosure(
+                from_id=start,
+                from_name=start_name,
+                to_id=end,
+                to_name=end_name,
+                segment_ids=(shared, *segments) if start == "avila" else segments,
+            )
+        )
+    return tuple(journeys)
+
+
 _JOURNEYS = (
     *_access_closures(),
+    *_salamanca_closures(),
     StationClosure(
         from_id="albacete-los-llanos",
         to_id="almansa",

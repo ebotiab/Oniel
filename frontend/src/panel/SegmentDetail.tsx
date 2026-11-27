@@ -114,9 +114,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
       <Plegable>
         <dl className="datos-tramo datos">
           <div>
-            <dt>
-              <Termino id="punto-kilometrico">Puntos kilométricos</Termino>
-            </dt>
+            <dt>Kilómetros desde el inicio del trazado</dt>
             <dd data-testid="tramo-pk">
               del {formatKm(segment.km_from)} al {formatKm(segment.km_to)}
             </dd>
@@ -130,7 +128,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
           <FilasAtributos segment={segment} line={line} lugar="detalle" />
         </dl>
         <p className="suave">
-          El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea. La velocidad habitual es la que Oniel usa para
+          La velocidad habitual es la que Oniel usa para
           estimar la hora de paso de los trenes que no paran en el tramo.
         </p>
         <PieFuente de="del trazado" sources={[sources.find((s) => s.id === segment.source_id)]} />

@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from 'react'
 
 import { fetchNodeServices } from '../data/api'
 import { useServices } from '../data/useServices'
-import type { AnnotationOut, NetworkOut, NodeOut, Operator, Source } from '../data/types'
+import type { AnnotationOut, NetworkOut, NodeCall, NodeOut, Operator, Source } from '../data/types'
 import { KIND_LABEL, formatDate, formatKm, lineKind, lineShortLabel, shortStop } from '../app/state'
 import { capasDe } from '../app/annotationLayers'
 import { isInterruption } from '../app/annotations'
@@ -34,6 +34,14 @@ interface Props {
   onBack: () => void
 }
 
+function permisoEnParada({ arrival, departure, boards, alights }: NodeCall) {
+  if (!arrival || !departure) return ''
+  if (boards === false && alights === false) return ' · Sin subida ni bajada'
+  if (boards === false) return ` · Solo bajada · sale a las ${departure}`
+  if (alights === false) return ` · Solo subida · llega a las ${arrival}`
+  return ''
+}
+
 export function NodeDetail({ notice, node, network, sources, operators, referenceDate, annotated, onSelectSegment, onSelectNode, onGoLine, onCompare, onBack }: Props) {
   const adjacent = network.segments.filter((s) => s.from_node_id === node.id || s.to_node_id === node.id)
   // Una conexión a trazos sale en la ficha de sus dos extremos, y en cada uno dice adónde lleva desde él.
@@ -44,7 +52,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
   // Un nodo puede pertenecer a varias líneas (Madrid y Córdoba): su kilómetro en cada una.
   const memberships = network.nodes
     .filter((n) => n.id === node.id)
-    .map((n) => ({ km: n.km, line: network.lines.find((l) => l.id === n.line_id) }))
+    .map((n) => ({ km: n.km, referencePk: n.reference_pk_km, line: network.lines.find((l) => l.id === n.line_id) }))
   const lineOf = (lineId: string) => network.lines.find((l) => l.id === lineId)
   // Anotaciones de los tramos que confluyen aquí, cada una una sola vez.
   const cuts = [...new Map(adjacent.flatMap((s) => annotated.get(s.id) ?? []).map((a) => [a.id, a])).values()]
@@ -103,15 +111,23 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
 
       <Plegable>
         <dl className="datos-tramo datos">
-          {memberships.map((m) => (
-            <div key={m.line?.id ?? '?'}>
-              <dt>
-                <Termino id="punto-kilometrico">Punto kilométrico</Termino>
-                {memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''}
-              </dt>
-              <dd data-testid="nodo-pk">km {formatKm(m.km)}</dd>
-            </div>
-          ))}
+          {memberships.map((m) => {
+            const linea = memberships.length > 1 && m.line ? ` en ${lineShortLabel(m.line)}` : ''
+            return (
+              <Fragment key={m.line?.id ?? '?'}>
+                <div>
+                  <dt>Distancia desde el inicio del trazado{linea}</dt>
+                  <dd data-testid="nodo-pk">km {formatKm(m.km)}</dd>
+                </div>
+                {m.referencePk != null && (
+                  <div>
+                    <dt><Termino id="punto-kilometrico">PK de referencia</Termino>{linea}</dt>
+                    <dd>{m.referencePk.toLocaleString('es-ES', { maximumFractionDigits: 3 })} km</dd>
+                  </div>
+                )}
+              </Fragment>
+            )
+          })}
           {node.adif_code && (
             <div>
               <dt>Código de Adif</dt>
@@ -119,10 +135,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
             </div>
           )}
         </dl>
-        <p className="suave">
-          El punto kilométrico es la distancia medida a lo largo de la vía desde el origen de la línea.
-          {node.adif_code ? ' El código es el número con el que Adif identifica esta dependencia.' : ''}
-        </p>
+        {node.adif_code && <p className="suave">El código es el número con el que Adif identifica esta dependencia.</p>}
         <PieFuente de="del trazado" sources={memberships.map((m) => sources.find((s) => s.id === m.line?.source_id))} />
         {station && (
           <>
@@ -225,7 +238,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
             <ol className="lista-servicios">
               {calls.calls.map((c) => (
                 <li key={c.service_id}>
-                  <span className="hora datos">{c.departure ?? c.arrival ?? '—'}</span>
+                  <span className="hora datos">{(c.boards === false ? c.arrival ?? c.departure : c.departure ?? c.arrival) ?? '—'}</span>
                   <span className="tren">
                     <strong>
                       {c.product} {c.train_number}
@@ -233,6 +246,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
                     <span className="suave">
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}
                       {severalOperators ? ` · ${operatorName(c.operator_id)}` : ''}
+                      {permisoEnParada(c)}
                     </span>
                   </span>
                 </li>

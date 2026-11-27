@@ -318,6 +318,18 @@
       "description": "La estación de Ávila. Aquí sale la línea de Peñaranda de Bracamonte y Salamanca, que no está cargada: por ella siguen casi todos los trenes de Madrid a Salamanca por esta línea."
     },
     {
+      "id": "bif-avila-salamanca",
+      "name": "Bifurcación de Ávila hacia Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.6841444,
+        "lat": 40.6610225
+      },
+      "source_id": "osm-relation-6016263",
+      "rank": "secundario",
+      "description": "La línea de Peñaranda se separa aquí de la que sigue hacia Arévalo. Desde la estación de Ávila ambas comparten el acceso."
+    },
+    {
       "id": "arevalo",
       "name": "Arévalo",
       "kind": "estacion",
@@ -470,31 +482,6 @@
       ]
     },
     {
-      "id": "conv-avila-salamanca",
-      "node_id": "avila",
-      "name": "Línea convencional Ávila – Salamanca",
-      "towards": "Peñaranda de Bracamonte y Salamanca",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.683002,
-          40.657091
-        ],
-        [
-          -4.750887,
-          40.73918
-        ],
-        [
-          -4.871463,
-          40.803847
-        ],
-        [
-          -5.64899,
-          40.972235
-        ]
-      ]
-    },
-    {
       "id": "conv-medina-salamanca",
       "node_id": "medina-del-campo",
       "name": "Línea convencional Medina del Campo – Salamanca",
@@ -506,10 +493,12 @@
           41.31726
         ],
         [
-          -5.64899,
-          40.972235
+          -5.6437217,
+          40.973664
         ]
-      ]
+      ],
+      "to_node_id": "bif-acceso-salamanca",
+      "towards_back": "Cantalapiedra y Medina del Campo"
     },
     {
       "id": "conv-valladolid-venta-de-banos",
@@ -776,58 +765,102 @@
     },
     "34002": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34005": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34007": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34008": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34010": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34011": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34012": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34013": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "34014": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "30100": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "30110": {
       "exits": [
-        "avila"
-      ]
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-avila-salamanca"
+      }
     },
     "32001": {
       "exits": [

@@ -138,6 +138,14 @@ async def _export_snapshot(
                 "destinations": [d.model_dump(mode="json") for d in destinations],
             },
         )
+    # Retira las fichas antiguas después de escribir las nuevas, por ejemplo al dividir un tramo.
+    for carpeta, vigentes in (
+        ("segments", {safe_name(s.id) for s in network.segments}),
+        ("nodes", set(nodes_by_id)),
+    ):
+        for ficha in (out_dir / carpeta).glob("*.json"):
+            if ficha.stem not in vigentes:
+                ficha.unlink()
     return {
         "out_dir": str(out_dir),
         "date": day.isoformat(),

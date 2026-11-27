@@ -335,7 +335,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     # hasta Badajoz, el ramal de Mérida (todos estimados) y el trazado antiguo por Cañaveral
     passes += (2051 + 582) + (2247 + 134) + 344 + (26 + 26)
     passes += 2028 + 4255  # la de València a Alicante por Xàtiva, publicados y estimados
-    passes += 2463 + 2915  # la de Madrid a Valladolid por Ávila, publicados y estimados
+    passes += 2375 + 3164  # Madrid a Valladolid con el acceso de Ávila
     passes += 372 + 993  # la de Palencia a Santander, publicados y estimados
     passes += 471 + 1515  # la de Zaragoza a Logroño, publicados y estimados
     passes += 192 + 448  # la de Castejón a Pamplona, publicados y estimados
@@ -345,6 +345,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 6 + 128 + (555 + 423)
     passes += 1427 + 342  # Vitoria–Irún
     passes += 472 + 78  # ampliación a La Encina y enlace a Caudete
+    passes += 172 + 996  # interior de la 122 y acceso salmantino
     passes += 153 * 8  # el acceso de Príncipe Pío, con los mismos trenes de la principal
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes
     assert await _count(conn, "service_segment_passes", NEWER_ID) < passes

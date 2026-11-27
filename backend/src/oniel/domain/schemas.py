@@ -350,6 +350,8 @@ class StopOut(BaseModel):
     arrival: str
     departure: str
     node_id: str | None = None
+    pickup_type: int | None = None
+    drop_off_type: int | None = None
 
 
 class ServiceDetail(ServiceOut):
