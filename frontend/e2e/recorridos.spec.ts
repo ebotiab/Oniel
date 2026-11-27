@@ -126,7 +126,7 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
     expect(c.recorridos[0]!.route.line_ids.at(-1)).toBe('miranda-bilbao')
   })
 
-  test('los trenes directos que no siguen ningún recorrido van por una vía que no está cargada, y se dice', () => {
+  test('se cuentan los trenes que quedan fuera de los recorridos mostrados', () => {
     const paradas = (nodo: string) => leer<{ calls: NodeCall[] }>(`../public/data/nodes/${nodo}.json`).calls
     // De Mérida a Sevilla los trenes van por Zafra, una línea que no está cargada: los recorridos dan la vuelta por Madrid.
     const directos = trenesDirectos(paradas('merida'), paradas('sevilla-santa-justa'))
@@ -139,11 +139,11 @@ test.describe('Comparador de recorridos: qué se enseña', () => {
       ]),
     )
     expect(trenesFueraDeLosRecorridos(c.recorridos, directos, pasos)).toBe(directos.length)
-    expect(fraseTrenesFuera(3, 3, 3)).toBe('Ninguno va por estos recorridos: siguen, al menos en parte, una vía que Oniel no tiene cargada.')
-    expect(fraseTrenesFuera(3, 3, 1)).toBe('Ninguno va por este recorrido: siguen, al menos en parte, una vía que Oniel no tiene cargada.')
-    expect(fraseTrenesFuera(1, 1, 2)).toBe('No va por ninguno de estos recorridos: sigue, al menos en parte, una vía que Oniel no tiene cargada.')
-    expect(fraseTrenesFuera(4, 9, 2)).toBe('De ellos, 4 no van por ninguno de estos recorridos: siguen, al menos en parte, una vía que Oniel no tiene cargada.')
-    expect(fraseTrenesFuera(1, 9, 1)).toBe('De ellos, 1 no va por este recorrido: sigue, al menos en parte, una vía que Oniel no tiene cargada.')
+    expect(fraseTrenesFuera(3, 3, 3)).toBe('Ninguno va por estos recorridos.')
+    expect(fraseTrenesFuera(3, 3, 1)).toBe('Ninguno va por este recorrido.')
+    expect(fraseTrenesFuera(1, 1, 2)).toBe('No va por ninguno de estos recorridos.')
+    expect(fraseTrenesFuera(4, 9, 2)).toBe('De ellos, 4 no van por ninguno de estos recorridos.')
+    expect(fraseTrenesFuera(1, 9, 1)).toBe('De ellos, 1 no va por este recorrido.')
     expect(fraseTrenesFuera(0, 9, 2)).toBeNull()
   })
 })
@@ -287,10 +287,10 @@ test.describe('Comparador de recorridos: la vista', () => {
     }
   })
 
-  test('Mérida – Sevilla: los trenes directos van por una línea que no está cargada, y el comparador lo dice', async ({ page }) => {
+  test('el comparador de Mérida a Sevilla distingue los trenes que quedan fuera de sus recorridos', async ({ page }) => {
     await page.goto('/recorridos/merida/sevilla-santa-justa')
     await expect(page.getByTestId('recorridos-resumen')).toContainText(/Hay \d+ trenes directos en este sentido/)
-    await expect(page.getByTestId('recorridos-trenes-fuera')).toHaveText(/^Ninguno va por est(e|os) recorridos?: siguen, al menos en parte, una vía que Oniel no tiene cargada\.$/)
+    await expect(page.getByTestId('recorridos-trenes-fuera')).toHaveText(/^Ninguno va por est(e|os) recorridos?\.$/)
     // donde todos los trenes directos siguen algún recorrido, la frase no sale
     await page.goto('/recorridos/madrid-puerta-de-atocha/cordoba')
     await expect(page.getByTestId('recorridos-resumen')).toContainText(/Hay \d+ trenes directos en este sentido/)

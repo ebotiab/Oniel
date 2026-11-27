@@ -109,7 +109,7 @@
     {"id": "navalmoral-de-la-mata", "name": "Navalmoral de la Mata", "kind": "estacion", "adif_code": "35206", "position": {"lon": -5.5456499, "lat": 39.8949611}, "reference_pk_km": 200.4, "description": "Primera estación de Extremadura viniendo de Madrid. A su entrada los trenes circulan desde 2026 por un trecho de la plataforma de la línea de alta velocidad en construcción."},
     {"id": "casatejada", "name": "Casatejada", "kind": "estacion", "adif_code": "35207", "rank": "secundario", "position": {"lon": -5.6776371, "lat": 39.8919896}, "reference_pk_km": 211.7},
     {"id": "monfrague", "name": "Monfragüe", "kind": "estacion", "adif_code": "30000", "position": {"lon": -6.1012466, "lat": 39.937619}, "reference_pk_km": 251.6, "description": "Estación de enlace en mitad del campo, junto al parque nacional del que toma el nombre. Aquí se separan el camino de Plasencia y de la línea nueva y el trazado antiguo a Cáceres por Mirabel y Cañaveral."},
-    {"id": "bif-el-chaparral", "name": "Bifurcación El Chaparral", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.1475609, "lat": 39.9554043}, "description": "Aquí sale el enlace por el que los trenes que no paran en Plasencia pasan directamente a la línea de alta velocidad, en Arroyo de la Herrera."},
+    {"id": "bif-el-chaparral", "name": "Bifurcación El Chaparral", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -6.1475798, "lat": 39.9555029}, "description": "Aquí sale el enlace por el que los trenes que no paran en Plasencia pasan directamente a la línea de alta velocidad, en Arroyo de la Herrera."},
     {"id": "bif-san-esteban", "name": "Bifurcación San Esteban", "kind": "bifurcacion", "position": {"lon": -6.1493221, "lat": 39.9745627}, "description": "Aquí la línea convencional de Madrid se une a la de alta velocidad de Extremadura, a 7 km de la estación de Plasencia. Los trenes de Madrid que paran en Plasencia siguen hasta la estación y allí cambian de sentido para continuar hacia Cáceres."}
   ],
   "attribute_sections": [
@@ -134,9 +134,7 @@
       "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
-  "connections": [
-    {"id": "enlace-el-chaparral-arroyo-de-la-herrera", "node_id": "bif-el-chaparral", "name": "Enlace El Chaparral – Arroyo de la Herrera", "towards": "Cáceres, Mérida y Badajoz sin entrar en Plasencia", "to_node_id": "arroyo-de-la-herrera", "towards_back": "Navalmoral de la Mata, Talavera de la Reina y Madrid sin entrar en Plasencia", "status": "no_cargada", "sketch": [[-6.1475609, 39.9554043], [-6.15, 39.962], [-6.165, 39.9635], [-6.178, 39.956], [-6.19109, 39.94645]]}
-  ],
+  "connections": [],
   "stop_mappings": {
     "35001": {"node": "leganes"},
     "35002": {"node": "fuenlabrada"},
@@ -152,13 +150,13 @@
     "18000": {"exits": ["bif-planetario"], "via": {"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}},
     "17000": {"exits": ["bif-planetario"], "via": [{"line": "convencional-madrid-alcazar-cordoba", "node": "bif-planetario"}, {"line": "enlace-atocha-chamartin", "node": "madrid-puerta-de-atocha"}]},
     "30002": {"exits": ["bif-san-esteban"], "via": {"line": "lav-plasencia-badajoz", "node": "bif-san-esteban"}},
-    "35400": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
-    "37500": {"exits": ["bif-el-chaparral"], "via": [{"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},
-    "37611": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
-    "37603": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
-    "37608": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
-    "37604": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
-    "37606": {"exits": ["bif-el-chaparral"], "via": {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}},
+    "35400": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}]},
+    "37500": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}, {"line": "ramal-merida", "node": "bif-granja-las-encinas"}]},
+    "37611": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}]},
+    "37603": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}]},
+    "37608": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}]},
+    "37604": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}]},
+    "37606": {"exits": ["bif-el-chaparral"], "via": [{"line": "enlace-el-chaparral-arroyo-de-la-herrera", "node": "bif-el-chaparral"}, {"line": "lav-plasencia-badajoz", "node": "arroyo-de-la-herrera"}]},
     "35301": {"exits": ["monfrague"], "via": {"line": "monfrague-caceres", "node": "monfrague"}},
     "35302": {"exits": ["monfrague"], "via": {"line": "monfrague-caceres", "node": "monfrague"}},
     "35303": {"exits": ["monfrague"], "via": {"line": "monfrague-caceres", "node": "monfrague"}},

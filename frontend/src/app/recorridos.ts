@@ -267,6 +267,7 @@ export function compararRecorridos(
   to: string,
   interrupted: Map<string, InterruptionOut[]>,
   scenarioCode?: string,
+  maxRatio?: number,
 ): Comparacion {
   const leido = leerEscenario(scenarioCode)
   let { scenario } = leido
@@ -276,14 +277,14 @@ export function compararRecorridos(
   const base: Scenario = { ...scenario, closures: [] }
   let found: Route[]
   try {
-    found = findRoutes(graph, from, to, base)
+    found = findRoutes(graph, from, to, base, undefined, maxRatio)
     // un cierre sobre un tramo que no existe hace el escenario inválido, como en el servidor
     for (const id of scenario.closures) if (!segments.has(id)) throw new ScenarioError(id)
   } catch (e) {
     if (!(e instanceof ScenarioError)) throw e
     scenario = scenarioFromCode('')
     ilegible = true
-    found = findRoutes(graph, from, to)
+    found = findRoutes(graph, from, to, undefined, undefined, maxRatio)
   }
   const cerrados = new Set(scenario.closures)
   const cortesDe = (route: Route): Corte[] => {
@@ -342,7 +343,7 @@ export function compararRecorridos(
   // Con una vía supuesta, lo que existe se calcula aparte, sin ella: así no desplaza de la lista a
   // ningún recorrido de hoy, y los que la usarían se enseñan junto a ellos, no en su lugar.
   if (scenario.links.length) {
-    const hoy = compararRecorridos(graph, network, from, to, interrupted, scenarioToCode({ ...scenario, links: [] }))
+    const hoy = compararRecorridos(graph, network, from, to, interrupted, scenarioToCode({ ...scenario, links: [] }), maxRatio)
     const supuestos = found.filter((r) => r.segment_ids.some(esViaSupuesta)).slice(0, SUPUESTOS_A_LA_VISTA).map(presentar)
     nombrar(supuestos, graph, lines)
     return { ...hoy, escenarioIlegible: ilegible, escenario, supuestos }
@@ -441,10 +442,8 @@ export function trenesDelRecorrido(recorrido: Recorrido, trenes: TrenDirecto[], 
 }
 
 /**
- * De los trenes directos, cuántos no siguen ninguno de los recorridos. El comparador solo conoce las
- * líneas cargadas: un tren que va, aunque sea en parte, por una vía que no lo está (la línea de Mérida
- * a Sevilla por Zafra, el enlace por el que los trenes de Madrid a Pamplona evitan Zaragoza) para en
- * las dos estaciones y no pasa por los tramos de ningún recorrido.
+ * De los trenes directos, cuántos quedan fuera de los recorridos mostrados. Pueden seguir un
+ * camino más largo que el límite elegido o circular por vías que faltan en la red.
  */
 export function trenesFueraDeLosRecorridos(recorridos: Recorrido[], trenes: TrenDirecto[], pasos: Map<string, Set<string>>): number {
   return trenes.filter((t) => !recorridos.some((r) => trenesDelRecorrido(r, [t], pasos).length > 0)).length
@@ -454,10 +453,9 @@ export function trenesFueraDeLosRecorridos(recorridos: Recorrido[], trenes: Tren
 export function fraseTrenesFuera(fuera: number, directos: number, recorridos: number): string | null {
   if (fuera <= 0 || directos <= 0) return null
   const estos = recorridos === 1 ? 'este recorrido' : 'ninguno de estos recorridos'
-  const porque = `${fuera === 1 ? 'sigue' : 'siguen'}, al menos en parte, una vía que Oniel no tiene cargada`
   if (fuera >= directos) {
-    if (directos === 1) return `No va por ${estos}: ${porque}.`
-    return recorridos === 1 ? `Ninguno va por este recorrido: ${porque}.` : `Ninguno va por estos recorridos: ${porque}.`
+    if (directos === 1) return `No va por ${estos}.`
+    return recorridos === 1 ? `Ninguno va por este recorrido.` : `Ninguno va por estos recorridos.`
   }
-  return `De ellos, ${fuera} no ${fuera === 1 ? 'va' : 'van'} por ${estos}: ${porque}.`
+  return `De ellos, ${fuera} no ${fuera === 1 ? 'va' : 'van'} por ${estos}.`
 }

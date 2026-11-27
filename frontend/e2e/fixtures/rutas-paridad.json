@@ -8644,6 +8644,730 @@
       ]
     },
     {
+      "from": "navalmoral-de-la-mata",
+      "to": "caceres",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "navalmoral-de-la-mata",
+          "from_name": "Navalmoral de la Mata",
+          "to_node_id": "caceres",
+          "to_name": "Cáceres",
+          "length_km": 129.3,
+          "time_min": 49,
+          "single_track_km": 72.7,
+          "line_ids": [
+            "madrid-plasencia",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "navalmoral-de-la-mata",
+              "from_name": "Navalmoral de la Mata",
+              "to_node_id": "bif-el-chaparral",
+              "to_name": "Bifurcación El Chaparral",
+              "length_km": 57.3,
+              "time_min": 24,
+              "single_track_km": 57.3
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "bif-el-chaparral",
+              "from_name": "Bifurcación El Chaparral",
+              "to_node_id": "caceres",
+              "to_name": "Cáceres",
+              "length_km": 72.0,
+              "time_min": 25,
+              "single_track_km": 15.4
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "navalmoral-de-la-mata",
+            "casatejada",
+            "monfrague",
+            "bif-el-chaparral",
+            "arroyo-de-la-herrera",
+            "bif-el-palmeral",
+            "bif-casa-de-la-torre",
+            "caceres"
+          ],
+          "segment_ids": [
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:monfrague:bif-el-chaparral",
+            "enlace-el-chaparral-arroyo-de-la-herrera:bif-el-chaparral:arroyo-de-la-herrera",
+            "lav-plasencia-badajoz:arroyo-de-la-herrera:bif-el-palmeral",
+            "lav-plasencia-badajoz:bif-el-palmeral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "navalmoral-de-la-mata",
+          "from_name": "Navalmoral de la Mata",
+          "to_node_id": "caceres",
+          "to_name": "Cáceres",
+          "length_km": 130.0,
+          "time_min": 59,
+          "single_track_km": 130.0,
+          "line_ids": [
+            "madrid-plasencia",
+            "monfrague-caceres",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "navalmoral-de-la-mata",
+              "from_name": "Navalmoral de la Mata",
+              "to_node_id": "monfrague",
+              "to_name": "Monfragüe",
+              "length_km": 51.1,
+              "time_min": 20,
+              "single_track_km": 51.1
+            },
+            {
+              "line_id": "monfrague-caceres",
+              "line_name": "Línea convencional Monfragüe – Cañaveral – Cáceres",
+              "from_node_id": "monfrague",
+              "from_name": "Monfragüe",
+              "to_node_id": "bif-casa-de-la-torre",
+              "to_name": "Bifurcación Casa de la Torre",
+              "length_km": 71.0,
+              "time_min": 36,
+              "single_track_km": 71.0
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "bif-casa-de-la-torre",
+              "from_name": "Bifurcación Casa de la Torre",
+              "to_node_id": "caceres",
+              "to_name": "Cáceres",
+              "length_km": 7.9,
+              "time_min": 4,
+              "single_track_km": 7.9
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "navalmoral-de-la-mata",
+            "casatejada",
+            "monfrague",
+            "mirabel",
+            "casas-de-millan",
+            "canaveral",
+            "bif-casa-de-la-torre",
+            "caceres"
+          ],
+          "segment_ids": [
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada",
+            "madrid-plasencia:casatejada:monfrague",
+            "monfrague-caceres:monfrague:mirabel",
+            "monfrague-caceres:mirabel:casas-de-millan",
+            "monfrague-caceres:casas-de-millan:canaveral",
+            "monfrague-caceres:canaveral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "navalmoral-de-la-mata",
+      "to": "caceres",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 100,
+      "expected": [
+        {
+          "from_node_id": "navalmoral-de-la-mata",
+          "from_name": "Navalmoral de la Mata",
+          "to_node_id": "caceres",
+          "to_name": "Cáceres",
+          "length_km": 129.3,
+          "time_min": 49,
+          "single_track_km": 72.7,
+          "line_ids": [
+            "madrid-plasencia",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "navalmoral-de-la-mata",
+              "from_name": "Navalmoral de la Mata",
+              "to_node_id": "bif-el-chaparral",
+              "to_name": "Bifurcación El Chaparral",
+              "length_km": 57.3,
+              "time_min": 24,
+              "single_track_km": 57.3
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "bif-el-chaparral",
+              "from_name": "Bifurcación El Chaparral",
+              "to_node_id": "caceres",
+              "to_name": "Cáceres",
+              "length_km": 72.0,
+              "time_min": 25,
+              "single_track_km": 15.4
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "navalmoral-de-la-mata",
+            "casatejada",
+            "monfrague",
+            "bif-el-chaparral",
+            "arroyo-de-la-herrera",
+            "bif-el-palmeral",
+            "bif-casa-de-la-torre",
+            "caceres"
+          ],
+          "segment_ids": [
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:monfrague:bif-el-chaparral",
+            "enlace-el-chaparral-arroyo-de-la-herrera:bif-el-chaparral:arroyo-de-la-herrera",
+            "lav-plasencia-badajoz:arroyo-de-la-herrera:bif-el-palmeral",
+            "lav-plasencia-badajoz:bif-el-palmeral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "navalmoral-de-la-mata",
+          "from_name": "Navalmoral de la Mata",
+          "to_node_id": "caceres",
+          "to_name": "Cáceres",
+          "length_km": 130.0,
+          "time_min": 59,
+          "single_track_km": 130.0,
+          "line_ids": [
+            "madrid-plasencia",
+            "monfrague-caceres",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "navalmoral-de-la-mata",
+              "from_name": "Navalmoral de la Mata",
+              "to_node_id": "monfrague",
+              "to_name": "Monfragüe",
+              "length_km": 51.1,
+              "time_min": 20,
+              "single_track_km": 51.1
+            },
+            {
+              "line_id": "monfrague-caceres",
+              "line_name": "Línea convencional Monfragüe – Cañaveral – Cáceres",
+              "from_node_id": "monfrague",
+              "from_name": "Monfragüe",
+              "to_node_id": "bif-casa-de-la-torre",
+              "to_name": "Bifurcación Casa de la Torre",
+              "length_km": 71.0,
+              "time_min": 36,
+              "single_track_km": 71.0
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "bif-casa-de-la-torre",
+              "from_name": "Bifurcación Casa de la Torre",
+              "to_node_id": "caceres",
+              "to_name": "Cáceres",
+              "length_km": 7.9,
+              "time_min": 4,
+              "single_track_km": 7.9
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "navalmoral-de-la-mata",
+            "casatejada",
+            "monfrague",
+            "mirabel",
+            "casas-de-millan",
+            "canaveral",
+            "bif-casa-de-la-torre",
+            "caceres"
+          ],
+          "segment_ids": [
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada",
+            "madrid-plasencia:casatejada:monfrague",
+            "monfrague-caceres:monfrague:mirabel",
+            "monfrague-caceres:mirabel:casas-de-millan",
+            "monfrague-caceres:casas-de-millan:canaveral",
+            "monfrague-caceres:canaveral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "navalmoral-de-la-mata",
+          "from_name": "Navalmoral de la Mata",
+          "to_node_id": "caceres",
+          "to_name": "Cáceres",
+          "length_km": 146.4,
+          "time_min": 55,
+          "single_track_km": 89.8,
+          "line_ids": [
+            "madrid-plasencia",
+            "lav-plasencia-badajoz"
+          ],
+          "legs": [
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "navalmoral-de-la-mata",
+              "from_name": "Navalmoral de la Mata",
+              "to_node_id": "bif-san-esteban",
+              "to_name": "Bifurcación San Esteban",
+              "length_km": 60.0,
+              "time_min": 25,
+              "single_track_km": 60.0
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "bif-san-esteban",
+              "from_name": "Bifurcación San Esteban",
+              "to_node_id": "plasencia",
+              "to_name": "Plasencia",
+              "length_km": 7.5,
+              "time_min": 3,
+              "single_track_km": 7.5
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "plasencia",
+              "from_name": "Plasencia",
+              "to_node_id": "caceres",
+              "to_name": "Cáceres",
+              "length_km": 79.0,
+              "time_min": 26,
+              "single_track_km": 22.4
+            }
+          ],
+          "via": [
+            "Monfragüe",
+            "Plasencia"
+          ],
+          "node_ids": [
+            "navalmoral-de-la-mata",
+            "casatejada",
+            "monfrague",
+            "bif-el-chaparral",
+            "bif-san-esteban",
+            "plasencia",
+            "bif-san-esteban",
+            "arroyo-de-la-herrera",
+            "bif-el-palmeral",
+            "bif-casa-de-la-torre",
+            "caceres"
+          ],
+          "segment_ids": [
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:monfrague:bif-el-chaparral",
+            "madrid-plasencia:bif-el-chaparral:bif-san-esteban",
+            "lav-plasencia-badajoz:plasencia:bif-san-esteban",
+            "lav-plasencia-badajoz:plasencia:bif-san-esteban",
+            "lav-plasencia-badajoz:bif-san-esteban:arroyo-de-la-herrera",
+            "lav-plasencia-badajoz:arroyo-de-la-herrera:bif-el-palmeral",
+            "lav-plasencia-badajoz:bif-el-palmeral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres"
+          ],
+          "reverse_node_ids": [
+            "plasencia"
+          ]
+        }
+      ]
+    },
+    {
+      "from": "caceres",
+      "to": "navalmoral-de-la-mata",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "caceres",
+          "from_name": "Cáceres",
+          "to_node_id": "navalmoral-de-la-mata",
+          "to_name": "Navalmoral de la Mata",
+          "length_km": 129.3,
+          "time_min": 49,
+          "single_track_km": 72.7,
+          "line_ids": [
+            "lav-plasencia-badajoz",
+            "madrid-plasencia"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "caceres",
+              "from_name": "Cáceres",
+              "to_node_id": "bif-el-chaparral",
+              "to_name": "Bifurcación El Chaparral",
+              "length_km": 72.0,
+              "time_min": 25,
+              "single_track_km": 15.4
+            },
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "bif-el-chaparral",
+              "from_name": "Bifurcación El Chaparral",
+              "to_node_id": "navalmoral-de-la-mata",
+              "to_name": "Navalmoral de la Mata",
+              "length_km": 57.3,
+              "time_min": 24,
+              "single_track_km": 57.3
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "caceres",
+            "bif-casa-de-la-torre",
+            "bif-el-palmeral",
+            "arroyo-de-la-herrera",
+            "bif-el-chaparral",
+            "monfrague",
+            "casatejada",
+            "navalmoral-de-la-mata"
+          ],
+          "segment_ids": [
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres",
+            "lav-plasencia-badajoz:bif-el-palmeral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:arroyo-de-la-herrera:bif-el-palmeral",
+            "enlace-el-chaparral-arroyo-de-la-herrera:bif-el-chaparral:arroyo-de-la-herrera",
+            "madrid-plasencia:monfrague:bif-el-chaparral",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "caceres",
+          "from_name": "Cáceres",
+          "to_node_id": "navalmoral-de-la-mata",
+          "to_name": "Navalmoral de la Mata",
+          "length_km": 130.0,
+          "time_min": 59,
+          "single_track_km": 130.0,
+          "line_ids": [
+            "lav-plasencia-badajoz",
+            "monfrague-caceres",
+            "madrid-plasencia"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "caceres",
+              "from_name": "Cáceres",
+              "to_node_id": "bif-casa-de-la-torre",
+              "to_name": "Bifurcación Casa de la Torre",
+              "length_km": 7.9,
+              "time_min": 4,
+              "single_track_km": 7.9
+            },
+            {
+              "line_id": "monfrague-caceres",
+              "line_name": "Línea convencional Monfragüe – Cañaveral – Cáceres",
+              "from_node_id": "bif-casa-de-la-torre",
+              "from_name": "Bifurcación Casa de la Torre",
+              "to_node_id": "monfrague",
+              "to_name": "Monfragüe",
+              "length_km": 71.0,
+              "time_min": 36,
+              "single_track_km": 71.0
+            },
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "monfrague",
+              "from_name": "Monfragüe",
+              "to_node_id": "navalmoral-de-la-mata",
+              "to_name": "Navalmoral de la Mata",
+              "length_km": 51.1,
+              "time_min": 20,
+              "single_track_km": 51.1
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "caceres",
+            "bif-casa-de-la-torre",
+            "canaveral",
+            "casas-de-millan",
+            "mirabel",
+            "monfrague",
+            "casatejada",
+            "navalmoral-de-la-mata"
+          ],
+          "segment_ids": [
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres",
+            "monfrague-caceres:canaveral:bif-casa-de-la-torre",
+            "monfrague-caceres:casas-de-millan:canaveral",
+            "monfrague-caceres:mirabel:casas-de-millan",
+            "monfrague-caceres:monfrague:mirabel",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "caceres",
+      "to": "navalmoral-de-la-mata",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 100,
+      "expected": [
+        {
+          "from_node_id": "caceres",
+          "from_name": "Cáceres",
+          "to_node_id": "navalmoral-de-la-mata",
+          "to_name": "Navalmoral de la Mata",
+          "length_km": 129.3,
+          "time_min": 49,
+          "single_track_km": 72.7,
+          "line_ids": [
+            "lav-plasencia-badajoz",
+            "madrid-plasencia"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "caceres",
+              "from_name": "Cáceres",
+              "to_node_id": "bif-el-chaparral",
+              "to_name": "Bifurcación El Chaparral",
+              "length_km": 72.0,
+              "time_min": 25,
+              "single_track_km": 15.4
+            },
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "bif-el-chaparral",
+              "from_name": "Bifurcación El Chaparral",
+              "to_node_id": "navalmoral-de-la-mata",
+              "to_name": "Navalmoral de la Mata",
+              "length_km": 57.3,
+              "time_min": 24,
+              "single_track_km": 57.3
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "caceres",
+            "bif-casa-de-la-torre",
+            "bif-el-palmeral",
+            "arroyo-de-la-herrera",
+            "bif-el-chaparral",
+            "monfrague",
+            "casatejada",
+            "navalmoral-de-la-mata"
+          ],
+          "segment_ids": [
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres",
+            "lav-plasencia-badajoz:bif-el-palmeral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:arroyo-de-la-herrera:bif-el-palmeral",
+            "enlace-el-chaparral-arroyo-de-la-herrera:bif-el-chaparral:arroyo-de-la-herrera",
+            "madrid-plasencia:monfrague:bif-el-chaparral",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "caceres",
+          "from_name": "Cáceres",
+          "to_node_id": "navalmoral-de-la-mata",
+          "to_name": "Navalmoral de la Mata",
+          "length_km": 130.0,
+          "time_min": 59,
+          "single_track_km": 130.0,
+          "line_ids": [
+            "lav-plasencia-badajoz",
+            "monfrague-caceres",
+            "madrid-plasencia"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "caceres",
+              "from_name": "Cáceres",
+              "to_node_id": "bif-casa-de-la-torre",
+              "to_name": "Bifurcación Casa de la Torre",
+              "length_km": 7.9,
+              "time_min": 4,
+              "single_track_km": 7.9
+            },
+            {
+              "line_id": "monfrague-caceres",
+              "line_name": "Línea convencional Monfragüe – Cañaveral – Cáceres",
+              "from_node_id": "bif-casa-de-la-torre",
+              "from_name": "Bifurcación Casa de la Torre",
+              "to_node_id": "monfrague",
+              "to_name": "Monfragüe",
+              "length_km": 71.0,
+              "time_min": 36,
+              "single_track_km": 71.0
+            },
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "monfrague",
+              "from_name": "Monfragüe",
+              "to_node_id": "navalmoral-de-la-mata",
+              "to_name": "Navalmoral de la Mata",
+              "length_km": 51.1,
+              "time_min": 20,
+              "single_track_km": 51.1
+            }
+          ],
+          "via": [
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "caceres",
+            "bif-casa-de-la-torre",
+            "canaveral",
+            "casas-de-millan",
+            "mirabel",
+            "monfrague",
+            "casatejada",
+            "navalmoral-de-la-mata"
+          ],
+          "segment_ids": [
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres",
+            "monfrague-caceres:canaveral:bif-casa-de-la-torre",
+            "monfrague-caceres:casas-de-millan:canaveral",
+            "monfrague-caceres:mirabel:casas-de-millan",
+            "monfrague-caceres:monfrague:mirabel",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "caceres",
+          "from_name": "Cáceres",
+          "to_node_id": "navalmoral-de-la-mata",
+          "to_name": "Navalmoral de la Mata",
+          "length_km": 146.4,
+          "time_min": 55,
+          "single_track_km": 89.8,
+          "line_ids": [
+            "lav-plasencia-badajoz",
+            "madrid-plasencia"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "caceres",
+              "from_name": "Cáceres",
+              "to_node_id": "plasencia",
+              "to_name": "Plasencia",
+              "length_km": 79.0,
+              "time_min": 26,
+              "single_track_km": 22.4
+            },
+            {
+              "line_id": "lav-plasencia-badajoz",
+              "line_name": "Línea de alta velocidad Plasencia – Cáceres – Badajoz",
+              "from_node_id": "plasencia",
+              "from_name": "Plasencia",
+              "to_node_id": "bif-san-esteban",
+              "to_name": "Bifurcación San Esteban",
+              "length_km": 7.5,
+              "time_min": 3,
+              "single_track_km": 7.5
+            },
+            {
+              "line_id": "madrid-plasencia",
+              "line_name": "Línea convencional Madrid – Talavera de la Reina – Plasencia",
+              "from_node_id": "bif-san-esteban",
+              "from_name": "Bifurcación San Esteban",
+              "to_node_id": "navalmoral-de-la-mata",
+              "to_name": "Navalmoral de la Mata",
+              "length_km": 60.0,
+              "time_min": 25,
+              "single_track_km": 60.0
+            }
+          ],
+          "via": [
+            "Plasencia",
+            "Monfragüe"
+          ],
+          "node_ids": [
+            "caceres",
+            "bif-casa-de-la-torre",
+            "bif-el-palmeral",
+            "arroyo-de-la-herrera",
+            "bif-san-esteban",
+            "plasencia",
+            "bif-san-esteban",
+            "bif-el-chaparral",
+            "monfrague",
+            "casatejada",
+            "navalmoral-de-la-mata"
+          ],
+          "segment_ids": [
+            "lav-plasencia-badajoz:bif-casa-de-la-torre:caceres",
+            "lav-plasencia-badajoz:bif-el-palmeral:bif-casa-de-la-torre",
+            "lav-plasencia-badajoz:arroyo-de-la-herrera:bif-el-palmeral",
+            "lav-plasencia-badajoz:bif-san-esteban:arroyo-de-la-herrera",
+            "lav-plasencia-badajoz:plasencia:bif-san-esteban",
+            "lav-plasencia-badajoz:plasencia:bif-san-esteban",
+            "madrid-plasencia:bif-el-chaparral:bif-san-esteban",
+            "madrid-plasencia:monfrague:bif-el-chaparral",
+            "madrid-plasencia:casatejada:monfrague",
+            "madrid-plasencia:navalmoral-de-la-mata:casatejada"
+          ],
+          "reverse_node_ids": [
+            "plasencia"
+          ]
+        }
+      ]
+    },
+    {
       "from": "medina-del-campo",
       "to": "salamanca",
       "scenario": "",

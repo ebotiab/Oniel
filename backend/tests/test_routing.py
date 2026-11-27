@@ -150,6 +150,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 8  # de Príncipe Pío a Pinar
             + 16  # quince tramos propios y la división del acceso en Ávila
             + 14  # once de la 120, dos del enlace y el corte de la 982
+            + 1  # enlace de El Chaparral a Arroyo
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -538,6 +539,7 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
         "enlace-la-encina-caudete": "valencia-xativa-alicante",
         "enlace-principe-pio-pinar": "madrid-avila-valladolid",
         "enlace-medina-av-salamanca": "lav-olmedo-ourense",
+        "enlace-el-chaparral-arroyo-de-la-herrera": "lav-plasencia-badajoz",
     }
     side_alicante = f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av"
     side_murcia = f"{LAV_MURCIA}:bif-murcia:bif-vinalopo"
@@ -552,6 +554,8 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
         "enlace-la-encina-caudete:la-encina:caudete": 0,
         "enlace-principe-pio-pinar:aguja-bif-chamartin:pinar-de-las-rozas": 0,
         "madrid-avila-valladolid:pitis:pinar-de-las-rozas": 1,
+        "enlace-el-chaparral-arroyo-de-la-herrera:bif-el-chaparral:arroyo-de-la-herrera": 0,
+        "lav-plasencia-badajoz:bif-san-esteban:arroyo-de-la-herrera": 1,
         "alcazar-albacete:la-encina:bif-la-encina": 1,
         "valencia-xativa-alicante:bif-la-encina:caudete": 2,
         "enlace-soto-de-cerrato:bif-soto-de-cerrato:bif-cerrato": 0,
@@ -1161,6 +1165,17 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"segment_id": f"{BCN}:bif-moncasi:zaragoza-delicias", "scenario": ""},
         {"segment_id": AROUND_LLEIDA, "scenario": ""},
     ]
+    for start, end in (("navalmoral-de-la-mata", "caceres"), ("caceres", "navalmoral-de-la-mata")):
+        for ratio in (DEFAULT_MAX_RATIO, 100):
+            routes.append(
+                {
+                    "from": start,
+                    "to": end,
+                    "scenario": "",
+                    "max_changes": DEFAULT_MAX_CHANGES,
+                    "max_ratio": ratio,
+                }
+            )
     for start in ("medina-del-campo", "medina-del-campo-av", "madrid-principe-pio"):
         for end in ("salamanca", "salamanca-la-alamedilla"):
             for a, b in ((start, end), (end, start)):
@@ -1335,3 +1350,34 @@ def test_el_acceso_de_principe_pio_solo_continua_hacia_las_matas_en_pinar(graph:
         for ruta in find_routes(graph, desde, hasta):
             pos = ruta.node_ids.index(pinar)
             assert "las-matas" in (ruta.node_ids[pos - 1], ruta.node_ids[pos + 1])
+
+
+@pytest.mark.parametrize("vuelta", [False, True])
+def test_desde_navalmoral_se_puede_entrar_en_plasencia_o_evitarla(
+    graph: Graph, vuelta: bool
+) -> None:
+    extremos = (
+        ("caceres", "navalmoral-de-la-mata") if vuelta else ("navalmoral-de-la-mata", "caceres")
+    )
+    directo, antigua, estacion = find_routes(graph, *extremos, max_ratio=100)
+    assert find_routes(graph, *extremos) == [directo, antigua]
+    assert [
+        (r.length_km, r.time_min, r.reverse_node_ids) for r in (directo, antigua, estacion)
+    ] == [(129.3, 49, []), (130.0, 59, []), (146.4, 55, ["plasencia"])]
+    for ruta, centro in [
+        (directo, ["monfrague", "bif-el-chaparral", "arroyo-de-la-herrera", "bif-el-palmeral"]),
+        (antigua, ["monfrague", "mirabel", "casas-de-millan", "canaveral", "bif-casa-de-la-torre"]),
+        (
+            estacion,
+            [
+                "bif-el-chaparral",
+                "bif-san-esteban",
+                "plasencia",
+                "bif-san-esteban",
+                "arroyo-de-la-herrera",
+            ],
+        ),
+    ]:
+        nodos = ruta.node_ids[::-1] if vuelta else ruta.node_ids
+        indice = nodos.index(centro[0])
+        assert nodos[indice : indice + len(centro)] == centro

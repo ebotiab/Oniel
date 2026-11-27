@@ -666,13 +666,12 @@ def _validate_line(
                     problems.append(
                         f"{towards} no es un nodo contiguo a {join} en {parent.line_id}"
                     )
-                if not any(
-                    n.id == far_node and n.kind == "estacion" and not n.shared for n in spec.nodes
-                ):
-                    problems.append(
-                        f"el extremo {far_node} del acceso debe ser una estación propia"
-                    )
-            elif not any(far_node in o.nodes for o in others if o is not parent):
+            # Príncipe Pío acaba en una estación propia. Un enlace dirigido como la 534
+            # también puede tener su otro extremo en una segunda línea cargada.
+            terminal = towards and any(
+                n.id == far_node and n.kind == "estacion" and not n.shared for n in spec.nodes
+            )
+            if not terminal and not any(far_node in o.nodes for o in others if o is not parent):
                 problems.append(
                     f"es un enlace de {parent.line_id}, pero {far_node} no es un nodo de ninguna"
                     " otra línea cargada"

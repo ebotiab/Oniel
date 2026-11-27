@@ -59,6 +59,20 @@ test.describe('Grafo de rutas en el cliente', () => {
     expect(() => findRoutes(buildGraph(red), MADRID, 'cordoba', closureScenario('no:existe'))).toThrow(ScenarioError)
   })
 
+  test('Navalmoral ↔ Cáceres ofrece los mismos tramos, orden e inversiones en la API y la instantánea @api', async ({ request }) => {
+    test.skip(estatico, 'Necesita la API.')
+    const grafo = buildGraph(red)
+    for (const caso of paridad.routes.filter((r) => [r.from, r.to].includes('navalmoral-de-la-mata'))) {
+      const ratio = caso.max_ratio!
+      const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, ...(ratio === 2 ? {} : { max_ratio: ratio }) } })
+      expect(respuesta.ok()).toBeTruthy()
+      const cuerpo = await respuesta.json() as { routes: (Route & { interruptions?: unknown })[]; scenario_code: string }
+      expect(cuerpo.scenario_code).toBe(caso.scenario)
+      const cliente = findRoutes(grafo, caso.from, caso.to, scenarioFromCode(caso.scenario), caso.max_changes, ratio)
+      expect(cuerpo.routes.map(({ interruptions: _avisos, ...ruta }) => ruta)).toEqual(cliente)
+    }
+  })
+
   test('la API da lo mismo que el cliente', { tag: '@api' }, async ({ request }) => {
     test.skip(estatico, 'compara con la API')
     const caso = paridad.routes[3]!

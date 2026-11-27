@@ -779,6 +779,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         LAV_MURCIA_SPEC.name: ["albacete-elche-sin-alicante", "madrid-murcia-sin-parada"],
     }
     expected["medina-del-campo-salamanca.json"] = {"incorporacion-desde-medina-av": 50}
+    expected["enlace-el-chaparral-arroyo-de-la-herrera.json"] = {}
     expected["enlace-medina-av-salamanca.json"] = {"medina-av-salamanca": 50}
     expected["avila-salamanca.json"] = {
         "acceso-desde-medina-08240": 50,

@@ -1,0 +1,262 @@
+{
+  "line": {
+    "id": "enlace-el-chaparral-arroyo-de-la-herrera",
+    "name": "Enlace de El Chaparral a Arroyo de la Herrera",
+    "short_name": "534",
+    "sort_order": 55,
+    "zone": "extremadura",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "tracks": 1,
+    "max_speed_kmh": 200,
+    "reference_length_km": 4.8,
+    "opened_on": "2022-07-19",
+    "link_of": "lav-plasencia-badajoz",
+    "link_towards": "bif-el-palmeral",
+    "description": "Entre Monfragüe y Cáceres, este enlace permite pasar de la línea de Madrid a la de alta velocidad sin entrar en Plasencia. Sale de El Chaparral y se une a la vía de Cáceres en Arroyo de la Herrera.\n\nLos trenes que paran en Plasencia siguen hasta la estación, cambian allí de sentido y vuelven por San Esteban. También se puede llegar a Cáceres por la línea convencional de Cañaveral.\n\nEl 20 de noviembre de 2026 Renfe publicó una parada en Plasencia para el Intercity 00194. Para el 00190 publicó Monfragüe y Cáceres seguidas. Su paso por el enlace es una estimación a partir del horario y del trazado.",
+    "verification_source_id": "ideadif-tramo-534",
+    "geometry_source": {
+      "source_id": "osm-relation-6759731",
+      "parts": [
+        {
+          "source_id": "osm-relation-6759731",
+          "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json",
+          "relation_id": 6759731,
+          "from": [
+            -6.1475798,
+            39.9555029
+          ],
+          "to": [
+            -6.1883402,
+            39.9482663
+          ]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-el-chaparral",
+      "name": "Bifurcación El Chaparral",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.1475798,
+        "lat": 39.9555029
+      },
+      "shared": true
+    },
+    {
+      "id": "arroyo-de-la-herrera",
+      "name": "Arroyo de la Herrera",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -6.1883402,
+        "lat": 39.9482663
+      },
+      "shared": true
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "bif-el-chaparral",
+      "to_node": "arroyo-de-la-herrera",
+      "value": 1,
+      "source_id": "ideadif-tramo-534",
+      "checked_on": "2026-11-27",
+      "note": "Una vía principal en NumberOfTracks_055340010 y una única vía de aguja hasta la 026 en OSM."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-el-chaparral",
+      "to_node": "arroyo-de-la-herrera",
+      "value": "asfa",
+      "source_id": "adif-av-puesta-servicio-534",
+      "checked_on": "2026-11-27",
+      "note": "Adif identifica ASFA en la puesta en servicio de la 534. El mapa 4 de 2026 sitúa ASFA en Arroyo."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-el-chaparral",
+      "to_node": "arroyo-de-la-herrera",
+      "value": "bau",
+      "source_id": "adif-av-puesta-servicio-534",
+      "checked_on": "2026-11-27",
+      "note": "BAU en la línea 534 hasta la incorporación a la 026. Adif no desglosa el enclavamiento de la aguja."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-el-chaparral",
+      "to_node": "arroyo-de-la-herrera",
+      "value": "ctc",
+      "source_id": "adif-av-puesta-servicio-534",
+      "checked_on": "2026-11-27",
+      "note": "Control centralizado de la 534 según Adif AV, contrastado con el mapa 4 en Arroyo."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "17000": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": [
+        {
+          "line": "madrid-plasencia",
+          "node": "bif-el-chaparral"
+        },
+        {
+          "line": "convencional-madrid-alcazar-cordoba",
+          "node": "bif-planetario"
+        },
+        {
+          "line": "enlace-atocha-chamartin",
+          "node": "madrid-puerta-de-atocha"
+        }
+      ]
+    },
+    "18000": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": [
+        {
+          "line": "madrid-plasencia",
+          "node": "bif-el-chaparral"
+        },
+        {
+          "line": "convencional-madrid-alcazar-cordoba",
+          "node": "bif-planetario"
+        }
+      ]
+    },
+    "30000": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": {
+        "line": "madrid-plasencia",
+        "node": "bif-el-chaparral"
+      }
+    },
+    "35001": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": {
+        "line": "madrid-plasencia",
+        "node": "bif-el-chaparral"
+      }
+    },
+    "35105": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": {
+        "line": "madrid-plasencia",
+        "node": "bif-el-chaparral"
+      }
+    },
+    "35200": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": {
+        "line": "madrid-plasencia",
+        "node": "bif-el-chaparral"
+      }
+    },
+    "35203": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": {
+        "line": "madrid-plasencia",
+        "node": "bif-el-chaparral"
+      }
+    },
+    "35206": {
+      "exits": [
+        "bif-el-chaparral"
+      ],
+      "via": {
+        "line": "madrid-plasencia",
+        "node": "bif-el-chaparral"
+      }
+    },
+    "35400": {
+      "exits": [
+        "arroyo-de-la-herrera"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "arroyo-de-la-herrera"
+      }
+    },
+    "37500": {
+      "exits": [
+        "arroyo-de-la-herrera"
+      ],
+      "via": [
+        {
+          "line": "lav-plasencia-badajoz",
+          "node": "arroyo-de-la-herrera"
+        },
+        {
+          "line": "ramal-merida",
+          "node": "bif-granja-las-encinas"
+        }
+      ]
+    },
+    "37603": {
+      "exits": [
+        "arroyo-de-la-herrera"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "arroyo-de-la-herrera"
+      }
+    },
+    "37606": {
+      "exits": [
+        "arroyo-de-la-herrera"
+      ],
+      "via": {
+        "line": "lav-plasencia-badajoz",
+        "node": "arroyo-de-la-herrera"
+      }
+    }
+  },
+  "corridor_filter": {
+    "description": "Se estima el paso en ambos sentidos cuando Monfragüe y Cáceres son consecutivas y el horario omite las estaciones de los otros dos recorridos.",
+    "min_node_stops": 1,
+    "consecutive_stop_ids": [
+      [
+        "30000",
+        "35400"
+      ]
+    ],
+    "exclude_stop_ids": [
+      "30002",
+      "35301",
+      "35302",
+      "35303"
+    ]
+  }
+}

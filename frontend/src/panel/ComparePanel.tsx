@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
+import { AtlasLink } from '../app/AtlasLink'
 import { fetchNodeServices, fetchSegmentServices } from '../data/api'
 import { useApiStatus } from '../data/useApiStatus'
 import type { NetworkOut, Source } from '../data/types'
@@ -154,7 +155,7 @@ function ViaSupuesta({ network, comparador, onChange }: { network: NetworkOut; c
   }
   const poner = (link: SketchLink | null) => {
     const code = scenarioToCode({ ...escenario, links: link ? [link, ...escenario.links.slice(1)] : escenario.links.slice(1) })
-    onChange({ from: comparador.from, to: comparador.to, ...(code ? { escenario: code } : {}) })
+    onChange({ ...comparador, escenario: code || undefined })
   }
   const desde = via?.from_node_id ?? a
   const hasta = via?.to_node_id ?? b
@@ -303,15 +304,18 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
   }, [irAlSupuesto])
   const conEscenario = (next: Scenario): Comparador => {
     const code = scenarioToCode(next)
-    return { from, to, ...(code ? { escenario: code } : {}) }
+    return { ...comparador, escenario: code || undefined }
   }
   const masLargo = Math.max(1, ...[...recorridos, ...supuestos].map((r) => r.route.length_km))
   const diferencia = supuestos.length > 0 ? diferenciaConSupuesto(recorridos, supuestos) : null
   const tarjeta = (r: Recorrido, supuesto: boolean) => {
     // Por una vía que no existe no pasa ningún tren: de los supuestos no se cuentan.
     const suyos = trenes && !supuesto ? trenesDelRecorrido(r, trenes.directos, trenes.pasos) : null
+    const tramos = new Set(r.route.segment_ids.map((id) => id.split(':')[0]))
+    const enlaces = network.lines.filter((linea) => linea.link_of && tramos.has(linea.id))
     return (
       <Tarjeta key={r.key} r={r} activo={r.key === elegido?.key} masLargo={masLargo} onElegir={onElegir} supuesto={supuesto}>
+        {enlaces.map((linea) => <p key={linea.id}><AtlasLink to={{ linea: linea.id }}>{linea.name}</AtlasLink></p>)}
         {suyos && (
           <p className="suave" data-testid="recorrido-trenes">
             {trenesTexto(suyos, dia)}
@@ -320,7 +324,6 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
       </Tarjeta>
     )
   }
-  // Los trenes directos que no siguen ninguno de los recorridos van por una vía que no está cargada.
   const fuera = trenes ? fraseTrenesFuera(trenesFueraDeLosRecorridos(recorridos, trenes.directos, trenes.pasos), trenes.directos.length, recorridos.length) : null
   const todos = [...recorridos, ...supuestos]
   const lineasUsadas = new Set(todos.flatMap((r) => r.route.line_ids))
@@ -395,6 +398,9 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             </h3>
           )}
           <ol className="recorridos">{recorridos.map((r) => tarjeta(r, false))}</ol>
+          <button type="button" className="enlace" onClick={() => onChange({ ...comparador, maxRatio: comparador.maxRatio === 100 ? undefined : 100 })}>
+            {comparador.maxRatio === 100 ? 'Volver al límite habitual' : 'Incluir recorridos más largos'}
+          </button>
           {comparacion.sinPaso && (
             <p className="texto" data-testid="recorridos-sin-paso">
               Hoy ninguno de estos recorridos tiene circulación de un extremo a otro, y las líneas cargadas no ofrecen otro camino.
@@ -469,7 +475,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
               </div>
             ))}
             <p className="suave">
-              Oniel une todas las líneas cargadas en una sola red y busca los caminos que no pasan dos veces por el mismo punto. Enseña los {recorridos.length > 1 ? 'más cortos' : 'que hay'}, hasta tres, y descarta los que dan un rodeo de más del doble respecto a otro más corto
+              Oniel une todas las líneas cargadas en una sola red y tiene en cuenta dónde se puede cambiar de sentido. Enseña los {recorridos.length > 1 ? 'más cortos' : 'que hay'}, hasta tres, y descarta los que, en la parte en que se separan, dan un rodeo de más {comparador.maxRatio && comparador.maxRatio !== 2 ? `de ${comparador.maxRatio} veces el camino más corto` : 'del doble del camino más corto'}
               {comparacion.ocultos > 0 ? ` (aquí hay ${comparacion.ocultos === 1 ? 'uno más, más largo, que no se enseña' : `${comparacion.ocultos} más, más largos, que no se enseñan`})` : ''}. Los kilómetros se miden por cada línea.
             </p>
             <p className="suave">

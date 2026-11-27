@@ -1,8 +1,8 @@
 # El Chaparral – Arroyo de la Herrera, el camino directo hacia Cáceres
 
-Un tren que viene de Madrid puede pasar de Monfragüe a la vía de Cáceres por el enlace de El Chaparral. Otro puede entrar en Plasencia, hacer su parada y cambiar allí de sentido. Oniel ya distingue esos servicios en los horarios. Falta la vía que permita recorrer el enlace en el mapa y contar qué trenes pasan por él. La carga queda para la [incidencia #323](https://github.com/ebotiab/Oniel/issues/323), sin turno de implementación asignado.
+Un tren que viene de Madrid puede pasar de Monfragüe a la vía de Cáceres por el enlace de El Chaparral. Otro puede entrar en Plasencia, hacer su parada y cambiar allí de sentido. Este plan recoge la comprobación previa a la #323. Las mediciones definitivas, la atribución de trenes y la importación están en [Cómo se cargó el enlace de El Chaparral](../datos.md#cómo-se-cargó-el-enlace-de-el-chaparral).
 
-## Qué ofrece hoy el comparador
+## Qué ofrecía el comparador antes de la carga
 
 Comprobación del 27 de noviembre de 2026 sobre [`main` en `a73d8f4`](https://github.com/ebotiab/Oniel/tree/a73d8f48c0086fccbf69412b961f0292a6e59edb). La búsqueda de «Chaparral» y «Herrera» en las incidencias y PR, junto con la revisión de los planes publicados y de la hoja de ruta, dejó este enlace pendiente de preparación. Para este, [#264](https://github.com/ebotiab/Oniel/issues/264) y su [PR #283](https://github.com/ebotiab/Oniel/pull/283) resolvieron cómo mostrar el trazo en las dos fichas. Hay una sola declaración, `enlace-el-chaparral-arroyo-de-la-herrera`, en la especificación de Madrid. Lleva `node_id`, `to_node_id`, los dos textos de destino y el estado `no_cargada`. El comparador solo recorre tramos cargados.
 

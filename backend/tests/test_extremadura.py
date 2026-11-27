@@ -13,6 +13,7 @@ from dataclasses import dataclass
 
 import pytest
 from conftest import (
+    CHAPARRAL_SPEC,
     CONV_SPEC,
     DATA_DIR,
     LAV_BADAJOZ_SPEC,
@@ -264,6 +265,7 @@ def resolved(
     y por la convencional de Andalucía, de la que sale la de Extremadura."""
     lines: list[LoadedLine] = [loaded_line(net) for net in nets.values()]
     lines.append(loaded_line(build_network(conv_spec, DATA_DIR)))
+    lines.append(loaded_line(build_network(load_network_spec(CHAPARRAL_SPEC), DATA_DIR)))
     out: dict[str, list[Resolved]] = {}
     for line_id, net in nets.items():
         own = next(line for line in lines if line.line_id == line_id)
@@ -362,11 +364,8 @@ def test_the_lines_meet_at_shared_nodes(
     # con la línea cargada, de la bifurcación Planetario ya no sale una conexión a trazos
     assert "conv-madrid-extremadura" not in {c.id for c in conv_spec.connections}
     assert all(c.node_id != "bif-planetario" for c in conv_spec.connections)
-    # lo que sigue sin cargar: el enlace de El Chaparral, las líneas de Valencia de Alcántara y de
-    # Elvas y las de Mérida a Zafra y a Ciudad Real; la de Aljucén a La Garrovilla es un enlace
-    # desde el 23 de noviembre de 2026
+    # Las líneas de Valencia de Alcántara, Elvas, Zafra y Ciudad Real siguen a trazos.
     assert {(line, c.node_id) for line, net in nets.items() for c in net.spec.connections} == {
-        (MADRID, "bif-el-chaparral"),
         (LAV, "caceres"),
         (LAV, "badajoz"),
         (MERIDA, "merida"),
@@ -505,7 +504,7 @@ def test_tracks_by_segment(nets: dict[str, BuiltNetwork]) -> None:
         tracks = segment.attributes["tracks"]
         assert tracks.source_id == MAP
     double_km = sum(s.length_km for s in lav.segments if s.tracks == 2)
-    assert double_km == pytest.approx(111.9, abs=0.2)
+    assert double_km == pytest.approx(112.174, abs=0.001)
     assert all(s.tracks == 1 for line in (MERIDA, OLD) for s in nets[line].segments)
 
 
@@ -690,9 +689,9 @@ def test_trains_that_call_at_plasencia_reach_san_esteban_and_the_rest_leave_at_e
             other.crossed
         )
         assert "arroyo-de-la-herrera:bif-el-palmeral" in other.crossed
-        # el salto de una línea a otra por el enlace, que no está cargado, se mide en línea recta
+        # El reparto usa ahora los kilómetros de vía entre las dos líneas.
         basis = " ".join(p.basis for p in other.passes)
-        assert "enlaza en Bifurcación El Chaparral" in basis
+        assert "5 km por el enlace de El Chaparral a Arroyo de la Herrera" in basis
     # las reglas de las dos líneas casan los mismos trenes
     assert {r.trip.trip_id for r in madrid.values() if r.rule} == {
         r.trip.trip_id for r in lav.values() if r.rule
