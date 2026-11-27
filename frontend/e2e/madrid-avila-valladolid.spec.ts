@@ -14,7 +14,7 @@ const LINEA = 'madrid-avila-valladolid'
 const LAV = 'lav-madrid-valladolid'
 const CHAMARTIN = 'madrid-chamartin'
 const VALLADOLID = 'valladolid-campo-grande'
-const AVILA_AREVALO = `${LINEA}:avila:arevalo`
+const AVILA_AREVALO = `${LINEA}:bif-avila-salamanca:arevalo`
 
 /** El campo del buscador: en escritorio está a la vista; en el móvil lo despliega la lupa. */
 async function abrirBuscador(page: import('@playwright/test').Page) {
@@ -26,7 +26,7 @@ async function abrirBuscador(page: import('@playwright/test').Page) {
 test.describe('Línea convencional de Madrid a Valladolid por Ávila', () => {
   test('va de Madrid-Chamartín a Valladolid-Campo Grande, las cabeceras de la alta velocidad', () => {
     const nodos = red.nodes.filter((n) => n.line_id === LINEA).sort((a, b) => a.km - b.km)
-    expect(nodos).toHaveLength(28)
+    expect(nodos).toHaveLength(29)
     expect(nodos[0].id).toBe(CHAMARTIN)
     expect(nodos.at(-1)?.id).toBe(VALLADOLID)
     const lineasDe = (id: string) => red.nodes.filter((n) => n.id === id).map((n) => n.line_id)
@@ -39,7 +39,7 @@ test.describe('Línea convencional de Madrid a Valladolid por Ávila', () => {
 
   test('es de vía doble y ancho ibérico en toda su longitud', () => {
     const tramos = red.segments.filter((s) => s.line_id === LINEA)
-    expect(tramos).toHaveLength(27)
+    expect(tramos).toHaveLength(28)
     expect(tramos.every((s) => s.tracks === 2)).toBe(true)
     expect(red.lines.find((l) => l.id === LINEA)?.gauge_mm).toBe(1668)
   })

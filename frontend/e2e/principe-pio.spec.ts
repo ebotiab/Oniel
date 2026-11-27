@@ -29,7 +29,7 @@ test('el enlace se abre desde la red y el buscador lleva a la ficha de Príncipe
   await ficha.getByTestId('destinos-ver-todos').click()
   const salamanca = ficha.getByTestId('lista-destinos').getByRole('listitem').filter({ hasText: /^SalamancaRegional/ })
   await expect(salamanca).toContainText('7 trenes')
-  await expect(salamanca.getByRole('button')).toHaveCount(0)
+  await expect(salamanca.getByRole('button', { name: 'Salamanca', exact: true })).toBeVisible()
 })
 
 for (const destino of destinos) {
@@ -75,7 +75,7 @@ test('la API y la instantánea comparten horarios, continuidad en Pinar, recorri
   expect(servicios.calls).toEqual(publicado.calls)
   expect(servicios.calls.length).toBeGreaterThan(0)
   expect(servicios.calls.every((c) => c.operator_id === 'renfe' && c.product === 'Regional')).toBe(true)
-  expect(servicios.destinations).toContainEqual(expect.objectContaining({ name: 'Salamanca', node_id: null }))
+  expect(servicios.destinations).toContainEqual(expect.objectContaining({ name: 'Salamanca', node_id: 'salamanca' }))
   const tramo = `${acceso}:aguja-bif-chamartin:${pinar}`
   const anterior = await (await request.get(`/api/segments/${tramo}/services`, { params: { date: publicado.date } })).json() as SegmentServicesOut
   expect(anterior.segment.station_closure).toMatchObject({ from_id: 'las-rozas', to_id: pinar })

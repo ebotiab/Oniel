@@ -778,6 +778,13 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         LAV_ALICANTE_SPEC.name: ["albacete-elche-sin-alicante", "madrid-murcia-sin-parada"],
         LAV_MURCIA_SPEC.name: ["albacete-elche-sin-alicante", "madrid-murcia-sin-parada"],
     }
+    expected["avila-salamanca.json"] = {
+        "acceso-desde-medina-08240": 50,
+        "acceso-desde-medina-10500": 23,
+        "acceso-desde-medina-32004": 6,
+        "acceso-desde-medina-32008": 7,
+        "acceso-desde-medina-32009": 8,
+    }
     for name, r in reports.items():
         unused = [
             f"la regla de recorrido {rule} no encaja con ningún viaje del GTFS"

@@ -35,15 +35,24 @@ interface Trenes {
 /** La fuente de los horarios en `sources.json`. */
 const FUENTE_HORARIOS = 'renfe-gtfs-av-ld-md'
 
-/** Los dos horarios comerciales que identifican el acceso de Pozuelo en los ficheros de Renfe. */
-async function trenesPorPozuelo(dia?: string) {
-  const [terminal, sierra] = await Promise.all([
-    fetchNodeServices('madrid-principe-pio', dia),
-    fetchNodeServices('villalba-de-guadarrama', dia),
-  ])
-  if (terminal.date !== sierra.date) throw new Error('Los horarios son de días distintos.')
-  const villalba = new Set(sierra.calls.map((parada) => parada.service_id))
-  return { date: terminal.date, ids: new Set(terminal.calls.map((parada) => parada.service_id).filter((id) => villalba.has(id))) }
+/** Paradas comerciales que distinguen un corredor en los horarios, también en sentido inverso. */
+function paradasDelCorredor(id: string): string[] | null {
+  if (id.startsWith('enlace-principe-pio-pinar:')) return ['madrid-principe-pio', 'villalba-de-guadarrama']
+  if (id === 'madrid-avila-valladolid:avila:bif-avila-salamanca') return ['avila', 'arevalo', 'medina-del-campo', 'penaranda-de-bracamonte']
+  if (id === 'madrid-avila-valladolid:bif-avila-salamanca:arevalo') return ['avila', 'arevalo', 'medina-del-campo']
+  if (id === 'avila-salamanca:salamanca:salamanca-la-alamedilla') return ['salamanca-la-alamedilla']
+  if (id === 'avila-salamanca:bif-acceso-salamanca:salamanca') return ['salamanca']
+  if (id.startsWith('avila-salamanca:')) return ['penaranda-de-bracamonte']
+  return null
+}
+
+/** La primera parada y, cuando hay varias, alguna de las siguientes deben figurar en el viaje. */
+async function trenesPorEstaciones(estaciones: string[], dia?: string) {
+  const [primera, ...resto] = await Promise.all(estaciones.map((id) => fetchNodeServices(id, dia)))
+  if (!primera || resto.some((e) => e.date !== primera.date)) throw new Error('Los horarios son de días distintos.')
+  const otras = new Set(resto.flatMap((e) => e.calls.map((c) => c.service_id)))
+  const ids = primera.calls.map((c) => c.service_id).filter((id) => resto.length === 0 || otras.has(id))
+  return { date: primera.date, ids: new Set(ids) }
 }
 
 /** Una estación por elegir. `etiqueta` la nombra para los lectores de pantalla cuando el rótulo a la vista no basta («y»). */
@@ -249,10 +258,9 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
     let alive = true
     const dia = referenceDate ?? undefined
     const ids = clavesTexto.split('|')
-    const porPozuelo = (id: string) => id.startsWith('enlace-principe-pio-pinar:')
-    const acceso = ids.some(porPozuelo) ? trenesPorPozuelo(dia) : null
     const porTramo = ids.map(async (id) => {
-      if (acceso && porPozuelo(id)) return acceso
+      const estaciones = paradasDelCorredor(id)
+      if (estaciones) return trenesPorEstaciones(estaciones, dia)
       const tramo = await fetchSegmentServices(id, dia)
       return { date: tramo.date, ids: new Set(tramo.passes.map((p) => p.service.id)) }
     })
@@ -467,7 +475,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             </p>
             {trenes && (
               <p className="suave">
-                Un <Termino id="tren-directo">tren directo</Termino> es el que para en las dos estaciones, en este sentido, el {formatDateLong(trenes.date)}. Se asigna a un recorrido cuando pasa por el primer y el último tramo de cada una de sus líneas.
+                Un <Termino id="tren-directo">tren directo</Termino> es el que para en las dos estaciones, en este sentido, el {formatDateLong(trenes.date)}. Se asigna a un recorrido por los tramos de sus líneas o por las paradas comerciales que distinguen el itinerario.
                 {recorridos.some((r) => r.baipases) ? ' El recorrido se mide por los baipases, y también cuentan en él los trenes que entran en las estaciones que rodean.' : ''}
               </p>
             )}

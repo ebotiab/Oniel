@@ -51,6 +51,7 @@ NODES = [
     "herradon-la-canada",
     "guimorcondo",
     "avila",
+    "bif-avila-salamanca",
     "arevalo",
     "medina-del-campo",
     "pozaldez",
@@ -118,7 +119,7 @@ def test_the_geometry_joins_two_relations_of_line_100(line: BuiltNetwork) -> Non
 
 def test_nodes_stations_and_dashed_branches(line: BuiltNetwork) -> None:
     assert [n.spec.id for n in line.nodes] == NODES
-    assert all(n.spec.kind == "estacion" for n in line.nodes)
+    assert [n.spec.id for n in line.nodes if n.spec.kind != "estacion"] == ["bif-avila-salamanca"]
     principal = {n.spec.id for n in line.nodes if n.spec.rank == "principal"}
     assert principal == {
         "madrid-chamartin",
@@ -134,7 +135,6 @@ def test_nodes_stations_and_dashed_branches(line: BuiltNetwork) -> None:
     assert line.node("medina-del-campo").spec.adif_code == MEDINA
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "conv-villalba-segovia": "villalba-de-guadarrama",
-        "conv-avila-salamanca": "avila",
         "conv-medina-salamanca": "medina-del-campo",
         "conv-valladolid-venta-de-banos": "valladolid-campo-grande",
     }
@@ -268,7 +268,7 @@ def test_salamanca_leaves_by_avila_or_by_medina(spec: NetworkSpec) -> None:
     """Salamanca sale por Ávila, como la mayoría de sus trenes; los que llegan por Medina del Campo
     la cambian con una regla."""
     sm = spec.stop_mappings
-    assert sm[SALAMANCA].exits == ["avila"] and sm[PENARANDA].exits == ["avila"]
+    assert sm[SALAMANCA].exits == sm[PENARANDA].exits == ["bif-avila-salamanca"]
     assert sm[EL_CARPIO].exits == ["medina-del-campo"]
     rules = {r.id: r for r in spec.route_overrides}
     for prev in (SALAMANCA, EL_CARPIO, "32001"):

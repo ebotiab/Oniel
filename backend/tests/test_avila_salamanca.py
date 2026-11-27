@@ -7,10 +7,13 @@ from datetime import date
 import pytest
 from conftest import DATA_DIR, MADRID_AVILA_VALLADOLID_SPEC
 
+from oniel.domain.station_closures import STATION_CLOSURES
 from oniel.gtfs.reader import parse_gtfs_time, read_feed
 from oniel.gtfs.trips import select_trips_for_spec
 from oniel.network.build import build_network, trace_osm_relation
 from oniel.network.spec import load_network_spec, load_sources
+from oniel.sim.closure import ClosureWindow, classify
+from oniel.sim.passes import LineNode, LineSegment, StopCall, resolve_passes
 
 PRINCIPE_PIO = "10000"
 AVILA = "10400"
@@ -67,6 +70,12 @@ def test_terminales_y_calendarios_comerciales(
     for spec in (principal, enlace):
         assert ids <= {t.trip_id for t in select_trips_for_spec(feed, spec)}
 
+    linea = load_network_spec(DATA_DIR / "curated/avila-salamanca.json")
+    seleccionados = select_trips_for_spec(feed, linea)
+    assert len(seleccionados) == (167 if edicion == "08" else 162)
+    assert {t.trip_id for t in seleccionados} == {
+        t.trip_id for t in feed.trips.values() if SALAMANCA in feed.stop_ids_of(t)
+    }
     assert {t.product for t in regionales} == {producto}
     assert Counter((t.stop_times[0].stop_id, t.stop_times[-1].stop_id) for t in regionales) == {
         (PRINCIPE_PIO, ALAMEDILLA): idas,
@@ -116,3 +125,60 @@ def test_terminales_y_calendarios_comerciales(
     salida = vuelta.stop_times[0]
     assert (salida.stop_id, salida.pickup_type, salida.drop_off_type) == (SALAMANCA, 0, 1)
     assert salida.departure_s == parse_gtfs_time("16:42:00")
+
+
+def test_secciones_y_cabeceras_de_la_122() -> None:
+    red = build_network(load_network_spec(DATA_DIR / "curated/avila-salamanca.json"), DATA_DIR)
+    assert not red.line.gaps_km
+    assert len(red.segments) == 15 and all(s.tracks == 1 for s in red.segments)
+    assert [n.spec.adif_code for n in red.nodes if n.spec.kind == "estacion"] == [
+        *INTERMEDIAS,
+        SALAMANCA,
+        ALAMEDILLA,
+    ]
+    for tramo in red.segments:
+        assert tramo.id in STATION_CLOSURES
+        if tramo.attributes["proteccion_tren"].value == "asfa":
+            assert tramo.attributes["electrification"].value == "Sin electrificar"
+        else:
+            assert tramo.attributes["proteccion_tren"].value == "sin_dato_publicado"
+            assert "electrification" not in tramo.attributes
+    assert red.node("salamanca").spec.reference_pk_km is None
+    assert red.node("salamanca-la-alamedilla").spec.reference_pk_km == 0.9
+
+
+def test_la_franja_de_minutos_con_viajes_ficticios() -> None:
+    """Dos sentidos del tronco y una continuación urbana, con horas y estaciones de prueba."""
+    estaciones = ["origen-ficticio", "central-ficticia", "apeadero-ficticio"]
+    nodos = {k: LineNode(k, float(i), 0, 0) for i, k in enumerate(estaciones)}
+    tramos = [LineSegment("tronco-ficticio", 0, 1), LineSegment("urbano-ficticio", 1, 2)]
+    viajes = {
+        "ida": [(0, 480), (1, 487), (2, 491)],
+        "vuelta": [(1, 607), (0, 614)],
+        "urbano": [(1, 720), (2, 724)],
+    }
+    pasos = {}
+    for viaje, secuencia in viajes.items():
+        paradas = [
+            StopCall(
+                i, estaciones[n], estaciones[n], minuto * 60, minuto * 60, node_id=estaciones[n]
+            )
+            for i, (n, minuto) in enumerate(secuencia)
+        ]
+        pasos[viaje], estado = resolve_passes(paradas, nodos, tramos)
+        assert estado == "completa"
+    for tramo, inicio, fin, esperado in [
+        ("tronco-ficticio", 480, 488, ["ida"]),
+        ("tronco-ficticio", 607, 615, ["vuelta"]),
+        ("urbano-ficticio", 720, 725, ["urbano"]),
+        ("tronco-ficticio", 720, 725, []),
+        ("urbano-ficticio", 724, 729, []),
+    ]:
+        franja = ClosureWindow(inicio * 60, fin * 60)
+        afectados = [
+            viaje
+            for viaje, recorridos in pasos.items()
+            for paso in recorridos
+            if paso.segment_id == tramo and classify(paso, franja).status == "afectado_publicado"
+        ]
+        assert afectados == esperado

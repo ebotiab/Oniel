@@ -226,6 +226,7 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             # el tercer carril de Girona a Vilamalla
             "barcelona-girona-portbou": 7,
             "enlace-principe-pio-pinar": 8,
+            "avila-salamanca": 15,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
         # la electrificación solo se declara donde no es la de la línea: ese último tramo de la
@@ -235,6 +236,7 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
         wired = {
             "valencia-castello-tarragona": 1,
             "madrid-plasencia": 3,
+            "avila-salamanca": 10,
             "leon-oviedo-gijon": 3,
             # la salida de Ourense, a 3 kV
             "lav-ourense-santiago": 1,

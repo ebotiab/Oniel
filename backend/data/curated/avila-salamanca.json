@@ -1,0 +1,623 @@
+{
+  "line": {
+    "id": "avila-salamanca",
+    "name": "Línea convencional Ávila – Salamanca",
+    "short_name": "122",
+    "sort_order": 52,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "tracks": 1,
+    "max_speed_kmh": 155,
+    "reference_length_km": 111.1,
+    "pk_restarts": [
+      {
+        "node": "salamanca",
+        "pk_km": 0
+      }
+    ],
+    "description": "La línea une Ávila con Salamanca por Peñaranda de Bracamonte. En Ávila los regionales de Madrid comparten la salida hacia el norte antes de tomar la vía de Cardeñosa.\n\nLos regionales de Príncipe Pío paran en Peñaranda y llegan a la estación principal de Salamanca. Algunos sirven también las otras ocho paradas intermedias. El horario distingue las paradas donde se puede subir al tren de las que solo admiten bajada.\n\nLa línea 122 termina en Salamanca. El esquema continúa por la 120 hasta La Alamedilla, la última parada de los regionales procedentes de Príncipe Pío. En sentido contrario salen de Salamanca principal. Los 111,1 km del catálogo de la RFIG corresponden a la 122.",
+    "geometry_source": {
+      "source_id": "osm-relation-6016263",
+      "parts": [
+        {
+          "source_id": "osm-relation-6016263",
+          "file": "raw/osm/relation_6016263_salamanca_2026-11-26.json",
+          "relation_id": 6016263,
+          "from": [
+            -4.6841444,
+            40.6610225
+          ],
+          "to": [
+            -5.6427688,
+            40.9739716
+          ]
+        },
+        {
+          "source_id": "osm-relation-1210118",
+          "file": "raw/osm/relation_1210118_salamanca_2026-11-26.json",
+          "relation_id": 1210118,
+          "from": [
+            -5.6427688,
+            40.9739716
+          ],
+          "to": [
+            -5.6437217,
+            40.973664
+          ]
+        },
+        {
+          "source_id": "osm-relation-6016262",
+          "file": "raw/osm/relation_6016262_salamanca_2026-11-26.json",
+          "relation_id": 6016262,
+          "from": [
+            -5.6437217,
+            40.973664
+          ],
+          "to": [
+            -5.6562359,
+            40.9667428
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "adif-esquema-salamanca"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-avila-salamanca",
+      "name": "Bifurcación de Ávila hacia Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.6841444,
+        "lat": 40.6610225
+      },
+      "rank": "secundario",
+      "shared": true
+    },
+    {
+      "id": "salida-avila-penaranda",
+      "name": "Salida de Ávila hacia Peñaranda",
+      "kind": "referencia",
+      "position": {
+        "lon": -4.6843484,
+        "lat": 40.6615553
+      },
+      "source_id": "osm-relation-6016263",
+      "rank": "secundario",
+      "description": "Empieza el tramo sin electrificar hacia Cardeñosa. En la cabecera se desconoce el límite operativo de cada vía."
+    },
+    {
+      "id": "cardenosa-de-avila",
+      "name": "Cardeñosa de Ávila",
+      "kind": "estacion",
+      "adif_code": "34002",
+      "position": {
+        "lon": -4.75075,
+        "lat": 40.73912
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 15.707
+    },
+    {
+      "id": "san-pedro-del-arroyo",
+      "name": "San Pedro del Arroyo",
+      "kind": "estacion",
+      "adif_code": "34005",
+      "position": {
+        "lon": -4.871407,
+        "lat": 40.803841
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 36.103
+    },
+    {
+      "id": "crespos",
+      "name": "Crespos",
+      "kind": "estacion",
+      "adif_code": "34007",
+      "position": {
+        "lon": -4.96803,
+        "lat": 40.87011
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 47.656
+    },
+    {
+      "id": "narros-del-castillo",
+      "name": "Narros del Castillo",
+      "kind": "estacion",
+      "adif_code": "34008",
+      "position": {
+        "lon": -5.052869,
+        "lat": 40.866641
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 55.67
+    },
+    {
+      "id": "penaranda-de-bracamonte",
+      "name": "Peñaranda de Bracamonte",
+      "kind": "estacion",
+      "adif_code": "34010",
+      "position": {
+        "lon": -5.206361,
+        "lat": 40.898138
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 70.792
+    },
+    {
+      "id": "villar-de-gallimazo",
+      "name": "Villar de Gallimazo",
+      "kind": "estacion",
+      "adif_code": "34011",
+      "position": {
+        "lon": -5.296183,
+        "lat": 40.951981
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 80.481
+    },
+    {
+      "id": "babilafuente",
+      "name": "Babilafuente",
+      "kind": "estacion",
+      "adif_code": "34012",
+      "position": {
+        "lon": -5.430593,
+        "lat": 40.972426
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 92.159
+    },
+    {
+      "id": "san-morales",
+      "name": "San Morales",
+      "kind": "estacion",
+      "adif_code": "34013",
+      "position": {
+        "lon": -5.492955,
+        "lat": 40.984243
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 97.648
+    },
+    {
+      "id": "aldealengua",
+      "name": "Aldealengua",
+      "kind": "estacion",
+      "adif_code": "34014",
+      "position": {
+        "lon": -5.552951,
+        "lat": 40.97989
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "reference_pk_km": 102.789
+    },
+    {
+      "id": "entrada-salamanca-por-avila",
+      "name": "Entrada a Salamanca desde Peñaranda",
+      "kind": "referencia",
+      "position": {
+        "lon": -5.6407399,
+        "lat": 40.9744869
+      },
+      "source_id": "osm-relation-6016263",
+      "rank": "secundario",
+      "description": "Las etiquetas de la vía cambian en la entrada a la estación. La situación de la catenaria por vía de estación no está confirmada."
+    },
+    {
+      "id": "desvio-acceso-salamanca",
+      "name": "Desvío de entrada a Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -5.6427688,
+        "lat": 40.9739716
+      },
+      "source_id": "osm-relation-1210118",
+      "rank": "secundario",
+      "description": "El itinerario cartográfico continúa por una de las vías de entrada de la estación."
+    },
+    {
+      "id": "bif-acceso-salamanca",
+      "name": "Acceso compartido a Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -5.6437217,
+        "lat": 40.973664
+      },
+      "source_id": "osm-relation-1210118",
+      "rank": "secundario",
+      "description": "Aquí se unen los itinerarios representados desde Peñaranda y Medina. El horario de Renfe identifica la estación y no asigna un andén."
+    },
+    {
+      "id": "salamanca",
+      "name": "Salamanca",
+      "kind": "estacion",
+      "adif_code": "30100",
+      "position": {
+        "lon": -5.6487091,
+        "lat": 40.9715338
+      },
+      "source_id": "osm-relation-6016262",
+      "description": "Estación principal de Salamanca. En el eje desde Medina figura en el PK 76,825. Los regionales de vuelta hacia Príncipe Pío salen de esta estación."
+    },
+    {
+      "id": "salamanca-la-alamedilla",
+      "name": "Salamanca-La Alamedilla",
+      "kind": "estacion",
+      "adif_code": "30110",
+      "position": {
+        "lon": -5.6562359,
+        "lat": 40.9667428
+      },
+      "source_id": "osm-relation-6016262",
+      "reference_pk_km": 0.9,
+      "description": "Apeadero urbano de Salamanca. Los regionales de Príncipe Pío continúan hasta aquí después de parar en la estación principal."
+    }
+  ],
+  "connections": [],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "bif-avila-salamanca",
+      "to_node": "desvio-acceso-salamanca",
+      "value": 1,
+      "source_id": "boe-catalogo-rfig-122",
+      "checked_on": "2026-11-26",
+      "note": "Número de vías generales de la 122."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "desvio-acceso-salamanca",
+      "to_node": "bif-acceso-salamanca",
+      "value": 1,
+      "source_id": "osm-relation-1210118",
+      "checked_on": "2026-11-26",
+      "note": "Una vía en la diagonal elegida."
+    },
+    {
+      "attribute": "tracks",
+      "from_node": "bif-acceso-salamanca",
+      "to_node": "salamanca-la-alamedilla",
+      "value": 1,
+      "source_id": "osm-relation-6016262",
+      "checked_on": "2026-11-26",
+      "note": "Eje seleccionado de la 120 hasta el apeadero. Las vías de andén quedan agrupadas."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "bif-avila-salamanca",
+      "to_node": "desvio-acceso-salamanca",
+      "value": "iberico",
+      "source_id": "boe-catalogo-rfig-122",
+      "checked_on": "2026-11-26",
+      "note": "Ancho convencional de la 122."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "desvio-acceso-salamanca",
+      "to_node": "salamanca-la-alamedilla",
+      "value": "iberico",
+      "source_id": "osm-relation-1210118",
+      "checked_on": "2026-11-26",
+      "note": "Ancho de 1.668 mm en las vías seleccionadas."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "salida-avila-penaranda",
+      "to_node": "entrada-salamanca-por-avila",
+      "value": "Sin electrificar",
+      "source_id": "boe-catalogo-rfig-122",
+      "checked_on": "2026-11-26",
+      "note": "Tronco sin electrificar, contrastado con las etiquetas de las vías de OSM. Falta confirmar la puesta en tensión de las vías de ambas estaciones."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-avila-salamanca",
+      "to_node": "salida-avila-penaranda",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no distingue las vías de la cabecera de Ávila."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "salida-avila-penaranda",
+      "to_node": "entrada-salamanca-por-avila",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4, tronco entre Ávila y Salamanca."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "entrada-salamanca-por-avila",
+      "to_node": "salamanca-la-alamedilla",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no resuelve este itinerario dentro de la cabecera salmantina."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-avila-salamanca",
+      "to_node": "salida-avila-penaranda",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no distingue las vías de la cabecera de Ávila."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "salida-avila-penaranda",
+      "to_node": "entrada-salamanca-por-avila",
+      "value": "blau",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4, tronco entre Ávila y Salamanca."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "entrada-salamanca-por-avila",
+      "to_node": "salamanca-la-alamedilla",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no resuelve este itinerario dentro de la cabecera salmantina."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-avila-salamanca",
+      "to_node": "salida-avila-penaranda",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no distingue las vías de la cabecera de Ávila."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "salida-avila-penaranda",
+      "to_node": "entrada-salamanca-por-avila",
+      "value": "ctc",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "Mapa 4, tronco entre Ávila y Salamanca."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "entrada-salamanca-por-avila",
+      "to_node": "salamanca-la-alamedilla",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-26",
+      "note": "El mapa 4 no resuelve este itinerario dentro de la cabecera salmantina."
+    }
+  ],
+  "stop_mappings": {
+    "34002": {
+      "node": "cardenosa-de-avila"
+    },
+    "34005": {
+      "node": "san-pedro-del-arroyo"
+    },
+    "34007": {
+      "node": "crespos"
+    },
+    "34008": {
+      "node": "narros-del-castillo"
+    },
+    "34010": {
+      "node": "penaranda-de-bracamonte"
+    },
+    "34011": {
+      "node": "villar-de-gallimazo"
+    },
+    "34012": {
+      "node": "babilafuente"
+    },
+    "34013": {
+      "node": "san-morales"
+    },
+    "34014": {
+      "node": "aldealengua"
+    },
+    "30100": {
+      "node": "salamanca"
+    },
+    "30110": {
+      "node": "salamanca-la-alamedilla"
+    },
+    "10200": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10203": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10204": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10205": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10206": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10207": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10208": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10300": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10400": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "bif-avila-salamanca"
+      }
+    },
+    "10000": {
+      "exits": [
+        "bif-avila-salamanca"
+      ],
+      "via": [
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "bif-avila-salamanca"
+        },
+        {
+          "line": "enlace-principe-pio-pinar",
+          "node": "pinar-de-las-rozas"
+        }
+      ]
+    },
+    "08240": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ]
+    },
+    "10500": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ]
+    },
+    "32004": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ]
+    },
+    "32008": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ]
+    },
+    "32009": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "required_stop_ids": [
+      "34010"
+    ],
+    "min_node_stops": 2,
+    "description": "Regionales de la línea 122 con parada en Peñaranda. Los trenes de Medina comparten el acceso final según las paradas de su horario."
+  },
+  "route_overrides": [
+    {
+      "id": "acceso-desde-medina-08240",
+      "description": "El horario enlaza la estación principal con el corredor de Medina. Se cuentan la entrada compartida y la continuación al apeadero cuando figura en el viaje.",
+      "consecutive_stop_ids": [
+        "08240",
+        "30100"
+      ],
+      "from_stop_id": "08240"
+    },
+    {
+      "id": "acceso-desde-medina-10500",
+      "description": "El horario enlaza la estación principal con el corredor de Medina. Se cuentan la entrada compartida y la continuación al apeadero cuando figura en el viaje.",
+      "consecutive_stop_ids": [
+        "10500",
+        "30100"
+      ],
+      "from_stop_id": "10500"
+    },
+    {
+      "id": "acceso-desde-medina-32004",
+      "description": "El horario enlaza la estación principal con el corredor de Medina. Se cuentan la entrada compartida y la continuación al apeadero cuando figura en el viaje.",
+      "consecutive_stop_ids": [
+        "32004",
+        "30100"
+      ],
+      "from_stop_id": "32004"
+    },
+    {
+      "id": "acceso-desde-medina-32008",
+      "description": "El horario enlaza la estación principal con el corredor de Medina. Se cuentan la entrada compartida y la continuación al apeadero cuando figura en el viaje.",
+      "consecutive_stop_ids": [
+        "32008",
+        "30100"
+      ],
+      "from_stop_id": "32008"
+    },
+    {
+      "id": "acceso-desde-medina-32009",
+      "description": "El horario enlaza la estación principal con el corredor de Medina. Se cuentan la entrada compartida y la continuación al apeadero cuando figura en el viaje.",
+      "consecutive_stop_ids": [
+        "32009",
+        "30100"
+      ],
+      "from_stop_id": "32009"
+    }
+  ]
+}

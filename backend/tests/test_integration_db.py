@@ -549,6 +549,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 3
         + 2
         + 1  # el acceso de Príncipe Pío
+        + 1  # la línea de Ávila a Salamanca
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -598,6 +599,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 20  # Vitoria–Irún
         + 5  # ampliación a La Encina y enlace a Caudete
         + 8  # el acceso de Príncipe Pío
+        + 16  # quince tramos propios y la división del acceso en Ávila
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -624,7 +626,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 1486 + 1282  # la de Barcelona a Portbou
     renfe_passes += 209 + 394  # la de Tarragona a Barcelona por la costa
     renfe_passes += 2028 + 4255  # la de València a Alicante por Xàtiva
-    renfe_passes += 2463 + 2915  # la de Madrid a Valladolid por Ávila
+    renfe_passes += 2375 + 3164  # la de Madrid a Valladolid, con el acceso compartido en Ávila
     renfe_passes += 372 + 993  # la de Palencia a Santander
     renfe_passes += 471 + 1515  # la de Zaragoza a Logroño
     renfe_passes += 192 + 448  # la de Castejón a Pamplona
@@ -634,6 +636,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 6 + 128 + (555 + 423)
     renfe_passes += 1427 + 342  # Vitoria–Irún
     renfe_passes += 472 + 78  # ampliación y enlace
+    renfe_passes += 172 + 996  # interior de la 122 y acceso salmantino
     renfe_passes += 153 * 8  # los mismos 153 regionales en los ocho tramos del nuevo acceso
     assert (
         c["service_segment_passes"] == renfe_passes + 306 + 128 + 420 + 35 + 268 + 86 + 51 + 40 + 5
@@ -827,6 +830,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 20  # Vitoria–Irún
         + 5  # ampliación a La Encina y enlace a Caudete
         + 8  # el acceso de Príncipe Pío
+        + 16  # quince tramos propios y la división del acceso en Ávila
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -890,6 +894,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "enlace-soto-de-cerrato",
         "enlace-aljucen-la-garrovilla",
         "enlace-la-encina-caudete",
+        "avila-salamanca",
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -972,6 +977,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "vitoria-irun",
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
+        "avila-salamanca",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -1079,6 +1085,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 20  # Vitoria–Irún
         + 5  # ampliación a La Encina y enlace a Caudete
         + 8  # el acceso de Príncipe Pío
+        + 16  # quince tramos propios y la división del acceso en Ávila
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1144,7 +1151,9 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         if k.startswith(("vitoria-irun:", "enlace-principe-pio-pinar:"))
     }
     assert len(own_wire) == 20 + 8 and set(own_wire.values()) == {"3 kV CC"}
-    assert {k: v for k, v in wire.items() if k not in own_wire} == {
+    tronco = {k: v for k, v in wire.items() if k.startswith("avila-salamanca:")}
+    assert len(tronco) == 10 and set(tronco.values()) == {"Sin electrificar"}
+    assert {k: v for k, v in wire.items() if k not in own_wire and k not in tronco} == {
         f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona": "25 kV 50 Hz",
         f"{MADRID_PLASENCIA}:bif-planetario:leganes": "3 kV CC",
         f"{MADRID_PLASENCIA}:leganes:fuenlabrada": "3 kV CC",
@@ -1163,7 +1172,13 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     values = {r["segment_id"]: r["value"] for r in rows if r["attribute"] == "gauge"}
     access = {k: v for k, v in values.items() if k.startswith("enlace-principe-pio-pinar:")}
     assert len(access) == 8 and set(access.values()) == {"iberico"}
-    assert {s for s in gauge if not s.startswith(MEDITERRANEO) and s not in access} == {
+    salamanca = {k: v for k, v in values.items() if k.startswith("avila-salamanca:")}
+    assert len(salamanca) == 15 and set(salamanca.values()) == {"iberico"}
+    assert {
+        s
+        for s in gauge
+        if not s.startswith(MEDITERRANEO) and s not in access and s not in salamanca
+    } == {
         f"{LAV_GRANADA}:bif-riofrio:loja",
         f"{LAV_GRANADA}:loja:bif-tocon",
         f"{LAV_GRANADA}:bif-la-chana:granada",
@@ -1672,6 +1687,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 19  # Vitoria–Irún reutiliza Vitoria
             + 2  # Almansa y La Encina
             + 6  # de Príncipe Pío a Las Rozas, Pinar ya estaba en la red
+            + 11  # nueve paradas interiores, Salamanca y La Alamedilla
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1868,7 +1884,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional Castejón – Pamplona" in cov["notice"]
     assert "la línea convencional Miranda de Ebro – Orduña – Bilbao" in cov["notice"]
     assert "la línea convencional Sevilla – Huelva" in cov["notice"]
-    assert "y la línea convencional Vitoria – Altsasu – San Sebastián – Irún" in cov["notice"]
+    assert "la línea convencional Vitoria – Altsasu – San Sebastián – Irún" in cov["notice"]
+    assert "y la línea convencional Ávila – Salamanca" in cov["notice"]
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
@@ -1923,6 +1940,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "vitoria-irun",
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
+        "avila-salamanca",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -2001,6 +2019,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "vitoria-irun": ["renfe"],
         "enlace-la-encina-caudete": ["renfe"],
         "enlace-principe-pio-pinar": ["renfe"],
+        "avila-salamanca": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
@@ -2878,58 +2897,14 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "vitoria-irun",
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
+        "avila-salamanca",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
     assert "líneas que Oniel tiene cargadas" in out["scope_note"]
     by_id = {s["segment_id"]: s for s in out["segments"]}
-    # los 8 son los tramos de la línea de Monforte del Cid a Murcia; los 35, los de la de
-    # Valencia a Camp de Tarragona; los 5, la de Madrid a
-    # Valladolid; los 13, 14, 2 y 4 del final, los de las cuatro líneas de
-    # Extremadura; los 7 siguientes, la de Burgos a Vitoria; los 3 y 15 de después, las de Galicia,
-    # los 16 siguientes, la de Sevilla a Cádiz; los 7, la de Barcelona a Figueres, y el 1 y los 2 del
-    # final, los ramales de Toledo y de Huesca, los 26 de la de Barcelona a Portbou y los 8 de la de
-    # Tarragona a Barcelona
-    assert (
-        len(by_id)
-        == (
-            54
-            + 8
-            + 8
-            + 20
-            + 2
-            + 14
-            + 2
-            + 9
-            + 8
-            + 35
-            + 5
-            + 1
-            + 13
-            + 14
-            + 2
-            + 4
-            + 8
-            + 13
-            + 4
-            + 11
-            + 7
-        )
-        + (3 + 15)
-        + 16
-        + 7
-        + (1 + 2)
-        + 26
-        + 8
-        + 20
-        + 27
-        + 21
-        + (18 + 5)  # las de Zaragoza a Logroño y de Castejón a Pamplona
-        + 3  # la de Miranda de Ebro a Bilbao
-        + 11  # la de Sevilla a Huelva
-        + (1 + 1 + 3)  # los enlaces de Soto de Cerrato y de Aljucén y el túnel de Madrid
-        + 20  # Vitoria–Irún
-    )
+    red = (await client.get("/api/network")).json()
+    assert set(by_id) == {s["id"] for s in red["segments"]} - set(STATION_CLOSURES)
     assert {k: s["trains"] for k, s in by_id.items() if s["trains"]} == {
         k: n for k, n in counts["counts"].items() if k not in STATION_CLOSURES
     }
@@ -2977,8 +2952,12 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
     from oniel.export.snapshot import export_snapshot
     from oniel.repo import network_repo, services_repo
 
+    retirada = tmp_path / "segments" / "tramo-dividido.json"
+    retirada.parent.mkdir()
+    retirada.write_text("{}")
     async with connect(dsn) as conn:
         result = await export_snapshot(conn, tmp_path)
+        assert not retirada.exists()
         whole = await network_repo.fetch_network(conn)
         day = result["date"]
         counts = {
@@ -3046,6 +3025,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "vitoria-irun",
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
+        "avila-salamanca",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

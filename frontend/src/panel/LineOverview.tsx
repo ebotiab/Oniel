@@ -135,6 +135,11 @@ export function LineOverview({ notice, network, coverage, detail, lineId, onShow
           ),
       )}
       {leyenda}
+      {line.id === 'avila-salamanca' && (
+        <p className="texto">
+          Desde la <button type="button" className="enlace" onClick={() => onSelect({ type: 'nodo', id: 'avila' })}>estación de Ávila</button> hasta la bifurcación, el recorrido comparte la línea de Valladolid.
+        </p>
+      )}
       <StripDiagram
         network={network}
         lineId={line.id}
