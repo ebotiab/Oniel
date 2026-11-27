@@ -5,7 +5,7 @@ import type { MouseEvent } from 'react'
 
 /** Lleva el visor a una ruta suya, con una entrada nueva en el historial; App la lee al recibir `popstate`. */
 export function navegar(path: string): void {
-  if (path !== window.location.pathname) window.history.pushState(null, '', path)
+  if (path !== window.location.pathname + window.location.search) window.history.pushState(null, '', path)
   window.dispatchEvent(new PopStateEvent('popstate'))
 }
 

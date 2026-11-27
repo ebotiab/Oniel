@@ -268,10 +268,13 @@ class ViaLeg:
         return abs(self.join.km - self.end.km)
 
     @property
-    def line_name(self) -> str:
-        """Nombre de la línea para ir en mitad de una frase («línea convencional…»)."""
+    def line_with_article(self) -> str:
+        """Nombre con su artículo para una explicación de paso («el enlace», «la línea»)."""
         name = self.line.spec.line.name
-        return f"{name[0].lower()}{name[1:]}"
+        article = (
+            "el" if name.startswith(("Enlace", "Túnel", "Baipás", "Ramal", "Acceso")) else "la"
+        )
+        return f"{article} {name[0].lower()}{name[1:]}"
 
 
 def via_legs(
@@ -321,7 +324,7 @@ def _via_other_lines(
     if isinstance(legs, str) or not legs:
         return {}, None  # el camino no se puede seguir en esta ejecución: línea recta
     first, last = legs[0], legs[-1]
-    note = f"está en la {last.line_name}"
+    note = f"está en {last.line_with_article}"
     by_lines = sum(leg.km for leg in legs)
     if by_lines == 0:
         return {}, note
@@ -339,7 +342,7 @@ def _via_other_lines(
             parts.append(f"{first.km:.0f} km por esa línea hasta {stop_name}")
         else:
             parts.extend(
-                f"{leg.km:.0f} km por la {leg.line_name} hasta"
+                f"{leg.km:.0f} km por {leg.line_with_article} hasta"
                 f" {stop_name if leg is last else leg.end.label}"
                 for leg in legs
             )

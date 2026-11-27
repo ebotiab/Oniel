@@ -352,6 +352,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "avila-salamanca",
         "medina-del-campo-salamanca",
         "enlace-medina-av-salamanca",
+        "enlace-el-chaparral-arroyo-de-la-herrera",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -725,10 +726,9 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     }
     # entre Monfragüe y Cáceres hay dos caminos, la línea nueva y el trazado antiguo, y cada uno
     # es el otro camino del otro mientras no pase del doble del recorrido del tren. En el tramo
-    # largo de la línea nueva, de Arroyo de la Herrera a El Palmeral, lo tienen 10 de sus 20
-    # trenes: los otros 10 lo tenían girando en una bifurcación, y con la regla de giro ya no
+    # largo de la línea nueva ahora pueden rodear el cierre también por la 534.
     new_line = _of(exported.segments, f"{LAV_BADAJOZ}:arroyo-de-la-herrera:bif-el-palmeral")
-    assert (new_line.trains, new_line.without_alternative) == (20, 10)
+    assert (new_line.trains, new_line.without_alternative) == (20, 0)
     # en los tramos cortos junto a las bifurcaciones solo lo tienen los trenes cuyo recorrido
     # sigue más allá: 8 de los 20 de Monfragüe a El Chaparral (los de Madrid que no entran en
     # Plasencia), 2 de los 12 de San Esteban a Arroyo de la Herrera y 10 de los 20 de El Palmeral
@@ -736,6 +736,7 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # seguido de Arroyo de la Herrera a Mérida (133,5 km) desde que no cuentan además en la curva
     # de Granja-Las Encinas a Garrovilla-Las Vegas
     in_part = {
+        "enlace-el-chaparral-arroyo-de-la-herrera:bif-el-chaparral:arroyo-de-la-herrera": (8, 4),
         f"{MADRID_PLASENCIA}:monfrague:bif-el-chaparral": (20, 12),
         f"{LAV_BADAJOZ}:bif-san-esteban:arroyo-de-la-herrera": (12, 10),
         f"{LAV_BADAJOZ}:bif-el-palmeral:bif-casa-de-la-torre": (20, 10),

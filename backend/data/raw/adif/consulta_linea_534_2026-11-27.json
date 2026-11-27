@@ -1,0 +1,32 @@
+{
+  "consulta": "2026-11-27",
+  "declaracion_2023": {
+    "url": "https://www.adifaltavelocidad.es/documents/34745/12551307/20231011_01_DR_AV_Libro_2023.pdf/94f6612a-d3b3-cc86-c607-e827e2b43986?t=1697025224294",
+    "apartado": "Desarrollo de la línea de alta velocidad de Extremadura",
+    "puesta_en_servicio": "2022-07-19",
+    "linea": 534,
+    "longitud_km": 4.832,
+    "ancho": "ibérico",
+    "vias": 1,
+    "proteccion": "ASFA",
+    "bloqueo": "BAU",
+    "mando": "CTC",
+    "conexion": "026 hacia y desde Madrid en Arroyo sin pasar por Plasencia"
+  },
+  "declaracion_2026": {
+    "url": "https://www.adifaltavelocidad.es/documents/34745/51134530/20260227_01%2BDR%2BAdif_AV%2B2026_Libro.pdf/60f60247-935c-6d14-3ac4-8886c5e74dd6?t=1772454129932",
+    "edicion": "2026-02-27",
+    "anexo": "Longitud de líneas",
+    "km_534": 4.8,
+    "mapas": "Mapas 3 y 4 (páginas 7 y 8 del PDF archivado). No delimitan el cambio de catenaria ni individualizan la velocidad de la aguja."
+  },
+  "aviso_renfe": {
+    "url": "https://grupo.renfe.com/es/es/sala-de-prensa/avisos/2026/julio/renfe-restablece-servicio-monfrague-plasencia",
+    "publicacion": "2026-07-27",
+    "restablecimiento": "2026-08-10"
+  },
+  "avisos_extremadura": {
+    "url": "https://www.adif.es/viajeros/avisos/-/categories/342252",
+    "resultado": "Sin incidencia relevante anunciada para Extremadura al consultar."
+  }
+}

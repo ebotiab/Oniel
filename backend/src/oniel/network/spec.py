@@ -318,7 +318,7 @@ class LineSpec(BaseModel):
     #: Alicante). El visor la lista bajo aquella y el comparador la cuenta como parte suya, pero,
     #: a diferencia de un baipás, elige sus trenes con su propio filtro y sus asignaciones.
     link_of: str | None = None
-    #: Para un acceso terminal, nodo contiguo de la principal hacia el que se puede continuar.
+    #: Nodo contiguo de la principal hacia el que se incorpora el enlace, si se conoce.
     link_towards: str | None = None
 
     @field_validator("electrification")

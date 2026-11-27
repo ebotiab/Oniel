@@ -28,6 +28,7 @@ BCN_SPEC = DATA_DIR / "curated" / "lav-madrid-barcelona.json"
 LAV_VALENCIA_SPEC = DATA_DIR / "curated" / "lav-madrid-valencia.json"
 MADRID_PLASENCIA_SPEC = DATA_DIR / "curated" / "madrid-plasencia.json"
 LAV_BADAJOZ_SPEC = DATA_DIR / "curated" / "lav-plasencia-badajoz.json"
+CHAPARRAL_SPEC = DATA_DIR / "curated" / "enlace-el-chaparral-arroyo-de-la-herrera.json"
 RAMAL_MERIDA_SPEC = DATA_DIR / "curated" / "ramal-merida.json"
 MONFRAGUE_CACERES_SPEC = DATA_DIR / "curated" / "monfrague-caceres.json"
 LAV_LEON_SPEC = DATA_DIR / "curated" / "lav-valladolid-leon.json"
@@ -92,6 +93,7 @@ SPECS = [
     LINK_MONFORTE_SPEC,
     MADRID_PLASENCIA_SPEC,
     LAV_BADAJOZ_SPEC,
+    CHAPARRAL_SPEC,
     RAMAL_MERIDA_SPEC,
     MONFRAGUE_CACERES_SPEC,
     LAV_LEON_SPEC,

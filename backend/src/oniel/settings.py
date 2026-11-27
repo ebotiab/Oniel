@@ -50,6 +50,7 @@ class Settings(BaseSettings):
         "eje-atlantico",
         "madrid-plasencia",
         "lav-plasencia-badajoz",
+        "enlace-el-chaparral-arroyo-de-la-herrera",
         "ramal-merida",
         "monfrague-caceres",
         "lav-valladolid-leon",

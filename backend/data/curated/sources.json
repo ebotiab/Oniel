@@ -1323,14 +1323,14 @@
     },
     {
       "id": "osm-relation-6759731",
-      "name": "Recorrido del Alvia de Madrid a Badajoz (relación OSM 6759731, route=train), usado para el paso por Cáceres y para el trecho de la bifurcación San Nicolás a Badajoz",
+      "name": "Recorrido Madrid – Badajoz en OpenStreetMap (relación 6759731)",
       "publisher": "Colaboradores de OpenStreetMap",
       "url": "https://www.openstreetmap.org/relation/6759731",
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-13",
-      "coverage": "De la bifurcación Casa de la Torre a la aguja del km 82,2 por la estación de Cáceres (10,1 km) y del final de la vía nueva a Badajoz por la bifurcación San Nicolás (16,1 km), en la línea Plasencia – Badajoz; velocidad máxima. Desde el 23 de noviembre de 2026, también los 7,1 km del enlace de Aljucén a La Garrovilla: las vías de la línea 520 de Aljucén a la bifurcación La Isla, la vía sin ref que sigue hasta la vía nueva y los metros de esta hasta el apeadero de Garrovilla-Las Vegas, con su velocidad máxima, su electrificación y la etiqueta railway:asfa.",
-      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es una relación de servicio, no de infraestructura, y tiene huecos (empieza cerca de Talavera de la Reina y no enlaza Monfragüe con el resto), pero trae seguidas las vías que les faltan a las relaciones de infraestructura: de la bifurcación Casa de la Torre a la estación de Cáceres y a la aguja del km 82,2, y de la bifurcación San Nicolás a Badajoz, por la vía de la línea 520.",
+      "coverage": "De la bifurcación Casa de la Torre a la aguja del km 82,2 por la estación de Cáceres (10,1 km) y del final de la vía nueva a Badajoz por la bifurcación San Nicolás (16,1 km), en la línea Plasencia – Badajoz; velocidad máxima. Desde el 23 de noviembre de 2026, también los 7,1 km del enlace de Aljucén a La Garrovilla: las vías de la línea 520 de Aljucén a la bifurcación La Isla, la vía sin ref que sigue hasta la vía nueva y los metros de esta hasta el apeadero de Garrovilla-Las Vegas, con su velocidad máxima, su electrificación y la etiqueta railway:asfa. También las cuatro vías de la 534 y la vía de aguja 1046552626 hasta el vértice de la 026 (4,981 km).",
+      "notes": "Descargado el 13 de noviembre de 2026 por la API Overpass, desde el servidor maps.mail.ru/osm/tools/overpass (overpass-api.de respondía 429 y 406 ese día). Es una relación de servicio, no de infraestructura, y tiene huecos (empieza cerca de Talavera de la Reina y no enlaza Monfragüe con el resto), pero trae seguidas las vías que les faltan a las relaciones de infraestructura: de la bifurcación Casa de la Torre a la estación de Cáceres y a la aguja del km 82,2, y de la bifurcación San Nicolás a Badajoz, por la vía de la línea 520. El nombre «Alvia 00194» identifica la relación de OSM. El horario vigente el 20/11/2026 lleva ese tren a Plasencia.",
       "file": "raw/osm/relation_6759731_alvia_madrid_badajoz_2026-11-13.json"
     },
     {
@@ -2884,6 +2884,29 @@
       "coverage": "Puesta en servicio de la 188 con BAU, ASFA y CTC.",
       "notes": "Páginas 66–67. El informe acredita la configuración inicial. El mapa de 2026 no individualiza todos los límites de cabecera.",
       "file": "raw/adif/medina_salamanca_consulta_2026-11-27.json"
+    },
+    {
+      "id": "ideadif-tramo-534",
+      "name": "IDEAdif, eje ferroviario y atributos de la línea 534 (2026/01)",
+      "publisher": "Administrador de infraestructuras ferroviarias",
+      "url": "https://datos.gob.es/es/catalogo/e0dat0002-red-de-transporte-ferroviario-de-adif1",
+      "license": "Uso sin condiciones. © Administrador de infraestructuras ferroviarias.",
+      "license_url": "https://www.idee.es/csw-codsi-idee/srv/api/records/62c487b1-6816-4594-a800-218abe896994/formatters/xml",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Empalmes de la 534 con la 530, 536 y 026, ancho, vías, electrificación inventariada y velocidad de diseño.",
+      "notes": "Extracto de los originales GML del 7 y 19 de agosto, identificados por su SHA-256. El eje cartográfico y la velocidad de diseño no identifican la vía utilizada por una circulación.",
+      "file": "raw/adif/ideadif_534_2026-11-27.json"
+    },
+    {
+      "id": "adif-av-puesta-servicio-534",
+      "name": "Adif AV, puesta en servicio y características de El Chaparral – Arroyo de la Herrera",
+      "publisher": "Adif Alta Velocidad",
+      "url": "https://www.adifaltavelocidad.es/documents/34745/12551307/20231011_01_DR_AV_Libro_2023.pdf/94f6612a-d3b3-cc86-c607-e827e2b43986?t=1697025224294",
+      "license": "Consulta pública. © Adif Alta Velocidad.",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Apertura, conexión con la 026, ancho, ASFA, BAU y CTC de la 534. Longitud de inventario contrastada con la Declaración sobre la Red 2026.",
+      "notes": "El mapa esquemático no individualiza la velocidad ni el límite de la catenaria en la aguja. La consulta incluye el aviso de Renfe sobre Plasencia y la revisión de los avisos de Adif.",
+      "file": "raw/adif/consulta_linea_534_2026-11-27.json"
     }
   ]
 }

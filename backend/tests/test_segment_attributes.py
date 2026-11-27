@@ -322,6 +322,8 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     and segment.from_node.spec.kind == "cambiador"
                 ):
                     source = "fomento-puesta-servicio-188"
+                if net.spec.line.id == "enlace-el-chaparral-arroyo-de-la-herrera":
+                    source = "adif-av-puesta-servicio-534"
                 assert value.source_id == source
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),

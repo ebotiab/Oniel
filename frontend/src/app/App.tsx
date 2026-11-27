@@ -93,16 +93,16 @@ export default function App() {
   // Trazo que la leyenda pide encuadrar en el mapa al fijarlo.
   const [frame, setFrame] = useState<{ trazo: Trazo; n: number } | null>(null)
   const pinTrazo = useCallback((trazo: Trazo) => setFrame((f) => ({ trazo, n: (f?.n ?? 0) + 1 })), [])
-  const [route, setRoute] = useState(() => parseRoute(window.location.pathname))
+  const [route, setRoute] = useState(() => parseRoute(window.location.pathname, window.location.search))
   const [hoverId, setHoverId] = useState<string | null>(null)
   // Las líneas que señala la lista de la vista de la red: el mapa las resalta mientras dura.
   const [lineasResaltadas, setLineasResaltadas] = useState<string[] | null>(null)
   const [result, setResult] = useState<ClosureResult | null>(null)
-  const [showCoverage, setShowCoverage] = useState(() => Boolean(parseRoute(window.location.pathname).cobertura))
+  const [showCoverage, setShowCoverage] = useState(() => Boolean(route.cobertura))
   const guidePosition = useRef<GuidePosition>({ scrollTop: 0, linkIndex: null, open: [] })
-  const [sheetOpen, setSheetOpen] = useState(() => Boolean(parseRoute(window.location.pathname).recorridos ?? parseRoute(window.location.pathname).glosario ?? parseRoute(window.location.pathname).guia ?? parseRoute(window.location.pathname).sinOtroCamino))
+  const [sheetOpen, setSheetOpen] = useState(() => Boolean(route.recorridos ?? route.glosario ?? route.guia ?? route.sinOtroCamino))
   const [elegidoKey, setElegidoKey] = useState<string | null>(null)
-  const [activeLineId, setActiveLineId] = useState<string | null>(() => parseRoute(window.location.pathname).linea ?? null)
+  const [activeLineId, setActiveLineId] = useState<string | null>(() => route.linea ?? null)
   const mobile = useMedia('(max-width: 760px)')
   const status = useApiStatus()
 
@@ -170,7 +170,7 @@ export default function App() {
   // (`navegar`), llegan como `popstate`.
   useEffect(() => {
     const onRoute = () => {
-      const r = parseRoute(window.location.pathname)
+      const r = parseRoute(window.location.pathname, window.location.search)
       setRoute(r)
       setShowCoverage(Boolean(r.cobertura))
       if (r.recorridos || r.glosario || r.guia || r.sinOtroCamino) setSheetOpen(true)
@@ -192,9 +192,9 @@ export default function App() {
     }
   }, [])
   // La línea a la vista y el panel de cobertura también van en la URL: toda vista se puede enlazar.
-  const ruta = useMemo(() => routePath({ ...route, linea: activeLineId, cobertura: showCoverage }), [route, activeLineId, showCoverage])
+  const ruta = useMemo(() => routePath({ ...route, linea: activeLineId, cobertura: showCoverage }, window.location.search), [route, activeLineId, showCoverage])
   useEffect(() => {
-    if (window.location.pathname !== ruta) window.history.replaceState(null, '', ruta + window.location.search)
+    if (window.location.pathname + window.location.search !== ruta) window.history.replaceState(null, '', ruta)
   }, [ruta])
   // El día y la franja de la simulación van en la dirección, para que su enlace reproduzca la vista.
   const setFranja = useCallback((franja: Franja) => {
@@ -323,7 +323,7 @@ export default function App() {
   }, [route.recorridos, graph])
   const comparacion = useMemo(() => {
     if (!comparador?.from || !comparador.to || comparador.from === comparador.to || !graph || !network) return null
-    return compararRecorridos(graph, network, comparador.from, comparador.to, interrupted, comparador.escenario)
+    return compararRecorridos(graph, network, comparador.from, comparador.to, interrupted, comparador.escenario, comparador.maxRatio)
   }, [comparador, graph, network, interrupted])
   const elegido = comparacion ? ([...comparacion.recorridos, ...comparacion.supuestos].find((r) => r.key === elegidoKey) ?? comparacion.recorridos[0] ?? null) : null
   // «Tramos sin otro camino» resalta en el mapa con el mismo recurso que el comparador: atenúa el resto de la

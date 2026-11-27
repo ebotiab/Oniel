@@ -31,6 +31,7 @@ export interface Route {
 export interface Comparador {
   from: string | null
   to: string | null
+  maxRatio?: number
   escenario?: string
 }
 
@@ -44,7 +45,7 @@ export interface Comparador {
  *
  * `parseRoute` interpreta la ruta y `routePath` la construye: ninguna vista arma direcciones a mano.
  */
-export function parseRoute(pathname: string): Route {
+export function parseRoute(pathname: string, search = ''): Route {
   const parts = pathname.split('/').filter(Boolean).map(decode)
   const [kind, id, action] = parts
   if ((kind === 'tramo' || kind === 'nodo') && id) {
@@ -62,7 +63,9 @@ export function parseRoute(pathname: string): Route {
   if (kind === 'recorridos') {
     const end = (value: string | undefined) => (value && value !== '-' ? value : null)
     const escenario = parts[3]
-    return { selection: null, simulacion: false, recorridos: { from: end(id), to: end(action), ...(escenario ? { escenario } : {}) } }
+    const maxRatio = Number(new URLSearchParams(search).get('max_ratio'))
+    const limite = maxRatio >= 1 && maxRatio <= 100 ? { maxRatio } : {}
+    return { selection: null, simulacion: false, recorridos: { from: end(id), to: end(action), ...limite, ...(escenario ? { escenario } : {}) } }
   }
   if (kind === 'escenario' && id) {
     // Un escenario que cierra un tramo abre la simulación de ese cierre; la URL lo conserva entero.
@@ -107,7 +110,14 @@ function code(value: string): string {
   return encodeURIComponent(value).replace(/%3A/gi, ':').replace(/%3B/gi, ';')
 }
 
-export function routePath(route: Route): string {
+export function routePath(route: Route, search = ''): string {
+  const params = new URLSearchParams(search)
+  if (route.recorridos?.maxRatio !== undefined) params.set('max_ratio', String(route.recorridos.maxRatio))
+  else params.delete('max_ratio')
+  return viewPath(route) + (params.size ? '?' + params.toString() : '')
+}
+
+function viewPath(route: Route): string {
   if (route.guia) return '/guia'
   if (route.cobertura) return '/cobertura'
   if (route.glosario) return route.glosario.entrada ? `/glosario/${encodeURIComponent(route.glosario.entrada)}` : '/glosario'
