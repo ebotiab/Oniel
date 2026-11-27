@@ -91,7 +91,7 @@
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/",
       "retrieved_on": "2026-11-17",
-      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant, Avant Exprés), AVE Euromed, Intercity y Regional de toda España, con esos rótulos desde el fichero del 17 de noviembre de 2026; los anteriores rotulaban además Alvia, Euromed, AVE internacional, Trencelta, Media Distancia, Regional Exprés y Proximidad. Oniel importa los que recorren las líneas cargadas. Validez del fichero del 16 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías.",
+      "coverage": "Servicios de Renfe de alta velocidad (AVE, AVLO, Avant, Avant Exprés), AVE Euromed, Intercity y Regional de toda España, con esos rótulos desde el fichero del 17 de noviembre de 2026; los anteriores rotulaban además Alvia, Euromed, AVE internacional, Trencelta, Media Distancia, Regional Exprés y Proximidad. Oniel importa los que recorren las líneas cargadas. Validez del fichero del 16 de noviembre de 2026 al 29 de septiembre de 2027. No incluye Cercanías. Patrones comerciales de los Avant Málaga – Granada y Sevilla – Granada.",
       "notes": "Fichero google_transit.zip publicado el 17 de noviembre de 2026. Son horarios planificados: no reflejan las interrupciones registradas en interrupciones.json (la de la alta velocidad Madrid–Andalucía, desde el 28 de octubre de 2026, y la de la línea convencional por obras, desde el 6 de septiembre de 2026) ni otras alteraciones del servicio.",
       "file": "raw/renfe/google_transit_av_ld_md_2026-11-17.zip"
     },
@@ -279,7 +279,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-12",
-      "coverage": "La relación completa, de la bifurcación Málaga-Alta Velocidad a Málaga-María Zambrano (154,7 km medidos), recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo; el desvío del que sale el enlace hacia la línea de Granada (bifurcación Gobantes).",
+      "coverage": "La relación completa, de la bifurcación Málaga-Alta Velocidad a Málaga-María Zambrano (154,7 km medidos), recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo; el desvío del que sale el enlace hacia la línea de Granada (bifurcación Gobantes). Empalme con la 014 en el nodo 2258256210, vía 1200950762.",
       "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación trae las dos vías de la línea (309 km de vías), todas con ref=030, operator=Adif, ancho de 1435 mm, 25 kV y passenger_lines=2. El número de línea de Adif (030) es el de estas etiquetas; no se ha contrastado con la Declaración sobre la Red. La longitud y los puntos kilométricos se contrastaron con Wikipedia. Hasta el 13 de noviembre de 2026 Oniel usaba solo los 96,9 km hasta Antequera-Santa Ana; desde ese día, la línea entera, con el mismo fichero. La bifurcación Gobantes se sitúa en el desvío (nodo 2258256210) en el que la relación 16228313, la del servicio Avant Málaga → Granada, deja las vías de la línea 030. La estación de Málaga-María Zambrano se sitúa con su nodo de Adif en OSM (2609534280, que enlaza a la ficha 54413 de adif.es), descargado el 13 de noviembre de 2026 con las demás estaciones y bifurcaciones de Adif de la zona (raw/osm/adif_facility_nodes_antequera_malaga_2026-11-13.json).",
       "file": "raw/osm/relation_11143233_lav_cordoba_malaga_2026-11-12.json"
     },
@@ -291,20 +291,20 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-12",
-      "coverage": "Los 108,2 km entre la estación de Antequera-Santa Ana y la entrada de Granada (longitud -3,6697), recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo; dónde las dos vías se juntan en una (bifurcación Archidona) y dónde la vía es de ancho mixto (entre las bifurcaciones de Riofrío y de Tocón).",
+      "coverage": "Los 108,2 km entre la estación de Antequera-Santa Ana y la entrada de Granada (longitud -3,6697), recorriendo el grafo de vías por el camino más corto; velocidad máxima por tramo; dónde las dos vías se juntan en una (bifurcación Archidona) y dónde la vía es de ancho mixto (entre las bifurcaciones de Riofrío y de Tocón). Empalme con la 014 en el nodo 4848128991, vía 218316743.",
       "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. La relación arranca en un desvío de la línea 030 situado 0,85 km al norte de la estación de Antequera-Santa Ana y pasa por la estación. Trae dos vías paralelas hasta el desvío de 37,1188 N, 4,4231 O, que Oniel toma como la bifurcación Archidona de los anuncios de Adif, y una sola desde allí. Entre los desvíos de las bifurcaciones Riofrío y Tocón (26,3 km) las vías llevan gauge=1435;1668 y velocidades de 50 a 95 km/h en la bajada a Loja. A la entrada de Granada le faltan tres trozos de vía (1,2 km, 0,6 km y 0,15 km): por eso los últimos 5,9 km se toman de la relación 16228313. El número de línea de Adif (036) es el de las etiquetas ref de sus vías; no se ha contrastado con la Declaración sobre la Red. También se descargaron las estaciones y bifurcaciones de Adif de la zona (raw/osm/adif_facility_nodes_antequera_granada_2026-11-12.json) para situar los nodos.",
       "file": "raw/osm/relation_2869549_lav_antequera_granada_2026-11-12.json"
     },
     {
       "id": "osm-relation-16228313",
-      "name": "Vías de la entrada a Granada de la línea de alta velocidad Antequera–Granada (relación OSM 16228313, servicio Avant Málaga → Granada)",
+      "name": "Vías del enlace Gobantes – Bobadilla y de la entrada a Granada (relación OSM 16228313, Avant Málaga → Granada)",
       "publisher": "Colaboradores de OpenStreetMap",
       "url": "https://www.openstreetmap.org/relation/16228313",
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-12",
-      "coverage": "De la relación completa (Málaga-María Zambrano – Granada, 165,0 km medidos) Oniel usa los últimos 5,9 km, entre la longitud -3,6697 y la estación de Granada, pasando por la bifurcación La Chana; velocidad máxima por tramo, una sola vía de la línea 036 y ancho mixto desde La Chana.",
-      "notes": "Descargado por la API Overpass el 12 de noviembre de 2026. Es la relación de un servicio de Renfe, no de la infraestructura: se usa porque la relación 2869549 no llega entera a Granada. Sus vías en ese trecho llevan ref=036 y, desde la bifurcación La Chana, gauge=1435;1668. Sirvió además para situar dónde se une a la línea de Granada el enlace que viene de Málaga (a 9,6 km del arranque de la relación 2869549, frente al PK 105,753 de Wikipedia) y para esbozar ese enlace.",
+      "coverage": "Eje entre las agujas de la 014 y últimos 5,9 km de la 036, hasta Granada. Velocidad de las vías y ancho mixto desde La Chana.",
+      "notes": "Extracto Overpass del 12/11/2026. Entre los nodos 2258256210 y 4848128991 se encadenan ocho vías sin ref=014, con tracks=2, gauge=1435, voltage=25000, frequency=50, maxspeed=220 y railway:etcs=2. El eje se puede recorrer en ambos sentidos. En la entrada a Granada completa la relación 2869549; allí las vías llevan ref=036 y, desde La Chana, gauge=1435;1668.",
       "file": "raw/osm/relation_16228313_avant_malaga_granada_2026-11-12.json"
     },
     {
@@ -742,7 +742,7 @@
       "license": "Consulta pública; © Adif Alta Velocidad y Administrador de Infraestructuras Ferroviarias",
       "license_url": "https://www.adifaltavelocidad.es/aviso-legal",
       "retrieved_on": "2026-11-12",
-      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra. Revisión del 25 de noviembre: mapa 3, página 7 (enero de 2026), máximos de 300 km/h de Madrid a Barcelona y 160 de Burgos a Miranda; número de vías principales y electrificación de las líneas cargadas, junto al mapa 4. Las secciones curadas precisan los extremos y la fecha de comprobación. Revisión 26 de noviembre: Vitoria–Irún, mapas 3 y 4, doble vía, 3 kV CC, ancho ibérico, ASFA, BAB y CTC; máximos de 160 entre Vitoria y Altsasu y 135 al norte, compatibles con los tramos medidos de OSM. En la ampliación desde Albacete, los mapas 3 y 4 distinguen la línea 300 de doble vía y el enlace de vía única hacia Caudete.",
+      "coverage": "Sistema de protección del tren, bloqueo y control de tráfico centralizado de las líneas cargadas, leídos tramo a tramo en el mapa 4 de la Red Ferroviaria de Interés General (página 8 del PDF); para la línea Sevilla – Cádiz, también la velocidad máxima de su primer trecho, del mapa 3 (página 7 del PDF), donde las vías de OpenStreetMap no la traen o dan otra. Revisión del 25 de noviembre: mapa 3, página 7 (enero de 2026), máximos de 300 km/h de Madrid a Barcelona y 160 de Burgos a Miranda; número de vías principales y electrificación de las líneas cargadas, junto al mapa 4. Las secciones curadas precisan los extremos y la fecha de comprobación. Revisión 26 de noviembre: Vitoria–Irún, mapas 3 y 4, doble vía, 3 kV CC, ancho ibérico, ASFA, BAB y CTC; máximos de 160 entre Vitoria y Altsasu y 135 al norte, compatibles con los tramos medidos de OSM. En la ampliación desde Albacete, los mapas 3 y 4 distinguen la línea 300 de doble vía y el enlace de vía única hacia Caudete. Mapa 3, máxima de 220 km/h entre Gobantes y Bobadilla.",
       "notes": "Edición vigente el 12 de noviembre de 2026: el documento «20250227_03_DR_AV_2026_Mapas.pdf» de la Declaración sobre la Red 2026. El mapa 4 es el mismo en los Mapas de la Declaración de Adif (https://www.adif.es/sobre-adif/declaracion-red), que cubre las líneas convencionales; el apartado 2.3.10 de los dos libros remite a estos mapas para los bloqueos y los sistemas de protección de cada línea, y no los da en tabla. El mapa es un esquema: sitúa los símbolos de los sistemas por línea y no dice qué puesto de mando gobierna cada tramo. adif.es y adifaltavelocidad.es responden 403 a las descargas automáticas; el fichero se bajó con el navegador.",
       "file": "raw/adif/dr-adif-av-2026-mapas_2026-11-12.pdf"
     },
@@ -2907,6 +2907,39 @@
       "coverage": "Apertura, conexión con la 026, ancho, ASFA, BAU y CTC de la 534. Longitud de inventario contrastada con la Declaración sobre la Red 2026.",
       "notes": "El mapa esquemático no individualiza la velocidad ni el límite de la catenaria en la aguja. La consulta incluye el aviso de Renfe sobre Plasencia y la revisión de los avisos de Adif.",
       "file": "raw/adif/consulta_linea_534_2026-11-27.json"
+    },
+    {
+      "id": "adif-av-inventario-014",
+      "name": "Declaración sobre la Red 2026, anexo H, línea 014",
+      "publisher": "Adif Alta Velocidad",
+      "url": "https://www.adifaltavelocidad.es/documents/34745/51134530/20260227_01%2BDR%2BAdif_AV%2B2026_Libro.pdf/60f60247-935c-6d14-3ac4-8886c5e74dd6?t=1772454129932",
+      "license": "Consulta pública. © Adif Alta Velocidad.",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Línea 014 Bif. Gobantes – Bif. Bobadilla, longitud de inventario de 8,6 km.",
+      "notes": "El anexo H clasifica la línea. La ficha del visor mide entre las dos agujas del eje de OSM.",
+      "file": "raw/adif/consulta_linea_014_2026-11-27.json"
+    },
+    {
+      "id": "adif-av-caracteristicas-014",
+      "name": "Declaración sobre la Red 2019, tramos puestos en servicio, p. 66",
+      "publisher": "Adif Alta Velocidad",
+      "url": "https://www.adifaltavelocidad.es/documents/34745/7247882/DR_ADIF_AV_V1_20191.pdf/c5b189a9-0192-dd89-2bfe-171a37a9a20f?t=1647948841767",
+      "license": "Consulta pública. © Adif Alta Velocidad.",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Conexión de las líneas 030 y 036, vía doble, ancho estándar, 2 × 25 kV a 50 Hz, ERTMS nivel 2, BCA, CTC y GSM-R.",
+      "notes": "Edición de julio de 2019. Se conserva sin fecha exacta de apertura técnica y sin atribuir respaldo ASFA.",
+      "file": "raw/adif/consulta_linea_014_2026-11-27.json"
+    },
+    {
+      "id": "adif-av-mantenimiento-014",
+      "name": "Pliego de mantenimiento de infraestructura y vía, expediente 2.22/21506.0028",
+      "publisher": "Adif Alta Velocidad",
+      "url": "https://contrataciondelestado.es/wps/wcm/connect/5b2b94b2-01ca-4f0d-b4f8-28d072990258/DOC20230306124050PliegoDePrescripcionesTecnicas.PDF?MOD=AJPERES",
+      "license": "Consulta pública. © Adif Alta Velocidad.",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Lote 3, límites de mantenimiento por vía y referencias aproximadas de la tabla 3.",
+      "notes": "El CSV identifica el original firmado. No se asigna a las agujas del eje un PK del ámbito de mantenimiento.",
+      "file": "raw/adif/consulta_linea_014_2026-11-27.json"
     }
   ]
 }

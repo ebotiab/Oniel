@@ -324,6 +324,8 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     source = "fomento-puesta-servicio-188"
                 if net.spec.line.id == "enlace-el-chaparral-arroyo-de-la-herrera":
                     source = "adif-av-puesta-servicio-534"
+                if net.spec.line.id == "enlace-gobantes-bobadilla":
+                    source = "adif-av-caracteristicas-014"
                 assert value.source_id == source
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),

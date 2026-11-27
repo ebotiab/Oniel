@@ -1,8 +1,12 @@
 # Gobantes–Bobadilla, el recorrido directo Málaga–Granada
 
-Los Avant de Málaga a Granada paran en **Antequera AV**, junto al casco urbano, y en **Loja**. Desde Málaga dejan la línea de Córdoba en Gobantes y se incorporan a la de Granada en Bobadilla. Así evitan **Antequera-Santa Ana**, la estación al oeste de Antequera. Oniel ya tiene los trenes y las dos bifurcaciones. Le falta el tramo que une esas bifurcaciones para poder dibujar el camino y asociarle los trenes. La carga queda en la [incidencia #328][carga]. **El Chaparral conserva el turno de datos.** [Incidencia #323][turno]
+Los Avant de Málaga a Granada paran en **Antequera AV**, junto al casco urbano, y en **Loja**. Desde Málaga dejan la línea de Córdoba en Gobantes y se incorporan a la de Granada en Bobadilla. Así evitan **Antequera-Santa Ana**, la estación al oeste de Antequera. Oniel ya tiene los trenes y las dos bifurcaciones. Al redactar este plan faltaba el tramo entre ellas. La carga de la [incidencia #328][carga] siguió a la de [El Chaparral][turno].
 
-## Qué ofrece el comparador
+## Resultado de la carga
+
+La 014 se puede recorrer en ambos sentidos. Los seis Avant del 20/11/2026 tienen un paso estimado cada uno y el 08275 conserva su entrada por Santa Ana. Las medidas y el cotejo por edición están en [Cómo se cargó el enlace de Gobantes a Bobadilla](../datos.md#cómo-se-cargó-el-enlace-de-gobantes-a-bobadilla). Los apartados siguientes conservan el diagnóstico previo a la carga.
+
+## Qué ofrecía el comparador
 
 Consulta del 27/11/2026 con la red de [`main` en `bc8c4414`][base], sin cierres ni vías supuestas, sin límite de cambios de línea y con `max_ratio=2`. Tanto el visor estático como `GET /api/routes` devuelven **un solo recorrido por sentido**, con 12 tramos y sin inversión de marcha indicada. El visor lo titula «Por Antequera-Santa Ana». La instantánea muestra el horario del **11/12/2026**, su día de referencia. [Abrir Málaga → Granada][ida] · [Abrir Granada → Málaga][vuelta]
 

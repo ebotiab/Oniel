@@ -552,6 +552,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 1  # la línea de Ávila a Salamanca
         + 2  # la 120 y el enlace del cambiador
         + 1  # la 534
+        + 1  # la 014
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -604,6 +605,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 16  # quince tramos propios y la división del acceso en Ávila
         + 14  # la 120, el enlace y el corte en la LAV
         + 1  # la 534
+        + 1  # la 014
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -640,6 +642,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 6 + 128 + (555 + 423)
     renfe_passes += 1427 + 342  # Vitoria–Irún
     renfe_passes += 472 + 78  # ampliación y enlace
+    renfe_passes += 6  # un paso estimado por Avant entre Málaga y Granada
     renfe_passes += 76  # la 534, en servicios que ya circulaban por las líneas vecinas
     renfe_passes += 934 + 100  # la 120 y el cambiador
     renfe_passes += 172 + 996  # interior de la 122 y acceso salmantino
@@ -839,6 +842,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 16  # quince tramos propios y la división del acceso en Ávila
         + 14  # la 120, el enlace y el corte en la LAV
         + 1  # la 534
+        + 1  # la 014
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -992,6 +996,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "medina-del-campo-salamanca",
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
+        "enlace-gobantes-bobadilla",
     ]
     # Los accesos de Planetario y El Chaparral ya tienen vía propia en el índice.
     assert "conv-madrid-extremadura" not in connections
@@ -1008,11 +1013,15 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
     # llega a Moreda, y de allí sale a trazos lo que falta hasta Guadix y Almería
     assert "conv-linares-almeria" not in connections
     assert connections["conv-moreda-almeria"] == "moreda"
-    # y la de Granada hacia Antequera: la alta velocidad está cargada, también hasta Málaga, y
-    # solo queda a trazos el enlace que sale de la bifurcación Bobadilla
+    # Las líneas de Málaga y Granada y su enlace ya son navegables.
     assert "av-antequera-granada" not in connections and "lav-cordoba-malaga" not in connections
     assert "lav-antequera-malaga" not in connections
-    assert connections["enlace-malaga-granada"] == "bif-bobadilla"
+    assert "enlace-malaga-granada" not in connections
+    for nodo, vecina in (("bif-gobantes", LAV_MALAGA), ("bif-bobadilla", LAV_GRANADA)):
+        assert {n["line_id"] for n in data["nodes"] if n["id"] == nodo} == {
+            "enlace-gobantes-bobadilla",
+            vecina,
+        }
     # la tercera línea une las otras dos: Manzanares es de la convencional y Ciudad Real, de la LAV
     memberships = {
         node_id: sorted(n["line_id"] for n in data["nodes"] if n["id"] == node_id)
@@ -1107,6 +1116,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 16  # quince tramos propios y la división del acceso en Ávila
         + 14  # la 120, el enlace y el corte en la LAV
         + 1  # la 534
+        + 1  # la 014
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1897,6 +1907,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 9  # nuevas fuentes del acceso de Príncipe Pío
             + 5  # tres relaciones de Salamanca, catálogo de la RFIG y esquema de mantenimiento
             + 6  # dos relaciones AV, andén de Cantalapiedra y tres fuentes documentales
+            + 3  # inventario, señalización y pliego de la 014
             + 2  # IDEAdif y puesta en servicio de la 534
         )
     )
@@ -1988,6 +1999,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "medina-del-campo-salamanca",
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
+        "enlace-gobantes-bobadilla",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -2070,6 +2082,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "medina-del-campo-salamanca": ["renfe"],
         "enlace-medina-av-salamanca": ["renfe"],
         "enlace-el-chaparral-arroyo-de-la-herrera": ["renfe"],
+        "enlace-gobantes-bobadilla": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
@@ -2951,6 +2964,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "medina-del-campo-salamanca",
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
+        "enlace-gobantes-bobadilla",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -3082,6 +3096,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "medina-del-campo-salamanca",
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
+        "enlace-gobantes-bobadilla",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

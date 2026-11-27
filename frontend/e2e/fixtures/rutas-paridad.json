@@ -8644,6 +8644,932 @@
       ]
     },
     {
+      "from": "malaga-maria-zambrano",
+      "to": "granada",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "malaga-maria-zambrano",
+          "from_name": "Málaga-María Zambrano",
+          "to_node_id": "granada",
+          "to_name": "Granada",
+          "length_km": 165.0,
+          "time_min": 49,
+          "single_track_km": 81.0,
+          "line_ids": [
+            "lav-cordoba-malaga",
+            "lav-antequera-granada"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "malaga-maria-zambrano",
+              "from_name": "Málaga-María Zambrano",
+              "to_node_id": "bif-gobantes",
+              "to_name": "Bifurcación Gobantes",
+              "length_km": 51.0,
+              "time_min": 15,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-antequera-granada",
+              "line_name": "Línea de alta velocidad Antequera – Granada",
+              "from_node_id": "bif-gobantes",
+              "from_name": "Bifurcación Gobantes",
+              "to_node_id": "granada",
+              "to_name": "Granada",
+              "length_km": 114.0,
+              "time_min": 34,
+              "single_track_km": 81.0
+            }
+          ],
+          "via": [
+            "Antequera AV",
+            "Loja"
+          ],
+          "node_ids": [
+            "malaga-maria-zambrano",
+            "paet-los-prados",
+            "pb-alora",
+            "bif-gobantes",
+            "bif-bobadilla",
+            "antequera-av",
+            "bif-archidona",
+            "bif-riofrio",
+            "loja",
+            "bif-tocon",
+            "bif-la-chana",
+            "granada"
+          ],
+          "segment_ids": [
+            "lav-cordoba-malaga:paet-los-prados:malaga-maria-zambrano",
+            "lav-cordoba-malaga:pb-alora:paet-los-prados",
+            "lav-cordoba-malaga:bif-gobantes:pb-alora",
+            "enlace-gobantes-bobadilla:bif-gobantes:bif-bobadilla",
+            "lav-antequera-granada:bif-bobadilla:antequera-av",
+            "lav-antequera-granada:antequera-av:bif-archidona",
+            "lav-antequera-granada:bif-archidona:bif-riofrio",
+            "lav-antequera-granada:bif-riofrio:loja",
+            "lav-antequera-granada:loja:bif-tocon",
+            "lav-antequera-granada:bif-tocon:bif-la-chana",
+            "lav-antequera-granada:bif-la-chana:granada"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "granada",
+      "to": "malaga-maria-zambrano",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "granada",
+          "from_name": "Granada",
+          "to_node_id": "malaga-maria-zambrano",
+          "to_name": "Málaga-María Zambrano",
+          "length_km": 165.0,
+          "time_min": 49,
+          "single_track_km": 81.0,
+          "line_ids": [
+            "lav-antequera-granada",
+            "lav-cordoba-malaga"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-antequera-granada",
+              "line_name": "Línea de alta velocidad Antequera – Granada",
+              "from_node_id": "granada",
+              "from_name": "Granada",
+              "to_node_id": "bif-gobantes",
+              "to_name": "Bifurcación Gobantes",
+              "length_km": 114.0,
+              "time_min": 34,
+              "single_track_km": 81.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "bif-gobantes",
+              "from_name": "Bifurcación Gobantes",
+              "to_node_id": "malaga-maria-zambrano",
+              "to_name": "Málaga-María Zambrano",
+              "length_km": 51.0,
+              "time_min": 15,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Loja",
+            "Antequera AV"
+          ],
+          "node_ids": [
+            "granada",
+            "bif-la-chana",
+            "bif-tocon",
+            "loja",
+            "bif-riofrio",
+            "bif-archidona",
+            "antequera-av",
+            "bif-bobadilla",
+            "bif-gobantes",
+            "pb-alora",
+            "paet-los-prados",
+            "malaga-maria-zambrano"
+          ],
+          "segment_ids": [
+            "lav-antequera-granada:bif-la-chana:granada",
+            "lav-antequera-granada:bif-tocon:bif-la-chana",
+            "lav-antequera-granada:loja:bif-tocon",
+            "lav-antequera-granada:bif-riofrio:loja",
+            "lav-antequera-granada:bif-archidona:bif-riofrio",
+            "lav-antequera-granada:antequera-av:bif-archidona",
+            "lav-antequera-granada:bif-bobadilla:antequera-av",
+            "enlace-gobantes-bobadilla:bif-gobantes:bif-bobadilla",
+            "lav-cordoba-malaga:bif-gobantes:pb-alora",
+            "lav-cordoba-malaga:pb-alora:paet-los-prados",
+            "lav-cordoba-malaga:paet-los-prados:malaga-maria-zambrano"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "cordoba",
+      "to": "granada",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "cordoba",
+          "from_name": "Córdoba",
+          "to_node_id": "granada",
+          "to_name": "Granada",
+          "length_km": 225.4,
+          "time_min": 56,
+          "single_track_km": 81.0,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "lav-cordoba-malaga",
+            "lav-antequera-granada"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "bif-malaga",
+              "to_name": "Bifurcación Málaga-Alta Velocidad",
+              "length_km": 14.4,
+              "time_min": 3,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "bif-malaga",
+              "from_name": "Bifurcación Málaga-Alta Velocidad",
+              "to_node_id": "antequera-santa-ana",
+              "to_name": "Antequera-Santa Ana",
+              "length_km": 96.9,
+              "time_min": 19,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-antequera-granada",
+              "line_name": "Línea de alta velocidad Antequera – Granada",
+              "from_node_id": "antequera-santa-ana",
+              "from_name": "Antequera-Santa Ana",
+              "to_node_id": "granada",
+              "to_name": "Granada",
+              "length_km": 114.1,
+              "time_min": 34,
+              "single_track_km": 81.0
+            }
+          ],
+          "via": [
+            "Puente Genil-Herrera",
+            "Antequera-Santa Ana",
+            "Antequera AV",
+            "Loja"
+          ],
+          "node_ids": [
+            "cordoba",
+            "bif-malaga",
+            "la-marota",
+            "santaella",
+            "puente-genil-herrera",
+            "antequera-santa-ana",
+            "bif-bobadilla",
+            "antequera-av",
+            "bif-archidona",
+            "bif-riofrio",
+            "loja",
+            "bif-tocon",
+            "bif-la-chana",
+            "granada"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-cordoba-malaga:bif-malaga:la-marota",
+            "lav-cordoba-malaga:la-marota:santaella",
+            "lav-cordoba-malaga:santaella:puente-genil-herrera",
+            "lav-cordoba-malaga:puente-genil-herrera:antequera-santa-ana",
+            "lav-antequera-granada:antequera-santa-ana:bif-bobadilla",
+            "lav-antequera-granada:bif-bobadilla:antequera-av",
+            "lav-antequera-granada:antequera-av:bif-archidona",
+            "lav-antequera-granada:bif-archidona:bif-riofrio",
+            "lav-antequera-granada:bif-riofrio:loja",
+            "lav-antequera-granada:loja:bif-tocon",
+            "lav-antequera-granada:bif-tocon:bif-la-chana",
+            "lav-antequera-granada:bif-la-chana:granada"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "cordoba",
+          "from_name": "Córdoba",
+          "to_node_id": "granada",
+          "to_name": "Granada",
+          "length_km": 300.7,
+          "time_min": 122,
+          "single_track_km": 300.7,
+          "line_ids": [
+            "convencional-madrid-alcazar-cordoba",
+            "linares-baeza-moreda-granada"
+          ],
+          "legs": [
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "linares-baeza",
+              "to_name": "Linares-Baeza",
+              "length_km": 127.0,
+              "time_min": 48,
+              "single_track_km": 127.0
+            },
+            {
+              "line_id": "linares-baeza-moreda-granada",
+              "line_name": "Línea convencional Linares-Baeza – Moreda – Granada",
+              "from_node_id": "linares-baeza",
+              "from_name": "Linares-Baeza",
+              "to_node_id": "granada",
+              "to_name": "Granada",
+              "length_km": 173.7,
+              "time_min": 74,
+              "single_track_km": 173.7
+            }
+          ],
+          "via": [
+            "Andújar",
+            "Linares-Baeza",
+            "Jódar-Úbeda",
+            "Cabra del Santo Cristo y Alicún",
+            "Moreda",
+            "Iznalloz"
+          ],
+          "node_ids": [
+            "cordoba",
+            "rabanales",
+            "alcolea-de-cordoba",
+            "montoro",
+            "villa-del-rio",
+            "andujar",
+            "espeluy",
+            "linares-baeza",
+            "jodar-ubeda",
+            "cabra-del-santo-cristo",
+            "moreda",
+            "bif-almeria",
+            "iznalloz",
+            "granada"
+          ],
+          "segment_ids": [
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "linares-baeza-moreda-granada:linares-baeza:jodar-ubeda",
+            "linares-baeza-moreda-granada:jodar-ubeda:cabra-del-santo-cristo",
+            "linares-baeza-moreda-granada:cabra-del-santo-cristo:moreda",
+            "linares-baeza-moreda-granada:moreda:bif-almeria",
+            "linares-baeza-moreda-granada:bif-almeria:iznalloz",
+            "linares-baeza-moreda-granada:iznalloz:granada"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "granada",
+      "to": "cordoba",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "granada",
+          "from_name": "Granada",
+          "to_node_id": "cordoba",
+          "to_name": "Córdoba",
+          "length_km": 225.4,
+          "time_min": 56,
+          "single_track_km": 81.0,
+          "line_ids": [
+            "lav-antequera-granada",
+            "lav-cordoba-malaga",
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-antequera-granada",
+              "line_name": "Línea de alta velocidad Antequera – Granada",
+              "from_node_id": "granada",
+              "from_name": "Granada",
+              "to_node_id": "antequera-santa-ana",
+              "to_name": "Antequera-Santa Ana",
+              "length_km": 114.1,
+              "time_min": 34,
+              "single_track_km": 81.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "antequera-santa-ana",
+              "from_name": "Antequera-Santa Ana",
+              "to_node_id": "bif-malaga",
+              "to_name": "Bifurcación Málaga-Alta Velocidad",
+              "length_km": 96.9,
+              "time_min": 19,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "bif-malaga",
+              "from_name": "Bifurcación Málaga-Alta Velocidad",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 14.4,
+              "time_min": 3,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Loja",
+            "Antequera AV",
+            "Antequera-Santa Ana",
+            "Puente Genil-Herrera"
+          ],
+          "node_ids": [
+            "granada",
+            "bif-la-chana",
+            "bif-tocon",
+            "loja",
+            "bif-riofrio",
+            "bif-archidona",
+            "antequera-av",
+            "bif-bobadilla",
+            "antequera-santa-ana",
+            "puente-genil-herrera",
+            "santaella",
+            "la-marota",
+            "bif-malaga",
+            "cordoba"
+          ],
+          "segment_ids": [
+            "lav-antequera-granada:bif-la-chana:granada",
+            "lav-antequera-granada:bif-tocon:bif-la-chana",
+            "lav-antequera-granada:loja:bif-tocon",
+            "lav-antequera-granada:bif-riofrio:loja",
+            "lav-antequera-granada:bif-archidona:bif-riofrio",
+            "lav-antequera-granada:antequera-av:bif-archidona",
+            "lav-antequera-granada:bif-bobadilla:antequera-av",
+            "lav-antequera-granada:antequera-santa-ana:bif-bobadilla",
+            "lav-cordoba-malaga:puente-genil-herrera:antequera-santa-ana",
+            "lav-cordoba-malaga:santaella:puente-genil-herrera",
+            "lav-cordoba-malaga:la-marota:santaella",
+            "lav-cordoba-malaga:bif-malaga:la-marota",
+            "lav-madrid-sevilla:cordoba:bif-malaga"
+          ],
+          "reverse_node_ids": []
+        },
+        {
+          "from_node_id": "granada",
+          "from_name": "Granada",
+          "to_node_id": "cordoba",
+          "to_name": "Córdoba",
+          "length_km": 300.7,
+          "time_min": 122,
+          "single_track_km": 300.7,
+          "line_ids": [
+            "linares-baeza-moreda-granada",
+            "convencional-madrid-alcazar-cordoba"
+          ],
+          "legs": [
+            {
+              "line_id": "linares-baeza-moreda-granada",
+              "line_name": "Línea convencional Linares-Baeza – Moreda – Granada",
+              "from_node_id": "granada",
+              "from_name": "Granada",
+              "to_node_id": "linares-baeza",
+              "to_name": "Linares-Baeza",
+              "length_km": 173.7,
+              "time_min": 74,
+              "single_track_km": 173.7
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "linares-baeza",
+              "from_name": "Linares-Baeza",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 127.0,
+              "time_min": 48,
+              "single_track_km": 127.0
+            }
+          ],
+          "via": [
+            "Iznalloz",
+            "Moreda",
+            "Cabra del Santo Cristo y Alicún",
+            "Jódar-Úbeda",
+            "Linares-Baeza",
+            "Andújar"
+          ],
+          "node_ids": [
+            "granada",
+            "iznalloz",
+            "bif-almeria",
+            "moreda",
+            "cabra-del-santo-cristo",
+            "jodar-ubeda",
+            "linares-baeza",
+            "espeluy",
+            "andujar",
+            "villa-del-rio",
+            "montoro",
+            "alcolea-de-cordoba",
+            "rabanales",
+            "cordoba"
+          ],
+          "segment_ids": [
+            "linares-baeza-moreda-granada:iznalloz:granada",
+            "linares-baeza-moreda-granada:bif-almeria:iznalloz",
+            "linares-baeza-moreda-granada:moreda:bif-almeria",
+            "linares-baeza-moreda-granada:cabra-del-santo-cristo:moreda",
+            "linares-baeza-moreda-granada:jodar-ubeda:cabra-del-santo-cristo",
+            "linares-baeza-moreda-granada:linares-baeza:jodar-ubeda",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "sevilla-santa-justa",
+      "to": "granada",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "sevilla-santa-justa",
+          "from_name": "Sevilla-Santa Justa",
+          "to_node_id": "granada",
+          "to_name": "Granada",
+          "length_km": 352.1,
+          "time_min": 90,
+          "single_track_km": 81.0,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "lav-cordoba-malaga",
+            "lav-antequera-granada"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "sevilla-santa-justa",
+              "from_name": "Sevilla-Santa Justa",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "bif-malaga",
+              "to_name": "Bifurcación Málaga-Alta Velocidad",
+              "length_km": 14.4,
+              "time_min": 3,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "bif-malaga",
+              "from_name": "Bifurcación Málaga-Alta Velocidad",
+              "to_node_id": "antequera-santa-ana",
+              "to_name": "Antequera-Santa Ana",
+              "length_km": 96.9,
+              "time_min": 19,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-antequera-granada",
+              "line_name": "Línea de alta velocidad Antequera – Granada",
+              "from_node_id": "antequera-santa-ana",
+              "from_name": "Antequera-Santa Ana",
+              "to_node_id": "granada",
+              "to_name": "Granada",
+              "length_km": 114.1,
+              "time_min": 34,
+              "single_track_km": 81.0
+            }
+          ],
+          "via": [
+            "Córdoba",
+            "Puente Genil-Herrera",
+            "Antequera-Santa Ana",
+            "Antequera AV",
+            "Loja"
+          ],
+          "node_ids": [
+            "sevilla-santa-justa",
+            "majarabique",
+            "bif-malaga",
+            "cordoba",
+            "bif-malaga",
+            "la-marota",
+            "santaella",
+            "puente-genil-herrera",
+            "antequera-santa-ana",
+            "bif-bobadilla",
+            "antequera-av",
+            "bif-archidona",
+            "bif-riofrio",
+            "loja",
+            "bif-tocon",
+            "bif-la-chana",
+            "granada"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-cordoba-malaga:bif-malaga:la-marota",
+            "lav-cordoba-malaga:la-marota:santaella",
+            "lav-cordoba-malaga:santaella:puente-genil-herrera",
+            "lav-cordoba-malaga:puente-genil-herrera:antequera-santa-ana",
+            "lav-antequera-granada:antequera-santa-ana:bif-bobadilla",
+            "lav-antequera-granada:bif-bobadilla:antequera-av",
+            "lav-antequera-granada:antequera-av:bif-archidona",
+            "lav-antequera-granada:bif-archidona:bif-riofrio",
+            "lav-antequera-granada:bif-riofrio:loja",
+            "lav-antequera-granada:loja:bif-tocon",
+            "lav-antequera-granada:bif-tocon:bif-la-chana",
+            "lav-antequera-granada:bif-la-chana:granada"
+          ],
+          "reverse_node_ids": [
+            "cordoba"
+          ]
+        },
+        {
+          "from_node_id": "sevilla-santa-justa",
+          "from_name": "Sevilla-Santa Justa",
+          "to_node_id": "granada",
+          "to_name": "Granada",
+          "length_km": 427.3,
+          "time_min": 155,
+          "single_track_km": 300.7,
+          "line_ids": [
+            "lav-madrid-sevilla",
+            "convencional-madrid-alcazar-cordoba",
+            "linares-baeza-moreda-granada"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "sevilla-santa-justa",
+              "from_name": "Sevilla-Santa Justa",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "linares-baeza",
+              "to_name": "Linares-Baeza",
+              "length_km": 127.0,
+              "time_min": 48,
+              "single_track_km": 127.0
+            },
+            {
+              "line_id": "linares-baeza-moreda-granada",
+              "line_name": "Línea convencional Linares-Baeza – Moreda – Granada",
+              "from_node_id": "linares-baeza",
+              "from_name": "Linares-Baeza",
+              "to_node_id": "granada",
+              "to_name": "Granada",
+              "length_km": 173.7,
+              "time_min": 74,
+              "single_track_km": 173.7
+            }
+          ],
+          "via": [
+            "Córdoba",
+            "Andújar",
+            "Linares-Baeza",
+            "Jódar-Úbeda",
+            "Cabra del Santo Cristo y Alicún",
+            "Moreda",
+            "Iznalloz"
+          ],
+          "node_ids": [
+            "sevilla-santa-justa",
+            "majarabique",
+            "bif-malaga",
+            "cordoba",
+            "rabanales",
+            "alcolea-de-cordoba",
+            "montoro",
+            "villa-del-rio",
+            "andujar",
+            "espeluy",
+            "linares-baeza",
+            "jodar-ubeda",
+            "cabra-del-santo-cristo",
+            "moreda",
+            "bif-almeria",
+            "iznalloz",
+            "granada"
+          ],
+          "segment_ids": [
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "linares-baeza-moreda-granada:linares-baeza:jodar-ubeda",
+            "linares-baeza-moreda-granada:jodar-ubeda:cabra-del-santo-cristo",
+            "linares-baeza-moreda-granada:cabra-del-santo-cristo:moreda",
+            "linares-baeza-moreda-granada:moreda:bif-almeria",
+            "linares-baeza-moreda-granada:bif-almeria:iznalloz",
+            "linares-baeza-moreda-granada:iznalloz:granada"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
+      "from": "granada",
+      "to": "sevilla-santa-justa",
+      "scenario": "",
+      "max_changes": null,
+      "max_ratio": 2.0,
+      "expected": [
+        {
+          "from_node_id": "granada",
+          "from_name": "Granada",
+          "to_node_id": "sevilla-santa-justa",
+          "to_name": "Sevilla-Santa Justa",
+          "length_km": 352.1,
+          "time_min": 90,
+          "single_track_km": 81.0,
+          "line_ids": [
+            "lav-antequera-granada",
+            "lav-cordoba-malaga",
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "lav-antequera-granada",
+              "line_name": "Línea de alta velocidad Antequera – Granada",
+              "from_node_id": "granada",
+              "from_name": "Granada",
+              "to_node_id": "antequera-santa-ana",
+              "to_name": "Antequera-Santa Ana",
+              "length_km": 114.1,
+              "time_min": 34,
+              "single_track_km": 81.0
+            },
+            {
+              "line_id": "lav-cordoba-malaga",
+              "line_name": "Línea de alta velocidad Córdoba – Málaga",
+              "from_node_id": "antequera-santa-ana",
+              "from_name": "Antequera-Santa Ana",
+              "to_node_id": "bif-malaga",
+              "to_name": "Bifurcación Málaga-Alta Velocidad",
+              "length_km": 96.9,
+              "time_min": 19,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "bif-malaga",
+              "from_name": "Bifurcación Málaga-Alta Velocidad",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 14.4,
+              "time_min": 3,
+              "single_track_km": 0.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "sevilla-santa-justa",
+              "to_name": "Sevilla-Santa Justa",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Loja",
+            "Antequera AV",
+            "Antequera-Santa Ana",
+            "Puente Genil-Herrera",
+            "Córdoba"
+          ],
+          "node_ids": [
+            "granada",
+            "bif-la-chana",
+            "bif-tocon",
+            "loja",
+            "bif-riofrio",
+            "bif-archidona",
+            "antequera-av",
+            "bif-bobadilla",
+            "antequera-santa-ana",
+            "puente-genil-herrera",
+            "santaella",
+            "la-marota",
+            "bif-malaga",
+            "cordoba",
+            "bif-malaga",
+            "majarabique",
+            "sevilla-santa-justa"
+          ],
+          "segment_ids": [
+            "lav-antequera-granada:bif-la-chana:granada",
+            "lav-antequera-granada:bif-tocon:bif-la-chana",
+            "lav-antequera-granada:loja:bif-tocon",
+            "lav-antequera-granada:bif-riofrio:loja",
+            "lav-antequera-granada:bif-archidona:bif-riofrio",
+            "lav-antequera-granada:antequera-av:bif-archidona",
+            "lav-antequera-granada:bif-bobadilla:antequera-av",
+            "lav-antequera-granada:antequera-santa-ana:bif-bobadilla",
+            "lav-cordoba-malaga:puente-genil-herrera:antequera-santa-ana",
+            "lav-cordoba-malaga:santaella:puente-genil-herrera",
+            "lav-cordoba-malaga:la-marota:santaella",
+            "lav-cordoba-malaga:bif-malaga:la-marota",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa"
+          ],
+          "reverse_node_ids": [
+            "cordoba"
+          ]
+        },
+        {
+          "from_node_id": "granada",
+          "from_name": "Granada",
+          "to_node_id": "sevilla-santa-justa",
+          "to_name": "Sevilla-Santa Justa",
+          "length_km": 427.3,
+          "time_min": 155,
+          "single_track_km": 300.7,
+          "line_ids": [
+            "linares-baeza-moreda-granada",
+            "convencional-madrid-alcazar-cordoba",
+            "lav-madrid-sevilla"
+          ],
+          "legs": [
+            {
+              "line_id": "linares-baeza-moreda-granada",
+              "line_name": "Línea convencional Linares-Baeza – Moreda – Granada",
+              "from_node_id": "granada",
+              "from_name": "Granada",
+              "to_node_id": "linares-baeza",
+              "to_name": "Linares-Baeza",
+              "length_km": 173.7,
+              "time_min": 74,
+              "single_track_km": 173.7
+            },
+            {
+              "line_id": "convencional-madrid-alcazar-cordoba",
+              "line_name": "Línea convencional Madrid – Alcázar de San Juan – Córdoba",
+              "from_node_id": "linares-baeza",
+              "from_name": "Linares-Baeza",
+              "to_node_id": "cordoba",
+              "to_name": "Córdoba",
+              "length_km": 127.0,
+              "time_min": 48,
+              "single_track_km": 127.0
+            },
+            {
+              "line_id": "lav-madrid-sevilla",
+              "line_name": "Línea de alta velocidad Madrid – Sevilla",
+              "from_node_id": "cordoba",
+              "from_name": "Córdoba",
+              "to_node_id": "sevilla-santa-justa",
+              "to_name": "Sevilla-Santa Justa",
+              "length_km": 126.6,
+              "time_min": 33,
+              "single_track_km": 0.0
+            }
+          ],
+          "via": [
+            "Iznalloz",
+            "Moreda",
+            "Cabra del Santo Cristo y Alicún",
+            "Jódar-Úbeda",
+            "Linares-Baeza",
+            "Andújar",
+            "Córdoba"
+          ],
+          "node_ids": [
+            "granada",
+            "iznalloz",
+            "bif-almeria",
+            "moreda",
+            "cabra-del-santo-cristo",
+            "jodar-ubeda",
+            "linares-baeza",
+            "espeluy",
+            "andujar",
+            "villa-del-rio",
+            "montoro",
+            "alcolea-de-cordoba",
+            "rabanales",
+            "cordoba",
+            "bif-malaga",
+            "majarabique",
+            "sevilla-santa-justa"
+          ],
+          "segment_ids": [
+            "linares-baeza-moreda-granada:iznalloz:granada",
+            "linares-baeza-moreda-granada:bif-almeria:iznalloz",
+            "linares-baeza-moreda-granada:moreda:bif-almeria",
+            "linares-baeza-moreda-granada:cabra-del-santo-cristo:moreda",
+            "linares-baeza-moreda-granada:jodar-ubeda:cabra-del-santo-cristo",
+            "linares-baeza-moreda-granada:linares-baeza:jodar-ubeda",
+            "convencional-madrid-alcazar-cordoba:linares-baeza:espeluy",
+            "convencional-madrid-alcazar-cordoba:espeluy:andujar",
+            "convencional-madrid-alcazar-cordoba:andujar:villa-del-rio",
+            "convencional-madrid-alcazar-cordoba:villa-del-rio:montoro",
+            "convencional-madrid-alcazar-cordoba:montoro:alcolea-de-cordoba",
+            "convencional-madrid-alcazar-cordoba:alcolea-de-cordoba:rabanales",
+            "convencional-madrid-alcazar-cordoba:rabanales:cordoba",
+            "lav-madrid-sevilla:cordoba:bif-malaga",
+            "lav-madrid-sevilla:bif-malaga:majarabique",
+            "lav-madrid-sevilla:majarabique:sevilla-santa-justa"
+          ],
+          "reverse_node_ids": []
+        }
+      ]
+    },
+    {
       "from": "navalmoral-de-la-mata",
       "to": "caceres",
       "scenario": "",
