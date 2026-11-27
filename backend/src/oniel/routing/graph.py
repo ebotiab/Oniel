@@ -1004,6 +1004,28 @@ def _along(graph: Graph, line_id: str, a: str, b: str) -> list[_Step]:
     return [step for _, step in sorted(steps, key=lambda s: s[0])]
 
 
+def _reachable_from_reentry(graph: Graph, line_id: str, after: set[str]) -> set[str]:
+    """Nodos conectados con alguna vuelta posterior al cierre sin atravesar su línea.
+
+    Desde cada posible vuelta se recorren las vías exteriores. Al tocar la línea se marca
+    el nodo como posible salida y se detiene ese ramal. Los giros se comprueban en _walk.
+    """
+    km = graph.line_km[line_id]
+    reachable = set(after)
+    pending = list(after)
+    while pending:
+        node = pending.pop()
+        for edge in graph.edges_at(node):
+            if edge.line_id == line_id:
+                continue
+            neighbor = edge.other(node)
+            if neighbor not in reachable:
+                reachable.add(neighbor)
+                if neighbor not in km:
+                    pending.append(neighbor)
+    return reachable
+
+
 def closure_detours(
     graph: Graph,
     segment_id: str,
@@ -1033,9 +1055,13 @@ def closure_detours(
     km = graph.line_km[line_id]
     lo, hi = sorted((km[closed.a], km[closed.b]))
     g = graph.apply((scenario or Scenario()).with_closures([segment_id]))
-    # Los nodos anteriores, del más cercano al tramo al más lejano.
-    before = sorted((n for n in km if km[n] <= lo + KM_TOLERANCE), key=lambda n: -km[n])
     after = {n for n in km if km[n] >= hi - KM_TOLERANCE}
+    reachable = _reachable_from_reentry(g, line_id, after)
+    # Las salidas conectadas a alguna vuelta, de la más cercana al cierre a la más lejana.
+    before = sorted(
+        (n for n in km if n in reachable and km[n] <= lo + KM_TOLERANCE), key=lambda n: -km[n]
+    )
+    outside = reachable.difference(km)
     found = [
         (start, steps)
         for start in before
@@ -1043,7 +1069,7 @@ def closure_detours(
             g,
             start,
             lambda n: n in after,
-            lambda n: n not in km,
+            lambda n: n in outside,
             lambda e: e.line_id != line_id,
             None,
         )
