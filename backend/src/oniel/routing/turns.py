@@ -55,15 +55,15 @@ class TurnProblem:
     detail: str
 
 
-def _heading(coords: Sequence[Coord]) -> tuple[Coord, float]:
+def _heading(coords: Sequence[Coord], reach_m: float) -> tuple[Coord, float]:
     """El primer punto del trazado y el rumbo, en grados, hacia el que está a ``REACH_M`` de él."""
     origin = coords[0]
     target = coords[-1]
     walked = 0.0
     for a, b in zip(coords, coords[1:], strict=False):
         step = haversine_km(a, b) * 1000
-        if step > 0 and walked + step >= REACH_M:
-            t = (REACH_M - walked) / step
+        if step > 0 and walked + step >= reach_m:
+            t = (reach_m - walked) / step
             target = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
             break
         walked += step
@@ -78,7 +78,9 @@ def _between(a: float, b: float) -> float:
 
 
 def turn_sides(
-    segments: Iterable[tuple[TurnSegment, Mapping[str, Any]]], station_ids: Iterable[str]
+    segments: Iterable[tuple[TurnSegment, Mapping[str, Any]]],
+    station_ids: Iterable[str],
+    reach_by_node: Mapping[str, float] | None = None,
 ) -> tuple[Turns, list[TurnProblem]]:
     """Los lados de cada nodo que no es estación y los nodos que no se han podido clasificar.
 
@@ -86,6 +88,7 @@ def turn_sides(
     origen al de destino). Solo cuentan los tramos disponibles, que son los del grafo.
     """
     stations = set(station_ids)
+    reach = reach_by_node or {}
     at_node: dict[str, list[tuple[str, Coord, float]]] = {}
     for segment, geometry in segments:
         if segment.status != "disponible":
@@ -98,7 +101,7 @@ def turn_sides(
             (segment.to_node_id, coords[::-1]),
         ):
             if node_id not in stations:
-                origin, heading = _heading(line)
+                origin, heading = _heading(line, reach.get(node_id, REACH_M))
                 at_node.setdefault(node_id, []).append((segment.id, origin, heading))
     turns: Turns = {}
     problems: list[TurnProblem] = []

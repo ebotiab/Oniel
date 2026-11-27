@@ -898,6 +898,20 @@
       "from_stop_id": "17000"
     },
     {
+      "id": "madrid-vigo-por-zamora",
+      "description": "Para la secuencia Madrid, Zamora, Ourense y la costa de Vigo basta resolver hasta Ourense. El tramo de Galicia tiene dos itinerarios posibles.",
+      "consecutive_stop_ids": [
+        "17000",
+        "30200",
+        "22100",
+        "23008",
+        "23004",
+        "08223"
+      ],
+      "from_stop_id": "17000",
+      "to_stop_id": "22100"
+    },
+    {
       "id": "madrid-zamora-sin-parada",
       "description": "Trenes entre Madrid-Chamartín y Zamora sin paradas intermedias: recorren la línea hasta la bifurcación Medina.",
       "consecutive_stop_ids": [

@@ -24,6 +24,7 @@ LBMG_SPEC = DATA_DIR / "curated" / "linares-baeza-moreda-granada.json"
 ALBACETE_SPEC = DATA_DIR / "curated" / "alcazar-albacete.json"
 LAV_MALAGA_SPEC = DATA_DIR / "curated" / "lav-cordoba-malaga.json"
 LAV_GRANADA_SPEC = DATA_DIR / "curated" / "lav-antequera-granada.json"
+CONXO_SPEC = DATA_DIR / "curated" / "enlace-conxo.json"
 GOBANTES_SPEC = DATA_DIR / "curated" / "enlace-gobantes-bobadilla.json"
 BCN_SPEC = DATA_DIR / "curated" / "lav-madrid-barcelona.json"
 LAV_VALENCIA_SPEC = DATA_DIR / "curated" / "lav-madrid-valencia.json"
@@ -92,6 +93,7 @@ SPECS = [
     LAV_OURENSE_SPEC,
     LAV_SANTIAGO_SPEC,
     EJE_ATLANTICO_SPEC,
+    CONXO_SPEC,
     LINK_MONFORTE_SPEC,
     MADRID_PLASENCIA_SPEC,
     LAV_BADAJOZ_SPEC,

@@ -150,6 +150,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 8  # de Príncipe Pío a Pinar
             + 16  # quince tramos propios y la división del acceso en Ávila
             + 14  # once de la 120, dos del enlace y el corte de la 982
+            + 2  # Conxo y la división de la 822
             + 1  # la 014 entre Gobantes y Bobadilla
             + 1  # enlace de El Chaparral a Arroyo
         )
@@ -404,8 +405,7 @@ def test_vitoria_is_reached_from_madrid_through_burgos(graph: Graph) -> None:
 
 def test_santiago_a_coruna_and_vigo_are_reached_from_madrid_through_ourense(graph: Graph) -> None:
     """Galicia entera: de Madrid-Chamartín a Ourense por las líneas de Valladolid y de Olmedo, de
-    Ourense a Santiago por la alta velocidad y, desde Santiago, a A Coruña o a Vigo. Hay un solo
-    camino, que entra en la estación de Santiago: el enlace de Conxo no está cargado."""
+    Ourense a Santiago por la alta velocidad y, desde Santiago, a A Coruña o a Vigo. Hacia Vigo se puede entrar en Santiago o tomar el enlace de Conxo."""
     lines = ["lav-madrid-valladolid", "lav-olmedo-ourense", "lav-ourense-santiago", "eje-atlantico"]
     to_santiago = find_routes(graph, "madrid-chamartin", "santiago")
     assert [
@@ -424,7 +424,7 @@ def test_santiago_a_coruna_and_vigo_are_reached_from_madrid_through_ourense(grap
         (r.length_km, r.time_min, r.line_ids)
         for r in to_vigo
         if "medina-del-campo-salamanca" not in r.line_ids
-    ] == [(643.0, 159, lines)]
+    ] == [(639.8, 156, lines), (643.0, 159, lines)]
     along = find_routes(graph, "a-coruna", "vigo-urzaiz")
     assert [(r.length_km, r.time_min, r.line_ids) for r in along] == [(155.2, 53, lines[3:])]
 
@@ -533,6 +533,7 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     Atocha a Chamartín, que cierra el suyo con las dos líneas de alta velocidad que se juntan en
     la bifurcación de Torrejón de Velasco."""
     assert graph.link_of == {
+        "enlace-conxo": "eje-atlantico",
         "enlace-gobantes-bobadilla": LAV_GRANADA,
         "enlace-monforte-del-cid": LAV_MURCIA,
         "enlace-soto-de-cerrato": "lav-venta-de-banos-burgos",
@@ -553,6 +554,9 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     }
     tunnel = "enlace-atocha-chamartin"
     assert {s: n for s, (link, n) in all_sides.items() if link != "enlace-monforte-del-cid"} == {
+        "enlace-conxo:bif-conxo:bif-rio-sar": 0,
+        "lav-ourense-santiago:bif-conxo:santiago": 1,
+        "eje-atlantico:santiago:bif-rio-sar": 2,
         "enlace-gobantes-bobadilla:bif-gobantes:bif-bobadilla": 0,
         f"{LAV_MALAGA}:antequera-santa-ana:bif-gobantes": 1,
         f"{LAV_GRANADA}:antequera-santa-ana:bif-bobadilla": 2,

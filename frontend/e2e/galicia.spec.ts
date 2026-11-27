@@ -8,7 +8,7 @@ async function abrirBuscador(page: import('@playwright/test').Page) {
 }
 
 test.describe('Las líneas de Ourense a Santiago y de A Coruña a Vigo', () => {
-  test('la línea de Ourense a Santiago tiene su ficha, con sus dos bifurcaciones en el esquema', async ({ page }) => {
+  test('la línea de Ourense a Santiago tiene su ficha, con sus bifurcaciones en el esquema', async ({ page }) => {
     await page.goto('/linea/lav-ourense-santiago')
     await expect(page.getByRole('heading', { name: 'Línea de alta velocidad Ourense – Santiago de Compostela' })).toBeVisible()
     await expect(page.locator('body')).toContainText('Une Ourense con Santiago de Compostela en poco más de media hora')
@@ -80,6 +80,7 @@ test.describe('Las líneas de Ourense a Santiago y de A Coruña a Vigo', () => {
     await expect(recorridos.first().getByTestId('recorrido-trenes')).toContainText(/\d+ trenes directos en el horario del /)
     await page.goto('/recorridos/madrid-chamartin/vigo-urzaiz')
     await expect(recorridos.first()).toBeVisible()
-    await expect(recorridos.first()).toContainText('643,0 km')
+    await expect(recorridos.first()).toContainText('639,8 km')
+    await expect(recorridos.nth(1)).toContainText('643,0 km')
   })
 })

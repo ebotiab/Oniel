@@ -1,0 +1,170 @@
+{
+  "line": {
+    "id": "enlace-conxo",
+    "name": "Enlace de Conxo",
+    "short_name": "842",
+    "sort_order": 57,
+    "zone": "galicia",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1668,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 50,
+    "tracks": 1,
+    "reference_length_km": 1.054,
+    "link_of": "eje-atlantico",
+    "link_reversal_at": "santiago",
+    "description": "El enlace de Conxo permite viajar entre Ourense y Vigo-Urzáiz sin entrar en la estación de Santiago de Compostela. El otro recorrido llega al andén, donde el tren cambia de sentido para continuar.\n\nDesde Ourense los dos caminos comparten la vía hasta la bifurcación de Conxo. Allí nace el enlace, que llega al Eje Atlántico en la bifurcación Río Sar. Desde Río Sar se sigue hacia Vilagarcía de Arousa y Vigo.\n\nEl 17 de noviembre de 2026 Renfe situó aquí el AVE 04515 hacia Vigo y el 04384 hacia Ourense. Las horas de paso por las bifurcaciones son estimadas. Para el 11 de diciembre Renfe publica sus paradas y horas comerciales. Su itinerario ese día está pendiente de confirmar.",
+    "verification_source_id": "adif-tramo-842",
+    "geometry_source": {
+      "source_id": "osm-vias-santiago-sur",
+      "parts": [
+        {
+          "source_id": "osm-vias-santiago-sur",
+          "file": "raw/osm/vias_santiago_sur_2026-11-18.json",
+          "way_ref": "842",
+          "from": [
+            -8.5413464,
+            42.8548111
+          ],
+          "to": [
+            -8.5533057,
+            42.8568421
+          ]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-conxo",
+      "name": "Bifurcación de Conxo",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.5413464,
+        "lat": 42.8548111
+      },
+      "shared": true
+    },
+    {
+      "id": "bif-rio-sar",
+      "name": "Bifurcación Río Sar",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.5533057,
+        "lat": 42.8568421
+      },
+      "shared": true
+    }
+  ],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "bif-conxo",
+      "to_node": "bif-rio-sar",
+      "value": 1,
+      "source_id": "adif-tramo-842",
+      "checked_on": "2026-11-27",
+      "note": "Tramo 068420010, tipo de vía U."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-conxo",
+      "to_node": "bif-rio-sar",
+      "value": "ertms_n1",
+      "source_id": "adif-dr-842",
+      "checked_on": "2026-11-27",
+      "note": "La DR 2024, §2.6.2, fecha la puesta en servicio el 30 de agosto de 2023."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-conxo",
+      "to_node": "bif-rio-sar",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-dr-842",
+      "checked_on": "2026-11-27",
+      "note": "Las referencias consultadas no especifican el bloqueo del enlace."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-conxo",
+      "to_node": "bif-rio-sar",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-dr-842",
+      "checked_on": "2026-11-27",
+      "note": "Las referencias consultadas no especifican el mando del enlace."
+    }
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "22100": {
+      "exits": [
+        "bif-conxo"
+      ],
+      "via": {
+        "line": "lav-ourense-santiago",
+        "node": "bif-conxo"
+      }
+    },
+    "23008": {
+      "exits": [
+        "bif-rio-sar"
+      ],
+      "via": {
+        "line": "eje-atlantico",
+        "node": "bif-rio-sar"
+      }
+    }
+  },
+  "corridor_filter": {
+    "description": "El enlace carece de paradas comerciales. Solo se atribuye un paso si su fecha, número y sentido tienen evidencia.",
+    "min_node_stops": 1
+  },
+  "route_overrides": [
+    {
+      "id": "ourense-vilagarcia-observado",
+      "description": "Posiciones publicadas por Renfe dentro de la línea 842. Cada observación acredita una circulación en un solo sentido y día.",
+      "consecutive_stop_ids": [
+        "17000",
+        "30200",
+        "22100",
+        "23008",
+        "23004",
+        "08223"
+      ],
+      "from_stop_id": "22100",
+      "to_stop_id": "23008",
+      "observations": [
+        {
+          "operator_id": "renfe",
+          "train_number": "04515",
+          "date": "2026-11-17",
+          "from_stop_id": "22100",
+          "source_id": "renfe-conxo-04515"
+        },
+        {
+          "operator_id": "renfe",
+          "train_number": "04384",
+          "date": "2026-11-17",
+          "from_stop_id": "23008",
+          "source_id": "renfe-conxo-04384"
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 Un tren de Ourense a Vigo-Urzáiz puede entrar en Santiago de Compostela, parar y cambiar de sentido, o tomar el enlace de Conxo y continuar hacia Vilagarcía sin entrar en la estación. El comparador debe mostrar ambos caminos. La ficha de un tren debe conservar sus paradas comerciales y explicar con qué evidencia se le atribuye uno de ellos. [Incidencia de implementación #322][tarea].
 
+La implementación y los recuentos finales están en [Cómo se cargó el enlace de Conxo](../datos.md#cómo-se-cargó-el-enlace-de-conxo). El plan que sigue recoge el estado previo y distingue las hipótesis de sus pruebas.
+
 Preparación del 27/11/2026 sobre [`main` a73d8f4][base]. La [carga de Galicia][galicia-pr] dejó el enlace a trazos. La [incidencia #264][costura] y la [PR #283][costura-pr] hicieron visible la conexión desde ambos extremos. La búsqueda de «Conxo» y «Río Sar» en incidencias, PR y planes encontró esos antecedentes. La futura carga necesita las dos líneas gallegas y un turno exclusivo de datos, incluidos los refrescos GTFS. La planificación mantiene [Ávila–Salamanca #316][avila] antes de [Medina–Salamanca #320][medina]. Conxo queda sin turno asignado.
 
 ## Dónde cambia de línea el tren

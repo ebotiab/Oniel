@@ -114,10 +114,14 @@
       "kind": "bifurcacion",
       "rank": "secundario",
       "position": {
-        "lon": -8.5523223,
-        "lat": 42.8567629
+        "lon": -8.5533057,
+        "lat": 42.8568421
       },
-      "description": "Bifurcación (el punto donde una vía se separa de otra) a dos kilómetros de la estación de Santiago. De aquí sale un enlace corto hacia la línea de Ourense, por el que algunos trenes de Madrid a Vigo pasan de una línea a otra sin entrar en la estación de Santiago."
+      "description": "Bifurcación (el punto donde una vía se separa de otra) a dos kilómetros de la estación de Santiago. De aquí sale un enlace corto hacia la línea de Ourense, por el que algunos trenes de Madrid a Vigo pasan de una línea a otra sin entrar en la estación de Santiago.",
+      "source_id": "osm-vias-santiago-sur",
+      "details": {
+        "turn_reach_m": 100
+      }
     },
     {
       "id": "osebe",
@@ -675,10 +679,14 @@
   "route_overrides": [
     {
       "id": "ourense-vilagarcia-sin-santiago",
-      "description": "Trenes entre Ourense y Vilagarcía de Arousa sin parada en Santiago: llegan de la línea de Ourense por el enlace de Conxo, que no está cargado, y entran en esta por la bifurcación Río Sar, sin pasar por la estación de Santiago.",
+      "description": "Los trenes con Ourense y Vilagarcía consecutivas recorren las vías comunes hasta las agujas de Conxo y Río Sar. Entre ellas se usa la distancia más corta para estimar las horas. La atribución del enlace se comprueba por circulación y fecha.",
       "consecutive_stop_ids": [
+        "17000",
+        "30200",
         "22100",
-        "23008"
+        "23008",
+        "23004",
+        "08223"
       ],
       "stop_mappings": {
         "17000": {
@@ -687,8 +695,13 @@
           ],
           "via": [
             {
+              "line": "enlace-conxo",
+              "node": "bif-rio-sar",
+              "distance_only": true
+            },
+            {
               "line": "lav-ourense-santiago",
-              "node": "bif-a-grandeira"
+              "node": "bif-conxo"
             },
             {
               "line": "lav-olmedo-ourense",
@@ -706,8 +719,13 @@
           ],
           "via": [
             {
+              "line": "enlace-conxo",
+              "node": "bif-rio-sar",
+              "distance_only": true
+            },
+            {
               "line": "lav-ourense-santiago",
-              "node": "bif-a-grandeira"
+              "node": "bif-conxo"
             },
             {
               "line": "lav-olmedo-ourense",
@@ -719,10 +737,17 @@
           "exits": [
             "bif-rio-sar"
           ],
-          "via": {
-            "line": "lav-ourense-santiago",
-            "node": "bif-a-grandeira"
-          }
+          "via": [
+            {
+              "line": "enlace-conxo",
+              "node": "bif-rio-sar",
+              "distance_only": true
+            },
+            {
+              "line": "lav-ourense-santiago",
+              "node": "bif-conxo"
+            }
+          ]
         }
       }
     }

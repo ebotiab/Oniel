@@ -627,6 +627,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         LAV_MALAGA_SPEC.name: MALAGA_RULES | {"malaga-granada-por-gobantes": 6},
         LAV_GRANADA_SPEC.name: {},
         "enlace-gobantes-bobadilla.json": {},
+        "enlace-conxo.json": {"ourense-vilagarcia-observado": 2},
         # la alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de
         # Huesca y el Alvia que sale por Camp de Tarragona hacia València y Córdoba
         BCN_SPEC.name: {
@@ -690,13 +691,15 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
             "madrid-valladolid-sin-parada": 188,
             "madrid-leon-sin-parada": 4,
             "madrid-medina-sin-parada": 14,
-            "madrid-zamora-sin-parada": 115,
+            "madrid-vigo-por-zamora": 10,
+            "madrid-zamora-sin-parada": 105,
             "madrid-ourense-sin-parada": 6,
         },
         # los que recorren la de Olmedo a Ourense sin parar en sus estaciones propias: los
         # mismos que la de Valladolid recoge con las reglas del mismo nombre
         LAV_OURENSE_SPEC.name: {
-            "madrid-zamora-sin-parada": 115,
+            "madrid-vigo-por-zamora": 10,
+            "madrid-zamora-sin-parada": 105,
             "madrid-ourense-sin-parada": 6,
         },
         # el enlace de Monforte del Cid tampoco: le basta su filtro

@@ -325,6 +325,12 @@ def validate_attributes(
         except (ValueError, OSError) as error:
             problems.append(f"{line.path.name}: {error}")
             continue
+        for rule in spec.route_overrides:
+            for observation in rule.observations or ():
+                if observation.source_id not in sources:
+                    problems.append(
+                        f"{rule.id}: fuente de itinerario desconocida ({observation.source_id})"
+                    )
         for node in spec.nodes:
             if node.source_id is not None and node.source_id not in sources:
                 problems.append(
@@ -384,12 +390,16 @@ def validate_turns(spec_paths: Sequence[Path | ValidationLine], data_dir: Path) 
 
     segments: list[tuple[Leaving, dict[str, Any]]] = []
     stations: set[str] = set()
+    reach: dict[str, float] = {}
     for line in _lines(spec_paths, data_dir):
         spec = line.spec
         try:
             net = line.network
         except ValueError:
             continue
+        reach.update(
+            {n.id: n.details["turn_reach_m"] for n in spec.nodes if "turn_reach_m" in n.details}
+        )
         stations.update(n.spec.id for n in net.nodes if n.spec.kind == "estacion")
         segments.extend(
             (
@@ -398,7 +408,7 @@ def validate_turns(spec_paths: Sequence[Path | ValidationLine], data_dir: Path) 
             )
             for s in net.segments
         )
-    turns, problems = turn_sides(segments, stations)
+    turns, problems = turn_sides(segments, stations, reach)
     return {
         "turns": {
             "nodes": len(turns),
@@ -656,6 +666,24 @@ def _validate_line(
             )
         else:
             far_node = link_far_node(own, others)
+            if station := spec.line.link_reversal_at:
+                arms = [
+                    o
+                    for o in others
+                    if o is not parent
+                    and far_node in o.nodes
+                    and not o.spec.line.link_of
+                    and not o.spec.line.bypass_of
+                ]
+                common = [(o, n) for o in arms for n in o.spec.nodes if n.id in parent.nodes]
+                if (
+                    len(common) != 1
+                    or common[0][1].id != station
+                    or common[0][1].kind != "estacion"
+                ):
+                    problems.append(
+                        f"{station} debe ser la estación común de los dos brazos del enlace"
+                    )
             if towards := spec.line.link_towards:
                 join = next(e for e in ends if e in parent.nodes)
                 parent_order = [n.id for n in parent.spec.nodes]

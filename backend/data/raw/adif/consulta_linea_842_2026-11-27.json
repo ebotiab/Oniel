@@ -1,0 +1,14 @@
+{
+  "consulta": "2026-11-27",
+  "declaracion_2026": "https://www.adif.es/documents/20124/51645141/20260327_01_DR%2BADIF_V1_LIBRO_2026.pdf/ad3f9339-e36e-8ad1-a931-22cd1a34e8fa?t=1774634014267",
+  "apartados_2026": "Anexos F y H, línea 842. Ancho ibérico y alimentación a 25 kV CA.",
+  "declaracion_2024": "https://www.adif.es/documents/20124/26593593/20240205_01_DR_Adif_Libro_2024_V1.pdf/36f0b3eb-65ad-3188-d43c-1456c7a87ddb",
+  "apartado_2024": "§2.6.2, p. 68. ERTMS nivel 1 en servicio desde 30/08/2023.",
+  "plano_y_contraste": "https://services7.arcgis.com/XTupIrLX53AjaJqO/arcgis/rest/services/Tramos_en_servicio_Adif_p%C3%BAblico/FeatureServer/0/query?where=CODTRAMO+IN+%28%27068420010%27%2C%27068220114%27%2C%27068220116%27%2C%27068240053%27%2C%27068240044%27%2C%27160820120%27%29&outFields=CODTRAMO%2CCOD_LINEA%2CDEPORIGEN%2CDEPDESTINO%2CPKI%2CPKD%2CLONGITUD%2CCOD_TIPO_V&returnGeometry=false&f=pjson",
+  "estado_red": {
+    "url": "https://www.adif.es/viajeros/estado-de-la-red",
+    "actualizado": "2026-11-27 14:54",
+    "avisos": "https://www.adif.es/viajeros/avisos",
+    "resultado": "Sin interrupción anunciada para la línea 842. El aviso gallego de obras afecta a Redondela–O Porriño."
+  }
+}

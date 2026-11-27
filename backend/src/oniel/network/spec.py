@@ -102,6 +102,9 @@ class ViaLine(BaseModel):
     line: str
     node: str
 
+    #: Distancia de referencia para estimar el tiempo entre dos agujas con itinerario incierto.
+    distance_only: bool = False
+
 
 class StopMapping(BaseModel):
     node: str | None = None
@@ -320,6 +323,7 @@ class LineSpec(BaseModel):
     link_of: str | None = None
     #: Nodo contiguo de la principal hacia el que se incorpora el enlace, si se conoce.
     link_towards: str | None = None
+    link_reversal_at: str | None = None
 
     @field_validator("electrification")
     @classmethod
@@ -368,6 +372,16 @@ class CorridorFilter(BaseModel):
         return self
 
 
+class RouteObservation(BaseModel):
+    """Una circulación identificada por su operador, número, día y sentido entre las paradas."""
+
+    operator_id: str
+    train_number: str
+    date: dt.date
+    from_stop_id: str
+    source_id: str
+
+
 class RouteOverride(BaseModel):
     """Viajes que recorren esta línea solo en parte de su recorrido y siguen por otra línea cargada,
     o que la cruzan sin parar en ella entre paradas de otras líneas.
@@ -388,9 +402,20 @@ class RouteOverride(BaseModel):
     from_stop_id: str | None = None
     to_stop_id: str | None = None
     stop_mappings: dict[str, StopMapping] = Field(default_factory=dict)
+    #: Con esta lista solo se atribuyen pasos en los días y sentidos observados.
+    observations: list[RouteObservation] | None = None
 
     @model_validator(mode="after")
     def _consistent(self) -> RouteOverride:
+        for observation in self.observations or ():
+            if (
+                not self.from_stop_id
+                or not self.to_stop_id
+                or observation.from_stop_id not in (self.from_stop_id, self.to_stop_id)
+            ):
+                raise ValueError(
+                    f"la observación de {self.id} necesita las dos paradas y el sentido"
+                )
         if len(set(self.consecutive_stop_ids)) != len(self.consecutive_stop_ids):
             raise ValueError(f"la regla {self.id} repite paradas en consecutive_stop_ids")
         for ref in (self.from_stop_id, self.to_stop_id):
@@ -462,6 +487,8 @@ class NetworkSpec(BaseModel):
                     f" {self.line.bypass_of} que no paran entre sus dos extremos, y no lleva"
                     " stop_mappings ni route_overrides"
                 )
+        if self.line.link_reversal_at and (not self.line.link_of or self.line.link_towards):
+            raise ValueError("la inversión necesita un enlace con dos brazos hasta la estación")
         if self.line.link_towards and not self.line.link_of:
             raise ValueError("solo un enlace puede declarar un sentido de incorporación")
         if self.line.link_of == self.line.id:

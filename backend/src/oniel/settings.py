@@ -49,6 +49,7 @@ class Settings(BaseSettings):
         "lav-olmedo-ourense",
         "lav-ourense-santiago",
         "eje-atlantico",
+        "enlace-conxo",
         "madrid-plasencia",
         "lav-plasencia-badajoz",
         "enlace-el-chaparral-arroyo-de-la-herrera",

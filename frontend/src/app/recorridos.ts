@@ -179,6 +179,15 @@ function nombrar(recorridos: Recorrido[], graph: Graph, lines: Map<string, LineS
       if (line) r.titulo += lineKind(line) === 'alta velocidad' ? ' y la alta velocidad' : ' y la línea convencional'
     }
   })
+  const estacionesDeInversion = new Set(graph.linkReversalAt.values())
+  for (const r of recorridos) {
+    const enlace = r.route.segment_ids.map((id) => graph.linkSides.get(id)).find((side) => side?.[1] === 0 && graph.linkReversalAt.has(side[0]))
+    const nombre = enlace && graph.lineNames.get(enlace[0])
+    if (nombre) r.titulo = `Por el ${nombre.replace(/^Enlace/, 'enlace')}`
+    else if (r.route.reverse_node_ids.some((id) => estacionesDeInversion.has(id))) {
+      r.titulo = `Por ${enumerar(r.route.reverse_node_ids.map((id) => shortStop(graph.nodes.get(id)?.name)))}`
+    }
+  }
   // Dos recorridos con el mismo nombre se distinguen por el tipo de la línea que solo recorre uno.
   for (const r of recorridos) {
     const iguales = recorridos.filter((o) => o !== r && o.titulo === r.titulo)
@@ -236,12 +245,15 @@ function baipasesDe(route: Route, graph: Graph, lines: Map<string, LineSummary>,
  * Primer y último tramo de cada trecho del recorrido. Un baipás o un enlace es parte de su línea: no abre trecho, y
  * así el tren que entra en la estación que el baipás rodea sigue contando en el recorrido.
  */
-function tramosClave(route: Route, segments: Map<string, SegmentOut>, lines: Map<string, LineSummary>): string[] {
+function tramosClave(graph: Graph, route: Route, segments: Map<string, SegmentOut>, lines: Map<string, LineSummary>): string[] {
   const clave = new Set<string>()
   let anterior: string | null | undefined
   let ultimo: string | undefined
   for (const id of route.segment_ids) {
     // Un enlace hipotético no es un tramo de ninguna línea ni tiene trenes: cuenta como trecho propio.
+    const lado = graph.linkSides.get(id)
+    // La 842 y los dos brazos de la estación distinguen los trenes, también en sentido inverso.
+    if (lado && graph.linkReversalAt.has(lado[0])) clave.add(id)
     const propia = segments.get(id)?.line_id ?? null
     const lineId = propia === null ? null : (parentOf(lines.get(propia) ?? {}) ?? propia)
     if (lineId !== anterior || lineId === null) {
@@ -305,7 +317,7 @@ export function compararRecorridos(
     baipases: baipasesDe(route, graph, lines, segments),
     cortes: cortesDe(route),
     alternativa: false,
-    tramosClave: tramosClave(route, segments, lines),
+    tramosClave: tramosClave(graph, route, segments, lines),
   })
   const recorridos = found.slice(0, RECORRIDOS_A_LA_VISTA).map(presentar)
   let sinPaso = false
@@ -408,6 +420,7 @@ export function diferenciaConSupuesto(hoy: Recorrido[], supuestos: Recorrido[]):
 
 /** Un tren que para en las dos estaciones, en ese orden. */
 export interface TrenDirecto {
+  itinerary?: NodeCall['itinerary']
   service_id: string
   train_number: string
   product: string
@@ -431,7 +444,7 @@ export function trenesDirectos(enOrigen: NodeCall[], enDestino: NodeCall[]): Tre
     const arrival = llegada?.arrival ?? llegada?.departure
     if (!departure || !arrival) continue
     const minutes = minutosEntre(departure, arrival)
-    if (minutes > 0) trenes.push({ service_id: c.service_id, train_number: c.train_number, product: c.product, departure, arrival, minutes })
+    if (minutes > 0) trenes.push({ itinerary: c.itinerary, service_id: c.service_id, train_number: c.train_number, product: c.product, departure, arrival, minutes })
   }
   return trenes.sort((a, b) => (a.departure < b.departure ? -1 : a.departure > b.departure ? 1 : 0))
 }

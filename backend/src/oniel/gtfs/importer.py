@@ -62,6 +62,9 @@ class _TripPlan:
     resolutions: list[Literal["completa", "parcial"]] = field(default_factory=list)
     lines: list[str] = field(default_factory=list)
 
+    itinerary_line_id: str | None = None
+    itinerary_sources: dict[dt.date, str] = field(default_factory=dict)
+
     @property
     def resolution(self) -> Literal["completa", "parcial"]:
         return "completa" if all(r == "completa" for r in self.resolutions) else "parcial"
@@ -216,27 +219,42 @@ async def import_gtfs(
             kinds: Counter[str] = Counter()
             resolutions: Counter[str] = Counter()
             rules: Counter[str] = Counter()
-            trips = select_trips_for_spec(feed, spec)
+            trips = select_trips_for_spec(feed, spec, include_unconfirmed=True)
+            imported_numbers: set[str] = set()
             for trip in trips:
                 route = route_for_trip(spec, trip)
+                calls = calls_for_trip(trip, feed, spec, nodes=nodes, others=others, route=route)
+                plan = plans.setdefault(trip.trip_id, _TripPlan(trip, calls))
+                if route is not None and route.override.observations is not None:
+                    plan.itinerary_line_id = spec.line.id
+                    plan.itinerary_sources = route.observed_sources(
+                        trip, feed.service_dates.get(trip.service_id, set()), operator_id
+                    )
+                    if not plan.itinerary_sources:
+                        continue
                 if route is not None:
                     rules[route.override.id] += 1
-                calls = calls_for_trip(trip, feed, spec, nodes=nodes, others=others, route=route)
+                imported_numbers.add(trip.train_number)
                 line_calls = calls_on_line(calls, route)
                 for c in line_calls:
                     if c.node_id is None and not c.exit_node_ids:
                         unmapped[f"{spec.line.id}: {c.stop_id} {c.stop_name}"] += 1
-                passes, resolution = resolve_passes(line_calls, nodes, segments, bypasses, far_node)
+                # En un enlace observado, la evidencia es la posición publicada para ese día.
+                reason_node = (
+                    None if route and route.override.observations is not None else far_node
+                )
+                passes, resolution = resolve_passes(
+                    line_calls, nodes, segments, bypasses, reason_node
+                )
                 resolutions[resolution] += 1
                 own_ids = {s.id for s in segments}
                 kinds.update(p.kind for p in passes if p.segment_id in own_ids)
-                plan = plans.setdefault(trip.trip_id, _TripPlan(trip, calls))
                 plan.passes.extend(passes)
                 plan.resolutions.append(resolution)
                 plan.lines.append(spec.line.id)
             per_line[spec.line.id] = {
-                "trips": len(trips),
-                "train_numbers": len({t.train_number for t in trips}),
+                "trips": sum(resolutions.values()),
+                "train_numbers": len(imported_numbers),
                 "passes": dict(kinds),
                 "resolution": dict(resolutions),
                 "route_overrides": dict(rules),
@@ -367,7 +385,10 @@ async def _insert_services(
                 run_id,
             )
         )
-        service_dates.extend((dataset_id, trip.trip_id, d) for d in dates)
+        service_dates.extend(
+            (dataset_id, trip.trip_id, d, plan.itinerary_line_id, plan.itinerary_sources.get(d))
+            for d in dates
+        )
         stops.extend(
             (
                 dataset_id,
@@ -422,7 +443,13 @@ async def _insert_services(
     await conn.copy_records_to_table(
         "service_dates",
         records=service_dates,
-        columns=["dataset_id", "service_id", "service_date"],
+        columns=[
+            "dataset_id",
+            "service_id",
+            "service_date",
+            "itinerary_line_id",
+            "itinerary_source_id",
+        ],
     )
     await conn.copy_records_to_table(
         "service_stops",

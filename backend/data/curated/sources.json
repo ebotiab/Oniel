@@ -1828,7 +1828,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-18",
-      "coverage": "Existencia y trazado del enlace entre la línea de alta velocidad Ourense–Santiago y la línea de Vigo (vía 143163375, «Desvío de Conxo», ref=842, 1,0 km, ancho ibérico, 50 km/h), que no se carga y se dibuja a trazos.",
+      "coverage": "Eje de la línea 842 de Adif por la vía 143163375, 32 vértices y 50 km/h en OSM. Agujas 470323194 y 1566507644 y lados físicos de los brazos de Santiago.",
       "notes": "Descargado por la API Overpass (overpass-api.de) el 18 de noviembre de 2026: las vías railway=rail del rectángulo 42,80–42,89° N, 8,62–8,48° O. El enlace sale de la línea de Ourense 0,7 km después de la bifurcación A Grandeira (el «desvío B7 hacia bifurcación Río Sar, PK 0,0 de la línea 842» de la tabla de Wikipedia) y acaba en la bifurcación Río Sar de la línea de Vigo.",
       "file": "raw/osm/vias_santiago_sur_2026-11-18.json"
     },
@@ -2940,6 +2940,52 @@
       "coverage": "Lote 3, límites de mantenimiento por vía y referencias aproximadas de la tabla 3.",
       "notes": "El CSV identifica el original firmado. No se asigna a las agujas del eje un PK del ámbito de mantenimiento.",
       "file": "raw/adif/consulta_linea_014_2026-11-27.json"
+    },
+    {
+      "id": "adif-tramo-842",
+      "name": "Tramos en servicio de Adif, línea 842",
+      "publisher": "Adif",
+      "url": "https://services7.arcgis.com/XTupIrLX53AjaJqO/arcgis/rest/services/Tramos_en_servicio_Adif_p%C3%BAblico/FeatureServer/0/5555?f=pjson",
+      "license": "© Administrador de infraestructuras ferroviarias. Consulta pública con atribución.",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Tramo 068420010 entre las agujas de A Grandeira (km 376,1) y Río Sar. Vía única de ancho ibérico y 1.054 metros de catálogo.",
+      "notes": "Contraste de la geometría y del inventario. El mapa usa el eje de OSM.",
+      "file": "raw/adif/tramo_068420010_2026-11-27.json"
+    },
+    {
+      "id": "adif-dr-842",
+      "name": "Declaraciones sobre la Red de Adif, enlace de Conxo",
+      "publisher": "Adif",
+      "url": "https://www.adif.es/documents/20124/26593593/20240205_01_DR_Adif_Libro_2024_V1.pdf/36f0b3eb-65ad-3188-d43c-1456c7a87ddb",
+      "license": "Consulta pública. © Adif.",
+      "retrieved_on": "2026-11-27",
+      "coverage": "ERTMS nivel 1 en la 842 desde el 30/08/2023. Extremos, ancho y alimentación en la DR 2026.",
+      "notes": "DR 2024, §2.6.2 y DR 2026 de 27 de marzo, anexos F y H. La ficha de consulta identifica ambas ediciones.",
+      "file": "raw/adif/consulta_linea_842_2026-11-27.json"
+    },
+    {
+      "id": "renfe-conxo-04515",
+      "name": "Posición del AVE 04515 en Conxo el 17/11/2026",
+      "publisher": "Renfe Viajeros, visor de posición de trenes AV/LD/MD",
+      "url": "https://github.com/EdenRochmanSharabi/renfe-tracker/blob/33af598288f07078f8a4920d0d9dbc49b284bed2/extra/2026-11-17/14-51.json",
+      "license": "Datos de posición de Renfe. CC BY 4.0.",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Una circulación del 04515 hacia Vigo, el 17/11/2026 a las 15:51 (hora peninsular), en 42,85663°, −8,54723°.",
+      "notes": "Captura del visor de Renfe archivada por renfe-tracker. Campo tr, coordenadas en cienmilésimas de grado. La vigencia se limita al día observado. Catálogo de Renfe: https://data.renfe.com/dataset/posicion-vehiculos-av-ld-md",
+      "file": "raw/renfe/posiciones_2026-11-17_1551.json"
+    },
+    {
+      "id": "renfe-conxo-04384",
+      "name": "Posición del AVE 04384 en Conxo el 17/11/2026",
+      "publisher": "Renfe Viajeros, visor de posición de trenes AV/LD/MD",
+      "url": "https://github.com/EdenRochmanSharabi/renfe-tracker/blob/33af598288f07078f8a4920d0d9dbc49b284bed2/extra/2026-11-17/17-22.json",
+      "license": "Datos de posición de Renfe. CC BY 4.0.",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Una circulación del 04384 hacia Ourense, el 17/11/2026 a las 18:22 (hora peninsular), en 42,85580°, −8,54557°.",
+      "notes": "Captura del visor de Renfe archivada por renfe-tracker. Campo tr, coordenadas en cienmilésimas de grado. La vigencia se limita al día observado. Catálogo de Renfe: https://data.renfe.com/dataset/posicion-vehiculos-av-ld-md",
+      "file": "raw/renfe/posiciones_2026-11-17_1822.json"
     }
   ]
 }
