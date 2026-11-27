@@ -36,6 +36,7 @@ class Settings(BaseSettings):
         "alcazar-albacete",
         "lav-cordoba-malaga",
         "lav-antequera-granada",
+        "enlace-gobantes-bobadilla",
         "lav-madrid-barcelona",
         "lav-madrid-valencia",
         "baipas-zaragoza",

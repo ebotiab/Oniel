@@ -17,8 +17,8 @@ from oniel.network.spec import ConnectionSpec, SlowRun, load_network_spec
 from oniel.validate import CONNECTION_END_M, connection_name_problem, validate_connections
 
 CURATED = DATA_DIR / "curated"
-GRANADA = CURATED / "lav-antequera-granada.json"
-MALAGA = CURATED / "lav-cordoba-malaga.json"
+ALBACETE = CURATED / "alcazar-albacete.json"
+MURCIA = CURATED / "lav-monforte-murcia.json"
 SEVILLA = CURATED / "lav-madrid-sevilla.json"
 
 
@@ -50,12 +50,11 @@ def test_the_loaded_network_has_no_loose_seams() -> None:
 
 
 def test_a_connection_between_two_loaded_nodes_says_where_it_leads_from_each() -> None:
-    """El enlace de Málaga a Granada une la bifurcación Bobadilla, donde se declara, y la
-    bifurcación Gobantes, de otra línea: desde una lleva a Málaga y desde la otra, a Granada."""
-    (link,) = [c for c in load_network_spec(GRANADA).connections if c.id == "enlace-malaga-granada"]
-    assert (link.node_id, link.to_node_id) == ("bif-bobadilla", "bif-gobantes")
-    assert link.towards.startswith("Málaga") and (link.towards_back or "").startswith("Granada")
-    assert "bif-gobantes" in {n.id for n in load_network_spec(MALAGA).nodes}
+    """La convencional de Chinchilla a Murcia y Cartagena llega a otro nodo cargado."""
+    (link,) = load_network_spec(ALBACETE).connections
+    assert (link.node_id, link.to_node_id) == ("bif-chinchilla", "murcia-del-carmen")
+    assert "Cartagena" in link.towards and "Chinchilla" in (link.towards_back or "")
+    assert link.to_node_id in {n.id for n in load_network_spec(MURCIA).nodes}
 
 
 def test_lines_drawn_from_both_ends_are_one_connection_now() -> None:
@@ -76,22 +75,29 @@ def test_lines_drawn_from_both_ends_are_one_connection_now() -> None:
 
 def test_validate_asks_for_the_other_end(tmp_path: Path) -> None:
     undeclared = _changed(
-        GRANADA, tmp_path, {"to_node_id": None, "towards_back": None}, "enlace-malaga-granada"
+        ALBACETE,
+        tmp_path,
+        {"to_node_id": None, "towards_back": None},
+        "conv-chinchilla-murcia-cartagena",
     )
-    report = validate_connections([undeclared, *_others(GRANADA)], DATA_DIR)
+    report = validate_connections([undeclared, *_others(ALBACETE)], DATA_DIR)
     (problem,) = report["problems"]
-    assert "enlace-malaga-granada" in problem and "bif-gobantes" in problem
+    assert "conv-chinchilla-murcia-cartagena" in problem and "murcia-del-carmen" in problem
     assert "falta to_node_id" in problem
 
 
 def test_validate_checks_that_the_sketch_reaches_the_declared_node(tmp_path: Path) -> None:
-    short = _changed(GRANADA, tmp_path, {"sketch": [[-4.6428, 37.0436]]}, "enlace-malaga-granada")
-    (problem,) = validate_connections([short, *_others(GRANADA)], DATA_DIR)["problems"]
-    assert "el croquis acaba a" in problem and "bif-gobantes" in problem
+    short = _changed(
+        ALBACETE, tmp_path, {"sketch": [[-1.7005, 38.9000]]}, "conv-chinchilla-murcia-cartagena"
+    )
+    (problem,) = validate_connections([short, *_others(ALBACETE)], DATA_DIR)["problems"]
+    assert "el croquis acaba a" in problem and "murcia-del-carmen" in problem
     assert CONNECTION_END_M == 300
-    # y que ese nodo esté cargado: sin la línea de Málaga, la bifurcación Gobantes no existe
-    (missing,) = validate_connections(_others(MALAGA), DATA_DIR)["problems"]
-    assert "enlace-malaga-granada" in missing and "no está cargado" in missing
+    ausente = _changed(
+        ALBACETE, tmp_path, {"to_node_id": "estacion-ausente"}, "conv-chinchilla-murcia-cartagena"
+    )
+    (missing,) = validate_connections([ausente, *_others(ALBACETE)], DATA_DIR)["problems"]
+    assert "estacion-ausente" in missing and "no está cargado" in missing
 
 
 @pytest.mark.parametrize(

@@ -42,15 +42,15 @@ test.describe('Conexiones a trazos entre dos nodos cargados', () => {
     }
   })
 
-  test('el enlace de Málaga a Granada sale en la ficha de sus dos bifurcaciones', async ({ page }) => {
-    await page.goto('/nodo/bif-bobadilla')
-    const ficha = page.getByTestId('detalle-nodo')
-    await expect(ficha.getByRole('heading', { name: 'Bifurcación Bobadilla' })).toBeVisible()
-    await expect(ficha).toContainText('Enlace Málaga – Granada hacia Málaga por la bifurcación Gobantes')
-    await page.goto('/nodo/bif-gobantes')
-    await expect(ficha.getByRole('heading', { name: 'Bifurcación Gobantes' })).toBeVisible()
-    await expect(ficha).toContainText('Enlace Málaga – Granada hacia Granada por la bifurcación Bobadilla')
-    await expect(ficha).toContainText('no cargada todavía')
+  test('las dos bifurcaciones permiten abrir el tramo de la 014', async ({ page }) => {
+    for (const [id, nombre] of [['bif-bobadilla', 'Bifurcación Bobadilla'], ['bif-gobantes', 'Bifurcación Gobantes']]) {
+      await page.goto('/nodo/' + id)
+      const ficha = page.getByTestId('detalle-nodo')
+      await expect(ficha.getByRole('heading', { name: nombre })).toBeVisible()
+      await ficha.getByRole('button', { name: 'Bifurcación Gobantes – Bifurcación Bobadilla' }).click()
+      await expect(page).toHaveURL('/tramo/enlace-gobantes-bobadilla:bif-gobantes:bif-bobadilla')
+      await expect(page.getByTestId('tramo-vias')).toHaveText('Vía doble')
+    }
   })
 
   test('Burgos dice por dónde llegan los regionales de Valladolid: la línea convencional, a trazos', async ({ page }) => {

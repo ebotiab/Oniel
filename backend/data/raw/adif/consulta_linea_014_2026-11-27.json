@@ -1,0 +1,61 @@
+{
+  "consulta": "2026-11-27",
+  "atribucion": "Adif y Adif Alta Velocidad. Documentación de consulta pública. Ficha de consulta.",
+  "inventario": {
+    "original": "https://www.adifaltavelocidad.es/documents/34745/51134530/20260227_01%2BDR%2BAdif_AV%2B2026_Libro.pdf/60f60247-935c-6d14-3ac4-8886c5e74dd6?t=1772454129932",
+    "edicion": "2026-02-27",
+    "apartado": "Anexo H, línea 014",
+    "origen": "Bif. Gobantes",
+    "destino": "Bif. Bobadilla",
+    "km": 8.6
+  },
+  "caracteristicas": {
+    "original": "https://www.adifaltavelocidad.es/documents/34745/7247882/DR_ADIF_AV_V1_20191.pdf/c5b189a9-0192-dd89-2bfe-171a37a9a20f?t=1647948841767",
+    "edicion": "Julio de 2019, V1",
+    "pagina": 66,
+    "vias": 2,
+    "ancho_mm": 1435,
+    "alimentacion": "2 × 25 kV, 50 Hz",
+    "proteccion": "ERTMS nivel 2",
+    "bloqueo": "BCA",
+    "mando": "CTC",
+    "radio": "GSM-R",
+    "apertura_tecnica_exacta": null
+  },
+  "pliego": {
+    "original": "https://contrataciondelestado.es/wps/wcm/connect/5b2b94b2-01ca-4f0d-b4f8-28d072990258/DOC20230306124050PliegoDePrescripcionesTecnicas.PDF?MOD=AJPERES",
+    "expediente": "2.22/21506.0028",
+    "anuncio": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2023-6907",
+    "csv": "3183H1VVG4XXP0S9WW01W2HD54",
+    "verificador": "https://sede.adif.gob.es/csv/valida.jsp",
+    "lote": 3,
+    "ambito_mantenimiento_014": {
+      "via_3": [
+        "0+300",
+        "9+000"
+      ],
+      "via_4": [
+        "0+340",
+        "8+960"
+      ]
+    },
+    "tabla_3_pk_aproximados_036": {
+      "Gobantes": "103+594",
+      "Bobadilla": "105+748"
+    }
+  },
+  "cartografia": {
+    "original_archivado": "dr-adif-av-2026-mapas_2026-11-12.pdf",
+    "mapa": 3,
+    "maxima_kmh": 220
+  },
+  "servicio": {
+    "aviso_renfe": "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/04/renfe-ofrece-primer-ave-directo-madrid-malaga",
+    "fecha_publicacion": "2026-04-29",
+    "restablecimiento_seis_avant": "2026-04-30",
+    "estado_adif": "https://www.adif.es/viajeros/estado-de-la-red",
+    "actualizacion_estado": "2026-11-27 11:54",
+    "avisos_adif": "https://www.adif.es/viajeros/avisos",
+    "resultado": "Sin corte anunciado en la 014. El aviso de obras de Algeciras – Bobadilla – Córdoba corresponde a la línea convencional."
+  }
+}

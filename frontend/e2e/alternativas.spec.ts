@@ -167,8 +167,7 @@ test.describe('Tramos sin otro camino', () => {
     const sevilla = page.getByTestId('sin-camino-linea-lav-madrid-sevilla')
     await expect(sevilla).toContainText('Madrid – Sevilla')
     await expect(sevilla).toContainText('2 de sus 13 tramos')
-    // una línea con otro camino en todos sus tramos no figura (hoy, la de Alcázar de San Juan a Albacete o la
-    // alta velocidad de Antequera a Granada): la lista tiene solo los renglones de arriba
+    // una línea con otro camino en todos sus tramos no figura (por ejemplo, la de Alcázar de San Juan a Albacete): la lista tiene solo los renglones de arriba
     await expect(vista).toContainText(`Trenes del ${fechaReferencia}`)
     await expect(vista).not.toContainText(/criticidad/i)
     // el mapa atenúa el resto de la red; mientras no se mira nada, no hay nada en azul
@@ -193,7 +192,7 @@ test.describe('Tramos sin otro camino', () => {
     const cordoba = otros.filter({ hasText: 'Córdoba – Bifurcación Málaga-Alta Velocidad' })
     await expect(cordoba).toContainText('154 trenes')
     await expect(cordoba).toContainText('95 sin él')
-    await expect(cordoba).toContainText('+147 km · +2 h 23 min')
+    await expect(cordoba).toContainText('+140 km · +2 h 21 min')
     await expect(resto).toContainText('no mira si el tren cabe por él')
     // entre la estación de Moreda y la bifurcación no pasa ningún tren: no está en ninguna lista
     await expect(vista).not.toContainText('Moreda – Bifurcación Almería')

@@ -626,6 +626,7 @@ def test_validate_reports_the_rules_and_no_problems() -> None:
         # la bifurcación Gobantes
         LAV_MALAGA_SPEC.name: MALAGA_RULES | {"malaga-granada-por-gobantes": 6},
         LAV_GRANADA_SPEC.name: {},
+        "enlace-gobantes-bobadilla.json": {},
         # la alta velocidad de Barcelona: los trenes que la dejan por Plasencia de Jalón, los de
         # Huesca y el Alvia que sale por Camp de Tarragona hacia València y Córdoba
         BCN_SPEC.name: {

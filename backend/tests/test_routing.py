@@ -150,6 +150,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 8  # de Príncipe Pío a Pinar
             + 16  # quince tramos propios y la división del acceso en Ávila
             + 14  # once de la 120, dos del enlace y el corte de la 982
+            + 1  # la 014 entre Gobantes y Bobadilla
             + 1  # enlace de El Chaparral a Arroyo
         )
     )
@@ -532,6 +533,7 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     Atocha a Chamartín, que cierra el suyo con las dos líneas de alta velocidad que se juntan en
     la bifurcación de Torrejón de Velasco."""
     assert graph.link_of == {
+        "enlace-gobantes-bobadilla": LAV_GRANADA,
         "enlace-monforte-del-cid": LAV_MURCIA,
         "enlace-soto-de-cerrato": "lav-venta-de-banos-burgos",
         "enlace-aljucen-la-garrovilla": "lav-plasencia-badajoz",
@@ -551,6 +553,9 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
     }
     tunnel = "enlace-atocha-chamartin"
     assert {s: n for s, (link, n) in all_sides.items() if link != "enlace-monforte-del-cid"} == {
+        "enlace-gobantes-bobadilla:bif-gobantes:bif-bobadilla": 0,
+        f"{LAV_MALAGA}:antequera-santa-ana:bif-gobantes": 1,
+        f"{LAV_GRANADA}:antequera-santa-ana:bif-bobadilla": 2,
         "enlace-la-encina-caudete:la-encina:caudete": 0,
         "enlace-principe-pio-pinar:aguja-bif-chamartin:pinar-de-las-rozas": 0,
         "madrid-avila-valladolid:pitis:pinar-de-las-rozas": 1,
@@ -1165,6 +1170,10 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"segment_id": f"{BCN}:bif-moncasi:zaragoza-delicias", "scenario": ""},
         {"segment_id": AROUND_LLEIDA, "scenario": ""},
     ]
+    # Los Avant de Málaga y los que llegan por Santa Ana desde Córdoba y Sevilla.
+    for ciudad in ("malaga-maria-zambrano", CORDOBA, "sevilla-santa-justa"):
+        for a, b in ((ciudad, "granada"), ("granada", ciudad)):
+            routes.append({"from": a, "to": b, "scenario": "", **DEFAULTS})
     for start, end in (("navalmoral-de-la-mata", "caceres"), ("caceres", "navalmoral-de-la-mata")):
         for ratio in (DEFAULT_MAX_RATIO, 100):
             routes.append(

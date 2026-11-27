@@ -4,7 +4,7 @@ Málaga-María Zambrano) y Antequera – Granada (Adif 036)."""
 from __future__ import annotations
 
 import pytest
-from conftest import DATA_DIR, LAV_GRANADA_SPEC, LAV_MALAGA_SPEC, SOURCES
+from conftest import DATA_DIR, GOBANTES_SPEC, LAV_GRANADA_SPEC, LAV_MALAGA_SPEC, SOURCES
 
 from oniel.geo import haversine_km
 from oniel.gtfs.reader import GtfsFeed, GtfsTrip
@@ -35,8 +35,9 @@ def granada() -> BuiltNetwork:
 
 @pytest.fixture(scope="module")
 def lines(built: BuiltNetwork, malaga: BuiltNetwork, granada: BuiltNetwork) -> list[LoadedLine]:
-    """Las tres líneas de alta velocidad, para medir por ellas el camino hasta cada parada."""
-    return [loaded_line(built), loaded_line(malaga), loaded_line(granada)]
+    """Las tres líneas de alta velocidad y el enlace que usan los Avant directos."""
+    enlace = build_network(load_network_spec(GOBANTES_SPEC), DATA_DIR)
+    return [loaded_line(n) for n in (built, malaga, granada, enlace)]
 
 
 def _passes(

@@ -353,6 +353,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "medina-del-campo-salamanca",
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
+        "enlace-gobantes-bobadilla",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -594,9 +595,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         f"{LAV}:majarabique:sevilla-santa-justa": 87,
         f"{JAEN}:espeluy:mengibar-artichuela": 26,
         f"{JAEN}:mengibar-artichuela:jaen": 26,
-        # a Málaga solo llega la alta velocidad de Córdoba, y el enlace de la bifurcación Gobantes
-        # hacia Granada no está cargado
-        f"{LAV_MALAGA}:antequera-santa-ana:bif-gobantes": 57,
+        # Los tres tramos al sur de Gobantes son comunes a los trenes de Málaga.
+        "enlace-gobantes-bobadilla:bif-gobantes:bif-bobadilla": 6,
         f"{LAV_MALAGA}:bif-gobantes:pb-alora": 63,
         f"{LAV_MALAGA}:pb-alora:paet-los-prados": 63,
         f"{LAV_MALAGA}:paet-los-prados:malaga-maria-zambrano": 63,

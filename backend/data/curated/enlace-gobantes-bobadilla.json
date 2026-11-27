@@ -1,0 +1,57 @@
+{
+  "line": {
+    "id": "enlace-gobantes-bobadilla",
+    "name": "Enlace de Gobantes a Bobadilla",
+    "short_name": "014",
+    "sort_order": 56,
+    "zone": "andalucia",
+    "infrastructure_manager": "adif",
+    "gauge_mm": 1435,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 220,
+    "tracks": 2,
+    "reference_length_km": 8.6,
+    "link_of": "lav-antequera-granada",
+    "description": "Los Avant entre Málaga y Granada toman este enlace para llegar directamente a Antequera AV y Loja. En Gobantes se separan de la línea de Córdoba a Málaga y en Bobadilla se incorporan a la de Granada.\n\nAntequera tiene dos estaciones de alta velocidad. Antequera AV está junto al casco urbano. Antequera-Santa Ana queda al oeste y da acceso a Granada a los trenes que vienen de Córdoba. Algunos Avant, como el de Sevilla a Granada, paran en las dos.\n\nRenfe publica las horas de las paradas en las estaciones. En las dos bifurcaciones los trenes siguen de largo y sus horas de paso son estimadas.",
+    "verification_source_id": "adif-av-inventario-014",
+    "geometry_source": {
+      "source_id": "osm-relation-16228313",
+      "parts": [
+        {
+          "source_id": "osm-relation-16228313",
+          "file": "raw/osm/relation_16228313_avant_malaga_granada_2026-11-12.json",
+          "relation_id": 16228313,
+          "from": [-4.7235031, 37.0106686],
+          "to": [-4.6409519, 37.0437736]
+        }
+      ]
+    }
+  },
+  "operators": [
+    {"id": "adif", "name": "Adif / Adif Alta Velocidad", "role": "administrador_infraestructura", "source_id": "adif-mapa-red"},
+    {"id": "renfe", "name": "Renfe Viajeros", "role": "operador", "source_id": "renfe-gtfs-av-ld-md"}
+  ],
+  "nodes": [
+    {"id": "bif-gobantes", "name": "Bifurcación Gobantes", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -4.7235031, "lat": 37.0106686}, "shared": true},
+    {"id": "bif-bobadilla", "name": "Bifurcación Bobadilla", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -4.6409519, "lat": 37.0437736}, "shared": true}
+  ],
+  "attribute_sections": [
+    {"attribute": "tracks", "from_node": "bif-gobantes", "to_node": "bif-bobadilla", "value": 2, "source_id": "adif-av-caracteristicas-014", "checked_on": "2026-11-27", "note": "Doble vía en la conexión de las líneas 030 y 036. El pliego de mantenimiento distingue las vías 3 y 4."},
+    {"attribute": "proteccion_tren", "from_node": "bif-gobantes", "to_node": "bif-bobadilla", "value": "ertms_n2", "source_id": "adif-av-caracteristicas-014", "checked_on": "2026-11-27", "note": "Adif documenta ERTMS nivel 2. Las ocho vías del eje llevan railway:etcs=2 en OSM."},
+    {"attribute": "bloqueo", "from_node": "bif-gobantes", "to_node": "bif-bobadilla", "value": "bca", "source_id": "adif-av-caracteristicas-014", "checked_on": "2026-11-27", "note": "Bloqueo de control automático según la Declaración sobre la Red de Adif AV."},
+    {"attribute": "mando", "from_node": "bif-gobantes", "to_node": "bif-bobadilla", "value": "ctc", "source_id": "adif-av-caracteristicas-014", "checked_on": "2026-11-27", "note": "Control de tráfico centralizado en el enlace según Adif AV."}
+  ],
+  "connections": [],
+  "stop_mappings": {
+    "54413": {"exits": ["bif-gobantes"], "via": {"line": "lav-cordoba-malaga", "node": "bif-gobantes"}},
+    "02030": {"exits": ["bif-bobadilla"], "via": {"line": "lav-antequera-granada", "node": "bif-bobadilla"}},
+    "05012": {"exits": ["bif-bobadilla"], "via": {"line": "lav-antequera-granada", "node": "bif-bobadilla"}},
+    "05000": {"exits": ["bif-bobadilla"], "via": {"line": "lav-antequera-granada", "node": "bif-bobadilla"}}
+  },
+  "corridor_filter": {
+    "description": "Se estima el paso en los dos sentidos para la secuencia publicada Málaga-María Zambrano, Antequera AV, Loja y Granada. Quienes paran en Antequera-Santa Ana entran por la línea 036.",
+    "min_node_stops": 1,
+    "consecutive_stop_ids": [["54413", "02030", "05012", "05000"]],
+    "exclude_stop_ids": ["02003"]
+  }
+}

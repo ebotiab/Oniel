@@ -59,12 +59,12 @@ test.describe('Grafo de rutas en el cliente', () => {
     expect(() => findRoutes(buildGraph(red), MADRID, 'cordoba', closureScenario('no:existe'))).toThrow(ScenarioError)
   })
 
-  test('Navalmoral ↔ Cáceres ofrece los mismos tramos, orden e inversiones en la API y la instantánea @api', async ({ request }) => {
+  test('La API y la instantánea dan los mismos tramos, orden e inversiones en Extremadura y Granada @api', async ({ request }) => {
     test.skip(estatico, 'Necesita la API.')
     const grafo = buildGraph(red)
-    for (const caso of paridad.routes.filter((r) => [r.from, r.to].includes('navalmoral-de-la-mata'))) {
+    for (const caso of paridad.routes.filter((r) => [r.from, r.to].some((nodo) => nodo === 'navalmoral-de-la-mata' || nodo === 'granada'))) {
       const ratio = caso.max_ratio!
-      const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, ...(ratio === 2 ? {} : { max_ratio: ratio }) } })
+      const respuesta = await request.get('/api/routes', { params: { from: caso.from, to: caso.to, scenario: caso.scenario, max_ratio: ratio, ...(caso.max_changes === null ? {} : { max_changes: caso.max_changes }) } })
       expect(respuesta.ok()).toBeTruthy()
       const cuerpo = await respuesta.json() as { routes: (Route & { interruptions?: unknown })[]; scenario_code: string }
       expect(cuerpo.scenario_code).toBe(caso.scenario)

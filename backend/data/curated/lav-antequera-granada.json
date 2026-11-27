@@ -43,7 +43,7 @@
   ],
   "nodes": [
     {"id": "antequera-santa-ana", "name": "Antequera-Santa Ana", "kind": "estacion", "adif_code": "02003", "shared": true, "position": {"lon": -4.7197084, "lat": 37.0701682}, "reference_pk_km": 96.772},
-    {"id": "bif-bobadilla", "name": "Bifurcación Bobadilla", "kind": "bifurcacion", "rank": "secundario", "position": {"km": 8.981}, "reference_pk_km": 105.753,
+    {"id": "bif-bobadilla", "name": "Bifurcación Bobadilla", "kind": "bifurcacion", "rank": "secundario", "position": {"lon": -4.6409519, "lat": 37.0437736}, "reference_pk_km": 105.753,
      "description": "Punto donde se une a la línea de Granada el enlace que viene de Málaga. Por él los trenes entre Málaga y Granada van directos, sin pasar por Antequera-Santa Ana, desde abril de 2022."},
     {"id": "antequera-av", "name": "Antequera AV", "kind": "estacion", "adif_code": "02030", "position": {"lon": -4.5613719, "lat": 37.029483}, "reference_pk_km": 113.417,
      "description": "Estación junto al casco urbano de Antequera, abierta el 25 de enero de 2023. Es la segunda estación de alta velocidad del municipio, con Antequera-Santa Ana."},
@@ -77,9 +77,7 @@
       "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
     }
   ],
-  "connections": [
-    {"id": "enlace-malaga-granada", "node_id": "bif-bobadilla", "name": "Enlace Málaga – Granada", "towards": "Málaga por la bifurcación Gobantes, sin pasar por Antequera-Santa Ana", "to_node_id": "bif-gobantes", "towards_back": "Granada por la bifurcación Bobadilla, sin pasar por Antequera-Santa Ana", "status": "no_cargada", "sketch": [[-4.6428, 37.0436], [-4.6662, 37.0403], [-4.6852, 37.0323], [-4.7071, 37.0281], [-4.7153, 37.0244], [-4.7235031, 37.0106686]]}
-  ],
+  "connections": [],
   "stop_mappings": {
     "02003": {"node": "antequera-santa-ana"},
     "02030": {"node": "antequera-av"},
@@ -98,7 +96,7 @@
     "78400": {"exits": ["antequera-santa-ana"]},
     "04104": {"exits": ["antequera-santa-ana"]},
     "71801": {"exits": ["antequera-santa-ana"]},
-    "54413": {"exits": ["bif-bobadilla"]},
+    "54413": {"exits": ["bif-bobadilla"], "via": [{"line": "enlace-gobantes-bobadilla", "node": "bif-bobadilla"}, {"line": "lav-cordoba-malaga", "node": "bif-gobantes"}]},
     "56200": {"exits": ["granada"]},
     "56310": {"exits": ["granada"]},
     "56312": {"exits": ["granada"]}

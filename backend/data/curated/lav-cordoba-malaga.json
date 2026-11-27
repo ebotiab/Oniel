@@ -112,12 +112,12 @@
     },
     {
       "id": "malaga-granada-por-gobantes",
-      "description": "Avant entre Málaga y Granada: recorren la línea de Málaga a la bifurcación Gobantes y siguen por el enlace directo hacia la línea de Granada, que no está cargado. Para estos viajes, Antequera AV, Loja y Granada son salidas por esa bifurcación y no por Antequera-Santa Ana.",
+      "description": "Avant entre Málaga y Granada: recorren la línea de Málaga a la bifurcación Gobantes y siguen por el enlace directo hacia la línea de Granada, entre Gobantes y Bobadilla. Para estos viajes, Antequera AV, Loja y Granada son salidas por esa bifurcación y no por Antequera-Santa Ana.",
       "consecutive_stop_ids": ["54413", "02030"],
       "stop_mappings": {
-        "02030": {"exits": ["bif-gobantes"]},
-        "05012": {"exits": ["bif-gobantes"]},
-        "05000": {"exits": ["bif-gobantes"]}
+        "02030": {"exits": ["bif-gobantes"], "via": [{"line": "enlace-gobantes-bobadilla", "node": "bif-gobantes"}, {"line": "lav-antequera-granada", "node": "bif-bobadilla"}]},
+        "05012": {"exits": ["bif-gobantes"], "via": [{"line": "enlace-gobantes-bobadilla", "node": "bif-gobantes"}, {"line": "lav-antequera-granada", "node": "bif-bobadilla"}]},
+        "05000": {"exits": ["bif-gobantes"], "via": [{"line": "enlace-gobantes-bobadilla", "node": "bif-gobantes"}, {"line": "lav-antequera-granada", "node": "bif-bobadilla"}]}
       }
     }
   ]
