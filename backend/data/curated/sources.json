@@ -2785,7 +2785,7 @@
       "license": "ODbL 1.0",
       "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
       "retrieved_on": "2026-11-26",
-      "coverage": "Vía de llegada a Salamanca y recorrido urbano hasta el apeadero de La Alamedilla.",
+      "coverage": "Vía de llegada a Salamanca y recorrido urbano hasta el apeadero de La Alamedilla. Salida desde Medina convencional hasta Arroyo de la Golosa.",
       "notes": "Relación de servicio, versión 49. Original completo de la API 0.6. La relación permite reconstruir la geometría y no acredita el producto comercial ni la puesta en tensión.",
       "file": "raw/osm/relation_6016262_salamanca_2026-11-26.json"
     },
@@ -2812,6 +2812,78 @@
       "coverage": "PK de las nueve paradas comerciales intermedias de la 122 y de Salamanca y La Alamedilla en la 120.",
       "notes": "Lámina 18, página 52 del PDF firmado. La consulta conserva los datos transcritos y la huella del documento. El PDF se puede verificar en la sede de Adif con su CSV.",
       "file": "raw/adif/esquema_salamanca_consulta_2026-11-26.json"
+    },
+    {
+      "id": "osm-relation-20685324",
+      "name": "Itinerario de Madrid a Salamanca por Medina AV",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/20685324",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Andén de Medina AV, enlace del cambiador y vía general de Golosa a Salamanca en sentido Madrid a Salamanca.",
+      "notes": "Relación de servicio v4 con sus miembros originales. Los horarios comerciales proceden de Renfe.",
+      "file": "raw/osm/relation_20685324_medina_salamanca_2026-11-27.json"
+    },
+    {
+      "id": "osm-relation-20685325",
+      "name": "Itinerario de Salamanca a Madrid por Medina AV",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/20685325",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Andén de Medina AV, enlace del cambiador y vía general de Golosa a Salamanca en sentido Salamanca a Madrid.",
+      "notes": "Relación de servicio v3 con sus miembros originales. Los horarios comerciales proceden de Renfe.",
+      "file": "raw/osm/relation_20685325_medina_salamanca_2026-11-27.json"
+    },
+    {
+      "id": "osm-anden-cantalapiedra",
+      "name": "Andén de Cantalapiedra",
+      "publisher": "Colaboradores de OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/223920440",
+      "license": "ODbL 1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Posición longitudinal de la parada sobre la general.",
+      "notes": "Vía de andén v1. Se proyecta su punto medio sobre el eje.",
+      "file": "raw/osm/anden_cantalapiedra_2026-11-27.json"
+    },
+    {
+      "id": "adif-capacidad-medina-salamanca",
+      "name": "Estrategia de capacidad 2028, línea 120",
+      "publisher": "Adif",
+      "url": "https://rne.eu/wp-content/uploads/ADIF-Capacity-Strategy-2028.pdf",
+      "license": "Consulta pública, © Adif",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Vía, ancho, cambio de tensión en el PK 4,5, velocidad y bloqueo entre Medina y Salamanca.",
+      "notes": "Tabla de la L120. El ámbito de otras columnas continúa a Portugal.",
+      "file": "raw/adif/medina_salamanca_consulta_2026-11-27.json"
+    },
+    {
+      "id": "adif-esquema-medina-salamanca",
+      "name": "Esquema de Salamanca, líneas 120 y 188",
+      "publisher": "Adif",
+      "url": "https://attachments.tender-service.com/07/1653/165392442_860937cbc64391e786890c9dbcec430b/DOC20240624111343PliegoDePrescripcionesTecnicas.PDF",
+      "license": "Consulta pública, © Adif",
+      "license_url": "https://www.adif.es/aviso-legal",
+      "retrieved_on": "2026-11-27",
+      "coverage": "PK oficiales de Golosa y de los apeaderos y estaciones entre Medina y Salamanca.",
+      "notes": "Lámina 18, página 52. Se archivan la transcripción y la huella del original.",
+      "file": "raw/adif/medina_salamanca_consulta_2026-11-27.json"
+    },
+    {
+      "id": "fomento-puesta-servicio-188",
+      "name": "Los transportes y las infraestructuras, informe anual 2015",
+      "publisher": "Ministerio de Fomento",
+      "url": "https://publicaciones.transportes.gob.es/downloadcustom/sample/1326",
+      "license": "Consulta pública",
+      "license_url": "https://www.transportes.gob.es/aviso-legal",
+      "retrieved_on": "2026-11-27",
+      "coverage": "Puesta en servicio de la 188 con BAU, ASFA y CTC.",
+      "notes": "Páginas 66–67. El informe acredita la configuración inicial. El mapa de 2026 no individualiza todos los límites de cabecera.",
+      "file": "raw/adif/medina_salamanca_consulta_2026-11-27.json"
     }
   ]
 }

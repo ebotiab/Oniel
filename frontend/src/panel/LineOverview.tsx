@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 import type { AnnotationOut, CoverageOut, LineDetailOut, NetworkOut } from '../data/types'
+import { AtlasLink } from '../app/AtlasLink'
 import { capasDe } from '../app/annotationLayers'
 import type { Selection } from '../app/state'
 import { formatDate, formatDayShort, formatKm, gaugeLabel, listaEs } from '../app/state'
@@ -138,6 +139,16 @@ export function LineOverview({ notice, network, coverage, detail, lineId, onShow
       {line.id === 'avila-salamanca' && (
         <p className="texto">
           Desde la <button type="button" className="enlace" onClick={() => onSelect({ type: 'nodo', id: 'avila' })}>estación de Ávila</button> hasta la bifurcación, el recorrido comparte la línea de Valladolid.
+        </p>
+      )}
+      {line.id === 'medina-del-campo-salamanca' && (
+        <p className="texto">
+          Desde el acceso compartido, el recorrido continúa hasta <button type="button" className="enlace" onClick={() => onSelect({ type: 'nodo', id: 'salamanca' })}>Salamanca</button>. Algunos regionales siguen hasta <button type="button" className="enlace" onClick={() => onSelect({ type: 'nodo', id: 'salamanca-la-alamedilla' })}>Salamanca-La Alamedilla</button>.
+        </p>
+      )}
+      {line.id === 'enlace-medina-av-salamanca' && (
+        <p className="texto">
+          Desde <button type="button" className="enlace" onClick={() => onSelect({ type: 'nodo', id: 'medina-del-campo-av' })}>Medina del Campo Alta Velocidad</button>, los trenes toman este enlace y continúan por la <AtlasLink to={{ linea: 'medina-del-campo-salamanca' }}>línea de Salamanca</AtlasLink>.
         </p>
       )}
       <StripDiagram

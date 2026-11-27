@@ -135,7 +135,6 @@ def test_nodes_stations_and_dashed_branches(line: BuiltNetwork) -> None:
     assert line.node("medina-del-campo").spec.adif_code == MEDINA
     assert {c.id: c.node_id for c in line.spec.connections} == {
         "conv-villalba-segovia": "villalba-de-guadarrama",
-        "conv-medina-salamanca": "medina-del-campo",
         "conv-valladolid-venta-de-banos": "valladolid-campo-grande",
     }
     for c in line.spec.connections:

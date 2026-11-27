@@ -149,6 +149,7 @@ def test_graph_joins_the_lines_at_their_shared_nodes(graph: Graph, network: Red)
             + 1  # de Albacete a La Encina y su enlace hacia Caudete
             + 8  # de Príncipe Pío a Pinar
             + 16  # quince tramos propios y la división del acceso en Ávila
+            + 14  # once de la 120, dos del enlace y el corte de la 982
         )
     )
     # un nodo común a dos líneas es uno solo, con un kilómetro en cada una
@@ -353,7 +354,11 @@ def test_burgos_is_reached_from_madrid_through_venta_de_banos(graph: Graph) -> N
     convencional por Ávila, hay un segundo camino hasta Valladolid: 71,6 km más."""
     lines = ["lav-madrid-valladolid", "lav-valladolid-leon", "lav-venta-de-banos-burgos"]
     to_burgos = find_routes(graph, "madrid-chamartin", "burgos-rosa-manzano")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_burgos] == [
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_burgos
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [
         (303.2, 64, lines),
         (374.8, 140, ["madrid-avila-valladolid", *lines[1:]]),
     ]
@@ -377,12 +382,20 @@ def test_vitoria_is_reached_from_madrid_through_burgos(graph: Graph) -> None:
         "burgos-miranda-vitoria",
     ]
     to_vitoria = find_routes(graph, "madrid-chamartin", "vitoria-gasteiz")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_vitoria] == [
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_vitoria
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [
         (420.5, 116, lines),
         (492.1, 192, ["madrid-avila-valladolid", *lines[1:]]),
     ]
     to_miranda = find_routes(graph, "madrid-chamartin", "miranda-de-ebro")
-    assert [(r.length_km, r.time_min) for r in to_miranda] == [(387.2, 100), (458.8, 177)]
+    assert [
+        (r.length_km, r.time_min)
+        for r in to_miranda
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [(387.2, 100), (458.8, 177)]
     from_burgos = find_routes(graph, "burgos-rosa-manzano", "vitoria-gasteiz")
     assert [(r.length_km, r.line_ids) for r in from_burgos] == [(117.3, lines[3:])]
 
@@ -393,11 +406,23 @@ def test_santiago_a_coruna_and_vigo_are_reached_from_madrid_through_ourense(grap
     camino, que entra en la estación de Santiago: el enlace de Conxo no está cargado."""
     lines = ["lav-madrid-valladolid", "lav-olmedo-ourense", "lav-ourense-santiago", "eje-atlantico"]
     to_santiago = find_routes(graph, "madrid-chamartin", "santiago")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_santiago] == [(549.2, 125, lines[:3])]
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_santiago
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [(549.2, 125, lines[:3])]
     to_coruna = find_routes(graph, "madrid-chamartin", "a-coruna")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_coruna] == [(610.6, 143, lines)]
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_coruna
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [(610.6, 143, lines)]
     to_vigo = find_routes(graph, "madrid-chamartin", "vigo-urzaiz")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_vigo] == [(643.0, 159, lines)]
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_vigo
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [(643.0, 159, lines)]
     along = find_routes(graph, "a-coruna", "vigo-urzaiz")
     assert [(r.length_km, r.time_min, r.line_ids) for r in along] == [(155.2, 53, lines[3:])]
 
@@ -439,12 +464,20 @@ def test_oviedo_and_gijon_are_reached_from_madrid(graph: Graph) -> None:
     Valladolid hay otro camino, por la línea convencional de Ávila."""
     lines = ["lav-madrid-valladolid", "lav-valladolid-leon", "leon-oviedo-gijon"]
     to_oviedo = find_routes(graph, "madrid-chamartin", "oviedo")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_oviedo] == [
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_oviedo
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [
         (445.5, 118, lines),
         (517.1, 195, ["madrid-avila-valladolid", *lines[1:]]),
     ]
     to_gijon = find_routes(graph, "madrid-chamartin", "gijon-sanz-crespo")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_gijon] == [
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_gijon
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [
         (477.1, 134, lines),
         (548.7, 210, ["madrid-avila-valladolid", *lines[1:]]),
     ]
@@ -463,9 +496,17 @@ def test_ourense_and_zamora_are_reached_from_madrid(graph: Graph) -> None:
     Medina y, desde allí, por la de Olmedo a Ourense. No hay otro en las líneas cargadas."""
     lines = ["lav-madrid-valladolid", "lav-olmedo-ourense"]
     to_ourense = find_routes(graph, "madrid-chamartin", "ourense")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_ourense] == [(461.4, 104, lines)]
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_ourense
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [(461.4, 104, lines)]
     to_zamora = find_routes(graph, "madrid-chamartin", "zamora")
-    assert [(r.length_km, r.time_min, r.line_ids) for r in to_zamora] == [(231.5, 49, lines)]
+    assert [
+        (r.length_km, r.time_min, r.line_ids)
+        for r in to_zamora
+        if "medina-del-campo-salamanca" not in r.line_ids
+    ] == [(231.5, 49, lines)]
     assert [(leg.from_node_id, leg.to_node_id) for leg in to_ourense[0].legs] == [
         ("madrid-chamartin", "bif-medina"),
         ("bif-medina", "ourense"),
@@ -496,6 +537,7 @@ def test_no_route_turns_a_corner_of_the_link_triangle(graph: Graph) -> None:
         "enlace-atocha-chamartin": LAV,
         "enlace-la-encina-caudete": "valencia-xativa-alicante",
         "enlace-principe-pio-pinar": "madrid-avila-valladolid",
+        "enlace-medina-av-salamanca": "lav-olmedo-ourense",
     }
     side_alicante = f"{LAV_ALICANTE}:bif-murcia:monforte-del-cid-av"
     side_murcia = f"{LAV_MURCIA}:bif-murcia:bif-vinalopo"
@@ -1119,6 +1161,19 @@ def _parity_cases(graph: Graph) -> dict[str, Any]:
         {"segment_id": f"{BCN}:bif-moncasi:zaragoza-delicias", "scenario": ""},
         {"segment_id": AROUND_LLEIDA, "scenario": ""},
     ]
+    for start in ("medina-del-campo", "medina-del-campo-av", "madrid-principe-pio"):
+        for end in ("salamanca", "salamanca-la-alamedilla"):
+            for a, b in ((start, end), (end, start)):
+                routes.append({"from": a, "to": b, "scenario": "", **DEFAULTS})
+    # El cierre del acceso convencional conserva el recorrido desde la estación AV.
+    routes.append(
+        {
+            "from": "medina-del-campo-av",
+            "to": "salamanca",
+            "scenario": "c~medina-del-campo-salamanca:medina-del-campo:cambio-tension-medina",
+            **DEFAULTS,
+        }
+    )
     for case in routes:
         found = find_routes(
             graph,
@@ -1235,7 +1290,12 @@ def test_madrid_san_sebastian_e_irun_en_ambos_sentidos(
     assert outward[0].line_ids[-1] == "vitoria-irun"
     for route in outward + backward:
         assert "pamplona" not in route.node_ids
-        assert len(route.node_ids) == len(set(route.node_ids))
+        repetidos = {n for n in route.node_ids if route.node_ids.count(n) > 1}
+        if "medina-del-campo-salamanca" in route.line_ids:
+            assert repetidos == {"bif-arroyo-de-la-golosa"}
+            assert route.reverse_node_ids == ["campillo"]
+        else:
+            assert not repetidos
 
 
 def test_extended_line_closures_compare_routes_between_passenger_stations(graph: Graph) -> None:

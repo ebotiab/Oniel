@@ -1,0 +1,221 @@
+{
+  "line": {
+    "id": "enlace-medina-av-salamanca",
+    "name": "Enlace de Medina del Campo AV a Salamanca",
+    "short_name": "190 y 188",
+    "sort_order": 54,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "link_of": "lav-olmedo-ourense",
+    "tracks": 1,
+    "electrification": "25 kV 50 Hz",
+    "max_speed_kmh": 100,
+    "description": "Los trenes entre Madrid-Chamartín y Salamanca salen de la línea de Zamora después de Medina del Campo Alta Velocidad. Un corto enlace les permite continuar por la línea convencional.\n\nDesde el andén hasta la salida comparten vía con los trenes de Galicia. En el cambiador pasan del ancho estándar de la alta velocidad al ancho ibérico.\n\nEl enlace termina en Arroyo de la Golosa. Allí los trenes se incorporan al mismo camino que los regionales de Medina convencional, hasta la estación principal de Salamanca.",
+    "geometry_source": {
+      "source_id": "osm-relation-20685324",
+      "parts": [
+        {
+          "source_id": "osm-relation-20685324",
+          "file": "raw/osm/relation_20685324_medina_salamanca_2026-11-27.json",
+          "relation_id": 20685324,
+          "from": [
+            -4.9308768,
+            41.2920457
+          ],
+          "to": [
+            -4.9675477,
+            41.2841889
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "adif-esquema-medina-salamanca"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bif-medina-av-salamanca",
+      "name": "Salida de Medina AV hacia Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.930868408917932,
+        "lat": 41.292087102724956
+      },
+      "rank": "secundario",
+      "shared": true,
+      "anchor_geometry": true
+    },
+    {
+      "id": "cambiador-medina-av",
+      "name": "Cambiador de ancho de Medina AV",
+      "kind": "cambiador",
+      "position": {
+        "lon": -4.9363428,
+        "lat": 41.2925559
+      },
+      "source_id": "osm-relation-20685324",
+      "rank": "secundario",
+      "description": "Los trenes pasan entre el ancho estándar y el ibérico. El cambiador figura en el PK 3,000 de la 188 y la unión en Golosa en el 0,000."
+    },
+    {
+      "id": "bif-arroyo-de-la-golosa",
+      "name": "Bifurcación Arroyo de la Golosa",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.9675477,
+        "lat": 41.2841889
+      },
+      "rank": "secundario",
+      "shared": true
+    }
+  ],
+  "connections": [],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "bif-medina-av-salamanca",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": 1,
+      "source_id": "osm-relation-20685324",
+      "checked_on": "2026-11-27",
+      "note": "Vía general del ramal después de la salida de la 982. Las relaciones de ida y vuelta confluyen antes del cambiador."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "bif-medina-av-salamanca",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": "25 kV 50 Hz",
+      "source_id": "osm-relation-20685324",
+      "checked_on": "2026-11-27",
+      "note": "Tensión etiquetada en la 190 y la 188. El límite operativo dentro del cambiador se desconoce."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "bif-medina-av-salamanca",
+      "to_node": "cambiador-medina-av",
+      "value": "estandar",
+      "source_id": "osm-relation-20685324",
+      "checked_on": "2026-11-27",
+      "note": "Línea 190, ancho de 1.435 mm."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "cambiador-medina-av",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": "iberico",
+      "source_id": "osm-relation-20685324",
+      "checked_on": "2026-11-27",
+      "note": "Línea 188, ancho de 1.668 mm."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "bif-medina-av-salamanca",
+      "to_node": "cambiador-medina-av",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-27",
+      "note": "El mapa de corredor no individualiza el ramal de la 190. OSM etiqueta ETCS nivel 2, sin confirmación de su ámbito efectivo."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "cambiador-medina-av",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": "asfa",
+      "source_id": "fomento-puesta-servicio-188",
+      "checked_on": "2026-11-27",
+      "note": "Sistema documentado en la puesta en servicio de la 188. No hay desglose actualizado del interior del cambiador."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-medina-av-salamanca",
+      "to_node": "cambiador-medina-av",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-27",
+      "note": "El mapa de corredor no individualiza el ramal de la 190. OSM etiqueta ETCS nivel 2, sin confirmación de su ámbito efectivo."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "cambiador-medina-av",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": "bau",
+      "source_id": "fomento-puesta-servicio-188",
+      "checked_on": "2026-11-27",
+      "note": "Sistema documentado en la puesta en servicio de la 188. No hay desglose actualizado del interior del cambiador."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "bif-medina-av-salamanca",
+      "to_node": "cambiador-medina-av",
+      "value": "sin_dato_publicado",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-27",
+      "note": "El mapa de corredor no individualiza el ramal de la 190. OSM etiqueta ETCS nivel 2, sin confirmación de su ámbito efectivo."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "cambiador-medina-av",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": "ctc",
+      "source_id": "fomento-puesta-servicio-188",
+      "checked_on": "2026-11-27",
+      "note": "Sistema documentado en la puesta en servicio de la 188. No hay desglose actualizado del interior del cambiador."
+    }
+  ],
+  "stop_mappings": {
+    "08240": {
+      "exits": [
+        "bif-medina-av-salamanca"
+      ],
+      "via": {
+        "line": "lav-olmedo-ourense",
+        "node": "bif-medina-av-salamanca"
+      }
+    },
+    "30100": {
+      "exits": [
+        "bif-arroyo-de-la-golosa"
+      ],
+      "via": [
+        {
+          "line": "medina-del-campo-salamanca",
+          "node": "bif-arroyo-de-la-golosa"
+        },
+        {
+          "line": "avila-salamanca",
+          "node": "bif-acceso-salamanca"
+        }
+      ]
+    }
+  },
+  "corridor_filter": {
+    "min_node_stops": 1,
+    "description": "El par consecutivo Medina AV–Salamanca identifica el enlace, en ambos sentidos."
+  },
+  "route_overrides": [
+    {
+      "id": "medina-av-salamanca",
+      "consecutive_stop_ids": [
+        "08240",
+        "30100"
+      ],
+      "from_stop_id": "08240",
+      "to_stop_id": "30100",
+      "description": "Solo el recorrido entre las dos paradas comerciales contiguas."
+    }
+  ]
+}

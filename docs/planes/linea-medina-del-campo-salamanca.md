@@ -4,6 +4,8 @@
 
 Se revisaron el [`main` 9d3679b][base], los planes y las incidencias y PR abiertas y cerradas sobre Salamanca. [#317][pr-avila] preparó Ávila–Salamanca y dejó los dos accesos de Medina a trazos. [#315][pio] ya incorporó Príncipe Pío–Pinar. **La carga de Medina espera a que [#316][avila] esté entregada en `main`**. Los nombres del [plan de Ávila][plan-avila] son propuestas. Al recoger el turno, localizar en la red resultante las fichas, las agujas y el propietario de cada tramo, y usar los IDs que se hayan publicado. La investigación documental es independiente de [Grisén, #310][grisen]. La futura importación necesita un turno de datos exclusivo, también respecto a los refrescos GTFS. Cercanías y la prolongación desde La Alamedilla hacia Portugal quedan fuera.
 
+**Entrega del 27/11/2026.** Las distancias finales hasta la principal son 76,4 km por la convencional y 73,8 km por AV. El comparador utiliza el acceso salmantino publicado en la #316. Los cierres se consultan entre estaciones y las pruebas por minutos emplean servicios ficticios. [Datos, fuentes y recuentos de la carga](../datos.md#cómo-se-cargaron-los-dos-accesos-de-medina-a-salamanca).
+
 ## Qué conectar en Medina
 
 | Entrada del tren | Camino hasta Arroyo de la Golosa | Cambio en el atlas |

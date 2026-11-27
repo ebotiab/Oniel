@@ -318,7 +318,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 4223 + 2107  # la de Valencia a Camp de Tarragona
     passes += 3409  # la de Madrid a Valladolid, todos estimados
     passes += 2142  # la de Valladolid a León, todos estimados
-    passes += 2130  # la de Olmedo a Ourense, todos estimados
+    passes += 2340  # la de Olmedo a Ourense, todos estimados
     passes += 490  # la de Venta de Baños a Burgos, todos estimados
     passes += 1311 + 125  # la de León a Gijón
     passes += 715 + 209  # la de Burgos a Vitoria
@@ -345,6 +345,7 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 6 + 128 + (555 + 423)
     passes += 1427 + 342  # Vitoria–Irún
     passes += 472 + 78  # ampliación a La Encina y enlace a Caudete
+    passes += 934 + 100  # la 120 y el cambiador
     passes += 172 + 996  # interior de la 122 y acceso salmantino
     passes += 153 * 8  # el acceso de Príncipe Pío, con los mismos trenes de la principal
     assert await _count(conn, "service_segment_passes", FEED_DATASET_ID) == passes

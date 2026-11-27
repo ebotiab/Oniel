@@ -351,7 +351,7 @@
         "lat": 41.31726
       },
       "reference_pk_km": 206.3,
-      "description": "La estación de Medina del Campo de la línea convencional; la de la alta velocidad es otra, a las afueras. Aquí salen las líneas de Salamanca y de Zamora, que no están cargadas."
+      "description": "Desde la estación convencional se puede seguir hacia Valladolid y Salamanca. También sale la línea hacia Zamora por Toro."
     },
     {
       "id": "pozaldez",
@@ -480,25 +480,6 @@
           40.93403
         ]
       ]
-    },
-    {
-      "id": "conv-medina-salamanca",
-      "node_id": "medina-del-campo",
-      "name": "Línea convencional Medina del Campo – Salamanca",
-      "towards": "Cantalapiedra y Salamanca",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.909678,
-          41.31726
-        ],
-        [
-          -5.6437217,
-          40.973664
-        ]
-      ],
-      "to_node_id": "bif-acceso-salamanca",
-      "towards_back": "Cantalapiedra y Medina del Campo"
     },
     {
       "id": "conv-valladolid-venta-de-banos",
@@ -865,42 +846,74 @@
     "32001": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32002": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32003": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32004": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32006": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32007": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32008": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "32009": {
       "exits": [
         "medina-del-campo"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "medina-del-campo"
+      }
     },
     "31002": {
       "exits": [
@@ -1521,11 +1534,31 @@
         "30100": {
           "exits": [
             "medina-del-campo"
+          ],
+          "via": [
+            {
+              "line": "medina-del-campo-salamanca",
+              "node": "medina-del-campo"
+            },
+            {
+              "line": "avila-salamanca",
+              "node": "bif-acceso-salamanca"
+            }
           ]
         },
         "30110": {
           "exits": [
             "medina-del-campo"
+          ],
+          "via": [
+            {
+              "line": "medina-del-campo-salamanca",
+              "node": "medina-del-campo"
+            },
+            {
+              "line": "avila-salamanca",
+              "node": "bif-acceso-salamanca"
+            }
           ]
         }
       }
@@ -1541,11 +1574,31 @@
         "30100": {
           "exits": [
             "medina-del-campo"
+          ],
+          "via": [
+            {
+              "line": "medina-del-campo-salamanca",
+              "node": "medina-del-campo"
+            },
+            {
+              "line": "avila-salamanca",
+              "node": "bif-acceso-salamanca"
+            }
           ]
         },
         "30110": {
           "exits": [
             "medina-del-campo"
+          ],
+          "via": [
+            {
+              "line": "medina-del-campo-salamanca",
+              "node": "medina-del-campo"
+            },
+            {
+              "line": "avila-salamanca",
+              "node": "bif-acceso-salamanca"
+            }
           ]
         }
       }
@@ -1561,11 +1614,31 @@
         "30100": {
           "exits": [
             "medina-del-campo"
+          ],
+          "via": [
+            {
+              "line": "medina-del-campo-salamanca",
+              "node": "medina-del-campo"
+            },
+            {
+              "line": "avila-salamanca",
+              "node": "bif-acceso-salamanca"
+            }
           ]
         },
         "30110": {
           "exits": [
             "medina-del-campo"
+          ],
+          "via": [
+            {
+              "line": "medina-del-campo-salamanca",
+              "node": "medina-del-campo"
+            },
+            {
+              "line": "avila-salamanca",
+              "node": "bif-acceso-salamanca"
+            }
           ]
         }
       }

@@ -114,6 +114,18 @@
       "description": "Estación solo de alta velocidad, a las afueras de Medina del Campo; la de la línea convencional es otra. Justo después sale el enlace por el que los trenes de Madrid a Salamanca dejan esta línea, y empieza la vía única hasta Coreses."
     },
     {
+      "id": "bif-medina-av-salamanca",
+      "name": "Salida de Medina AV hacia Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.930868408917932,
+        "lat": 41.292087102724956
+      },
+      "source_id": "osm-relation-20685324",
+      "rank": "secundario",
+      "description": "Después de la estación, la vía de Salamanca se separa de la que continúa hacia Toro y Zamora."
+    },
+    {
       "id": "toro-av",
       "name": "Toro",
       "kind": "paet",
@@ -252,7 +264,7 @@
   "attribute_sections": [
     {
       "attribute": "tracks",
-      "from_node": "medina-del-campo-av",
+      "from_node": "bif-medina-av-salamanca",
       "to_node": "coreses",
       "value": 1,
       "source_id": "wikipedia-lav-olmedo-zamora-galicia",
@@ -343,11 +355,11 @@
     {
       "attribute": "tracks",
       "from_node": "bif-medina",
-      "to_node": "medina-del-campo-av",
+      "to_node": "bif-medina-av-salamanca",
       "value": 2,
       "source_id": "adif-declaracion-red-2026-mapas",
       "checked_on": "2026-11-25",
-      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md."
+      "note": "Vías principales del recorrido representado, contrastadas en el mapa 3 de la Declaración sobre la Red 2026; las excepciones y los trechos inferiores a la resolución de nodos se documentan en docs/datos.md. Los itinerarios de ambos andenes de Medina AV confirman la doble vía hasta la salida hacia Salamanca."
     },
     {
       "attribute": "tracks",
@@ -378,25 +390,6 @@
     }
   ],
   "connections": [
-    {
-      "id": "enlace-medina-salamanca",
-      "node_id": "medina-del-campo-av",
-      "name": "Enlace a la línea de Salamanca",
-      "towards": "Salamanca",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -4.9229851,
-          41.2913315
-        ],
-        [
-          -5.6437217,
-          40.973664
-        ]
-      ],
-      "to_node_id": "bif-acceso-salamanca",
-      "towards_back": "Medina del Campo AV"
-    },
     {
       "id": "conv-zamora-medina-del-campo",
       "node_id": "zamora",
@@ -569,7 +562,21 @@
     },
     "30100": {
       "exits": [
-        "medina-del-campo-av"
+        "bif-medina-av-salamanca"
+      ],
+      "via": [
+        {
+          "line": "enlace-medina-av-salamanca",
+          "node": "bif-medina-av-salamanca"
+        },
+        {
+          "line": "medina-del-campo-salamanca",
+          "node": "bif-arroyo-de-la-golosa"
+        },
+        {
+          "line": "avila-salamanca",
+          "node": "bif-acceso-salamanca"
+        }
       ]
     },
     "31400": {

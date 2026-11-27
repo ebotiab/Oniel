@@ -44,6 +44,8 @@ class NodeSpec(BaseModel):
     #: El nodo lo define otra línea (por ejemplo una estación común): esta línea solo lo
     #: incorpora a su kilometraje y no sobrescribe su nombre, posición ni descripción.
     shared: bool = False
+    #: Ajuste cartográfico al eje publicado de otra vía de la misma estación.
+    anchor_geometry: bool = False
     source_id: str | None = None
     position: Position
     reference_pk_km: float | None = None
@@ -52,6 +54,8 @@ class NodeSpec(BaseModel):
 
     @model_validator(mode="after")
     def _shared_needs_coords(self) -> NodeSpec:
+        if self.anchor_geometry and not self.shared:
+            raise ValueError("solo se ancla la geometría a un nodo compartido")
         if self.shared and self.position.km is not None:
             raise ValueError(f"el nodo compartido {self.id} necesita lon/lat para situarlo")
         return self

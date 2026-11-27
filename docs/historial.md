@@ -115,3 +115,5 @@ Entre el 8 y el 10 de noviembre de 2026 se fusionaron catorce PR, una por tarea:
 - 26 de noviembre de 2026, #308. Madrid-Príncipe Pío se incorpora a la línea convencional de Ávila y Valladolid mediante el enlace por Pozuelo y Las Rozas. El comparador conserva los regionales por su identidad al pasar por Pinar. Trazado, fuentes y recuentos en «El acceso de Madrid-Príncipe Pío a Pinar de las Rozas» de `docs/datos.md`.
 
 - 27 de noviembre de 2026, #316. Los regionales de Madrid-Príncipe Pío se pueden seguir por Ávila y Peñaranda hasta su terminal salmantina. El mapa distingue la estación principal y La Alamedilla, con sus horarios, permisos y cierres entre estaciones.
+
+- 27 de noviembre de 2026 ([#320](https://github.com/ebotiab/Oniel/issues/320)). Los servicios por Medina convencional y Medina AV llegan a Salamanca por la 120. El acceso salmantino y la continuación a La Alamedilla se comparten con los regionales de Ávila. Las medidas y los horarios están en [Cómo se cargaron los dos accesos de Medina a Salamanca](datos.md#cómo-se-cargaron-los-dos-accesos-de-medina-a-salamanca).

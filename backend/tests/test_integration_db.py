@@ -550,6 +550,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 2
         + 1  # el acceso de Príncipe Pío
         + 1  # la línea de Ávila a Salamanca
+        + 2  # la 120 y el enlace del cambiador
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -600,6 +601,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 5  # ampliación a La Encina y enlace a Caudete
         + 8  # el acceso de Príncipe Pío
         + 16  # quince tramos propios y la división del acceso en Ávila
+        + 14  # la 120, el enlace y el corte en la LAV
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -613,7 +615,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 3409  # la de Madrid a Valladolid, todos estimados
     renfe_passes += 91  # el enlace de Monforte del Cid
     renfe_passes += 2142  # la de Valladolid a León, todos estimados
-    renfe_passes += 2130  # la de Olmedo a Ourense, todos estimados
+    renfe_passes += 2340  # la de Olmedo a Ourense, todos estimados
     renfe_passes += 490  # la de Venta de Baños a Burgos, todos estimados
     renfe_passes += 1311 + 125  # la de León a Gijón
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
@@ -636,6 +638,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 6 + 128 + (555 + 423)
     renfe_passes += 1427 + 342  # Vitoria–Irún
     renfe_passes += 472 + 78  # ampliación y enlace
+    renfe_passes += 934 + 100  # la 120 y el cambiador
     renfe_passes += 172 + 996  # interior de la 122 y acceso salmantino
     renfe_passes += 153 * 8  # los mismos 153 regionales en los ocho tramos del nuevo acceso
     assert (
@@ -831,6 +834,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 5  # ampliación a La Encina y enlace a Caudete
         + 8  # el acceso de Príncipe Pío
         + 16  # quince tramos propios y la división del acceso en Ávila
+        + 14  # la 120, el enlace y el corte en la LAV
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -895,6 +899,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "enlace-aljucen-la-garrovilla",
         "enlace-la-encina-caudete",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     }
     # en la de Venta de Baños a Burgos, de Soto de Cerrato a Burgos
     assert sum(1 for s in single if s["line_id"] == LAV_BURGOS) == 3
@@ -978,6 +984,8 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     ]
     # con Extremadura cargada, de la bifurcación Planetario ya no sale una conexión a trazos; lo
     # que queda a trazos es el enlace por el que los trenes evitan Plasencia
@@ -1086,6 +1094,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 5  # ampliación a La Encina y enlace a Caudete
         + 8  # el acceso de Príncipe Pío
         + 16  # quince tramos propios y la división del acceso en Ávila
+        + 14  # la 120, el enlace y el corte en la LAV
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1153,7 +1162,15 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     assert len(own_wire) == 20 + 8 and set(own_wire.values()) == {"3 kV CC"}
     tronco = {k: v for k, v in wire.items() if k.startswith("avila-salamanca:")}
     assert len(tronco) == 10 and set(tronco.values()) == {"Sin electrificar"}
-    assert {k: v for k, v in wire.items() if k not in own_wire and k not in tronco} == {
+    medina = {
+        k: v
+        for k, v in wire.items()
+        if k.startswith(("medina-del-campo-salamanca:", "enlace-medina-av-salamanca:"))
+    }
+    assert Counter(medina.values()) == {"3 kV CC": 1, "25 kV 50 Hz": 12}
+    assert {
+        k: v for k, v in wire.items() if k not in own_wire and k not in tronco and k not in medina
+    } == {
         f"{MEDITERRANEO}:cambiador-la-boella:camp-de-tarragona": "25 kV 50 Hz",
         f"{MADRID_PLASENCIA}:bif-planetario:leganes": "3 kV CC",
         f"{MADRID_PLASENCIA}:leganes:fuenlabrada": "3 kV CC",
@@ -1174,10 +1191,19 @@ async def test_segments_carry_their_attributes_with_source_and_date(
     assert len(access) == 8 and set(access.values()) == {"iberico"}
     salamanca = {k: v for k, v in values.items() if k.startswith("avila-salamanca:")}
     assert len(salamanca) == 15 and set(salamanca.values()) == {"iberico"}
+    medina_gauge = {
+        k: v
+        for k, v in values.items()
+        if k.startswith(("medina-del-campo-salamanca:", "enlace-medina-av-salamanca:"))
+    }
+    assert Counter(medina_gauge.values()) == {"iberico": 12, "estandar": 1}
     assert {
         s
         for s in gauge
-        if not s.startswith(MEDITERRANEO) and s not in access and s not in salamanca
+        if not s.startswith(MEDITERRANEO)
+        and s not in access
+        and s not in salamanca
+        and s not in medina_gauge
     } == {
         f"{LAV_GRANADA}:bif-riofrio:loja",
         f"{LAV_GRANADA}:loja:bif-tocon",
@@ -1688,6 +1714,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 2  # Almansa y La Encina
             + 6  # de Príncipe Pío a Las Rozas, Pinar ya estaba en la red
             + 11  # nueve paradas interiores, Salamanca y La Alamedilla
+            + 8  # de Campillo a Moriscos
         )
     )
     # 429 servicios el jueves 12 de noviembre, el día de referencia desde que está cargada la
@@ -1857,6 +1884,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 10  # ampliación a La Encina
             + 9  # nuevas fuentes del acceso de Príncipe Pío
             + 5  # tres relaciones de Salamanca, catálogo de la RFIG y esquema de mantenimiento
+            + 6  # dos relaciones AV, andén de Cantalapiedra y tres fuentes documentales
         )
     )
     assert "línea convencional" in cov["notice"]
@@ -1885,7 +1913,10 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
     assert "la línea convencional Miranda de Ebro – Orduña – Bilbao" in cov["notice"]
     assert "la línea convencional Sevilla – Huelva" in cov["notice"]
     assert "la línea convencional Vitoria – Altsasu – San Sebastián – Irún" in cov["notice"]
-    assert "y la línea convencional Ávila – Salamanca" in cov["notice"]
+    assert (
+        "la línea convencional Ávila – Salamanca y la línea convencional Medina del Campo – Salamanca"
+        in cov["notice"]
+    )
     assert "la línea convencional León – Oviedo – Gijón" in cov["notice"]
     assert "la línea convencional Burgos – Miranda de Ebro – Vitoria" in cov["notice"]
     assert "la línea de alta velocidad Ourense – Santiago de Compostela" in cov["notice"]
@@ -1941,6 +1972,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -2020,6 +2053,8 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-la-encina-caudete": ["renfe"],
         "enlace-principe-pio-pinar": ["renfe"],
         "avila-salamanca": ["renfe"],
+        "medina-del-campo-salamanca": ["renfe"],
+        "enlace-medina-av-salamanca": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
@@ -2898,6 +2933,8 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -3026,6 +3063,8 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

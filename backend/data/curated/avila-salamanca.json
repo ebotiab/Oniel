@@ -543,27 +543,57 @@
     "08240": {
       "exits": [
         "bif-acceso-salamanca"
+      ],
+      "via": [
+        {
+          "line": "medina-del-campo-salamanca",
+          "node": "bif-acceso-salamanca"
+        },
+        {
+          "line": "enlace-medina-av-salamanca",
+          "node": "bif-arroyo-de-la-golosa"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina-av-salamanca"
+        }
       ]
     },
     "10500": {
       "exits": [
         "bif-acceso-salamanca"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "bif-acceso-salamanca"
+      }
     },
     "32004": {
       "exits": [
         "bif-acceso-salamanca"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "bif-acceso-salamanca"
+      }
     },
     "32008": {
       "exits": [
         "bif-acceso-salamanca"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "bif-acceso-salamanca"
+      }
     },
     "32009": {
       "exits": [
         "bif-acceso-salamanca"
-      ]
+      ],
+      "via": {
+        "line": "medina-del-campo-salamanca",
+        "node": "bif-acceso-salamanca"
+      }
     }
   },
   "corridor_filter": {

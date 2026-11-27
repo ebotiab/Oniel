@@ -1,0 +1,1 @@
+{"node": {"id": "cambio-tension-medina", "name": "Cambio de tensión de Medina", "kind": "referencia", "rank": "secundario", "lon": -4.953191, "lat": 41.301586, "adif_code": null, "description": null, "details": {}, "line_id": "medina-del-campo-salamanca", "km": 4.5, "reference_pk_km": 4.5, "seq": 2}, "date": "2026-12-11", "calls": [], "destinations": []}
