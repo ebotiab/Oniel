@@ -38,7 +38,8 @@ MEDINA, ZAMORA, SANABRIA, GUDINA, OURENSE = "08240", "30200", "08247", "08251", 
 SALAMANCA = "30100"
 ALL_SEGMENTS = [
     "bif-medina:medina-del-campo-av",
-    "medina-del-campo-av:toro-av",
+    "medina-del-campo-av:bif-medina-av-salamanca",
+    "bif-medina-av-salamanca:toro-av",
     "toro-av:coreses",
     "coreses:zamora",
     "zamora:bif-los-conforcos",
@@ -52,7 +53,7 @@ ALL_SEGMENTS = [
     "taboadela:ourense",
 ]
 SINGLE_TRACK = {
-    "medina-del-campo-av:toro-av",
+    "bif-medina-av-salamanca:toro-av",
     "toro-av:coreses",
     "zamora:bif-los-conforcos",
     "pedralba:vilavella",
@@ -125,6 +126,7 @@ def test_nodes_stations_and_what_hangs_from_them(line: BuiltNetwork) -> None:
     assert [n.spec.id for n in line.nodes] == [
         "bif-medina",
         "medina-del-campo-av",
+        "bif-medina-av-salamanca",
         "toro-av",
         "coreses",
         "zamora",
@@ -146,6 +148,7 @@ def test_nodes_stations_and_what_hangs_from_them(line: BuiltNetwork) -> None:
         "ourense": OURENSE,
     }
     assert {n.spec.id: n.spec.kind for n in line.nodes if n.spec.rank == "secundario"} == {
+        "bif-medina-av-salamanca": "bifurcacion",
         "toro-av": "paet",
         "coreses": "pb",
         "bif-los-conforcos": "bifurcacion",
@@ -158,7 +161,6 @@ def test_nodes_stations_and_what_hangs_from_them(line: BuiltNetwork) -> None:
     # lo que sale de la línea y no está cargado: el enlace de Salamanca, las líneas convencionales
     # de Zamora y las dos convencionales que siguen desde Ourense; la de Santiago ya está cargada
     assert {c.id: c.node_id for c in line.spec.connections} == {
-        "enlace-medina-salamanca": "medina-del-campo-av",
         "conv-zamora-medina-del-campo": "zamora",
         "conv-zamora-ourense": "zamora",
         "conv-ourense-vigo": "ourense",
@@ -217,6 +219,9 @@ def test_kilometre_points_continue_those_of_the_line_to_valladolid(line: BuiltNe
         "ourense": 462.533,
     }
     for node in line.nodes:
+        if node.spec.id == "bif-medina-av-salamanca":
+            assert node.spec.reference_pk_km is None
+            continue
         assert node.spec.reference_pk_km is not None
         tolerance = 1.1 if node.spec.id == "vilavella" else 0.5
         assert node.km + origin == pytest.approx(node.spec.reference_pk_km, abs=tolerance)
@@ -233,7 +238,7 @@ def test_single_track_where_the_sources_say_so(line: BuiltNetwork) -> None:
         if s.tracks == 1
     }
     assert sources == {
-        "medina-del-campo-av:toro-av": WIKIPEDIA,
+        "bif-medina-av-salamanca:toro-av": WIKIPEDIA,
         "toro-av:coreses": WIKIPEDIA,
         "zamora:bif-los-conforcos": WIKIPEDIA,
         "pedralba:vilavella": HIGH_SPEED,
@@ -242,9 +247,9 @@ def test_single_track_where_the_sources_say_so(line: BuiltNetwork) -> None:
     mixed = [s for s in line.segments if "gauge" in s.attributes]
     assert [s.id.removeprefix(f"{LINE}:") for s in mixed] == ["taboadela:ourense"]
     assert mixed[0].attributes["gauge"].value == "mixto"
-    assert sum(s.length_km for s in line.segments if s.tracks == 1) == pytest.approx(125.8, abs=0.5)
+    assert sum(s.length_km for s in line.segments if s.tracks == 1) == pytest.approx(125.1, abs=0.5)
     # las vías de OSM traen la velocidad en todos los tramos
-    assert [s.max_speed_kmh for s in line.segments] == [300] * 11 + [260, 190]
+    assert [s.max_speed_kmh for s in line.segments] == [300] * 12 + [260, 190]
     assert all(s.typical_speed_kmh for s in line.segments)
     assert line.segments[-1].typical_speed_kmh == 90
 
@@ -342,7 +347,7 @@ def test_trains_that_do_not_stop_in_its_own_stations_enter_through_the_rules(
 
 def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNetwork) -> None:
     """Los trenes de Galicia recorren la línea entera, paren donde paren; los de Salamanca, solo
-    el primer tramo, hasta Medina del Campo AV."""
+    los dos primeros tramos, hasta la salida tras Medina del Campo AV."""
     trips = select_trips_for_spec(feed, line.spec)
 
     def having(pair: tuple[str, str]) -> list[GtfsTrip]:
@@ -356,7 +361,7 @@ def test_each_train_counts_on_the_segments_it_runs(feed: GtfsFeed, line: BuiltNe
     salamanca = having((MEDINA, SALAMANCA))
     assert len(salamanca) == 50
     for trip in salamanca:
-        assert _short(_passes(trip, feed, line)) == ALL_SEGMENTS[:1]
+        assert _short(_passes(trip, feed, line)) == ALL_SEGMENTS[:2]
     # nadie más: todo viaje de la línea va a Ourense o a Salamanca
     assert all(OURENSE in _stops(t) or SALAMANCA in _stops(t) for t in trips)
 
@@ -366,8 +371,12 @@ def test_stops_beyond_the_line_leave_by_the_right_node(spec: NetworkSpec) -> Non
     su enlace; Santiago, A Coruña, Vigo y Lugo, por Ourense. Santiago sigue por la línea de alta
     velocidad de Ourense a Santiago, y A Coruña, Vilagarcía, Pontevedra y Vigo, además, por la
     de A Coruña a Vigo; la línea de Lugo no está cargada."""
-    assert spec.stop_mappings[SALAMANCA].exits == ["medina-del-campo-av"]
-    assert not spec.stop_mappings[SALAMANCA].via
+    assert spec.stop_mappings[SALAMANCA].exits == ["bif-medina-av-salamanca"]
+    assert [v.line for v in spec.stop_mappings[SALAMANCA].via] == [
+        "enlace-medina-av-salamanca",
+        "medina-del-campo-salamanca",
+        "avila-salamanca",
+    ]
     for stop_id in ("20300", "20305", "20309"):
         mapping = spec.stop_mappings[stop_id]
         assert mapping.exits == ["ourense"] and not mapping.via

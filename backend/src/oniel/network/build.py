@@ -396,6 +396,14 @@ def cut_segments(
             # un servicio. Conservamos la predominante de OSM, limitada por la corrección;
             # si falta, la máxima sigue siendo la aproximación que usa el comparador.
             typical = min(typical, max_speed) if typical is not None else max_speed
+        coords = line.polyline.slice(a.km, b.km)
+        # En estaciones con vías paralelas dibujamos el encuentro en el eje publicado.
+        # La distancia sigue medida sobre el itinerario de la fuente.
+        for index, node in ((0, a), (-1, b)):
+            if node.spec.anchor_geometry:
+                position = node.spec.position
+                assert position.lon is not None and position.lat is not None
+                coords[index] = (position.lon, position.lat)
         segments.append(
             BuiltSegment(
                 id=f"{spec.line.id}:{a.spec.id}:{b.spec.id}",
@@ -409,7 +417,7 @@ def cut_segments(
                 typical_speed_kmh=typical,
                 attributes=attributes[seq - 1],
                 source_id=source_at(line, spec, (a.km + b.km) / 2),
-                coords=line.polyline.slice(a.km, b.km),
+                coords=coords,
             )
         )
     return segments

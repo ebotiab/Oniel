@@ -223,6 +223,24 @@
     "30100": {
       "exits": [
         "bif-medina"
+      ],
+      "via": [
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina"
+        },
+        {
+          "line": "enlace-medina-av-salamanca",
+          "node": "bif-medina-av-salamanca"
+        },
+        {
+          "line": "medina-del-campo-salamanca",
+          "node": "bif-arroyo-de-la-golosa"
+        },
+        {
+          "line": "avila-salamanca",
+          "node": "bif-acceso-salamanca"
+        }
       ]
     },
     "31400": {

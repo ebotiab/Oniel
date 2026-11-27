@@ -227,6 +227,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "barcelona-girona-portbou": 7,
             "enlace-principe-pio-pinar": 8,
             "avila-salamanca": 15,
+            "medina-del-campo-salamanca": 11,
+            "enlace-medina-av-salamanca": 2,
         }
         assert covered.pop("gauge", None) == other.get(line["line"])
         # la electrificación solo se declara donde no es la de la línea: ese último tramo de la
@@ -237,6 +239,8 @@ def test_validate_reports_coverage_and_unregistered_sources(tmp_path: Path) -> N
             "valencia-castello-tarragona": 1,
             "madrid-plasencia": 3,
             "avila-salamanca": 10,
+            "medina-del-campo-salamanca": 11,
+            "enlace-medina-av-salamanca": 2,
             "leon-oviedo-gijon": 3,
             # la salida de Ourense, a 3 kV
             "lav-ourense-santiago": 1,
@@ -308,6 +312,16 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     and attribute == "proteccion_tren"
                     else DR
                 )
+                if (
+                    net.spec.line.id == "medina-del-campo-salamanca"
+                    and attribute != "proteccion_tren"
+                ):
+                    source = "adif-capacidad-medina-salamanca"
+                if (
+                    net.spec.line.id == "enlace-medina-av-salamanca"
+                    and segment.from_node.spec.kind == "cambiador"
+                ):
+                    source = "fomento-puesta-servicio-188"
                 assert value.source_id == source
                 assert value.checked_on in (
                     dt.date(2026, 11, 12),
@@ -321,6 +335,7 @@ def test_every_segment_of_every_loaded_line_has_its_signalling_with_source_and_d
                     # los tres enlaces de #260
                     dt.date(2026, 11, 23),
                     dt.date(2026, 11, 26),
+                    dt.date(2026, 11, 27),
                 )
 
 

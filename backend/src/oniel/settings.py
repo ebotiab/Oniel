@@ -76,6 +76,8 @@ class Settings(BaseSettings):
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     ]
 
 

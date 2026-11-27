@@ -34,7 +34,7 @@ test.describe('Línea convencional de Madrid a Valladolid por Ávila', () => {
     expect(lineasDe(CHAMARTIN)).toContain(LAV)
     expect(lineasDe(VALLADOLID)).toContain(LINEA)
     expect(lineasDe('avila')).toEqual([LINEA])
-    expect(lineasDe('medina-del-campo')).toEqual([LINEA])
+    expect(lineasDe('medina-del-campo').sort()).toEqual([LINEA, 'medina-del-campo-salamanca'].sort())
   })
 
   test('es de vía doble y ancho ibérico en toda su longitud', () => {
@@ -46,10 +46,10 @@ test.describe('Línea convencional de Madrid a Valladolid por Ávila', () => {
 
   test('el comparador da los dos caminos de Madrid a Valladolid', () => {
     const rutas = findRoutes(grafo, CHAMARTIN, VALLADOLID)
-    expect(rutas.slice(0, 2).map((r) => [r.length_km, r.line_ids])).toEqual([
+    expect(rutas.map((r) => [r.length_km, r.line_ids])).toEqual(expect.arrayContaining([
       [178.6, [LAV]],
       [250.2, [LINEA]],
-    ])
+    ]))
     expect(findRoutes(grafo, CHAMARTIN, 'avila')[0].length_km).toBe(121.2)
   })
 
@@ -90,9 +90,7 @@ test.describe('Línea convencional de Madrid a Valladolid por Ávila', () => {
   test('el comparador enseña el camino por Ávila de Madrid a Valladolid', async ({ page }) => {
     await page.goto(`/recorridos/${CHAMARTIN}/${VALLADOLID}`)
     const recorridos = page.getByTestId('recorrido')
-    await expect(recorridos.nth(1)).toBeVisible()
     await expect(recorridos.first()).toContainText('178,6 km')
-    await expect(recorridos.nth(1)).toContainText('250,2 km')
-    await expect(recorridos.nth(1)).toContainText('Ávila')
+    await expect(recorridos.filter({ hasText: '250,2 km' })).toContainText('Ávila')
   })
 })

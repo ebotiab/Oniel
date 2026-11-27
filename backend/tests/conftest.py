@@ -118,6 +118,8 @@ SPECS = [
     DATA_DIR / "curated" / "enlace-la-encina-caudete.json",
     DATA_DIR / "curated" / "enlace-principe-pio-pinar.json",
     DATA_DIR / "curated" / "avila-salamanca.json",
+    DATA_DIR / "curated" / "medina-del-campo-salamanca.json",
+    DATA_DIR / "curated" / "enlace-medina-av-salamanca.json",
 ]
 SOURCES = DATA_DIR / "curated" / "sources.json"
 #: Fichero de horarios fijo de las pruebas: el del 8 de noviembre de 2026, por su nombre. Los

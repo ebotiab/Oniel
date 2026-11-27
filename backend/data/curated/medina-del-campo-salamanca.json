@@ -1,0 +1,527 @@
+{
+  "line": {
+    "id": "medina-del-campo-salamanca",
+    "name": "Línea convencional Medina del Campo – Salamanca",
+    "short_name": "120",
+    "sort_order": 53,
+    "zone": "castilla-y-leon",
+    "mode": "ferrocarril",
+    "infrastructure_manager": "adif",
+    "tracks": 1,
+    "gauge_mm": 1668,
+    "max_speed_kmh": 155,
+    "description": "La línea une la estación convencional de Medina del Campo con Salamanca. La usan los trenes de Valladolid y Palencia y los servicios que Renfe publica entre Zaragoza y Salamanca.\n\nEn Arroyo de la Golosa se incorporan los trenes de Madrid que han parado en Medina del Campo Alta Velocidad. El horario distingue los servicios directos de los regionales que atienden las ocho paradas del corredor.\n\nEn la entrada de Salamanca se une la línea de Ávila. Los dos caminos comparten el acceso a la estación principal. Algunos regionales continúan hasta Salamanca-La Alamedilla. Cada ficha de tren muestra su última parada publicada.",
+    "geometry_source": {
+      "source_id": "osm-relation-6016262",
+      "parts": [
+        {
+          "source_id": "osm-relation-6016262",
+          "file": "raw/osm/relation_6016262_salamanca_2026-11-26.json",
+          "relation_id": 6016262,
+          "from": [
+            -4.9101131,
+            41.3178808
+          ],
+          "to": [
+            -4.9675477,
+            41.2841889
+          ]
+        },
+        {
+          "source_id": "osm-relation-20685324",
+          "file": "raw/osm/relation_20685324_medina_salamanca_2026-11-27.json",
+          "relation_id": 20685324,
+          "from": [
+            -4.9675477,
+            41.2841889
+          ],
+          "to": [
+            -5.6437217,
+            40.973664
+          ]
+        }
+      ]
+    },
+    "verification_source_id": "adif-esquema-medina-salamanca"
+  },
+  "operators": [
+    {
+      "id": "adif",
+      "name": "Adif / Adif Alta Velocidad",
+      "role": "administrador_infraestructura",
+      "source_id": "adif-mapa-red"
+    },
+    {
+      "id": "renfe",
+      "name": "Renfe Viajeros",
+      "role": "operador",
+      "source_id": "renfe-gtfs-av-ld-md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "medina-del-campo",
+      "name": "Medina del Campo",
+      "kind": "estacion",
+      "adif_code": "10500",
+      "position": {
+        "lon": -4.91003216156359,
+        "lat": 41.3173265314473
+      },
+      "shared": true,
+      "anchor_geometry": true
+    },
+    {
+      "id": "cambio-tension-medina",
+      "name": "Cambio de tensión de Medina",
+      "kind": "referencia",
+      "position": {
+        "lon": -4.9531911,
+        "lat": 41.3015858
+      },
+      "source_id": "osm-relation-6016262",
+      "rank": "secundario",
+      "reference_pk_km": 4.5
+    },
+    {
+      "id": "bif-arroyo-de-la-golosa",
+      "name": "Bifurcación Arroyo de la Golosa",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -4.9675477,
+        "lat": 41.2841889
+      },
+      "source_id": "osm-relation-20685324",
+      "reference_pk_km": 6.846,
+      "rank": "secundario",
+      "description": "Desde aquí los trenes de ambas estaciones de Medina comparten vía hasta Salamanca."
+    },
+    {
+      "id": "campillo",
+      "name": "Campillo",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.017791,
+        "lat": 41.259509
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32001",
+      "reference_pk_km": 11.829
+    },
+    {
+      "id": "el-carpio",
+      "name": "El Carpio",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.114466,
+        "lat": 41.215464
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32002",
+      "reference_pk_km": 21.31
+    },
+    {
+      "id": "fresno-el-viejo",
+      "name": "Fresno el Viejo",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.138061,
+        "lat": 41.191351
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32003",
+      "reference_pk_km": 24.725
+    },
+    {
+      "id": "cantalapiedra",
+      "name": "Cantalapiedra",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.1831324,
+        "lat": 41.1336631
+      },
+      "source_id": "osm-anden-cantalapiedra",
+      "adif_code": "32004",
+      "reference_pk_km": 32.23
+    },
+    {
+      "id": "el-pedroso-de-la-armuna",
+      "name": "El Pedroso de la Armuña",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.406019,
+        "lat": 41.079901
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32006",
+      "reference_pk_km": 52.574
+    },
+    {
+      "id": "pitiegua",
+      "name": "Pitiegua",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.474174,
+        "lat": 41.063741
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32007",
+      "reference_pk_km": 58.574
+    },
+    {
+      "id": "gomecello",
+      "name": "Gomecello",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.541551,
+        "lat": 41.041859
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32008",
+      "reference_pk_km": 64.852
+    },
+    {
+      "id": "moriscos",
+      "name": "Moriscos",
+      "kind": "estacion",
+      "position": {
+        "lon": -5.584713,
+        "lat": 41.011633
+      },
+      "source_id": "renfe-gtfs-av-ld-md",
+      "adif_code": "32009",
+      "reference_pk_km": 69.724
+    },
+    {
+      "id": "bif-acceso-salamanca",
+      "name": "Acceso compartido a Salamanca",
+      "kind": "bifurcacion",
+      "position": {
+        "lon": -5.6437217,
+        "lat": 40.973664
+      },
+      "rank": "secundario",
+      "shared": true
+    }
+  ],
+  "connections": [],
+  "attribute_sections": [
+    {
+      "attribute": "tracks",
+      "from_node": "medina-del-campo",
+      "to_node": "bif-acceso-salamanca",
+      "value": 1,
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Una vía general de la 120. En la playa de Medina hay otras vías de estación y del corredor de Zamora."
+    },
+    {
+      "attribute": "gauge",
+      "from_node": "medina-del-campo",
+      "to_node": "bif-acceso-salamanca",
+      "value": "iberico",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Ancho ibérico de 1.668 mm."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "medina-del-campo",
+      "to_node": "cambio-tension-medina",
+      "value": "3 kV CC",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Desde Medina hasta el PK 4,5."
+    },
+    {
+      "attribute": "electrification",
+      "from_node": "cambio-tension-medina",
+      "to_node": "bif-acceso-salamanca",
+      "value": "25 kV 50 Hz",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Desde el PK 4,5 hasta el acceso salmantino."
+    },
+    {
+      "attribute": "proteccion_tren",
+      "from_node": "medina-del-campo",
+      "to_node": "bif-acceso-salamanca",
+      "value": "asfa",
+      "source_id": "adif-declaracion-red-2026-mapas",
+      "checked_on": "2026-11-27",
+      "note": "Mapa 4, línea convencional Medina–Salamanca. El esquema representa la general."
+    },
+    {
+      "attribute": "mando",
+      "from_node": "medina-del-campo",
+      "to_node": "bif-acceso-salamanca",
+      "value": "ctc",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Control de tráfico centralizado en la 120."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "medina-del-campo",
+      "to_node": "bif-arroyo-de-la-golosa",
+      "value": "blau",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Tabla de la línea 120. La excepción de bloqueo corresponde a Golosa–Campillo."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "bif-arroyo-de-la-golosa",
+      "to_node": "campillo",
+      "value": "bau",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Tabla de la línea 120. La excepción de bloqueo corresponde a Golosa–Campillo."
+    },
+    {
+      "attribute": "bloqueo",
+      "from_node": "campillo",
+      "to_node": "bif-acceso-salamanca",
+      "value": "blau",
+      "source_id": "adif-capacidad-medina-salamanca",
+      "checked_on": "2026-11-27",
+      "note": "Tabla de la línea 120. La excepción de bloqueo corresponde a Golosa–Campillo."
+    }
+  ],
+  "stop_mappings": {
+    "10500": {
+      "node": "medina-del-campo"
+    },
+    "32001": {
+      "node": "campillo"
+    },
+    "32002": {
+      "node": "el-carpio"
+    },
+    "32003": {
+      "node": "fresno-el-viejo"
+    },
+    "32004": {
+      "node": "cantalapiedra"
+    },
+    "32006": {
+      "node": "el-pedroso-de-la-armuna"
+    },
+    "32007": {
+      "node": "pitiegua"
+    },
+    "32008": {
+      "node": "gomecello"
+    },
+    "32009": {
+      "node": "moriscos"
+    },
+    "30100": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-acceso-salamanca"
+      }
+    },
+    "30110": {
+      "exits": [
+        "bif-acceso-salamanca"
+      ],
+      "via": {
+        "line": "avila-salamanca",
+        "node": "bif-acceso-salamanca"
+      }
+    },
+    "08240": {
+      "exits": [
+        "bif-arroyo-de-la-golosa"
+      ],
+      "via": [
+        {
+          "line": "enlace-medina-av-salamanca",
+          "node": "bif-arroyo-de-la-golosa"
+        },
+        {
+          "line": "lav-olmedo-ourense",
+          "node": "bif-medina-av-salamanca"
+        }
+      ]
+    },
+    "10600": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "medina-del-campo"
+      }
+    },
+    "10504": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "medina-del-campo"
+      }
+    },
+    "10503": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "medina-del-campo"
+      }
+    },
+    "10502": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "medina-del-campo"
+      }
+    },
+    "10501": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": {
+        "line": "madrid-avila-valladolid",
+        "node": "medina-del-campo"
+      }
+    },
+    "10610": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "11000": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "14100": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": [
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "medina-del-campo"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        }
+      ]
+    },
+    "10605": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "11014": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": [
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "medina-del-campo"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        }
+      ]
+    },
+    "11200": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": [
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "medina-del-campo"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
+      ]
+    },
+    "11208": {
+      "exits": [
+        "medina-del-campo"
+      ],
+      "via": [
+        {
+          "line": "madrid-avila-valladolid",
+          "node": "medina-del-campo"
+        },
+        {
+          "line": "lav-valladolid-leon",
+          "node": "valladolid-campo-grande"
+        },
+        {
+          "line": "lav-venta-de-banos-burgos",
+          "node": "bif-venta-de-banos"
+        },
+        {
+          "line": "burgos-miranda-vitoria",
+          "node": "burgos-rosa-manzano"
+        }
+      ]
+    },
+    "80100": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "81202": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    },
+    "04040": {
+      "exits": [
+        "medina-del-campo"
+      ]
+    }
+  },
+  "corridor_filter": {
+    "required_stop_ids": [
+      "10500",
+      "30100"
+    ],
+    "description": "Servicios entre Medina convencional y Salamanca, incluidos los directos."
+  },
+  "route_overrides": [
+    {
+      "id": "incorporacion-desde-medina-av",
+      "description": "El par Medina AV–Salamanca identifica los trenes que entran por Golosa en ambos sentidos.",
+      "consecutive_stop_ids": [
+        "08240",
+        "30100"
+      ],
+      "from_stop_id": "08240",
+      "to_stop_id": "30100"
+    }
+  ]
+}

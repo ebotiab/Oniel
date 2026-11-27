@@ -102,7 +102,70 @@ def _salamanca_closures() -> tuple[StationClosure, ...]:
     return tuple(journeys)
 
 
+def _medina_closures() -> tuple[StationClosure, ...]:
+    line = "medina-del-campo-salamanca"
+    link = "enlace-medina-av-salamanca"
+    lav = "lav-olmedo-ourense"
+    medina = "medina-del-campo"
+    av = "medina-del-campo-av"
+    branch = "bif-medina-av-salamanca"
+    changer = "cambiador-medina-av"
+    junction = "bif-arroyo-de-la-golosa"
+    entry = "bif-acceso-salamanca"
+    stations = (
+        (medina, "Medina del Campo"),
+        ("campillo", "Campillo"),
+        ("el-carpio", "El Carpio"),
+        ("fresno-el-viejo", "Fresno el Viejo"),
+        ("cantalapiedra", "Cantalapiedra"),
+        ("el-pedroso-de-la-armuna", "El Pedroso de la Armuña"),
+        ("pitiegua", "Pitiegua"),
+        ("gomecello", "Gomecello"),
+        ("moriscos", "Moriscos"),
+        ("salamanca", "Salamanca"),
+    )
+    common = f"{lav}:{av}:{branch}"
+    journeys = [
+        StationClosure(
+            from_id=av,
+            from_name="Medina del Campo Alta Velocidad",
+            to_id="zamora",
+            to_name="Zamora",
+            segment_ids=(
+                common,
+                f"{lav}:{branch}:toro-av",
+                f"{lav}:toro-av:coreses",
+                f"{lav}:coreses:zamora",
+            ),
+        ),
+        StationClosure(
+            from_id=av,
+            from_name="Medina del Campo Alta Velocidad",
+            to_id="campillo",
+            to_name="Campillo",
+            segment_ids=(
+                common,
+                f"{link}:{branch}:{changer}",
+                f"{link}:{changer}:{junction}",
+                f"{line}:{junction}:campillo",
+            ),
+        ),
+    ]
+    for (start, name), (end, end_name) in pairwise(stations):
+        nodes = (start, "cambio-tension-medina", junction, end) if start == medina else (start, end)
+        segments = tuple(f"{line}:{a}:{b}" for a, b in pairwise(nodes))
+        if end == "salamanca":
+            segments = (f"{line}:{start}:{entry}", f"avila-salamanca:{entry}:{end}")
+        journeys.append(
+            StationClosure(
+                from_id=start, from_name=name, to_id=end, to_name=end_name, segment_ids=segments
+            )
+        )
+    return tuple(journeys)
+
+
 _JOURNEYS = (
+    *_medina_closures(),
     *_access_closures(),
     *_salamanca_closures(),
     StationClosure(

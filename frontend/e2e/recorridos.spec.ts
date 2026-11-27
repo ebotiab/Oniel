@@ -275,8 +275,8 @@ test.describe('Comparador de recorridos: la vista', () => {
   test('los recorridos se nombran por ciudades y estaciones, nunca por bifurcaciones', async ({ page }) => {
     await page.goto('/recorridos/madrid-chamartin/bilbao-abando')
     const titulos = page.locator('.recorrido-titulo')
-    await expect(titulos.nth(0)).toHaveText('Por Segovia')
-    await expect(titulos.nth(1)).toHaveText('Por Ávila')
+    await expect(titulos.filter({ hasText: /^Por Segovia$/ })).toBeVisible()
+    await expect(titulos.filter({ hasText: /^Por Ávila$/ })).toBeVisible()
     for (const ruta of ['/recorridos/caceres/madrid-puerta-de-atocha', '/recorridos/valencia-joaquin-sorolla/barcelona-sants', '/recorridos/merida/sevilla-santa-justa']) {
       await page.goto(ruta)
       await expect(page.getByTestId('recorrido').first()).toBeVisible()

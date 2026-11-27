@@ -350,6 +350,8 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "enlace-la-encina-caudete",
         "enlace-principe-pio-pinar",
         "avila-salamanca",
+        "medina-del-campo-salamanca",
+        "enlace-medina-av-salamanca",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -452,7 +454,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         - 2
         + 20  # Vitoria–Irún no cierra ningún anillo
         + 23  # el viaje de los regionales ya comienza en Príncipe Pío en vez de Pinar
-        - 1,  # Ávila–Arévalo se consulta entre estaciones
+        - 1  # Ávila–Arévalo se consulta entre estaciones
+        - 10,  # la conexión por Medina y los cierres entre estaciones
         121
         + 29
         + 4
@@ -489,7 +492,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 4
         + 20  # Vitoria–Irún
         - 7  # con la continuidad por La Encina, en los siete tramos históricos mejora el recorrido
-        - 1,  # Ávila–Arévalo se consulta entre estaciones
+        - 1  # Ávila–Arévalo se consulta entre estaciones
+        - 7,  # la conexión por Medina y los cierres entre estaciones
     )
     # la de Barcelona a Figueres, de Girona al límite: a Figueres-Vilafant solo llega ella. De
     # Barcelona-Sants a Girona tiene otro camino, la convencional de Portbou
@@ -521,9 +525,9 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     gijon = {k: n for k, n in none.items() if k.startswith(f"{LEON_GIJON}:")}
     assert len(gijon) == 11 and sorted(set(gijon.values())) == [14, 16]
     assert gijon[f"{LEON_GIJON}:la-robla-av:campomanes-av"] == 14
-    # la de Olmedo a Ourense, entera: 30 trenes hasta Medina del Campo AV y 22 en los demás
+    # Desde Zamora a Ourense los nueve tramos conservan 22 trenes sin alternativa.
     ourense = {k: n for k, n in none.items() if k.startswith(f"{LAV_OURENSE}:")}
-    assert len(ourense) == 13 and sorted(set(ourense.values())) == [22, 30]
+    assert len(ourense) == 9 and set(ourense.values()) == {22}
     # la de Palencia a Santander, entera: a Santander solo llega ella; los 13 trenes de ese día la
     # recorren de punta a punta
     santander = {k: n for k, n in none.items() if k.startswith("palencia-santander:")}
@@ -606,7 +610,11 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         s for s in exported.segments if s.segment_id.startswith("madrid-avila-valladolid:")
     ]
     assert len(convencional) == 26  # las dos partes de Ávila–Arévalo se consultan entre estaciones
-    assert all(s.trains == s.without_alternative for s in convencional)
+    assert [(s.trains, s.without_alternative) for s in convencional[-6:]] == [
+        (19, 0),
+        *([(70, 55)] * 5),
+    ]
+    assert all(s.trains == s.without_alternative for s in convencional[:-6])
     assert all(s.trains == 12 for s in convencional[:4])
     # desde que Albacete está unida a Madrid por dos caminos, el convencional por Alcázar de San
     # Juan y el de alta velocidad por Cuenca, cada uno es el otro camino del otro: los 13 trenes
@@ -760,10 +768,10 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # la convencional por Ávila no se pasa a la línea de Zamora sin invertir la marcha
     valladolid = [s for s in exported.segments if s.segment_id.startswith(f"{LAV_VALLADOLID}:")]
     assert [(s.trains, s.without_alternative) for s in valladolid] == [
-        (122, 19),
-        (122, 19),
-        (111, 30),
-        (111, 30),
+        (122, 11),
+        (122, 11),
+        (111, 0),
+        (111, 0),
         (81, 0),
     ]
     # y la de Valladolid a León, que la continúa: 51 trenes hasta la bifurcación Venta de Baños,

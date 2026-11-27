@@ -1,0 +1,59 @@
+{
+  "consulta": "2026-11-27",
+  "estrategia": {
+    "url": "https://rne.eu/wp-content/uploads/ADIF-Capacity-Strategy-2028.pdf",
+    "sha256": "a34ac4c4e3019cf5112da79a55f84b8b4b9fa269bc5710d9b7b8f031866e82d5",
+    "linea": 120,
+    "ancho_mm": 1668,
+    "vias_generales": 1,
+    "cambio_tension_pk": 4.5,
+    "tensiones": [
+      "3 kV CC",
+      "25 kV 50 Hz"
+    ],
+    "maxima_medina_salamanca_kmh": 155,
+    "bloqueo": "BLAU con CTC, BAU con CTC entre Golosa y Campillo"
+  },
+  "esquema": {
+    "url": "https://attachments.tender-service.com/07/1653/165392442_860937cbc64391e786890c9dbcec430b/DOC20240624111343PliegoDePrescripcionesTecnicas.PDF",
+    "sha256": "f48a7a06e16c61648556f7cdb0790767aaff4af76532b62925a2a3655fdd2201",
+    "pagina": 52,
+    "pk_120": {
+      "32001": 11.829,
+      "32002": 21.31,
+      "32003": 24.725,
+      "32004": 32.23,
+      "32006": 52.574,
+      "32007": 58.574,
+      "32008": 64.852,
+      "32009": 69.724,
+      "Golosa": 6.846,
+      "Salamanca": 76.825
+    },
+    "pk_188": {
+      "Golosa": 0,
+      "Cambiador": 3
+    }
+  },
+  "informe": {
+    "url": "https://publicaciones.transportes.gob.es/downloadcustom/sample/1326",
+    "paginas": [
+      66,
+      67
+    ],
+    "linea": 188,
+    "puesta_en_servicio": [
+      "BAU",
+      "CTC",
+      "ASFA"
+    ]
+  },
+  "avisos": {
+    "urls": [
+      "https://www.adif.es/viajeros/estado-de-la-red",
+      "https://www.adif.es/viajeros/avisos"
+    ],
+    "consulta": "27/11/2026, mañana (CET)",
+    "resultado": "Sin corte anunciado en Medina–Salamanca. Los avisos en Madrid y en Robledo de Chavela–Zarzalejo afectan a otros corredores."
+  }
+}

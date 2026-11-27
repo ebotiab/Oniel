@@ -42,6 +42,14 @@ function paradasDelCorredor(id: string): string[] | null {
   if (id === 'madrid-avila-valladolid:bif-avila-salamanca:arevalo') return ['avila', 'arevalo', 'medina-del-campo']
   if (id === 'avila-salamanca:salamanca:salamanca-la-alamedilla') return ['salamanca-la-alamedilla']
   if (id === 'avila-salamanca:bif-acceso-salamanca:salamanca') return ['salamanca']
+  if (id.startsWith('enlace-medina-av-salamanca:')) return ['salamanca', 'medina-del-campo-av']
+  if (id.startsWith('medina-del-campo-salamanca:')) {
+    const desdeMedina = id.includes('cambio-tension-medina')
+    return desdeMedina ? ['salamanca', 'medina-del-campo'] : ['salamanca', 'medina-del-campo', 'medina-del-campo-av']
+  }
+  if (id === 'lav-olmedo-ourense:bif-medina-av-salamanca:toro-av' || id === 'lav-olmedo-ourense:toro-av:coreses' || id === 'lav-olmedo-ourense:coreses:zamora') {
+    return ['ourense', 'medina-del-campo-av', 'segovia-guiomar', 'madrid-chamartin']
+  }
   if (id.startsWith('avila-salamanca:')) return ['penaranda-de-bracamonte']
   return null
 }
@@ -261,7 +269,9 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
     const porTramo = ids.map(async (id) => {
       const estaciones = paradasDelCorredor(id)
       if (estaciones) return trenesPorEstaciones(estaciones, dia)
-      const tramo = await fetchSegmentServices(id, dia)
+      // Los servicios por Galicia y por Salamanca comparten el acceso desde Olmedo.
+      const compartido = id === 'lav-olmedo-ourense:medina-del-campo-av:bif-medina-av-salamanca'
+      const tramo = await fetchSegmentServices(compartido ? 'lav-olmedo-ourense:bif-medina:medina-del-campo-av' : id, dia)
       return { date: tramo.date, ids: new Set(tramo.passes.map((p) => p.service.id)) }
     })
     Promise.all([fetchNodeServices(from, dia), fetchNodeServices(to, dia), Promise.all(porTramo)])
