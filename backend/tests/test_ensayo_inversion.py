@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any, Literal
 from unittest.mock import AsyncMock, patch
 
@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from oniel.api.deps import get_connection
 from oniel.api.routers import routes
 from oniel.domain.schemas import LineSummary, NodeOut, SegmentOut
+from oniel.repo import network_repo
 from oniel.routing import build_graph
 
 # PK en metros. Las velocidades son ficticias y solo sirven para comprobar la paridad.
@@ -132,7 +133,7 @@ async def medir(variante: str) -> dict[str, Any]:
     app = FastAPI()
     app.include_router(routes.router, prefix="/api")
     app.dependency_overrides[get_connection] = lambda: None
-    casos = []
+    casos: list[dict[str, Any]] = []
 
     async def comprobar(desde: str, hasta: str, escenario: str, caminos: list[Camino]) -> None:
         for vuelta in (False, True):
@@ -169,17 +170,30 @@ async def medir(variante: str) -> dict[str, Any]:
             ], (variante, params, recibidos)
             casos.append(dict(desde=inicio, hasta=fin, escenario=escenario, rutas=recibidos))
 
-    with patch.object(routes.network_repo, "fetch_graph", AsyncMock(return_value=graph)):
+    with patch.object(network_repo, "fetch_graph", AsyncMock(return_value=graph)):
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://ensayo"
         ) as client:
-            await comprobar("origen", "destino", "", [DIRECTO])
+            por_estacion = (
+                [replace(ESTACION, inversiones=("parada",))] if variante == "habilitada" else []
+            )
+            await comprobar("origen", "destino", "", [DIRECTO, *por_estacion])
             await comprobar(
-                "origen", "destino", "c~directo", [ESTACION] if variante == "orientado" else []
+                "origen",
+                "destino",
+                "c~directo",
+                [ESTACION] if variante == "orientado" else por_estacion,
             )
             for brazo in ("anden-este", "anden-oeste"):
                 await comprobar("origen", "destino", f"c~{brazo}", [DIRECTO])
             if variante == "habilitada":
+                # Un viaje entre las propias agujas también excede el doble en el total.
+                await comprobar("este", "oeste", "", [Camino("este oeste", "directo", 1.0, 1)])
+                # Una vía ajena al triángulo sigue midiendo el rodeo por su parte distinta.
+                supuesto = Camino(
+                    "origen este oeste destino", "acceso enlace:este:oeste salida", 177.9, 54
+                )
+                await comprobar("origen", "destino", "e~este~oeste~0.5~100", [supuesto])
                 await comprobar("origen", "parada", "", [ENTRADA])
                 await comprobar("parada", "destino", "", [SALIDA])
                 # Se cierra el brazo legal. Cada aguja queda como única esquina posible hacia el andén.

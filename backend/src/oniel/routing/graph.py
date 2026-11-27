@@ -21,7 +21,7 @@ import itertools
 import math
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass, field, replace
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel
 
@@ -89,6 +89,7 @@ class Graph:
     #: de uno a otro hay que seguir hasta una estación e invertir la marcha (``_excursion``).
     turns: Turns = field(default_factory=dict)
     link_towards: dict[str, str] = field(default_factory=dict)
+    link_reversal_at: dict[str, str] = field(default_factory=dict)
     _adjacent: dict[str, list[Edge]] = field(default_factory=dict, compare=False, repr=False)
     #: Lo que se calcula la primera vez que se pide y no cambia: los lados de los triángulos de los
     #: enlaces, los tramos por id, las distancias a un nodo y el grafo del último escenario.
@@ -150,7 +151,7 @@ class Graph:
         en la bifurcación de Murcia: los lados son el enlace, el tramo de Monforte del Cid a la
         bifurcación de Murcia y el de esta a la bifurcación Vinalopó. Las vías de un triángulo así
         no dejan doblar sus esquinas: de un lado a otro solo se pasa invirtiendo la marcha, y un
-        recorrido no lo hace (``_walk``).
+        recorrido solo lo hace en la estación declarada para esos dos brazos (``_link_turn``).
         """
         sides: dict[str, tuple[str, int]] | None = self._memo.get("sides")
         if sides is None:
@@ -269,6 +270,7 @@ class Graph:
             self.link_of,
             self.turns,
             self.link_towards,
+            self.link_reversal_at,
         )
 
 
@@ -285,6 +287,8 @@ class LineLike(Protocol):
     def link_of(self) -> str | None: ...
     @property
     def link_towards(self) -> str | None: ...
+    @property
+    def link_reversal_at(self) -> str | None: ...
 
 
 class NodeLike(Protocol):
@@ -366,6 +370,7 @@ def build_graph(
         {line.id: line.link_of for line in lines if line.link_of is not None},
         turns or {},
         {line.id: line.link_towards for line in lines if line.link_towards is not None},
+        {line.id: line.link_reversal_at for line in lines if line.link_reversal_at is not None},
     )
 
 
@@ -400,8 +405,7 @@ class Route(BaseModel):
     via: list[str]
     node_ids: list[str]
     segment_ids: list[str]
-    #: Estaciones en las que el recorrido invierte la marcha: llega, y vuelve por donde vino
-    #: hasta la bifurcación en la que las vías no le dejaban girar.
+    #: Estaciones en las que el tren vuelve por donde llegó o sale por el otro brazo autorizado.
     reverse_node_ids: list[str] = []
 
 
@@ -425,18 +429,22 @@ class ClosureDetours(BaseModel):
 _Step = tuple[Edge, str]
 
 
-def _corner(graph: Graph, previous: Edge, edge: Edge) -> bool:
-    """Si pasar de un tramo a otro es doblar una esquina del triángulo de un enlace.
-
-    Ningún recorrido lo hace (``Graph.link_sides``), tampoco invirtiendo la marcha en la estación
-    que haya en la esquina: del túnel de Atocha a Chamartín no se sale hacia el sur por la alta
-    velocidad.
-    """
+def _link_turn(
+    graph: Graph, node_id: str, previous: Edge, edge: Edge
+) -> Literal["blocked", "reversal"] | None:
+    """Al cambiar de lado del triángulo solo cabe la inversión declarada entre los dos brazos."""
     sides = graph.link_sides()
-    if previous.id not in sides or edge.id not in sides:
-        return False
-    (link, side), (other_link, other_side) = sides[previous.id], sides[edge.id]
-    return link == other_link and side != other_side
+    first, second = sides.get(previous.id), sides.get(edge.id)
+    if first is None or second is None or first[0] != second[0] or first[1] == second[1]:
+        return None
+    if (
+        first[1] != 0
+        and second[1] != 0
+        and graph.link_reversal_at.get(first[0]) == node_id
+        and graph.nodes[node_id].kind == "estacion"
+    ):
+        return "reversal"
+    return "blocked"
 
 
 def _must_reverse(graph: Graph, node_id: str, previous: Edge, edge: Edge) -> bool:
@@ -496,13 +504,14 @@ def _excursion(
                 continue
             if last is None:
                 # La salida: solo por un tramo del lado opuesto al de llegada.
-                if graph.turns[node_id].get(edge.id) in (None, side) or _corner(
-                    graph, previous, edge
+                if (
+                    graph.turns[node_id].get(edge.id) in (None, side)
+                    or _link_turn(graph, at, previous, edge) == "blocked"
                 ):
                     continue
             elif (
                 edge.id == last.id
-                or _corner(graph, last, edge)
+                or _link_turn(graph, at, last, edge) == "blocked"
                 or _must_reverse(graph, at, last, edge)
             ):
                 continue
@@ -567,7 +576,7 @@ def _walk(
             if nxt in visited or not edge_ok(edge):
                 continue
             previous = path[-1][0] if path else None
-            if previous is not None and _corner(graph, previous, edge):
+            if previous is not None and _link_turn(graph, node_id, previous, edge) == "blocked":
                 continue
             added: list[_Step] = [(edge, nxt)]
             if previous is not None and _must_reverse(graph, node_id, previous, edge):
@@ -706,7 +715,7 @@ def _route(graph: Graph, start: str, steps: list[_Step]) -> Route:
         reverse_node_ids=[
             node_id
             for (edge, node_id), (after, _) in itertools.pairwise(steps)
-            if edge.id == after.id
+            if edge.id == after.id or _link_turn(graph, node_id, edge, after) == "reversal"
         ],
     )
 
@@ -788,29 +797,57 @@ def _without_bypass_twins(
     return kept
 
 
-def _strays(steps: list[_Step], shorter: list[_Step], max_ratio: float) -> bool:
+def _station_arms(graph: Graph, own: list[_Step], direct: list[_Step]) -> bool:
+    """Las partes distintas son exactamente el enlace y el paso por sus dos brazos con inversión."""
+    if not direct or not graph.link_reversal_at:
+        return False
+    link = direct[0][0].line_id
+    if (
+        link is None
+        or link not in graph.link_reversal_at
+        or any(edge.line_id != link for edge, _ in direct)
+    ):
+        return False
+    sides = graph.link_sides()
+    return (
+        all(sides.get(edge.id) in ((link, 1), (link, 2)) for edge, _ in own)
+        and len({edge.id for edge, _ in own}) == len(own)
+        and any(
+            _link_turn(graph, at, edge, after) == "reversal"
+            for (edge, at), (after, _) in itertools.pairwise(own)
+        )
+    )
+
+
+def _strays(
+    steps: list[_Step],
+    shorter: list[_Step],
+    max_ratio: float,
+    comparison_graph: Graph | None = None,
+) -> bool:
     """Si un camino se aparta de otro más corto y da un rodeo desproporcionado hasta reencontrarlo.
 
     Se quitan los tramos que los dos comparten al principio y al final y se compara lo que queda
     de cada uno: el camino se descarta si su parte propia mide más de ``max_ratio`` veces la del
     corto. Sin tramos comunes es la comparación de las dos longitudes enteras. Vale igual en los
-    dos sentidos, así que invertir origen y destino da los mismos recorridos.
+    dos sentidos. Si el comparador enfrenta el enlace a su estación con inversión, mide el viaje
+    completo; en los rodeos de cierre se sigue midiendo siempre la parte distinta.
     """
-    a, b = [e for e, _ in steps], [e for e, _ in shorter]
-    shared = min(len(a), len(b))
+    shared = min(len(steps), len(shorter))
     head = 0
-    while head < shared and a[head].id == b[head].id:
+    while head < shared and steps[head][0].id == shorter[head][0].id:
         head += 1
     tail = 0
-    while tail < shared - head and a[len(a) - 1 - tail].id == b[len(b) - 1 - tail].id:
+    while tail < shared - head and steps[-1 - tail][0].id == shorter[-1 - tail][0].id:
         tail += 1
-    own = 0.0
-    for edge in a[head : len(a) - tail]:
-        own += edge.length_km
-    other = 0.0
-    for edge in b[head : len(b) - tail]:
-        other += edge.length_km
-    return own > other * max_ratio
+    own_steps = steps[head : len(steps) - tail]
+    other_steps = shorter[head : len(shorter) - tail]
+    if _raw_length(own_steps) <= _raw_length(other_steps) * max_ratio:
+        return False
+    if comparison_graph is not None and _station_arms(comparison_graph, own_steps, other_steps):
+        # Al comparar el enlace con su estación, se conserva el tope sobre el viaje completo.
+        return _raw_length(steps) > _raw_length(shorter) * max_ratio
+    return True
 
 
 def find_routes(
@@ -830,7 +867,8 @@ def find_routes(
     respecto a otro más corto, medido donde se apartan de él (``_strays``; ``None``, sin descartar
     ninguno por largo). Un baipás es parte de su línea: de los caminos que solo se distinguen por
     ir por él o por la estación que rodea queda el más corto, y cuenta como un recorrido. Un
-    enlace también es parte de su línea, y ningún camino dobla una esquina de su triángulo.
+    enlace también es parte de su línea. Puede admitir una inversión declarada en la estación
+    que une los dos brazos de su triángulo.
     """
     for node_id in (from_node_id, to_node_id):
         if node_id not in graph.nodes:
@@ -848,7 +886,7 @@ def find_routes(
     if max_ratio is not None:
         kept: list[tuple[str, list[_Step]]] = []
         for candidate in ordered:
-            if not any(_strays(candidate[1], shorter[1], max_ratio) for shorter in kept):
+            if not any(_strays(candidate[1], shorter[1], max_ratio, g) for shorter in kept):
                 kept.append(candidate)
         ordered = kept
     return [_route(g, start, steps) for start, steps in ordered[:MAX_ROUTES]]
@@ -898,7 +936,10 @@ def _shortest_walk(
         for edge in graph.edges_at(node_id):
             added: Sequence[_Step] = ((edge, edge.other(node_id)),)
             if previous is not None:
-                if edge.id == previous.id or _corner(graph, previous, edge):
+                if (
+                    edge.id == previous.id
+                    or _link_turn(graph, node_id, previous, edge) == "blocked"
+                ):
                     continue
                 if _must_reverse(graph, node_id, previous, edge):
                     key = ("excursion", node_id, previous.id)

@@ -73,6 +73,8 @@ export interface LineSummary {
   /** Si la línea es un enlace entre dos líneas, el id de la línea de la que cuelga en la lista. */
   link_of?: string | null
   link_towards?: string | null
+  /** Estación en la que se puede invertir entre los dos brazos del triángulo de este enlace. */
+  link_reversal_at?: string | null
   node_count: number
   segment_count: number
 }

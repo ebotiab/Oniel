@@ -23,7 +23,7 @@ test('el comparador y la API coinciden en el enlace, la inversión y los giros d
       const caso = `${variante} · ${desde} → ${hasta} · ${escenario || 'abierto'}`
       expect(findRoutes(grafo, desde, hasta, scenarioFromCode(escenario)), caso).toEqual(rutas)
       const vista = compararRecorridos(grafo, red, desde, hasta, new Map(), escenario)
-      const libres = vista.recorridos.filter((r) => !r.cortes.length)
+      const libres = escenario.startsWith('e~') ? vista.supuestos : vista.recorridos.filter((r) => !r.cortes.length)
       expect(libres.map((r) => r.route), caso).toEqual(rutas)
       expect(libres.map((r) => r.inversion), caso).toEqual(rutas.map((r) => r.reverse_node_ids.length ? 'Invierte la marcha en Parada.' : null))
     }

@@ -70,6 +70,8 @@ class LineSummary(BaseModel):
     #: Si la línea es un enlace, el id de la línea de la que cuelga (``LineSpec.link_of``).
     link_of: str | None = None
     link_towards: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    #: Estación en la que se puede invertir entre los dos brazos del triángulo de este enlace.
+    link_reversal_at: str | None = Field(default=None, exclude_if=lambda v: v is None)
     node_count: int
     segment_count: int
 
