@@ -65,6 +65,7 @@ export interface Graph {
    */
   linkOf: Map<string, string>
   linkTowards: Map<string, string>
+  linkReversalAt: Map<string, string>
   /**
    * Por cada nodo que no es estación, el lado por el que sale cada uno de sus tramos. Dos tramos del
    * mismo lado no se pueden encadenar allí: para pasar de uno a otro hay que seguir hasta una
@@ -75,7 +76,7 @@ export interface Graph {
    * De cada tramo que es lado del triángulo de un enlace, de qué enlace y qué lado: el enlace (0) y
    * el trecho de cada una de las dos líneas desde un extremo del enlace hasta el nodo en el que se
    * juntan. Las vías de un triángulo así no dejan doblar sus esquinas: de un lado a otro solo se
-   * pasa invirtiendo la marcha, y un recorrido no lo hace.
+   * pasa invirtiendo la marcha en la estación declarada para esos dos brazos.
    */
   linkSides: Map<string, readonly [string, number]>
   adjacent: Map<string, Edge[]>
@@ -107,6 +108,7 @@ function makeGraph(
   linkOf: Graph['linkOf'],
   turns: Turns,
   linkTowards: Graph['linkTowards'],
+  linkReversalAt: Graph['linkReversalAt'],
 ): Graph {
   const adjacent = new Map<string, Edge[]>()
   for (const edge of edges) {
@@ -116,7 +118,7 @@ function makeGraph(
       else adjacent.set(end, [edge])
     }
   }
-  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, linkTowards, turns, linkSides: linkSides(edges, lineKm, bypassOf, linkOf, linkTowards), adjacent }
+  return { nodes, edges, lineNames, lineKm, bypassOf, linkOf, linkTowards, linkReversalAt, turns, linkSides: linkSides(edges, lineKm, bypassOf, linkOf, linkTowards), adjacent }
 }
 
 /** Los lados del triángulo de cada enlace, con la misma regla que el servidor (`Graph.link_sides`). */
@@ -197,7 +199,8 @@ export function buildGraph(network: { lines: LineSummary[]; nodes: NodeOut[]; se
   const bypassOf = new Map(network.lines.flatMap((l) => (l.bypass_of ? [[l.id, l.bypass_of] as const] : [])))
   const linkOf = new Map(network.lines.flatMap((l) => (l.link_of ? [[l.id, l.link_of] as const] : [])))
   const linkTowards = new Map(network.lines.flatMap((l) => l.link_towards ? [[l.id, l.link_towards] as const] : []))
-  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf, network.turns ?? {}, linkTowards)
+  const linkReversalAt = new Map(network.lines.flatMap((l) => l.link_reversal_at ? [[l.id, l.link_reversal_at] as const] : []))
+  return makeGraph(nodes, edges, new Map(network.lines.map((l) => [l.id, l.name])), lineKm, bypassOf, linkOf, network.turns ?? {}, linkTowards, linkReversalAt)
 }
 
 /** El grafo con las modificaciones del escenario: cierres, velocidades y enlaces. */
@@ -216,7 +219,7 @@ export function applyScenario(graph: Graph, scenario: Scenario): Graph {
     if (link.from_node_id === link.to_node_id) throw new ScenarioError('Un enlace tiene que unir dos nodos distintos')
     edges.push({ id: linkId(link), line_id: null, a: link.from_node_id, b: link.to_node_id, length_km: link.length_km, speed_kmh: link.speed_kmh, tracks: null })
   }
-  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf, graph.turns, graph.linkTowards)
+  return makeGraph(graph.nodes, edges, graph.lineNames, graph.lineKm, graph.bypassOf, graph.linkOf, graph.turns, graph.linkTowards, graph.linkReversalAt)
 }
 
 /**
@@ -255,13 +258,13 @@ function mustReverse(graph: Graph, node: string, previous: Edge, edge: Edge): bo
   return side !== undefined && side === graph.turns[node]?.[edge.id]
 }
 
-/**
- * Si pasar de un tramo a otro es doblar una esquina del triángulo de un enlace. Ningún recorrido lo
- * hace, tampoco invirtiendo la marcha en la estación que haya en la esquina.
- */
-function corner(graph: Graph, previous: Edge, edge: Edge): boolean {
-  const [from, to] = [graph.linkSides.get(previous.id), graph.linkSides.get(edge.id)]
-  return from !== undefined && to !== undefined && from[0] === to[0] && from[1] !== to[1]
+/** Al cambiar de lado del triángulo solo cabe la inversión declarada entre los dos brazos. */
+function linkTurn(graph: Graph, node: string, previous: Edge, edge: Edge): 'blocked' | 'reversal' | null {
+  const first = graph.linkSides.get(previous.id)
+  const second = graph.linkSides.get(edge.id)
+  if (!first || !second || first[0] !== second[0] || first[1] === second[1]) return null
+  if (first[1] !== 0 && second[1] !== 0 && graph.linkReversalAt.get(first[0]) === node && graph.nodes.get(node)?.kind === 'estacion') return 'reversal'
+  return 'blocked'
 }
 
 /** El orden del servidor: la longitud y, a igualdad, la lista de tramos. */
@@ -302,8 +305,8 @@ function excursion(graph: Graph, node: string, previous: Edge, edgeOk: (edge: Ed
       if (!edgeOk(edge)) continue
       if (!last) {
         // La salida: solo por un tramo del lado opuesto al de llegada.
-        if (sides[edge.id] === undefined || sides[edge.id] === side || corner(graph, previous, edge)) continue
-      } else if (edge.id === last.id || corner(graph, last, edge) || mustReverse(graph, at, last, edge)) continue
+        if (sides[edge.id] === undefined || sides[edge.id] === side || linkTurn(graph, at, previous, edge) === 'blocked') continue
+      } else if (edge.id === last.id || linkTurn(graph, at, last, edge) === 'blocked' || mustReverse(graph, at, last, edge)) continue
       const next = edge.a === at ? edge.b : edge.a
       // Solo por los nodos que admite quien la pide: el rodeo de un cierre no toca su línea tampoco para invertir la marcha.
       if (!nodeOk(next)) continue
@@ -340,7 +343,7 @@ function walk(
       const next = edge.a === node ? edge.b : edge.a
       if (visited.has(next) || !edgeOk(edge)) continue
       const previous = path.at(-1)?.[0]
-      if (previous !== undefined && corner(graph, previous, edge)) continue
+      if (previous !== undefined && linkTurn(graph, node, previous, edge) === 'blocked') continue
       let added: Step[] = [[edge, next]]
       if (previous !== undefined && mustReverse(graph, node, previous, edge)) {
         const key = `${node}|${previous.id}`
@@ -466,7 +469,10 @@ function toRoute(graph: Graph, start: string, steps: Step[]): Route {
     via: [...new Set(inner.filter((n) => n.kind === 'estacion' && n.rank === 'principal').map((n) => n.name))],
     node_ids: [start, ...steps.map(([, n]) => n)],
     segment_ids: edges.map((e) => e.id),
-    reverse_node_ids: steps.flatMap(([edge, node], i) => (steps[i + 1]?.[0].id === edge.id ? [node] : [])),
+    reverse_node_ids: steps.flatMap(([edge, node], i) => {
+      const after = steps[i + 1]?.[0]
+      return after && (after.id === edge.id || linkTurn(graph, node, edge, after) === 'reversal') ? [node] : []
+    }),
   }
 }
 
@@ -530,23 +536,40 @@ function withoutBypassTwins(graph: Graph, ordered: { start: string; steps: Step[
   })
 }
 
+/** Las partes distintas son exactamente el enlace y el paso por sus dos brazos con inversión. */
+function stationArms(graph: Graph, own: Step[], direct: Step[]): boolean {
+  const link = direct[0]?.[0].line_id
+  if (!link || !graph.linkReversalAt.has(link) || !direct.every(([edge]) => edge.line_id === link)) return false
+  const onArm = ([edge]: Step) => {
+    const side = graph.linkSides.get(edge.id)
+    return side?.[0] === link && side[1] !== 0
+  }
+  return own.every(onArm) && new Set(own.map(([edge]) => edge.id)).size === own.length && own.some(([edge, at], i) => {
+    const after = own[i + 1]?.[0]
+    return after && linkTurn(graph, at, edge, after) === 'reversal'
+  })
+}
+
 /**
  * Si un camino se aparta de otro más corto y da un rodeo desproporcionado hasta reencontrarlo. Se
  * quitan los tramos que los dos comparten al principio y al final y se compara lo que queda: el
  * camino se descarta si su parte propia mide más de `maxRatio` veces la del corto. Sin tramos
  * comunes es la comparación de las dos longitudes enteras, y vale igual en los dos sentidos.
  */
-function strays(steps: Step[], shorter: Step[], maxRatio: number): boolean {
+function strays(steps: Step[], shorter: Step[], maxRatio: number, comparisonGraph?: Graph): boolean {
   const shared = Math.min(steps.length, shorter.length)
   let head = 0
   while (head < shared && steps[head]![0].id === shorter[head]![0].id) head++
   let tail = 0
   while (tail < shared - head && steps[steps.length - 1 - tail]![0].id === shorter[shorter.length - 1 - tail]![0].id) tail++
-  let own = 0
-  for (const [edge] of steps.slice(head, steps.length - tail)) own += edge.length_km
-  let other = 0
-  for (const [edge] of shorter.slice(head, shorter.length - tail)) other += edge.length_km
-  return own > other * maxRatio
+  const own = steps.slice(head, steps.length - tail)
+  const other = shorter.slice(head, shorter.length - tail)
+  if (rawLength(own) <= rawLength(other) * maxRatio) return false
+  if (comparisonGraph && stationArms(comparisonGraph, own, other)) {
+    // Al comparar el enlace con su estación, se conserva el tope sobre el viaje completo.
+    return rawLength(steps) > rawLength(shorter) * maxRatio
+  }
+  return true
 }
 
 /**
@@ -582,7 +605,7 @@ export function findRoutes(
   if (maxRatio !== null) {
     const kept: typeof ordered = []
     for (const candidate of ordered) {
-      if (!kept.some((shorter) => strays(candidate.steps, shorter.steps, maxRatio))) kept.push(candidate)
+      if (!kept.some((shorter) => strays(candidate.steps, shorter.steps, maxRatio, g))) kept.push(candidate)
     }
     ordered = kept
   }

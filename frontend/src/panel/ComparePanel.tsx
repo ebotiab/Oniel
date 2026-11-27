@@ -10,6 +10,7 @@ import { emptyScenario, scenarioFromCode, scenarioToCode, type Scenario, type Sk
 import { formatDayShort, formatKm, shortStop, type Comparador } from '../app/state'
 import { PieFuente, Plegable } from './Plegable'
 import { SearchBox } from './SearchBox'
+import { Itinerario } from './Itinerario'
 import { Termino } from './Termino'
 
 interface Props {
@@ -308,6 +309,10 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
   }
   const masLargo = Math.max(1, ...[...recorridos, ...supuestos].map((r) => r.route.length_km))
   const diferencia = supuestos.length > 0 ? diferenciaConSupuesto(recorridos, supuestos) : null
+  // Si dos caminos se distinguen por una inversión, se identifican los servicios de cada uno.
+  const enlacesConInversion = network.lines.filter(({ id, link_reversal_at }) => link_reversal_at && recorridos.some(
+    (r) => r.route.reverse_node_ids.includes(link_reversal_at) || r.route.segment_ids.some((tramo) => tramo.startsWith(`${id}:`)),
+  ))
   const tarjeta = (r: Recorrido, supuesto: boolean) => {
     // Por una vía que no existe no pasa ningún tren: de los supuestos no se cuentan.
     const suyos = trenes && !supuesto ? trenesDelRecorrido(r, trenes.directos, trenes.pasos) : null
@@ -318,13 +323,23 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
         {enlaces.map((linea) => <p key={linea.id}><AtlasLink to={{ linea: linea.id }}>{linea.name}</AtlasLink></p>)}
         {suyos && (
           <p className="suave" data-testid="recorrido-trenes">
-            {trenesTexto(suyos, dia)}
+            {suyos.length === 0 && enlaces.some((l) => l.link_reversal_at)
+              ? `Ningún tren con paso acreditado el ${dia}.` : trenesTexto(suyos, dia)}
           </p>
+        )}
+        {suyos && suyos.length > 0 && enlacesConInversion.length > 0 && (
+          <ul className="lista-servicios">
+            {suyos.map((t) => <li key={t.service_id}>{t.product} {t.train_number} · {t.departure} → {t.arrival}
+              <Itinerario itinerary={t.itinerary} sources={sources} />
+            </li>)}
+          </ul>
         )}
       </Tarjeta>
     )
   }
-  const fuera = trenes ? fraseTrenesFuera(trenesFueraDeLosRecorridos(recorridos, trenes.directos, trenes.pasos), trenes.directos.length, recorridos.length) : null
+  const pendientes = trenes?.directos.filter((t) => t.itinerary && !t.itinerary.source_id &&
+    enlacesConInversion.some((l) => l.id === t.itinerary?.line_id)) ?? []
+  const fuera = trenes ? fraseTrenesFuera(trenesFueraDeLosRecorridos(recorridos, trenes.directos, trenes.pasos) - pendientes.length, trenes.directos.length, recorridos.length) : null
   const todos = [...recorridos, ...supuestos]
   const lineasUsadas = new Set(todos.flatMap((r) => r.route.line_ids))
   const fuentes = [...new Set(network.lines.filter((l) => lineasUsadas.has(l.id)).map((l) => l.source_id))].map((id) => sources.find((s) => s.id === id))
@@ -387,6 +402,11 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             {trenes && ` ${trenes.directos.length === 0 ? 'No hay trenes directos' : trenes.directos.length === 1 ? 'Hay 1 tren directo' : `Hay ${trenes.directos.length} trenes directos`} en este sentido en el horario del ${dia}.`}
           </p>
           {fallida === consulta && !trenes && <p className="aviso">Horarios no disponibles para esta consulta.</p>}
+          {pendientes.map((t) => (
+            <p key={t.service_id} className="texto" data-testid="itinerario-pendiente">
+              {t.product} {t.train_number} · {t.departure} → {t.arrival}<Itinerario itinerary={t.itinerary} sources={sources} />
+            </p>
+          ))}
           {fuera && (
             <p className="suave" data-testid="recorridos-trenes-fuera">
               {fuera}
@@ -476,7 +496,7 @@ export function ComparePanel({ network, comparador, comparacion, elegido, source
             ))}
             <p className="suave">
               Oniel une todas las líneas cargadas en una sola red y tiene en cuenta dónde se puede cambiar de sentido. Enseña los {recorridos.length > 1 ? 'más cortos' : 'que hay'}, hasta tres, y descarta los que, en la parte en que se separan, dan un rodeo de más {comparador.maxRatio && comparador.maxRatio !== 2 ? `de ${comparador.maxRatio} veces el camino más corto` : 'del doble del camino más corto'}
-              {comparacion.ocultos > 0 ? ` (aquí hay ${comparacion.ocultos === 1 ? 'uno más, más largo, que no se enseña' : `${comparacion.ocultos} más, más largos, que no se enseñan`})` : ''}. Los kilómetros se miden por cada línea.
+              {comparacion.ocultos > 0 ? ` (aquí hay ${comparacion.ocultos === 1 ? 'uno más, más largo, que no se enseña' : `${comparacion.ocultos} más, más largos, que no se enseñan`})` : ''}. {enlacesConInversion.length > 0 && 'Al comparar el enlace con la entrada y el cambio de sentido en la estación, se aplica ese límite al recorrido completo. '}Los kilómetros se miden por cada línea.
             </p>
             <p className="suave">
               El tiempo es el de recorrer cada tramo a su velocidad habitual, sin parar, sin acelerar ni frenar y sin esperar a otro tren donde solo hay una vía. Un tren real tarda más.

@@ -11,6 +11,7 @@ import { DirectDestinations } from './DirectDestinations'
 import { TERMINO_DE_NODO } from './glosario'
 import { PieFuente, Plegable } from './Plegable'
 import { ServiceHistory } from './ServiceHistory'
+import { Itinerario } from './Itinerario'
 import { Termino } from './Termino'
 
 interface Props {
@@ -247,6 +248,7 @@ export function NodeDetail({ notice, node, network, sources, operators, referenc
                       {shortStop(c.origin_name)} → {shortStop(c.destination_name)}
                       {severalOperators ? ` · ${operatorName(c.operator_id)}` : ''}
                       {permisoEnParada(c)}
+                      <Itinerario itinerary={c.itinerary} sources={sources} />
                     </span>
                   </span>
                 </li>

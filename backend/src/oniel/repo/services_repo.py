@@ -18,6 +18,7 @@ from oniel.domain.schemas import (
     HistoryChangeOut,
     HistoryPointOut,
     HistoryProductOut,
+    ItineraryOut,
     ServiceOut,
     StopOut,
 )
@@ -38,8 +39,14 @@ class DatedPass:
         return self.day_offset == -1
 
 
+def _itinerary(r: asyncpg.Record | Mapping[str, Any]) -> ItineraryOut | None:
+    line = r.get("itinerary_line_id")
+    return ItineraryOut(line_id=line, source_id=r["itinerary_source_id"]) if line else None
+
+
 def _service(r: asyncpg.Record) -> ServiceOut:
     return ServiceOut(
+        itinerary=_itinerary(r),
         id=r["id"],
         operator_id=r["operator_id"],
         train_number=r["train_number"],
@@ -69,11 +76,9 @@ def _pass(r: asyncpg.Record) -> SegmentPass:
 PASS_SQL = f"""
     SELECT p.*, s.id, s.operator_id, s.train_number, s.product, s.origin_name, s.destination_name,
            s.resolution, s.valid_from, s.valid_to
-    FROM service_segment_passes p
+    FROM dated_segment_passes p
     JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
-    JOIN service_dates d
-      ON d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = $2
-    WHERE p.segment_id = $1 AND p.dataset_id IN {active_ids_sql("$2")}
+    WHERE p.service_date = $2 AND p.segment_id = $1 AND p.dataset_id IN {active_ids_sql("$2")}
 """
 
 
@@ -139,9 +144,8 @@ async def _daily_counts(
     rows = await conn.fetch(
         f"""
         SELECT p.segment_id, count(*) AS n
-        FROM service_segment_passes p
-        JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
-        WHERE d.service_date = $1 AND {scope} GROUP BY p.segment_id ORDER BY p.segment_id
+        FROM dated_segment_passes p
+        WHERE p.service_date = $1 AND {scope} GROUP BY p.segment_id ORDER BY p.segment_id
         """,
         date,
         *([dataset_id] if dataset_id else []),
@@ -167,10 +171,9 @@ async def _daily_counts_by_operator(
     rows = await conn.fetch(
         f"""
         SELECT p.segment_id, s.operator_id, count(*) AS n
-        FROM service_segment_passes p
+        FROM dated_segment_passes p
         JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
-        JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
-        WHERE d.service_date = $1 AND p.dataset_id IN {active_ids_sql("$1")}
+        WHERE p.service_date = $1 AND p.dataset_id IN {active_ids_sql("$1")}
         GROUP BY p.segment_id, s.operator_id ORDER BY p.segment_id, s.operator_id
         """,
         date,
@@ -189,10 +192,9 @@ async def service_paths(conn: asyncpg.Connection, date: dt.date) -> list[Service
     rows = await conn.fetch(
         f"""
         SELECT p.service_id, s.operator_id, array_agg(p.segment_id ORDER BY p.segment_id) AS ids
-        FROM service_segment_passes p
+        FROM dated_segment_passes p
         JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
-        JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
-        WHERE d.service_date = $1 AND p.dataset_id IN {active_ids_sql("$1")}
+        WHERE p.service_date = $1 AND p.dataset_id IN {active_ids_sql("$1")}
         GROUP BY p.dataset_id, p.service_id, s.operator_id ORDER BY p.service_id
         """,
         date,
@@ -206,12 +208,11 @@ async def fetch_service(
     # Sin fecha se conserva el detalle más reciente, incluso de un servicio retirado.
     r = await conn.fetchrow(
         f"""
-        SELECT s.* FROM services s JOIN datasets ds ON ds.id = s.dataset_id
+        SELECT s.*, d.itinerary_line_id, d.itinerary_source_id
+        FROM services s JOIN datasets ds ON ds.id = s.dataset_id
+        LEFT JOIN service_dates d ON d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = $2
         WHERE s.id = $1 AND ($2::date IS NULL OR (
-            s.dataset_id IN {active_ids_sql("$2")} AND EXISTS (
-                SELECT 1 FROM service_dates d
-                WHERE d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = $2
-            )))
+            s.dataset_id IN {active_ids_sql("$2")} AND d.service_date IS NOT NULL))
         ORDER BY ds.retrieved_on DESC, ds.valid_to DESC, ds.id DESC LIMIT 1
         """,
         service_id,
@@ -248,7 +249,7 @@ async def calls_at_node(
     rows = await conn.fetch(
         f"""
         SELECT s.id, s.operator_id, s.train_number, s.product, s.origin_name, s.destination_name, ss.arrival_s, ss.departure_s, ss.seq,
-               ss.pickup_type, ss.drop_off_type,
+               ss.pickup_type, ss.drop_off_type, d.itinerary_line_id, d.itinerary_source_id,
                (SELECT min(seq) FROM service_stops x
                 WHERE x.dataset_id = s.dataset_id AND x.service_id = s.id) AS first_seq,
                (SELECT max(seq) FROM service_stops x
@@ -276,6 +277,7 @@ def call_at_node(r: Mapping[str, Any]) -> dict[str, Any]:
     """
     first, last = r["seq"] == r["first_seq"], r["seq"] == r["last_seq"]
     return {
+        **({"itinerary": itinerary.model_dump()} if (itinerary := _itinerary(r)) else {}),
         "service_id": r["id"],
         "operator_id": r["operator_id"],
         "train_number": r["train_number"],
@@ -425,10 +427,8 @@ SEGMENT_HISTORY_SQL = f"""
     WITH refs AS ({_REFS_SQL})
     SELECT r.dataset_id, s.product, count(*) AS n
     FROM refs r
-    JOIN service_segment_passes p ON p.dataset_id = r.dataset_id AND p.segment_id = $1
+    JOIN dated_segment_passes p ON p.dataset_id = r.dataset_id AND p.segment_id = $1 AND p.service_date = r.day
     JOIN services s ON s.dataset_id = p.dataset_id AND s.id = p.service_id
-    JOIN service_dates d
-      ON d.dataset_id = s.dataset_id AND d.service_id = s.id AND d.service_date = r.day
     GROUP BY r.dataset_id, s.product
 """
 
@@ -460,9 +460,8 @@ SEGMENT_WINDOW_SQL = f"""
     WITH windows AS ({_WINDOWS_SQL})
     SELECT w.k, count(*) AS n
     FROM windows w
-    JOIN service_segment_passes p ON p.dataset_id = w.dataset_id AND p.segment_id = $1
-    JOIN service_dates d ON d.dataset_id = p.dataset_id AND d.service_id = p.service_id
-     AND d.service_date BETWEEN w.d_from AND w.d_to
+    JOIN dated_segment_passes p ON p.dataset_id = w.dataset_id AND p.segment_id = $1
+     AND p.service_date BETWEEN w.d_from AND w.d_to
     GROUP BY w.k
 """
 

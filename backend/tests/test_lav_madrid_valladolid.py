@@ -270,6 +270,7 @@ def test_trains_without_a_stop_in_segovia_enter_through_the_rules(
         "madrid-valladolid-sin-parada": [CHAMARTIN, VALLADOLID],
         "madrid-leon-sin-parada": [CHAMARTIN, "15100"],
         "madrid-medina-sin-parada": [CHAMARTIN, "08240"],
+        "madrid-vigo-por-zamora": [CHAMARTIN, "30200", "22100", "23008", "23004", "08223"],
         "madrid-zamora-sin-parada": [CHAMARTIN, "30200"],
         "madrid-ourense-sin-parada": [CHAMARTIN, "22100"],
     }
@@ -280,7 +281,8 @@ def test_trains_without_a_stop_in_segovia_enter_through_the_rules(
     )
     assert matched == {
         "madrid-valladolid-sin-parada": 188,
-        "madrid-zamora-sin-parada": 115,
+        "madrid-vigo-por-zamora": 10,
+        "madrid-zamora-sin-parada": 105,
         "madrid-medina-sin-parada": 14,
         "madrid-ourense-sin-parada": 6,
         "madrid-leon-sin-parada": 4,

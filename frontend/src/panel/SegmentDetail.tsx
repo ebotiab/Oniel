@@ -12,6 +12,7 @@ import { PieFuente, Plegable } from './Plegable'
 import { FilasAtributos, FuentesAtributos } from './SegmentAttributes'
 import { StationClosureLinks } from './StationClosureLinks'
 import { ServiceHistory } from './ServiceHistory'
+import { Itinerario } from './Itinerario'
 import { Termino } from './Termino'
 
 interface Props {
@@ -227,7 +228,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
           {/* un tramo puede no llevar ningún tren de los horarios: se dice, en vez de un recuento a cero */}
           {services.passes.length === 0 ? (
             <p className="suave" data-testid="tramo-sin-trenes">
-              Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de{' '}
+              {line?.link_reversal_at ? 'Ningún tren tiene un paso acreditado por este enlace ese día. Consulta la ficha de' : 'Ningún tren de los horarios cargados recorre este tramo ese día. Por dónde van los que pasan cerca está en la ficha de'}{' '}
               <button type="button" className="enlace-nodo" onClick={() => onSelectNode(segment.from_node_id)}>
                 {segment.from_name}
               </button>{' '}
@@ -260,6 +261,7 @@ export function SegmentDetail({ notice, segment, network, sources, operators, re
                         </strong>{' '}
                         <span className="suave">
                           {shortStop(p.service.origin_name)} → {shortStop(p.service.destination_name)}
+                          <Itinerario itinerary={p.service.itinerary} sources={sources} />
                         </span>
                       </span>
                       <KindBadge kind={p.kind} title={p.basis} />

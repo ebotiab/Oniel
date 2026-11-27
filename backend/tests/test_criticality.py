@@ -354,6 +354,7 @@ def test_snapshot_alternatives_add_up_with_the_counts_of_each_line(
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
         "enlace-gobantes-bobadilla",
+        "enlace-conxo",
     ]
     assert exported.missing_operator_ids == []
     # los trenes de cada tramo son los mismos pasos que cuenta su línea, por operador
@@ -457,7 +458,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         + 20  # Vitoria–Irún no cierra ningún anillo
         + 23  # el viaje de los regionales ya comienza en Príncipe Pío en vez de Pinar
         - 1  # Ávila–Arévalo se consulta entre estaciones
-        - 10,  # la conexión por Medina y los cierres entre estaciones
+        - 10  # la conexión por Medina y los cierres entre estaciones
+        - 1,  # un tramo común más y dos brazos de Santiago que ya se pueden rodear
         121
         + 29
         + 4
@@ -496,7 +498,8 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
         - 7  # con la continuidad por La Encina, en los siete tramos históricos mejora el recorrido
         - 1  # Ávila–Arévalo se consulta entre estaciones
         - 7  # la conexión por Medina y los cierres entre estaciones
-        + 1,  # los seis Avant del enlace de Gobantes quedan sin otro camino
+        + 1  # los seis Avant del enlace de Gobantes quedan sin otro camino
+        + 1,  # el tramo común entre A Grandeira y la aguja de Conxo
     )
     santa_ana_gobantes = _of(exported.segments, f"{LAV_MALAGA}:antequera-santa-ana:bif-gobantes")
     assert 0 < santa_ana_gobantes.without_alternative < santa_ana_gobantes.trains == 57
@@ -508,11 +511,13 @@ def assert_alternatives_of_13_november_2026(exported: AlternativesOut) -> None:
     # trenes hasta Flaçà, 42 hasta Figueres y 22 hasta Portbou
     portbou = {k: n for k, n in none.items() if k.startswith("barcelona-girona-portbou:")}
     assert len(portbou) == 12 and sorted(set(portbou.values())) == [22, 42, 43]
-    # las dos de Galicia, enteras: a Santiago, A Coruña y Vigo solo llegan ellas
+    # Conxo permite rodear los dos brazos de Santiago a los diez trenes pasantes.
     santiago = {k: n for k, n in none.items() if k.startswith(f"{LAV_SANTIAGO}:")}
-    assert len(santiago) == 3 and sorted(set(santiago.values())) == [43, 45]
+    assert len(santiago) == 3 and set(santiago.values()) == {45}
     eje = {k: n for k, n in none.items() if k.startswith(f"{EJE_ATLANTICO}:")}
-    assert len(eje) == 15 and sorted(set(eje.values())) == [35, 36, 51, 53, 55, 64]
+    assert len(eje) == 14 and sorted(set(eje.values())) == [35, 36, 51, 55, 64]
+    for brazo in (f"{LAV_SANTIAGO}:bif-conxo:santiago", f"{EJE_ATLANTICO}:santiago:bif-rio-sar"):
+        assert _of(exported.segments, brazo).with_alternative == 10
     cadiz = {k: n for k, n in none.items() if k.startswith(f"{SEVILLA_CADIZ}:")}
     # la de Sevilla a Cádiz, entera: 56 trenes hasta la bifurcación Utrera y 42 desde allí
     assert len(cadiz) == 16 and sorted(set(cadiz.values())) == [42, 56]

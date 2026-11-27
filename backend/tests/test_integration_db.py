@@ -396,7 +396,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         "madrid-valladolid-sin-parada": 188,
         "madrid-leon-sin-parada": 4,
         "madrid-medina-sin-parada": 14,
-        "madrid-zamora-sin-parada": 115,
+        "madrid-vigo-por-zamora": 10,
+        "madrid-zamora-sin-parada": 105,
         "madrid-ourense-sin-parada": 6,
     }
     assert gtfs1["trips_imported"] == gtfs2["trips_imported"] == trips
@@ -553,6 +554,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 2  # la 120 y el enlace del cambiador
         + 1  # la 534
         + 1  # la 014
+        + 1  # el enlace de Conxo
     )
     # los 9 y los 8 son los tramos de la línea de Albacete a Alicante y de la de Monforte del Cid
     # a Murcia; los 35, los de la de Valencia a Camp de Tarragona; los 5, la de Madrid a
@@ -606,6 +608,7 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
         + 14  # la 120, el enlace y el corte en la LAV
         + 1  # la 534
         + 1  # la 014
+        + 2  # la 842 y la división de la 822
     )
     assert c["services"] == trips + 47 + 22
     # (los 267 de la convencional son los de los trenes de la línea de Extremadura entre
@@ -623,7 +626,8 @@ async def test_import_is_repeatable(imported: dict[str, Any]) -> None:
     renfe_passes += 490  # la de Venta de Baños a Burgos, todos estimados
     renfe_passes += 1311 + 125  # la de León a Gijón
     renfe_passes += 715 + 209  # la de Burgos a Vitoria
-    renfe_passes += 854  # la de Ourense a Santiago
+    renfe_passes += 854 + 288  # Ourense–Santiago, incluido el tramo común hasta la aguja de Conxo
+    renfe_passes += 2  # los dos pasos de la 842 acreditados el 17 de noviembre
     renfe_passes += 3035 + 281  # la de A Coruña a Vigo
     renfe_passes += 1733 + 1081  # la de Sevilla a Cádiz
     renfe_passes += 1094 + 208  # la de Barcelona a Figueres
@@ -843,6 +847,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         + 14  # la 120, el enlace y el corte en la LAV
         + 1  # la 534
         + 1  # la 014
+        + 2  # la 842 y la división de la 822
     )
     assert data["connection_features"]["features"]
     # la conexión a trazos Manzanares–Ciudad Real desaparece: ahora es una línea cargada, y de
@@ -887,6 +892,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         LAV_LEON,
         LAV_OURENSE,
         LAV_BURGOS,
+        "enlace-conxo",
         # el kilómetro de la salida de Ourense, por la vía de la línea convencional
         LAV_SANTIAGO,
         "lav-zaragoza-huesca",
@@ -997,6 +1003,7 @@ async def test_network_endpoint(client: httpx.AsyncClient) -> None:
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
         "enlace-gobantes-bobadilla",
+        "enlace-conxo",
     ]
     # Los accesos de Planetario y El Chaparral ya tienen vía propia en el índice.
     assert "conv-madrid-extremadura" not in connections
@@ -1117,6 +1124,7 @@ async def test_segments_carry_their_attributes_with_source_and_date(
         + 14  # la 120, el enlace y el corte en la LAV
         + 1  # la 534
         + 1  # la 014
+        + 2  # la 842 y la división de la 822
     )
     # la velocidad declarada, solo donde OpenStreetMap no la trae o la trae mal: tres tramos de
     # la alta velocidad de Barcelona, a la salida de Zaragoza y a la entrada y la salida de
@@ -1907,6 +1915,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
             + 9  # nuevas fuentes del acceso de Príncipe Pío
             + 5  # tres relaciones de Salamanca, catálogo de la RFIG y esquema de mantenimiento
             + 6  # dos relaciones AV, andén de Cantalapiedra y tres fuentes documentales
+            + 4  # ficha y DR de la 842, dos observaciones de Renfe
             + 3  # inventario, señalización y pliego de la 014
             + 2  # IDEAdif y puesta en servicio de la 534
         )
@@ -2000,6 +2009,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
         "enlace-gobantes-bobadilla",
+        "enlace-conxo",
     ]
     # la cobertura dice de qué conjunto de datos salen las cifras y el día de referencia
     # un conjunto por fuente de horarios: el de Ouigo y el de Renfe
@@ -2083,6 +2093,7 @@ async def test_coverage_and_sources(client: httpx.AsyncClient) -> None:
         "enlace-medina-av-salamanca": ["renfe"],
         "enlace-el-chaparral-arroyo-de-la-herrera": ["renfe"],
         "enlace-gobantes-bobadilla": ["renfe"],
+        "enlace-conxo": ["renfe"],
     }
     assert (
         "con los servicios de Iryo, Ouigo España, Renfe Viajeros y SNCF Voyageurs que las recorren"
@@ -2328,6 +2339,39 @@ async def test_direct_destinations_match_the_route_comparator(client: httpx.Asyn
         assert {to: n for to, n in counted.items() if n} == expected, origin
         pairs += len(expected)
     assert pairs > 300
+
+
+async def test_la_842_exige_evidencia_del_dia_aunque_coincida_el_viaje(
+    client: httpx.AsyncClient,
+) -> None:
+    """La edición del 08/11 conserva el mismo trip_id del 04384 en las dos fechas."""
+    tramo = "enlace-conxo:bif-conxo:bif-rio-sar"
+    comun = "lav-ourense-santiago:bif-a-grandeira:bif-conxo"
+    service_id = "0438412026-11-07"
+    for dia, acreditado in (("2026-11-17", True), ("2026-12-11", False)):
+        params = {"date": dia}
+        link = (await client.get(f"/api/segments/{tramo}/services", params=params)).json()
+        assert len(link["passes"]) == (2 if acreditado else 0)
+        esos = {p["service"]["train_number"]: p for p in link["passes"]}
+        if acreditado:
+            assert set(esos) == {"04384", "04515"}
+            assert esos["04384"]["service"]["id"] == service_id
+            assert "18:00" < esos["04384"]["enter"] <= esos["04384"]["exit"] < "18:52"
+            assert "13:42" < esos["04515"]["enter"] <= esos["04515"]["exit"] < "14:39"
+            assert all(p["kind"] == "estimado" for p in link["passes"])
+        servicio = (await client.get(f"/api/services/{service_id}", params=params)).json()
+        assert servicio["itinerary"] == {
+            "line_id": "enlace-conxo",
+            "source_id": "renfe-conxo-04384" if acreditado else None,
+        }
+        pasos = (await client.get(f"/api/segments/{comun}/services", params=params)).json()[
+            "passes"
+        ]
+        paso = next(p for p in pasos if p["service"]["id"] == service_id)
+        assert paso["service"]["itinerary"] == servicio["itinerary"]
+        if acreditado:
+            assert paso["enter"] == esos["04384"]["exit"]
+        assert "por el enlace de Conxo" not in paso["basis"]
 
 
 async def test_segment_services_on_a_weekday(client: httpx.AsyncClient) -> None:
@@ -2965,6 +3009,7 @@ async def test_alternatives_count_the_trains_of_each_segment(client: httpx.Async
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
         "enlace-gobantes-bobadilla",
+        "enlace-conxo",
     ]
     # ningún operador declarado se queda sin trenes: los de Iryo salen de una compilación no oficial
     assert out["missing_operator_ids"] == []
@@ -3097,6 +3142,7 @@ async def test_snapshot_parts_add_up_to_the_whole_network(
         "enlace-medina-av-salamanca",
         "enlace-el-chaparral-arroyo-de-la-herrera",
         "enlace-gobantes-bobadilla",
+        "enlace-conxo",
     ]
     assert sorted(p.name for p in (tmp_path / "lines").iterdir()) == sorted(
         f"{line}.json" for line in result["lines"]

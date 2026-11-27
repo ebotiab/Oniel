@@ -324,6 +324,7 @@ def test_trains_that_do_not_stop_in_its_own_stations_enter_through_the_rules(
 ) -> None:
     rules = {r.id: r.consecutive_stop_ids for r in spec.route_overrides}
     assert rules == {
+        "madrid-vigo-por-zamora": [CHAMARTIN, "30200", "22100", "23008", "23004", "08223"],
         "madrid-zamora-sin-parada": [CHAMARTIN, ZAMORA],
         "madrid-ourense-sin-parada": [CHAMARTIN, OURENSE],
     }
@@ -331,7 +332,11 @@ def test_trains_that_do_not_stop_in_its_own_stations_enter_through_the_rules(
     matched = Counter(
         route.override.id for trip in trips if (route := route_for_trip(spec, trip)) is not None
     )
-    assert matched == {"madrid-zamora-sin-parada": 115, "madrid-ourense-sin-parada": 6}
+    assert matched == {
+        "madrid-vigo-por-zamora": 10,
+        "madrid-zamora-sin-parada": 105,
+        "madrid-ourense-sin-parada": 6,
+    }
     # los mismos viajes que la línea de Valladolid recoge con sus reglas del mismo nombre
     valladolid = load_network_spec(LAV_VALLADOLID_SPEC)
     theirs = Counter(

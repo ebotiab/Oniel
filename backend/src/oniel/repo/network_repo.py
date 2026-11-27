@@ -178,6 +178,7 @@ async def _load_lines(conn: asyncpg.Connection) -> list[LineSummary]:
                 bypass_of=r["bypass_of"],
                 link_of=r["link_of"],
                 link_towards=r["link_towards"],
+                link_reversal_at=r["link_reversal_at"],
                 node_count=r["node_count"],
                 segment_count=r["segment_count"],
             )
@@ -584,8 +585,10 @@ async def fetch_turns(conn: asyncpg.Connection) -> Turns:
     """Los lados de cada nodo que no es estación, sacados de la geometría completa de los tramos."""
 
     async def load() -> Turns:
-        stations = {n.id for n in await fetch_nodes(conn) if n.kind == "estacion"}
-        turns, _ = turn_sides(await fetch_segments(conn), stations)
+        nodes = await fetch_nodes(conn)
+        stations = {n.id for n in nodes if n.kind == "estacion"}
+        reach = {n.id: n.details["turn_reach_m"] for n in nodes if "turn_reach_m" in n.details}
+        turns, _ = turn_sides(await fetch_segments(conn), stations, reach)
         return turns
 
     return await cache.remember("turns", load)

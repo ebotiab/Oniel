@@ -322,7 +322,8 @@ async def test_a_new_file_keeps_the_previous_dataset(
     passes += 490  # la de Venta de Baños a Burgos, todos estimados
     passes += 1311 + 125  # la de León a Gijón
     passes += 715 + 209  # la de Burgos a Vitoria
-    passes += 854  # la de Ourense a Santiago, sin estaciones intermedias: todos estimados
+    passes += 854 + 288  # Ourense–Santiago, incluido el tramo común hasta la aguja de Conxo
+    passes += 2  # los dos pasos de la 842 acreditados el 17 de noviembre
     passes += 3035 + 281  # la de A Coruña a Vigo
     passes += 1733 + 1081  # la de Sevilla a Cádiz
     passes += 1094 + 208  # la de Barcelona a Figueres: publicados, de Girona a Figueres-Vilafant

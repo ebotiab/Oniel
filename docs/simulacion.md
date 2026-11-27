@@ -127,6 +127,8 @@ Cada recorrido lleva:
 
 Límites: el grafo no distingue anchos de vía ni sentidos, no sabe por qué vía de una estación se pasa de una línea a otra y trata un cambio de línea como instantáneo. Invertir la marcha en una estación tampoco le cuesta tiempo: solo los kilómetros de ir y volver.
 
+En Conxo, `link_reversal_at` identifica Santiago como la estación donde se pasa de un brazo al otro con inversión. En las dos agujas se miden los rumbos a 100 m. Solo cuando los tramos distintos son exactamente los dos brazos con esa inversión y la 842, se aplica el límite habitual de rodeo al viaje completo. Los demás desvíos se comparan por las partes distintas. [Ensayo del comparador](https://github.com/ebotiab/Oniel/issues/322#issuecomment-7214919006)
+
 **Giros en las bifurcaciones** (aplicado el 23 de noviembre de 2026, #260). En un nodo que no es una estación (una bifurcación, un puesto de banalización, un PAET) un tren no puede dar la vuelta: entra por un lado y sale por el otro. Dos tramos solo se encadenan allí si salen del nodo hacia lados opuestos. Hasta entonces el grafo dejaba cualquier giro, y de Madrid-Puerta de Atocha a Madrid-Chamartín daba 65,2 km, bajando por la línea de Sevilla hasta la bifurcación Torrejón de Velasco y volviendo por la de Valencia.
 
 - **De qué lado sale cada tramo.** Se saca del trazado (`oniel.routing.turns`): se mira hacia dónde va cada tramo a 500 m del nodo, medidos por la vía, y se compara con los demás. En las 22 bifurcaciones y puestos con tres tramos o más, cada pareja forma más de 150° (lados opuestos) o menos de 30° (el mismo lado); con dos tramos, uno sigue al otro salvo que salgan juntos. Son 104 nodos clasificados y ninguno dudoso. `oniel-data validate` falla si en un nodo de tres tramos o más alguna pareja queda entre 30° y 150°. Se calcula con la geometría completa, en el servidor, y viaja en el índice de la red (`turns` en `index.json`): con la geometría simplificada del índice dos bifurcaciones salían dudosas, así que el visor no mide ángulos, los lee.
@@ -153,6 +155,7 @@ El comparador del visor (`/recorridos/<desde>/<hasta>`) responde a «¿cómo se 
 | Madrid – Córdoba | 343,6 km (alta velocidad), 433,3 km (por Manzanares y Ciudad Real, tres líneas), 440,7 km (convencional, 194,1 km de vía única) | 479,8 km (el cuarto) |
 | Madrid – Ciudad Real | 170,8 km (alta velocidad), 260,5 km (por Manzanares, 64,4 km de vía única) | 613,5 km (por Córdoba, más del doble) |
 | Madrid – Andújar | 361,9 km (convencional), 401,0 km (por Ciudad Real y Manzanares), 422,4 km (por Córdoba) | 512,1 km (el cuarto, por cuatro trechos) |
+| Ourense ↔ Vigo-Urzáiz | 178,4 km y 52 min por Conxo o 181,6 km y 55 min con inversión en Santiago | Cerrar la 842 deja disponible la estación. Cerrar cualquiera de sus brazos conserva el enlace |
 | Málaga-María Zambrano ↔ Granada | 165,0 km por Gobantes – Bobadilla, 49 min y once tramos, sin inversión | El recorrido previo a la carga medía 171,9 km por Santa Ana |
 | Sevilla-Santa Justa ↔ Granada | 352,1 km por Santa Ana con inversión en Córdoba, 427,3 km por Linares-Baeza sin inversión | — |
 | Manzanares – Ciudad Real | 64,4 km | 366,9 km y 417,4 km (más del doble) |
@@ -233,8 +236,10 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Miranda de Ebro – Bilbao-Abando (línea de Miranda de Ebro a Bilbao por Orduña, la línea entera, tres tramos) | 8 | Ninguno. A Bilbao solo llega esta línea: la alta velocidad de Vitoria a Bilbao está en obras (trenes del 20 de noviembre de 2026) |
 | Vitoria-Gasteiz – Irun (veinte tramos) | 12 a 34 | Ninguno. La conexión de Pamplona a Altsasu y la continuación a Hendaya siguen sin cargar; la línea no cierra ningún anillo. Son 398 pasos de tren el 11 de diciembre de 2026, el día de referencia conservado tras #230 |
 | Sevilla-Santa Justa – Huelva (línea de Sevilla a Huelva, la línea entera, once tramos) | 12 a 38 | Ninguno. A Huelva solo llega esta línea. El primer tramo, de Santa Justa a la bifurcación Los Naranjos, lleva además los regionales de Córdoba, Jaén y Extremadura, que siguen por líneas que no están cargadas (trenes del 20 de noviembre de 2026) |
-| Ourense – Santiago de Compostela (alta velocidad de Ourense a Santiago, la línea entera, tres tramos) | 43 a 45 | Ninguno. Es el único camino cargado a Santiago: la línea antigua por O Carballiño y Lalín existe, pero no está cargada |
-| A Coruña – Vigo-Urzáiz (línea de A Coruña a Vigo por Santiago, la línea entera, quince tramos) | 35 a 64 | Ninguno. Es la única línea cargada en la costa gallega: las vías antiguas de Padrón y de Redondela existen, pero no están cargadas |
+| Ourense – bifurcación de Conxo (tres tramos, 11/12/2026) | 45 | Ninguno. Los dos itinerarios comparten la entrada desde Ourense |
+| Conxo – Santiago / Santiago – Río Sar (11/12/2026) | 43 / 53 | Diez en cada brazo pueden rodear el cierre por Conxo |
+| Enlace de Conxo (11/12/2026) | 0 acreditados | El itinerario del 04515 y del 04384 está pendiente ese día |
+| Eje Atlántico, excepto Santiago – Río Sar (catorce tramos, 11/12/2026) | 35 a 64 | Ninguno. Los caminos a Vigo vuelven a unirse en Río Sar |
 | Bifurcación La Sagra – Toledo (ramal de Toledo) | 30 | Ninguno. Toledo es final de línea y solo se llega a ella por el ramal (trenes del 20 de noviembre de 2026) |
 | Bifurcación Huesca – Tardienta – Huesca (línea de Zaragoza a Huesca, dos tramos) | 4 | Ninguno. A Tardienta y a Huesca solo llega esta línea entre las cargadas: la convencional de Zaragoza a Tardienta no lo está (trenes del 20 de noviembre de 2026) |
 | Bifurcación Albacete – València-Joaquín Sorolla (alta velocidad de Valencia, cuatro tramos) | 56 y 66 | Desde la línea de València a Alicante por Xàtiva (#208), por Albacete, Alicante y Xàtiva: 273 km más para los 43 de Madrid-Chamartín a València y para los demás que vienen de Madrid o de más al norte. No la tienen los 10 de Requena-Utiel a València de los dos últimos tramos (trenes del 20 de noviembre de 2026) |
@@ -282,7 +287,7 @@ Cada tramo se cierra por separado sobre la red completa: las interrupciones vige
 | Manzanares – Ciudad Real (tres tramos) | 32 | Para los 22 desviados, la alta velocidad directa: 90 km y 1 h 8 min menos |
 | Manzanares – Linares-Baeza (convencional) | 10 | Para los 8 de Madrid a Jaén, por la alta velocidad hasta Córdoba y de vuelta hasta Espelúy: 105 km más y 30 min menos |
 
-En la instantánea del 11/12/2026 se analizan 447 tramos con trenes. En 238, ninguno de sus trenes tiene otro camino. En 131, solo algunos lo tienen, y en 78 todos pueden rodear el cierre. La 014 añade un tramo sin alternativa para sus seis Avant. A la vez, Santa Ana – Gobantes sale de ese grupo porque los trenes de largo recorrido ya pueden alcanzar Málaga por Granada. El número de tramos sin alternativa se mantiene en 238. La ficha muestra el reparto por trenes de cada tramo.
+En la instantánea del 11/12/2026 se analizan 448 tramos con trenes. En 237, ninguno de sus trenes tiene otro camino. En 133, solo algunos lo tienen, y en 78 todos pueden rodear el cierre. La división de la 822 añade un tramo común. Los dos brazos hacia Santiago tienen alternativa para diez trenes cada uno.
 
 El comparador permite ampliar el límite de rodeo con «Incluir recorridos más largos». La URL conserva `max_ratio=100` al compartir el recorrido o invertir el sentido. El límite habitual sigue siendo 2. Entre Navalmoral y Cáceres la ampliación enseña el recorrido de 146,4 km por Plasencia, incluida la inversión en la estación. La simulación de cierres mantiene su propio límite.
 

@@ -10,6 +10,7 @@ sigue el tren.
 
 from __future__ import annotations
 
+import datetime as dt
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from itertools import pairwise
@@ -54,6 +55,18 @@ class MatchedRoute:
     @property
     def last_stop_id(self) -> str | None:
         return self.override.from_stop_id if self.reversed else self.override.to_stop_id
+
+    def observed_sources(
+        self, trip: GtfsTrip, dates: set[dt.date], operator_id: str | None = None
+    ) -> dict[dt.date, str]:
+        return {
+            o.date: o.source_id
+            for o in self.override.observations or ()
+            if o.train_number == trip.train_number
+            and o.from_stop_id == self.first_stop_id
+            and o.date in dates
+            and (operator_id is None or o.operator_id == operator_id)
+        }
 
 
 def match_run(pattern: Sequence[str], stop_ids: Sequence[str]) -> bool | None:
@@ -100,7 +113,9 @@ def takes_parallel_track(runs: Sequence[SlowRun], trip: GtfsTrip) -> bool:
     return False
 
 
-def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
+def select_trips_for_spec(
+    feed: GtfsFeed, spec: NetworkSpec, *, include_unconfirmed: bool = False
+) -> list[GtfsTrip]:
     """Viajes que recorren la línea: los del filtro de corredor, los que llevan seguidas las paradas
     que el filtro declara y los de las reglas de recorrido.
 
@@ -134,6 +149,14 @@ def select_trips_for_spec(feed: GtfsFeed, spec: NetworkSpec) -> list[GtfsTrip]:
             if in_a_row or route_for_trip(spec, trip) is not None:
                 selected.append(trip)
         selected.sort(key=lambda t: (t.train_number, t.trip_id))
+    if not include_unconfirmed and any(r.observations is not None for r in spec.route_overrides):
+        selected = [
+            t
+            for t in selected
+            if (r := route_for_trip(spec, t)) is None
+            or r.override.observations is None
+            or r.observed_sources(t, feed.service_dates.get(t.service_id, set()))
+        ]
     return selected
 
 
@@ -262,6 +285,7 @@ class ViaLeg:
     join: LineNode
     #: Nodo en el que la deja: el enlace con el trecho siguiente o, en el último, la parada.
     end: LineNode
+    distance_only: bool
 
     @property
     def km(self) -> float:
@@ -303,7 +327,7 @@ def via_legs(
             end = line.node_of_stop(stop_id)
             if end is None:
                 return f"la parada no es un nodo de la línea {hop.line}"
-        legs.append(ViaLeg(line, join, end))
+        legs.append(ViaLeg(line, join, end, hop.distance_only))
     return legs
 
 
@@ -342,7 +366,9 @@ def _via_other_lines(
             parts.append(f"{first.km:.0f} km por esa línea hasta {stop_name}")
         else:
             parts.extend(
-                f"{leg.km:.0f} km por {leg.line_with_article} hasta"
+                f"{leg.km:.0f} km de referencia entre {leg.join.label} y {leg.end.label}"
+                if leg.distance_only
+                else f"{leg.km:.0f} km por {leg.line_with_article} hasta"
                 f" {stop_name if leg is last else leg.end.label}"
                 for leg in legs
             )

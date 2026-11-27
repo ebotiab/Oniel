@@ -100,6 +100,21 @@
       "description": "Bifurcación a tres kilómetros de la estación de Santiago de Compostela, donde la vía nueva de Ourense se junta con la línea antigua de Lalín. Poco después sale un enlace corto hacia la línea de Vigo, por el que algunos trenes de Madrid a Vigo evitan entrar en la estación de Santiago."
     },
     {
+      "id": "bif-conxo",
+      "name": "Bifurcación de Conxo",
+      "kind": "bifurcacion",
+      "rank": "secundario",
+      "position": {
+        "lon": -8.5413464,
+        "lat": 42.8548111
+      },
+      "source_id": "osm-vias-santiago-sur",
+      "description": "Aquí se separan los dos caminos desde Ourense. Una vía sigue hacia la estación de Santiago de Compostela. La otra toma el enlace de Conxo hacia Vilagarcía de Arousa. Los dos caminos comparten los 735 metros anteriores desde A Grandeira.",
+      "details": {
+        "turn_reach_m": 100
+      }
+    },
+    {
       "id": "santiago",
       "name": "Santiago de Compostela",
       "kind": "estacion",
@@ -193,25 +208,6 @@
         [
           -7.883657,
           42.356114
-        ]
-      ]
-    },
-    {
-      "id": "enlace-conxo",
-      "node_id": "bif-a-grandeira",
-      "name": "Enlace de Conxo",
-      "towards": "Vilagarcía de Arousa y Vigo, sin entrar en Santiago de Compostela",
-      "to_node_id": "bif-rio-sar",
-      "towards_back": "Ourense, sin entrar en Santiago de Compostela",
-      "status": "no_cargada",
-      "sketch": [
-        [
-          -8.5413464,
-          42.8548111
-        ],
-        [
-          -8.5523223,
-          42.8567629
         ]
       ]
     }
@@ -459,38 +455,63 @@
   "route_overrides": [
     {
       "id": "ourense-vilagarcia-sin-santiago",
-      "description": "Trenes entre Ourense y Vilagarcía de Arousa sin parada en Santiago: recorren la línea hasta la bifurcación A Grandeira y toman el enlace de Conxo, que no está cargado, hacia la línea de Vigo. Sus 52 a 57 minutos entre las dos paradas no dan para entrar en Santiago y cambiar de sentido.",
+      "description": "Los trenes con Ourense y Vilagarcía consecutivas recorren las vías comunes hasta las agujas de Conxo y Río Sar. Entre ellas se usa la distancia más corta para estimar las horas. La atribución del enlace se comprueba por circulación y fecha.",
       "consecutive_stop_ids": [
+        "17000",
+        "30200",
         "22100",
-        "23008"
+        "23008",
+        "23004",
+        "08223"
       ],
       "stop_mappings": {
         "23008": {
           "exits": [
-            "bif-a-grandeira"
+            "bif-conxo"
           ],
-          "via": {
-            "line": "eje-atlantico",
-            "node": "bif-rio-sar"
-          }
+          "via": [
+            {
+              "line": "enlace-conxo",
+              "node": "bif-conxo",
+              "distance_only": true
+            },
+            {
+              "line": "eje-atlantico",
+              "node": "bif-rio-sar"
+            }
+          ]
         },
         "23004": {
           "exits": [
-            "bif-a-grandeira"
+            "bif-conxo"
           ],
-          "via": {
-            "line": "eje-atlantico",
-            "node": "bif-rio-sar"
-          }
+          "via": [
+            {
+              "line": "enlace-conxo",
+              "node": "bif-conxo",
+              "distance_only": true
+            },
+            {
+              "line": "eje-atlantico",
+              "node": "bif-rio-sar"
+            }
+          ]
         },
         "08223": {
           "exits": [
-            "bif-a-grandeira"
+            "bif-conxo"
           ],
-          "via": {
-            "line": "eje-atlantico",
-            "node": "bif-rio-sar"
-          }
+          "via": [
+            {
+              "line": "enlace-conxo",
+              "node": "bif-conxo",
+              "distance_only": true
+            },
+            {
+              "line": "eje-atlantico",
+              "node": "bif-rio-sar"
+            }
+          ]
         }
       }
     }

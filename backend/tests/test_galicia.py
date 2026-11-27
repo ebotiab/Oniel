@@ -45,7 +45,8 @@ DUPLICATES = {"99117": "ourense", "99159": "santiago", "99143": "a-coruna", "991
 SANTIAGO_SEGMENTS = [
     "ourense:bif-coto-da-torre",
     "bif-coto-da-torre:bif-a-grandeira",
-    "bif-a-grandeira:santiago",
+    "bif-a-grandeira:bif-conxo",
+    "bif-conxo:santiago",
 ]
 EJE_NODES = [
     "a-coruna",
@@ -138,26 +139,30 @@ def test_ourense_santiago_nodes_and_kilometre_points(santiago_line: BuiltNetwork
         "ourense",
         "bif-coto-da-torre",
         "bif-a-grandeira",
+        "bif-conxo",
         "santiago",
     ]
     assert {n.spec.id: n.spec.reference_pk_km for n in santiago_line.nodes} == {
         "ourense": 0.0,
         "bif-coto-da-torre": 1.041,
         "bif-a-grandeira": 85.041,
+        "bif-conxo": None,
         "santiago": 88.28,
     }
     for node in santiago_line.nodes:
-        assert node.spec.reference_pk_km is not None
+        if node.spec.reference_pk_km is None:
+            assert node.spec.id == "bif-conxo" and node.km == pytest.approx(85.702, abs=0.001)
+            continue
         assert node.km == pytest.approx(node.spec.reference_pk_km, abs=0.5)
     assert all(n.offset_m < 200 for n in santiago_line.nodes)
     assert {n.spec.id for n in santiago_line.nodes if n.spec.rank == "secundario"} == {
         "bif-coto-da-torre",
         "bif-a-grandeira",
+        "bif-conxo",
     }
-    # lo que sale de la línea y no está cargado: la línea antigua de Lalín y el enlace de Conxo
+    # lo que sale de la línea y no está cargado: la línea antigua de Lalín
     assert {c.id: c.node_id for c in santiago_line.spec.connections} == {
         "conv-ourense-santiago": "bif-a-grandeira",
-        "enlace-conxo": "bif-a-grandeira",
     }
 
 
@@ -188,14 +193,14 @@ def test_ourense_santiago_tracks_voltage_and_speed(santiago_line: BuiltNetwork) 
     doble a 25 kV y ancho ibérico en el resto."""
     segments = santiago_line.segments
     assert [s.id.removeprefix(f"{SANTIAGO_LINE}:") for s in segments] == SANTIAGO_SEGMENTS
-    assert [s.tracks for s in segments] == [1, 2, 2]
+    assert [s.tracks for s in segments] == [1, 2, 2, 2]
     assert segments[0].attributes["electrification"].value == "3 kV CC"
     assert all("electrification" not in s.attributes for s in segments[1:])
     assert santiago_line.spec.line.gauge_mm == 1668
     assert santiago_line.spec.line.electrification == "25 kV 50 Hz"
-    assert [s.max_speed_kmh for s in segments] == [110, 300, 80]
+    assert [s.max_speed_kmh for s in segments] == [110, 300, 80, 60]
     assert all(s.typical_speed_kmh for s in segments)
-    assert [round(s.length_km, 1) for s in segments] == [1.1, 83.8, 2.9]
+    assert [round(s.length_km, 1) for s in segments] == [1.1, 83.8, 0.7, 2.1]
 
 
 def test_ourense_santiago_signalling_as_the_map_draws_it(santiago_line: BuiltNetwork) -> None:
@@ -236,34 +241,48 @@ def test_ourense_santiago_takes_the_trains_of_the_new_line(
     assert select_trips_for_spec(ouigo_feed, spec) == []
 
 
-def test_trains_that_skip_santiago_leave_at_a_grandeira(
+def test_trenes_sin_parada_en_santiago_recorren_los_tramos_comunes(
     feed: GtfsFeed, santiago_line: BuiltNetwork, eje: BuiltNetwork
 ) -> None:
-    """Diez viajes van de Ourense a Vilagarcía sin parar en Santiago: toman el enlace de Conxo,
-    que no está cargado. No cuentan en la llegada a Santiago ni en su salida hacia Vigo."""
+    """Las diez variantes con las dos paradas consecutivas comparten la 822 hasta la aguja."""
     for net in (santiago_line, eje):
         rules = {r.id: r.consecutive_stop_ids for r in net.spec.route_overrides}
-        assert rules == {"ourense-vilagarcia-sin-santiago": [OURENSE, VILAGARCIA]}
+        assert rules == {
+            "ourense-vilagarcia-sin-santiago": [
+                CHAMARTIN,
+                "30200",
+                OURENSE,
+                VILAGARCIA,
+                PONTEVEDRA,
+                URZAIZ,
+            ]
+        }
     trips = select_trips_for_spec(feed, santiago_line.spec)
     skipping = [t for t in trips if (OURENSE, VILAGARCIA) in _pairs(t)]
     assert len(skipping) == 10
     assert all(route_for_trip(santiago_line.spec, t) is not None for t in skipping)
     assert all(route_for_trip(eje.spec, t) is not None for t in skipping)
     for trip in skipping:
-        assert _segments(trip, feed, santiago_line) == SANTIAGO_SEGMENTS[:2]
+        assert _segments(trip, feed, santiago_line) == SANTIAGO_SEGMENTS[:3]
         # en la otra línea entran por la bifurcación Río Sar y llegan a Vigo-Urzáiz
         assert _segments(trip, feed, eje) == EJE_SEGMENTS[5:]
     rule = santiago_line.spec.route_overrides[0]
     for stop_id in (VILAGARCIA, PONTEVEDRA, URZAIZ):
         mapping = rule.stop_mappings[stop_id]
-        assert mapping.exits == ["bif-a-grandeira"]
-        assert [(v.line, v.node) for v in mapping.via] == [(EJE_LINE, "bif-rio-sar")]
+        assert mapping.exits == ["bif-conxo"]
+        assert [(v.line, v.node) for v in mapping.via] == [
+            ("enlace-conxo", "bif-conxo"),
+            (EJE_LINE, "bif-rio-sar"),
+        ]
     theirs = eje.spec.route_overrides[0].stop_mappings[OURENSE]
     assert theirs.exits == ["bif-rio-sar"]
-    assert [(v.line, v.node) for v in theirs.via] == [(SANTIAGO_LINE, "bif-a-grandeira")]
+    assert [(v.line, v.node) for v in theirs.via] == [
+        ("enlace-conxo", "bif-rio-sar"),
+        (SANTIAGO_LINE, "bif-conxo"),
+    ]
     # los demás recorren la línea entera
     counts = Counter(s for t in trips for s in _segments(t, feed, santiago_line))
-    assert [counts[s] for s in SANTIAGO_SEGMENTS] == [288, 288, 278]
+    assert [counts[s] for s in SANTIAGO_SEGMENTS] == [288, 288, 288, 278]
 
 
 # --- A Coruña – Santiago – Vigo ---------------------------------------------------------------
